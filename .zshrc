@@ -161,8 +161,6 @@ alias vdir="vdir --color=auto"
 # Process alias:
 alias pvr="processviewer"
 
-#test
-
 
 
 export NVM_DIR="$HOME/.nvm"
