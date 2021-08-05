@@ -3,6 +3,7 @@
 
 # But not these files...
 !../.zshrc
+!settings.json
 # etc...
 
 # ...even if they are in subdirectories
