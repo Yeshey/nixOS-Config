@@ -1,0 +1,10 @@
+formulahendry.code-runner
+icrawl.discord-vscode
+James-Yu.latex-workshop
+ms-python.python
+ms-python.vscode-pylance
+ms-toolsai.jupyter
+ms-vscode.cpptools
+ms-vsliveshare.vsliveshare
+ritwickdey.live-sass
+ritwickdey.LiveServer
