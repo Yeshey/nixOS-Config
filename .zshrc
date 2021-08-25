@@ -8,7 +8,9 @@ export ZSH="/home/yeshey/.oh-my-zsh"
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="jovial"
+#ZSH_THEME="robbyrussell"
+#ZSH_THEME="jovial"
+ZSH_THEME="agnoster"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -116,14 +118,18 @@ alias zshreload="clear && zsh"
 alias zshconfig="nano ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-#Easier install & system-update:
-alias apt-get="sudo apt-get"
-alias apt="sudo apt"
-alias update="sudo apt update && sudo apt upgrade --yes && sudo apt dist-upgrade --yes && do-release-upgrade -c"
+#Easier install & system-update ubuntu:
+#alias apt-get="sudo apt-get"
+#alias apt="sudo apt"
+#alias update="sudo apt update && sudo apt upgrade --yes && sudo apt dist-upgrade --yes && do-release-upgrade -c"
+#alias update="sudo apt update && sudo apt upgrade --yes && sudo apt dist-upgrade --yes && do-release-upgrade -c"
+alias upgrade="sudo pacman -Syu"
 
+#Restart gui:
+alias re="killall latte-dock && latte-dock & && kquitapp5 plasmashell || killall plasmashell && kstart5 plasmashell"
 
 #Pretty mount:
-alias mount="mount|column -t" 
+alias mount="mount|column -t"
 
 # Get Week Date:
 week(){
@@ -161,6 +167,20 @@ alias vdir="vdir --color=auto"
 # Process alias:
 alias pvr="processviewer"
 
+# Elapsed time, from https://gist.github.com/knadh/123bca5cfdae8645db750bfb49cb44b0
+function preexec() {
+  timer=$(($(date +%s%0N)/1000000))
+}
+
+function precmd() {
+  if [ $timer ]; then
+    now=$(($(date +%s%0N)/1000000))
+    elapsed=$(($now-$timer))
+
+    export RPROMPT="%F{cyan}${elapsed}ms %{$reset_color%}"
+    unset timer
+  fi
+}
 
 
 export NVM_DIR="$HOME/.nvm"
