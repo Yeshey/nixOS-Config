@@ -167,6 +167,27 @@ alias vdir="vdir --color=auto"
 # Process alias:
 alias pvr="processviewer"
 
+#https://github.com/BrunoTeixeira1996/dotfiles/blob/main/.bashrc
+# alias to use cht.sh for python help
+chtp(){
+    curl cht.sh/python/"$1"
+}
+
+# alias to use cht.sh for c help
+chtc(){
+    curl cht.sh/c/"$1"
+}
+
+# alias to use cht.sh for c# help
+chtc#(){
+    curl cht.sh/csharp/"$1"
+}
+
+# alias to use cht.sh in general
+cht(){
+    curl cht.sh/"$1"
+}
+
 # Elapsed time, from https://gist.github.com/knadh/123bca5cfdae8645db750bfb49cb44b0
 function preexec() {
   timer=$(($(date +%s%0N)/1000000))
@@ -181,6 +202,29 @@ function precmd() {
     unset timer
   fi
 }
+
+
+#Starting SSH authentication agent, so we don't need to run < eval $(ssh-agent) >, run ssh-add before starting to work
+SSH_ENV="$HOME/.ssh/agent-environment"
+
+function start_agent {
+    echo "Initialising new SSH agent..."
+    /usr/bin/ssh-agent | sed 's/^echo/#echo/' > "${SSH_ENV}"
+    echo succeeded
+    chmod 600 "${SSH_ENV}"
+    . "${SSH_ENV}" > /dev/null
+    #/usr/bin/ssh-add;
+}
+# Source SSH settings, if applicable
+if [ -f "${SSH_ENV}" ]; then
+    . "${SSH_ENV}" > /dev/null
+    #ps ${SSH_AGENT_PID} doesn't work under cywgin
+    ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
+        start_agent;
+    }
+else
+    start_agent;
+fi
 
 
 export NVM_DIR="$HOME/.nvm"
