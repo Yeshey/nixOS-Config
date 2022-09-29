@@ -7,6 +7,7 @@
 # Variables
 let
   user="yeshey";
+  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
 in
 
 {
@@ -23,6 +24,7 @@ in
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
+      (import "${home-manager}/nixos")
     ];
 
 #     ___            __ 
@@ -137,6 +139,14 @@ in
 #  / /_/ (_-</ -_) __(_-<
 #  \____/___/\__/_/ /___/
 
+  # Attempt at making home manager work, but doesn't work..!!!
+  home-manager.users.${user} = { pkgs, ... }: {
+    home.stateVersion = "22.05";
+    home.packages = [ ];
+    programs.bash.enable = true;
+  };
+  home-manager.useUserPackages = true;
+
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${user} = {
     isNormalUser = true;
@@ -147,7 +157,8 @@ in
     #  thunderbird
     ];
   };
-
+  users.defaultUserShell = pkgs.zsh;
+  
 #      __                 __                            ____     
 #   __/ /_  ___ __ _____ / /____ __ _    _______  ___  / _(_)__ _
 #  /_  __/ (_-</ // (_-</ __/ -_)  ' \  / __/ _ \/ _ \/ _/ / _ `/
@@ -256,7 +267,10 @@ in
   };
 
   environment.systemPackages = with pkgs; [
-    vim # The Nano editor is also installed by default.
+    # vim # The Nano editor is installed by default.
+    # nvim
+    bat
+    lsd
     wget
     htop
     btop
@@ -286,9 +300,10 @@ in
     cudaPackages.cudatoolkit # for blender (nvidia)
 
     # SHELL
-    lambda-mod-zsh-theme
     oh-my-zsh
     zsh
+    thefuck
+    autojump
 
     # gnome.seahorse # to manage the gnome keyring
   ];
@@ -301,12 +316,67 @@ in
   hardware.opengl.driSupport32Bit = true;
 
   # Some programs need SUID wrappers, can be configured further or are started in user sessions.
-  programs.bash.enableCompletion = true;
-  # programs.mtr.enable = true;
-  # programs.gnupg.agent = {
-  #   enable = true;
-  #   enableSSHSupport = true;
-  # };
+  # (Code from https://gist.github.com/kendricktan/8c33019cf5786d666d0ad64c6a412526)
+  programs.zsh = {
+    enable = true;
+    shellAliases = {
+      vim = "nvim";
+      cat = "bat";
+      ls = "lsd -l --group-dirs first";
+      update = "sudo nixos-rebuild switch";
+      upgrade = "sudo nixos-rebuild switch --upgrade";
+      cp = "cp -i";                                   # Confirm before overwriting something
+      df = "df -h";                                   # Human-readable sizes
+      free = "free -m";                               # Show sizes in MB
+      gitu = "git add . && git commit && git push";
+      zshreload = "clear && zsh";
+      zshconfig = "nano ~/.zshrc";
+      re-kde = "killall latte-dock && latte-dock & && kquitapp5 plasmashell || killall plasmashell && kstart5 plasmashell"; # Restart gui in KDE
+      mount = "mount|column -t";                      # Pretty mount
+      speedtest = "curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -";
+      ping = "ping -c 5";                             # Control output of ping
+      fastping = "ping -c 100 -s 1";
+      ports = "netstat -tulanp";                      # Show Open ports
+      l="ls -l";
+      la="ls -a";
+      lla="ls -la";
+      lt="ls --tree";
+      grep="grep --color=auto";
+      egrep="egrep --color=auto";
+      fgrep="fgrep --color=auto";
+      diff="colordiff";
+      dir="dir --color=auto";
+      vdir="vdir --color=auto";
+      week = "
+        now=$(date '+%V %B %Y');
+        echo \"Week Date:\" $now
+      ";
+      myip = "  
+        echo \"Your external IP address is:\"
+        curl -w '\n' https://ipinfo.io/ip
+      ";
+      chtp = " curl cht.sh/python/\"$1\" ";           # lias to use cht.sh for python help
+      chtc = " curl cht.sh/c/\"$1\" ";                # alias to use cht.sh for c help
+      chtsharp = " curl cht.sh/csharp/\"$1\" ";           # alias to use cht.sh for c# help
+      cht = " curl cht.sh/\"$1\" ";                   # alias to use cht.sh in general
+    };
+    autosuggestions.enable = true;
+    syntaxHighlighting.enable = true;
+    enableCompletion = true;
+    histSize = 100000;
+    ohMyZsh = {
+      enable = true;
+      plugins = [ "git" 
+                  "thefuck" 
+                  "colored-man-pages" 
+                  "alias-finder" 
+                  "command-not-found" 
+                  "autojump" 
+                  "urltools" 
+                  "bgnotify"];
+      theme = "frisk"; # robbyrussell # agnoster
+    };
+  };
 
 #     _____                            _               _____                 _  __ _         _____             __ _       
 #    / ____|                          | |             / ____|               (_)/ _(_)       / ____|           / _(_)      
