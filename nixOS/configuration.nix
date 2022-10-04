@@ -7,7 +7,6 @@
 # Variables
 let
   user="yeshey";
-  home-manager = builtins.fetchTarball "https://github.com/nix-community/home-manager/archive/master.tar.gz";
 in
 
 {
@@ -22,9 +21,9 @@ in
 #           |___/                                                 |___/ 
 
   imports =
-    [ # Include the results of the hardware scan.
-      ./hardware-configuration.nix
-      (import "${home-manager}/nixos")
+    [ 
+      ./hardware-configuration.nix  # Include the results of the hardware scan.
+      ./home-manager.nix
     ];
 
 #     ___            __ 
@@ -139,19 +138,11 @@ in
 #  / /_/ (_-</ -_) __(_-<
 #  \____/___/\__/_/ /___/
 
-  # Attempt at making home manager work, but doesn't work..!!!
-  home-manager.users.${user} = { pkgs, ... }: {
-    home.stateVersion = "22.05";
-    home.packages = [ ];
-    programs.bash.enable = true;
-  };
-  home-manager.useUserPackages = true;
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${user} = {
     isNormalUser = true;
     description = "Yeshey";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [
     #  firefox
     #  thunderbird
@@ -182,6 +173,20 @@ in
       automatic = true;
       dates = "weekly";
       options = "--delete-older-than 10d";
+    };
+  };
+
+  # Docker
+  # Follow the service log with `journalctl -fu podman-epic_games.service`
+  # You have to put the config.json5 file in /mnt/Epic_Games_Claimer/config.json5
+  virtualisation.docker.enable = true;
+  virtualisation.oci-containers.containers = {
+    epic_games = {
+      image = "charlocharlie/epicgames-freegames:latest";
+      volumes = [ "/mnt/Epic_Games_Claimer:/usr/app/config:rw" ];
+      ports = [ "3000:3000" ];
+      # extraOptions = [ "-p 3000:3000"];
+      # autoStart = true;
     };
   };
 
@@ -289,12 +294,19 @@ in
     lutris
     anydesk
     pdfarranger
+
+    # Epic_Games_Claimer
+    docker
+
+    # tmp
+    # texlive.combined.scheme-full # LaTeX
     
     # FOR PLASMA DESKTOP
     scrot # for plasma config saver widget
     kdialog # for plasma config saver widget
     ark # Compress and Uncompress files
     sddm-kcm # for sddm configuration in settings
+    kate # KDEs notepad
 
     # NVIDIA
     cudaPackages.cudatoolkit # for blender (nvidia)
@@ -322,7 +334,7 @@ in
     shellAliases = {
       vim = "nvim";
       cat = "bat";
-      ls = "lsd -l --group-dirs first";
+      # ls = "lsd -l --group-dirs first";
       update = "sudo nixos-rebuild switch";
       upgrade = "sudo nixos-rebuild switch --upgrade";
       cp = "cp -i";                                   # Confirm before overwriting something
@@ -333,7 +345,7 @@ in
       zshconfig = "nano ~/.zshrc";
       re-kde = "killall latte-dock && latte-dock & && kquitapp5 plasmashell || killall plasmashell && kstart5 plasmashell"; # Restart gui in KDE
       mount = "mount|column -t";                      # Pretty mount
-      speedtest = "curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -";
+      speedtest = "nix-shell -p python3 --command \"curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -\"";
       ping = "ping -c 5";                             # Control output of ping
       fastping = "ping -c 100 -s 1";
       ports = "netstat -tulanp";                      # Show Open ports
