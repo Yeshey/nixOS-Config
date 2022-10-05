@@ -2,7 +2,7 @@
 # Common System Configuration.nix
 #
 
-{ config, lib, pkgs, inputs, user, ... }:
+{ config, lib, pkgs, inputs, user, location, ... }:
 
 {
 
@@ -176,6 +176,7 @@
   };
 
   # Docker
+  # Docker to automatically grab Epic Games Free games
   # Follow the service log with `journalctl -fu podman-epic_games.service`
   # You have to put the config.json5 file in /mnt/Epic_Games_Claimer/config.json5
   virtualisation.docker.enable = true;
@@ -328,10 +329,9 @@
     enable = true;
     shellAliases = {
       vim = "nvim";
-      cat = "bat";
       # ls = "lsd -l --group-dirs first";
-      update = "sudo nixos-rebuild switch";
-      upgrade = "sudo nixos-rebuild switch --upgrade";
+      update = "cd ${location} && sudo nixos-rebuild switch --flake .#laptop"; #old: "sudo nixos-rebuild switch";
+      upgrade = "cd ${location} && sudo nixos-rebuild switch --flake .#laptop --upgrade"; #old: upgrade = "sudo nixos-rebuild switch --upgrade";
       cp = "cp -i";                                   # Confirm before overwriting something
       df = "df -h";                                   # Human-readable sizes
       free = "free -m";                               # Show sizes in MB
