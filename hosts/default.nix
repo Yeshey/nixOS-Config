@@ -1,9 +1,9 @@
-{ lib, inputs, system, home-manager, user, ... }:
+{ lib, inputs, system, home-manager, user, location, ... }:
 
 {
   laptop = lib.nixosSystem {                           # Desktop profile
     inherit system;
-    specialArgs = { inherit user inputs; };             # Pass flake variable
+    specialArgs = { inherit user location inputs; };             # Pass flake variable
     modules = [                                         # Modules that are used.
       ./desktop
       ./configuration.nix

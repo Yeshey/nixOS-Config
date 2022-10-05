@@ -26,11 +26,11 @@
       nixosConfigurations = (                                 # Location of the available configurations
         import ./hosts {                                      # Imports ./hosts/default.nix
           inherit (nixpkgs) lib;
-          inherit inputs user system home-manager;                 # Also inherit home-manager so it does not need to be defined here.
+          inherit inputs user location system home-manager;            # Also inherit home-manager so it does not need to be defined here.
         }
       );
 
-      #homeConfigurations = (                                                # Non-NixOS configurations
+      #homeConfigurations = (                                 # Non-NixOS configurations
       #  import ./nix {
       #    inherit (nixpkgs) lib;
       #    inherit inputs nixpkgs home-manager nixgl user;
