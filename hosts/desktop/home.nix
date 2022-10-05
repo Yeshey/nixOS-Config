@@ -12,7 +12,6 @@
 {
   home = {                                # Specific packages for desktop
     packages = with pkgs; [
-      cmatrix
       # Applications
       #darktable         # Raw Image Processing
       #gimp              # Graphical Editor
