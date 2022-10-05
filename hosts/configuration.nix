@@ -1,13 +1,8 @@
-# Edit this configuration file to define what should be installed on
-# your system.  Help is available in the configuration.nix(5) man page
-# and in the NixOS manual (accessible by running ‘nixos-help’).
+#
+# Common System Configuration.nix
+#
 
-{ config, pkgs, ... }:
-
-# Variables
-let
-  user="yeshey";
-in
+{ config, lib, pkgs, inputs, user, ... }:
 
 {
 
@@ -20,11 +15,11 @@ in
 #            __/ |                                                 __/ |
 #           |___/                                                 |___/ 
 
-  imports =
-    [ 
-      ./hardware-configuration.nix  # Include the results of the hardware scan.
-      ./home-manager.nix
-    ];
+#  imports =
+#    [ 
+#      ./hardware-configuration.nix  # Include the results of the hardware scan.
+#      ./home-manager.nix
+#    ];
 
 #     ___            __ 
 #    / _ )___  ___  / /_
@@ -168,12 +163,16 @@ in
 
   # Garbage Collect
   nix = {
-    settings.auto-optimise-store = true;
+    settings = {
+      auto-optimise-store = true;
+      experimental-features = [ "nix-command" "flakes" ];
+    };
     gc = {
       automatic = true;
       dates = "weekly";
       options = "--delete-older-than 10d";
     };
+    extraOptions = ''preallocate-contents = false ''; # for compression to work with btrfs (https://github.com/NixOS/nix/issues/3550)
   };
 
   # Docker
@@ -189,10 +188,6 @@ in
       # autoStart = true;
     };
   };
-
-  # Enable Flakes
-  nix.extraOptions = ''experimental-features = nix-command flakes
-                       preallocate-contents = false ''; # for compression to work with btrfs (https://github.com/NixOS/nix/issues/3550)
 
   # Configure console keymap
   console.keyMap = "pt-latin1";
@@ -388,45 +383,6 @@ in
                   "bgnotify"];
       theme = "frisk"; # robbyrussell # agnoster
     };
-  };
-
-#     _____                            _               _____                 _  __ _         _____             __ _       
-#    / ____|                          | |             / ____|               (_)/ _(_)       / ____|           / _(_)      
-#   | |     ___  _ __ ___  _ __  _   _| |_ ___ _ __  | (___  _ __   ___  ___ _| |_ _  ___  | |     ___  _ __ | |_ _  __ _ 
-#   | |    / _ \| '_ ` _ \| '_ \| | | | __/ _ \ '__|  \___ \| '_ \ / _ \/ __| |  _| |/ __| | |    / _ \| '_ \|  _| |/ _` |
-#   | |___| (_) | | | | | | |_) | |_| | ||  __/ |     ____) | |_) |  __/ (__| | | | | (__  | |___| (_) | | | | | | | (_| |
-#    \_____\___/|_| |_| |_| .__/ \__,_|\__\___|_|    |_____/| .__/ \___|\___|_|_| |_|\___|  \_____\___/|_| |_|_| |_|\__, |
-#                         | |                               | |                                                      __/ |
-#                         |_|                               |_|                                                     |___/ 
-
-  # NVIDIA drivers 
-  services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.opengl.enable = true;
-
-  # SWAP
-  # swap in ext4:
-  #swapDevices = [ {
-  #  device = "/var/lib/swapfile";
-  #  size = 17*1024;
-  #} ];
-  # swap in btrfs as followed from https://nixos.wiki/wiki/Btrfs#:~:text=btrfs%20is%20a%20modern%20copy,tolerance,%20repair%20and%20easy%20administration.
-  swapDevices = [ { device = "/swap/swapfile"; } ];
-
-  # MY MOUNTS
-  fileSystems."/mnt/DataDisk" = {
-    device = "/dev/disk/by-label/DataDisk";
-    fsType = "auto";
-    options = [ "nosuid" "nodev" "nofail" "x-gvfs-show"];
-  };
-  fileSystems."/mnt/hdd-ntfs" = {
-    device = "/dev/disk/by-label/hdd-ntfs";
-    fsType = "auto";
-    options = [ "uid=1000" "gid=1000" "dmask=007" "fmask=117" ];
-  };
-  fileSystems."/mnt/hdd-btrfs" = {
-    device = "/dev/disk/by-label/hdd-btrfs";
-    fsType = "btrfs";
-    options = [ "nosuid" "nodev" "nofail" "x-gvfs-show" ];
   };
 
   # This value determines the NixOS release from which the default
