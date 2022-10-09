@@ -29,4 +29,15 @@
     })
   ];
 
+  #https://redirector.gvt1.com/edgedl/android/studio/ide-zips/2021.3.1.16/android-studio-2021.3.1.16-linux.tar.gz
+
+  environment.systemPackages = with pkgs; [
+    # tmp
+    virt-manager # for android studio (installed through flatpak for latest version)
+
+    # Games
+    osu-lazer
+  ];
+  programs.adb.enable = true;
+
 }
