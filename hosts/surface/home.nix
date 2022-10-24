@@ -1,5 +1,5 @@
 #
-#  Home-manager configuration for desktop
+#  Home-manager configuration for Surface
 #
 #  flake.nix
 #   └─ ./hosts

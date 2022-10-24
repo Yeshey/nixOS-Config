@@ -83,4 +83,58 @@
     fsType = "btrfs";
     options = [ "nosuid" "nodev" "nofail" "x-gvfs-show" ];
   };
+
+#     ___            __ 
+#    / _ )___  ___  / /_
+#   / _  / _ \/ _ \/ __/
+#  /____/\___/\___/\__/      
+
+  boot.loader = {
+
+    timeout = 2;
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/boot/efi";
+    };
+    grub = {
+      enable = true;
+      version = 2;
+      efiSupport = true;
+      devices = [ "nodev" ];
+      useOSProber = true;
+      # default = "saved"; # doesn't work with btrfs :(
+      extraEntries = ''
+        menuentry "Reboot" {
+            reboot
+        }
+
+        menuentry "Shut Down" {
+            halt
+        }
+
+        # Option info from /boot/grub/grub.cfg, technotes "Grub" section for more details
+        menuentry "NixOS - Console" --class nixos --unrestricted {
+        search --set=drive1 --fs-uuid 69e9ba80-fb1f-4c2d-981d-d44e59ff9e21
+        search --set=drive2 --fs-uuid 69e9ba80-fb1f-4c2d-981d-d44e59ff9e21
+          linux ($drive2)/@/nix/store/ll70jpkp1wgh6qdp3spxl684m0rj9ws4-linux-5.15.68/bzImage init=/nix/store/c2mg9sck85ydls81xrn8phh3i1rn8bph-nixos-system-nixos-22.11pre410602.ae1dc133ea5/init loglevel=4 3
+          initrd ($drive2)/@/nix/store/s38fgk7axcjryrp5abkvzqmyhc3m4pd1-initrd-linux-5.15.68/initrd
+        }
+
+      '';
+    };
+  };
+
+
+  # NVIDIA
+
+  # Allow unfree packages
+  nixpkgs.config = {
+    cudaSupport = true; # for blender (nvidia)
+  };
+
+  environment.systemPackages = with pkgs; [
+    # NVIDIA
+    cudaPackages.cudatoolkit # for blender (nvidia)
+  ];
+  
 }
