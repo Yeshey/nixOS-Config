@@ -32,40 +32,6 @@
   # boot.loader.efi.canTouchEfiVariables = true;
   # boot.loader.efi.efiSysMountPoint = "/boot/efi";
   #    -- grub --
-  boot.loader = {
-
-    timeout = 2;
-    efi = {
-      canTouchEfiVariables = true;
-      efiSysMountPoint = "/boot/efi";
-    };
-    grub = {
-      enable = true;
-      version = 2;
-      efiSupport = true;
-      devices = [ "nodev" ];
-      useOSProber = true;
-      # default = "saved"; # doesn't work with btrfs :(
-      extraEntries = ''
-        menuentry "Reboot" {
-            reboot
-        }
-
-        menuentry "Shut Down" {
-            halt
-        }
-
-        # Option info from /boot/grub/grub.cfg, technotes "Grub" section for more details
-        menuentry "NixOS - Console" --class nixos --unrestricted {
-        search --set=drive1 --fs-uuid 69e9ba80-fb1f-4c2d-981d-d44e59ff9e21
-        search --set=drive2 --fs-uuid 69e9ba80-fb1f-4c2d-981d-d44e59ff9e21
-          linux ($drive2)/@/nix/store/ll70jpkp1wgh6qdp3spxl684m0rj9ws4-linux-5.15.68/bzImage init=/nix/store/c2mg9sck85ydls81xrn8phh3i1rn8bph-nixos-system-nixos-22.11pre410602.ae1dc133ea5/init loglevel=4 3
-          initrd ($drive2)/@/nix/store/s38fgk7axcjryrp5abkvzqmyhc3m4pd1-initrd-linux-5.15.68/initrd
-        }
-
-      '';
-    };
-  };
   boot.cleanTmpDir = true;
   boot.supportedFilesystems = [ "ntfs" ];
 
@@ -175,21 +141,6 @@
     extraOptions = ''preallocate-contents = false ''; # for compression to work with btrfs (https://github.com/NixOS/nix/issues/3550)
   };
 
-  # Docker
-  # Docker to automatically grab Epic Games Free games
-  # Follow the service log with `journalctl -fu podman-epic_games.service`
-  # You have to put the config.json5 file in /mnt/Epic_Games_Claimer/config.json5
-  virtualisation.docker.enable = true;
-  virtualisation.oci-containers.containers = {
-    epic_games = {
-      image = "charlocharlie/epicgames-freegames:latest";
-      volumes = [ "/mnt/Epic_Games_Claimer:/usr/app/config:rw" ];
-      ports = [ "3000:3000" ];
-      # extraOptions = [ "-p 3000:3000"];
-      # autoStart = true;
-    };
-  };
-
   # Configure console keymap
   console.keyMap = "pt-latin1";
 
@@ -264,12 +215,24 @@
       proprietaryCodecs = true;
       enableWideVine = true;
     };
-    cudaSupport = true; # for blender (nvidia)
   };
+
+  nixpkgs.overlays = [                          # This overlay will pull the latest version of Discord (but I guess it doesnt work)
+    (self: super: {
+      discord = super.discord.overrideAttrs (
+        _: { src = builtins.fetchTarball {
+          url = "https://discord.com/api/download?platform=linux&format=tar.gz"; 
+          sha256 = "0qaczvp79b4gzzafgc5ynp6h4nd2ppvndmj6pcs1zys3c0hrabpv";
+        };}
+      );
+    })
+  ];
 
   environment.systemPackages = with pkgs; [
     # vim # The Nano editor is installed by default.
     # nvim
+    # nixosRecentCommit cmon man
+
     bat
     lsd
     wget
@@ -278,7 +241,6 @@
     libnotify # so you can use notify-send
     git
     wine
-    blender # for blender
     vscode
     discord
     vivaldi
@@ -287,12 +249,8 @@
     vlc
     firefox
     gparted
-    lutris
     anydesk
     pdfarranger
-
-    # Epic_Games_Claimer
-    docker
 
     # tmp
     # texlive.combined.scheme-full # LaTeX
@@ -303,9 +261,6 @@
     ark # Compress and Uncompress files
     sddm-kcm # for sddm configuration in settings
     kate # KDEs notepad
-
-    # NVIDIA
-    cudaPackages.cudatoolkit # for blender (nvidia)
 
     # SHELL
     oh-my-zsh

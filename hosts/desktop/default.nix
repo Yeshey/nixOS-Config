@@ -18,26 +18,35 @@
   imports =                                     # For now, if applying to other system, swap files
     [(import ./hardware-configuration.nix)];    # Current system hardware config @ /etc/nixos/hardware-configuration.nix
 
-  nixpkgs.overlays = [                          # This overlay will pull the latest version of Discord
-    (self: super: {
-      discord = super.discord.overrideAttrs (
-        _: { src = builtins.fetchTarball {
-          url = "https://discord.com/api/download?platform=linux&format=tar.gz"; 
-          sha256 = "0qaczvp79b4gzzafgc5ynp6h4nd2ppvndmj6pcs1zys3c0hrabpv";
-        };}
-      );
-    })
-  ];
-
-  #https://redirector.gvt1.com/edgedl/android/studio/ide-zips/2021.3.1.16/android-studio-2021.3.1.16-linux.tar.gz
+  # Docker 
+  # Docker to automatically grab Epic Games Free games
+  # Follow the service log with `journalctl -fu podman-epic_games.service`
+  # You have to put the config.json5 file in /mnt/Epic_Games_Claimer/config.json5
+  virtualisation.docker.enable = true;
+  virtualisation.oci-containers.containers = {
+    epic_games = {
+      image = "charlocharlie/epicgames-freegames:latest";
+      volumes = [ "/mnt/Epic_Games_Claimer:/usr/app/config:rw" ];
+      ports = [ "3000:3000" ];
+      # extraOptions = [ "-p 3000:3000"];
+      # autoStart = true;
+    };
+  };
 
   environment.systemPackages = with pkgs; [
+
+    # Epic_Games_Claimer
+    docker
+
     # tmp
     virt-manager # for android studio (installed through flatpak for latest version)
 
     # Games
     osu-lazer
+    lutris
+
+    blender # for blender
   ];
-  programs.adb.enable = true;
+  programs.adb.enable = true; # for android-studio
 
 }
