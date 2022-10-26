@@ -114,6 +114,7 @@
     settings = {
       auto-optimise-store = true;
       experimental-features = [ "nix-command" "flakes" ];
+      trusted-users = [ "root" "yeshey" "@wheel" ];
     };
     gc = {
       automatic = true;
@@ -216,11 +217,9 @@
     # nixosRecentCommit cmon man
 
     bat
-    lsd
     wget
     htop
     btop
-    libnotify # so you can use notify-send
     git
     wine
     vscode
