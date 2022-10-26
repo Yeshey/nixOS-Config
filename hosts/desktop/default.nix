@@ -18,6 +18,8 @@
   imports =                                     # For now, if applying to other system, swap files
     [(import ./hardware-configuration.nix)];    # Current system hardware config @ /etc/nixos/hardware-configuration.nix
 
+  services.openssh.permitRootLogin = "yes"; # to let surface connect to this so this PC builds for the surface (https://github.com/NixOS/nixpkgs/issues/20718)
+
   # Docker 
   # Docker to automatically grab Epic Games Free games
   # Follow the service log with `journalctl -fu podman-epic_games.service`
@@ -71,6 +73,9 @@
     kate # KDEs notepad
 
     blender # for blender
+    libnotify # so you can use notify-send
+    lsd
+
   ];
   programs.adb.enable = true; # for android-studio
 

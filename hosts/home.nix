@@ -13,14 +13,6 @@
     packages = with pkgs; [
       github-desktop
 
-      yt-dlp # download youtube videos
-      gimp
-      inkscape
-
-      # Libreoffice
-      libreoffice-qt
-      hunspell
-      hunspellDicts.uk_UA
     ];
   };
 
