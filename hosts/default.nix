@@ -23,7 +23,7 @@
     inherit system;
     specialArgs = { inherit user location inputs; };             # Pass flake variable
     modules = [                                         # Modules that are used.
-      ./desktop
+      ./surface
       ./configuration.nix
 
       home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
@@ -31,7 +31,7 @@
         home-manager.useUserPackages = true;
         home-manager.extraSpecialArgs = { inherit user; };  # Pass flake variable
         home-manager.users.${user} = {
-          imports = [(import ./home.nix)] ++ [(import ./desktop/home.nix)];
+          imports = [(import ./home.nix)] ++ [(import ./surface/home.nix)];
         };
       }
     ];
