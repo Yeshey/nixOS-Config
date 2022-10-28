@@ -18,6 +18,16 @@
   imports =                                     # For now, if applying to other system, swap files
     [(import ./hardware-configuration.nix)];    # Current system hardware config @ /etc/nixos/hardware-configuration.nix
 
+  #     ___            __ 
+  #    / _ )___  ___  / /_
+  #   / _  / _ \/ _ \/ __/
+  #  /____/\___/\___/\__/  
+
+  # Bootloader.
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+
   # GNOME Desktop (uses wayland)
   services.xserver = {
     enable = true;

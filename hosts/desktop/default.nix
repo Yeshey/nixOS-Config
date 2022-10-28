@@ -18,6 +18,46 @@
   imports =                                     # For now, if applying to other system, swap files
     [(import ./hardware-configuration.nix)];    # Current system hardware config @ /etc/nixos/hardware-configuration.nix
 
+#     ___            __ 
+#    / _ )___  ___  / /_
+#   / _  / _ \/ _ \/ __/
+#  /____/\___/\___/\__/      
+
+  boot.loader = {
+
+    timeout = 2;
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/boot/efi";
+    };
+    grub = {
+      enable = true;
+      version = 2;
+      efiSupport = true;
+      devices = [ "nodev" ];
+      useOSProber = true;
+      # default = "saved"; # doesn't work with btrfs :(
+      extraEntries = ''
+        menuentry "Reboot" {
+            reboot
+        }
+
+        menuentry "Shut Down" {
+            halt
+        }
+
+        # Option info from /boot/grub/grub.cfg, technotes "Grub" section for more details
+        menuentry "NixOS - Console" --class nixos --unrestricted {
+        search --set=drive1 --fs-uuid 69e9ba80-fb1f-4c2d-981d-d44e59ff9e21
+        search --set=drive2 --fs-uuid 69e9ba80-fb1f-4c2d-981d-d44e59ff9e21
+          linux ($drive2)/@/nix/store/ll70jpkp1wgh6qdp3spxl684m0rj9ws4-linux-5.15.68/bzImage init=/nix/store/c2mg9sck85ydls81xrn8phh3i1rn8bph-nixos-system-nixos-22.11pre410602.ae1dc133ea5/init loglevel=4 3
+          initrd ($drive2)/@/nix/store/s38fgk7axcjryrp5abkvzqmyhc3m4pd1-initrd-linux-5.15.68/initrd
+        }
+
+      '';
+    };
+  };
+
   services.openssh.permitRootLogin = "yes"; # to let surface connect to this so this PC builds for the surface (https://github.com/NixOS/nixpkgs/issues/20718)
 
   # Docker 
