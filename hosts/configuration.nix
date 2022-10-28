@@ -216,22 +216,22 @@
     # nvim
     # nixosRecentCommit cmon man
 
-    bat
-    wget
-    htop
-    btop
-    git
-    wine
-    vscode
-    discord
-    vivaldi
-    steam
-    stremio
-    vlc
-    firefox
-    gparted
-    anydesk
-    pdfarranger
+    #bat
+    #wget
+    #htop
+    #btop
+    #git
+    #wine
+    #vscode
+    #discord
+    #vivaldi
+    #steam
+    #stremio
+    #vlc
+    #firefox
+    #gparted
+    #anydesk
+    #pdfarranger
 
     # tmp
     # texlive.combined.scheme-full # LaTeX
