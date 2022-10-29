@@ -1,4 +1,4 @@
-{ lib, inputs, system, home-manager, user, location, ... }:
+{ lib, inputs, system, home-manager, user, location, nixos-hardware, ... }:
 
 {
   laptop = lib.nixosSystem {                           # Desktop profile
@@ -25,6 +25,7 @@
     modules = [                                         # Modules that are used.
       ./surface
       ./configuration.nix
+      nixos-hardware.nixosModules.microsoft-surface
 
       home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
         home-manager.useGlobalPkgs = true;

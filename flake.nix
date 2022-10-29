@@ -4,13 +4,15 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
 
+    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+
     home-manager = {
       url = github:nix-community/home-manager;
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = inputs @ { self, nixpkgs, home-manager, ...}:
+  outputs = inputs @ { self, nixpkgs, home-manager, nixos-hardware, ...}:
     let
       system = "x86_64-linux";                                # System architecture
       user = "yeshey";
@@ -26,7 +28,7 @@
       nixosConfigurations = (                                 # Location of the available configurations
         import ./hosts {                                      # Imports ./hosts/default.nix
           inherit (nixpkgs) lib;
-          inherit inputs user location system home-manager;            # Also inherit home-manager so it does not need to be defined here.
+          inherit inputs user location system home-manager nixos-hardware;            # Also inherit home-manager so it does not need to be defined here.
         }
       );
 
