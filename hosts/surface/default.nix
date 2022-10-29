@@ -33,6 +33,10 @@
     enable = true;
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
+    desktopManager.gnome.extraGSettingsOverrides = ''
+      [org.gnome.desktop.peripherals.touchpad]
+      click-method='default'
+    '';
   };
 
   environment.systemPackages = with pkgs; [
