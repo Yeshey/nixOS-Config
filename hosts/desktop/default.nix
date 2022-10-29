@@ -102,8 +102,9 @@
     virt-manager # for android studio (installed through flatpak for latest version)
 
     # Games
-    osu-lazer
     lutris
+    steam
+    osu-lazer
 
     # FOR PLASMA DESKTOP
     scrot # for plasma config saver widget

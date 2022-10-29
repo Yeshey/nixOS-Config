@@ -90,6 +90,9 @@
     #  firefox
     #  thunderbird
     ];
+    #openssh.authorizedKeys.keys = [
+    #  "..." # ssh public key of root on the slow machine
+    #];
   };
   users.defaultUserShell = pkgs.zsh;
   
@@ -216,22 +219,21 @@
     # nvim
     # nixosRecentCommit cmon man
 
-    #bat
-    #wget
-    #htop
-    #btop
-    #git
-    #wine
-    #vscode
-    #discord
-    #vivaldi
-    #steam
-    #stremio
-    #vlc
-    #firefox
-    #gparted
-    #anydesk
-    #pdfarranger
+    bat
+    wget
+    htop
+    btop
+    git
+    wine
+    vscode
+    discord
+    vivaldi
+    stremio
+    vlc
+    firefox
+    gparted
+    anydesk
+    pdfarranger
 
     # tmp
     # texlive.combined.scheme-full # LaTeX
