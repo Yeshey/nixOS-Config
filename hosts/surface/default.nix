@@ -44,14 +44,20 @@
     enable = true;
     displayManager.gdm.enable = true;
     desktopManager.gnome.enable = true;
+    # Make Surface Touchpad Work:
     desktopManager.gnome.extraGSettingsOverrides = ''
       [org.gnome.desktop.peripherals.touchpad]
       click-method='default'
     '';
   };
 
-  environment.systemPackages = with pkgs; [
+  # A multi-touch gesture recognizer
+  services.touchegg.enable = true;
+  services.thermald.enable = true;
 
+  environment.systemPackages = with pkgs; [
+    gnome.gnome-tweaks
+    touchegg
   ];
 
 }
