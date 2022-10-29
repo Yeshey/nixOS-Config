@@ -23,6 +23,12 @@
   imports =                                     # For now, if applying to other system, swap files
     [(import ./hardware-configuration.nix)];    # Current system hardware config @ /etc/nixos/hardware-configuration.nix
 
+  # swap in ext4:
+  swapDevices = [ {
+    device = "/var/lib/swapfile";
+    size = 17*1024;
+  } ];
+
   #     ___            __ 
   #    / _ )___  ___  / /_
   #   / _  / _ \/ _ \/ __/
