@@ -17,7 +17,7 @@
 # Or use this one in the surface:
 # sudo nixos-rebuild --flake .#surface --build-host root@192.168.1.102 switch
 
-{ config, pkgs, user, ... }:
+{ config, pkgs, user, location, ... }:
 
 {
   imports =                                     # For now, if applying to other system, swap files
@@ -53,7 +53,10 @@
 
   # A multi-touch gesture recognizer
   services.touchegg.enable = true;
-  services.thermald.enable = true;
+  services.thermald = {
+    enable = true;
+    configFile = ./configFiles/thermal-conf.xml;
+  };
 
   environment.systemPackages = with pkgs; [
     gnome.gnome-tweaks
