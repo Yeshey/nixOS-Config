@@ -11,6 +11,11 @@
 #           └─ ./qemu
 #               └─ default.nix
 #
+# Surface is underpowered, use this command in the more powerfull machine to build:
+# sudo nixos-rebuild --flake .#surface --target-host root@192.168.1.115 --build-host localhost switch
+#
+# Or use this one in the surface:
+# sudo nixos-rebuild --flake .#surface --build-host root@192.168.1.102 switch
 
 { config, pkgs, user, ... }:
 
