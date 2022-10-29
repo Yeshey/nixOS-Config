@@ -20,14 +20,20 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/009e39e0-6c1b-4da7-92a1-2d8441152358";
+    { device = "/dev/disk/by-label/MicroSD-NixOS";
       fsType = "ext4";
     };
-
   fileSystems."/boot/efi" =
     { device = "/dev/disk/by-uuid/84A9-3C95";
       fsType = "vfat";
     };
+
+  # MY MOUNTS
+  fileSystems."/mnt/MicroSD-DataDisk" = {
+    device = "/dev/disk/by-label/MicroSD-DataDisk";
+    fsType = "auto";
+    options = [ "uid=1000" "gid=1000" "dmask=007" "fmask=117" ];
+  };
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
