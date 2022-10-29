@@ -18,11 +18,6 @@
       gimp
       inkscape
 
-      # Libreoffice
-      libreoffice-qt
-      hunspell
-      hunspellDicts.uk_UA
-
     ];
   };
 

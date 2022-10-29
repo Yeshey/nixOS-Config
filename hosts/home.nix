@@ -13,6 +13,10 @@
     packages = with pkgs; [
       github-desktop
 
+      # Libreoffice
+      libreoffice-qt
+      hunspell
+      hunspellDicts.uk_UA
     ];
   };
 
