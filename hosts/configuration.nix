@@ -178,7 +178,10 @@
 #                          /___/                                                                
 
   # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    permitRootLogin = "yes"; # to let surface and Laptop connect to builds for the surface (https://github.com/NixOS/nixpkgs/issues/20718)
+  };
   programs.ssh.startAgent = true;
 
   # Syncthing
