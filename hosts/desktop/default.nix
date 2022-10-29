@@ -57,9 +57,7 @@
       '';
     };
   };
-
-  services.openssh.permitRootLogin = "yes"; # to let surface connect to this so this PC builds for the surface (https://github.com/NixOS/nixpkgs/issues/20718)
-
+  
   # Docker 
   # Docker to automatically grab Epic Games Free games
   # Follow the service log with `journalctl -fu podman-epic_games.service`
