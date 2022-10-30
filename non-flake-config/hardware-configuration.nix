@@ -11,7 +11,14 @@
   boot.initrd.availableKernelModules = [ "xhci_pci" "ahci" "nvme" "usbhid" "uas" "sd_mod" ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
+
+  # for touch screen to work? BUt it also works without it?
+  # https://github.com/linux-surface/linux-surface/wiki/Supported-Devices-and-Features#feature-matrix
+  # https://discourse.nixos.org/t/install-kernel-package-from-unstable-when-using-a-custom-kernel/20661
+  boot.extraModulePackages = [
+    (config.boot.kernelPackages.callPackage
+      "${pkgs.unstable.path}/pkgs/os-specific/linux/ithc/default.nix" {})
+  ];
 
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/69e9ba80-fb1f-4c2d-981d-d44e59ff9e21";

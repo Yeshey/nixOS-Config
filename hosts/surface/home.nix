@@ -13,7 +13,8 @@
 
   home = {                                # Specific packages
     packages = with pkgs; [
-
+      p3x-onenote
+      psensor
     ];
   };
 

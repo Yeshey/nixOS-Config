@@ -58,9 +58,53 @@
     configFile = ./configFiles/thermal-conf.xml; #(https://github.com/linux-surface/linux-surface/blob/master/contrib/thermald/thermal-conf.xml)
   };
 
+/*
+# https://github.com/linux-surface/iptsd
+# https://github.com/NixOS/nixpkgs/blob/nixos-22.05/pkgs/applications/misc/iptsd/default.nix
+  nixpkgs.overlays = [ # This overlay will pull the latest version of iptsd
+    (self: super:
+      {
+        iptsd = super.iptsd.overrideAttrs (old: {
+          src = super.fetchFromGitHub {
+            owner = "linux-surface";
+            repo = "iptsd";
+            rev = "87698d6bcfe03bfe901ed2714c4648c99e645df5";
+            sha256 = "sha256-YlfpHDGDpMZRbwX+SSX8owOsngGsaC+l6kwMESJMlWc=";
+          };
+            mesonFlags = [
+            "-Dservice_manager=systemd"
+            "-Dsample_config=false"
+          ];
+            
+            # https://www.reddit.com/r/NixOS/comments/ygssgm/make_simple_overlay_properly/
+            nativeBuildInputs = old.nativeBuildInputs ++ [ 
+                self.gcc
+                self.cmake 
+                self.cli11 
+                self.fmt
+                self.spdlog
+                self.microsoft_gsl
+                self.hidrd
+                self.SDL2
+                self.cairomm
+              ];
+                # Original installs udev rules and service config into global paths
+              prePatch = ''
+                echo FUCKKKKKKKKKKKKKKKKKKKKKKKKKKKK
+                ls
+                sed -i 's/b_lto=true/b_lto=false/g' meson.build
+                cat meson.build
+
+              '';
+        });
+      })
+  ];
+  */
+
   environment.systemPackages = with pkgs; [
     gnome.gnome-tweaks
     touchegg
+    # iptsd
   ];
 
 }
