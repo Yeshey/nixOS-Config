@@ -116,6 +116,5 @@
     lsd
 
   ];
-  programs.adb.enable = true; # for android-studio
 
 }

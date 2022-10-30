@@ -177,6 +177,8 @@
 #  /_/   \_,_/\__/_/\_\\_,_/\_, /\__/___/  |_____/  /___/\__/_/  |___/_/\__/\__/___/
 #                          /___/                                                                
 
+  programs.adb.enable = true; # for android-studio
+
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
