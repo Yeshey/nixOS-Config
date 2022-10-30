@@ -206,6 +206,7 @@
     };
   };
 
+  # OVERLAYS
   nixpkgs.overlays = [                          # This overlay will pull the latest version of Discord (but I guess it doesnt work)
     (self: super: {
       discord = super.discord.overrideAttrs (
@@ -229,7 +230,6 @@
     git
     wine
     vscode
-    discord
     vivaldi
     stremio
     vlc
@@ -248,6 +248,9 @@
     autojump
 
     # gnome.seahorse # to manage the gnome keyring
+
+    # Overlayed
+    discord
   ];
 
   # App things
