@@ -14,7 +14,7 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" =
-    { device = "/dev/disk/by-label/MicroSD-NixOS";
+    { device = "/dev/disk/by-label/NixOS";
       fsType = "ext4";
     };
   fileSystems."/boot/efi" =
@@ -23,7 +23,7 @@
     };
 
   # MY MOUNTS
-  fileSystems."/mnt/MicroSD-DataDisk" = {
+  fileSystems."/mnt/ntfsMicroSD-DataDisk" = {
     device = "/dev/disk/by-label/MicroSD-DataDisk";
     fsType = "auto";
     options = [ "uid=1000" "gid=1000" "dmask=007" "fmask=117" ];
