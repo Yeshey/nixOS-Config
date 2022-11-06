@@ -15,7 +15,6 @@
       obs-studio
       qbittorrent
       yt-dlp # download youtube videos
-      anki
 
       # Libreoffice
       libreoffice-qt
