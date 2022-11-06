@@ -68,6 +68,54 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
+
+    # Trying to make a seperate virtual sink for recording, but failing
+    # https://www.reddit.com/r/NixOS/comments/thgkug/how_do_i_create_a_virtual_device_in_pipewire/
+    config.pipewire = let
+      defaultConf = lib.importJSON "${inputs.nixpkgs}/nixos/modules/services/desktops/pipewire/daemon/pipewire.conf.json";
+    in lib.recursiveUpdate defaultConf {
+      "context.modules" = defaultConf."context.modules" ++ [
+        {
+          factory = "adapter";
+          args = {
+            "factory.name" = "support.null-audio-sink";
+            "node.name" = "Microphone-Proxy";
+            "node.description" = "Microphone";
+            "media.class" = "Audio/Source/Virtual";
+            "audio.position" = "MONO";
+          };
+        }
+        {
+          factory = "adapter";
+          args = {
+            "factory.name" = "support.null-audio-sink";
+            "node.name" = "Main-Output-Proxy";
+            "node.description" = "Main Output";
+            "media.class" = "Audio/Sink";
+            "audio.position" = "FL,FR";
+          };
+        }
+      ];
+      "context.objects" = defaultConf."context.objects" ++ [
+        {
+          name = "libpipewire-module-loopback";
+          args = {
+            "audio.position" = [ "FL" "FR" ];
+            "capture.props" = {
+              "media.class" = "Audio/Sink";
+              "node.name" = "my_sink";
+              "node.description" = "my-sink";
+            };
+            "playback.props" = {
+              "node.name" = "my_sink";
+              "node.description" = "my-sink";
+              "node.target" = "my-default-sink";
+            };
+          };
+        }
+      ];
+    };
+
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
 
@@ -239,6 +287,7 @@
     gparted
     anydesk
     pdfarranger
+    helvum # To control pipewire
 
     # tmp
     # texlive.combined.scheme-full # LaTeX
@@ -277,6 +326,7 @@
       gitu = "git add . && git commit && git push";
       zshreload = "clear && zsh";
       zshconfig = "nano ~/.zshrc";
+      # killall latte-dock && latte-dock & && kquitapp5 plasmashell || killall plasmashell && kstart5 plasmashell"
       re-kde = "killall latte-dock && latte-dock & && kquitapp5 plasmashell || killall plasmashell && kstart5 plasmashell"; # Restart gui in KDE
       mount = "mount|column -t";                      # Pretty mount
       speedtest = "nix-shell -p python3 --command \"curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -\"";

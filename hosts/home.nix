@@ -12,6 +12,7 @@
 
     packages = with pkgs; [
       github-desktop
+      obs-studio
 
       # Libreoffice
       libreoffice-qt
