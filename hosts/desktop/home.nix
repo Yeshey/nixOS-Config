@@ -14,7 +14,6 @@
   home = {                                # Specific packages
     packages = with pkgs; [
 
-      yt-dlp # download youtube videos
       gimp
       inkscape
 

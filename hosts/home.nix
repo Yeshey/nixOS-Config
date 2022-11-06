@@ -13,6 +13,8 @@
     packages = with pkgs; [
       github-desktop
       obs-studio
+      qbittorrent
+      yt-dlp # download youtube videos
 
       # Libreoffice
       libreoffice-qt
