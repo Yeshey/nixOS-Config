@@ -24,10 +24,33 @@
 
   # MY MOUNTS
   fileSystems."/mnt/ntfsMicroSD-DataDisk" = {
-    device = "/dev/disk/by-label/MicroSD-DataDisk";
+    device = "/dev/disk/by-label/ntfsMicroSD-DataDisk";
     fsType = "auto";
     options = [ "uid=1000" "gid=1000" "dmask=007" "fmask=117" ];
   };
+
+  # Changing Mounts to MicroSD with mount binds
+  fileSystems."/mnt/btrfsMicroSD" =
+    { device = "/dev/disk/by-label/btrfsMicroSD";
+      fsType = "btrfs";
+      neededForBoot = true;
+    };
+
+  fileSystems."/nix" =
+    { device = "/mnt/btrfsMicroSD/nix"; 
+      fsType = "none";
+      options = [ "bind" ];
+    };
+  fileSystems."/var" =
+    { device = "/mnt/btrfsMicroSD/var";
+      fsType = "none";
+      options = [ "bind" ];
+    };
+  fileSystems."/home" =
+    { device = "/mnt/btrfsMicroSD/home";
+      fsType = "none";
+      options = [ "bind" ];
+    };
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

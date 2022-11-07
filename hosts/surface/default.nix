@@ -24,10 +24,18 @@
     [(import ./hardware-configuration.nix)];    # Current system hardware config @ /etc/nixos/hardware-configuration.nix
 
   # swap in ext4:
-  swapDevices = [ {
-    device = "/var/lib/swapfile";
-    size = 17*1024;
-  } ];
+  swapDevices = [ 
+    {
+      device = "/var/lib/swapfile";
+      priority = 100
+      size = 5*1024;
+    }
+    {
+      device = "/mnt/btrfsMicroSD/swapfile";
+      priority = 0
+      size = 7*1024;
+    } 
+  ];
 
   #     ___            __ 
   #    / _ )___  ___  / /_
