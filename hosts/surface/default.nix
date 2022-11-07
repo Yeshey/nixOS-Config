@@ -27,12 +27,12 @@
   swapDevices = [ 
     {
       device = "/var/lib/swapfile";
-      priority = 100
+      priority = 100;
       size = 5*1024;
     }
     {
       device = "/mnt/btrfsMicroSD/swapfile";
-      priority = 0
+      priority = 0;
       size = 7*1024;
     } 
   ];
