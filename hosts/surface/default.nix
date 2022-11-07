@@ -26,15 +26,15 @@
   # swap in ext4:
   swapDevices = [ 
     {
-      device = "/var/lib/swapfile";
+      device = "/swapfile";
       priority = 100;
       size = 5*1024;
     }
-    {
-      device = "/mnt/btrfsMicroSD/swapfile";
-      priority = 0;
-      size = 7*1024;
-    } 
+    #{
+    #  device = "/var/lib/swapfile";
+    #  priority = 0;
+    #  size = 1*1024;
+    #}
   ];
 
   #     ___            __ 
