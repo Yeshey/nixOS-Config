@@ -15,6 +15,7 @@
       obs-studio
       qbittorrent
       yt-dlp # download youtube videos
+      baobab
 
       # Libreoffice
       libreoffice-qt
