@@ -11,7 +11,7 @@
       home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
-        home-manager.extraSpecialArgs = { inherit user; };  # Pass flake variable
+        home-manager.extraSpecialArgs = { inherit user location; };  # Pass flake variable
         home-manager.users.${user} = {
           imports = [(import ./home.nix)] ++ [(import ./desktop/home.nix)];
         };
@@ -30,7 +30,7 @@
       home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
-        home-manager.extraSpecialArgs = { inherit user; };  # Pass flake variable
+        home-manager.extraSpecialArgs = { inherit user location; };  # Pass flake variable
         home-manager.users.${user} = {
           imports = [(import ./home.nix)] ++ [(import ./surface/home.nix)];
         };

@@ -141,8 +141,16 @@
     #openssh.authorizedKeys.keys = [
     #  "..." # ssh public key of root on the slow machine
     #];
+
+    # needed to make home-manager zsh worrk with gdm
+    shell = pkgs.zsh;
+    useDefaultShell = false;
   };
   users.defaultUserShell = pkgs.zsh;
+
+  # needed to make home-manager zsh worrk with gdm
+  environment.pathsToLink = [ "/share/zsh" ];
+  environment.shells = [ pkgs.zsh ];
   
 #      __                 __                            ____     
 #   __/ /_  ___ __ _____ / /____ __ _    _______  ___  / _(_)__ _
@@ -273,6 +281,10 @@
     # nvim
     # nixosRecentCommit cmon man
 
+    # Development
+    jdk # java (alias for openJDK)
+    
+
     bat
     wget
     htop
@@ -293,10 +305,10 @@
     # texlive.combined.scheme-full # LaTeX
 
     # SHELL
-    oh-my-zsh
-    zsh
-    thefuck
-    autojump
+    #oh-my-zsh
+    #zsh
+    #thefuck
+    #autojump
 
     # gnome.seahorse # to manage the gnome keyring
 
@@ -313,6 +325,7 @@
 
   # Some programs need SUID wrappers, can be configured further or are started in user sessions.
   # (Code from https://gist.github.com/kendricktan/8c33019cf5786d666d0ad64c6a412526)
+  /*
   programs.zsh = {
     enable = true;
     shellAliases = {
@@ -372,7 +385,7 @@
                   "bgnotify"];
       theme = "frisk"; # robbyrussell # agnoster
     };
-  };
+  };*/
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
