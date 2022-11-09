@@ -34,6 +34,46 @@
 
   programs = {
     home-manager.enable = true;
+
+    vscode = {
+      enable = true;
+      package = pkgs.vscodium;
+      extensions = with pkgs.vscode-extensions; [
+        vscodevim.vim
+        ms-vsliveshare.vsliveshare
+        bbenoist.nix # nix language highlighting
+        ms-azuretools.vscode-docker
+        usernamehw.errorlens # Improve highlighting of errors, warnings and other language diagnostics.
+        ritwickdey.liveserver # for html and css development
+        # glenn2223.live-sass # not in nixpkgs
+        davidanson.vscode-markdownlint # markdown
+        formulahendry.code-runner
+        james-yu.latex-workshop
+        bungcip.better-toml # TOML language support
+        matklad.rust-analyzer
+
+        # python
+        ms-python.python
+        ms-python.vscode-pylance
+
+        # java
+        redhat.java
+        #search for extension pack for java
+        vscjava.vscode-java-debug 
+        # vscjava.vscode-java-dependency
+        # vscjava.vscode-java-pack
+        vscjava.vscode-java-test
+        # vscjava.vscode-maven
+
+        # C
+        llvm-vs-code-extensions.vscode-clangd
+
+        # remote extension pack
+        # jeanp413.open-remote-ssh # not in nixpkgs install manually, and see extension page to add one more thing to configuration for it to workkkkkkkkkkkkkkk
+        # ms-vscode-remote.remote-ssh # doesn't work in vscodium
+      ];
+    };
+
     git = {
       enable = true;
       userEmail = "yesheysangpo@hotmail.com";
