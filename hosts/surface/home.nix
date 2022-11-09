@@ -20,6 +20,6 @@
   };
 
   # Raw configuration files (https://ghedam.at/24353/tutorial-getting-started-with-home-manager-for-nix)
-  home.file.".config/user-dirs.dirs".source = ./configFiles/user-dirs.dirs;
+  home.file.".config/user-dirs.dirs".source = ./configFiles/user-dirs.dirs; # nautilus configuration for surface
   
 }
