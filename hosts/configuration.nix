@@ -148,7 +148,7 @@
   };
   users.defaultUserShell = pkgs.zsh;
 
-  # needed to make home-manager zsh worrk with gdm
+  # needed to make home-manager zsh work with gdm (https://www.reddit.com/r/NixOS/comments/ocimef/users_not_showing_up_in_gnome/)
   environment.pathsToLink = [ "/share/zsh" ];
   environment.shells = [ pkgs.zsh ];
   
