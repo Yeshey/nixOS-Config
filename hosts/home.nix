@@ -38,6 +38,13 @@
     vscode = {
       enable = true;
       package = pkgs.vscodium;
+      #haskell = { ?
+        #enable = true;
+        #hie = {
+          #enable = true;
+          #executablePath = "${pkgs.hies}/bin/hie-wrapper";
+        #};
+      #};
       extensions = with pkgs.vscode-extensions; [
         # vscodevim.vim # this is later when you're a chad
         ms-vsliveshare.vsliveshare
@@ -51,6 +58,10 @@
         james-yu.latex-workshop
         bungcip.better-toml # TOML language support
         matklad.rust-analyzer
+        arrterian.nix-env-selector # nix environment selector
+
+        # Haskell ?
+        # haskell.haskell
 
         # python
         ms-python.python
@@ -69,13 +80,13 @@
         llvm-vs-code-extensions.vscode-clangd
 
         # remote extension pack
-        # jeanp413.open-remote-ssh # not in nixpkgs install manually, and see extension page to add one more thing to configuration for it to workkkkkkkkkkkkkkk
+        # jeanp413.open-remote-ssh # not in nixpkgs install manually, and see extension page to add one more thing to configuration for it to work
         # ms-vscode-remote.remote-ssh # doesn't work in vscodium
       ];
-      #userSettings = {
-      #  "files.autoSave" = "afterDelay"; # basically on
-      #  "java.jdt.ls.java.home" = "/nix/store/8x159i85yl9fs1bscfzj75a3rdmjhmsg-system-path/";
-      #};
+      userSettings = {
+        "files.autoSave" = "afterDelay"; # basically on
+        "java.jdt.ls.java.home" = "/run/current-system/sw/lib/openjdk/"; # Show VSCodium where jdk is
+      };
     };
 
     git = {
