@@ -28,7 +28,7 @@
     {
       device = "/swapfile";
       priority = 100;
-      size = 5*1024;
+      size = 10*1024;
     }
     #{
     #  device = "/var/lib/swapfile";
