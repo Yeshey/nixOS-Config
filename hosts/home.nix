@@ -39,7 +39,7 @@
       enable = true;
       package = pkgs.vscodium;
       extensions = with pkgs.vscode-extensions; [
-        vscodevim.vim
+        # vscodevim.vim # this is later when you're a chad
         ms-vsliveshare.vsliveshare
         bbenoist.nix # nix language highlighting
         ms-azuretools.vscode-docker
@@ -72,6 +72,10 @@
         # jeanp413.open-remote-ssh # not in nixpkgs install manually, and see extension page to add one more thing to configuration for it to workkkkkkkkkkkkkkk
         # ms-vscode-remote.remote-ssh # doesn't work in vscodium
       ];
+      #userSettings = {
+      #  "files.autoSave" = "afterDelay"; # basically on
+      #  "java.jdt.ls.java.home" = "/nix/store/8x159i85yl9fs1bscfzj75a3rdmjhmsg-system-path/";
+      #};
     };
 
     git = {
