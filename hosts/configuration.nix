@@ -282,8 +282,8 @@
     # nixosRecentCommit cmon man
 
     # Development
-    jdk # java (alias for openJDK)
-    
+    jdk18 # java (alias for openJDK)
+    # haskell-language-server # Haskell    ?
 
     bat
     wget
