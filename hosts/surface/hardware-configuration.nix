@@ -13,6 +13,13 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
+  # manage temperature, prevent throttling
+  # https://github.com/linux-surface/linux-surface/issues/221
+  services.thermald = {
+    enable = true;
+    configFile = ./configFiles/thermal-conf.xml; #(https://github.com/linux-surface/linux-surface/blob/master/contrib/thermald/thermal-conf.xml)
+  };
+
   fileSystems."/" =
     { device = "/dev/disk/by-label/NixOS";
       fsType = "ext4";
