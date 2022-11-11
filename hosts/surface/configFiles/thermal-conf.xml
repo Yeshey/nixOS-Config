@@ -10,7 +10,7 @@
         <TripPoints>
           <TripPoint>
             <SensorType>x86_pkg_temp</SensorType>
-            <Temperature>65000</Temperature>
+            <Temperature>60000</Temperature>
             <type>passive</type>
             <ControlType>SEQUENTIAL</ControlType>
             <CoolingDevice>
@@ -25,3 +25,11 @@
     </ThermalZones>
   </Platform>
 </ThermalConfiguration> 
+
+<CoolingDeviceOrder>
+	<CoolingDevice>rapl_controller</CoolingDevice>
+	<CoolingDevice>intel_pstate</CoolingDevice>
+	<CoolingDevice>intel_powerclamp</CoolingDevice>
+	<CoolingDevice>cpufreq</CoolingDevice>
+	<CoolingDevice>Processor</CoolingDevice>
+</CoolingDeviceOrder>
