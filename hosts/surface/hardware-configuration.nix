@@ -8,8 +8,8 @@
     [ (modulesPath + "/installer/scan/not-detected.nix")
     ];
 
-  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" ];
-  boot.initrd.kernelModules = [ "dm-cache" "dm-cache-smq" "dm-cache-mq" "dm-cache-cleaner" ];
+  boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usbhid" "usb_storage" "sd_mod" ];
+  boot.initrd.kernelModules = [ "dm-snapshot" "dm-cache" "dm-cache-smq" "dm-cache-mq" "dm-cache-cleaner" ];
   boot.kernelModules = [ "kvm-intel" "kvm-amd" "dm-cache" "dm-cache-smq" "dm-persistent-data" "dm-bio-prison" "dm-clone" "dm-crypt" "dm-writecache" "dm-mirror" "dm-snapshot" ];
   boot.extraModulePackages = [ ];
 
@@ -23,14 +23,34 @@
     configFile = ./configFiles/thermal-conf.xml; #(https://github.com/linux-surface/linux-surface/blob/master/contrib/thermald/thermal-conf.xml)
   };
 
-  fileSystems."/" =
-    { device = "/dev/disk/by-label/NixOS";
-      fsType = "ext4";
-    };
   fileSystems."/boot/efi" =
     { device = "/dev/disk/by-uuid/84A9-3C95";
       fsType = "vfat";
     };
+/*fileSystems."/" =
+    { device = "/dev/disk/by-label/NixOS";
+      fsType = "ext4";
+    }; */
+  fileSystems."/" =
+    { device = "/dev/disk/by-uuid/1021f606-5adf-438b-8f50-3a7713c2da9b";
+      #device = "/dev/disk/by-label/root";
+      fsType = "ext4";
+    };
+
+  # nixos-generate-config Auto Generated cache config: # this is a bug..?
+/*fileSystems."/nix/store" =
+    { device = "/nix/store";
+      fsType = "none";
+      options = [ "bind" ];
+    };
+  fileSystems."/root/.cache/doc" =
+    { device = "portal";
+      fsType = "fuse.portal";
+    };
+  fileSystems."/root/.cache/gvfs" =
+    { device = "gvfsd-fuse";
+      fsType = "fuse.gvfsd-fuse";
+    }; */
 
   # MY MOUNTS
   fileSystems."/mnt/ntfsMicroSD-DataDisk" = {
@@ -39,28 +59,7 @@
     options = [ "uid=1000" "gid=1000" "dmask=007" "fmask=117" ];
   };
 
-  # Changing Mounts to MicroSD with mount binds
-  fileSystems."/mnt/btrfsMicroSD" =
-    { device = "/dev/disk/by-label/btrfsMicroSD";
-      fsType = "btrfs";
-      neededForBoot = true;
-    };
-
-  fileSystems."/nix" =
-    { device = "/mnt/btrfsMicroSD/nix"; 
-      fsType = "none";
-      options = [ "bind" ];
-    };
-  fileSystems."/var" =
-    { device = "/mnt/btrfsMicroSD/var";
-      fsType = "none";
-      options = [ "bind" ];
-    };
-  fileSystems."/home" =
-    { device = "/mnt/btrfsMicroSD/home";
-      fsType = "none";
-      options = [ "bind" ];
-    };
+  swapDevices = [{ device = "/dev/disk/by-label/swap"; }];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's

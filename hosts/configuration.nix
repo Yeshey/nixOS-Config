@@ -291,7 +291,6 @@
     btop
     git
     wine
-    vscode
     vivaldi
     stremio
     vlc
