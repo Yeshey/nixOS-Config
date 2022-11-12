@@ -66,6 +66,9 @@
     gnome.gnome-tweaks
     touchegg
     # iptsd
+    
+    # Games
+    osu-lazer
   ];
 
 }
