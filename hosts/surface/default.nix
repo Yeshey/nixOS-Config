@@ -61,10 +61,6 @@
 
   # A multi-touch gesture recognizer
   services.touchegg.enable = true;
-  services.thermald = {
-    enable = true;
-    configFile = ./configFiles/thermal-conf.xml; #(https://github.com/linux-surface/linux-surface/blob/master/contrib/thermald/thermal-conf.xml)
-  };
 
   environment.systemPackages = with pkgs; [
     gnome.gnome-tweaks

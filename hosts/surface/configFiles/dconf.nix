@@ -243,6 +243,12 @@ with lib.hm.gvariant;
       name = "StudyMusic";
     };
 
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2" = {
+      binding = "<Control><Alt>t";
+      command = "kgx";
+      name = "Launch New Terminal";
+    };
+
     "org/gnome/settings-daemon/plugins/power" = {
       sleep-inactive-ac-type = "suspend";
     };
