@@ -91,13 +91,20 @@
     # windowManager.bspwm.enable = true; # but doesn't work
   };
 
+  # for VMs
+  virtualisation.libvirtd.enable = true;
+  virtualisation.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host.enableExtensionPack = true;
+  virtualisation.virtualbox.host.enableHardening = false;
+
   environment.systemPackages = with pkgs; [
 
     # Epic_Games_Claimer
     docker
 
     # tmp
-    virt-manager # for android studio (installed through flatpak for latest version)
+    virt-manager # for VMs android studio (installed through flatpak for latest version)
+    # virtualbox
 
     # Games
     lutris

@@ -9,9 +9,12 @@
     ];
 
   boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.initrd.kernelModules = [ "dm-cache" "dm-cache-smq" "dm-cache-mq" "dm-cache-cleaner" ];
+  boot.kernelModules = [ "kvm-intel" "kvm-amd" "dm-cache" "dm-cache-smq" "dm-persistent-data" "dm-bio-prison" "dm-clone" "dm-crypt" "dm-writecache" "dm-mirror" "dm-snapshot" ];
   boot.extraModulePackages = [ ];
+
+  # for LVM: (https://github.com/NixOS/nixpkgs/issues/15516)
+  services.lvm.boot.thin.enable = true;
 
   fileSystems."/" =
     { device = "/dev/disk/by-label/NixOS";
