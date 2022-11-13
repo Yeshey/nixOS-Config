@@ -292,7 +292,6 @@
     git
     wine
     vivaldi
-    stremio
     vlc
     firefox
     gparted
