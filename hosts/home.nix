@@ -89,11 +89,12 @@
       };
     };
 
-    git = {
-      enable = true;
-      userEmail = "yesheysangpo@hotmail.com";
-      userName = "Yeshey";
-    };
+    # GIthub Desktop is complaining about .git config being read only
+    #git = {
+    #  enable = true;
+    #  userEmail = "yesheysangpo@hotmail.com";
+    #  userName = "Yeshey";
+    #};
 
     zsh={
       enable = true;
@@ -112,6 +113,8 @@
         re-kde = "killall latte-dock && latte-dock & && kquitapp5 plasmashell || killall plasmashell && kstart5 plasmashell"; # Restart gui in KDE
         mount = "mount|column -t";                      # Pretty mount
         speedtest = "nix-shell -p python3 --command \"curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -\"";
+        temperature = "watch \"nix-shell -p lm_sensors --command sensors | grep temp1 | awk '{print $2}' | sed 's/+//'\"";
+        rvt = "nix-shell -p ffmpeg --command \"bash <(curl -s https://raw.githubusercontent.com/Yeshey/RecursiveVideoTranscoder/main/RecursiveVideoTranscoder.sh)\"";
         ping = "ping -c 5";                             # Control output of ping
         fastping = "ping -c 100 -s 1";
         ports = "netstat -tulanp";                      # Show Open ports
