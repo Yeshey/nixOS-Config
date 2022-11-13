@@ -99,6 +99,8 @@
 
   environment.systemPackages = with pkgs; [
 
+    stremio
+
     # Epic_Games_Claimer
     docker
 
@@ -108,8 +110,8 @@
 
     # Games
     lutris
-    steam
     osu-lazer
+    steam
 
     # FOR PLASMA DESKTOP
     scrot # for plasma config saver widget
