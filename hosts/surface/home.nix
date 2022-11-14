@@ -16,6 +16,7 @@
     packages = with pkgs; [
       p3x-onenote
       psensor
+      s-tui
     ];
   };
 
