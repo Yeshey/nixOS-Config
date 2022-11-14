@@ -74,6 +74,22 @@ in
   imports =                                     # For now, if applying to other system, swap files
     [(import ./hardware-configuration.nix)];    # Current system hardware config @ /etc/nixos/hardware-configuration.nix
 
+  # Manage Temperature, prevent throttling
+  # https://github.com/linux-surface/linux-surface/issues/221
+  services.thermald = {
+    enable = true;
+    configFile = ./configFiles/thermal-conf.xml; #(https://github.com/linux-surface/linux-surface/blob/master/contrib/thermald/thermal-conf.xml)
+  };
+  services.undervolt = {
+    enable = true;
+    temp = 79;
+    # BIOS prevents these settings
+    #gpuOffset = -70;
+    #coreOffset = -70;
+    #uncoreOffset = -70;
+    #analogioOffset = -70;
+  };
+
   # swap in ext4:
   swapDevices = [ 
     {
@@ -131,6 +147,7 @@ in
     # Games
     osu-lazer
     steam-scalled
+    
   ];
 
 }

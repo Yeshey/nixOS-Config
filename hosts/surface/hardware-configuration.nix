@@ -15,13 +15,6 @@
 
   # for LVM: (https://github.com/NixOS/nixpkgs/issues/15516)
   services.lvm.boot.thin.enable = true;
-  
-  # manage temperature, prevent throttling
-  # https://github.com/linux-surface/linux-surface/issues/221
-  services.thermald = {
-    enable = true;
-    configFile = ./configFiles/thermal-conf.xml; #(https://github.com/linux-surface/linux-surface/blob/master/contrib/thermald/thermal-conf.xml)
-  };
 
   fileSystems."/boot/efi" =
     { device = "/dev/disk/by-uuid/84A9-3C95";
