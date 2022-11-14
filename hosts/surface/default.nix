@@ -80,15 +80,6 @@ in
     enable = true;
     configFile = ./configFiles/thermal-conf.xml; #(https://github.com/linux-surface/linux-surface/blob/master/contrib/thermald/thermal-conf.xml)
   };
-  services.undervolt = {
-    enable = true;
-    temp = 79;
-    # BIOS prevents these settings
-    #gpuOffset = -70;
-    #coreOffset = -70;
-    #uncoreOffset = -70;
-    #analogioOffset = -70;
-  };
 
   # swap in ext4:
   swapDevices = [ 
