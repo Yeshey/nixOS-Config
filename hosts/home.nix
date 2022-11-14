@@ -53,7 +53,7 @@
         usernamehw.errorlens # Improve highlighting of errors, warnings and other language diagnostics.
         ritwickdey.liveserver # for html and css development
         # glenn2223.live-sass # not in nixpkgs
-        davidanson.vscode-markdownlint # markdown
+        yzhang.markdown-all-in-one # markdown
         formulahendry.code-runner
         james-yu.latex-workshop
         bungcip.better-toml # TOML language support
