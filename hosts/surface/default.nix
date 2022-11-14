@@ -97,21 +97,7 @@ in
       priority = 100;
       size = 10*1024;
     }
-    #{
-    #  device = "/var/lib/swapfile";
-    #  priority = 0;
-    #  size = 1*1024;
-    #}
   ];
-
-/*
-  pkgs.symlinkJoin = {
-    name = "steam";
-    paths = [
-      steam-wrapped
-      pkgs.steam
-    ];
-  };*/
 
   #     ___            __ 
   #    / _ )___  ___  / /_
