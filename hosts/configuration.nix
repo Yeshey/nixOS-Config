@@ -274,6 +274,21 @@
         };}
       );
     })
+
+    # Current exodus in nixpkgs not working, getting latest (and actually works!)
+    (self: super: {
+      exodus = super.exodus.overrideAttrs (
+        _: { 
+          src = builtins.fetchurl {
+            url = "https://downloads.exodus.com/releases/exodus-linux-x64-22.11.13.zip";
+            sha256 = "sha256:14xav91liz4xrlcwwin94gfh6w1iyq9z8dvbz34l017m7vqhn2nl";
+          };
+          unpackCmd = ''
+              ${pkgs.unzip}/bin/unzip "$src" -x "Exodus*/lib*so"
+          '';
+        }
+      );
+    })
   ];
 
   environment.systemPackages = with pkgs; [
@@ -312,6 +327,7 @@
 
     # Overlayed
     discord
+    exodus
   ];
 
   # App things

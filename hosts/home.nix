@@ -17,6 +17,9 @@
       yt-dlp # download youtube videos
       baobab
 
+      # Games
+      osu-lazer
+
       # Libreoffice
       libreoffice-qt
       hunspell
@@ -101,8 +104,8 @@
       shellAliases = {
         vim = "nvim";
         # ls = "lsd -l --group-dirs first";
-        update = "cd ${location} && sudo nixos-rebuild switch --flake .#laptop"; #old: "sudo nixos-rebuild switch";
-        upgrade = "cd ${location} && sudo nixos-rebuild switch --flake .#laptop --upgrade"; #old: upgrade = "sudo nixos-rebuild switch --upgrade";
+        update = "cd ${location} && sudo nixos-rebuild switch --flake .#laptop";
+        upgrade = "cd ${location} && sudo nixos-rebuild switch --flake .#laptop --upgrade";
         cp = "cp -i";                                   # Confirm before overwriting something
         df = "df -h";                                   # Human-readable sizes
         free = "free -m";                               # Show sizes in MB
@@ -166,6 +169,9 @@
     };
 
   };
+
+  # Raw configuration files (https://ghedam.at/24353/tutorial-getting-started-with-home-manager-for-nix)
+  home.file.".local/share/osu/storage.ini".source = ./configFiles/storage.ini; # osu configuration for surface
 
   home.stateVersion = "22.11";
 }

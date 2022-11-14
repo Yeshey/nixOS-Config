@@ -110,7 +110,6 @@
 
     # Games
     lutris
-    osu-lazer
     steam
 
     # FOR PLASMA DESKTOP
