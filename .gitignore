@@ -4,3 +4,5 @@ hosts/configFiles/osu-lazer/*
 # But not these files...
 !hosts/configFiles/osu-lazer/files
 !hosts/configFiles/osu-lazer/screenshots
+!hosts/configFiles/osu-lazer/collection.db
+!hosts/configFiles/osu-lazer/client.realm
