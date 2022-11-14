@@ -131,7 +131,6 @@ in
     # iptsd
     
     # Games
-    osu-lazer
     steam-scalled
     
   ];

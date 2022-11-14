@@ -1,0 +1,6 @@
+# Ignore everything in osu files
+hosts/configFiles/osu-lazer/*
+
+# But not these files...
+!hosts/configFiles/osu-lazer/files
+!hosts/configFiles/osu-lazer/screenshots

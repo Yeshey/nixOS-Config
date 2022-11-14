@@ -17,6 +17,9 @@
       yt-dlp # download youtube videos
       baobab
 
+      # Games
+      osu-lazer
+
       # Libreoffice
       libreoffice-qt
       hunspell
@@ -166,6 +169,9 @@
     };
 
   };
+
+  # Raw configuration files (https://ghedam.at/24353/tutorial-getting-started-with-home-manager-for-nix)
+  home.file.".local/share/osu/storage.ini".source = ./configFiles/storage.ini; # osu configuration for surface
 
   home.stateVersion = "22.11";
 }
