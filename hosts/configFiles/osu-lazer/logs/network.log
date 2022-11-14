@@ -1,0 +1,41 @@
+2022-11-14 16:58:20 [verbose]: ----------------------------------------------------------
+2022-11-14 16:58:20 [verbose]: network Log for yeshey (LogLevel: Verbose)
+2022-11-14 16:58:20 [verbose]: Running osu 2022.723.0.0 on .NET 6.0.9
+2022-11-14 16:58:20 [verbose]: Environment: Linux (Unix 5.15.71.0), 12 cores
+2022-11-14 16:58:20 [verbose]: ----------------------------------------------------------
+2022-11-14 16:58:20 [verbose]: Performing request osu.Game.Online.API.Requests.GetUserRequest
+2022-11-14 16:58:20 [verbose]: Request to https://osu.ppy.sh/api/v2/me/ successfully completed!
+2022-11-14 16:58:20 [verbose]: osu.Game.Online.API.Requests.GetUserRequest finished with response size of 5,653 bytes
+2022-11-14 16:58:20 [verbose]: Performing request osu.Game.Online.API.Requests.GetFriendsRequest
+2022-11-14 16:58:20 [verbose]: Request to https://osu.ppy.sh/api/v2/friends successfully completed!
+2022-11-14 16:58:20 [verbose]: osu.Game.Online.API.Requests.GetFriendsRequest finished with response size of 846 bytes
+2022-11-14 16:58:21 [verbose]: OnlineMetadataClient connecting...
+2022-11-14 16:58:21 [verbose]: OnlineMultiplayerClient connecting...
+2022-11-14 16:58:21 [verbose]: SpectatorClient connecting...
+2022-11-14 16:58:22 [verbose]: Request to https://api.github.com/repos/ppy/osu/releases/latest successfully completed!
+2022-11-14 16:58:22 [verbose]: OnlineMetadataClient connected!
+2022-11-14 16:58:22 [verbose]: OnlineMultiplayerClient connected!
+2022-11-14 16:58:22 [verbose]: Performing request osu.Game.Online.API.Requests.GetUpdatesRequest
+2022-11-14 16:58:22 [verbose]: SpectatorClient connected!
+2022-11-14 16:58:23 [verbose]: Request to https://osu.ppy.sh/api/v2/chat/updates successfully completed!
+2022-11-14 16:58:23 [verbose]: osu.Game.Online.API.Requests.GetUpdatesRequest finished with response size of 24,990 bytes
+2022-11-14 16:58:23 [verbose]: Performing request osu.Game.Online.API.Requests.GetMessagesRequest
+2022-11-14 16:58:23 [verbose]: Request to https://osu.ppy.sh/api/v2/chat/channels/5/messages successfully completed!
+2022-11-14 16:58:23 [verbose]: osu.Game.Online.API.Requests.GetMessagesRequest finished with response size of 23,798 bytes
+2022-11-14 16:58:23 [verbose]: Performing request osu.Game.Online.API.Requests.ListChannelsRequest
+2022-11-14 16:58:23 [verbose]: Request to https://osu.ppy.sh/api/v2/chat/channels successfully completed!
+2022-11-14 16:58:23 [verbose]: osu.Game.Online.API.Requests.ListChannelsRequest finished with response size of 6,021 bytes
+2022-11-14 16:58:28 [verbose]: Performing request osu.Game.Online.API.Requests.GetSeasonalBackgroundsRequest
+2022-11-14 16:58:29 [verbose]: Request to https://osu.ppy.sh/api/v2/seasonal-backgrounds successfully completed!
+2022-11-14 16:58:29 [verbose]: osu.Game.Online.API.Requests.GetSeasonalBackgroundsRequest finished with response size of 11,983 bytes
+2022-11-14 16:58:29 [verbose]: Request to https://assets.ppy.sh/user-contest-entries/10524/845d3cbe86b9ebafdace6ce004e2bad0ce849593261bcbf803a8cb6b0081971f_opt.jpg successfully completed!
+2022-11-14 16:58:32 [verbose]: Request to https://osu.ppy.sh/images/layout/avatar-guest.png successfully completed!
+2022-11-14 16:58:35 [verbose]: Performing request osu.Game.Online.API.Requests.GetBeatmapRequest
+2022-11-14 16:58:35 [verbose]: Request to https://assets.ppy.sh/user-contest-entries/10525/69f4efac16984b44e5369c4e59d30f6a819d37dccf92f6b7b135c6a35bd42cc5_opt.jpg successfully completed!
+2022-11-14 16:58:35 [verbose]: Request to https://osu.ppy.sh/api/v2/beatmaps/lookup successfully completed!
+2022-11-14 16:58:35 [verbose]: osu.Game.Online.API.Requests.GetBeatmapRequest finished with response size of 3,291 bytes
+2022-11-14 16:58:37 [verbose]: Request to https://assets.ppy.sh/user-contest-entries/10527/8a50d75beba3b890498f9e62e59777febb9f866392feb17f4c22bfe7ed99dd7b_opt.jpg successfully completed!
+2022-11-14 16:59:09 [verbose]: Request to https://assets.ppy.sh/user-contest-entries/10537/9ca2e907899930c99180f454b186062f2f4f51636da9d43604179397745fc0d5_opt.jpg successfully completed!
+2022-11-14 16:59:23 [verbose]: Performing request osu.Game.Online.API.Requests.GetUpdatesRequest
+2022-11-14 16:59:23 [verbose]: Request to https://osu.ppy.sh/api/v2/chat/updates successfully completed!
+2022-11-14 16:59:23 [verbose]: osu.Game.Online.API.Requests.GetUpdatesRequest finished with response size of 3,618 bytes
