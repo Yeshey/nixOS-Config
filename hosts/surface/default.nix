@@ -77,6 +77,7 @@ in
   # Manage Temperature, prevent throttling
   # https://github.com/linux-surface/linux-surface/issues/221
   services.thermald = {
+    debug = false;
     enable = true;
     configFile = ./configFiles/thermal-conf.xml; #(https://github.com/linux-surface/linux-surface/blob/master/contrib/thermald/thermal-conf.xml)
   };
