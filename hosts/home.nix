@@ -22,7 +22,7 @@
 
       # Games
       osu-lazer
-      minecraft
+      prismlauncher
 
       # Libreoffice
       libreoffice-qt

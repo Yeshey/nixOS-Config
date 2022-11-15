@@ -264,25 +264,13 @@
     };
   };
 
-  # OVERLAYS
-  nixpkgs.overlays = [ # This overlay will pull the latest version of java for minecraft
-  (self: super:
-    {
-      minecraft = super.minecraft.override (old: 
-        {
-          jre = pkgs.openjdk18;
-        }
-      );
-    })
-  ];
-
   environment.systemPackages = with pkgs; [
     # vim # The Nano editor is installed by default.
     # nvim
     # nixosRecentCommit cmon man
 
     # Development
-    jdk18 # java (alias for openJDK)
+    jdk17 # java (alias for openJDK)
     # haskell-language-server # Haskell    ?
 
     bat
@@ -298,6 +286,7 @@
     anydesk
     pdfarranger
     helvum # To control pipewire
+    virt-manager # virtual machines
 
     # tmp
     # texlive.combined.scheme-full # LaTeX
@@ -309,6 +298,9 @@
     #autojump
 
     # gnome.seahorse # to manage the gnome keyring
+
+    # Games
+    
 
     # Overlayed
     discord
