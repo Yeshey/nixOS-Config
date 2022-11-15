@@ -16,7 +16,7 @@
     let
       system = "x86_64-linux";                                # System architecture
       user = "yeshey";
-      location = "$HOME/.setup";
+      location = "/home/${user}/.setup"; # "$HOME/.setup"
 
       pkgs = import nixpkgs {
         inherit system;
