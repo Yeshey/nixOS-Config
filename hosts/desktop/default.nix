@@ -93,9 +93,9 @@
 
   # for VMs
   virtualisation.libvirtd.enable = true;
-  virtualisation.virtualbox.host.enable = true;
-  virtualisation.virtualbox.host.enableExtensionPack = true;
-  virtualisation.virtualbox.host.enableHardening = false;
+  #virtualisation.virtualbox.host.enable = true;
+  #virtualisation.virtualbox.host.enableExtensionPack = true;
+  #virtualisation.virtualbox.host.enableHardening = false;
 
   environment.systemPackages = with pkgs; [
 

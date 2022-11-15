@@ -264,25 +264,13 @@
     };
   };
 
-  # OVERLAYS
-  nixpkgs.overlays = [                          # This overlay will pull the latest version of Discord (but I guess it doesnt work)
-    (self: super: {
-      discord = super.discord.overrideAttrs (
-        _: { src = builtins.fetchTarball {
-          url = "https://discord.com/api/download?platform=linux&format=tar.gz"; 
-          sha256 = "1pw9q4290yn62xisbkc7a7ckb1sa5acp91plp2mfpg7gp7v60zvz";
-        };}
-      );
-    })
-  ];
-
   environment.systemPackages = with pkgs; [
     # vim # The Nano editor is installed by default.
     # nvim
     # nixosRecentCommit cmon man
 
     # Development
-    jdk18 # java (alias for openJDK)
+    jdk17 # java (alias for openJDK)
     # haskell-language-server # Haskell    ?
 
     bat
@@ -298,6 +286,7 @@
     anydesk
     pdfarranger
     helvum # To control pipewire
+    virt-manager # virtual machines
 
     # tmp
     # texlive.combined.scheme-full # LaTeX
@@ -309,6 +298,9 @@
     #autojump
 
     # gnome.seahorse # to manage the gnome keyring
+
+    # Games
+    
 
     # Overlayed
     discord

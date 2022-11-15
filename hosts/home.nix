@@ -17,8 +17,12 @@
       yt-dlp # download youtube videos
       baobab
 
+      # tmp
+      teams
+
       # Games
       osu-lazer
+      prismlauncher
 
       # Libreoffice
       libreoffice-qt
