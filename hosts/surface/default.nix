@@ -17,7 +17,7 @@
 # Or use this one in the surface:
 # sudo nixos-rebuild --flake .#surface --build-host root@192.168.1.102 switch
 
-{ config, pkgs, user, location, ... }:
+{ config, pkgs, user, location, lib, ... }:
 
 #let
  #Steam needs this env variable to display in the right scalling (https://www.reddit.com/r/NixOS/comments/qha9t5/comment/hid3w3z/)
@@ -74,13 +74,32 @@ in
   imports =                                     # For now, if applying to other system, swap files
     [(import ./hardware-configuration.nix)];    # Current system hardware config @ /etc/nixos/hardware-configuration.nix
 
+
   # Manage Temperature, prevent throttling
   # https://github.com/linux-surface/linux-surface/issues/221
+  services.power-profiles-daemon.enable = true;
   services.thermald = {
     debug = false;
     enable = true;
     configFile = ./configFiles/thermal-conf.xml; #(https://github.com/linux-surface/linux-surface/blob/master/contrib/thermald/thermal-conf.xml)
   };
+  systemd.services.thermald.serviceConfig.ExecStart = let # running with --adaptive ignores the config file. Need to raise an issue for this
+    cfg = config.services.thermald;
+  in lib.mkForce ''
+          ${cfg.package}/sbin/thermald \
+            --no-daemon \
+            --config-file ${location}/hosts/surface/configFiles/thermal-conf.xml \
+        '';
+  #services.undervolt = {
+  #  enable = true;
+  #  temp = 64;
+    # BIOS prevents these settings
+    #gpuOffset = -70;
+    #coreOffset = -70;
+    #uncoreOffset = -70;
+    #analogioOffset = -70;
+  #};
+
 
   # swap in ext4:
   swapDevices = [ 
