@@ -83,7 +83,7 @@ in
     enable = true;
     configFile = ./configFiles/thermal-conf.xml; #(https://github.com/linux-surface/linux-surface/blob/master/contrib/thermald/thermal-conf.xml)
   };
-  systemd.services.thermald.serviceConfig.ExecStart = let # running with --adaptive ignores the config file. Need to raise an issue for this
+  systemd.services.thermald.serviceConfig.ExecStart = let # running with --adaptive ignores the config file. Issue raised: https://github.com/NixOS/nixpkgs/issues/201402
     cfg = config.services.thermald;
   in lib.mkForce ''
           ${cfg.package}/sbin/thermald \
