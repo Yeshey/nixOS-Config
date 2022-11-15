@@ -31,7 +31,7 @@
 
       # SHELL
       oh-my-zsh
-      zshsd
+      zsh
       thefuck
       #autojump
     ];
