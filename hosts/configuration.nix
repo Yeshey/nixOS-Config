@@ -341,69 +341,21 @@
   # for steam to work
   hardware.opengl.driSupport32Bit = true;
 
-  # Some programs need SUID wrappers, can be configured further or are started in user sessions.
-  # (Code from https://gist.github.com/kendricktan/8c33019cf5786d666d0ad64c6a412526)
-  /*
-  programs.zsh = {
+  # Accelerated Video Playback (https://nixos.wiki/wiki/Accelerated_Video_Playback)
+  nixpkgs.config.packageOverrides = pkgs: {
+    vaapiIntel = pkgs.vaapiIntel.override { enableHybridCodec = true; };
+  };
+  hardware.opengl = {
     enable = true;
-    shellAliases = {
-      vim = "nvim";
-      # ls = "lsd -l --group-dirs first";
-      update = "cd ${location} && sudo nixos-rebuild switch --flake .#laptop"; #old: "sudo nixos-rebuild switch";
-      upgrade = "cd ${location} && sudo nixos-rebuild switch --flake .#laptop --upgrade"; #old: upgrade = "sudo nixos-rebuild switch --upgrade";
-      cp = "cp -i";                                   # Confirm before overwriting something
-      df = "df -h";                                   # Human-readable sizes
-      free = "free -m";                               # Show sizes in MB
-      gitu = "git add . && git commit && git push";
-      zshreload = "clear && zsh";
-      zshconfig = "nano ~/.zshrc";
-      # killall latte-dock && latte-dock & && kquitapp5 plasmashell || killall plasmashell && kstart5 plasmashell"
-      re-kde = "killall latte-dock && latte-dock & && kquitapp5 plasmashell || killall plasmashell && kstart5 plasmashell"; # Restart gui in KDE
-      mount = "mount|column -t";                      # Pretty mount
-      speedtest = "nix-shell -p python3 --command \"curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -\"";
-      ping = "ping -c 5";                             # Control output of ping
-      fastping = "ping -c 100 -s 1";
-      ports = "netstat -tulanp";                      # Show Open ports
-      l="ls -l";
-      la="ls -a";
-      lla="ls -la";
-      lt="ls --tree";
-      grep="grep --color=auto";
-      egrep="egrep --color=auto";
-      fgrep="fgrep --color=auto";
-      diff="colordiff";
-      dir="dir --color=auto";
-      vdir="vdir --color=auto";
-      week = "
-        now=$(date '+%V %B %Y');
-        echo \"Week Date:\" $now
-      ";
-      myip = "  
-        echo \"Your external IP address is:\"
-        curl -w '\n' https://ipinfo.io/ip
-      ";
-      chtp = " curl cht.sh/python/\"$1\" ";           # lias to use cht.sh for python help
-      chtc = " curl cht.sh/c/\"$1\" ";                # alias to use cht.sh for c help
-      chtsharp = " curl cht.sh/csharp/\"$1\" ";           # alias to use cht.sh for c# help
-      cht = " curl cht.sh/\"$1\" ";                   # alias to use cht.sh in general
-    };
-    autosuggestions.enable = true;
-    syntaxHighlighting.enable = true;
-    enableCompletion = true;
-    histSize = 100000;
-    ohMyZsh = {
-      enable = true;
-      plugins = [ "git" 
-                  "thefuck" 
-                  "colored-man-pages" 
-                  "alias-finder" 
-                  "command-not-found" 
-                  "autojump" 
-                  "urltools" 
-                  "bgnotify"];
-      theme = "frisk"; # robbyrussell # agnoster
-    };
-  };*/
+    extraPackages = with pkgs; [
+      intel-media-driver # LIBVA_DRIVER_NAME=iHD
+      vaapiIntel         # LIBVA_DRIVER_NAME=i965 (older but works better for Firefox/Chromium)
+      vaapiVdpau
+      libvdpau-va-gl
+    ];
+  };
+
+  # Some programs need SUID wrappers, can be configured further or are started in user sessions.
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
