@@ -264,6 +264,33 @@
     };
   };
 
+  # OVERLAYS
+  nixpkgs.overlays = [                          # This overlay will pull the latest version of Discord (but I guess it doesnt work)
+    (self: super: {
+      discord = super.discord.overrideAttrs (
+        _: { src = builtins.fetchTarball {
+          url = "https://discord.com/api/download?platform=linux&format=tar.gz"; 
+          sha256 = "1pw9q4290yn62xisbkc7a7ckb1sa5acp91plp2mfpg7gp7v60zvz";
+        };}
+      );
+    })
+
+    # Current exodus in nixpkgs not working, getting latest (and actually works!)
+    (self: super: {
+      exodus = super.exodus.overrideAttrs (
+        _: { 
+          src = builtins.fetchurl {
+            url = "https://downloads.exodus.com/releases/exodus-linux-x64-22.11.13.zip";
+            sha256 = "sha256:14xav91liz4xrlcwwin94gfh6w1iyq9z8dvbz34l017m7vqhn2nl";
+          };
+          unpackCmd = ''
+              ${pkgs.unzip}/bin/unzip "$src" -x "Exodus*/lib*so"
+          '';
+        }
+      );
+    })
+  ];
+
   environment.systemPackages = with pkgs; [
     # vim # The Nano editor is installed by default.
     # nvim
@@ -304,6 +331,7 @@
 
     # Overlayed
     discord
+    exodus
   ];
 
   # App things
