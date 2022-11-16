@@ -117,7 +117,7 @@
         zshreload = "clear && zsh";
         zshconfig = "nano ~/.zshrc";
         # killall latte-dock && latte-dock & && kquitapp5 plasmashell || killall plasmashell && kstart5 plasmashell"
-        re-kde = "killall latte-dock && latte-dock & && kquitapp5 plasmashell || killall plasmashell && kstart5 plasmashell"; # Restart gui in KDE
+        re-kde = "nix-shell -p killall --command \"kquitapp5 plasmashell || killall plasmashell && kstart5 plasmashell\""; # Restart gui in KDE
         mount = "mount|column -t";                      # Pretty mount
         speedtest = "nix-shell -p python3 --command \"curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -\"";
         temperature = "watch \"nix-shell -p lm_sensors --command sensors | grep temp1 | awk '{print $2}' | sed 's/+//'\"";
@@ -175,7 +175,9 @@
   };
 
   # Raw configuration files (https://ghedam.at/24353/tutorial-getting-started-with-home-manager-for-nix)
-  home.file.".local/share/osu/storage.ini".source = ./configFiles/storage.ini; # osu configuration for surface
+  home.file.".local/share/osu/storage.ini".source = builtins.toFile "storage.ini" ''
+FullPath = ${location}/hosts/configFiles/osu-lazer/
+  '';
 
   home.stateVersion = "22.11";
 }
