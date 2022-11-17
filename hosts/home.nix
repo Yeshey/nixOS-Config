@@ -4,6 +4,12 @@
 
 { config, lib, pkgs, user, location, ... }:
 
+let
+  # Overlay minecraft
+  minecraft-fixed = pkgs.callPackage ./extraFiles/minecraft.nix {
+    inherit (self);
+  };
+in
 { 
 
   home = {
@@ -22,7 +28,7 @@
 
       # Games
       osu-lazer
-      prismlauncher # polymc # prismlauncher
+      minecraft-fixed # polymc # prismlauncher
 
       # Libreoffice
       libreoffice-qt
@@ -38,6 +44,7 @@
   };
 
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.config.minecraft-fixed.commandLineArgs = "--workDir \"${location}/hosts/configFiles/.minecraft/\"";
 
   programs = {
     home-manager.enable = true;
