@@ -22,7 +22,7 @@
 
       # Games
       osu-lazer
-      prismlauncher
+      polymc # prismlauncher
 
       # Libreoffice
       libreoffice-qt
