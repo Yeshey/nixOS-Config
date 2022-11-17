@@ -90,16 +90,6 @@ in
             --no-daemon \
             --config-file ${location}/hosts/surface/configFiles/thermal-conf.xml \
         '';
-  #services.undervolt = {
-  #  enable = true;
-  #  temp = 64;
-    # BIOS prevents these settings
-    #gpuOffset = -70;
-    #coreOffset = -70;
-    #uncoreOffset = -70;
-    #analogioOffset = -70;
-  #};
-
 
   # swap in ext4:
   swapDevices = [ 
