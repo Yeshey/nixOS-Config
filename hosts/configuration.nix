@@ -4,6 +4,30 @@
 
 { config, lib, pkgs, inputs, user, location, ... }:
 
+/*
+  let
+    # Wrapper to run steam with env variable GDK_SCALE=2 to scale correctly
+    # nixOS wiki on wrappers: https://nixos.wiki/wiki/Nix_Cookbook#Wrapping_packages
+    # Reddit: https://www.reddit.com/r/NixOS/comments/qha9t5/comment/hid3w3z/
+    vivaldi-s = pkgs.runCommand "vivaldi" {
+      buildInputs = [ pkgs.makeWrapper ];
+    } ''
+      mkdir $out
+      # Link every top-level folder from pkgs.vivaldi to our new target
+      ln -s ${pkgs.vivaldi}/* $out
+      # Except the bin folder
+      rm $out/bin
+      mkdir $out/bin
+      # We create the bin folder ourselves and link every binary in it
+      ln -s ${pkgs.vivaldi}/bin/* $out/bin
+      # Except the steam binary
+      rm $out/bin/vivaldi
+      # Because we create this ourself, by creating a wrapper
+      makeWrapper ${pkgs.vivaldi}/bin/vivaldi $out/bin/vivaldi \
+        --add-flags "-t --use-gl=desktop --enable-features=VaapiVideoDecoder --disable-features=UseOzonePlatform"
+    '';
+  in
+  */
 {
 
 #     _____           _                    _____             __ _       
@@ -261,6 +285,8 @@
     vivaldi = {
       proprietaryCodecs = true;
       enableWideVine = true;
+      # https://forum.vivaldi.net/topic/62354/hardware-accelerated-video-encode/20 # in chrome its enabled by default, why not vivaldi
+      # commandLineArgs = "--use-gl=desktop --enable-features=VaapiVideoDecoder --disable-features=UseOzonePlatform" ;  # wtf doesnt work?
     };
   };
 
@@ -289,6 +315,31 @@
         }
       );
     })
+
+    # https://www.reddit.com/r/NixOS/comments/uy21q1/wrapping_discord_to_add_flags/
+    # but doesn't work
+    /* (final: prev: let
+      source = (prev.vivaldi.override { 
+      }).overrideAttrs (_: {
+      });
+      # commandLineArgs = prev.inputs.commandLineArgs ++ [ "--use-gl=desktop" "--enable-features=VaapiVideoDecoder" "--disable-features=UseOzonePlatform" ];
+      commandLineArgs = "--use-gl=desktop --enable-features=VaapiVideoDecoder --disable-features=UseOzonePlatform";
+
+    in {
+      vivaldi = let
+        wrapped = pkgs.writeShellScriptBin "vivaldi" ( ''
+          exec ${source}/bin/vivaldi ${commandLineArgs}
+        '');
+      in
+        pkgs.symlinkJoin {
+          name = "vivaldi";
+          paths = [
+            wrapped
+            source
+          ];
+        };
+    }) */
+
   ];
 
   environment.systemPackages = with pkgs; [
@@ -298,15 +349,16 @@
 
     # Development
     jdk17 # java (alias for openJDK)
+    python
     # haskell-language-server # Haskell    ?
 
+    vivaldi
     bat
     wget
     htop
     btop
     git
     wine
-    vivaldi
     vlc
     firefox
     gparted
