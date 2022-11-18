@@ -4,12 +4,6 @@
 
 { config, lib, pkgs, user, location, ... }:
 
-let
-  # Overlay minecraft
-  minecraft-fixed = pkgs.callPackage ./extraFiles/minecraft.nix {
-    inherit (self);
-  };
-in
 { 
 
   home = {
@@ -28,7 +22,7 @@ in
 
       # Games
       osu-lazer
-      minecraft-fixed # polymc # prismlauncher
+      prismlauncher # polymc # prismlauncher
 
       # Libreoffice
       libreoffice-qt
@@ -44,7 +38,8 @@ in
   };
 
   nixpkgs.config.allowUnfree = true;
-  nixpkgs.config.minecraft-fixed.commandLineArgs = "--workDir \"${location}/hosts/configFiles/.minecraft/\"";
+  # If I use the official launcher I can use this to set the .minecraft directory in my repository
+  # nixpkgs.config.minecraft-fixed.commandLineArgs = "--workDir \"${location}/hosts/configFiles/.minecraft/\"";
 
   programs = {
     home-manager.enable = true;
