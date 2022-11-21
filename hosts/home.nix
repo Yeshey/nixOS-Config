@@ -22,7 +22,8 @@
 
       # Games
       osu-lazer
-      prismlauncher # polymc # prismlauncher
+      prismlauncher # polymc # prismlauncher # for Minecraft
+      heroic
 
       # Libreoffice
       libreoffice-qt
