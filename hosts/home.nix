@@ -100,11 +100,11 @@
     };
 
     # GIthub Desktop is complaining about .git config being read only
-    #git = {
-    #  enable = true;
-    #  userEmail = "yesheysangpo@hotmail.com";
-    #  userName = "Yeshey";
-    #};
+    git = {
+      enable = true;
+      userEmail = "yesheysangpo@hotmail.com";
+      userName = "Yeshey";
+    };
 
     zsh={
       enable = true;
