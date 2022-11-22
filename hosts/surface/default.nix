@@ -110,6 +110,9 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
+  # trying to activate wayland support for vivaldi?
+  nixpkgs.config.vivaldi.commandLineArgs = "--enable-features=UseOzonePlatform --ozone-platform=wayland";
+
   # GNOME Desktop (uses wayland)
   services.xserver = {
     enable = true;
