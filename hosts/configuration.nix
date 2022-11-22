@@ -353,6 +353,7 @@
     # haskell-language-server # Haskell    ?
 
     vivaldi
+    brave
     bat
     wget
     htop
