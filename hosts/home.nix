@@ -16,6 +16,7 @@
       qbittorrent
       yt-dlp # download youtube videos
       baobab
+      p3x-onenote
 
       # tmp
       teams
