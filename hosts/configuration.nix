@@ -368,6 +368,7 @@
     pdfarranger
     helvum # To control pipewire
     virt-manager # virtual machines
+    linux-wifi-hotspot # hotspot
 
     # tmp
     # texlive.combined.scheme-full # LaTeX
