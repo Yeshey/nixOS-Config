@@ -17,9 +17,11 @@
       yt-dlp # download youtube videos
       baobab
       p3x-onenote
+      vivaldi
 
       # tmp
       teams
+      staruml
 
       # Games
       osu-lazer
@@ -37,6 +39,21 @@
       thefuck
       #autojump
     ];
+  };
+
+  xdg.desktopEntries = {
+    staruml = {
+      name = "staruml";
+      exec = "${pkgs.staruml}/bin/staruml %U --no-sandbox";
+      icon = "staruml";
+      categories = [ "Development" ];
+    };
+    #vivaldi = {
+    #  name = "Vivaldi";
+    #  exec = "${pkgs.vivaldi}/bin/vivaldi %U --enable-features=UseOzonePlatform --ozone-platform=wayland";
+    #  icon = "vivaldi";
+    #  categories = [ "Network" "WebBrowser" ];
+    #};
   };
 
   nixpkgs.config.allowUnfree = true;

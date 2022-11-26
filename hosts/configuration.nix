@@ -353,7 +353,6 @@
     ghc # Haskell
     # haskell-language-server # Haskell    ?
 
-    vivaldi
     brave
     bat
     wget
@@ -368,6 +367,7 @@
     pdfarranger
     helvum # To control pipewire
     virt-manager # virtual machines
+    spice-gtk # for virtual machines (to connect usbs and everything else)
     linux-wifi-hotspot # hotspot
 
     # tmp
@@ -388,6 +388,12 @@
     discord
     exodus
   ];
+
+  # for virtual machines (to connect usbs and everything else)
+  # Not working rn (https://discourse.nixos.org/t/having-an-issue-with-virt-manager-not-allowing-usb-passthrough/6272/3)
+  #security.wrappers.spice-client-glib-usb-acl-helper.source = "${pkgs.spice-gtk}/bin/spice-client-glib-usb-acl-helper";
+  #security.wrappers.spice-client-glib-usb-acl-helper.owner = "${user}";
+  #security.wrappers.spice-client-glib-usb-acl-helper.group = "libvirtd";
 
   # App things
   # for github-desktop to work (https://discourse.nixos.org/t/unlocking-gnome-keyring-automatically-upon-login-with-kde-sddm/6966)
