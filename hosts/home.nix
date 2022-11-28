@@ -21,7 +21,9 @@
 
       # tmp
       teams
-      staruml
+      staruml # UML diagrams
+      jetbrains.clion # C++
+      jetbrains.idea-community # java
 
       # Games
       osu-lazer
