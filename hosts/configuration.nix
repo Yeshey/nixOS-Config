@@ -365,6 +365,7 @@
     gparted
     anydesk
     pdfarranger
+    unrar # to extract .rar with ark in KDE # unrar x Lab5.rar
     helvum # To control pipewire
     virt-manager # virtual machines
     spice-gtk # for virtual machines (to connect usbs and everything else)
@@ -372,6 +373,7 @@
 
     # tmp
     # texlive.combined.scheme-full # LaTeX
+    ocrmypdf # ocrmypdf -l eng+por combined.pdf ok.pdf
 
     # SHELL
     #oh-my-zsh
