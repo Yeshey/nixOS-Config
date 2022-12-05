@@ -16,9 +16,14 @@
       qbittorrent
       yt-dlp # download youtube videos
       baobab
+      p3x-onenote
+      vivaldi
 
       # tmp
       teams
+      staruml # UML diagrams
+      jetbrains.clion # C++
+      jetbrains.idea-community # java
 
       # Games
       osu-lazer
@@ -36,6 +41,21 @@
       thefuck
       #autojump
     ];
+  };
+
+  xdg.desktopEntries = {
+    staruml = {
+      name = "staruml";
+      exec = "${pkgs.staruml}/bin/staruml %U --no-sandbox";
+      icon = "staruml";
+      categories = [ "Development" ];
+    };
+    #vivaldi = {
+    #  name = "Vivaldi";
+    #  exec = "${pkgs.vivaldi}/bin/vivaldi %U --enable-features=UseOzonePlatform --ozone-platform=wayland";
+    #  icon = "vivaldi";
+    #  categories = [ "Network" "WebBrowser" ];
+    #};
   };
 
   nixpkgs.config.allowUnfree = true;
@@ -100,11 +120,11 @@
     };
 
     # GIthub Desktop is complaining about .git config being read only
-    #git = {
-    #  enable = true;
-    #  userEmail = "yesheysangpo@hotmail.com";
-    #  userName = "Yeshey";
-    #};
+    git = {
+      enable = true;
+      userEmail = "yesheysangpo@hotmail.com";
+      userName = "Yeshey";
+    };
 
     zsh={
       enable = true;
