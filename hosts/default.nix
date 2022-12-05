@@ -25,7 +25,7 @@
     modules = [                                         # Modules that are used.
       ./surface
       ./configuration.nix
-      # nixos-hardware.nixosModules.microsoft-surface # Broken for now (https://github.com/NixOS/nixos-hardware/issues/504)
+      nixos-hardware.nixosModules.microsoft-surface # Broken for now (https://github.com/NixOS/nixos-hardware/issues/504)
 
       home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
         home-manager.useGlobalPkgs = true;
