@@ -65,6 +65,7 @@
   programs = {
     home-manager.enable = true;
 
+    # todo Allow VScode to change settings on run time, see last response: https://github.com/nix-community/home-manager/issues/1800
     vscode = {
       enable = true;
       package = pkgs.vscodium;
