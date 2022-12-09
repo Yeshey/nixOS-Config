@@ -62,10 +62,31 @@
   # If I use the official launcher I can use this to set the .minecraft directory in my repository
   # nixpkgs.config.minecraft-fixed.commandLineArgs = "--workDir \"${location}/hosts/configFiles/.minecraft/\"";
 
+  # ====== Making VScode settings writable ======
+  /*
+  home = {
+    activation = mkIf cfg.mutable {
+      removeExistingVSCodeSettings = lib.hm.dag.entryBefore [ "checkLinkTargets" ] ''
+        rm -rf "${userFilePath}"
+      '';
+
+      overwriteVSCodeSymlink = let
+        userSettings = config.programs.vscode.userSettings;
+        jsonSettings = pkgs.writeText "tmp_vscode_settings" (builtins.toJSON userSettings);
+      in lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+        rm -rf "${userFilePath}"
+        cat ${jsonSettings} | ${pkgs.jq}/bin/jq --monochrome-output > "${userFilePath}"
+      '';
+    };
+  };
+  */
+  # ====== ============================ ======
+
   programs = {
     home-manager.enable = true;
 
     # todo Allow VScode to change settings on run time, see last response: https://github.com/nix-community/home-manager/issues/1800
+    # check also how he implemented in his repository: https://github.com/rgbatty/cauldron
     vscode = {
       enable = true;
       package = pkgs.vscodium;
