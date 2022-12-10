@@ -47,6 +47,8 @@
         yt-dlp # download youtube videos
         baobab
         p3x-onenote
+
+        # Browsers
         vivaldi
 
         # tmp
