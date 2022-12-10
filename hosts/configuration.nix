@@ -159,7 +159,6 @@
     description = "Yeshey";
     extraGroups = [ "networkmanager" "wheel" "docker" "adbusers" "libvirtd" "surface-control"]; # libvirtd - For android-studio
     packages = with pkgs; [
-    #  firefox
     #  thunderbird
     ];
     #openssh.authorizedKeys.keys = [
@@ -353,7 +352,11 @@
     ghc # Haskell
     # haskell-language-server # Haskell    ?
 
+    # Browsers
     brave
+    tor-browser-bundle-bin
+    firefox
+
     bat
     wget
     htop
@@ -361,7 +364,6 @@
     git
     wine
     vlc
-    firefox
     gparted
     anydesk
     pdfarranger
