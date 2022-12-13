@@ -111,6 +111,7 @@
     # Games
     lutris
     steam
+    grapejuice # roblox
 
     # FOR PLASMA DESKTOP
     scrot # for plasma config saver widget
