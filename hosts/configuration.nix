@@ -386,8 +386,8 @@
     # gnome.seahorse # to manage the gnome keyring
 
     # Games
-    
 
+    
     # Overlayed
     discord
     exodus

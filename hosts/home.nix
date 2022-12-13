@@ -47,6 +47,7 @@
         yt-dlp # download youtube videos
         baobab
         p3x-onenote
+        gnome.cheese
 
         # Browsers
         vivaldi
