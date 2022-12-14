@@ -54,7 +54,7 @@
 
         # tmp
         teams
-        staruml # UML diagrams
+        #staruml # UML diagrams
         jetbrains.clion # C++
         jetbrains.idea-community # java
 
@@ -76,6 +76,7 @@
       ];
     };
 
+/*
     xdg.desktopEntries = {
       staruml = {
         name = "staruml";
@@ -90,6 +91,7 @@
       #  categories = [ "Network" "WebBrowser" ];
       #};
     };
+*/    
 
     nixpkgs.config.allowUnfree = true;
     # If I use the official launcher I can use this to set the .minecraft directory in my repository
