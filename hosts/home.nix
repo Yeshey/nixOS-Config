@@ -62,6 +62,7 @@
         osu-lazer
         prismlauncher # polymc # prismlauncher # for Minecraft
         heroic
+        minetest
 
         # Libreoffice
         libreoffice-qt
