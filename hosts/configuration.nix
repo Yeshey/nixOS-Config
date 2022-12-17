@@ -174,6 +174,9 @@
   # needed to make home-manager zsh work with gdm (https://www.reddit.com/r/NixOS/comments/ocimef/users_not_showing_up_in_gnome/)
   environment.pathsToLink = [ "/share/zsh" ];
   environment.shells = [ pkgs.zsh ];
+  environment.sessionVariables = rec {
+    CHROME_EXECUTABLE  = "\$(whereis vivaldi | cut -d \" \" -f2)"; # needed for flutter
+  };
   
 #      __                 __                            ____     
 #   __/ /_  ___ __ _____ / /____ __ _    _______  ___  / _(_)__ _
@@ -351,6 +354,7 @@
     python
     ghc # Haskell
     # haskell-language-server # Haskell    ?
+    
 
     # Browsers
     brave
@@ -376,6 +380,17 @@
     # tmp
     # texlive.combined.scheme-full # LaTeX
     ocrmypdf # ocrmypdf -l eng+por combined.pdf ok.pdf
+
+    # for amov, flutter need this
+    flutter # Dart, for amov
+    # Make it detect android studio: https://github.com/flutter/flutter/issues/18970#issuecomment-762399686
+    clang
+    cmake
+    ninja
+    pkg-config
+    # https://github.com/NixOS/nixpkgs/issues/36759 ?
+
+
 
     # SHELL
     #oh-my-zsh
