@@ -126,8 +126,7 @@
           matklad.rust-analyzer
           arrterian.nix-env-selector # nix environment selector
 
-          # Haskell ?
-          # haskell.haskell
+          haskell.haskell
 
           # python
           ms-python.python
