@@ -95,7 +95,7 @@ in
   swapDevices = [ 
     {
       device = "/swapfile";
-      priority = 100;
+      priority = 100; # Higher numbers indicate higher priority.
       size = 10*1024;
     }
   ];
