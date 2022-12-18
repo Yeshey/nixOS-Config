@@ -46,8 +46,8 @@
         qbittorrent
         yt-dlp # download youtube videos
         baobab
-        p3x-onenote
         gnome.cheese
+        p3x-onenote # might be worth trying notekit(https://github.com/blackhole89/notekit) and Zettlr(https://github.com/Zettlr/Zettlr)
 
         # Browsers
         vivaldi

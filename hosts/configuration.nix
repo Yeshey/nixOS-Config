@@ -175,7 +175,7 @@
   environment.pathsToLink = [ "/share/zsh" ];
   environment.shells = [ pkgs.zsh ];
   environment.sessionVariables = rec {
-    CHROME_EXECUTABLE  = "\$(whereis vivaldi | cut -d \" \" -f2)"; # needed for flutter
+    CHROME_EXECUTABLE  = "\$(whereis brave | cut -d \" \" -f2)"; # needed for flutter
   };
   
 #      __                 __                            ____     
