@@ -62,7 +62,10 @@
   # Docker to automatically grab Epic Games Free games
   # Follow the service log with `journalctl -fu podman-epic_games.service`
   # You have to put the config.json5 file in /mnt/Epic_Games_Claimer/config.json5
+
   virtualisation.docker.enable = true;
+  virtualisation.docker.enableOnBoot = true; # Big WTF
+  # Help from https://github.com/NixOS/nixpkgs/issues/68349 and https://docs.docker.com/storage/storagedriver/btrfs-driver/
   virtualisation.oci-containers.containers = {
     epic_games = {
       image = "charlocharlie/epicgames-freegames:latest";
@@ -72,6 +75,7 @@
       # autoStart = true;
     };
   };
+  
 
   # KDE Plasma
   services.xserver = {
@@ -102,7 +106,7 @@
     stremio
 
     # Epic_Games_Claimer
-    docker
+    # docker
 
     # tmp
     virt-manager # for VMs android studio (installed through flatpak for latest version)
