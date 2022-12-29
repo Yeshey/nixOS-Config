@@ -385,6 +385,7 @@
 
     # for amov, flutter need this
     flutter # Dart, for amov # Make it detect android studio: https://github.com/flutter/flutter/issues/18970#issuecomment-762399686
+    # also do this: https://stackoverflow.com/questions/60475481/flutter-doctor-error-android-sdkmanager-tool-not-found-windows
     clang
     cmake
     ninja
