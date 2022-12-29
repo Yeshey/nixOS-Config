@@ -66,6 +66,7 @@
   virtualisation.docker.enable = true;
   virtualisation.docker.enableOnBoot = true; # Big WTF
   # Help from https://github.com/NixOS/nixpkgs/issues/68349 and https://docs.docker.com/storage/storagedriver/btrfs-driver/
+  virtualisation.docker.storageDriver = "btrfs";
   virtualisation.oci-containers.containers = {
     epic_games = {
       image = "charlocharlie/epicgames-freegames:latest";
