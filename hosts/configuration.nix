@@ -367,6 +367,7 @@
     wget
     htop
     btop
+    tree
     git
     wine
     vlc
