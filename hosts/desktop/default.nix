@@ -112,6 +112,7 @@
     # tmp
     virt-manager # for VMs android studio (installed through flatpak for latest version)
     # virtualbox
+    # texlive.combined.scheme-full # LaTeX
 
     # Games
     lutris
