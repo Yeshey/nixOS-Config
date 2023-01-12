@@ -25,7 +25,8 @@
       fsType = "ext4";
     }; */
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/1021f606-5adf-438b-8f50-3a7713c2da9b";
+    { device = "/dev/disk/by-uuid/c0d72823-1159-4eef-a4ba-f50c443aff6b"; 
+      #sudo blkid /dev/VG/root
       #device = "/dev/disk/by-label/root";
       fsType = "ext4";
     };
