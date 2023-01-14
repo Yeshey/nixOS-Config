@@ -27,7 +27,7 @@
   fileSystems."/swap" =
     { device = "/dev/disk/by-uuid/69e9ba80-fb1f-4c2d-981d-d44e59ff9e21";
       fsType = "btrfs";
-      options = [ "subvol=swap" ];
+      options = [ "subvol=swap" "nofail" ];
     };
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -78,12 +78,12 @@
   fileSystems."/mnt/DataDisk" = {
     device = "/dev/disk/by-label/DataDisk";
     fsType = "auto";
-    options = [ "nosuid" "nodev" "nofail" "x-gvfs-show"];
+    options = [ "nosuid" "nodev" "nofail" "x-gvfs-show"]; # x-systemd.device-timeout=3s
   };
   fileSystems."/mnt/hdd-ntfs" = {
     device = "/dev/disk/by-label/hdd-ntfs";
     fsType = "auto";
-    options = [ "uid=1000" "gid=1000" "dmask=007" "fmask=117" ];
+    options = [ "uid=1000" "gid=1000" "dmask=007" "fmask=117" "nofail" ];
   };
   fileSystems."/mnt/hdd-btrfs" = {
     device = "/dev/disk/by-label/hdd-btrfs";
