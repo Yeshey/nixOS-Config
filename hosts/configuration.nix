@@ -300,7 +300,7 @@
       discord = super.discord.overrideAttrs (
         _: { src = builtins.fetchTarball {
           url = "https://discord.com/api/download?platform=linux&format=tar.gz"; 
-          sha256 = "1pw9q4290yn62xisbkc7a7ckb1sa5acp91plp2mfpg7gp7v60zvz";
+          sha256 = "sha256:1vw602k7dzqm2zxic88jaw9pbg5w436x9h2y74f7jmn3wzdg5bm3";
         };}
       );
     })
