@@ -346,6 +346,11 @@
 
   ];
 
+  # REMEMBER TO TRY TO BUILD WITHOUT THIS TO SEE IF IT IS WORKING AGAIN
+  nixpkgs.config.permittedInsecurePackages = [
+    "python-2.7.18.6"
+  ];
+
   environment.systemPackages = with pkgs; [
     # vim # The Nano editor is installed by default.
     # nvim
