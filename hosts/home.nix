@@ -49,12 +49,14 @@
         gnome.cheese
         p3x-onenote # might be worth trying notekit(https://github.com/blackhole89/notekit) and Zettlr(https://github.com/Zettlr/Zettlr)
         signal-desktop
+        # etcher #insecure?
 
         # Browsers
         vivaldi
 
         # tmp
         teams
+        skypeforlinux
         #staruml # UML diagrams
         jetbrains.clion # C++
         jetbrains.idea-community # java

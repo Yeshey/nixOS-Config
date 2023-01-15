@@ -15,6 +15,7 @@
     packages = with pkgs; [
 
       gimp
+      krita
       inkscape
 
     ];
