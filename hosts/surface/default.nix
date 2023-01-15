@@ -95,10 +95,14 @@ in
   swapDevices = [ 
     {
       device = "/swapfile";
-      priority = 100; # Higher numbers indicate higher priority.
+      priority = 0; # Higher numbers indicate higher priority.
       size = 10*1024;
     }
   ];
+  zramSwap = {
+    enable = true;
+    algorithm = "zstd";
+  };
 
   #     ___            __ 
   #    / _ )___  ___  / /_
