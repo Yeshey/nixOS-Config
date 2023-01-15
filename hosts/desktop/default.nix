@@ -18,6 +18,11 @@
   imports =                                     # For now, if applying to other system, swap files
     [(import ./hardware-configuration.nix)];    # Current system hardware config @ /etc/nixos/hardware-configuration.nix
 
+  services.thermald = {
+    debug = false;
+    enable = true;
+  };
+
 #     ___            __ 
 #    / _ )___  ___  / /_
 #   / _  / _ \/ _ \/ __/
