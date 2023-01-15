@@ -84,7 +84,7 @@
   fileSystems."/mnt/DataDisk" = {
     device = "/dev/disk/by-label/DataDisk";
     fsType = "auto";
-    options = [ "nosuid" "nodev" "nofail" "x-gvfs-show"];
+    options = [ "nosuid" "nodev" "nofail" "x-gvfs-show"]; # x-systemd.device-timeout=3s
   };
   fileSystems."/mnt/hdd-ntfs" = {
     device = "/dev/disk/by-label/hdd-ntfs";
