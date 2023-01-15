@@ -63,6 +63,7 @@
 
         # Games
         osu-lazer
+        # tetrio-desktop # runs horribly, better on the web
         prismlauncher # polymc # prismlauncher # for Minecraft
         heroic
         minetest
