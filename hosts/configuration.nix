@@ -362,7 +362,7 @@
     brave
     tor-browser-bundle-bin
     firefox
-
+    
     bat
     wget
     htop
