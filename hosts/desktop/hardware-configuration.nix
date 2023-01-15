@@ -27,7 +27,7 @@
   fileSystems."/swap" =
     { device = "/dev/disk/by-uuid/69e9ba80-fb1f-4c2d-981d-d44e59ff9e21";
       fsType = "btrfs";
-      options = [ "subvol=swap" "nofail" ];
+      options = [ "subvol=swap" "nofail"];
     };
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -67,10 +67,16 @@
     {
       device = "/mnt/hdd-btrfs/swap/swaphdd";
       priority = 0; # Higher numbers indicate higher priority.
+      options = [ "nofail"];
     }
     { 
       device = "/swap/swapfile";
       priority = 100; # Higher numbers indicate higher priority.
+    }
+    { 
+      device = "/dev/disk/by-label/DataDiskSwap"; 
+      priority = 50; # Higher numbers indicate higher priority.
+      options = [ "nofail"];
     }
   ];
 
@@ -83,7 +89,7 @@
   fileSystems."/mnt/hdd-ntfs" = {
     device = "/dev/disk/by-label/hdd-ntfs";
     fsType = "auto";
-    options = [ "uid=1000" "gid=1000" "dmask=007" "fmask=117" "nofail" ];
+    options = [ "uid=1000" "gid=1000" "dmask=007" "fmask=117" "nofail"];
   };
   fileSystems."/mnt/hdd-btrfs" = {
     device = "/dev/disk/by-label/hdd-btrfs";
