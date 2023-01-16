@@ -71,11 +71,12 @@
     }
     { 
       device = "/swap/swapfile";
-      priority = 100; # Higher numbers indicate higher priority.
+      priority = 1; # Higher numbers indicate higher priority.
     }
     { 
       device = "/dev/disk/by-label/DataDiskSwap"; 
-      priority = 50; # Higher numbers indicate higher priority.
+      priority = 2; # Higher numbers indicate higher priority.
+      # This needs to be higher, so hibernation works, systemd only checks the swap device with more priority (https://bugs.launchpad.net/ubuntu/+source/systemd/+bug/1910252)
       options = [ "nofail"];
     }
   ];
