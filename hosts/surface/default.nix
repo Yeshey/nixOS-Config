@@ -99,10 +99,10 @@ in
       size = 10*1024;
     }
   ];
-  #zramSwap = { # zram was making it very slow every time there were animations on screen for some reason
-  #  enable = true;
-  #  algorithm = "zstd";
-  #};
+  zramSwap = { # zram only made things slwo whenever there were animations when the thermald temperature threshold was set too low (61069)
+    enable = true;
+    algorithm = "zstd";
+  };
 
   #     ___            __ 
   #    / _ )___  ___  / /_

@@ -234,6 +234,19 @@
 
     };
 
+    # Syncthing shortcut
+    home.file.".local/share/applications/vivaldi-syncthing.desktop".source = builtins.toFile "vivaldi-syncthing.desktop" ''
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Version=1.0
+Terminal=false
+Type=Application
+Name=Syncthing
+Exec=vivaldi --profile-directory=Default --app-id=kihndcefldmlbmbjgblelephlgjpmkgl
+Icon=vivaldi-kihndcefldmlbmbjgblelephlgjpmkgl-Default
+StartupWMClass=crx_kihndcefldmlbmbjgblelephlgjpmkgl
+    '';
+
     # Raw configuration files (https://ghedam.at/24353/tutorial-getting-started-with-home-manager-for-nix)
     home.file.".local/share/osu/storage.ini".source = builtins.toFile "storage.ini" ''
   FullPath = ${location}/hosts/configFiles/osu-lazer/
