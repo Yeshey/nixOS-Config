@@ -99,7 +99,7 @@ in
       size = 10*1024;
     }
   ];
-  zramSwap = {
+  zramSwap = { # zram only made things slwo whenever there were animations when the thermald temperature threshold was set too low (61069)
     enable = true;
     algorithm = "zstd";
   };
@@ -130,11 +130,10 @@ in
   };
 
   # A multi-touch gesture recognizer
-  services.touchegg.enable = true;
+  # services.touchegg.enable = true; # only for X11
 
   environment.systemPackages = with pkgs; [
     gnome.gnome-tweaks
-    touchegg
     stremio-scalled
     # iptsd
     
