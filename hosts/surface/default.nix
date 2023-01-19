@@ -99,10 +99,10 @@ in
       size = 10*1024;
     }
   ];
-  zramSwap = {
-    enable = true;
-    algorithm = "zstd";
-  };
+  #zramSwap = { # zram was making it very slow every time there were animations on screen for some reason
+  #  enable = true;
+  #  algorithm = "zstd";
+  #};
 
   #     ___            __ 
   #    / _ )___  ___  / /_
@@ -130,11 +130,10 @@ in
   };
 
   # A multi-touch gesture recognizer
-  services.touchegg.enable = true;
+  # services.touchegg.enable = true; # only for X11
 
   environment.systemPackages = with pkgs; [
     gnome.gnome-tweaks
-    touchegg
     stremio-scalled
     # iptsd
     
