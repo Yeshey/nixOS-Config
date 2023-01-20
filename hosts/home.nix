@@ -235,17 +235,27 @@
 
     };
 
-    # Syncthing shortcut
+    # Syncthing shortcut, based on webapp manager created shortcut (https://github.com/linuxmint/webapp-manager)
     home.file.".local/share/applications/vivaldi-syncthing.desktop".source = builtins.toFile "vivaldi-syncthing.desktop" ''
-#!/usr/bin/env xdg-open
 [Desktop Entry]
 Version=1.0
-Terminal=false
-Type=Application
 Name=Syncthing
-Exec=vivaldi --profile-directory=Default --app-id=kihndcefldmlbmbjgblelephlgjpmkgl
-Icon=vivaldi-kihndcefldmlbmbjgblelephlgjpmkgl-Default
-StartupWMClass=crx_kihndcefldmlbmbjgblelephlgjpmkgl
+Comment=Web App
+Exec=vivaldi --app="http://127.0.0.1:8384#" --class=WebApp-Syncthingvivaldi5519 --user-data-dir=/home/yeshey/.local/share/ice/profiles/Syncthingvivaldi5519
+Terminal=false
+X-MultipleArgs=false
+Type=Application
+Icon=webapp-manager
+Categories=GTK;WebApps;
+MimeType=text/html;text/xml;application/xhtml_xml;
+StartupWMClass=WebApp-Syncthingvivaldi5519
+StartupNotify=true
+X-WebApp-Browser=Vivaldi
+X-WebApp-URL=http://127.0.0.1:8384#
+X-WebApp-CustomParameters=
+X-WebApp-Navbar=false
+X-WebApp-PrivateWindow=false
+X-WebApp-Isolated=true
     '';
 
     # Raw configuration files (https://ghedam.at/24353/tutorial-getting-started-with-home-manager-for-nix)
