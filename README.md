@@ -20,7 +20,11 @@ More Documentation for myself about nixOS in my [TechNotes Repo](https://github.
 - Have a way to run `nixos-rebuild` with very low priority, and using low memory. not just `sudo nice -n 19 nixos-rebuild switch`, maybe use cgroups
   - Super low cgroup priority in nixOS? https://unix.stackexchange.com/questions/44985/limit-memory-usage-for-a-single-linux-process
 
-- Make PDF unite Work in nixOS
+- Make it so the surface doesn't die when you suspend it, or find an alternative to suspending it.
+
+- Make PDF unite Work in nixOS, make t so you can run [this script](https://github.com/Yeshey/TechNotes/blob/main/techNotes.md#1121-unite)
+
+- Can you alter mmore settings in gnome(surface) and add them to your nix configuration with dconf2nix now that you have a configuration running already? [dconf2nix github](https://github.com/gvolpe/dconf2nix)
 
 ## Issues
 
