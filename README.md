@@ -28,6 +28,9 @@ More Documentation for myself about nixOS in my [TechNotes Repo](https://github.
 
 - Can you alter mmore settings in gnome(surface) and add them to your nix configuration with dconf2nix now that you have a configuration running already? [dconf2nix github](https://github.com/gvolpe/dconf2nix)
 
+- When the command is not found, why am I getting a weird error instead of a helpful message?
+  - nixOS DBI connect unable to open database file(https://discourse.nixos.org/t/command-not-found-unable-to-open-database/3807)
+
 ## Issues
 
 - Thermald service not working correct
