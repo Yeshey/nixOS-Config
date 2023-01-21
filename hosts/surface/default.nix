@@ -129,6 +129,22 @@ in
     '';
   };
 
+  # Auto Upgrade
+  system.autoUpgrade = {
+    enable = true;
+    dates = "15:00";
+    flake = "${location}/";
+    flags = [
+        "${location}#surface" "--update-input" "nixpkgs"
+    ];
+    allowReboot = true; # set to false
+    # and make this run with low priority
+
+    #enable = true;
+    #allowReboot = true;
+    #channel = "https://nixos.org/channels/nixos-unstable";
+  };
+
   # A multi-touch gesture recognizer
   # services.touchegg.enable = true; # only for X11
 
