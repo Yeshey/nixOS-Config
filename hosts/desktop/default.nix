@@ -64,6 +64,22 @@
     };
   };
   
+  # Auto Upgrade
+  system.autoUpgrade = {
+    enable = true;
+    dates = "15:00";
+    flake = "${location}/";
+    flags = [
+        "${location}#laptop" "--update-input" "nixpkgs"
+    ];
+    allowReboot = true; # set to false
+    # and make this run with low priority
+
+    #enable = true;
+    #allowReboot = true;
+    #channel = "https://nixos.org/channels/nixos-unstable";
+  };
+
   # Docker 
   # Docker to automatically grab Epic Games Free games
   # Follow the service log with `journalctl -fu podman-epic_games.service`

@@ -189,13 +189,6 @@
   # Bluetooth
   hardware.bluetooth.enable = true;
 
-  # Auto Upgrade
-  system.autoUpgrade = {
-    enable = true;
-    allowReboot = true;
-    channel = "https://nixos.org/channels/nixos-unstable";
-  };
-
   # Garbage Collect
   nix = {
     settings = {

@@ -14,7 +14,7 @@ More Documentation for myself about nixOS in my [TechNotes Repo](https://github.
 
   - MS WhiteBoard: https://whiteboard.office.com
 
-- Make system.autoUpgrade not make PC unusable:
+- Make system.autoUpgrade not make PC unusable(right now it grabs /etc/nixos/ configuration):
   - https://discourse.nixos.org/t/system-autoupgrade-nearly-halts-my-system-even-though-nixos-rebuild-doesnt/23820
 
 - Have a way to run `nixos-rebuild` with very low priority, and using low memory. not just `sudo nice -n 19 nixos-rebuild switch`, maybe use cgroups
@@ -22,7 +22,9 @@ More Documentation for myself about nixOS in my [TechNotes Repo](https://github.
 
 - Make it so the surface doesn't die when you suspend it, or find an alternative to suspending it.
 
-- Make PDF unite Work in nixOS, make t so you can run [this script](https://github.com/Yeshey/TechNotes/blob/main/techNotes.md#1121-unite)
+- Make PDF unite Work in nixOS, make t so you can run [this script](https://github.com/Yeshey/TechNotes/blob/main/techNotes.md#1121-unite), add it to zsh
+
+- figure out how to add functions aliases to zsh
 
 - Can you alter mmore settings in gnome(surface) and add them to your nix configuration with dconf2nix now that you have a configuration running already? [dconf2nix github](https://github.com/gvolpe/dconf2nix)
 
