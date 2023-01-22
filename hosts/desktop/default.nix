@@ -12,7 +12,7 @@
 #               └─ default.nix
 #
 
-{ config, pkgs, user, ... }:
+{ config, pkgs, user, location, ... }:
 
 {
   imports =                                     # For now, if applying to other system, swap files
@@ -64,6 +64,23 @@
     };
   };
   
+  # Auto Upgrade
+  system.autoUpgrade = {
+    enable = true;
+    dates = "19:15";
+    flake = "${location}/";
+    flags = [
+        "${location}#laptop" "--update-input" "nixpkgs"
+        # [ "--update-input" "nixpkgs" "--commit-lock-file" ]
+    ];
+    allowReboot = true; # set to false
+    # and make this run with low priority
+
+    #enable = true;
+    #allowReboot = true;
+    #channel = "https://nixos.org/channels/nixos-unstable";
+  };
+
   # Docker 
   # Docker to automatically grab Epic Games Free games
   # Follow the service log with `journalctl -fu podman-epic_games.service`

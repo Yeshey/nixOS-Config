@@ -45,6 +45,11 @@
 #      ./home-manager.nix
 #    ];
 
+#imports =
+#    [ 
+#      (./nixFiles/bluetooth.nix) # override bluetooth so it has --experimental
+#    ];
+
 #     ___            __ 
 #    / _ )___  ___  / /_
 #   / _  / _ \/ _ \/ __/
@@ -186,14 +191,11 @@
 #   /_/   /___/\_, /___/\__/\__/_/_/_/  \__/\___/_//_/_//_/\_, / 
 #             /___/                                       /___/
 
+  # now in imports to override
   # Bluetooth
-  hardware.bluetooth.enable = true;
-
-  # Auto Upgrade
-  system.autoUpgrade = {
+  hardware.bluetooth = {
     enable = true;
-    allowReboot = true;
-    channel = "https://nixos.org/channels/nixos-unstable";
+    package = pkgs.bluezFull;
   };
 
   # Garbage Collect
