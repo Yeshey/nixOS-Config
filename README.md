@@ -8,7 +8,6 @@ More Documentation for myself about nixOS in my [TechNotes Repo](https://github.
 
 ## To-Do
 
-- Speak with teh surface kernel guys
 - Make a desktop entry for MS whiteboard
   - https://discourse.nixos.org/t/create-desktop-files-with-home-manager/22261
 
@@ -21,8 +20,6 @@ More Documentation for myself about nixOS in my [TechNotes Repo](https://github.
   - Super low cgroup priority in nixOS? https://unix.stackexchange.com/questions/44985/limit-memory-usage-for-a-single-linux-process
 
 - Make it so the surface doesn't die when you suspend it, or find an alternative to suspending it.
-
-- Make PDF unite Work in nixOS, make t so you can run [this script](https://github.com/Yeshey/TechNotes/blob/main/techNotes.md#1121-unite), add it to zsh
 
 - figure out how to add functions aliases to zsh
 

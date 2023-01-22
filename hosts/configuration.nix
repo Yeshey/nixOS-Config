@@ -45,6 +45,11 @@
 #      ./home-manager.nix
 #    ];
 
+#imports =
+#    [ 
+#      (./nixFiles/bluetooth.nix) # override bluetooth so it has --experimental
+#    ];
+
 #     ___            __ 
 #    / _ )___  ___  / /_
 #   / _  / _ \/ _ \/ __/
@@ -186,8 +191,12 @@
 #   /_/   /___/\_, /___/\__/\__/_/_/_/  \__/\___/_//_/_//_/\_, / 
 #             /___/                                       /___/
 
+  # now in imports to override
   # Bluetooth
-  hardware.bluetooth.enable = true;
+  hardware.bluetooth = {
+    enable = true;
+    package = pkgs.bluezFull;
+  };
 
   # Garbage Collect
   nix = {

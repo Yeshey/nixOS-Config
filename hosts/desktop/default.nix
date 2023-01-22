@@ -67,10 +67,11 @@
   # Auto Upgrade
   system.autoUpgrade = {
     enable = true;
-    dates = "15:00";
+    dates = "19:15";
     flake = "${location}/";
     flags = [
         "${location}#laptop" "--update-input" "nixpkgs"
+        # [ "--update-input" "nixpkgs" "--commit-lock-file" ]
     ];
     allowReboot = true; # set to false
     # and make this run with low priority
