@@ -208,16 +208,29 @@
   # Auto Upgrade
   system.autoUpgrade = {
     enable = true;
-    # dates = "19:15";
+    dates = "22:14";
     flake = "${location}#${host}"; # my flake online uri is for example github:yeshey/nixos-config#laptop
     flags = [
       "--upgrade" # upgrade NixOS to the latest version in your chosen channel
       "--option fallback false" # fallback false should force it to use pre-built packages (https://github.com/NixOS/nixpkgs/issues/77971)
-      # "--update-input nixos-hardware --update-input home-manager --update-input nixpkgs" # To update all the packages
+      "--update-input nixos-hardware --update-input home-manager --update-input nixpkgs" # To update all the packages
       # "--commit-lock-file" # commit the new lock file with git
     ];
     allowReboot = false; # set to false
     # and make this run with low priority
+  };
+  systemd.services.nixos-upgrade.serviceConfig = {
+    # Also worth noting that these only apply to the physical RAM used,
+    # they do not include swap space used. 
+    # (There is a separate MemorySwapMax setting, but no MemorySwapHigh, it seems.)
+    # https://unix.stackexchange.com/questions/436791/limit-total-memory-usage-for-multiple-instances-of-systemd-service
+    MemoryHigh = [ "500M" ];
+    MemoryMax = [ "2048M" ];
+
+    # https://unix.stackexchange.com/questions/494843/how-to-limit-a-systemd-service-to-play-nice-with-the-cpu
+    CPUWeight = [ "20" ];
+    CPUQuota = [ "85%" ];
+    IOWeight = [ "20" ];
   };
 
   # Garbage Collect
