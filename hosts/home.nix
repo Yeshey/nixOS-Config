@@ -258,6 +258,29 @@ X-WebApp-PrivateWindow=false
 X-WebApp-Isolated=true
     '';
 
+    # MS WhiteBoard, based on webapp manager created shortcut (https://github.com/linuxmint/webapp-manager)
+    home.file.".local/share/applications/MSwhiteboard.desktop".source = builtins.toFile "MSwhiteboard.desktop" ''
+[Desktop Entry]
+Version=1.0
+Name=MS WhiteBoard
+Comment=Web App
+Exec=vivaldi --app="https://whiteboard.office.com" --class=WebApp-MSwhiteboard2348 --user-data-dir=/home/yeshey/.local/share/ice/profiles/MSwhiteboard2348
+Terminal=false
+X-MultipleArgs=false
+Type=Application
+Icon=webapp-manager
+Categories=GTK;WebApps;
+MimeType=text/html;text/xml;application/xhtml_xml;
+StartupWMClass=WebApp-MSwhiteboard2348
+StartupNotify=true
+X-WebApp-Browser=Vivaldi
+X-WebApp-URL=https://whiteboard.office.com
+X-WebApp-CustomParameters=
+X-WebApp-Navbar=false
+X-WebApp-PrivateWindow=false
+X-WebApp-Isolated=true
+    '';
+
     # Raw configuration files (https://ghedam.at/24353/tutorial-getting-started-with-home-manager-for-nix)
     home.file.".local/share/osu/storage.ini".source = builtins.toFile "storage.ini" ''
   FullPath = ${location}/hosts/configFiles/osu-lazer/
