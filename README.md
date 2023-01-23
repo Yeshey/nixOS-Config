@@ -13,6 +13,7 @@ It has my personal configuration for two devices, my Lenovo Legion laptop and my
   - https://discourse.nixos.org/t/system-autoupgrade-nearly-halts-my-system-even-though-nixos-rebuild-doesnt/23820
   - Have a way to run `nixos-rebuild` with very low priority, and using low memory. not just `sudo nice -n 19 nixos-rebuild switch`, maybe use cgroups
   - Super low cgroup priority in nixOS? https://unix.stackexchange.com/questions/44985/limit-memory-usage-for-a-single-linux-process
+  - You made a comment [here](https://github.com/NixOS/nixpkgs/issues/77971) with your alterations to systemd service, once you know they work, give an update there
 
 - Make it so the surface doesn't die when you suspend it, or find an alternative to suspending it.
 
