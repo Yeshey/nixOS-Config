@@ -63,25 +63,6 @@
       '';
     };
   };
-  
-  # Auto Upgrade
-  system.autoUpgrade = {
-    enable = true;
-    # dates = "19:15";
-    flake = "github.com:Yeshey/nixOS-Config";
-    flags = [
-      "--option fallback false"
-      # fallback false should force it to use pre-built packages (https://github.com/NixOS/nixpkgs/issues/77971)
-      # "--update-input" "nixpkgs" "--commit-lock-file" 
-      # To update all the packages
-    ];
-    allowReboot = false; # set to false
-    # and make this run with low priority
-
-    #enable = true;
-    #allowReboot = true;
-    #channel = "https://nixos.org/channels/nixos-unstable";
-  };
 
   # Docker 
   # Docker to automatically grab Epic Games Free games
