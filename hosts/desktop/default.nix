@@ -67,13 +67,15 @@
   # Auto Upgrade
   system.autoUpgrade = {
     enable = true;
-    dates = "19:15";
-    flake = "${location}/";
+    # dates = "19:15";
+    flake = "github.com:Yeshey/nixOS-Config";
     flags = [
-        "${location}#laptop" "--update-input" "nixpkgs"
-        # [ "--update-input" "nixpkgs" "--commit-lock-file" ]
+      "--option fallback false"
+      # fallback false should force it to use pre-built packages (https://github.com/NixOS/nixpkgs/issues/77971)
+      # "--update-input" "nixpkgs" "--commit-lock-file" 
+      # To update all the packages
     ];
-    allowReboot = true; # set to false
+    allowReboot = false; # set to false
     # and make this run with low priority
 
     #enable = true;
