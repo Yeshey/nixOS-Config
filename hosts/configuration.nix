@@ -191,12 +191,18 @@
 #   /_/   /___/\_, /___/\__/\__/_/_/_/  \__/\___/_//_/_//_/\_, / 
 #             /___/                                       /___/
 
-  # now in imports to override
   # Bluetooth
   hardware.bluetooth = {
+    powerOnBoot = true;
     enable = true;
-    package = pkgs.bluezFull;
+    # package = pkgs.bluezFull;
   };
+  # https://github.com/NixOS/nixpkgs/issues/63703
+  # https://discourse.nixos.org/t/how-to-override-nixpkg-services-execstart/17699
+  systemd.services.bluetooth.serviceConfig.ExecStart = [  #I guess you don't need this: lib.mkForce
+    ""
+    "${pkgs.bluez}/libexec/bluetooth/bluetoothd -f /etc/bluetooth/main.conf --experimental" 
+  ];
 
   # Garbage Collect
   nix = {
