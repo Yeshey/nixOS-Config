@@ -8,11 +8,6 @@ More Documentation for myself about nixOS in my [TechNotes Repo](https://github.
 
 ## To-Do
 
-- Make a desktop entry for MS whiteboard
-  - https://discourse.nixos.org/t/create-desktop-files-with-home-manager/22261
-
-  - MS WhiteBoard: https://whiteboard.office.com
-
 - Make system.autoUpgrade not make PC unusable(right now it grabs /etc/nixos/ configuration):
   - https://discourse.nixos.org/t/system-autoupgrade-nearly-halts-my-system-even-though-nixos-rebuild-doesnt/23820
 
