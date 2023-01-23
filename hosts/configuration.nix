@@ -208,7 +208,7 @@
   # Auto Upgrade
   system.autoUpgrade = {
     enable = true;
-    dates = "22:14";
+    # dates = "23:01";
     flake = "${location}#${host}"; # my flake online uri is for example github:yeshey/nixos-config#laptop
     flags = [
       "--upgrade" # upgrade NixOS to the latest version in your chosen channel
@@ -217,9 +217,9 @@
       # "--commit-lock-file" # commit the new lock file with git
     ];
     allowReboot = false; # set to false
-    # and make this run with low priority
   };
   systemd.services.nixos-upgrade.serviceConfig = {
+    # you can follow the service real time with journalctl -f -u nixos-upgrade.service
     # Also worth noting that these only apply to the physical RAM used,
     # they do not include swap space used. 
     # (There is a separate MemorySwapMax setting, but no MemorySwapHigh, it seems.)
@@ -303,7 +303,9 @@
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
-    permitRootLogin = "yes"; # to let surface and Laptop connect to builds for the surface (https://github.com/NixOS/nixpkgs/issues/20718)
+    #settings = {
+      permitRootLogin = "yes"; # to let surface and Laptop connect to builds for the surface (https://github.com/NixOS/nixpkgs/issues/20718)
+    #};
   };
   programs.ssh.startAgent = true;
 
