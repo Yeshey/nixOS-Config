@@ -2,7 +2,7 @@
 # Common System Configuration.nix
 #
 
-{ config, lib, pkgs, inputs, user, location, ... }:
+{ config, lib, pkgs, inputs, user, location, host, ... }:
 
 /*
   let
@@ -204,6 +204,21 @@
     ""
     "${pkgs.bluez}/libexec/bluetooth/bluetoothd -f /etc/bluetooth/main.conf --experimental" 
   ];
+
+  # Auto Upgrade
+  system.autoUpgrade = {
+    enable = true;
+    # dates = "19:15";
+    flake = "${location}#${host}"; # my flake online uri is for example github:yeshey/nixos-config#laptop
+    flags = [
+      "--upgrade" # upgrade NixOS to the latest version in your chosen channel
+      "--option fallback false" # fallback false should force it to use pre-built packages (https://github.com/NixOS/nixpkgs/issues/77971)
+      # "--update-input nixos-hardware --update-input home-manager --update-input nixpkgs" # To update all the packages
+      # "--commit-lock-file" # commit the new lock file with git
+    ];
+    allowReboot = false; # set to false
+    # and make this run with low priority
+  };
 
   # Garbage Collect
   nix = {

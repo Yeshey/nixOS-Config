@@ -2,7 +2,7 @@
 #  Common Home-Manager Configuration
 #
 
-{ config, lib, pkgs, user, location, ... }:
+{ config, lib, pkgs, user, location, host, ... }:
 
 {
     # ====== Making VScode settings writable ======
@@ -169,8 +169,9 @@
         shellAliases = {
           vim = "nvim";
           # ls = "lsd -l --group-dirs first";
-          update = "cd ${location} && sudo nixos-rebuild switch --flake .#laptop"; #old: "sudo nixos-rebuild switch";
-          upgrade = "cd ${location} && sudo nixos-rebuild switch --flake .#laptop --upgrade"; #old: upgrade = "sudo nixos-rebuild switch --upgrade";
+          update = "cd ${location} && sudo nixos-rebuild switch --flake .#${host}"; # old: "sudo nixos-rebuild switch";
+          upgrade = "cd ${location} && sudo nixos-rebuild switch --flake .#${host} --upgrade --update-input nixos-hardware --update-input home-manager --update-input nixpkgs"; /*--commit-lock-file*/ #upgrade: upgrade NixOS to the latest version in your chosen channel";
+          clean = "echo \"This will clean all generations, and optimise the store\" ; sudo sh -c 'nix-collect-garbage -d ; nix-store --optimise'";
           cp = "cp -i";                                   # Confirm before overwriting something
           df = "df -h";                                   # Human-readable sizes
           free = "free -m";                               # Show sizes in MB
@@ -182,7 +183,6 @@
           mount = "mount|column -t";                      # Pretty mount
           speedtest = "nix-shell -p python3 --command \"curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -\"";
           temperature = "watch \"nix-shell -p lm_sensors --command sensors | grep temp1 | awk '{print $2}' | sed 's/+//'\"";
-          clean = "echo \"This will clean all generations, and optimise the store\" ; sudo sh -c 'nix-collect-garbage -d ; nix-store --optimise'";
           rvt = "nix-shell -p ffmpeg --command \"bash <(curl -s https://raw.githubusercontent.com/Yeshey/RecursiveVideoTranscoder/main/RecursiveVideoTranscoder.sh)\"";
           ping = "ping -c 5";                             # Control output of ping
           fastping = "ping -c 100 -s 1";
