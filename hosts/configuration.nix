@@ -215,6 +215,7 @@
       "--option fallback false" # fallback false should force it to use pre-built packages (https://github.com/NixOS/nixpkgs/issues/77971)
       "--update-input nixos-hardware --update-input home-manager --update-input nixpkgs" # To update all the packages
       # "--commit-lock-file" # commit the new lock file with git
+      "|| git checkout -- ${location}/flake.lock" # reverts the changes to flake.lock if things went south
     ];
     allowReboot = false; # set to false
   };
@@ -419,7 +420,7 @@
     anydesk
     pdfarranger
     unrar # to extract .rar with ark in KDE # unrar x Lab5.rar
-    helvum # To control pipewire
+    helvum # To control pipewire Not Working?
     virt-manager # virtual machines
     spice-gtk # for virtual machines (to connect usbs and everything else)
     linux-wifi-hotspot # hotspot

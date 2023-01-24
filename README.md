@@ -18,6 +18,7 @@ It has my personal configuration for two devices, my Lenovo Legion laptop and my
 - Make it so the surface doesn't die when you suspend it, or find an alternative to suspending it.
 
 - figure out how to add functions aliases to zsh
+  - Make it so upgrade and update tries three times before giving up
 
 - Can you alter mmore settings in gnome(surface) and add them to your nix configuration with dconf2nix now that you have a configuration running already? [dconf2nix github](https://github.com/gvolpe/dconf2nix)
 
