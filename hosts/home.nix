@@ -148,7 +148,7 @@
         userEmail = "yesheysangpo@hotmail.com";
         userName = "Yeshey";
       };
-/*
+
       zsh={
         enable = true;
         shellAliases = {
@@ -207,7 +207,6 @@
         oh-my-zsh = {
           enable = true;
           plugins = [ "git" 
-                      "thefuck" 
                       "colored-man-pages" 
                       "alias-finder" 
                       "command-not-found" 
@@ -216,7 +215,7 @@
                       "bgnotify"];
           theme = "frisk"; # robbyrussell # agnoster
         };
-      };*/
+      };
 
     };
 
