@@ -315,7 +315,74 @@
     #  permitRootLogin = "yes"; # to let surface and Laptop connect to builds for the surface (https://github.com/NixOS/nixpkgs/issues/20718)
     #};
   };
-  programs.ssh.startAgent = true;
+  programs = {
+    ssh.startAgent = true;
+
+      # general terminal shell config for all users
+      zsh={
+        enable = true;
+        shellAliases = {
+          vim = "nvim";
+          # ls = "lsd -l --group-dirs first";
+          update = "sudo nixos-rebuild switch --flake ${location}#${host}"; # old: "sudo nixos-rebuild switch";
+          upgrade = "trap \"git checkout -- ${location}/flake.lock\" INT ; sudo nixos-rebuild switch --flake ${location}#${host} --upgrade --update-input nixos-hardware --update-input home-manager --update-input nixpkgs || git checkout -- ${location}/flake.lock"; /*--commit-lock-file*/ #upgrade: upgrade NixOS to the latest version in your chosen channel";
+          clean = "echo \"This will clean all generations, and optimise the store\" ; sudo sh -c 'nix-collect-garbage -d ; nix-store --optimise'";
+          cp = "cp -i";                                   # Confirm before overwriting something
+          df = "df -h";                                   # Human-readable sizes
+          free = "free -m";                               # Show sizes in MB
+          gitu = "git add . && git commit && git push";
+          zshreload = "clear && zsh";
+          zshconfig = "nano ~/.zshrc";
+          # killall latte-dock && latte-dock & && kquitapp5 plasmashell || killall plasmashell && kstart5 plasmashell"
+          re-kde = "nix-shell -p killall --command \"kquitapp5 plasmashell || killall plasmashell && kstart5 plasmashell\""; # Restart gui in KDE
+          mount = "mount|column -t";                      # Pretty mount
+          speedtest = "nix-shell -p python3 --command \"curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -\"";
+          temperature = "watch \"nix-shell -p lm_sensors --command sensors | grep temp1 | awk '{print $2}' | sed 's/+//'\"";
+          rvt = "nix-shell -p ffmpeg --command \"bash <(curl -s https://raw.githubusercontent.com/Yeshey/RecursiveVideoTranscoder/main/RecursiveVideoTranscoder.sh)\"";
+          ping = "ping -c 5";                             # Control output of ping
+          fastping = "ping -c 100 -s 1";
+          ports = "netstat -tulanp";                      # Show Open ports
+          l="ls -l";
+          la="ls -a";
+          lla="ls -la";
+          lt="ls --tree";
+          grep="grep --color=auto";
+          egrep="egrep --color=auto";
+          fgrep="fgrep --color=auto";
+          diff="colordiff";
+          dir="dir --color=auto";
+          vdir="vdir --color=auto";
+          week = "
+            now=$(date '+%V %B %Y');
+            echo \"Week Date:\" $now
+          ";
+          myip = "  
+            echo \"Your external IP address is:\"
+            curl -w '\n' https://ipinfo.io/ip
+          ";
+          chtp = " curl cht.sh/python/\"$1\" ";           # lias to use cht.sh for python help
+          chtc = " curl cht.sh/c/\"$1\" ";                # alias to use cht.sh for c help
+          chtsharp = " curl cht.sh/csharp/\"$1\" ";           # alias to use cht.sh for c# help
+          cht = " curl cht.sh/\"$1\" ";                   # alias to use cht.sh in general
+        };
+        autosuggestions.enable = true;
+        syntaxHighlighting.enable = true;
+        enableCompletion = true;
+        histSize = 100000;
+        ohMyZsh = {
+          enable = true;
+          plugins = [ "git" 
+                      "thefuck" 
+                      "colored-man-pages" 
+                      "alias-finder" 
+                      "command-not-found" 
+                      #"autojump" 
+                      "urltools" 
+                      "bgnotify"];
+          theme = "frisk"; # robbyrussell # agnoster
+        };
+      };
+  };
 
   # Syncthing
   services = {
