@@ -311,9 +311,9 @@
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
-    settings = {
-      permitRootLogin = "yes"; # to let surface and Laptop connect to builds for the surface (https://github.com/NixOS/nixpkgs/issues/20718)
-    };
+    #settings = { # wasn't even working..?
+    #  permitRootLogin = "yes"; # to let surface and Laptop connect to builds for the surface (https://github.com/NixOS/nixpkgs/issues/20718)
+    #};
   };
   programs.ssh.startAgent = true;
 
@@ -366,30 +366,6 @@
         }
       );
     })
-
-    # https://www.reddit.com/r/NixOS/comments/uy21q1/wrapping_discord_to_add_flags/
-    # but doesn't work
-    /* (final: prev: let
-      source = (prev.vivaldi.override { 
-      }).overrideAttrs (_: {
-      });
-      # commandLineArgs = prev.inputs.commandLineArgs ++ [ "--use-gl=desktop" "--enable-features=VaapiVideoDecoder" "--disable-features=UseOzonePlatform" ];
-      commandLineArgs = "--use-gl=desktop --enable-features=VaapiVideoDecoder --disable-features=UseOzonePlatform";
-
-    in {
-      vivaldi = let
-        wrapped = pkgs.writeShellScriptBin "vivaldi" ( ''
-          exec ${source}/bin/vivaldi ${commandLineArgs}
-        '');
-      in
-        pkgs.symlinkJoin {
-          name = "vivaldi";
-          paths = [
-            wrapped
-            source
-          ];
-        };
-    }) */
 
   ];
 
