@@ -83,23 +83,6 @@
       ];
     };
 
-/*
-    xdg.desktopEntries = {
-      staruml = {
-        name = "staruml";
-        exec = "${pkgs.staruml}/bin/staruml %U --no-sandbox";
-        icon = "staruml";
-        categories = [ "Development" ];
-      };
-      #vivaldi = {
-      #  name = "Vivaldi";
-      #  exec = "${pkgs.vivaldi}/bin/vivaldi %U --enable-features=UseOzonePlatform --ozone-platform=wayland";
-      #  icon = "vivaldi";
-      #  categories = [ "Network" "WebBrowser" ];
-      #};
-    };
-*/    
-
     nixpkgs.config.allowUnfree = true;
     # If I use the official launcher I can use this to set the .minecraft directory in my repository
     # nixpkgs.config.minecraft-fixed.commandLineArgs = "--workDir \"${location}/hosts/configFiles/.minecraft/\"";
@@ -172,7 +155,7 @@
           vim = "nvim";
           # ls = "lsd -l --group-dirs first";
           update = "sudo nixos-rebuild switch --flake ${location}#${host}"; # old: "sudo nixos-rebuild switch";
-          upgrade = "trap \"git checkout -- ${location}/flake.lock\" INT ; sudo nixos-rebuild switch --flake ${location}#${host} --upgrade --update-input nixos-hardware --update-input home-manager --update-input nixpkgs || git checkout -- ${location}/flake.lock"; /*--commit-lock-file*/ #upgrade: upgrade NixOS to the latest version in your chosen channel";
+          upgrade = "trap \"git checkout -- ${location}/flake.lock\" INT ; sudo nixos-rebuild switch --flake ${location}#${host} --upgrade --update-input nixos-hardware --update-input home-manager --update-input nixpkgs || git checkout -- ${location}/flake.lock"; #--commit-lock-file #upgrade: upgrade NixOS to the latest version in your chosen channel";
           clean = "echo \"This will clean all generations, and optimise the store\" ; sudo sh -c 'nix-collect-garbage -d ; nix-store --optimise'";
           cp = "cp -i";                                   # Confirm before overwriting something
           df = "df -h";                                   # Human-readable sizes
@@ -224,7 +207,6 @@
         oh-my-zsh = {
           enable = true;
           plugins = [ "git" 
-                      "thefuck" 
                       "colored-man-pages" 
                       "alias-finder" 
                       "command-not-found" 
