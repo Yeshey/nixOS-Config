@@ -71,7 +71,7 @@
         minetest
 
         # Libreoffice
-        # libreoffice-qt
+        libreoffice-qt
         hunspell
         hunspellDicts.uk_UA
  
