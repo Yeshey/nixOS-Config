@@ -2,7 +2,12 @@
   description = "A very basic flake";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    # Release Notes: https://nixos.org/manual/nixos/stable/release-notes.html
+    # sudo nix-channel --add https://nixos.org/channels/nixos-22.11 nixpkgs
+    # sudo nix-channel --add https://nixos.org/channels/nixos-22.11 nixos
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
+
+    
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
