@@ -218,11 +218,11 @@
     # dates = "23:01";
     flake = "${location}#${host}"; # my flake online uri is for example github:yeshey/nixos-config#laptop
     flags = [
-      "--upgrade" # upgrade NixOS to the latest version in your chosen channel
-      "--option fallback false" # fallback false should force it to use pre-built packages (https://github.com/NixOS/nixpkgs/issues/77971)
-      "--update-input nixos-hardware --update-input home-manager --update-input nixpkgs" # To update all the packages
-      # "--commit-lock-file" # commit the new lock file with git
-      "|| git checkout -- ${location}/flake.lock" # reverts the changes to flake.lock if things went south
+      ''--upgrade # upgrade NixOS to the latest version in your chosen channel \
+      --option fallback false" # fallback false should force it to use pre-built packages (https://github.com/NixOS/nixpkgs/issues/77971) \
+      --update-input nixos-hardware --update-input home-manager --update-input nixpkgs # To update all the packages \
+      # "--commit-lock-file" # commit the new lock file with git \
+      || cd ${location} && git checkout -- flake.lock '' # reverts the changes to flake.lock if things went south
     ];
     allowReboot = false; # set to false
   };

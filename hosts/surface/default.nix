@@ -97,6 +97,7 @@ in
       device = "/swapfile";
       priority = 0; # Higher numbers indicate higher priority.
       size = 10*1024;
+      options = [ "nofail"];
     }
   ];
   zramSwap = { # zram only made things slwo whenever there were animations when the thermald temperature threshold was set too low (61069)
