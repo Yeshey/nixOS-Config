@@ -71,10 +71,10 @@
         minetest
 
         # Libreoffice
-        libreoffice-qt
+        # libreoffice-qt
         hunspell
         hunspellDicts.uk_UA
-
+ 
         # SHELL
         oh-my-zsh
         zsh
