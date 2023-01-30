@@ -254,7 +254,7 @@
       dates = "weekly";
       options = "--delete-older-than 10d";
     };
-    extraOptions = ''preallocate-contents = false ''; # for compression to work with btrfs (https://github.com/NixOS/nix/issues/3550)
+    extraOptions = ''preallocate-contents = false ''; # for compression to work with btrfs (https://github.com/NixOS/nix/issues/3550) ...?
   };
 
   # Configure console keymap
