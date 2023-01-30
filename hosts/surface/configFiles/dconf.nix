@@ -1,18 +1,52 @@
 # Generated via dconf2nix: https://github.com/gvolpe/dconf2nix
+# Generated with: nix-shell -p dconf2nix --command "dconf dump / | dconf2nix -e --timeout 15 --verbose > dconf.nix"
+
 { lib, ... }:
 
 with lib.hm.gvariant;
 
 {
   dconf.settings = {
+    "com/uploadedlobster/peek" = {
+      persist-save-folder = "/mnt/ntfsMicroSD-DataDisk/Downloads";
+      persist-window-geometry = mkTuple [ 84 417 ];
+    };
+
+    "org/gnome/Characters" = {
+      recent-characters = [ "🚌" "👍" "🥲" "🥰" "😆" "😁" "😊" "🤣" ];
+    };
+
+    "org/gnome/TextEditor" = {
+      last-save-directory = "file:///mnt/ntfsMicroSD-DataDisk/Downloads";
+    };
+
+    "org/gnome/Totem" = {
+      active-plugins = [ "vimeo" "screenshot" "autoload-subtitles" "mpris" "rotation" "recent" "variable-rate" "skipto" "save-file" "screensaver" "open-directory" "apple-trailers" "movie-properties" ];
+      subtitle-encoding = "UTF-8";
+    };
+
     "org/gnome/baobab/ui" = {
       is-maximized = false;
       window-size = mkTuple [ 960 600 ];
     };
 
+    "org/gnome/cheese" = {
+      burst-delay = 1000;
+    };
+
+    "org/gnome/clocks" = {
+      timers = "[{'duration': <240>, 'name': <''>}]";
+    };
+
+    "org/gnome/clocks/state/window" = {
+      maximized = false;
+      panel-id = "world";
+      size = mkTuple [ 870 690 ];
+    };
+
     "org/gnome/control-center" = {
-      last-panel = "keyboard";
-      window-state = mkTuple [ 1009 661 ];
+      last-panel = "power";
+      window-state = mkTuple [ 980 640 ];
     };
 
     "org/gnome/desktop/app-folders" = {
@@ -37,6 +71,7 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/desktop/input-sources" = {
+      show-all-sources = false;
       sources = [ (mkTuple [ "xkb" "pt" ]) ];
       xkb-options = [ "terminate:ctrl_alt_bksp" ];
     };
@@ -51,15 +86,27 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/desktop/notifications" = {
-      application-children = [ "org-gnome-nautilus" "org-gnome-console" "firefox" "com-google-androidstudio" "vivaldi-stable" "discord" "gnome-power-panel" "code" "org-gnome-epiphany" "github-desktop" "org-gnome-baobab" ];
+      application-children = [ "org-gnome-nautilus" "org-gnome-console" "firefox" "com-google-androidstudio" "vivaldi-stable" "discord" "gnome-power-panel" "code" "org-gnome-epiphany" "github-desktop" "org-gnome-baobab" "com-uploadedlobster-peek" ];
+    };
+
+    "org/gnome/desktop/notifications/application/clion" = {
+      application-id = "clion.desktop";
     };
 
     "org/gnome/desktop/notifications/application/code" = {
       application-id = "code.desktop";
     };
 
+    "org/gnome/desktop/notifications/application/codium" = {
+      application-id = "codium.desktop";
+    };
+
     "org/gnome/desktop/notifications/application/com-google-androidstudio" = {
       application-id = "com.google.AndroidStudio.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/com-uploadedlobster-peek" = {
+      application-id = "com.uploadedlobster.peek.desktop";
     };
 
     "org/gnome/desktop/notifications/application/discord" = {
@@ -74,12 +121,20 @@ with lib.hm.gvariant;
       application-id = "github-desktop.desktop";
     };
 
+    "org/gnome/desktop/notifications/application/gnome-network-panel" = {
+      application-id = "gnome-network-panel.desktop";
+    };
+
     "org/gnome/desktop/notifications/application/gnome-power-panel" = {
       application-id = "gnome-power-panel.desktop";
     };
 
     "org/gnome/desktop/notifications/application/org-gnome-baobab" = {
       application-id = "org.gnome.baobab.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/org-gnome-clocks" = {
+      application-id = "org.gnome.clocks.desktop";
     };
 
     "org/gnome/desktop/notifications/application/org-gnome-console" = {
@@ -90,12 +145,40 @@ with lib.hm.gvariant;
       application-id = "org.gnome.Epiphany.desktop";
     };
 
+    "org/gnome/desktop/notifications/application/org-gnome-extensions-desktop" = {
+      application-id = "org.gnome.Extensions.desktop.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/org-gnome-fileroller" = {
+      application-id = "org.gnome.FileRoller.desktop";
+    };
+
     "org/gnome/desktop/notifications/application/org-gnome-nautilus" = {
       application-id = "org.gnome.Nautilus.desktop";
     };
 
+    "org/gnome/desktop/notifications/application/org-gnome-settings" = {
+      application-id = "org.gnome.Settings.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/org-gnome-tweaks" = {
+      application-id = "org.gnome.tweaks.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/p3x-onenote" = {
+      application-id = "p3x-onenote.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/steam" = {
+      application-id = "steam.desktop";
+    };
+
     "org/gnome/desktop/notifications/application/vivaldi-stable" = {
       application-id = "vivaldi-stable.desktop";
+    };
+
+    "org/gnome/desktop/notifications/application/vivaldi-syncthing" = {
+      application-id = "vivaldi-syncthing.desktop";
     };
 
     "org/gnome/desktop/peripherals/touchpad" = {
@@ -120,6 +203,8 @@ with lib.hm.gvariant;
 
     "org/gnome/desktop/sound" = {
       allow-volume-above-100-percent = true;
+      event-sounds = true;
+      theme-name = "__custom";
     };
 
     "org/gnome/desktop/wm/keybindings" = {
@@ -138,6 +223,10 @@ with lib.hm.gvariant;
     "org/gnome/eog/view" = {
       background-color = "rgb(0,0,0)";
       use-background-color = true;
+    };
+
+    "org/gnome/epiphany" = {
+      ask-for-default = false;
     };
 
     "org/gnome/epiphany/state" = {
@@ -186,6 +275,12 @@ with lib.hm.gvariant;
     "org/gnome/gnome-system-monitor/disktreenew" = {
       col-6-visible = true;
       col-6-width = 0;
+    };
+
+    "org/gnome/gnome-system-monitor/proctree" = {
+      columns-order = [ 0 1 2 3 4 6 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 ];
+      sort-col = 8;
+      sort-order = 0;
     };
 
     "org/gnome/mutter" = {
@@ -250,18 +345,58 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/settings-daemon/plugins/power" = {
-      sleep-inactive-ac-type = "suspend";
+      sleep-inactive-ac-timeout = 1500;
+      sleep-inactive-ac-type = "nothing";
+      sleep-inactive-battery-timeout = 900;
+      sleep-inactive-battery-type = "suspend";
     };
 
     "org/gnome/shell" = {
       app-picker-layout = "[{'org.gnome.Geary.desktop': <{'position': <0>}>, 'org.gnome.Contacts.desktop': <{'position': <1>}>, 'org.gnome.Weather.desktop': <{'position': <2>}>, 'org.gnome.clocks.desktop': <{'position': <3>}>, 'org.gnome.Maps.desktop': <{'position': <4>}>, 'org.gnome.Photos.desktop': <{'position': <5>}>, 'org.gnome.Totem.desktop': <{'position': <6>}>, 'org.gnome.Calculator.desktop': <{'position': <7>}>, 'simple-scan.desktop': <{'position': <8>}>, 'org.gnome.Settings.desktop': <{'position': <9>}>, 'gnome-system-monitor.desktop': <{'position': <10>}>, 'yelp.desktop': <{'position': <11>}>, 'Utilities': <{'position': <12>}>, 'org.gnome.Cheese.desktop': <{'position': <13>}>, 'AnyDesk.desktop': <{'position': <14>}>, 'btop.desktop': <{'position': <15>}>, 'org.gnome.Calendar.desktop': <{'position': <16>}>, 'discord.desktop': <{'position': <17>}>, 'org.gnome.Extensions.desktop': <{'position': <18>}>, 'firefox.desktop': <{'position': <19>}>, 'github-desktop.desktop': <{'position': <20>}>, 'gparted.desktop': <{'position': <21>}>, 'org.pipewire.Helvum.desktop': <{'position': <22>}>, 'htop.desktop': <{'position': <23>}>}, {'startcenter.desktop': <{'position': <0>}>, 'base.desktop': <{'position': <1>}>, 'calc.desktop': <{'position': <2>}>, 'draw.desktop': <{'position': <3>}>, 'impress.desktop': <{'position': <4>}>, 'math.desktop': <{'position': <5>}>, 'writer.desktop': <{'position': <6>}>, 'cups.desktop': <{'position': <7>}>, 'org.gnome.Music.desktop': <{'position': <8>}>, 'nixos-manual.desktop': <{'position': <9>}>, 'com.obsproject.Studio.desktop': <{'position': <10>}>, 'p3x-onenote.desktop': <{'position': <11>}>, 'com.github.jeromerobert.pdfarranger.desktop': <{'position': <12>}>, 'psensor.desktop': <{'position': <13>}>, 'org.qbittorrent.qBittorrent.desktop': <{'position': <14>}>, 'org.gnome.Software.desktop': <{'position': <15>}>, 'smartcode-stremio.desktop': <{'position': <16>}>, 'org.gnome.TextEditor.desktop': <{'position': <17>}>, 'org.gnome.Tour.desktop': <{'position': <18>}>, 'code.desktop': <{'position': <19>}>, 'vlc.desktop': <{'position': <20>}>, 'xterm.desktop': <{'position': <21>}>}]";
-      enabled-extensions = [ "clipboard-history@alexsaveau.dev" ];
+      disable-user-extensions = false;
+      disabled-extensions = [ "rounded-window-corners@yilozt" "workspace-indicator@gnome-shell-extensions.gcampax.github.com" ];
+      enabled-extensions = [ "clipboard-history@alexsaveau.dev" "burn-my-windows@schneegans.github.com" "clipboard-indicator@tudmotu.com" "hibernate-status@dromi" "trayIconsReloaded@selfmade.pl" ];
       favorite-apps = [ "org.gnome.Epiphany.desktop" "vivaldi-stable.desktop" "org.gnome.Nautilus.desktop" "org.gnome.Console.desktop" ];
+      last-selected-power-profile = "power-saver";
       welcome-dialog-last-shown-version = "42.4";
     };
 
     "org/gnome/shell/app-switcher" = {
       current-workspace-only = false;
+    };
+
+    "org/gnome/shell/extensions/burn-my-windows" = {
+      close-preview-effect = "";
+      fire-close-effect = false;
+      glide-close-effect = false;
+      glitch-close-effect = true;
+      glitch-open-effect = true;
+      hexagon-animation-time = 600;
+      hexagon-close-effect = false;
+      hexagon-open-effect = true;
+      incinerate-animation-time = 1000;
+      incinerate-close-effect = false;
+      open-preview-effect = "";
+      tv-close-effect = true;
+      tv-open-effect = false;
+      wisps-open-effect = false;
+    };
+
+    "org/gnome/shell/extensions/clipboard-indicator" = {
+      disable-down-arrow = true;
+      history-size = 200;
+    };
+
+    "org/gnome/shell/extensions/rounded-window-corners" = {
+      custom-rounded-corner-settings = "@a{sv} {}";
+      global-rounded-corner-settings = "{'padding': <{'left': <uint32 1>, 'right': <uint32 1>, 'top': <uint32 1>, 'bottom': <uint32 1>}>, 'keep_rounded_corners': <{'maximized': <false>, 'fullscreen': <false>}>, 'border_radius': <uint32 12>, 'smoothing': <uint32 0>}";
+      settings-version = mkUint32 5;
+    };
+
+    "org/gnome/shell/extensions/trayIconsReloaded" = {
+      icon-size = 20;
+      icons-limit = 4;
+      tray-margin-left = 4;
     };
 
     "org/gnome/shell/window-switcher" = {
@@ -273,6 +408,7 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/software" = {
+      check-timestamp = mkInt64 1674904120;
       first-run = false;
     };
 
@@ -294,6 +430,11 @@ with lib.hm.gvariant;
       window-size = mkTuple [ 896 682 ];
     };
 
+    "org/gtk/settings/color-chooser" = {
+      custom-colors = [ (mkTuple [ 0.9882352941176471 0.6862745098039216 ]) ];
+      selected-color = mkTuple [ true 0.9882352941176471 ];
+    };
+
     "org/gtk/settings/file-chooser" = {
       date-format = "regular";
       location-mode = "path-bar";
@@ -307,6 +448,10 @@ with lib.hm.gvariant;
       type-format = "category";
       window-position = mkTuple [ 165 32 ];
       window-size = mkTuple [ 1203 833 ];
+    };
+
+    "system/proxy" = {
+      mode = "none";
     };
 
   };
