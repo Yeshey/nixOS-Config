@@ -21,6 +21,11 @@
     ];
   };
 
+  # Github PlasmaManager Repo: https://github.com/pjones/plasma-manager
+  # got with this command: nix run github:pjones/plasma-manager > plasmaconf.nix
+  # Not working yet, keep an eye on it.
+  # programs.plasma5 = import ./nixFiles/plasmaconf.nix;
+
   # Raw configuration files (https://ghedam.at/24353/tutorial-getting-started-with-home-manager-for-nix)
   home.file.".config/user-dirs.dirs".source = builtins.toFile "user-dirs.dirs" ''
 XDG_DESKTOP_DIR="$HOME/Desktop"
