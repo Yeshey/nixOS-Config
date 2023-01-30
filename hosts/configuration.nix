@@ -218,7 +218,7 @@
     # dates = "23:01";
     flake = "${location}#${host}"; # my flake online uri is for example github:yeshey/nixos-config#laptop
     flags = [
-      "--upgrade --option fallback false --update-input nixos-hardware --update-input home-manager --update-input nixpkgs || cd ${location} && git checkout -- flake.lock"
+      "--upgrade --option fallback false --update-input nixos-hardware --update-input home-manager --update-input nixpkgs || (cd ${location} && git checkout -- flake.lock)"
       # --upgrade # upgrade NixOS to the latest version in your chosen channel
       # --option fallback false" # fallback false should force it to use pre-built packages (https://github.com/NixOS/nixpkgs/issues/77971)
       # --update-input nixos-hardware --update-input home-manager --update-input nixpkgs # To update all the packages
@@ -330,7 +330,7 @@
         vim = "nvim";
         # ls = "lsd -l --group-dirs first";
         update = "sudo nixos-rebuild switch --flake ${location}#${host}"; # old: "sudo nixos-rebuild switch";
-        upgrade = "trap \"cd ${location} && git checkout -- flake.lock\" INT ; sudo nixos-rebuild switch --flake ${location}#${host} --upgrade --update-input nixos-hardware --update-input home-manager --update-input nixpkgs || cd ${location} && git checkout -- flake.lock"; /*--commit-lock-file*/ #upgrade: upgrade NixOS to the latest version in your chosen channel";
+        upgrade = "trap \"cd ${location} && git checkout -- flake.lock\" INT ; sudo nixos-rebuild switch --flake ${location}#${host} --upgrade --update-input nixos-hardware --update-input home-manager --update-input nixpkgs || (cd ${location} && git checkout -- flake.lock)"; /*--commit-lock-file*/ #upgrade: upgrade NixOS to the latest version in your chosen channel";
         clean = "echo \"This will clean all generations, and optimise the store\" ; sudo sh -c 'nix-collect-garbage -d ; nix-store --optimise'";
         cp = "cp -i";                                   # Confirm before overwriting something
         df = "df -h";                                   # Human-readable sizes
