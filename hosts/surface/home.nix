@@ -11,6 +11,7 @@
 
 rec { 
   imports = [ ./configFiles/dconf.nix ]; # gnome configuration
+  # Generated with: nix-shell -p dconf2nix --command "dconf dump / | dconf2nix -e --timeout 15 --verbose > dconf.nix"
 
   home = {                                # Specific packages
     packages = with pkgs; [
