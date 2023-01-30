@@ -218,16 +218,18 @@
     # dates = "23:01";
     flake = "${location}#${host}"; # my flake online uri is for example github:yeshey/nixos-config#laptop
     flags = [
-      "--upgrade --option fallback false --update-input nixos-hardware --update-input home-manager --update-input nixpkgs || (cd ${location} && git checkout -- flake.lock)"
-      # --upgrade # upgrade NixOS to the latest version in your chosen channel
-      # --option fallback false" # fallback false should force it to use pre-built packages (https://github.com/NixOS/nixpkgs/issues/77971)
-      # --update-input nixos-hardware --update-input home-manager --update-input nixpkgs # To update all the packages
+      # "--upgrade --option fallback false --update-input nixos-hardware --update-input home-manager --update-input nixpkgs || (cd ${location} && git checkout --flake.lock)"
+      # "--upgrade" (seems to be redundant) # upgrade NixOS to the latest version in your chosen channel
+      "--option fallback false" # fallback false should force it to use pre-built packages (https://github.com/NixOS/nixpkgs/issues/77971)
+      "--update-input nixos-hardware --update-input home-manager --update-input nixpkgs" # To update all the packages
       # "--commit-lock-file" # commit the new lock file with git
-      # || cd ${location} && git checkout -- flake.lock '' # reverts the changes to flake.lock if things went south
+      # || cd ${location} && git checkout -- flake.lock '' # reverts the changes to flake.lock if things went south (doesn't work because they aren't placed in this order)
     ];
     allowReboot = false; # set to false
   };
-  systemd.services.nixos-upgrade.serviceConfig = {
+  systemd.services.nixos-upgrade.serviceConfig = let
+    cfg = config.services.nixos-upgrade;
+  in {
     # you can follow the service real time with journalctl -f -u nixos-upgrade.service
     # Also worth noting that these only apply to the physical RAM used,
     # they do not include swap space used. 
@@ -240,7 +242,11 @@
     CPUWeight = [ "20" ];
     CPUQuota = [ "85%" ];
     IOWeight = [ "20" ];
+    # this probs doesn't work (https://unix.stackexchange.com/questions/441575/proper-way-to-use-onfailure-in-systemd)
+    ExecStopPost= [ "sh -c 'if [ \"$$SERVICE_RESULT\" != \"success\" ]; then cd ${location} && git checkout -- flake.lock; fi'" ];
   };
+
+
 
   # Garbage Collect
   nix = {
