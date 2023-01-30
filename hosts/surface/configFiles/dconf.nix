@@ -1,6 +1,7 @@
 # Generated via dconf2nix: https://github.com/gvolpe/dconf2nix
 # Generated with: nix-shell -p dconf2nix --command "dconf dump / | dconf2nix -e --timeout 15 --verbose > dconf.nix"
 
+# Generated via dconf2nix: https://github.com/gvolpe/dconf2nix
 { lib, ... }:
 
 with lib.hm.gvariant;
@@ -86,7 +87,7 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/desktop/notifications" = {
-      application-children = [ "org-gnome-nautilus" "org-gnome-console" "firefox" "com-google-androidstudio" "vivaldi-stable" "discord" "gnome-power-panel" "code" "org-gnome-epiphany" "github-desktop" "org-gnome-baobab" "com-uploadedlobster-peek" ];
+      application-children = [ "org-gnome-nautilus" "org-gnome-console" "firefox" "com-google-androidstudio" "vivaldi-stable" "discord" "gnome-power-panel" "code" "org-gnome-epiphany" "github-desktop" "org-gnome-baobab" "com-uploadedlobster-peek" "steam" ];
     };
 
     "org/gnome/desktop/notifications/application/clion" = {
@@ -183,6 +184,7 @@ with lib.hm.gvariant;
 
     "org/gnome/desktop/peripherals/touchpad" = {
       click-method = "areas";
+      tap-to-click = true;
     };
 
     "org/gnome/desktop/privacy" = {
@@ -418,7 +420,7 @@ with lib.hm.gvariant;
 
     "org/gtk/gtk4/settings/file-chooser" = {
       date-format = "regular";
-      location-mode = "filename-entry";
+      location-mode = "path-bar";
       show-hidden = false;
       show-size-column = true;
       show-type-column = true;
@@ -431,8 +433,8 @@ with lib.hm.gvariant;
     };
 
     "org/gtk/settings/color-chooser" = {
-      custom-colors = [ (mkTuple [ 0.9882352941176471 0.6862745098039216 ]) ];
-      selected-color = mkTuple [ true 0.9882352941176471 ];
+      custom-colors = [ (mkTuple [ 0.988235 0.686275 ]) ];
+      selected-color = mkTuple [ true 0.988235 ];
     };
 
     "org/gtk/settings/file-chooser" = {
