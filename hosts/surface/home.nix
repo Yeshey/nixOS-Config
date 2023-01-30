@@ -9,14 +9,27 @@
 
 { pkgs, ... }:
 
-{
+rec { 
   imports = [ ./configFiles/dconf.nix ]; # gnome configuration
 
   home = {                                # Specific packages
     packages = with pkgs; [
       psensor
       s-tui
+
+      # For gnome
+      gnomeExtensions.clipboard-indicator
+      gnomeExtensions.burn-my-windows
+      gnomeExtensions.hibernate-status-button
+      gnomeExtensions.tray-icons-reloaded
     ];
+  };
+
+ dconf.settings = {
+    # Enable installed extensions
+    # "org/gnome/shell".enabled-extensions = map (extension: extension.extensionUuid) home.packages;
+
+    #"org/gnome/shell".disabled-extensions = [];
   };
 
   # Raw configuration files (https://ghedam.at/24353/tutorial-getting-started-with-home-manager-for-nix)
