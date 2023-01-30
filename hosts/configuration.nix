@@ -482,7 +482,6 @@
     # tmp
     # texlive.combined.scheme-full # LaTeX
     ocrmypdf # ocrmypdf -l eng+por combined.pdf ok.pdf
-    dconf2nix
 
     # for amov, flutter need this
     flutter # Dart, for amov # Make it detect android studio: https://github.com/flutter/flutter/issues/18970#issuecomment-762399686
