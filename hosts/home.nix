@@ -69,6 +69,7 @@
         prismlauncher # polymc # prismlauncher # for Minecraft
         heroic
         minetest
+        the-powder-toy
 
         # Libreoffice
         libreoffice-qt
