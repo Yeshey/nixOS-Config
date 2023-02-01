@@ -265,6 +265,11 @@ X-WebApp-PrivateWindow=false
 X-WebApp-Isolated=true
     '';
 
+    # Make a symlink for minetest Worlds:
+    #(https://www.reddit.com/r/NixOS/comments/v0eak7/homemanager_how_to_create_symlink_to/)
+    home.file.".minetest/worlds".source = config.lib.file.mkOutOfStoreSymlink "${location}/hosts/configFiles/Minetest/worlds/";
+
+
     # Raw configuration files (https://ghedam.at/24353/tutorial-getting-started-with-home-manager-for-nix)
     home.file.".local/share/osu/storage.ini".source = builtins.toFile "storage.ini" ''
   FullPath = ${location}/hosts/configFiles/osu-lazer/

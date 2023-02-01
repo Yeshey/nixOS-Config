@@ -242,7 +242,7 @@
     CPUWeight = [ "20" ];
     CPUQuota = [ "85%" ];
     IOWeight = [ "20" ];
-    # this probs doesn't work (https://unix.stackexchange.com/questions/441575/proper-way-to-use-onfailure-in-systemd)
+    # this doesn't work yet (https://unix.stackexchange.com/questions/441575/proper-way-to-use-onfailure-in-systemd)
     ExecStopPost= [ "sh -c 'if [ \"$$SERVICE_RESULT\" != \"success\" ]; then cd ${location} && git checkout -- flake.lock; fi'" ];
   };
 

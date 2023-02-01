@@ -1,0 +1,7 @@
+day_count = 10
+lbm_introduction_times = mcl_anvils:update_formspec_0_60_0~0;mcl_chests:replace_old_ender_form~0;mcl_chests:update_shulker_box_formspecs_0_60_0~0;mcl_core:replace_legacy_dry_grass_0_65_0~0;mcl_dispensers:update_formspecs_0_60_0~0;mcl_droppers:update_formspecs_0_60_0~0;mcl_furnaces:update_formspecs_0_60_0~0;mcl_hoppers:update_formspec_0_60_0~0;mcl_itemframes:update_legacy_item_frames~0;mcl_mushrooms:replace_legacy_mushroom_caps~0;
+lbm_introduction_times_version = 1
+last_clear_objects_time = 0
+time_of_day = 9410
+game_time = 11937
+EnvArgsEnd
