@@ -265,9 +265,10 @@ X-WebApp-PrivateWindow=false
 X-WebApp-Isolated=true
     '';
 
-    # Make a symlink for minetest Worlds:
+    # Make a symlinks for minetest:
     #(https://www.reddit.com/r/NixOS/comments/v0eak7/homemanager_how_to_create_symlink_to/)
     home.file.".minetest/worlds".source = config.lib.file.mkOutOfStoreSymlink "${location}/hosts/configFiles/Minetest/worlds/";
+    home.file.".minetest/minetest.conf".source = config.lib.file.mkOutOfStoreSymlink "${location}/hosts/configFiles/Minetest/minetest.conf";
 
 
     # Raw configuration files (https://ghedam.at/24353/tutorial-getting-started-with-home-manager-for-nix)
