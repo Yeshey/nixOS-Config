@@ -443,14 +443,20 @@
           # Potencial Ignore patterns: AllMusic
         };
 
-        # Sync game files
+        # Config and game files sync
+        "ssh" = {
+          path = "~/.ssh";
+          devices = [ "nixOS-Laptop" "nixOS-Surface" ]; 
+          versioning = myVersioning;
+          # Potencial Ignore patterns: 
+        };
         "MinecraftPrismLauncher" = {
           path = "~/.local/share/PolyMC/instances";
           devices = [ "nixOS-Laptop" "nixOS-Surface" ]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
-        "osu-lazer" = {
+        "Osu-Lazer" = {
           path = "~/.local/share/osu";
           devices = [ "nixOS-Laptop" "nixOS-Surface" ]; 
           versioning = myVersioning;
@@ -462,8 +468,8 @@
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
-        "ssh" = {
-          path = "~/.ssh";
+        "PowderToy" = {
+          path = "~/.local/share/The Powder Toy/";
           devices = [ "nixOS-Laptop" "nixOS-Surface" ]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
