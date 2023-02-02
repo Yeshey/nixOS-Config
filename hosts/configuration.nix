@@ -416,7 +416,7 @@
             type = "staggered"; 
             params = { 
               cleanInterval = "3600"; # 1 hour in seconds
-              maxAge = "1728000"; # 20 days in seconds
+              maxAge = "1296000"; # 15 days in seconds
             }; 
           }; 
           # Ignore patterns: Recorded_Classes 
@@ -428,7 +428,7 @@
             type = "staggered"; 
             params = { 
               cleanInterval = "3600"; # 1 hour in seconds
-              maxAge = "1728000"; # 20 days in seconds
+              maxAge = "1296000"; # 15 days in seconds
             }; 
           }; 
           # Ignore patterns: 
@@ -440,7 +440,7 @@
             type = "staggered"; 
             params = { 
               cleanInterval = "3600"; # 1 hour in seconds
-              maxAge = "1728000"; # 20 days in seconds
+              maxAge = "1296000"; # 15 days in seconds
             }; 
           }; 
           # Potencial Ignore patterns: watch
@@ -452,7 +452,7 @@
             type = "staggered"; 
             params = { 
               cleanInterval = "3600"; # 1 hour in seconds
-              maxAge = "1728000"; # 20 days in seconds
+              maxAge = "1296000"; # 15 days in seconds
             }; 
           }; 
           # Potencial Ignore patterns: AllMusic
@@ -466,7 +466,7 @@
             type = "staggered"; 
             params = { 
               cleanInterval = "3600"; # 1 hour in seconds
-              maxAge = "1728000"; # 20 days in seconds
+              maxAge = "1296000"; # 15 days in seconds
             }; 
           }; 
           # Potencial Ignore patterns: 
