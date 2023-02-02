@@ -408,53 +408,38 @@
         "nixOS-Surface" = { id = "7MRGXWS-QWTEGDF-YEIOM3M-5DM627F-DSYTRN3-JUECBF4-6A4Z26Y-PQVAUAC"; };
         "windows-Surface" = { id = "4L2C6IN-PG25JP6-46WCN2B-EKFAHPR-3FE3B2F-JCXRQ5T-MO5PDAA-JWU2IA7"; };
       };
-      folders = {
-        "2022" = {
-          path = "${dataStoragePath}/PersonalFiles/2022"; 
-          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" ]; 
-          versioning = { 
+      folders = 
+      let 
+        myVersioning = {
             type = "staggered"; 
             params = { 
               cleanInterval = "3600"; # 1 hour in seconds
-              maxAge = "1296000"; # 15 days in seconds
+              maxAge = "5184000"; # 60 days in seconds
             }; 
           }; 
+      in {
+        "2022" = {
+          path = "${dataStoragePath}/PersonalFiles/2022"; 
+          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" ]; 
+          versioning = myVersioning;
           # Ignore patterns: Recorded_Classes 
         };
         "A70Camera" = {
           path = "${dataStoragePath}/PersonalFiles/Timeless/Syncthing/PhoneCamera";
           devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" ]; 
-          versioning = {
-            type = "staggered"; 
-            params = { 
-              cleanInterval = "3600"; # 1 hour in seconds
-              maxAge = "1296000"; # 15 days in seconds
-            }; 
-          }; 
+          versioning = myVersioning;
           # Ignore patterns: 
         };
         "Allsync" = {
           path = "${dataStoragePath}/PersonalFiles/Timeless/Syncthing/Allsync";
           devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" ]; 
-          versioning = {
-            type = "staggered"; 
-            params = { 
-              cleanInterval = "3600"; # 1 hour in seconds
-              maxAge = "1296000"; # 15 days in seconds
-            }; 
-          }; 
+          versioning = myVersioning;
           # Potencial Ignore patterns: watch
         };
         "Music" = {
           path = "${dataStoragePath}/PersonalFiles/Timeless/Music";
           devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" ]; 
-          versioning = {
-            type = "staggered"; 
-            params = { 
-              cleanInterval = "3600"; # 1 hour in seconds
-              maxAge = "1296000"; # 15 days in seconds
-            }; 
-          }; 
+          versioning = myVersioning;
           # Potencial Ignore patterns: AllMusic
         };
 
@@ -462,37 +447,19 @@
         "MinecraftPrismLauncher" = {
           path = "~/.local/share/PolyMC/instances";
           devices = [ "nixOS-Laptop" "nixOS-Surface" ]; 
-          versioning = {
-            type = "staggered"; 
-            params = { 
-              cleanInterval = "3600"; # 1 hour in seconds
-              maxAge = "1296000"; # 15 days in seconds
-            }; 
-          }; 
+          versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
         "osu-lazer" = {
           path = "~/.local/share/osu";
           devices = [ "nixOS-Laptop" "nixOS-Surface" ]; 
-          versioning = {
-            type = "staggered"; 
-            params = { 
-              cleanInterval = "3600"; # 1 hour in seconds
-              maxAge = "1296000"; # 15 days in seconds
-            }; 
-          }; 
+          versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
         "Minetest" = {
           path = "~/.minetest";
           devices = [ "nixOS-Laptop" "nixOS-Surface" ]; 
-          versioning = {
-            type = "staggered"; 
-            params = { 
-              cleanInterval = "3600"; # 1 hour in seconds
-              maxAge = "1296000"; # 15 days in seconds
-            }; 
-          }; 
+          versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
       };
