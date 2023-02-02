@@ -457,6 +457,20 @@
           }; 
           # Potencial Ignore patterns: AllMusic
         };
+
+        # Sync game files
+        "MinecraftPrismLauncher" = {
+          path = "~/.local/share/PolyMC/instances";
+          devices = [ "nixOS-Laptop" "nixOS-Surface" ]; 
+          versioning = {
+            type = "staggered"; 
+            params = { 
+              cleanInterval = "3600"; # 1 hour in seconds
+              maxAge = "1728000"; # 20 days in seconds
+            }; 
+          }; 
+          # Potencial Ignore patterns: 
+        };
       };
     };
   };

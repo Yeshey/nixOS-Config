@@ -7,7 +7,7 @@
 #           └─ home.nix *
 #
 
-{ pkgs, ... }:
+{ pkgs, dataStoragePath, ... }:
 
 {
 
