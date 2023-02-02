@@ -2,7 +2,7 @@
 # Common System Configuration.nix
 #
 
-{ config, lib, pkgs, inputs, user, location, host, ... }:
+{ config, lib, pkgs, inputs, user, location, host, dataStoragePath, ... }:
 
 /*
   let
@@ -396,12 +396,69 @@
 
   # Syncthing
   services = {
-      syncthing = {
-          enable = true;
-          user = "yeshey";
-          dataDir = "/home/yeshey/Documents";    # Default folder for new synced folders
-          configDir = "/home/yeshey/Documents/.config/syncthing";   # Folder for Syncthing's settings and keys
+    syncthing = {
+      enable = true;
+      user = "yeshey";
+      dataDir = "/home/yeshey/Documents";    # Default folder for new synced folders
+      configDir = "/home/yeshey/Documents/.config/syncthing";   # Folder for Syncthing's settings and keys
+      devices = {
+        "nixOS-Laptop" = { id = "CAFH4IM-77ESFU5-26XFLN5-SVVMZ5F-G56DPXU-4X6AZAJ-E4HPZQ7-AJLQMQO"; };
+        "manjaro-Laptop" = { id = "HWPEE67-I7DPOPG-H3A3SDX-5HFJK5W-33OIOUO-S6TD5E7-52OAO3B-OFAUAAF"; };
+        "windows-Laptop" = { id = "SST7QBM-2SKF4WK-F4RUAA2-ICQ7NBB-LDI3I33-O3DEZZJ-TVXZ3DB-M7IYTAQ"; };
+        "nixOS-Surface" = { id = "7MRGXWS-QWTEGDF-YEIOM3M-5DM627F-DSYTRN3-JUECBF4-6A4Z26Y-PQVAUAC"; };
+        "windows-Surface" = { id = "4L2C6IN-PG25JP6-46WCN2B-EKFAHPR-3FE3B2F-JCXRQ5T-MO5PDAA-JWU2IA7"; };
       };
+      folders = {
+        "2022" = {
+          path = "${dataStoragePath}/PersonalFiles/2022"; 
+          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" ]; 
+          versioning = { 
+            type = "staggered"; 
+            params = { 
+              cleanInterval = "3600"; # 1 hour in seconds
+              maxAge = "1728000"; # 20 days in seconds
+            }; 
+          }; 
+          # Ignore patterns: Recorded_Classes 
+        };
+        "A70Camera" = {
+          path = "${dataStoragePath}/PersonalFiles/Timeless/Syncthing/PhoneCamera";
+          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" ]; 
+          versioning = {
+            type = "staggered"; 
+            params = { 
+              cleanInterval = "3600"; # 1 hour in seconds
+              maxAge = "1728000"; # 20 days in seconds
+            }; 
+          }; 
+          # Ignore patterns: 
+        };
+        "Allsync" = {
+          path = "${dataStoragePath}/PersonalFiles/Timeless/Syncthing/Allsync";
+          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" ]; 
+          versioning = {
+            type = "staggered"; 
+            params = { 
+              cleanInterval = "3600"; # 1 hour in seconds
+              maxAge = "1728000"; # 20 days in seconds
+            }; 
+          }; 
+          # Potencial Ignore patterns: watch
+        };
+        "Music" = {
+          path = "${dataStoragePath}/PersonalFiles/Timeless/Music";
+          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" ]; 
+          versioning = {
+            type = "staggered"; 
+            params = { 
+              cleanInterval = "3600"; # 1 hour in seconds
+              maxAge = "1728000"; # 20 days in seconds
+            }; 
+          }; 
+          # Potencial Ignore patterns: AllMusic
+        };
+      };
+    };
   };
 
   # More apps

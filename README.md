@@ -17,6 +17,8 @@ It has my personal configuration for two devices, my Lenovo Legion laptop and my
 - figure out how to add functions aliases to zsh
   - Make it so upgrade and update tries three times before giving up
 
+- Sync things with syncthing instead of having game saves etc in the github repo
+
 ## Issues
 
 - Thermald service not working correct, now overriten, but the issue persists, here is the issue I raised:

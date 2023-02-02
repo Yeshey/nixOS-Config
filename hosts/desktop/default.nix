@@ -12,11 +12,12 @@
 #               └─ default.nix
 #
 
-{ config, pkgs, user, location, ... }:
+{ config, pkgs, user, location, dataStoragePath, ... }:
 
 {
-  imports =                                     # For now, if applying to other system, swap files
-    [(import ./hardware-configuration.nix)];    # Current system hardware config @ /etc/nixos/hardware-configuration.nix
+imports = [
+  (import ./hardware-configuration.nix)
+];
 
   services.thermald = {
     debug = false;
