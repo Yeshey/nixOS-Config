@@ -462,6 +462,12 @@
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
+        "ssh" = {
+          path = "~/.ssh";
+          devices = [ "nixOS-Laptop" "nixOS-Surface" ]; 
+          versioning = myVersioning;
+          # Potencial Ignore patterns: 
+        };
       };
     };
   };
