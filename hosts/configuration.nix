@@ -414,7 +414,7 @@
             type = "staggered"; 
             params = { 
               cleanInterval = "3600"; # 1 hour in seconds
-              maxAge = "5184000"; # 60 days in seconds
+              maxAge = "864000"; # 11 days in seconds
             }; 
           }; 
       in {
