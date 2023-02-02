@@ -202,7 +202,7 @@
         enableCompletion = true;
         history = {
           size = 100000;
-          path = "${location}/hosts/configFiles/.zsh_history"; # Auto save history to the file in this repository
+          # path = "${location}/hosts/configFiles/.zsh_history"; # Auto save history to the file in this repository
         };
         # histSize = 100000;
         oh-my-zsh = {

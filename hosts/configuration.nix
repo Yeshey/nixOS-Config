@@ -451,7 +451,7 @@
           # Potencial Ignore patterns: 
         };
         "bash&zshHistory" = { # added ignore batterns with home-manager to sync only those files
-          path = "~";
+          path = "~/";
           devices = [ "nixOS-Laptop" "nixOS-Surface" ]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
