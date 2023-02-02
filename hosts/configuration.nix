@@ -483,6 +483,18 @@
           }; 
           # Potencial Ignore patterns: 
         };
+        "Minetest" = {
+          path = "~/.minetest";
+          devices = [ "nixOS-Laptop" "nixOS-Surface" ]; 
+          versioning = {
+            type = "staggered"; 
+            params = { 
+              cleanInterval = "3600"; # 1 hour in seconds
+              maxAge = "1296000"; # 15 days in seconds
+            }; 
+          }; 
+          # Potencial Ignore patterns: 
+        };
       };
     };
   };
