@@ -17,7 +17,7 @@
 # Or use this one in the surface:
 # sudo nixos-rebuild --flake .#surface --build-host root@192.168.1.102 switch
 
-{ config, pkgs, user, location, lib, ... }:
+{ config, pkgs, user, location, lib, dataStoragePath, ... }:
 
 #let
  #Steam needs this env variable to display in the right scalling (https://www.reddit.com/r/NixOS/comments/qha9t5/comment/hid3w3z/)

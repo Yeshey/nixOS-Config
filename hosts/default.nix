@@ -2,11 +2,12 @@
 
 {
   laptop = let 
-    host = "laptop"; 
+    host = "laptop";
+    dataStoragePath = "/mnt/DataDisk";
   in
    lib.nixosSystem {                           # Desktop profile
     inherit system;
-    specialArgs = { inherit user location inputs host; };             # Pass flake variable
+    specialArgs = { inherit user location inputs host dataStoragePath; };             # Pass flake variable
     modules = [                                         # Modules that are used.
       ./desktop
       ./configuration.nix
@@ -14,7 +15,7 @@
       home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
-        home-manager.extraSpecialArgs = { inherit user location host; };  # Pass flake variable
+        home-manager.extraSpecialArgs = { inherit user location host dataStoragePath; };  # Pass flake variable
         home-manager.users.${user} = {
           imports = [(import ./home.nix)] ++ [(import ./desktop/home.nix)];
         };
@@ -24,9 +25,10 @@
 
   surface = let 
     host = "surface"; 
+    dataStoragePath = "/mnt/ntfsMicroSD-DataDisk"; 
   in lib.nixosSystem {                           # Surface profile
     inherit system;
-    specialArgs = { inherit user location inputs host ; };             # Pass flake variable
+    specialArgs = { inherit user location inputs host dataStoragePath; };             # Pass flake variable
     modules = [                                         # Modules that are used.
       ./surface
       ./configuration.nix
@@ -35,7 +37,7 @@
       home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
-        home-manager.extraSpecialArgs = { inherit user location host; };  # Pass flake variable
+        home-manager.extraSpecialArgs = { inherit user location host dataStoragePath; };  # Pass flake variable
         home-manager.users.${user} = {
           imports = [(import ./home.nix)] ++ [(import ./surface/home.nix)];
         };
