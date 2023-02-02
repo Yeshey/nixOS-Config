@@ -266,18 +266,14 @@ X-WebApp-PrivateWindow=false
 X-WebApp-Isolated=true
     '';
 
-    # Make a symlinks for minetest:
-    #(https://www.reddit.com/r/NixOS/comments/v0eak7/homemanager_how_to_create_symlink_to/)
-    home.file.".minetest/worlds".source = config.lib.file.mkOutOfStoreSymlink "${location}/hosts/configFiles/Minetest/worlds/";
-    home.file.".minetest/minetest.conf".source = config.lib.file.mkOutOfStoreSymlink "${location}/hosts/configFiles/Minetest/minetest.conf";
-
-    # For Powder Toy:
-    home.file.".local/share/The Powder Toy/Saves".source = config.lib.file.mkOutOfStoreSymlink "${location}/hosts/configFiles/PowderToy/Saves/";
-
-    # Raw configuration files (https://ghedam.at/24353/tutorial-getting-started-with-home-manager-for-nix)
-    #home.file.".local/share/osu/storage.ini".source = builtins.toFile "storage.ini" ''
-  #FullPath = ${location}/hosts/configFiles/osu-lazer/
-  #  '';
+    # Make a symlinks for Syncthing Ignore file:
+    home.file.".stignore".source = builtins.toFile ".stignore" ''
+!/.zsh_history
+!/.bash_history
+!/.python_history
+// Ignore everything else:
+*
+    '';
 
     home.stateVersion = "22.11";
   }

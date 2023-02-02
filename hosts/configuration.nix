@@ -450,6 +450,12 @@
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
+        "bash&zshHistory" = { # added ignore batterns with home-manager to sync only those files
+          path = "~";
+          devices = [ "nixOS-Laptop" "nixOS-Surface" ]; 
+          versioning = myVersioning;
+          # Potencial Ignore patterns: 
+        };
         "MinecraftPrismLauncher" = {
           path = "~/.local/share/PolyMC/instances";
           devices = [ "nixOS-Laptop" "nixOS-Surface" ]; 
