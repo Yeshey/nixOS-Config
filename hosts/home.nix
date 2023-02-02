@@ -275,9 +275,9 @@ X-WebApp-Isolated=true
     home.file.".local/share/The Powder Toy/Saves".source = config.lib.file.mkOutOfStoreSymlink "${location}/hosts/configFiles/PowderToy/Saves/";
 
     # Raw configuration files (https://ghedam.at/24353/tutorial-getting-started-with-home-manager-for-nix)
-    home.file.".local/share/osu/storage.ini".source = builtins.toFile "storage.ini" ''
-  FullPath = ${location}/hosts/configFiles/osu-lazer/
-    '';
+    #home.file.".local/share/osu/storage.ini".source = builtins.toFile "storage.ini" ''
+  #FullPath = ${location}/hosts/configFiles/osu-lazer/
+  #  '';
 
     home.stateVersion = "22.11";
   }

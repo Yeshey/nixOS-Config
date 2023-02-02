@@ -471,6 +471,18 @@
           }; 
           # Potencial Ignore patterns: 
         };
+        "osu-lazer" = {
+          path = "~/.local/share/osu";
+          devices = [ "nixOS-Laptop" "nixOS-Surface" ]; 
+          versioning = {
+            type = "staggered"; 
+            params = { 
+              cleanInterval = "3600"; # 1 hour in seconds
+              maxAge = "1296000"; # 15 days in seconds
+            }; 
+          }; 
+          # Potencial Ignore patterns: 
+        };
       };
     };
   };

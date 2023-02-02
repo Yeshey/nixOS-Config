@@ -18,6 +18,7 @@ It has my personal configuration for two devices, my Lenovo Legion laptop and my
   - Make it so upgrade and update tries three times before giving up
 
 - Sync things with syncthing instead of having game saves etc in the github repo
+  - Use syncthing to also sync your ssh keys
 
 ## Issues
 
