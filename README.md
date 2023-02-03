@@ -19,6 +19,8 @@ It has my personal configuration for two devices, my Lenovo Legion laptop and my
 
 - Sync things with syncthing instead of having game saves etc in the github repo
 
+- Fix minecraft skin
+
 ## Issues
 
 - Thermald service not working correct, now overriten, but the issue persists, here is the issue I raised:
