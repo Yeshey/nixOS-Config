@@ -483,6 +483,27 @@
       };
     };
   };
+  # A systemd timer to delete all the sync-conflict files
+  systemd.timers."delete-sync-conflicts" = {
+    wantedBy = [ "timers.target" ];
+      timerConfig = {
+        Persistent = true; # If missed, run on boot (https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
+        OnCalendar = "*-*-1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31"; # Every two days
+        Unit = "delete-sync-conflicts.service";
+      };
+  };
+  systemd.services."delete-sync-conflicts" = {
+    script = ''
+      set -eu
+      ${pkgs.findutils}/bin/find /mnt /home -mindepth 1 -type f -not \( -path '*/.Trash-1000/*' -or -path '*.local/share/Trash/*' \) -name '*.sync-conflict-*' -ls -delete
+    '';
+    # Ignore What's inside Trash etc...
+    serviceConfig = {
+      Type = "oneshot";
+      User= "${user}";
+    };
+  };
+
 
   # More apps
   services.flatpak.enable = true;
