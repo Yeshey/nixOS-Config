@@ -200,7 +200,7 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/desktop/session" = {
-      idle-delay = mkUint32 180;
+      idle-delay = mkUint32 0;
     };
 
     "org/gnome/desktop/sound" = {
@@ -275,6 +275,8 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/gnome-system-monitor/disktreenew" = {
+      col-1-visible = true;
+      col-1-width = 178;
       col-6-visible = true;
       col-6-width = 0;
     };
@@ -303,6 +305,8 @@ with lib.hm.gvariant;
       migrated-gtk-settings = true;
       search-filter-time-type = "last_modified";
       search-view = "list-view";
+      show-create-link = true;
+      show-delete-permanently = true;
     };
 
     "org/gnome/nautilus/window-state" = {
@@ -410,7 +414,7 @@ with lib.hm.gvariant;
     };
 
     "org/gnome/software" = {
-      check-timestamp = mkInt64 1674904120;
+      check-timestamp = mkInt64 1675544601;
       first-run = false;
     };
 
