@@ -390,11 +390,23 @@
 
   # Syncthing
   services = {
+    
     minecraft-server = {
       enable = true;
       eula = true;
+      openFirewall = true; # auto open port in firewall?
+
       serverProperties = {
+        server-port = 25565;
+        difficulty = 3;
+        gamemode = 1;
+        max-players = 100;
+        motd = "NixOS Minecraft server!";
+        white-list = true;
         allow-cheats=true;
+
+
+        /*
         enable-jmx-monitoring=false;
         rcon.port=25575;
         gamemode=1;
@@ -412,7 +424,7 @@
         require-resource-pack=false;
         use-native-transport=true;
         max-players=20;
-        online-mode=false;
+        "online-mode"="false";
         enable-status=true;
         allow-flight=false;
         broadcast-rcon-to-ops=true;
@@ -439,6 +451,7 @@
         enforce-whitelist=false;
         spawn-protection=16;
         max-world-size=29999984;
+        */
       };
     };
 
