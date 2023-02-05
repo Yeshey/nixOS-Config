@@ -11,15 +11,12 @@ It has my personal configuration for two devices, my Lenovo Legion laptop and my
 
 - Make system.autoUpgrade not make PC unusable(right now it grabs /etc/nixos/ configuration):
   - You made a comment [here](https://github.com/NixOS/nixpkgs/issues/77971) with your alterations to systemd service, once you know they work, give an update there
+  - Fix the fail case in the autoUpgrade service, so it remocves the last version of the flake.lock if it didn't finish.
 
 - Make it so the surface doesn't die when you suspend it, or find an alternative to suspending it.
 
 - figure out how to add functions aliases to zsh
   - Make it so upgrade and update tries three times before giving up
-
-- Sync things with syncthing instead of having game saves etc in the github repo
-
-- Fix minecraft skin
 
 ## Issues
 
