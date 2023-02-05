@@ -3,7 +3,6 @@
 #
 
 { config, lib, pkgs, inputs, user, location, host, dataStoragePath, ... }:
-
 /*
   let
     # Wrapper to run steam with env variable GDK_SCALE=2 to scale correctly
@@ -43,11 +42,6 @@
 #    [ 
 #      ./hardware-configuration.nix  # Include the results of the hardware scan.
 #      ./home-manager.nix
-#    ];
-
-#imports =
-#    [ 
-#      (./nixFiles/bluetooth.nix) # override bluetooth so it has --experimental
 #    ];
 
 #     ___            __ 
@@ -302,8 +296,8 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 25565 ]; # for minecraft
+  networking.firewall.allowedUDPPorts = [ 25565 ]; # for minecraft
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
@@ -396,6 +390,58 @@
 
   # Syncthing
   services = {
+    minecraft-server = {
+      enable = true;
+      eula = true;
+      serverProperties = {
+        allow-cheats=true;
+        enable-jmx-monitoring=false;
+        rcon.port=25575;
+        gamemode=1;
+        enable-command-block=false;
+        enable-query=false;
+        generator-settings={};
+        enforce-secure-profile=true;
+        query.port=25565;
+        pvp=true;
+        generate-structures=true;
+        max-chained-neighbor-updates=1000000;
+        difficulty=3;
+        network-compression-threshold=256;
+        max-tick-time=60000;
+        require-resource-pack=false;
+        use-native-transport=true;
+        max-players=20;
+        online-mode=false;
+        enable-status=true;
+        allow-flight=false;
+        broadcast-rcon-to-ops=true;
+        view-distance=10;
+        allow-nether=true;
+        server-port=25565;
+        enable-rcon=false;
+        sync-chunk-writes=true;
+        op-permission-level=4;
+        prevent-proxy-connections=false;
+        hide-online-players=false;
+        entity-broadcast-range-percentage=100;
+        simulation-distance=10;
+        player-idle-timeout=0;
+        force-gamemode=false;
+        rate-limit=0;
+        hardcore=false;
+        white-list=false;
+        broadcast-console-to-ops=true;
+        spawn-npcs=true;
+        spawn-animals=true;
+        function-permission-level=2;
+        spawn-monsters=true;
+        enforce-whitelist=false;
+        spawn-protection=16;
+        max-world-size=29999984;
+      };
+    };
+
     syncthing = {
       enable = true;
       user = "yeshey";
@@ -407,6 +453,7 @@
         "windows-Laptop" = { id = "SST7QBM-2SKF4WK-F4RUAA2-ICQ7NBB-LDI3I33-O3DEZZJ-TVXZ3DB-M7IYTAQ"; };
         "nixOS-Surface" = { id = "7MRGXWS-QWTEGDF-YEIOM3M-5DM627F-DSYTRN3-JUECBF4-6A4Z26Y-PQVAUAC"; };
         "windows-Surface" = { id = "4L2C6IN-PG25JP6-46WCN2B-EKFAHPR-3FE3B2F-JCXRQ5T-MO5PDAA-JWU2IA7"; };
+        "android-A70Phone" = { id = "H6ETBYH-DGJCL3H-UUI7GJK-EK6WI5I-UFGTVZF-W6HKUPN-I5MOXCL-PDP4BAS"; };
       };
       folders = 
       let 
@@ -420,25 +467,25 @@
       in {
         "2022" = {
           path = "${dataStoragePath}/PersonalFiles/2022"; 
-          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" ]; 
+          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" "android-A70Phone" ]; 
           versioning = myVersioning;
           # Ignore patterns: Recorded_Classes 
         };
         "A70Camera" = {
           path = "${dataStoragePath}/PersonalFiles/Timeless/Syncthing/PhoneCamera";
-          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" ]; 
+          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" "android-A70Phone" ]; 
           versioning = myVersioning;
           # Ignore patterns: 
         };
         "Allsync" = {
           path = "${dataStoragePath}/PersonalFiles/Timeless/Syncthing/Allsync";
-          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" ]; 
+          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" "android-A70Phone" ]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: watch
         };
         "Music" = {
           path = "${dataStoragePath}/PersonalFiles/Timeless/Music";
-          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" ]; 
+          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" "android-A70Phone" ]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: AllMusic
         };
@@ -446,37 +493,37 @@
         # Config and game files sync
         "ssh" = {
           path = "~/.ssh";
-          devices = [ "nixOS-Laptop" "nixOS-Surface" ]; 
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "android-A70Phone" ]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
         "bash&zshHistory" = { # added ignore batterns with home-manager to sync only those files
           path = "~/";
-          devices = [ "nixOS-Laptop" "nixOS-Surface" ]; 
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "android-A70Phone" ]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
         "MinecraftPrismLauncher" = {
           path = "~/.local/share/PolyMC/instances";
-          devices = [ "nixOS-Laptop" "nixOS-Surface" ]; 
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "android-A70Phone" ]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
         "Osu-Lazer" = {
           path = "~/.local/share/osu";
-          devices = [ "nixOS-Laptop" "nixOS-Surface" ]; 
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "android-A70Phone" ]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
         "Minetest" = {
           path = "~/.minetest";
-          devices = [ "nixOS-Laptop" "nixOS-Surface" ]; 
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "android-A70Phone" ]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
         "PowderToy" = {
           path = "~/.local/share/The Powder Toy/";
-          devices = [ "nixOS-Laptop" "nixOS-Surface" ]; 
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "android-A70Phone" ]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
@@ -488,13 +535,12 @@
     wantedBy = [ "timers.target" ];
       timerConfig = {
         Persistent = true; # If missed, run on boot (https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
-        OnCalendar = "*-*-1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31"; # Every two days
+        OnCalendar = "*-*-1,4,7,10,13,16,19,22,25,28"; # Every three days approximatley
         Unit = "delete-sync-conflicts.service";
       };
   };
   systemd.services."delete-sync-conflicts" = {
     script = ''
-      set -eu
       ${pkgs.findutils}/bin/find /mnt /home -mindepth 1 -type f -not \( -path '*/.Trash-1000/*' -or -path '*.local/share/Trash/*' \) -name '*.sync-conflict-*' -ls -delete
     '';
     # Ignore What's inside Trash etc...
@@ -545,17 +591,29 @@
       );
     })
 
+    (self: super: {
+      playit-cli = super.playit-cli.overrideAttrs (
+        _: { 
+          src = builtins.fetchurl {
+            url = "https://github.com/playit-cloud/playit-agent/releases/download/v1.0.0-rc2/playit-cli";
+            sha256 = "sha256:14xav91liz4xrlcwwin94gfh6w1iyq9z8dvbz34l017m7vqhn2nl";
+          };
+          unpackCmd = ''
+              ${pkgs.unzip}/bin/unzip "$src" -x "playit-agent*/lib*so"
+          '';
+        }
+      );
+    })
+
   ];
 
-  # REMEMBER TO TRY TO BUILD WITHOUT THIS TO SEE IF IT IS WORKING AGAIN
-  #nixpkgs.config.permittedInsecurePackages = [
-  #  "python-2.7.18.6"
-  #];
-
   environment.systemPackages = with pkgs; [
+    #Follow the ask for help you did: (https://discourse.nixos.org/t/compiling-and-adding-program-not-in-nixpkgs-to-pc-compiling-error/25239/3)
+    #(callPackage ./nixFiles/playit-cli.nix {})
+
+    
     # vim # The Nano editor is installed by default.
-    # nvim
-    # nixosRecentCommit cmon man
+    neovim
 
     # Development
     jdk17 # java (alias for openJDK)
@@ -563,7 +621,6 @@
     ghc # Haskell
     # haskell-language-server # Haskell    ?
     
-
     # Browsers
     brave
     tor-browser-bundle-bin
@@ -598,41 +655,10 @@
     ninja
     pkg-config
     unzip
-    
-/*  libepoxy.dev
-    at-spi2-core.dev
-    clang
-    cmake
-    dart
-    dbus.dev
-    flutter
-    gtk3
-    libdatrie
-    libepoxy.dev
-    libselinux
-    libsepol
-    libthai
-    libxkbcommon
-    ninja
-    pcre
-    pkg-config
-    util-linux.dev
-    xorg.libXdmcp
-    xorg.libXtst */
-    # https://github.com/NixOS/nixpkgs/issues/36759 ?
-
-
-
-    # SHELL
-    #oh-my-zsh
-    #zsh
-    #thefuck
-    #autojump
 
     # gnome.seahorse # to manage the gnome keyring
 
     # Games
-
     
     # Overlayed
     discord
