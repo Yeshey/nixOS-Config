@@ -296,8 +296,9 @@
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 25565 ]; # for minecraft
-  networking.firewall.allowedUDPPorts = [ 25565 ]; # for minecraft
+  # Ports for syncthing: https://docs.syncthing.net/users/firewall.html
+  networking.firewall.allowedTCPPorts = [ 25565 22000 ]; # for [ minecraft syncthing ]
+  networking.firewall.allowedUDPPorts = [ 25565 22000 21027 ]; # for [ minecraft syncthing syncthing ]
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
 
