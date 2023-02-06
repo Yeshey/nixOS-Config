@@ -4,7 +4,7 @@
 rustPlatform.buildRustPackage rec {
   pname = "playit-agent";
   version = "1.0.0"; # for release 1.0.0-rc2;
-  doCheck = false; # the tests weren't letting it build????
+  doCheck = false; # the tests weren't letting it build???
   # You have to change this to disable just the test that wasn't making it work: https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/rust.section.md#running-package-tests-running-package-tests
 
   src = fetchFromGitHub {
