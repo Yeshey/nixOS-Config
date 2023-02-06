@@ -7,6 +7,10 @@ It has my personal configuration for two devices, my Lenovo Legion laptop and my
 
 - Highly Inspiered by [Matthias Benaets](https://github.com/MatthiasBenaets) [configuration](https://github.com/MatthiasBenaets/nixos-config) and his [video](https://www.youtube.com/watch?v=AGVXJ-TIv3Y)
 
+## Notes
+
+- Check the [languages-frameworks](https://github.com/NixOS/nixpkgs/tree/master/doc/languages-frameworks) if you ever want to do a project with nix in one of these programming languages
+
 ## To-Do
 
 - Make system.autoUpgrade not make PC unusable(right now it grabs /etc/nixos/ configuration):
