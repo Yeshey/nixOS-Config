@@ -310,6 +310,14 @@
 
   programs.adb.enable = true; # for android-studio
 
+  # Binary Cache for Haskell.nix
+  nix.settings.trusted-public-keys = [
+    "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
+  ];
+  nix.settings.substituters = [
+    "https://cache.iog.io"
+  ];
+
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
@@ -582,7 +590,7 @@
     btop
     tree
     git
-    wine
+    wine64
     vlc
     gparted
     anydesk
