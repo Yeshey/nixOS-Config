@@ -423,6 +423,12 @@
             }; 
           }; 
       in {
+        "2023" = {
+          path = "${dataStoragePath}/PersonalFiles/2023"; 
+          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" "android-A70Phone" ]; 
+          versioning = myVersioning;
+          # Ignore patterns: Recorded_Classes 
+        };
         "2022" = {
           path = "${dataStoragePath}/PersonalFiles/2022"; 
           devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" "android-A70Phone" ]; 
