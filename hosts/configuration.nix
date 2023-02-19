@@ -555,26 +555,20 @@
       );
     })
 
+    /* # Current yt-dlp in nixpkgs stable not working, getting latest
     (self: super: {
-      playit-cli = super.playit-cli.overrideAttrs (
+      yt-dlp = super.yt-dlp.overrideAttrs (
         _: { 
-          src = builtins.fetchurl {
-            url = "https://github.com/playit-cloud/playit-agent/releases/download/v1.0.0-rc2/playit-cli";
-            sha256 = "sha256:14xav91liz4xrlcwwin94gfh6w1iyq9z8dvbz34l017m7vqhn2nl";
-          };
-          unpackCmd = ''
-              ${pkgs.unzip}/bin/unzip "$src" -x "playit-agent*/lib*so"
-          '';
+          version = "2023.2.17";
         }
       );
-    })
+    }) */
 
   ];
 
   environment.systemPackages = with pkgs; [
     #Follow the ask for help you did: (https://discourse.nixos.org/t/compiling-and-adding-program-not-in-nixpkgs-to-pc-compiling-error/25239/3)
     (callPackage ./nixFiles/playit-cli.nix {})
-
     
     # vim # The Nano editor is installed by default.
     neovim

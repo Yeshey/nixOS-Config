@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "game client to run servers without portforwarding";
-    homepage = "https://github.com/playit-cloud/playit-agent";
+    homepage = "https://playit.gg";
     license = licenses.unlicense;
     maintainers = [ "Yeshey" ];
   };
