@@ -206,6 +206,7 @@
     "${pkgs.bluez}/libexec/bluetooth/bluetoothd -f /etc/bluetooth/main.conf --experimental" 
   ];
 
+/*
   # Auto Upgrade
   system.autoUpgrade = {
     enable = true;
@@ -239,6 +240,7 @@
     # this doesn't work yet (https://unix.stackexchange.com/questions/441575/proper-way-to-use-onfailure-in-systemd)
     ExecStopPost= [ "sh -c 'if [ \"$$SERVICE_RESULT\" != \"success\" ]; then cd ${location} && git checkout -- flake.lock; fi'" ];
   };
+  */
 
 
 
@@ -596,7 +598,7 @@
     anydesk
     pdfarranger
     unrar # to extract .rar with ark in KDE # unrar x Lab5.rar
-    helvum # To control pipewire Not Working?
+    # helvum # To control pipewire Not Working?
     virt-manager # virtual machines
     spice-gtk # for virtual machines (to connect usbs and everything else)
     linux-wifi-hotspot # hotspot
