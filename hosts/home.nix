@@ -36,18 +36,19 @@
     };
     # ====== ============================ ======
 
-    # Change VSCodium to be able to use pylance and the MS VSC extension store (https://github.com/VSCodium/vscodium/pull/674#issuecomment-1137920704)
+    # Change VSCodium to be able to use pylance (https://github.com/VSCodium/vscodium/pull/674#issuecomment-1137920704)
     home.file.".config/VSCodium/product.json".source = builtins.toFile "product.json" ''
 {
   "nameShort": "Visual Studio Code",
   "nameLong": "Visual Studio Code",
-  "extensionsGallery": {
-    "serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
-    "cacheUrl": "https://vscode.blob.core.windows.net/gallery/index",
-    "itemUrl": "https://marketplace.visualstudio.com/items"
-  }
 }
     '';
+# if you want to activate the MS extension store, add this as well:
+ #"extensionsGallery": {
+ #   "serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
+ #   "cacheUrl": "https://vscode.blob.core.windows.net/gallery/index",
+ #   "itemUrl": "https://marketplace.visualstudio.com/items"
+ # }
 
     home = {
       username = "${user}";
