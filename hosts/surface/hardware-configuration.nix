@@ -50,7 +50,7 @@
   fileSystems."${dataStoragePath}" = {
     device = "/dev/disk/by-label/ntfsMicroSD-DataDisk";
     fsType = "auto";
-    options = [ "nosuid" "nodev" "nofail" "x-gvfs-show" ];
+    options = [ "nodev" "nofail" "x-gvfs-show"   ]; #"uid=1000" "gid=1000" "dmask=007" "fmask=117"
   };
 
   swapDevices = [{ device = "/dev/disk/by-uuid/3d28629e-2f9b-4ae5-93b1-2a1018faeed3"; }];
