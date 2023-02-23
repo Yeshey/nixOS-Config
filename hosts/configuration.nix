@@ -577,7 +577,7 @@
 
     # Development
     jdk17 # java (alias for openJDK)
-    python
+    python3
     ghc # Haskell
     # haskell-language-server # Haskell    ?
     

@@ -4,8 +4,16 @@
 
 { config, lib, pkgs, user, location, host, ... }:
 
+let
+  vscUserSettings = {
+    "files.autoSave" = "afterDelay"; # basically on
+    "java.jdt.ls.java.home" = "/run/current-system/sw/lib/openjdk/"; # Show VSCodium where jdk is
+    "nameLong" = "Visual Studio Code"; # to make pylance work (https://github.com/VSCodium/vscodium/issues/892#issuecomment-957850440)
+    "python.defaultInterpreterPath" = "${pkgs.python3}";
+  };
+in
 {
-    # ====== Making VScode settings writable ======
+    # ====== Making VScodium settings writable ======
     # Allowing VScode to change settings on run time, see last response: https://github.com/nix-community/home-manager/issues/1800
     # VScodium is now free to write to its settings, but they will be overwritten when I run nixos rebuild
     # check also how he implemented in his repository: https://github.com/rgbatty/cauldron (nope!)
@@ -15,12 +23,16 @@
       data = ''
         userDir=/home/${user}/.config/VSCodium/User
         rm -rf $userDir/settings.json
+
+        # as I changed the name to Visual Studio Code, I need to maintain VSC settings too
+        userDir2="/home/${user}/.config/Visual Studio Code/User"
+        rm -rf $userDir/settings.json
       '';
     };
 
     home.activation.afterWriteBoundary = 
     let
-        userSettings = import ./nixFiles/vscode-settings.nix;
+        userSettings = vscUserSettings;
     in
     {
       after = [ "writeBoundary" ];
@@ -32,9 +44,17 @@
           ${(pkgs.formats.json {}).generate "blabla"
             userSettings} \
           > $userDir/settings.json
+
+        # as I changed the name to Visual Studio Code, I need to maintain VSC settings too
+        userDir2="~/.config/Visual Studio Code/User"
+        rm -rf $userDir/settings.json
+        cat \
+          ${(pkgs.formats.json {}).generate "blabla"
+            userSettings} \
+          > $userDir/settings.json
       '';
     };
-    # ====== ============================ ======
+    
 
     # Change VSCodium to be able to use pylance (https://github.com/VSCodium/vscodium/pull/674#issuecomment-1137920704)
     home.file.".config/VSCodium/product.json".source = builtins.toFile "product.json" ''
@@ -49,6 +69,8 @@
  #   "cacheUrl": "https://vscode.blob.core.windows.net/gallery/index",
  #   "itemUrl": "https://marketplace.visualstudio.com/items"
  # }
+
+    # ====== ============================ ======
 
     home = {
       username = "${user}";
@@ -157,7 +179,7 @@
           # jeanp413.open-remote-ssh # not in nixpkgs install manually, and see extension page to add one more thing to configuration for it to work
           # ms-vscode-remote.remote-ssh # doesn't work in vscodium
         ];
-        userSettings = import ./nixFiles/vscode-settings.nix;
+        userSettings = vscUserSettings;
       };
 
       # Github Desktop is complaining about .git config being read only
