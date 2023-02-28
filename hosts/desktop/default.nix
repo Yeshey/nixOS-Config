@@ -132,8 +132,7 @@ imports = [
     ark # Compress and Uncompress files
     sddm-kcm # for sddm configuration in settings
     kate # KDEs notepad
-
-    blender # for blender
+    
     libnotify # so you can use notify-send
     lsd
   ];
