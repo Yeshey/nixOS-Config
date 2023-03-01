@@ -90,6 +90,7 @@ in
         signal-desktop
         xdotool
         lbry
+        blender # for blender
         # etcher #insecure?
 
         # Browsers
