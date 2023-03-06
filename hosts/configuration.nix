@@ -625,6 +625,23 @@
     exodus
   ];
 
+  # tmp for the postgresql community square Project.
+  services.postgresql = {
+    enable = true;
+    # package = pkgs.postgresql_10;
+    enableTCPIP = true;
+    authentication = pkgs.lib.mkOverride 10 ''
+      local all all trust
+      host all all 127.0.0.1/32 trust
+      host all all ::1/128 trust
+    '';
+    initialScript = pkgs.writeText "backend-initScript" ''
+      CREATE ROLE nixcloud WITH LOGIN PASSWORD 'nixcloud' CREATEDB;
+      CREATE DATABASE nixcloud;
+      GRANT ALL PRIVILEGES ON DATABASE nixcloud TO nixcloud;
+    '';
+  };
+
   # for virtual machines (to connect usbs and everything else)
   # Not working rn (https://discourse.nixos.org/t/having-an-issue-with-virt-manager-not-allowing-usb-passthrough/6272/3)
   #security.wrappers.spice-client-glib-usb-acl-helper.source = "${pkgs.spice-gtk}/bin/spice-client-glib-usb-acl-helper";
