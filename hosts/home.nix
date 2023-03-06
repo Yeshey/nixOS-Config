@@ -91,6 +91,9 @@ in
         xdotool
         lbry
         blender # for blender
+        gimp
+        krita
+        inkscape
         # etcher #insecure?
 
         # Browsers
