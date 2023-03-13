@@ -94,6 +94,7 @@ in
         gimp
         krita
         inkscape
+        arduino
         # etcher #insecure?
 
         # Browsers
