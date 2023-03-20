@@ -593,6 +593,7 @@
     tree
     git
     wine64
+    wine
     vlc
     gparted
     anydesk
@@ -602,6 +603,7 @@
     virt-manager # virtual machines
     spice-gtk # for virtual machines (to connect usbs and everything else)
     linux-wifi-hotspot # hotspot
+    scrcpy
 
     # tmp
     # texlive.combined.scheme-full # LaTeX
