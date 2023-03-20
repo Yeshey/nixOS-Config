@@ -320,6 +320,17 @@ X-WebApp-Isolated=true
 // Ignore everything else:
 *
     '';
+    # So it doesn't sync for example the mouse sensitivity between devices
+    home.file.".local/share/osu/.stignore".source = builtins.toFile ".stignore" ''
+// Don't ignore these files...
+!/files
+!/screenshots
+!/collection.db
+!/client.realm
+
+// Ignore everything else in osu folder
+*
+    '';
 
     home.stateVersion = "22.11";
   }
