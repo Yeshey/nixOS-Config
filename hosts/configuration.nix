@@ -529,6 +529,9 @@
       # https://forum.vivaldi.net/topic/62354/hardware-accelerated-video-encode/20 # in chrome its enabled by default, why not vivaldi
       # commandLineArgs = "--use-gl=desktop --enable-features=VaapiVideoDecoder --disable-features=UseOzonePlatform" ;  # wtf doesnt work?
     };
+    #permittedInsecurePackages = [
+    #    "openjdk-18+36"
+    #  ];
   };
 
   # OVERLAYS
@@ -566,6 +569,16 @@
       );
     }) */
 
+    /* (self: super: {
+        prismlauncher = super.prismlauncher.override {
+            glfw = super.glfw.overrideAttrs (
+            _: { 
+              version = "3.1";  
+            }
+          );
+        };
+    }) */
+
   ];
 
   environment.systemPackages = with pkgs; [
@@ -576,7 +589,8 @@
     neovim
 
     # Development
-    jdk17 # java (alias for openJDK)
+    jdk17 # java (alias for openJDK) 17.0.4.1
+    #jdk18
     python3
     ghc # Haskell
     # haskell-language-server # Haskell    ?
