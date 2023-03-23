@@ -606,6 +606,7 @@
     btop
     tree
     git
+    ffmpeg
     wine64
     wine
     vlc
