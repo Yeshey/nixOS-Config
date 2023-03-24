@@ -65,6 +65,7 @@ in
 
       packages = with pkgs; [
         github-desktop
+        libnotify # so you can use notify-send
         obs-studio
         qbittorrent
         yt-dlp # download youtube videos
@@ -80,6 +81,7 @@ in
         krita
         inkscape
         arduino
+        stremio
         premid # show youtube videos watching in discord
         # etcher #insecure?
 
@@ -95,6 +97,7 @@ in
 
         # Games
         osu-lazer
+        lutris
         # tetrio-desktop # runs horribly, better on the web
         prismlauncher # polymc # prismlauncher # for Minecraft
         heroic
