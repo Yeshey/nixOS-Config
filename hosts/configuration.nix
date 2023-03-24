@@ -162,7 +162,7 @@
   users.users.${user} = {
     isNormalUser = true;
     description = "Yeshey";
-    extraGroups = [ "networkmanager" "wheel" "docker" "adbusers" "libvirtd" "surface-control"]; # libvirtd - For android-studio
+    extraGroups = [ "networkmanager" "wheel" "dialout" "docker" "adbusers" "libvirtd" "surface-control"]; # libvirtd - For android-studio
     packages = with pkgs; [
     #  thunderbird
     ];
