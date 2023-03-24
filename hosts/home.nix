@@ -13,27 +13,8 @@ let
       "python" = "python3 -u";
     };
   };
-  #autostartPrograms = [ pkgs.discord pkgs.slack ];
 in
 {
-    # https://github.com/nix-community/home-manager/issues/3447
-    /*home.file = builtins.listToAttrs (map
-      (pkg:
-        {
-          name = ".config/autostart/" + pkg.pname + ".desktop";
-          value =
-            if pkg ? desktopItem then {
-              # Application has a desktopItem entry. 
-              # Assume that it was made with makeDesktopEntry, which exposes a
-              # text attribute with the contents of the .desktop file
-              text = pkg.desktopItem.text;
-            } else {
-              # Application does *not* have a desktopItem entry. Try to find a
-              # matching .desktop name in /share/apaplications
-              source = (pkg + "/share/applications/" + pkg.pname + ".desktop");
-            };
-        })
-      autostartPrograms);*/
 
     # ====== Making VScodium settings writable ======
     # Allowing VScode to change settings on run time, see last response: https://github.com/nix-community/home-manager/issues/1800
@@ -76,23 +57,7 @@ in
           > $userDir/settings.json
       '';
     };
-    
-
-    # Change VSCodium to be able to use pylance (https://github.com/VSCodium/vscodium/pull/674#issuecomment-1137920704)
-    home.file.".config/VSCodium/product.json".source = builtins.toFile "product.json" ''
-{
-  "nameShort": "Visual Studio Code",
-  "nameLong": "Visual Studio Code",
-}
-    '';
-# if you want to activate the MS extension store, add this as well:
- #"extensionsGallery": {
- #   "serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
- #   "cacheUrl": "https://vscode.blob.core.windows.net/gallery/index",
- #   "itemUrl": "https://marketplace.visualstudio.com/items"
- # }
-
-    # ====== ============================ ======
+    # ====== ============================ ======    
 
     home = {
       username = "${user}";
@@ -287,8 +252,46 @@ in
 
     };
 
-    # Syncthing shortcut, based on webapp manager created shortcut (https://github.com/linuxmint/webapp-manager)
-    home.file.".local/share/applications/vivaldi-syncthing.desktop".source = builtins.toFile "vivaldi-syncthing.desktop" ''
+    # My home files 
+    home.file = let
+      autostartPrograms = [ pkgs.discord pkgs.premid ];
+    in builtins.listToAttrs (map
+          # Startup applications with home manager
+          # https://github.com/nix-community/home-manager/issues/3447
+          (pkg:
+            {
+              name = ".config/autostart/" + pkg.pname + ".desktop";
+              value =
+                if pkg ? desktopItem then {
+                  # Application has a desktopItem entry. 
+                  # Assume that it was made with makeDesktopEntry, which exposes a
+                  # text attribute with the contents of the .desktop file
+                  text = pkg.desktopItem.text;
+                } else {
+                  # Application does *not* have a desktopItem entry. Try to find a
+                  # matching .desktop name in /share/apaplications
+                  source = (pkg + "/share/applications/" + pkg.pname + ".desktop");
+                };
+            })
+          autostartPrograms)
+          //
+          {
+    # Change VSCodium to be able to use pylance (https://github.com/VSCodium/vscodium/pull/674#issuecomment-1137920704)
+      ".config/VSCodium/product.json".source = builtins.toFile "product.json" ''
+{
+  "nameShort": "Visual Studio Code",
+  "nameLong": "Visual Studio Code",
+}
+      '';
+ # if you want to activate the MS extension store, add this as well:
+ #"extensionsGallery": {
+ #   "serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
+ #   "cacheUrl": "https://vscode.blob.core.windows.net/gallery/index",
+ #   "itemUrl": "https://marketplace.visualstudio.com/items"
+ # }
+
+      # Syncthing shortcut, based on webapp manager created shortcut (https://github.com/linuxmint/webapp-manager)
+      ".local/share/applications/vivaldi-syncthing.desktop".source = builtins.toFile "vivaldi-syncthing.desktop" ''
 [Desktop Entry]
 Version=1.0
 Name=Syncthing
@@ -308,10 +311,10 @@ X-WebApp-CustomParameters=
 X-WebApp-Navbar=false
 X-WebApp-PrivateWindow=false
 X-WebApp-Isolated=true
-    '';
+          '';
 
-    # MS WhiteBoard, based on webapp manager created shortcut (https://github.com/linuxmint/webapp-manager)
-    home.file.".local/share/applications/MSwhiteboard.desktop".source = builtins.toFile "MSwhiteboard.desktop" ''
+      # MS WhiteBoard, based on webapp manager created shortcut (https://github.com/linuxmint/webapp-manager)
+      ".local/share/applications/MSwhiteboard.desktop".source = builtins.toFile "MSwhiteboard.desktop" ''
 [Desktop Entry]
 Version=1.0
 Name=MS WhiteBoard
@@ -331,18 +334,19 @@ X-WebApp-CustomParameters=
 X-WebApp-Navbar=false
 X-WebApp-PrivateWindow=false
 X-WebApp-Isolated=true
-    '';
+          '';
 
-    # Make a symlinks for Syncthing Ignore file:
-    home.file.".stignore".source = builtins.toFile ".stignore" ''
+      # Make a symlinks for Syncthing Ignore file:
+      ".stignore".source = builtins.toFile ".stignore" ''
 !/.zsh_history
 !/.bash_history
 !/.python_history
 // Ignore everything else:
 *
-    '';
-    # So it doesn't sync for example the mouse sensitivity between devices
-    home.file.".local/share/osu/.stignore".source = builtins.toFile ".stignore" ''
+          '';
+
+      # So it doesn't sync for example the mouse sensitivity between devices
+      ".local/share/osu/.stignore".source = builtins.toFile ".stignore" ''
 // Don't ignore these files...
 !/files
 !/screenshots
@@ -351,7 +355,8 @@ X-WebApp-Isolated=true
 
 // Ignore everything else in osu folder
 *
-    '';
+        '';
+    };
 
     home.stateVersion = "22.11";
   }
