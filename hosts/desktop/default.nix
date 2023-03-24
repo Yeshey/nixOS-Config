@@ -111,18 +111,14 @@ imports = [
 
   environment.systemPackages = with pkgs; [
 
-    stremio
-
     # Epic_Games_Claimer
     # docker
 
     # tmp
-    virt-manager # for VMs android studio (installed through flatpak for latest version)
     # virtualbox
     # texlive.combined.scheme-full # LaTeX
 
     # Games
-    lutris
     steam
     grapejuice # roblox
 
@@ -133,7 +129,6 @@ imports = [
     sddm-kcm # for sddm configuration in settings
     kate # KDEs notepad
     
-    libnotify # so you can use notify-send
     lsd
   ];
 
