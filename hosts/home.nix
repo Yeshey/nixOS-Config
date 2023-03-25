@@ -103,6 +103,7 @@ in
         heroic
         minetest
         the-powder-toy
+        tetrio-desktop
 
         # Libreoffice
         libreoffice-qt

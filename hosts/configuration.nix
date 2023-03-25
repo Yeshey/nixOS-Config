@@ -493,6 +493,12 @@
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
+        "tetrio" = {
+          path = "~/.config/tetrio-desktop/";
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "android-A70Phone" ]; 
+          versioning = myVersioning;
+          # Potencial Ignore patterns: 
+        };
       };
     };
   };
