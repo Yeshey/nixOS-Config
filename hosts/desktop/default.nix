@@ -103,12 +103,6 @@ imports = [
     # windowManager.bspwm.enable = true; # but doesn't work
   };
 
-  # for VMs
-  virtualisation.libvirtd.enable = true;
-  #virtualisation.virtualbox.host.enable = true;
-  #virtualisation.virtualbox.host.enableExtensionPack = true;
-  #virtualisation.virtualbox.host.enableHardening = false;
-
   environment.systemPackages = with pkgs; [
 
     # Epic_Games_Claimer
