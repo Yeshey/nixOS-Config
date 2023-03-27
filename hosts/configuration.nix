@@ -312,6 +312,13 @@
 
   programs.adb.enable = true; # for android-studio
 
+  # for VMs
+  virtualisation.libvirtd.enable = true;
+  virtualisation.spiceUSBRedirection.enable = true; # to enable USB rederection in virt-manager (https://github.com/NixOS/nixpkgs/issues/106594)
+  #virtualisation.virtualbox.host.enable = true;
+  #virtualisation.virtualbox.host.enableExtensionPack = true;
+  #virtualisation.virtualbox.host.enableHardening = false;
+
   # Binary Cache for Haskell.nix
   nix.settings.trusted-public-keys = [
     "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
