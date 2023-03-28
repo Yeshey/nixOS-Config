@@ -89,7 +89,7 @@ in
         vivaldi
 
         # tmp
-        teams
+        #teams
         skypeforlinux
         #staruml # UML diagrams
         jetbrains.clion # C++
