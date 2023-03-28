@@ -620,6 +620,7 @@
     tree
     git
     ffmpeg
+    tldr
     wine64
     wine
     vlc
