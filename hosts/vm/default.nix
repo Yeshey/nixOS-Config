@@ -1,5 +1,5 @@
 #
-#  Specific system configuration settings for desktop
+#  Specific system configuration settings for vm
 #
 #  flake.nix
 #   ├─ ./hosts
@@ -65,6 +65,20 @@ imports = [
     };
   };
 
+  # swap in ext4:
+  swapDevices = [ 
+    {
+      device = "/swapfile";
+      priority = 0; # Higher numbers indicate higher priority.
+      size = 8*1024;
+      options = [ "nofail"];
+    }
+  ];
+  zramSwap = { # zram only made things slwo whenever there were animations when the thermald temperature threshold was set too low (61069)
+    enable = true;
+    algorithm = "zstd";
+  };
+
   # Docker 
   # Docker to automatically grab Epic Games Free games
   # Follow the service log with `journalctl -fu podman-epic_games.service`
@@ -73,7 +87,7 @@ imports = [
   virtualisation.docker.enable = true;
   virtualisation.docker.enableOnBoot = true; # Big WTF
   # Help from https://github.com/NixOS/nixpkgs/issues/68349 and https://docs.docker.com/storage/storagedriver/btrfs-driver/
-  virtualisation.docker.storageDriver = "btrfs";
+  /*virtualisation.docker.storageDriver = "btrfs";
   virtualisation.oci-containers.containers = {
     epic_games = {
       image = "charlocharlie/epicgames-freegames:latest";
@@ -82,7 +96,7 @@ imports = [
       # extraOptions = [ "-p 3000:3000"];
       # autoStart = true;
     };
-  };
+  };*/
   
 
   # KDE Plasma
@@ -103,6 +117,17 @@ imports = [
     # windowManager.bspwm.enable = true; # but doesn't work
   };
 
+  # NVIDIA
+
+  # NVIDIA drivers 
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.opengl.enable = true;
+
+  # Allow unfree packages
+  nixpkgs.config = {
+    cudaSupport = true; # for blender (nvidia)
+  };
+
   environment.systemPackages = with pkgs; [
 
     # Epic_Games_Claimer
@@ -112,9 +137,11 @@ imports = [
     # virtualbox
     # texlive.combined.scheme-full # LaTeX
 
+    # NVIDIA
+    cudaPackages.cudatoolkit # for blender (nvidia)
+
     # Games
     steam
-    grapejuice # roblox
 
     # FOR PLASMA DESKTOP
     scrot # for plasma config saver widget
