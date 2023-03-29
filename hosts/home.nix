@@ -91,11 +91,6 @@ in
         heroic
         minetest
         the-powder-toy
-
-        # Libreoffice
-        libreoffice-qt
-        hunspell
-        hunspellDicts.uk_UA
  
         # SHELL
         oh-my-zsh
