@@ -602,11 +602,6 @@
     ghc # Haskell
     # haskell-language-server # Haskell    ?
     
-    # Browsers
-    brave
-    tor-browser-bundle-bin
-    firefox
-    
     bat
     wget
     htop

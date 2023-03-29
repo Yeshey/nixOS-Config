@@ -14,6 +14,23 @@
   home = {                                # Specific packages
     packages = with pkgs; [
       gwe
+      lbry
+
+      # Surface and Desktop apps
+      yt-dlp # download youtube videos
+      qbittorrent
+      baobab
+      gnome.cheese
+      peek # doesn't work on wayland
+      p3x-onenote # might be worth trying notekit(https://github.com/blackhole89/notekit) and Zettlr(https://github.com/Zettlr/Zettlr)
+      signal-desktop
+      xdotool
+      blender # for blender
+      gimp
+      krita
+      inkscape
+      arduino
+      premid # show youtube videos watching in discord
     ];
   };
 

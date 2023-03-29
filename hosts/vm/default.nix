@@ -98,6 +98,7 @@ imports = [
     };
   };*/
   
+  services.spice-vdagentd.enable=true;
 
   # KDE Plasma
   services.xserver = {
