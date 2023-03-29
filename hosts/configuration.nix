@@ -610,7 +610,7 @@
     git
     ffmpeg
     tldr
-    wine64
+    #wine64
     wine
     vlc
     gparted

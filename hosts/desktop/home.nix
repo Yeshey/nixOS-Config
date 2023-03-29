@@ -31,6 +31,10 @@
       inkscape
       arduino
       premid # show youtube videos watching in discord
+      # Libreoffice
+      libreoffice-qt
+      hunspell
+      hunspellDicts.uk_UA
     ];
   };
 
