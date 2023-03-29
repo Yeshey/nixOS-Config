@@ -115,6 +115,7 @@ imports = [
 
 
   # GNOME Desktop (uses wayland)
+  /*
   services.xserver = {
     enable = true;
     displayManager.gdm.enable = true;
@@ -124,7 +125,12 @@ imports = [
       [org.gnome.desktop.peripherals.touchpad]
       click-method='default'
     '';
-  };
+  };*/
+
+  # GNOME desktop simple
+  services.xserver.enable = true;
+  services.xserver.displayManager.gdm.enable = true;
+  services.xserver.desktopManager.gnome.enable = true;
 
   # NVIDIA
 
