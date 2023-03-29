@@ -67,33 +67,21 @@ in
         github-desktop
         libnotify # so you can use notify-send
         obs-studio
-        qbittorrent
-        yt-dlp # download youtube videos
-        baobab
-        gnome.cheese
-        peek # doesn't work on wayland
-        p3x-onenote # might be worth trying notekit(https://github.com/blackhole89/notekit) and Zettlr(https://github.com/Zettlr/Zettlr)
-        signal-desktop
-        xdotool
-        lbry
-        blender # for blender
-        gimp
-        krita
-        inkscape
-        arduino
         stremio
-        premid # show youtube videos watching in discord
         # etcher #insecure?
 
         # Browsers
         vivaldi
+        brave
+        tor-browser-bundle-bin
+        firefox
 
         # tmp
         #teams
         skypeforlinux
         #staruml # UML diagrams
-        jetbrains.clion # C++
-        jetbrains.idea-community # java
+        #jetbrains.clion # C++
+        #jetbrains.idea-community # java
 
         # Games
         osu-lazer
