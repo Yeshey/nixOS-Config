@@ -29,6 +29,8 @@ imports = [
 #   / _  / _ \/ _ \/ __/
 #  /____/\___/\___/\__/      
 
+  boot.kernelParams = [ "nouveau.modeset=0" ];
+
   boot.loader = {
 
     timeout = 2;
