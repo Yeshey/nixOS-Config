@@ -41,20 +41,22 @@ in
       after = [ "writeBoundary" ];
       before = [];
       data = ''
-        userDir=~/.config/VSCodium/User
-        rm -rf $userDir/settings.json
-        cat \
-          ${(pkgs.formats.json {}).generate "blabla"
-            userSettings} \
-          > $userDir/settings.json
+        if [ -d ~/.config/VSCodium/User ]; then
+          userDir=~/.config/VSCodium/User
+          rm -rf $userDir/settings.json
+          cat \
+            ${(pkgs.formats.json {}).generate "blabla"
+              userSettings} \
+            > $userDir/settings.json
 
-        # as I changed the name to Visual Studio Code, I need to maintain VSC settings too
-        userDir2="~/.config/Visual Studio Code/User"
-        rm -rf $userDir/settings.json
-        cat \
-          ${(pkgs.formats.json {}).generate "blabla"
-            userSettings} \
-          > $userDir/settings.json
+          # as I changed the name to Visual Studio Code, I need to maintain VSC settings too
+          userDir2="~/.config/Visual Studio Code/User"
+          rm -rf $userDir/settings.json
+          cat \
+            ${(pkgs.formats.json {}).generate "blabla"
+              userSettings} \
+            > $userDir/settings.json
+        fi
       '';
     };
     # ====== ============================ ======    
