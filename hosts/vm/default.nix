@@ -32,18 +32,10 @@ imports = [
   boot.kernelParams = [ "nouveau.modeset=0" ];
 
   boot.loader = {
-
     timeout = 2;
-    efi = {
-      canTouchEfiVariables = true;
-      efiSysMountPoint = "/boot/efi";
-    };
     grub = {
       enable = true;
-      version = 2;
-      efiSupport = true;
-      devices = [ "nodev" ];
-      device = "nodev";
+      device = "/dev/vda";
       useOSProber = true;
       # default = "saved"; # doesn't work with btrfs :(
       extraEntries = ''
@@ -76,7 +68,7 @@ imports = [
       options = [ "nofail"];
     }
   ];
-  zramSwap = { # zram only made things slwo whenever there were animations when the thermald temperature threshold was set too low (61069)
+  zramSwap = { # zram only made things slow whenever there were animations when the thermald temperature threshold was set too low (61069)
     enable = true;
     algorithm = "zstd";
   };
