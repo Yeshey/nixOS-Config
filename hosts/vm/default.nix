@@ -103,6 +103,7 @@ imports = [
   services.spice-vdagentd.enable=true;
 
   # KDE Plasma
+  /*
   services.xserver = {
     enable = true; # Enable the X11 windowing system.
     displayManager = {
@@ -118,6 +119,19 @@ imports = [
       # supportDDC = true; # doesnt work with nvidia # to support changing brightness for external monitors (https://discourse.nixos.org/t/how-to-enable-ddc-brightness-control-i2c-permissions/20800)
     };
     # windowManager.bspwm.enable = true; # but doesn't work
+  };*/
+
+
+  # GNOME Desktop (uses wayland)
+  services.xserver = {
+    enable = true;
+    displayManager.gdm.enable = true;
+    desktopManager.gnome.enable = true;
+    # Make Surface Touchpad Work:
+    desktopManager.gnome.extraGSettingsOverrides = ''
+      [org.gnome.desktop.peripherals.touchpad]
+      click-method='default'
+    '';
   };
 
   # NVIDIA
