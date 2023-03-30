@@ -17,7 +17,14 @@
 {
 imports = [
   (import ./hardware-configuration.nix)
+  (import ./pci-passthrough.nix)
 ];
+
+  pciPassthrough = {
+    enable = true;
+    pciIDs = "10de:1f11,10de:10f9";
+    libvirtUsers = [ "${user}" ];
+  };
 
   services.thermald = {
     debug = false;
