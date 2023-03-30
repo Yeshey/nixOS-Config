@@ -32,10 +32,18 @@ imports = [
   boot.kernelParams = [ "nouveau.modeset=0" ];
 
   boot.loader = {
+
     timeout = 2;
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/boot/efi";
+    };
     grub = {
       enable = true;
-      device = "/dev/vda";
+      version = 2;
+      efiSupport = true;
+      devices = [ "nodev" ];
+      device = "nodev";
       useOSProber = true;
       # default = "saved"; # doesn't work with btrfs :(
       extraEntries = ''
