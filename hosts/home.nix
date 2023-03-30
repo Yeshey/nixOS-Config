@@ -70,13 +70,13 @@ in
         libnotify # so you can use notify-send
         obs-studio
         stremio
+        barrier
         # etcher #insecure?
 
         # Browsers
         vivaldi
         brave
         tor-browser-bundle-bin
-        firefox
 
         # tmp
         #teams

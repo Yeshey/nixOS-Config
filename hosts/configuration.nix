@@ -419,6 +419,7 @@
         "manjaro-Laptop" = { id = "HWPEE67-I7DPOPG-H3A3SDX-5HFJK5W-33OIOUO-S6TD5E7-52OAO3B-OFAUAAF"; };
         "windows-Laptop" = { id = "SST7QBM-2SKF4WK-F4RUAA2-ICQ7NBB-LDI3I33-O3DEZZJ-TVXZ3DB-M7IYTAQ"; };
         "nixOS-Surface" = { id = "7MRGXWS-QWTEGDF-YEIOM3M-5DM627F-DSYTRN3-JUECBF4-6A4Z26Y-PQVAUAC"; };
+        "nixOS-VM" = { id = "GNY2ZH4-Y7W67RF-YXAB7KP-6ZYYAVB-OO2RB4I-UXM2J4X-UNLJGEL-77BHWQY"; };
         "windows-Surface" = { id = "4L2C6IN-PG25JP6-46WCN2B-EKFAHPR-3FE3B2F-JCXRQ5T-MO5PDAA-JWU2IA7"; };
         "android-A70Phone" = { id = "H6ETBYH-DGJCL3H-UUI7GJK-EK6WI5I-UFGTVZF-W6HKUPN-I5MOXCL-PDP4BAS"; };
       };
@@ -466,37 +467,37 @@
         # Config and game files sync
         "ssh" = {
           path = "~/.ssh";
-          devices = [ "nixOS-Laptop" "nixOS-Surface" "android-A70Phone" ]; 
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" ]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
         "bash&zshHistory" = { # added ignore batterns with home-manager to sync only those files
           path = "~/";
-          devices = [ "nixOS-Laptop" "nixOS-Surface" "android-A70Phone" ]; 
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" ]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
         "MinecraftPrismLauncher" = {
           path = "~/.local/share/PolyMC/instances";
-          devices = [ "nixOS-Laptop" "nixOS-Surface" "android-A70Phone" ]; 
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" ]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
         "Osu-Lazer" = {
           path = "~/.local/share/osu";
-          devices = [ "nixOS-Laptop" "nixOS-Surface" "android-A70Phone" ]; 
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" ]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
         "Minetest" = {
           path = "~/.minetest";
-          devices = [ "nixOS-Laptop" "nixOS-Surface" "android-A70Phone" ]; 
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" ]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
         "PowderToy" = {
           path = "~/.local/share/The Powder Toy/";
-          devices = [ "nixOS-Laptop" "nixOS-Surface" "android-A70Phone" ]; 
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" ]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
@@ -526,6 +527,7 @@
 
   # More apps
   services.flatpak.enable = true;
+  xdg.portal.enable = true; # needed for flatpaks
 
   # Allow unfree packages
   nixpkgs.config = {
@@ -594,6 +596,7 @@
     
     # vim # The Nano editor is installed by default.
     neovim
+
 
     # Development
     jdk17 # java (alias for openJDK) 17.0.4.1
