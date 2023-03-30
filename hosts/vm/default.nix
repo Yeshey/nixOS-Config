@@ -132,6 +132,12 @@ imports = [
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
+  services.openssh = {
+    #settings = { # wasn't even working..?
+    permitRootLogin = "yes"; # to let surface and Laptop connect to builds for the surface (https://github.com/NixOS/nixpkgs/issues/20718)
+    #};
+  };
+
   # NVIDIA
 
   # NVIDIA drivers 

@@ -19,6 +19,9 @@ rec {
       lbry
       arduino
 
+      # Browser
+      firefox
+
       # Surface and Desktop apps
       yt-dlp # download youtube videos
       qbittorrent

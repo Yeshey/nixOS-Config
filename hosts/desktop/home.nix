@@ -16,6 +16,9 @@
       gwe
       lbry
 
+      # Browser
+      firefox
+
       # Surface and Desktop apps
       yt-dlp # download youtube videos
       qbittorrent
