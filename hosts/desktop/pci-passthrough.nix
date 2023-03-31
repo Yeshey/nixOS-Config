@@ -1,3 +1,4 @@
+# https://astrid.tech/2022/09/22/0/nixos-gpu-vfio/
 let
   # RTX 3070 Ti
   gpuIDs = [
