@@ -2,8 +2,8 @@
 let
   # RTX 3070 Ti
   gpuIDs = [
-    "8086:1901" # Graphics
-    "10de:1f11" # Audio
+    "10de:1f11" # Graphics
+    "10de:10f9" # Audio
   ];
 in { pkgs, lib, config, ... }: {
   options.vfio.enable = with lib;
@@ -26,7 +26,7 @@ in { pkgs, lib, config, ... }: {
 
       kernelParams = [
         # enable IOMMU
-        "amd_iommu=on"
+        "intel_iommu=on"
       ] ++ lib.optional cfg.enable
         # isolate the GPU
         ("vfio-pci.ids=" + lib.concatStringsSep "," gpuIDs);
