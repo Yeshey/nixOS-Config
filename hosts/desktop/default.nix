@@ -19,14 +19,15 @@ imports = [
   (import ./hardware-configuration.nix)
   (import ./pci-passthrough.nix)
 ];
-/*
-  pciPassthrough = {
-    enable = true;
-    pciIDs = "8086:1901,10de:1f11,10de:10f9,10de:1ada" ; #"8086:1901,10de:1f11,10de:10f9,10de:1ada"; # "8086:1901,10de:1f11,10de:10f9,10de:1ada";
-    libvirtUsers = [ "${user}" ];
-  };
-  */
 
+  # For GPU passthrough to the VM, but instead I'm going to try to use GPU virtualisation through the discovered jailbreak: https://github.com/DualCoder/vgpu_unlock
+  # https://gist.github.com/WhittlesJr/a6de35b995e8c14b9093c55ba41b697c
+  # pciPassthrough = {
+  #   enable = true;
+  #   pciIDs = "10de:1f11,10de:10f9" ; #"8086:1901,10de:1f11,10de:10f9,10de:1ada";
+  #   libvirtUsers = [ "${user}" ];
+  # };
+  
   services.thermald = {
     debug = false;
     enable = true;
