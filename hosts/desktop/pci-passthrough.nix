@@ -1,38 +1,66 @@
-# https://astrid.tech/2022/09/22/0/nixos-gpu-vfio/
+# put this file in /etc/nixos/
+# and add 
+#   ./pci-passthrough.nix
+# to /etc/nixos/configuration.nix in `imports`
+
+# https://gist.github.com/WhittlesJr/a6de35b995e8c14b9093c55ba41b697c
+
+{config, pkgs, lib, ... }:
+
+with lib;
 let
-  # RTX 3070 Ti
-  gpuIDs = [
-    "10de:1f11" # Graphics
-    "10de:10f9" # Audio
-  ];
-in { pkgs, lib, config, ... }: {
-  options.vfio.enable = with lib;
-    mkEnableOption "Configure the machine for VFIO";
+  cfg = config.pciPassthrough;
+in
+{
+  ###### interface
+  options.pciPassthrough = {
+    enable = mkEnableOption "PCI Passthrough";
 
-  config = let cfg = config.vfio;
-  in {
-    boot = {
-      initrd.kernelModules = [
-        "vfio_pci"
-        "vfio"
-        "vfio_iommu_type1"
-        "vfio_virqfd"
-
-        "nvidia"
-        "nvidia_modeset"
-        "nvidia_uvm"
-        "nvidia_drm"
-      ];
-
-      kernelParams = [
-        # enable IOMMU
-        "intel_iommu=on"
-      ] ++ lib.optional cfg.enable
-        # isolate the GPU
-        ("vfio-pci.ids=" + lib.concatStringsSep "," gpuIDs);
+    cpuType = mkOption {
+      description = "One of `intel` or `amd`";
+      default = "intel";
+      type = types.str;
     };
 
-    hardware.opengl.enable = true;
-    virtualisation.spiceUSBRedirection.enable = true;
+    pciIDs = mkOption {
+      description = "Comma-separated list of PCI IDs to pass-through";
+      type = types.str;
+    };
+
+    libvirtUsers = mkOption {
+      description = "Extra users to add to libvirtd (root is already included)";
+      type = types.listOf types.str;
+      default = [];
+    };
   };
+
+  ###### implementation
+  config = (mkIf cfg.enable {
+
+    boot.kernelParams = [ "${cfg.cpuType}_iommu=on" ];
+
+    # These modules are required for PCI passthrough, and must come before early modesetting stuff
+    boot.kernelModules = [ "vfio" "vfio_iommu_type1" "vfio_pci" "vfio_virqfd" ];
+
+    boot.extraModprobeConfig ="options vfio-pci ids=${cfg.pciIDs}";
+
+    environment.systemPackages = with pkgs; [
+      virtmanager
+      qemu
+      OVMF
+      pciutils
+    ];
+
+    virtualisation.libvirtd.enable = true;
+    virtualisation.libvirtd.qemuPackage = pkgs.qemu_kvm;
+
+    users.groups.libvirtd.members = [ "root" ] ++ cfg.libvirtUsers;
+
+    virtualisation.libvirtd.qemuVerbatimConfig = ''
+      nvram = [
+      "${pkgs.OVMF}/FV/OVMF.fd:${pkgs.OVMF}/FV/OVMF_VARS.fd"
+      ]
+    '';
+  });
+
 }
