@@ -346,5 +346,5 @@ X-WebApp-Isolated=true
         '';
     };
 
-    home.stateVersion = "22.11";
+    home.stateVersion = "21.05";
   }

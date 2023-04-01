@@ -1,4 +1,4 @@
-{ lib, inputs, system, home-manager, user, location, nixos-hardware, nixos-nvidia-vgpu, ... }:
+{ lib, inputs, system, user, location, nixos-hardware, nixos-nvidia-vgpu, ... }:
 
 {
   laptop = let 
@@ -13,6 +13,7 @@
       ./configuration.nix
       nixos-nvidia-vgpu.nixosModules.nvidia-vgpu
 
+      /*
       home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
@@ -21,6 +22,7 @@
           imports = [(import ./home.nix)] ++ [(import ./desktop/home.nix)];
         };
       }
+      */
     ];
   };
 
@@ -35,6 +37,7 @@
       ./configuration.nix
       nixos-hardware.nixosModules.microsoft-surface-pro-intel # Not broken anymore
 
+      /*
       home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
@@ -43,6 +46,7 @@
           imports = [(import ./home.nix)] ++ [(import ./surface/home.nix)];
         };
       }
+      */
     ];
   };
 
@@ -57,6 +61,7 @@
       ./vm
       ./configuration.nix
 
+      /*
       home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
@@ -65,6 +70,7 @@
           imports = [(import ./home.nix)] ++ [(import ./vm/home.nix)];
         };
       }
+      */
     ];
   };
 

@@ -141,7 +141,6 @@ in
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.${user} = {
     isNormalUser = true;
-    description = "Yeshey";
     extraGroups = [ "networkmanager" "wheel" "docker" ];
     packages = with pkgs; [
     #  firefox
@@ -309,7 +308,7 @@ in
     kate # KDEs notepad
 
     # NVIDIA
-    cudaPackages.cudatoolkit # for blender (nvidia)
+    # cudaPackages.cudatoolkit # for blender (nvidia)
 
     # SHELL
     oh-my-zsh
