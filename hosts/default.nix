@@ -1,4 +1,4 @@
-{ lib, inputs, system, home-manager, user, location, nixos-hardware, nixos-nvidia-vgpu, ... }:
+{ lib, inputs, system, home-manager, user, location, nixos-hardware, ... }:
 
 {
   laptop = let 
@@ -11,7 +11,6 @@
     modules = [                                         # Modules that are used.
       ./desktop
       ./configuration.nix
-      nixos-nvidia-vgpu.nixosModules.nvidia-vgpu
 
       home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
         home-manager.useGlobalPkgs = true;
