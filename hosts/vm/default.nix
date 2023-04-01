@@ -167,7 +167,7 @@ imports = [
     # texlive.combined.scheme-full # LaTeX
 
     # NVIDIA
-    cudaPackages.cudatoolkit # for blender (nvidia)
+    # cudaPackages.cudatoolkit # for blender (nvidia)
 
     # Games
     steam

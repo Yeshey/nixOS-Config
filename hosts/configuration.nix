@@ -161,7 +161,6 @@
   };
   users.users.${user} = {
     isNormalUser = true;
-    description = "Yeshey";
     extraGroups = [ "networkmanager" "wheel" "dialout" "docker" "adbusers" "libvirtd" "surface-control"]; # libvirtd - For android-studio
     packages = with pkgs; [
     #  thunderbird
@@ -180,11 +179,11 @@
   # needed to make home-manager zsh work with gdm (https://www.reddit.com/r/NixOS/comments/ocimef/users_not_showing_up_in_gnome/)
   environment.pathsToLink = [ "/share/zsh" ];
   environment.shells = [ pkgs.zsh ];
-  environment.sessionVariables = rec {
-    CHROME_EXECUTABLE  = "\$(whereis brave | cut -d \" \" -f2)"; # needed for flutter, can remove later
-    # you need to talso make a symlink to your dart sdk in your home folder with something like: ln -s /nix/store/xbq4nb97scigamd9kf2kdl7m1kr0w6m4-flutter-3.3.8/bin/cache/dart-sdk/ /home/yeshey/.cache/flutter/dart-sdk
-    LD_LIBRARY_PATH="${pkgs.libepoxy}/lib"; # trying to make flutter work, can remove later
-  };
+  #environment.sessionVariables = rec {
+  #  CHROME_EXECUTABLE  = "\$(whereis brave | cut -d \" \" -f2)"; # needed for flutter, can remove later
+  #  # you need to talso make a symlink to your dart sdk in your home folder with something like: ln -s /nix/store/xbq4nb97scigamd9kf2kdl7m1kr0w6m4-flutter-3.3.8/bin/cache/dart-sdk/ /home/yeshey/.cache/flutter/dart-sdk
+  #  LD_LIBRARY_PATH="${pkgs.libepoxy}/lib"; # trying to make flutter work, can remove later
+  #};
   
 #      __                 __                            ____     
 #   __/ /_  ___ __ _____ / /____ __ _    _______  ___  / _(_)__ _
@@ -246,11 +245,11 @@
 
   # Garbage Collect
   nix = {
-    settings = {
-      auto-optimise-store = true;
-      experimental-features = [ "nix-command" "flakes" ];
-      trusted-users = [ "root" "yeshey" "@wheel" ];
-    };
+    #settings = {
+    #  auto-optimise-store = true;
+    #  experimental-features = [ "nix-command" "flakes" ];
+    #  trusted-users = [ "root" "yeshey" "@wheel" ];
+    #};
     gc = {
       automatic = true;
       dates = "weekly";
@@ -320,12 +319,12 @@
   #virtualisation.virtualbox.host.enableHardening = false;
 
   # Binary Cache for Haskell.nix
-  nix.settings.trusted-public-keys = [
-    "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
-  ];
-  nix.settings.substituters = [
-    "https://cache.iog.io"
-  ];
+  #nix.settings.trusted-public-keys = [
+  #  "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
+  #];
+  #nix.settings.substituters = [
+  #  "https://cache.iog.io"
+  #];
 
   # Enable the OpenSSH daemon.
   services.openssh = {
@@ -414,7 +413,7 @@
       user = "yeshey";
       dataDir = "/home/yeshey/Documents";    # Default folder for new synced folders
       configDir = "/home/yeshey/Documents/.config/syncthing";   # Folder for Syncthing's settings and keys
-      devices = {
+      /*devices = {
         "nixOS-Laptop" = { id = "CAFH4IM-77ESFU5-26XFLN5-SVVMZ5F-G56DPXU-4X6AZAJ-E4HPZQ7-AJLQMQO"; };
         "manjaro-Laptop" = { id = "HWPEE67-I7DPOPG-H3A3SDX-5HFJK5W-33OIOUO-S6TD5E7-52OAO3B-OFAUAAF"; };
         "windows-Laptop" = { id = "SST7QBM-2SKF4WK-F4RUAA2-ICQ7NBB-LDI3I33-O3DEZZJ-TVXZ3DB-M7IYTAQ"; };
@@ -501,7 +500,7 @@
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
-      };
+      }; */
     };
   };
   # A systemd timer to delete all the sync-conflict files
@@ -592,7 +591,6 @@
 
   environment.systemPackages = with pkgs; [
     #Follow the ask for help you did: (https://discourse.nixos.org/t/compiling-and-adding-program-not-in-nixpkgs-to-pc-compiling-error/25239/3)
-    (callPackage ./nixFiles/playit-cli.nix {})
     
     # vim # The Nano editor is installed by default.
     neovim
@@ -623,7 +621,7 @@
     # helvum # To control pipewire Not Working?
     virt-manager # virtual machines
     spice-gtk # for virtual machines (to connect usbs and everything else)
-    linux-wifi-hotspot # hotspot
+    # linux-wifi-hotspot # hotspot
     scrcpy
 
     # tmp
