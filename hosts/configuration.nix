@@ -669,14 +669,14 @@ in
     exodus
 
 
-    # Programs from home manager:
+    # ===== Programs from home manager: =====
     libnotify # so you can use notify-send
     obs-studio
     barrier
     # etcher #insecure?
 
     # Browsers
-    vivaldi
+    firefox
     brave
     #tor-browser-bundle-bin
 
