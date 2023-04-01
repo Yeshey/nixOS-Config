@@ -11,6 +11,20 @@ It has my personal configuration for two devices, my Lenovo Legion laptop and my
 
 - Check the [languages-frameworks](https://github.com/NixOS/nixpkgs/tree/master/doc/languages-frameworks) if you ever want to do a project with nix in one of these programming languages
 
+## Nvidia-GPU-Virtualisaion(nixos21.05) Brach
+
+- Use this branch to do GPU virtualisation with my nvidia card as this repo doesn't work in 22.11 yet: https://github.com/danielfullmer/nixos-nvidia-vgpu/issues/8
+- So, You need to change the channels:
+  - `sudo nix-channel --add https://nixos.org/channels/nixos-21.05 nixos`
+  - `sudo nix-channel --add https://nixos.org/channels/nixos-21.05 nixpkgs`
+  - `sudo nix-channel --update`
+  - Check with `sudo nix-channel --list`
+- Go back with:
+  - `sudo nix-channel --add https://nixos.org/channels/nixos-22.11 nixos`
+  - `sudo nix-channel --add https://nixos.org/channels/nixos-22.11 nixpkgs`
+  - `sudo nix-channel --update`
+  - Check with `sudo nix-channel --list`
+
 ## To-Do
 
 - Make system.autoUpgrade not make PC unusable(right now it grabs /etc/nixos/ configuration):
