@@ -1,4 +1,4 @@
-{ lib, inputs, system, user, location, nixos-hardware, nixos-nvidia-vgpu, ... }:
+{ lib, inputs, system, user, location, nixos-hardware, home-manager, nixos-nvidia-vgpu, ... }:
 
 {
   laptop = let 
@@ -12,17 +12,17 @@
       ./desktop
       ./configuration.nix
       nixos-nvidia-vgpu.nixosModules.nvidia-vgpu
-
-      /*
-      home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
+      #(import ./home.nix)
+      
+      /*home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
         home-manager.extraSpecialArgs = { inherit user location host dataStoragePath; };  # Pass flake variable
         home-manager.users.${user} = {
           imports = [(import ./home.nix)] ++ [(import ./desktop/home.nix)];
         };
-      }
-      */
+      }*/
+      
     ];
   };
 

@@ -64,6 +64,7 @@
   #  size = 17*1024;
   #} ];
   # swap in btrfs as followed from https://nixos.wiki/wiki/Btrfs#:~:text=btrfs%20is%20a%20modern%20copy,tolerance,%20repair%20and%20easy%20administration.
+  /*
   swapDevices = [ 
     {
       device = "/mnt/hdd-btrfs/swap/swaphdd";
@@ -81,6 +82,7 @@
       options = [ "nofail"];
     }
   ];
+  */
 
   # MY MOUNTS
   fileSystems."${dataStoragePath}" = {

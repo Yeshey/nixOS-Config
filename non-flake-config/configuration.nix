@@ -96,7 +96,7 @@ in
       sddm = {
         enable = true;
       };
-      defaultSession = "plasma"; # "none+bspwm" or "plasma"
+      defaultSession = "plasma5"; # "none+bspwm" or "plasma"
     };
     desktopManager.plasma5 = {
       enable = true;

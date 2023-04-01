@@ -32,8 +32,8 @@ imports = [
   # Or get here: https://archive.org/download/nvidia-grid-linux-kvm-460.32.04-460.32.03-461.33 or this magnet link: magnet:?xt=urn:btih:cb397984bc1389b8034706bc23a87a1c6216755f&dn=nvidia-grid-linux-kvm-460.32.04-460.32.03-461.33&tr=http%3a%2f%2fbt1.archive.org%3a6969%2fannounce&tr=http%3a%2f%2fbt2.archive.org%3a6969%2fannounce&ws=http%3a%2f%2fia601403.us.archive.org%2f29%2fitems%2f&ws=http%3a%2f%2fia903407.us.archive.org&ws=https%3a%2f%2farchive.org%2fdownload%2f&ws=https%3a%2f%2fia903407.us.archive.org
   #boot.kernelPackages = pkgs.linuxPackages_5_4; # needed for this
   boot.kernelPackages = pkgs.linuxPackages_5_10;
-  hardware.nvidia.vgpu.enable = true; # Enable NVIDIA KVM vGPU + GRID driver
-  hardware.nvidia.vgpu.unlock.enable = true; # Unlock vGPU functionality on consumer cards using DualCoder/vgpu_unlock project.
+  #hardware.nvidia.vgpu.enable = true; # Enable NVIDIA KVM vGPU + GRID driver
+  #hardware.nvidia.vgpu.unlock.enable = true; # Unlock vGPU functionality on consumer cards using DualCoder/vgpu_unlock project.
 
   services.thermald = {
     debug = false;
@@ -110,7 +110,7 @@ imports = [
       sddm = {
         enable = true;
       };
-      defaultSession = "plasma"; # "none+bspwm" or "plasma"
+      defaultSession = "plasma5"; # "none+bspwm" or "plasma"
     };
     desktopManager.plasma5 = {
       enable = true;
@@ -130,7 +130,6 @@ imports = [
 
     # Games
     steam
-    grapejuice # roblox
 
     # FOR PLASMA DESKTOP
     scrot # for plasma config saver widget
