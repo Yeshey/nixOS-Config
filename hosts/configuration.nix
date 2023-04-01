@@ -591,13 +591,24 @@ in
       );
     })
 
+    /*
+    # I am f***** stupid, this doesnt work
     (self: super: {
       virt-manager = super.virt-manager.overrideAttrs (
         _: { 
-          version = "4.1.0";
+          doCheck = false;
+          src = pkgs.fetchFromGitHub {
+            owner = "virt-manager";
+            repo = "virt-manager";
+            rev = "v3.1.0";
+            hash = "sha256-UgZ58WLXq0U3EDt4311kv0kayVU17In4kwnQ+QN1E7A=";
+          };
         }
       );
     })
+    */
+
+
 
     /* # Current yt-dlp in nixpkgs stable not working, getting latest
     (self: super: {
@@ -625,7 +636,6 @@ in
     
     # vim # The Nano editor is installed by default.
     neovim
-
 
     # Development
     # jdk17 # java (alias for openJDK) 17.0.4.1
