@@ -17,11 +17,20 @@
 {
 imports = [
   (import ./hardware-configuration.nix)
+  (import ./pci-passthrough.nix)
 
   # Optionally replace "master" with a particular revision to pin this dependency.
   # This repo also provides the module in a "Nix flake" under `nixosModules.nvidia-vgpu` output
   
 ];
+
+  # For GPU passthrough to the VM, but instead I'm going to try to use GPU virtualisation through the discovered jailbreak: https://github.com/DualCoder/vgpu_unlock
+  # https://gist.github.com/WhittlesJr/a6de35b995e8c14b9093c55ba41b697c
+  pciPassthrough = {
+    enable = true;
+    pciIDs = "" ; # "10de:1f11,10de:10f9" ; #"8086:1901,10de:1f11,10de:10f9,10de:1ada";
+    libvirtUsers = [ "${user}" ];
+  };
 
   # From here: https://github.com/danielfullmer/nixos-nvidia-vgpu
   # Saw [here](https://github.com/DualCoder/vgpu_unlock/issues/7) that you can get the drivers here: https://cloud.google.com/compute/docs/gpus/grid-drivers-table if the script asks for them like this:
