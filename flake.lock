@@ -37,6 +37,22 @@
         "type": "github"
       }
     },
+    "nixos-nvidia-vgpu": {
+      "locked": {
+        "lastModified": 1629956048,
+        "narHash": "sha256-mhKZWRn6swGwwfdb/bRrDB6GkA8V5sMhlOS60Jm/dM0=",
+        "owner": "danielfullmer",
+        "repo": "nixos-nvidia-vgpu",
+        "rev": "a4be77969dc2a8acbe3a4882ba5f0324cca138b6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "danielfullmer",
+        "ref": "master",
+        "repo": "nixos-nvidia-vgpu",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1676817468,
@@ -57,6 +73,7 @@
       "inputs": {
         "home-manager": "home-manager",
         "nixos-hardware": "nixos-hardware",
+        "nixos-nvidia-vgpu": "nixos-nvidia-vgpu",
         "nixpkgs": "nixpkgs"
       }
     },
