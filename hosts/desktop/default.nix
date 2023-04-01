@@ -18,7 +18,23 @@
 imports = [
   (import ./hardware-configuration.nix)
   (import ./pci-passthrough.nix)
+
+  # Optionally replace "master" with a particular revision to pin this dependency.
+  # This repo also provides the module in a "Nix flake" under `nixosModules.nvidia-vgpu` output
+  
 ];
+
+  # From here: https://github.com/danielfullmer/nixos-nvidia-vgpu
+  # Saw [here](https://github.com/DualCoder/vgpu_unlock/issues/7) that you can get the drivers here: https://cloud.google.com/compute/docs/gpus/grid-drivers-table if the script asks for them like this:
+  ### Unfortunately, we cannot download file NVIDIA-Linux-x86_64-460.32.03-grid.run automatically.
+  ### This file can be extracted from NVIDIA-GRID-Linux-KVM-460.32.04-460.32.03-461.33.zip.
+  ### Please go to https://www.nvidia.com/object/vGPU-software-driver.html to download it yourself, and add it to the Nix store
+  ### using either
+  # Or get here: https://archive.org/download/nvidia-grid-linux-kvm-460.32.04-460.32.03-461.33 or this magnet link: magnet:?xt=urn:btih:cb397984bc1389b8034706bc23a87a1c6216755f&dn=nvidia-grid-linux-kvm-460.32.04-460.32.03-461.33&tr=http%3a%2f%2fbt1.archive.org%3a6969%2fannounce&tr=http%3a%2f%2fbt2.archive.org%3a6969%2fannounce&ws=http%3a%2f%2fia601403.us.archive.org%2f29%2fitems%2f&ws=http%3a%2f%2fia903407.us.archive.org&ws=https%3a%2f%2farchive.org%2fdownload%2f&ws=https%3a%2f%2fia903407.us.archive.org
+  #boot.kernelPackages = pkgs.linuxPackages_5_4; # needed for this
+  #boot.kernelPackages = pkgs.linuxPackages_5_10;
+  #hardware.nvidia.vgpu.enable = true; # Enable NVIDIA KVM vGPU + GRID driver
+  #hardware.nvidia.vgpu.unlock.enable = true; # Unlock vGPU functionality on consumer cards using DualCoder/vgpu_unlock project.
 
   # For GPU passthrough to the VM, but instead I'm going to try to use GPU virtualisation through the discovered jailbreak: https://github.com/DualCoder/vgpu_unlock
   # https://gist.github.com/WhittlesJr/a6de35b995e8c14b9093c55ba41b697c
