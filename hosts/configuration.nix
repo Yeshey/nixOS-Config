@@ -591,6 +591,14 @@ in
       );
     })
 
+    (self: super: {
+      virt-manager = super.virt-manager.overrideAttrs (
+        _: { 
+          version = "4.1.0";
+        }
+      );
+    })
+
     /* # Current yt-dlp in nixpkgs stable not working, getting latest
     (self: super: {
       yt-dlp = super.yt-dlp.overrideAttrs (
