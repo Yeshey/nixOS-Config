@@ -27,6 +27,17 @@
     '';
   in
   */
+
+let
+  vscUserSettings = {
+    "files.autoSave" = "afterDelay"; # basically on
+    "java.jdt.ls.java.home" = "/run/current-system/sw/lib/openjdk/"; # Show VSCodium where jdk is
+    "code-runner.runInTerminal" = true;
+    "code-runner.executorMap" = {
+      "python" = "python3 -u";
+    };
+  };
+in
 {
 
 #     _____           _                    _____             __ _       
@@ -334,20 +345,26 @@
     #  permitRootLogin = "yes"; # to let surface and Laptop connect to builds for the surface (https://github.com/NixOS/nixpkgs/issues/20718)
     #};
   };
-  programs = {
-    ssh = {
-      startAgent = true;
-      forwardX11 = true;
-    };
 
-    # general terminal shell config for all users
-    zsh = {
+  # From home manager
+  programs = {
+    #home-manager.enable = true;
+  
+
+    # Github Desktop is complaining about .git config being read only
+    #git = {
+    #  enable = true;
+    #  userEmail = "yesheysangpo@hotmail.com";
+    #  userName = "Yeshey";
+    #};
+
+    zsh={
       enable = true;
       shellAliases = {
         vim = "nvim";
         # ls = "lsd -l --group-dirs first";
         update = "sudo nixos-rebuild switch --flake ${location}#${host}"; # old: "sudo nixos-rebuild switch";
-        upgrade = "trap \"cd ${location} && git checkout -- flake.lock\" INT ; sudo nixos-rebuild switch --flake ${location}#${host} --upgrade --update-input nixos-hardware --update-input home-manager --update-input nixpkgs || (cd ${location} && git checkout -- flake.lock)"; /*--commit-lock-file*/ #upgrade: upgrade NixOS to the latest version in your chosen channel";
+        upgrade = "trap \"cd ${location} && git checkout -- flake.lock\" INT ; sudo nixos-rebuild switch --flake ${location}#${host} --upgrade --update-input nixos-hardware --update-input nixpkgs || (cd ${location} && git checkout -- flake.lock)"; #--commit-lock-file #upgrade: upgrade NixOS to the latest version in your chosen channel";
         clean = "echo \"This will clean all generations, and optimise the store\" ; sudo sh -c 'nix-collect-garbage -d ; nix-store --optimise'";
         cp = "cp -i";                                   # Confirm before overwriting something
         df = "df -h";                                   # Human-readable sizes
@@ -382,16 +399,21 @@
           echo \"Your external IP address is:\"
           curl -w '\n' https://ipinfo.io/ip
         ";
-        chtp = " curl cht.sh/python/\"$1\" ";           # alias to use cht.sh for python help
+        chtp = " curl cht.sh/python/\"$1\" ";           # lias to use cht.sh for python help
         chtc = " curl cht.sh/c/\"$1\" ";                # alias to use cht.sh for c help
         chtsharp = " curl cht.sh/csharp/\"$1\" ";           # alias to use cht.sh for c# help
         cht = " curl cht.sh/\"$1\" ";                   # alias to use cht.sh in general
       };
-      autosuggestions.enable = true;
-      syntaxHighlighting.enable = true;
+      enableAutosuggestions = true;
+#      autosuggestions.enable = true;
+      enableSyntaxHighlighting = true;
       enableCompletion = true;
-      histSize = 100000;
-      ohMyZsh = {
+      # history = {
+      #  size = 100000;
+        # path = "${location}/hosts/configFiles/.zsh_history"; # Auto save history to the file in this repository
+      #};
+      # histSize = 100000;
+      oh-my-zsh = {
         enable = true;
         plugins = [ "git" 
                     "colored-man-pages" 
@@ -400,9 +422,10 @@
                     #"autojump" 
                     "urltools" 
                     "bgnotify"];
-        theme = "agnoster"; # robbyrussell # agnoster # frisk
+        theme = "frisk"; # robbyrussell # agnoster
       };
     };
+
   };
 
   # Syncthing
@@ -597,7 +620,7 @@
 
 
     # Development
-    jdk17 # java (alias for openJDK) 17.0.4.1
+    # jdk17 # java (alias for openJDK) 17.0.4.1
     #jdk18
     python3
     ghc # Haskell
@@ -606,7 +629,6 @@
     bat
     wget
     htop
-    btop
     tree
     git
     ffmpeg
@@ -621,8 +643,9 @@
     # helvum # To control pipewire Not Working?
     virt-manager # virtual machines
     spice-gtk # for virtual machines (to connect usbs and everything else)
-    # linux-wifi-hotspot # hotspot
     scrcpy
+    # github-desktop
+    vscode
 
     # tmp
     # texlive.combined.scheme-full # LaTeX
@@ -644,6 +667,40 @@
     # Overlayed
     discord
     exodus
+
+
+    # Programs from home manager:
+    libnotify # so you can use notify-send
+    obs-studio
+    barrier
+    # etcher #insecure?
+
+    # Browsers
+    vivaldi
+    brave
+    #tor-browser-bundle-bin
+
+    # tmp
+    #teams
+    skypeforlinux
+    #staruml # UML diagrams
+    #jetbrains.clion # C++
+    #jetbrains.idea-community # java
+
+    # Games
+    osu-lazer
+    lutris
+    # tetrio-desktop # runs horribly, better on the web
+    #prismlauncher # polymc # prismlauncher # for Minecraft
+    #heroic
+    minetest
+    the-powder-toy
+
+    # SHELL
+    oh-my-zsh
+    zsh
+    thefuck
+    #autojump
   ];
 
   # tmp for the postgresql community square Project.
@@ -662,6 +719,8 @@
       GRANT ALL PRIVILEGES ON DATABASE nixcloud TO nixcloud;
     '';
   };
+
+
 
   # for virtual machines (to connect usbs and everything else)
   # Not working rn (https://discourse.nixos.org/t/having-an-issue-with-virt-manager-not-allowing-usb-passthrough/6272/3)

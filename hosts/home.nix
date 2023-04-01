@@ -66,10 +66,8 @@ in
       homeDirectory = "/home/${user}";
 
       packages = with pkgs; [
-        github-desktop
         libnotify # so you can use notify-send
         obs-studio
-        stremio
         barrier
         # etcher #insecure?
 
@@ -89,8 +87,8 @@ in
         osu-lazer
         lutris
         # tetrio-desktop # runs horribly, better on the web
-        prismlauncher # polymc # prismlauncher # for Minecraft
-        heroic
+        #prismlauncher # polymc # prismlauncher # for Minecraft
+        #heroic
         minetest
         the-powder-toy
  
@@ -241,28 +239,7 @@ in
     };
 
     # My home files 
-    home.file = let
-      autostartPrograms = [ pkgs.discord pkgs.premid ];
-    in builtins.listToAttrs (map
-          # Startup applications with home manager
-          # https://github.com/nix-community/home-manager/issues/3447
-          (pkg:
-            {
-              name = ".config/autostart/" + pkg.pname + ".desktop";
-              value =
-                if pkg ? desktopItem then {
-                  # Application has a desktopItem entry. 
-                  # Assume that it was made with makeDesktopEntry, which exposes a
-                  # text attribute with the contents of the .desktop file
-                  text = pkg.desktopItem.text;
-                } else {
-                  # Application does *not* have a desktopItem entry. Try to find a
-                  # matching .desktop name in /share/apaplications
-                  source = (pkg + "/share/applications/" + pkg.pname + ".desktop");
-                };
-            })
-          autostartPrograms)
-          //
+    home.file = 
           {
     # Change VSCodium to be able to use pylance (https://github.com/VSCodium/vscodium/pull/674#issuecomment-1137920704)
       ".config/VSCodium/product.json".source = builtins.toFile "product.json" ''

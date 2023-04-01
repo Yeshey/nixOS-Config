@@ -68,6 +68,7 @@ imports = [
   };
 
   # swap in ext4:
+  /*
   swapDevices = [ 
     {
       device = "/swapfile";
@@ -80,6 +81,7 @@ imports = [
     enable = true;
     algorithm = "zstd";
   };
+  */
 
   # Docker 
   # Docker to automatically grab Epic Games Free games
