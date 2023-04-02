@@ -600,7 +600,7 @@ in
           src = pkgs.fetchFromGitHub {
             owner = "virt-manager";
             repo = "virt-manager";
-            rev = "v3.1.0";
+            rev = "v4.0.0";
             hash = "sha256-UgZ58WLXq0U3EDt4311kv0kayVU17In4kwnQ+QN1E7A=";
           };
         }

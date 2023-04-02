@@ -130,6 +130,9 @@ imports = [
 
   environment.systemPackages = with pkgs; [
 
+    # For the vms.. ?
+    looking-glass-client
+
     # Epic_Games_Claimer
     # docker
 
