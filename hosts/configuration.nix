@@ -634,6 +634,9 @@ in
   environment.systemPackages = with pkgs; [
     #Follow the ask for help you did: (https://discourse.nixos.org/t/compiling-and-adding-program-not-in-nixpkgs-to-pc-compiling-error/25239/3)
     
+    
+    (callPackage ./nixFiles/virt-manager.nix { system-libvirt = libvirt; })
+
     # vim # The Nano editor is installed by default.
     neovim
 
@@ -659,7 +662,7 @@ in
     pdfarranger
     unrar # to extract .rar with ark in KDE # unrar x Lab5.rar
     # helvum # To control pipewire Not Working?
-    virt-manager # virtual machines
+    #virt-manager # virtual machines
     spice-gtk # for virtual machines (to connect usbs and everything else)
     scrcpy
     # github-desktop
