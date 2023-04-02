@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "";
+    hash = "sha256-UgZ58WLXq0U3EDt4311kv0kayVU17In4kwnQ+QN1E7A=";
   };
 
   nativeBuildInputs = [
