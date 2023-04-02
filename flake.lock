@@ -37,6 +37,18 @@
         "type": "github"
       }
     },
+    "nixos-nvidia-vgpu": {
+      "locked": {
+        "lastModified": 1680476546,
+        "narHash": "sha256-vKW/YyNaMDX8hI+ERKCqcqsSZx2w7XkXSozJQdjAnm0=",
+        "path": "/mnt/DataDisk/Downloads/nixos-nvidia-vgpu/",
+        "type": "path"
+      },
+      "original": {
+        "path": "/mnt/DataDisk/Downloads/nixos-nvidia-vgpu/",
+        "type": "path"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1676817468,
@@ -57,6 +69,7 @@
       "inputs": {
         "home-manager": "home-manager",
         "nixos-hardware": "nixos-hardware",
+        "nixos-nvidia-vgpu": "nixos-nvidia-vgpu",
         "nixpkgs": "nixpkgs"
       }
     },

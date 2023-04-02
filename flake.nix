@@ -7,7 +7,11 @@
     # sudo nix-channel --add https://nixos.org/channels/nixos-22.11 nixos
     nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
 
-    
+    nixos-nvidia-vgpu = {
+      type = "path";
+      path = "/mnt/DataDisk/Downloads/nixos-nvidia-vgpu/";
+    };
+    #nixos-nvidia-vgpu.url = "github:Yeshey/nixos-nvidia-vgpu/master";
 
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
 
