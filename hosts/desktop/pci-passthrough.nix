@@ -37,7 +37,7 @@ in
   ###### implementation
   config = (mkIf cfg.enable {
 
-    boot.kernelParams = [ "${cfg.cpuType}_iommu=on" ];
+    boot.kernelParams = [ "${cfg.cpuType}_iommu=on" "kvm.ignore_msrs=1" "iommu=pt"];
 
     # These modules are required for PCI passthrough, and must come before early modesetting stuff
     boot.kernelModules = [ "vfio" "vfio_iommu_type1" "vfio_pci" "vfio_virqfd" ];
@@ -50,6 +50,10 @@ in
       OVMF
       pciutils
     ];
+
+    # ===== My added conf =====
+    boot.blacklistedKernelModules = [ "nvidia" "nouveau" ];
+    # ===== My added conf =====
 
     virtualisation.libvirtd.enable = true;
     virtualisation.libvirtd.qemuPackage = pkgs.qemu_kvm;
