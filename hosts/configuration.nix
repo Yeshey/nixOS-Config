@@ -429,6 +429,7 @@ in
   };
 
   # Syncthing
+  /*
   services = {
 
     syncthing = {
@@ -523,9 +524,10 @@ in
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
-      }; */
+      }; 
     };
   };
+  */
   # A systemd timer to delete all the sync-conflict files
   systemd.timers."delete-sync-conflicts" = {
     wantedBy = [ "timers.target" ];
@@ -740,8 +742,6 @@ in
       GRANT ALL PRIVILEGES ON DATABASE nixcloud TO nixcloud;
     '';
   };
-
-
 
   # for virtual machines (to connect usbs and everything else)
   # Not working rn (https://discourse.nixos.org/t/having-an-issue-with-virt-manager-not-allowing-usb-passthrough/6272/3)

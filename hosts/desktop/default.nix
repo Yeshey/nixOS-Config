@@ -44,10 +44,10 @@ imports = [
   hardware.nvidia.vgpu.enable = true; # Enable NVIDIA KVM vGPU + GRID driver
   hardware.nvidia.vgpu.unlock.enable = true; # Unlock vGPU functionality on consumer cards using DualCoder/vgpu_unlock project.
 
-  services.thermald = {
-    debug = false;
-    enable = true;
-  };
+  #services.thermald = {
+  #  debug = false;
+  #  enable = true;
+  #};
 
 #     ___            __ 
 #    / _ )___  ___  / /_
