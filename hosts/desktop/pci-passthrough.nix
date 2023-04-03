@@ -56,11 +56,11 @@ in
     # ===== My added conf =====
 
     virtualisation.libvirtd.enable = true;
-    virtualisation.libvirtd.qemuPackage = pkgs.qemu_kvm;
+    virtualisation.libvirtd.qemu.package = pkgs.qemu_kvm;
 
     users.groups.libvirtd.members = [ "root" ] ++ cfg.libvirtUsers;
 
-    virtualisation.libvirtd.qemuVerbatimConfig = ''
+    virtualisation.libvirtd.qemu.verbatimConfig = ''
       nvram = [
       "${pkgs.OVMF}/FV/OVMF.fd:${pkgs.OVMF}/FV/OVMF_VARS.fd"
       ]
