@@ -21,7 +21,7 @@
     };
   };
 
-  outputs = inputs @ { self, nixpkgs, home-manager, nixos-hardware, ...}:
+  outputs = inputs @ { self, nixpkgs, home-manager, nixos-hardware, nixos-nvidia-vgpu, ...}:
     let
       system = "x86_64-linux";                                # System architecture
       user = "yeshey";
@@ -37,7 +37,7 @@
       nixosConfigurations = (                                 # Location of the available configurations
         import ./hosts {                                      # Imports ./hosts/default.nix
           inherit (nixpkgs) lib;
-          inherit inputs user location system home-manager nixos-hardware;            # Also inherit home-manager so it does not need to be defined here.
+          inherit inputs user location system home-manager nixos-hardware nixos-nvidia-vgpu;            # Also inherit home-manager so it does not need to be defined here.
         }
       );
 
