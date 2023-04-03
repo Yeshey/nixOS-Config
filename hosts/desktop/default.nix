@@ -41,8 +41,8 @@ imports = [
     vgpu = {
       enable = true; # Enable NVIDIA KVM vGPU + GRID driver
       unlock.enable = true; # Unlock vGPU functionality on consumer cards using DualCoder/vgpu_unlock project.
-      gridDriver = /home/yeshey/.setup/hosts/desktop/configFiles/NVIDIA-Linux-x86_64-460.32.03-grid.run;
-      vgpuKvmDriver = /home/yeshey/.setup/hosts/desktop/configFiles/NVIDIA-Linux-x86_64-460.73.01-grid-vgpu-kvm-v5.run;
+      gridDriver = /mnt/DataDisk/Downloads/drivers/NVIDIA-Linux-x86_64-460.32.03-grid.run;
+      vgpuKvmDriver = /mnt/DataDisk/Downloads/drivers/theOtherOne/NVIDIA-Linux-x86_64-460.32.04-vgpu-kvm.run;
     };
   };
   
