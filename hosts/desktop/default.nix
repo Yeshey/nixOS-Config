@@ -24,11 +24,11 @@ imports = [
 
   # For GPU passthrough to the VM, but instead I'm going to try to use GPU virtualisation through the discovered jailbreak: https://github.com/DualCoder/vgpu_unlock
   # https://gist.github.com/WhittlesJr/a6de35b995e8c14b9093c55ba41b697c
-  pciPassthrough = {
-    enable = true;
-    pciIDs = "" ; #"8086:1901,10de:1f11,10de:10f9,10de:1ada";
-    libvirtUsers = [ "${user}" ];
-  };
+  #pciPassthrough = {
+  #  enable = true;
+  #  pciIDs = "" ; #"8086:1901,10de:1f11,10de:10f9,10de:1ada";
+  #  libvirtUsers = [ "${user}" ];
+  #};
 
   #boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_5_10.override { 
   #  src = pkgs.fetchurl { 
@@ -37,14 +37,14 @@ imports = [
   #  };
   #});
   boot.kernelPackages = pkgs.linuxPackages_5_4; # needed for this
-  hardware.nvidia = {
-    vgpu = {
-      enable = true; # Enable NVIDIA KVM vGPU + GRID driver
-      unlock.enable = true; # Unlock vGPU functionality on consumer cards using DualCoder/vgpu_unlock project.
-      gridDriver = /mnt/DataDisk/Downloads/drivers/NVIDIA-Linux-x86_64-460.32.03-grid.run;
-      vgpuKvmDriver = /mnt/DataDisk/Downloads/drivers/theOtherOne/NVIDIA-Linux-x86_64-460.32.04-vgpu-kvm.run;
-    };
-  };
+  #hardware.nvidia = {
+  #  vgpu = {
+  #    enable = true; # Enable NVIDIA KVM vGPU + GRID driver
+  #    unlock.enable = true; # Unlock vGPU functionality on consumer cards using DualCoder/vgpu_unlock project.
+  #    #gridDriver = /mnt/DataDisk/Downloads/drivers/NVIDIA-Linux-x86_64-460.32.03-grid.run;
+  #    #vgpuKvmDriver = /mnt/DataDisk/Downloads/drivers/NVIDIA-Linux-x86_64-460.73.01-grid-vgpu-kvm-v5.run;
+  #  };
+  #};
   
   services.thermald = {
     debug = false;
