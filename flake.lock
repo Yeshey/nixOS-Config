@@ -39,8 +39,8 @@
     },
     "nixos-nvidia-vgpu": {
       "locked": {
-        "lastModified": 1680541968,
-        "narHash": "sha256-bbWlp3fKF8aA7kjsnQILhMhHWOP0XbLEXzYogrKiHOA=",
+        "lastModified": 1680952757,
+        "narHash": "sha256-CiFXdebJaBZmb0eGkBKcM0w2kn/KMDcLL7A1L+TIKng=",
         "path": "/mnt/DataDisk/Downloads/nixos-nvidia-vgpu/",
         "type": "path"
       },
