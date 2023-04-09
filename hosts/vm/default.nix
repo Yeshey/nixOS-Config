@@ -14,6 +14,15 @@
 
 { config, pkgs, user, location, dataStoragePath, ... }:
 
+let
+  nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
+    export __NV_PRIME_RENDER_OFFLOAD=1
+    export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
+    export __GLX_VENDOR_LIBRARY_NAME=nvidia
+    export __VK_LAYER_NV_optimus=NVIDIA_only
+    exec -a "$0" "$@"
+  '';
+in
 {
 imports = [
   (import ./hardware-configuration.nix)
@@ -119,26 +128,33 @@ imports = [
       # supportDDC = true; # doesnt work with nvidia # to support changing brightness for external monitors (https://discourse.nixos.org/t/how-to-enable-ddc-brightness-control-i2c-permissions/20800)
     };
     # windowManager.bspwm.enable = true; # but doesn't work
-  };*/
+  };
+  */
 
+  # https://www.reddit.com/r/NixOS/comments/ktxz75/i_absolutely_cannot_connect_to_wifi/
+  networking.useDHCP = false;
+  # networking.wireless.enable = true;
+
+  # DNS server was not working (https://unix.stackexchange.com/questions/510940/how-can-i-set-a-custom-dns-server-within-nixos) (maybe should put in general config?)
+  networking.nameservers = [ "1.1.1.1" "8.8.8.8" "9.9.9.9" ];
 
   # GNOME Desktop (uses wayland)
-  /*
   services.xserver = {
     enable = true;
     displayManager.gdm.enable = true;
+    displayManager.gdm.wayland = false; # Makes it not have a GUI?
     desktopManager.gnome.enable = true;
     # Make Surface Touchpad Work:
     desktopManager.gnome.extraGSettingsOverrides = ''
       [org.gnome.desktop.peripherals.touchpad]
       click-method='default'
     '';
-  };*/
+  };
 
   # GNOME desktop simple
-  services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  #services.xserver.enable = true;
+  #services.xserver.displayManager.gdm.enable = true;
+  #services.xserver.desktopManager.gnome.enable = true;
 
   services.openssh = {
     #settings = { # wasn't even working..?
@@ -147,14 +163,27 @@ imports = [
   };
 
   # NVIDIA
-
+  # Allow unfree packages
+  nixpkgs.config = {
+    cudaSupport = true; # for blender (nvidia)
+  };
+  nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
+    "nvidia-x11"
+    "nvidia-settings"
+  ];
   # NVIDIA drivers 
   services.xserver.videoDrivers = [ "nvidia" ];
   hardware.opengl.enable = true;
 
-  # Allow unfree packages
-  nixpkgs.config = {
-    cudaSupport = true; # for blender (nvidia)
+  # Comment this to use only the nvidia Grpahics card, or when you're not passing the nvidia card inside?
+  hardware.nvidia = {
+    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    modesetting.enable = true;
+    prime = {
+      offload.enable = true;
+      intelBusId = "PCI:0:1:0";
+      nvidiaBusId = "PCI:8:0:0";
+    };
   };
 
   environment.systemPackages = with pkgs; [
@@ -168,6 +197,7 @@ imports = [
 
     # NVIDIA
     cudaPackages.cudatoolkit # for blender (nvidia)
+    nvidia-offload
 
     # Games
     steam
