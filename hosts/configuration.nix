@@ -515,7 +515,13 @@
   };
   systemd.services."delete-sync-conflicts" = {
     script = ''
-      ${pkgs.findutils}/bin/find /mnt /home -mindepth 1 -type f -not \( -path '*/.Trash-1000/*' -or -path '*.local/share/Trash/*' \) -name '*.sync-conflict-*' -ls -delete
+      if [ -d "/mnt" ]; then
+          ${pkgs.findutils}/bin/find /mnt -mount -mindepth 1 -type f -not \( -path '*/.Trash-1000/*' -or -path '*.local/share/Trash/*' \) -name '*.sync-conflict-*' -ls -delete
+      fi
+
+      if [ -d "/home" ]; then
+          ${pkgs.findutils}/bin/find /home -mount -mindepth 1 -type f -not \( -path '*/.Trash-1000/*' -or -path '*.local/share/Trash/*' \) -name '*.sync-conflict-*' -ls -delete
+      fi
     '';
     # Ignore What's inside Trash etc...
     serviceConfig = {
