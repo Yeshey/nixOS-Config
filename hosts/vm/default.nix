@@ -131,10 +131,8 @@ imports = [
   };
   */
 
-  # https://www.reddit.com/r/NixOS/comments/ktxz75/i_absolutely_cannot_connect_to_wifi/
-  networking.useDHCP = false;
   # networking.wireless.enable = true;
-  networking.hostName = "nixosVM"; # Define your hostname.
+  networking.hostName = "nixOS-VM"; # Define your hostname.
 
   # GNOME Desktop (uses wayland)
   services.xserver = {

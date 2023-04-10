@@ -105,6 +105,8 @@ in
     algorithm = "zstd";
   };
 
+  networking.hostName = "nixOS-Surface"; # Define your hostname.
+
   #     ___            __ 
   #    / _ )___  ___  / /_
   #   / _  / _ \/ _ \/ __/

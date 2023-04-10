@@ -17,7 +17,7 @@
 {
 imports = [
   (import ./hardware-configuration.nix)
-  (import ./pci-passthrough.nix)
+  (import ./nixFiles/pci-passthrough.nix)
 ];
 
   # Following this github guide: https://github.com/tuh8888/libvirt_win10_vm
@@ -51,6 +51,8 @@ imports = [
     debug = false;
     enable = true;
   };
+
+  networking.hostName = "nixOS-Laptop"; # Define your hostname.
 
 #     ___            __ 
 #    / _ )___  ___  / /_
