@@ -265,7 +265,6 @@
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  networking.hostName = "nixos"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Enable networking
