@@ -134,9 +134,7 @@ imports = [
   # https://www.reddit.com/r/NixOS/comments/ktxz75/i_absolutely_cannot_connect_to_wifi/
   networking.useDHCP = false;
   # networking.wireless.enable = true;
-
-  # DNS server was not working (https://unix.stackexchange.com/questions/510940/how-can-i-set-a-custom-dns-server-within-nixos) (maybe should put in general config?)
-  networking.nameservers = [ "1.1.1.1" "8.8.8.8" "9.9.9.9" ];
+  networking.hostName = "nixosVM"; # Define your hostname.
 
   # GNOME Desktop (uses wayland)
   services.xserver = {

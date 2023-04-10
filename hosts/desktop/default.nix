@@ -139,6 +139,7 @@ imports = [
     # tmp
     # virtualbox
     # texlive.combined.scheme-full # LaTeX
+    looking-glass-client
 
     # Games
     steam
