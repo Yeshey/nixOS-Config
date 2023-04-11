@@ -138,7 +138,7 @@ imports = [
   services.xserver = {
     enable = true;
     displayManager.gdm.enable = true;
-    displayManager.gdm.wayland = false; # Makes it not have a GUI?
+    #displayManager.gdm.wayland = false; # Makes it not have a GUI?
     desktopManager.gnome.enable = true;
     # Make Surface Touchpad Work:
     desktopManager.gnome.extraGSettingsOverrides = ''
