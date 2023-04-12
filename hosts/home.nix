@@ -345,8 +345,6 @@ X-WebApp-Isolated=true
 // Ignore everything else in osu folder
 *
         '';
-    };
-
       # For discord to start correctly (from nixOS wiki discord page)
       ".config/discord/settings.json".source = builtins.toFile "MSwhiteboard.desktop" ''
 {
@@ -361,6 +359,7 @@ X-WebApp-Isolated=true
   }
 }
           '';
+    };
 
     home.stateVersion = "22.11";
   }
