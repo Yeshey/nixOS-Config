@@ -176,6 +176,7 @@ in
           vim = "nvim";
           # ls = "lsd -l --group-dirs first";
           update = "sudo nixos-rebuild switch --flake ${location}#${host}"; # old: "sudo nixos-rebuild switch";
+          update-re = "sudo nixos-rebuild boot --flake ${location}#${host} && reboot"; # old: "sudo nixos-rebuild switch";
           upgrade = "trap \"cd ${location} && git checkout -- flake.lock\" INT ; sudo nixos-rebuild switch --flake ${location}#${host} --upgrade --update-input nixos-hardware --update-input home-manager --update-input nixpkgs || (cd ${location} && git checkout -- flake.lock)"; #--commit-lock-file #upgrade: upgrade NixOS to the latest version in your chosen channel";
           clean = "echo \"This will clean all generations, and optimise the store\" ; sudo sh -c 'nix-collect-garbage -d ; nix-store --optimise'";
           cp = "cp -i";                                   # Confirm before overwriting something
@@ -242,7 +243,7 @@ in
 
     # My home files 
     home.file = let
-      autostartPrograms = [ pkgs.discord pkgs.premid ];
+      autostartPrograms = [ pkgs.discord pkgs.premid pkgs.anydesk ];
     in builtins.listToAttrs (map
           # Startup applications with home manager
           # https://github.com/nix-community/home-manager/issues/3447
@@ -345,6 +346,21 @@ X-WebApp-Isolated=true
 *
         '';
     };
+
+      # For discord to start correctly (from nixOS wiki discord page)
+      ".config/discord/settings.json".source = builtins.toFile "MSwhiteboard.desktop" ''
+{
+  "IS_MAXIMIZED": false,
+  "IS_MINIMIZED": true,
+  "SKIP_HOST_UPDATE": true,
+  "WINDOW_BOUNDS": {
+    "x": 173,
+    "y": 68,
+    "width": 1630,
+    "height": 799
+  }
+}
+          '';
 
     home.stateVersion = "22.11";
   }
