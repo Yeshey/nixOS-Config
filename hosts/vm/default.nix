@@ -112,7 +112,6 @@ imports = [
   services.spice-vdagentd.enable=true;
 
   # KDE Plasma
-  /*
   services.xserver = {
     enable = true; # Enable the X11 windowing system.
     displayManager = {
@@ -129,12 +128,12 @@ imports = [
     };
     # windowManager.bspwm.enable = true; # but doesn't work
   };
-  */
 
   # networking.wireless.enable = true;
   networking.hostName = "nixOS-VM"; # Define your hostname.
 
   # GNOME Desktop (uses wayland)
+  /*
   services.xserver = {
     enable = true;
     displayManager.gdm.enable = true;
@@ -145,7 +144,7 @@ imports = [
       [org.gnome.desktop.peripherals.touchpad]
       click-method='default'
     '';
-  };
+  };*/
 
   # GNOME desktop simple
   #services.xserver.enable = true;
@@ -176,7 +175,8 @@ imports = [
     package = config.boot.kernelPackages.nvidiaPackages.stable;
     modesetting.enable = true;
     prime = {
-      offload.enable = true;
+      sync.enable = true; # https://github.com/NixOS/nixpkgs/issues/199024#issuecomment-1300650034
+      #offload.enable = true;
       intelBusId = "PCI:0:1:0";
       nvidiaBusId = "PCI:8:0:0";
     };
