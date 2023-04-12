@@ -334,7 +334,7 @@
     enable = true;
     forwardX11 = true; # forward graphical interfaces through SSH
     #settings = { # wasn't even working..?
-    #  permitRootLogin = "yes"; # to let surface and Laptop connect to builds for the surface (https://github.com/NixOS/nixpkgs/issues/20718)
+    permitRootLogin = "yes"; # to let surface and Laptop connect to builds for the surface (https://github.com/NixOS/nixpkgs/issues/20718)
     #};
   };
   programs = {
