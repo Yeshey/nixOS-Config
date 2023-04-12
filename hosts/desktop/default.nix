@@ -12,7 +12,7 @@
 #               └─ default.nix
 #
 
-{ config, pkgs, user, location, dataStoragePath, ... }:
+{ config, pkgs, user, location, dataStoragePath, lib, ... }:
 
 {
 imports = [
@@ -47,10 +47,26 @@ imports = [
   #  };
   #};
   
+  # Manage Temperature, prevent throttling
+  # https://github.com/linux-surface/linux-surface/issues/221
+  services.power-profiles-daemon.enable = true;
   services.thermald = {
     debug = false;
     enable = true;
+    configFile = ./configFiles/thermal-conf.xml; #(https://github.com/linux-surface/linux-surface/blob/master/contrib/thermald/thermal-conf.xml)
   };
+  systemd.services.thermald.serviceConfig.ExecStart = let # running with --adaptive ignores the config file. Issue raised: https://github.com/NixOS/nixpkgs/issues/201402
+    cfg = config.services.thermald;
+  in lib.mkForce ''
+          ${cfg.package}/sbin/thermald \
+            --no-daemon \
+            --config-file ${location}/hosts/desktop/configFiles/thermal-conf.xml \
+        '';
+
+  #services.thermald = {
+  #  debug = false;
+  #  enable = true;
+  #};
 
   networking.hostName = "nixOS-Laptop"; # Define your hostname.
 
