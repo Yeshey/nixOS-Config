@@ -271,6 +271,9 @@
   networking.networkmanager.enable = true;
   networking.resolvconf.dnsExtensionMechanism = false; # fixes internet connectivity problems with some sites (https://discourse.nixos.org/t/domain-name-resolve-problem/885/2)nvidia
 
+  # DNS server was not working (https://unix.stackexchange.com/questions/510940/how-can-i-set-a-custom-dns-server-within-nixos) (maybe should put in general config?)
+  networking.nameservers = [ "1.1.1.1" "8.8.8.8" "9.9.9.9" ];
+
   # Set your time zone.
   time.timeZone = "Europe/Lisbon";
 
