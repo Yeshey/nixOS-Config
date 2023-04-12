@@ -49,6 +49,7 @@ imports = [
   
   # Manage Temperature, prevent throttling
   # https://github.com/linux-surface/linux-surface/issues/221
+  # laptop thermald with: https://github.com/intel/thermal_daemon/issues/42#issuecomment-294567400
   services.power-profiles-daemon.enable = true;
   services.thermald = {
     debug = false;
