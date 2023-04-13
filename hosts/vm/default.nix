@@ -12,7 +12,7 @@
 #               └─ default.nix
 #
 
-{ config, pkgs, user, location, dataStoragePath, ... }:
+{ config, pkgs, user, location, dataStoragePath, lib, ... }:
 
 let
   nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
@@ -129,8 +129,20 @@ imports = [
     # windowManager.bspwm.enable = true; # but doesn't work
   };
 
+  # force VM to use pipewire, it seems to be necessary
+  # What is mkForce and mkDefault and mkOverride: https://discourse.nixos.org/t/what-does-mkdefault-do-exactly/9028
+  services.pipewire.enable = lib.mkForce false; # same as mkoverride 50 - the option has a priority of 50
+  hardware.pulseaudio.enable = lib.mkForce true;
+  hardware.pulseaudio.support32Bit = true;    ## If compatibility with 32-bit applications is desired.
+  nixpkgs.config.pulseaudio = true;
+  hardware.pulseaudio.extraConfig = "load-module module-combine-sink";
+
   # networking.wireless.enable = true;
   networking.hostName = "nixOS-VM"; # Define your hostname.
+
+  #https://discourse.nixos.org/t/unknown-network-problem/10669/9
+  networking.useDHCP = false;
+  networking.interfaces.eno1.useDHCP = true;
 
   # GNOME Desktop (uses wayland)
   /*
