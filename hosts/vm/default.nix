@@ -130,8 +130,9 @@ imports = [
   };
 
   # force VM to use pipewire, it seems to be necessary
-  services.pipewire.enable = lib.mkDefault false;
-  hardware.pulseaudio.enable = lib.mkDefault true;
+  # What is mkForce and mkDefault and mkOverride: https://discourse.nixos.org/t/what-does-mkdefault-do-exactly/9028
+  services.pipewire.enable = lib.mkForce false; # same as mkoverride 50 - the option has a priority of 50
+  hardware.pulseaudio.enable = lib.mkForce true;
   hardware.pulseaudio.support32Bit = true;    ## If compatibility with 32-bit applications is desired.
   nixpkgs.config.pulseaudio = true;
   hardware.pulseaudio.extraConfig = "load-module module-combine-sink";
