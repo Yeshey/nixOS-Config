@@ -11,7 +11,7 @@
             <TripPoints>
                <TripPoint>
                   <SensorType>x86_pkg_temp</SensorType>
-                  <Temperature>81000</Temperature>
+                  <Temperature>88000</Temperature>
                   <type>passive</type>
                   <ControlType>SEQUENTIAL</ControlType>
                   <CoolingDevice>

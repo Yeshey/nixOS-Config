@@ -127,6 +127,7 @@ in
     package = config.boot.kernelPackages.nvidiaPackages.stable;
     modesetting.enable = true;
     prime = {
+      #sync.enable = true; # https://github.com/NixOS/nixpkgs/issues/199024#issuecomment-1300650034
       offload.enable = true;
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:1:0:0";
