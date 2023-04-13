@@ -26,8 +26,8 @@ imports = [
   # https://gist.github.com/WhittlesJr/a6de35b995e8c14b9093c55ba41b697c
   pciPassthrough = {
     enable = true;
-    #pciIDs = "";
-    pciIDs = "10de:1f11,10de:10f9,8086:1901,10de:1ada" ; # Nvidia VGA, Nvidia Audia,... "10de:1f11,10de:10f9,8086:1901,10de:1ada";
+    pciIDs = "";
+    #pciIDs = "10de:1f11,10de:10f9,8086:1901,10de:1ada" ; # Nvidia VGA, Nvidia Audia,... "10de:1f11,10de:10f9,8086:1901,10de:1ada";
     libvirtUsers = [ "${user}" ];
   };
 
