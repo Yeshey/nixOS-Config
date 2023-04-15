@@ -71,6 +71,7 @@ in
         obs-studio
         stremio
         barrier
+        libsForQt5.neochat # plasma client for matrix
         # etcher #insecure?
 
         # Browsers
