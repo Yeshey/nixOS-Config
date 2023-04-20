@@ -123,6 +123,7 @@ in
   hardware.opengl.enable = true;
 
   # Comment this to use only the nvidia Grpahics card (discrete graphics option in BIOS instead of switchable graphics)
+  /*
   hardware.nvidia = {
     #package = config.boot.kernelPackages.nvidiaPackages.stable;
     modesetting.enable = true;
@@ -133,5 +134,6 @@ in
       nvidiaBusId = "PCI:1:0:0";
     };
   };
+  */
 
 }
