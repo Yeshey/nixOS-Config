@@ -553,14 +553,14 @@
 
   # OVERLAYS
   nixpkgs.overlays = [                          # This overlay will pull the latest version of Discord (but I guess it doesnt work)
-    (self: super: {
-      discord = super.discord.overrideAttrs (
-        _: { src = builtins.fetchTarball {
-          url = "https://discord.com/api/download?platform=linux&format=tar.gz"; 
-          sha256 = "sha256:1vw602k7dzqm2zxic88jaw9pbg5w436x9h2y74f7jmn3wzdg5bm3";
-        };}
-      );
-    })
+    #(self: super: {
+    #  discord = super.discord.overrideAttrs (
+    #    _: { src = builtins.fetchTarball {
+    #      url = "https://discord.com/api/download?platform=linux&format=tar.gz"; 
+    #      sha256 = "sha256:1vw602k7dzqm2zxic88jaw9pbg5w436x9h2y74f7jmn3wzdg5bm3";
+    #    };}
+    #  );
+    #})
 
     # Current exodus in nixpkgs not working, getting latest (and actually works!)
     (self: super: {
