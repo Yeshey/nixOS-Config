@@ -633,6 +633,7 @@
     spice-gtk # for virtual machines (to connect usbs and everything else)
     linux-wifi-hotspot # hotspot
     scrcpy
+    #mdevctl
 
     # tmp
     # texlive.combined.scheme-full # LaTeX
