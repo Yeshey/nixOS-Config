@@ -71,6 +71,7 @@ in
         obs-studio
         stremio
         barrier
+        libsForQt5.neochat # plasma client for matrix
         # etcher #insecure?
 
         # Browsers
@@ -241,8 +242,9 @@ in
 
     };
 
+    
     # My home files 
-    home.file = let
+    home.file = /* let
       autostartPrograms = [ pkgs.discord pkgs.premid pkgs.anydesk ];
     in builtins.listToAttrs (map
           # Startup applications with home manager
@@ -263,7 +265,7 @@ in
                 };
             })
           autostartPrograms)
-          //
+          // */
           {
     # Change VSCodium to be able to use pylance (https://github.com/VSCodium/vscodium/pull/674#issuecomment-1137920704)
       ".config/VSCodium/product.json".source = builtins.toFile "product.json" ''
