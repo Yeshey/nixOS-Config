@@ -9,7 +9,7 @@
 
     nixos-nvidia-vgpu = {
       type = "path";
-      path = "/mnt/DataDisk/Downloads/nixos-nvidia-vgpu/";
+      path = "/mnt/DataDisk/PersonalFiles/2023/Projects/Programming/nixos-nvidia-vgpu_nixOS22.11/";
     };
     #nixos-nvidia-vgpu.url = "github:Yeshey/nixos-nvidia-vgpu/master";
 
