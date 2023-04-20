@@ -124,7 +124,7 @@ in
 
   # Comment this to use only the nvidia Grpahics card (discrete graphics option in BIOS instead of switchable graphics)
   hardware.nvidia = {
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    #package = config.boot.kernelPackages.nvidiaPackages.stable;
     modesetting.enable = true;
     prime = {
       #sync.enable = true; # https://github.com/NixOS/nixpkgs/issues/199024#issuecomment-1300650034
