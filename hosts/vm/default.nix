@@ -129,13 +129,16 @@ imports = [
     # windowManager.bspwm.enable = true; # but doesn't work
   };
 
-  # force VM to use pipewire, it seems to be necessary
+  #
+  # Playing OSU is awfull with pipewire, it bugs all out for some reason, but with pulseaudio you can't use microphone of bluetooth devices you connect
+  #
+  # force VM to use pulseaudio, it seems to be necessary
   # What is mkForce and mkDefault and mkOverride: https://discourse.nixos.org/t/what-does-mkdefault-do-exactly/9028
-  services.pipewire.enable = lib.mkForce false; # same as mkoverride 50 - the option has a priority of 50
-  hardware.pulseaudio.enable = lib.mkForce true;
-  hardware.pulseaudio.support32Bit = true;    ## If compatibility with 32-bit applications is desired.
-  nixpkgs.config.pulseaudio = true;
-  hardware.pulseaudio.extraConfig = "load-module module-combine-sink";
+  #services.pipewire.enable = lib.mkForce false; # same as mkoverride 50 - the option has a priority of 50
+  #hardware.pulseaudio.enable = lib.mkForce true;
+  #hardware.pulseaudio.support32Bit = true;    ## If compatibility with 32-bit applications is desired.
+  #nixpkgs.config.pulseaudio = true;
+  #hardware.pulseaudio.extraConfig = "load-module module-combine-sink";
 
   # networking.wireless.enable = true;
   networking.hostName = "nixOS-VM"; # Define your hostname.
@@ -184,7 +187,7 @@ imports = [
 
   # Comment this to use only the nvidia Grpahics card, or when you're not passing the nvidia card inside?
   hardware.nvidia = {
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
+    # package = config.boot.kernelPackages.nvidiaPackages.stable;
     modesetting.enable = true;
     prime = {
       sync.enable = true; # https://github.com/NixOS/nixpkgs/issues/199024#issuecomment-1300650034
@@ -217,6 +220,14 @@ imports = [
     sddm-kcm # for sddm configuration in settings
     kate # KDEs notepad    
   ];
+
+  # MY MOUNTS
+  # Trying to share the datadisk folder isnt working like this, but works with this command(if things are configured): sudo mount -t 9p -o trans=virtio DataDisk /mnt
+  #fileSystems."${dataStoragePath}" = {
+  #  device = "/dev/disk/by-label/DataDisk";
+  #  fsType = "auto";
+  #  options = [ "nosuid" "nodev" "nofail" "x-gvfs-show" "9p" "trans=virtio"]; # x-systemd.device-timeout=3s
+  #};
 
   # Syncthing, there's no easy way to add ignore patters, so we're doing it like this for now:
   # But it looks like there also isn't an easy way to add them like we can in home manager with file.source...
