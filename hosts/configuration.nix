@@ -441,12 +441,12 @@
           versioning = myVersioning;
           # Ignore patterns: Recorded_Classes 
         };
-        "2022" = {
-          path = "${dataStoragePath}/PersonalFiles/2022"; 
-          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" ]; 
-          versioning = myVersioning;
+        #"2022" = {
+        #  path = "${dataStoragePath}/PersonalFiles/2022"; 
+        #  devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" ]; 
+        #  versioning = myVersioning;
           # Ignore patterns: Recorded_Classes 
-        };
+        #};
         "A70Camera" = {
           path = "${dataStoragePath}/PersonalFiles/Timeless/Syncthing/PhoneCamera";
           devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" "android-A70Phone" ]; 
