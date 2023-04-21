@@ -37,15 +37,15 @@ imports = [
   #    sha256 = "1k1ziz7v92k0w77sd7d07m51bdcac7vyil8cnn2h7i1a73bf2j7k";
   #  };
   #});
-  #boot.kernelPackages = pkgs.linuxPackages_5_4; # needed for this
-  #hardware.nvidia = {
-  #  vgpu = {
-  #    enable = true; # Enable NVIDIA KVM vGPU + GRID driver
-  #    unlock.enable = true; # Unlock vGPU functionality on consumer cards using DualCoder/vgpu_unlock project.
-  #    #gridDriver = /mnt/DataDisk/Downloads/drivers/NVIDIA-Linux-x86_64-460.32.03-grid.run;
-  #    #vgpuKvmDriver = /mnt/DataDisk/Downloads/drivers/NVIDIA-Linux-x86_64-460.73.01-grid-vgpu-kvm-v5.run;
-  #  };
-  #};
+  boot.kernelPackages = pkgs.linuxPackages_5_4; # needed for this
+  hardware.nvidia = {
+    vgpu = {
+      enable = true; # Enable NVIDIA KVM vGPU + GRID driver
+      unlock.enable = true; # Unlock vGPU functionality on consumer cards using DualCoder/vgpu_unlock project.
+      #gridDriver = /mnt/DataDisk/Downloads/drivers/NVIDIA-Linux-x86_64-460.32.03-grid.run;
+      #vgpuKvmDriver = /mnt/DataDisk/Downloads/drivers/NVIDIA-Linux-x86_64-460.73.01-grid-vgpu-kvm-v5.run;
+    };
+  };
   
   # Manage Temperature, prevent throttling
   # https://github.com/linux-surface/linux-surface/issues/221
