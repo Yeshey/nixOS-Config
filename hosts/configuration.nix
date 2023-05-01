@@ -632,7 +632,7 @@
     virt-manager # virtual machines
     spice-gtk # for virtual machines (to connect usbs and everything else)
     linux-wifi-hotspot # hotspot
-    scrcpy
+    scrcpy # screen cast android phone
     #mdevctl
 
     # tmp
