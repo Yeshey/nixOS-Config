@@ -35,7 +35,7 @@
       arduino
       premid # show youtube videos watching in discord
       # Libreoffice
-      libreoffice-qt
+      libreoffice
       hunspell
       hunspellDicts.uk_UA
     ];
