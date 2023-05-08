@@ -28,6 +28,7 @@ imports = [
   # For GPU passthrough to the VM, but instead I'm going to try to use GPU virtualisation through the discovered jailbreak: https://github.com/DualCoder/vgpu_unlock
   # https://gist.github.com/WhittlesJr/a6de35b995e8c14b9093c55ba41b697c
   pciPassthrough = {
+    # you will also need to set hardware.nvidia.prime.offload.enable = true for this GPU passthrough to work
     enable = true;
     pciIDs = "";
     #pciIDs = "10de:1f11,10de:10f9,8086:1901,10de:1ada" ; # Nvidia VGA, Nvidia Audia,... "10de:1f11,10de:10f9,8086:1901,10de:1ada";
@@ -48,6 +49,27 @@ imports = [
   #virtualisation.docker.enableOnBoot = true; # Big WTF
   # Help from https://github.com/NixOS/nixpkgs/issues/68349 and https://docs.docker.com/storage/storagedriver/btrfs-driver/
   #virtualisation.docker.storageDriver = "btrfs";
+
+  /*
+  systemd.timers."scream-receiver" = {
+    wantedBy = [ "timers.target" ];
+      timerConfig = {
+        Persistent = true; # If missed, run on boot (https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
+        OnCalendar = "*-*-1,4,7,10,13,16,19,22,25,28"; # Every three days approximatley
+        Unit = "delete-sync-conflicts.service";
+      };
+  };
+  systemd.services."delete-sync-conflicts" = {
+    script = ''
+      ${pkgs.scream}/bin/scream -i virbr0
+    '';
+    # Ignore What's inside Trash etc...
+    serviceConfig = {
+      Type = "oneshot";
+      User= "${user}";
+    };
+  };
+  */
 
 /*
 sudo mkdir -p /opt/docker/fastapi-dls/cert
@@ -168,6 +190,8 @@ openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout  $WORKING_DIR/webse
   # Follow the service log with `journalctl -fu podman-epic_games.service`
   # You have to put the config.json5 file in /mnt/Epic_Games_Claimer/config.json5
 
+  /*
+  # My epic games accounts are not very well trusted anymore...
   virtualisation.docker.enable = true;
   virtualisation.docker.enableOnBoot = true; # Big WTF
   # Help from https://github.com/NixOS/nixpkgs/issues/68349 and https://docs.docker.com/storage/storagedriver/btrfs-driver/
@@ -181,6 +205,7 @@ openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout  $WORKING_DIR/webse
       # autoStart = true;
     };
   };
+  */
   
   # tmp solution for audio not working
   # force VM to use pulseaudio, it seems to be necessary
