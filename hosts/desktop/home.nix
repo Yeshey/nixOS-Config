@@ -15,6 +15,7 @@
     packages = with pkgs; [
       gwe
       lbry
+      teams
 
       # Browser
       firefox

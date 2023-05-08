@@ -123,17 +123,16 @@ in
   hardware.opengl.enable = true;
 
   # Comment this to use only the nvidia Grpahics card (discrete graphics option in BIOS instead of switchable graphics)
-  /*
   hardware.nvidia = {
     #package = config.boot.kernelPackages.nvidiaPackages.stable;
     modesetting.enable = true;
     prime = {
-      #sync.enable = true; # https://github.com/NixOS/nixpkgs/issues/199024#issuecomment-1300650034
-      offload.enable = true;
+      sync.enable = true; # https://github.com/NixOS/nixpkgs/issues/199024#issuecomment-1300650034
+      #offload.enable = true;
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:1:0:0";
     };
   };
-*/
+
 
 }
