@@ -14,6 +14,9 @@
 
 { config, pkgs, user, location, dataStoragePath, lib, ... }:
 
+let
+  workingDir = "/opt/docker/fastapi-dls/cert";
+in
 {
 imports = [
   (import ./hardware-configuration.nix)
@@ -37,8 +40,53 @@ imports = [
   #    sha256 = "1k1ziz7v92k0w77sd7d07m51bdcac7vyil8cnn2h7i1a73bf2j7k";
   #  };
   #});
-  /*
-  boot.kernelPackages = pkgs.linuxPackages_5_4; # needed for this
+  
+  #boot.kernelPackages = pkgs.linuxPackages_5_4; # needed for this
+
+  #users.extraGroups.docker.members = [ "username-with-access-to-socket" ]; #(https://nixos.wiki/wiki/Docker)
+  #virtualisation.docker.enable = true;
+  #virtualisation.docker.enableOnBoot = true; # Big WTF
+  # Help from https://github.com/NixOS/nixpkgs/issues/68349 and https://docs.docker.com/storage/storagedriver/btrfs-driver/
+  #virtualisation.docker.storageDriver = "btrfs";
+
+/*
+sudo mkdir -p /opt/docker/fastapi-dls/cert
+
+WORKING_DIR=/opt/docker/fastapi-dls/cert
+mkdir -p $WORKING_DIR
+cd $WORKING_DIR
+# create instance private and public key for singing JWT's
+openssl genrsa -out $WORKING_DIR/instance.private.pem 2048 
+openssl rsa -in $WORKING_DIR/instance.private.pem -outform PEM -pubout -out $WORKING_DIR/instance.public.pem
+# create ssl certificate for integrated webserver (uvicorn) - because clients rely on ssl
+openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout  $WORKING_DIR/webserver.key -out $WORKING_DIR/webserver.crt
+ */
+
+  virtualisation.oci-containers.containers = {
+    fastapi-dls = {
+      image = "collinwebdesigns/fastapi-dls:latest";
+      volumes = [
+        "${workingDir}:/app/cert:rw"
+        "dls-db:/app/database"
+      ];
+      # Set environment variables
+      environment = {
+        TZ = "Europe/Lisbon";
+        DLS_URL = "192.168.1.81"; # this should grab your hostname, not your IP!
+        DLS_PORT = "443";
+        LEASE_EXPIRE_DAYS="90";
+        DATABASE = "sqlite:////app/database/db.sqlite";
+        DEBUG = "true";
+      };
+      extraOptions = [
+      ];
+      # Publish the container's port to the host
+      ports = [ "443:443" ];
+      # Automatically start the container
+      autoStart = true;
+    };
+  };
+
   hardware.nvidia = {
     vgpu = {
       enable = true; # Enable NVIDIA KVM vGPU + GRID driver
@@ -47,7 +95,7 @@ imports = [
       #vgpuKvmDriver = /mnt/DataDisk/Downloads/drivers/NVIDIA-Linux-x86_64-460.73.01-grid-vgpu-kvm-v5.run;
     };
   };
-  */
+  
   
   # Manage Temperature, prevent throttling
   # https://github.com/linux-surface/linux-surface/issues/221
@@ -134,6 +182,14 @@ imports = [
     };
   };
   
+  # tmp solution for audio not working
+  # force VM to use pulseaudio, it seems to be necessary
+  # What is mkForce and mkDefault and mkOverride: https://discourse.nixos.org/t/what-does-mkdefault-do-exactly/9028
+  #services.pipewire.enable = lib.mkForce false; # same as mkoverride 50 - the option has a priority of 50
+  #hardware.pulseaudio.enable = lib.mkForce true;
+  #hardware.pulseaudio.support32Bit = true;    ## If compatibility with 32-bit applications is desired.
+  #nixpkgs.config.pulseaudio = true;
+  #hardware.pulseaudio.extraConfig = "load-module module-combine-sink";
 
   # KDE Plasma
   services.xserver = {
