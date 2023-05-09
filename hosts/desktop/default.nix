@@ -14,9 +14,6 @@
 
 { config, pkgs, user, location, dataStoragePath, lib, ... }:
 
-let
-  workingDir = "/opt/docker/fastapi-dls/cert";
-in
 {
 imports = [
   (import ./hardware-configuration.nix)
@@ -72,18 +69,6 @@ imports = [
   */
 
 /*
-sudo mkdir -p /opt/docker/fastapi-dls/cert
-
-WORKING_DIR=/opt/docker/fastapi-dls/cert
-mkdir -p $WORKING_DIR
-cd $WORKING_DIR
-# create instance private and public key for singing JWT's
-openssl genrsa -out $WORKING_DIR/instance.private.pem 2048 
-openssl rsa -in $WORKING_DIR/instance.private.pem -outform PEM -pubout -out $WORKING_DIR/instance.public.pem
-# create ssl certificate for integrated webserver (uvicorn) - because clients rely on ssl
-openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout  $WORKING_DIR/webserver.key -out $WORKING_DIR/webserver.crt
- */
-
   virtualisation.oci-containers.containers = {
     fastapi-dls = {
       image = "collinwebdesigns/fastapi-dls:latest";
@@ -107,14 +92,17 @@ openssl req -x509 -nodes -days 3650 -newkey rsa:2048 -keyout  $WORKING_DIR/webse
       # Automatically start the container
       autoStart = true;
     };
-  };
+  }; */
 
   hardware.nvidia = {
     vgpu = {
-      enable = true; # Enable NVIDIA KVM vGPU + GRID driver
+      enable = true; # Install NVIDIA KVM vGPU + GRID driver
       unlock.enable = true; # Unlock vGPU functionality on consumer cards using DualCoder/vgpu_unlock project.
       #gridDriver = /mnt/DataDisk/Downloads/drivers/NVIDIA-Linux-x86_64-460.32.03-grid.run;
       #vgpuKvmDriver = /mnt/DataDisk/Downloads/drivers/NVIDIA-Linux-x86_64-460.73.01-grid-vgpu-kvm-v5.run;
+      fastapi-dls = {
+        enable = true;
+      };
     };
   };
   
