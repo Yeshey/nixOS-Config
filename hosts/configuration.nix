@@ -337,7 +337,75 @@
     permitRootLogin = "yes"; # to let surface and Laptop connect to builds for the surface (https://github.com/NixOS/nixpkgs/issues/20718)
     #};
   };
+  # Backups!
+  services.restic.backups = {
+    localbackup = {
+      initialize = true;
+      passwordFile = "/home/yeshey/.ssh/my_identity";
+      paths = [
+        "/home"
+        "/mnt/DataDisk/PersonalFiles"
+      ];
+      repository = "/mnt/hdd-btrfs/Backups/restic/";
+      timerConfig = {
+        OnCalendar = "weekly"; # every minute *:0/1
+        #RandomizedDelaySec = "5h";
+      };
+      extraBackupArgs = [
+        "--exclude=.cache"
+        "--exclude=*/cache2"
+        "--exclude=*/Cache"
+        "--exclude=.config/Slack/logs"
+        "--exclude=.config/Code/CachedData"
+        "--exclude=.container-diff"
+        "--exclude=.npm/_cacache"
+        "--exclude=*/node_modules"
+        "--exclude=*/bower_components"
+        "--exclude=*/_build"
+        "--exclude=*/.tox"
+        "--exclude=*/venv"
+        "--exclude=*/.venv"
+      ];
+    };
+  };
+
+
+  services.borgbackup.jobs = { # for a local backup
+    rootBackup = {
+      paths = "/mnt/DataDisk/PersonalFiles";
+      exclude = [ 
+          # Largest cache dirs
+          ".cache"
+          "*/cache2" # firefox
+          "*/Cache"
+          ".config/Slack/logs"
+          ".config/Code/CachedData"
+          ".container-diff"
+          ".npm/_cacache"
+          # Work related dirs
+          "*/node_modules"
+          "*/bower_components"
+          "*/_build"
+          "*/.tox"
+          "*/venv"
+          "*/.venv"
+       ];
+      repo = "/mnt/hdd-btrfs/Backups/borgbackup";
+      encryption = {
+        mode = "none";
+      };
+      #encryption = {
+      #  mode = "repokey";
+      #  passphrase = "secret";
+      #};
+      compression = "auto,lzma";
+      startAt = "weekly";
+    };
+  };
+  
   programs = {
+    firejail.enable = true; # so you can start apps in a sandbox?
+
     ssh = {
       startAgent = true;
       forwardX11 = true;
@@ -576,6 +644,8 @@
         }
       );
     })
+
+
 
     /* # Current yt-dlp in nixpkgs stable not working, getting latest
     (self: super: {

@@ -39,8 +39,8 @@
     },
     "nixos-nvidia-vgpu": {
       "locked": {
-        "lastModified": 1683649317,
-        "narHash": "sha256-kwrqUwNQwz4oQZgT4E1l71fcvFBhavQNgdMGxI5+7dM=",
+        "lastModified": 1683838176,
+        "narHash": "sha256-Kc0U7gNFajfLcqA4VegT8FwBGXyYbRISItEPV7pWGoA=",
         "path": "/mnt/DataDisk/PersonalFiles/2023/Projects/Programming/nixos-nvidia-vgpu_nixOS22.11/",
         "type": "path"
       },

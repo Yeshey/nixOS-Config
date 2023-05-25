@@ -103,6 +103,11 @@ in
     fsType = "btrfs";
     options = [ "nosuid" "nodev" "nofail" "x-gvfs-show" ];
   };
+  fileSystems."/mnt/hdd-ext4" = {
+    device = "/dev/disk/by-label/hdd-ext4";
+    fsType = "ext4";
+    options = [ "nosuid" "nodev" "nofail" "x-gvfs-show" ];
+  };
 
   # NVIDIA
   # Allow unfree packages
