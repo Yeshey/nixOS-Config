@@ -14,6 +14,13 @@
 
 { config, pkgs, user, location, dataStoragePath, lib, ... }:
 
+let
+    myPkgs = import (builtins.fetchTarball {
+        url = "https://github.com/NixOS/nixpkgs/archive/9fa5c1f0a85f83dfa928528a33a28f063ae3858d.tar.gz";
+    }) {};
+
+    myLookingGlass = myPkgs.looking-glass-client;
+in
 {
 imports = [
   (import ./hardware-configuration.nix)
@@ -25,7 +32,7 @@ imports = [
   # For GPU passthrough to the VM, but instead I'm going to try to use GPU virtualisation through the discovered jailbreak: https://github.com/DualCoder/vgpu_unlock
   # https://gist.github.com/WhittlesJr/a6de35b995e8c14b9093c55ba41b697c
   pciPassthrough = {
-    # you will also need to set hardware.nvidia.prime.offload.enable = true for this GPU passthrough to work
+    # you will also need to set hardware.nvidia.prime.offload.enable = true for this GPU passthrough to work  (or the sync method?)
     enable = true;
     pciIDs = "";
     #pciIDs = "10de:1f11,10de:10f9,8086:1901,10de:1ada" ; # Nvidia VGA, Nvidia Audia,... "10de:1f11,10de:10f9,8086:1901,10de:1ada";
@@ -46,27 +53,6 @@ imports = [
   #virtualisation.docker.enableOnBoot = true; # Big WTF
   # Help from https://github.com/NixOS/nixpkgs/issues/68349 and https://docs.docker.com/storage/storagedriver/btrfs-driver/
   #virtualisation.docker.storageDriver = "btrfs";
-
-  /*
-  systemd.timers."scream-receiver" = {
-    wantedBy = [ "timers.target" ];
-      timerConfig = {
-        Persistent = true; # If missed, run on boot (https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
-        OnCalendar = "*-*-1,4,7,10,13,16,19,22,25,28"; # Every three days approximatley
-        Unit = "delete-sync-conflicts.service";
-      };
-  };
-  systemd.services."delete-sync-conflicts" = {
-    script = ''
-      ${pkgs.scream}/bin/scream -i virbr0
-    '';
-    # Ignore What's inside Trash etc...
-    serviceConfig = {
-      Type = "oneshot";
-      User= "${user}";
-    };
-  };
-  */
 
 /*
   virtualisation.oci-containers.containers = {
@@ -94,14 +80,16 @@ imports = [
     };
   }; */
 
+  #boot.kernelPackages = pkgs.linuxPackages_5_10; # needed for this linuxPackages_5_19
   hardware.nvidia = {
     vgpu = {
       enable = true; # Install NVIDIA KVM vGPU + GRID driver
       unlock.enable = true; # Unlock vGPU functionality on consumer cards using DualCoder/vgpu_unlock project.
-      #gridDriver = /mnt/DataDisk/Downloads/drivers/NVIDIA-Linux-x86_64-460.32.03-grid.run;
-      #vgpuKvmDriver = /mnt/DataDisk/Downloads/drivers/NVIDIA-Linux-x86_64-460.73.01-grid-vgpu-kvm-v5.run;
       fastapi-dls = {
         enable = true;
+        local_ipv4 = "192.168.1.109";
+        timezone = "Europe/Lisbon";
+        #docker-directory = /mnt/dockers;
       };
     };
   };
@@ -194,15 +182,6 @@ imports = [
     };
   };
   */
-  
-  # tmp solution for audio not working
-  # force VM to use pulseaudio, it seems to be necessary
-  # What is mkForce and mkDefault and mkOverride: https://discourse.nixos.org/t/what-does-mkdefault-do-exactly/9028
-  #services.pipewire.enable = lib.mkForce false; # same as mkoverride 50 - the option has a priority of 50
-  #hardware.pulseaudio.enable = lib.mkForce true;
-  #hardware.pulseaudio.support32Bit = true;    ## If compatibility with 32-bit applications is desired.
-  #nixpkgs.config.pulseaudio = true;
-  #hardware.pulseaudio.extraConfig = "load-module module-combine-sink";
 
   # KDE Plasma
   services.xserver = {
@@ -222,7 +201,62 @@ imports = [
     # windowManager.bspwm.enable = true; # but doesn't work
   };
 
-  environment.systemPackages = with pkgs; [
+
+  # tmp solution for audio not working
+  # force VM to use pulseaudio, it seems to be necessary
+  # What is mkForce and mkDefault and mkOverride: https://discourse.nixos.org/t/what-does-mkdefault-do-exactly/9028 
+  #services.pipewire.enable = lib.mkForce false; # same as mkoverride 50 - the option has a priority of 50
+  #hardware.pulseaudio.enable = lib.mkForce true;
+  #hardware.pulseaudio.support32Bit = true;    ## If compatibility with 32-bit applications is desired.
+  #nixpkgs.config.pulseaudio = true;
+  #hardware.pulseaudio.extraConfig = "load-module module-combine-sink";
+  # Scream Audio Server Service
+
+  /*
+  systemd.user.services.scream = {
+    enable = true;
+    description = "Scream Audio Server";
+    serviceConfig = {
+        ExecStart = "${pkgs.scream}/bin/scream -v -o pulse -i virbr0 -p 4010";
+        Restart = "always";
+    };
+    wantedBy = [ "default.target" ];
+    requires = [ "pipewire-pulse.service" ];
+  };  
+  */
+
+  # OVERLAYS
+  nixpkgs.overlays = [                          # This overlay will pull the latest version of Discord (but I guess it doesnt work)
+  
+  /*
+    (self: super: {
+      looking-glass-client = super.looking-glass-client.overrideAttrs (
+        old: { 
+          #pname = "looking-glass-client";
+          #version = "B6";
+
+          src = pkgs.fetchFromGitHub {
+            owner = "gnif";
+            repo = "LookingGlass";
+            rev = "B6-rc1";
+            sha256 = "sha256-6vYbNmNJBCoU23nVculac24tHqH7F4AZVftIjL93WJU=";
+            fetchSubmodules = true;
+          };
+          
+          buildInputs = old.buildInputs ++ [
+            pkgs.pipewire
+            pkgs.pulseaudio
+            pkgs.libsamplerate
+          ];
+
+        }
+      );
+    })
+    */
+
+  ];
+
+  environment.systemPackages = [
 
     # Epic_Games_Claimer
     # docker
@@ -230,18 +264,19 @@ imports = [
     # tmp
     # virtualbox
     # texlive.combined.scheme-full # LaTeX
-    looking-glass-client
+    myLookingGlass
+    pkgs.scream
 
     # Games
-    steam
-    grapejuice # roblox
+    pkgs.steam
+    pkgs.grapejuice # roblox
 
     # FOR PLASMA DESKTOP
-    scrot # for plasma config saver widget
-    kdialog # for plasma config saver widget
-    ark # Compress and Uncompress files
-    sddm-kcm # for sddm configuration in settings
-    kate # KDEs notepad    
+    pkgs.scrot # for plasma config saver widget
+    pkgs.kdialog # for plasma config saver widget
+    pkgs.ark # Compress and Uncompress files
+    pkgs.sddm-kcm # for sddm configuration in settings
+    pkgs.kate # KDEs notepad    
   ];
 
   # Syncthing, there's no easy way to add ignore patters, so we're doing it like this for now:
