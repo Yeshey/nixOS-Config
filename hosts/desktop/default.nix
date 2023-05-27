@@ -15,16 +15,18 @@
 { config, pkgs, user, location, dataStoragePath, lib, ... }:
 
 let
+    # Looking glass B6 version in nix: https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/virtualization/looking-glass-client/default.nix
     myPkgs = import (builtins.fetchTarball {
         url = "https://github.com/NixOS/nixpkgs/archive/9fa5c1f0a85f83dfa928528a33a28f063ae3858d.tar.gz";
     }) {};
 
-    myLookingGlass = myPkgs.looking-glass-client;
+    LookingGlassB6 = myPkgs.looking-glass-client;
 in
 {
 imports = [
   (import ./hardware-configuration.nix)
   (import ./nixFiles/pci-passthrough.nix)
+  (import ./nixFiles/looking-glass.nix)
 ];
 
   # Following this github guide: https://github.com/tuh8888/libvirt_win10_vm
@@ -37,6 +39,11 @@ imports = [
     pciIDs = "";
     #pciIDs = "10de:1f11,10de:10f9,8086:1901,10de:1ada" ; # Nvidia VGA, Nvidia Audia,... "10de:1f11,10de:10f9,8086:1901,10de:1ada";
     libvirtUsers = [ "${user}" ];
+  };
+
+  programs.looking-glass = {
+    enable = true;
+    package = LookingGlassB6;
   };
 
   #boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_5_10.override { 
@@ -264,7 +271,7 @@ imports = [
     # tmp
     # virtualbox
     # texlive.combined.scheme-full # LaTeX
-    myLookingGlass
+    #LookingGlassB6
     pkgs.scream
 
     # Games
