@@ -14,19 +14,14 @@
 
 { config, pkgs, user, location, dataStoragePath, lib, ... }:
 
-let
-    # Looking glass B6 version in nix: https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/virtualization/looking-glass-client/default.nix
-    myPkgs = import (builtins.fetchTarball {
-        url = "https://github.com/NixOS/nixpkgs/archive/9fa5c1f0a85f83dfa928528a33a28f063ae3858d.tar.gz";
-    }) {};
-
-    LookingGlassB6 = myPkgs.looking-glass-client;
-in
 {
 imports = [
   (import ./hardware-configuration.nix)
   (import ./nixFiles/pci-passthrough.nix)
-  (import ./nixFiles/looking-glass.nix)
+  (import (builtins.fetchurl{
+        url = "https://github.com/NixOS/nixpkgs/raw/63c34abfb33b8c579631df6b5ca00c0430a395df/nixos/modules/programs/looking-glass.nix";
+        sha256 = "sha256:1lfrqix8kxfawnlrirq059w1hk3kcfq4p8g6kal3kbsczw90rhki";
+      } ))  #(import ./nixFiles/looking-glass.nix)
 ];
 
   # Following this github guide: https://github.com/tuh8888/libvirt_win10_vm
@@ -41,7 +36,14 @@ imports = [
     libvirtUsers = [ "${user}" ];
   };
 
-  programs.looking-glass = {
+  programs.looking-glass = let
+    # Looking glass B6 version in nix: https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/virtualization/looking-glass-client/default.nix
+    myPkgs = import (builtins.fetchTarball {
+        url = "https://github.com/NixOS/nixpkgs/archive/9fa5c1f0a85f83dfa928528a33a28f063ae3858d.tar.gz";
+    }) {};
+
+    LookingGlassB6 = myPkgs.looking-glass-client;
+  in {
     enable = true;
     package = LookingGlassB6;
   };
