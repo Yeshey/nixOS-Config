@@ -48,47 +48,6 @@ imports = [
     package = LookingGlassB6;
   };
 
-  #boot.kernelPackages = pkgs.linuxPackagesFor (pkgs.linux_5_10.override { 
-  #  src = pkgs.fetchurl { 
-  #    url = "https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.12.15.tar.xz";
-  #    sha256 = "1k1ziz7v92k0w77sd7d07m51bdcac7vyil8cnn2h7i1a73bf2j7k";
-  #  };
-  #});
-  
-  #boot.kernelPackages = pkgs.linuxPackages_5_4; # needed for this
-
-  #users.extraGroups.docker.members = [ "username-with-access-to-socket" ]; #(https://nixos.wiki/wiki/Docker)
-  #virtualisation.docker.enable = true;
-  #virtualisation.docker.enableOnBoot = true; # Big WTF
-  # Help from https://github.com/NixOS/nixpkgs/issues/68349 and https://docs.docker.com/storage/storagedriver/btrfs-driver/
-  #virtualisation.docker.storageDriver = "btrfs";
-
-/*
-  virtualisation.oci-containers.containers = {
-    fastapi-dls = {
-      image = "collinwebdesigns/fastapi-dls:latest";
-      volumes = [
-        "${workingDir}:/app/cert:rw"
-        "dls-db:/app/database"
-      ];
-      # Set environment variables
-      environment = {
-        TZ = "Europe/Lisbon";
-        DLS_URL = "192.168.1.81"; # this should grab your hostname, not your IP!
-        DLS_PORT = "443";
-        LEASE_EXPIRE_DAYS="90";
-        DATABASE = "sqlite:////app/database/db.sqlite";
-        DEBUG = "true";
-      };
-      extraOptions = [
-      ];
-      # Publish the container's port to the host
-      ports = [ "443:443" ];
-      # Automatically start the container
-      autoStart = true;
-    };
-  }; */
-
   #boot.kernelPackages = pkgs.linuxPackages_5_10; # needed for this linuxPackages_5_19
   hardware.nvidia = {
     vgpu = {
@@ -102,7 +61,6 @@ imports = [
       };
     };
   };
-  
   
   # Manage Temperature, prevent throttling
   # https://github.com/linux-surface/linux-surface/issues/221
@@ -125,6 +83,71 @@ imports = [
   #  debug = false;
   #  enable = true;
   #};
+
+  # systemctl status borgbackup-job-rootBackup.service/timer
+  services.borgbackup.jobs = { # for a local backup
+    rootBackup = {
+      # Use `sudo borg list -v /mnt/hdd-btrfs/Backups/borgbackup` to check the archives created
+      # Use `sudo borg info /mnt/hdd-btrfs/Backups/borgbackup::<NameOfArchive>` to see details
+      # Use `sudo borg extract /mnt/hdd-btrfs/Backups/borgbackup::<NameOfArchive>` to extract the specified archive to the current directory
+      paths = [ "${dataStoragePath}/PersonalFiles" "/home/${user}"]; 
+      exclude = [ 
+          # Largest cache dirs
+          ".cache"
+          "*/cache2" # firefox
+          "*/Cache"
+          ".config/Slack/logs"
+          ".config/Code/CachedData"
+          ".container-diff"
+          ".npm/_cacache"
+          # Work related dirs
+          "*/node_modules"
+          "*/bower_components"
+          "*/_build"
+          "*/.tox"
+          "*/venv"
+          "*/.venv"
+          # Personal Home Dirs
+          "*cache*"
+          "*/Android"
+          "*/.gradle"
+          "*/.var"
+          "*/.cabal"
+          "*/.vscode"
+          "*/.stremio-server"
+          "*/grapejuice"
+          "*/baloo"
+          "*/share/containers"
+          "*/lutris"
+          "*/Steam"
+          "*/.config"
+          "*/Trash"
+          "*/Games"
+
+          # Personal Dirs
+          "*/RecordedClasses"
+
+       ];
+      repo = "/mnt/hdd-btrfs/Backups/borgbackup";
+      encryption = {
+        mode = "none";
+      };
+      prune.keep = {
+        within = "1d"; # Keep all archives from the last day
+        daily = 2; # keep the latest backup on each day, up to 7 most recent days with backups (days without backups do not count)
+        weekly = 2; 
+        monthly = 2;
+        yearly = 5;
+      };
+      extraCreateArgs = "--stats";
+      #encryption = {
+      #  mode = "repokey";
+      #  passphrase = "secret";
+      #};
+      compression = "auto,lzma";
+      startAt = "weekly"; # weekly # *:0/9 every 9 minutes # daily
+    };
+  };
 
   networking.hostName = "nixOS-Laptop"; # Define your hostname.
   # hardware.enableAllFirmware = true; #?
