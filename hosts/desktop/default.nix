@@ -90,6 +90,8 @@ imports = [
       # Use `sudo borg list -v /mnt/hdd-btrfs/Backups/borgbackup` to check the archives created
       # Use `sudo borg info /mnt/hdd-btrfs/Backups/borgbackup::<NameOfArchive>` to see details
       # Use `sudo borg extract /mnt/hdd-btrfs/Backups/borgbackup::<NameOfArchive>` to extract the specified archive to the current directory
+      # Use `sudo systemctl start borgbackup-job-rootBackup.service` to make a backup right now
+      # Watch size of repo: `watch "sudo du -sh /mnt/hdd-btrfs/Backups/borgbackup/ && echo && sudo du -s /mnt/hdd-btrfs/Backups/borgbackup/"`
       paths = [ "${dataStoragePath}/PersonalFiles" "/home/${user}"]; 
       exclude = [ 
           # Largest cache dirs
@@ -137,7 +139,7 @@ imports = [
         daily = 2; # keep the latest backup on each day, up to 7 most recent days with backups (days without backups do not count)
         weekly = 2; 
         monthly = 2;
-        yearly = 5;
+        yearly = 3;
       };
       extraCreateArgs = "--stats";
       #encryption = {
@@ -233,62 +235,21 @@ imports = [
     # windowManager.bspwm.enable = true; # but doesn't work
   };
 
-
-  # tmp solution for audio not working
-  # force VM to use pulseaudio, it seems to be necessary
-  # What is mkForce and mkDefault and mkOverride: https://discourse.nixos.org/t/what-does-mkdefault-do-exactly/9028 
-  #services.pipewire.enable = lib.mkForce false; # same as mkoverride 50 - the option has a priority of 50
-  #hardware.pulseaudio.enable = lib.mkForce true;
-  #hardware.pulseaudio.support32Bit = true;    ## If compatibility with 32-bit applications is desired.
-  #nixpkgs.config.pulseaudio = true;
-  #hardware.pulseaudio.extraConfig = "load-module module-combine-sink";
-  # Scream Audio Server Service
-
-  /*
-  systemd.user.services.scream = {
-    enable = true;
-    description = "Scream Audio Server";
-    serviceConfig = {
-        ExecStart = "${pkgs.scream}/bin/scream -v -o pulse -i virbr0 -p 4010";
-        Restart = "always";
-    };
-    wantedBy = [ "default.target" ];
-    requires = [ "pipewire-pulse.service" ];
-  };  
-  */
-
   # OVERLAYS
   nixpkgs.overlays = [                          # This overlay will pull the latest version of Discord (but I guess it doesnt work)
-  
-  /*
-    (self: super: {
-      looking-glass-client = super.looking-glass-client.overrideAttrs (
-        old: { 
-          #pname = "looking-glass-client";
-          #version = "B6";
-
-          src = pkgs.fetchFromGitHub {
-            owner = "gnif";
-            repo = "LookingGlass";
-            rev = "B6-rc1";
-            sha256 = "sha256-6vYbNmNJBCoU23nVculac24tHqH7F4AZVftIjL93WJU=";
-            fetchSubmodules = true;
-          };
-          
-          buildInputs = old.buildInputs ++ [
-            pkgs.pipewire
-            pkgs.pulseaudio
-            pkgs.libsamplerate
-          ];
-
-        }
-      );
-    })
-    */
 
   ];
 
-  environment.systemPackages = [
+  # Check configuration: onedrive --display-config
+  # config file documentation: https://github.com/abraunegg/onedrive/blob/master/docs/USAGE.md#configuration (get the default config file if you don't have any: wget https://raw.githubusercontent.com/abraunegg/onedrive/master/config -O ~/.config/onedrive/config)
+  # change config file here: /home/yeshey/.config/onedrive-0/config
+  # nixOS documentation: https://nixos.wiki/wiki/OneDrive
+  services.onedrive= {
+    enable = true;
+    package = pkgs.onedrive;
+  };
+
+  environment.systemPackages = with pkgs; [
 
     # Epic_Games_Claimer
     # docker
@@ -297,18 +258,17 @@ imports = [
     # virtualbox
     # texlive.combined.scheme-full # LaTeX
     #LookingGlassB6
-    pkgs.scream
 
     # Games
-    pkgs.steam
-    pkgs.grapejuice # roblox
+    steam
+    grapejuice # roblox
 
     # FOR PLASMA DESKTOP
-    pkgs.scrot # for plasma config saver widget
-    pkgs.kdialog # for plasma config saver widget
-    pkgs.ark # Compress and Uncompress files
-    pkgs.sddm-kcm # for sddm configuration in settings
-    pkgs.kate # KDEs notepad    
+    scrot # for plasma config saver widget
+    kdialog # for plasma config saver widget
+    ark # Compress and Uncompress files
+    sddm-kcm # for sddm configuration in settings
+    kate # KDEs notepad    
   ];
 
   # Syncthing, there's no easy way to add ignore patters, so we're doing it like this for now:
