@@ -515,7 +515,7 @@
           # Potencial Ignore patterns: 
         };
         "MinecraftPrismLauncher" = {
-          path = "~/.local/share/PolyMC/instances";
+          path = "~/.local/share/PrismLauncher/instances";
           devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" ]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
