@@ -96,7 +96,7 @@ in
   fileSystems."/mnt/hdd-ntfs" = {
     device = "/dev/disk/by-label/hdd-ntfs";
     fsType = "auto";
-    options = [ "uid=1000" "gid=1000" "dmask=007" "fmask=117" "nofail"];
+    options = [ "nosuid" "nodev" "nofail" "x-gvfs-show" ]; # [ "uid=1000" "gid=1000" "dmask=007" "fmask=117" "nofail"];
   };
   fileSystems."/mnt/hdd-btrfs" = {
     device = "/dev/disk/by-label/hdd-btrfs";

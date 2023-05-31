@@ -48,6 +48,7 @@ imports = [
     package = LookingGlassB6;
   };
 
+  # For the VM
   #boot.kernelPackages = pkgs.linuxPackages_5_10; # needed for this linuxPackages_5_19
   hardware.nvidia = {
     vgpu = {
@@ -61,6 +62,64 @@ imports = [
       };
     };
   };
+  # For sharing folders with the windows VM
+  services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
+  networking.firewall.allowedTCPPorts = [
+    5357 # wsdd
+  ];
+  networking.firewall.allowedUDPPorts = [
+    3702 # wsdd
+  ];
+  services.samba = {
+    enable = true;
+    securityType = "user";
+    extraConfig = ''
+      workgroup = WORKGROUP
+      server string = smbnix
+      netbios name = smbnix
+      security = user 
+      #use sendfile = yes
+      #max protocol = smb2
+      # note: localhost is the ipv6 localhost ::1
+      #hosts allow = 192.168.0. 127.0.0.1 localhost
+      #hosts deny = 0.0.0.0/0
+      guest account = nobody
+      map to guest = bad user
+    '';
+    shares = {
+      hdd-ntfs = {
+        path = "/mnt/hdd-ntfs";
+        browseable = "yes";
+        "read only" = "no";
+        "guest ok" = "yes";
+        "create mask" = "0644";
+        "directory mask" = "0755";
+        #"force user" = "username";
+        #"force group" = "groupname";
+      };
+      DataDisk = {
+        path = "/mnt/DataDisk";
+        browseable = "yes";
+        "read only" = "no";
+        "guest ok" = "yes";
+        "create mask" = "0644";
+        "directory mask" = "0755";
+        #"force user" = "username";
+        #"force group" = "groupname";
+      };
+    };
+  };
+  networking.firewall.allowPing = true;
+  services.samba.openFirewall = true;
+  # However, for this samba share to work you will need to run `sudo smbpasswd -a yeshey` after building your configuration!
+  # In windoows you can access them in file explorer with `\\192.168.1.xxx` or whatever your local IP is
+  # In Windowos you should also map them to a drive to use them in a lot of programs, for this:
+  #   - Add a file MapNetworkDriveDataDisk and MapNetworkDriveHdd-ntfs to the folder C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup (to be accessible to every user in every startup):
+  #      With these contents respectively:
+  #         net use V: "\\192.168.1.109\DataDisk" /p:yes
+  #      and
+  #         net use V: "\\192.168.1.109\hdd-ntfs" /p:yes
+  # Then to have those drives be usable by administrator programs, open a cmd with priviliges and also run both commands above!
   
   # Manage Temperature, prevent throttling
   # https://github.com/linux-surface/linux-surface/issues/221
