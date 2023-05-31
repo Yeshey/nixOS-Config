@@ -27,6 +27,16 @@ It has my personal configuration for two devices, my Lenovo Legion laptop and my
 
 ## To-Do
 
+- change the files you create with home manager to create with this:
+  ```
+    systemd.tmpfiles.rules = [
+      "d /var/spool/samba 1777 root root -"
+    ];
+  ```
+  When appropriate. For example for syncthing. (seen this is possible in [this answer](https://discourse.nixos.org/t/nixos-configuration-for-samba/17079))
+
+- Adding support for one virtual screen, so you can use another computer as a second screen with `deskreen`
+
 - Make system.autoUpgrade not make PC unusable(right now it grabs /etc/nixos/ configuration):
   - You made a comment [here](https://github.com/NixOS/nixpkgs/issues/77971) with your alterations to systemd service, once you know they work, give an update there
   - Fix the fail case in the autoUpgrade service, so it remocves the last version of the flake.lock if it didn't finish.
@@ -35,6 +45,21 @@ It has my personal configuration for two devices, my Lenovo Legion laptop and my
 
 - figure out how to add functions aliases to zsh
   - Make it so upgrade and update tries three times before giving up
+
+## Notes
+
+[This answer:](https://discourse.nixos.org/t/nixos-configuration-for-samba/17079) 
+- For creating folders, there is [systemd.tmpfiles](https://search.nixos.org/options?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=systemd.tmpfiles). Despite the implications of its name, you can use it to automatically ensure folders exist, without setting up any clean up. Looks something like this in my config:
+
+  ```nix
+  systemd.tmpfiles.rules = [
+    "d /mnt/media/Movies 0770 media media - -"
+  ];
+  ```
+
+- For normal Unix passwords, I just set them imperatively after installation.
+
+More generally, you can do imperative things when activating a new NixOS configuration using [system.activationScripts](https://search.nixos.org/options?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=system.activationScripts). Of course, the script you run should be idempotent and such changes would not be able to be rolled-back by standard NixOS mechanisms - imperative is imperative.
 
 ## Issues
 

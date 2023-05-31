@@ -611,28 +611,6 @@
         }
       );
     })
-
-
-
-    /* # Current yt-dlp in nixpkgs stable not working, getting latest
-    (self: super: {
-      yt-dlp = super.yt-dlp.overrideAttrs (
-        _: { 
-          version = "2023.2.17";
-        }
-      );
-    }) */
-
-    /* (self: super: {
-        prismlauncher = super.prismlauncher.override {
-            glfw = super.glfw.overrideAttrs (
-            _: { 
-              version = "3.1";  
-            }
-          );
-        };
-    }) */
-
   ];
 
   environment.systemPackages = with pkgs; [
@@ -667,6 +645,7 @@
     unrar # to extract .rar with ark in KDE # unrar x Lab5.rar
     # helvum # To control pipewire Not Working?
     virt-manager # virtual machines
+    virt-viewer # needed to choose share folders with windows VM (guide and video: https://www.guyrutenberg.com/2018/10/25/sharing-a-folder-a-windows-guest-under-virt-manager/ and https://www.youtube.com/watch?v=Ow3gVbkWj-c)
     spice-gtk # for virtual machines (to connect usbs and everything else)
     linux-wifi-hotspot # hotspot
     scrcpy # screen cast android phone
