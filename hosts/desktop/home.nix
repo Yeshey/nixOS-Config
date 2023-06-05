@@ -17,6 +17,10 @@
       lbry
       teams
 
+      # Games
+      steam
+      grapejuice # roblox
+
       # Browser
       firefox
 
@@ -34,7 +38,7 @@
       krita
       inkscape
       arduino
-      premid # show youtube videos watching in discord
+      # premid # show youtube videos watching in discord
       # Libreoffice
       libreoffice
       hunspell

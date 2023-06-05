@@ -57,6 +57,19 @@ It has my personal configuration for two devices, my Lenovo Legion laptop and my
   ];
   ```
 
+- If you want to have a systemd service that can change files in your system, here is an example, weites to /my-ip file your local IP:
+  ```nix
+    systemd.services.my-awesome-service = {
+      description = "writes a file to /my-ip";
+      serviceConfig.PassEnvironment = "DISPLAY";
+      script = ''
+        ${pkgs.busybox}/bin/ip a | grep "scope" | grep -Po '(?<=inet )[\d.]+' | head -n 2 | tail -n 1 > /my-ip;
+        echo "success!"
+      '';
+      wantedBy = [ "multi-user.target" ]; # starts after login
+    };
+  ```
+
 - For normal Unix passwords, I just set them imperatively after installation.
 
 More generally, you can do imperative things when activating a new NixOS configuration using [system.activationScripts](https://search.nixos.org/options?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=system.activationScripts). Of course, the script you run should be idempotent and such changes would not be able to be rolled-back by standard NixOS mechanisms - imperative is imperative.
