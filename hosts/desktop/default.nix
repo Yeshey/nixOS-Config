@@ -135,7 +135,7 @@ imports = [
   #      and
   #         net use V: "\\192.168.1.109\hdd-ntfs" /p:yes
   # Then to have those drives be usable by administrator programs, open a cmd with priviliges and also run both commands above!
-  
+
   # Manage Temperature, prevent throttling
   # https://github.com/linux-surface/linux-surface/issues/221
   # laptop thermald with: https://github.com/intel/thermal_daemon/issues/42#issuecomment-294567400
@@ -349,10 +349,6 @@ imports = [
     # virtualbox
     # texlive.combined.scheme-full # LaTeX
     #LookingGlassB6
-
-    # Games
-    steam
-    grapejuice # roblox
 
     # FOR PLASMA DESKTOP
     scrot # for plasma config saver widget

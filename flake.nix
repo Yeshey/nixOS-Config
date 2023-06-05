@@ -7,7 +7,7 @@
     # sudo nix-channel --add https://nixos.org/channels/nixos-22.11 nixos
     nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
 
-    #nixos-nvidia-vgpu = {
+    #nixos-nvidia-vgpu = { # sudo nixos-rebuild --flake ~/.setup#laptop switch --update-input nixos-nvidia-vgpu --impure
     #  type = "path";
     #  path = "/mnt/DataDisk/PersonalFiles/2023/Projects/Programming/nixos-nvidia-vgpu_nixOS22.11/";
     #};
