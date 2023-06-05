@@ -180,6 +180,7 @@ in
           update-re = "sudo nixos-rebuild boot --flake ${location}#${host} --impure && reboot"; # old: "sudo nixos-rebuild switch";
           upgrade = "trap \"cd ${location} && git checkout -- flake.lock\" INT ; sudo nixos-rebuild switch --flake ${location}#${host} --upgrade --update-input nixos-hardware --update-input nixos-nvidia-vgpu --update-input home-manager --update-input nixpkgs --impure || (cd ${location} && git checkout -- flake.lock)"; #--commit-lock-file #upgrade: upgrade NixOS to the latest version in your chosen channel";
           clean = "echo \"This will clean all generations, and optimise the store\" ; sudo sh -c 'nix-collect-garbage -d ; nix-store --optimise'";
+          #"sudo dolphin" = "sudo SUDO_USER= dolphin";
           cp = "cp -i";                                   # Confirm before overwriting something
           df = "df -h";                                   # Human-readable sizes
           free = "free -m";                               # Show sizes in MB

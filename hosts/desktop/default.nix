@@ -14,6 +14,16 @@
 
 { config, pkgs, user, location, dataStoragePath, lib, ... }:
 
+#let
+#        ipDerivation = pkgs.runCommand "${pkgs.busybox}/bin/ip" {} ''
+#          ${pkgs.busybox}/bin/ip -4 route get 8.8.8.8 | awk '{print $7}' > "$out";
+#          # Or ip a | grep "scope" | grep -Po '(?<=inet )[\d.]+' | head -n 2 | tail -n 1
+#          echo "$out";
+#          #echo $(${pkgs.busybox}/bin/ip a);
+#          jskdhjaskhdaskj
+#        '';
+#        ipAddress = builtins.readFile ipDerivation;
+#      in
 {
 imports = [
   (import ./hardware-configuration.nix)
@@ -56,13 +66,18 @@ imports = [
       unlock.enable = true; # Unlock vGPU functionality on consumer cards using DualCoder/vgpu_unlock project.
       fastapi-dls = {
         enable = true;
-        local_ipv4 = "192.168.1.109";
+        local_ipv4 = "localhost"; #"192.168.1.109";
         timezone = "Europe/Lisbon";
         #docker-directory = /mnt/dockers;
       };
     };
   };
   # For sharing folders with the windows VM
+  # Make your local IP static for the VM to never lose the folders
+  networking.interfaces.eth0.ipv4.addresses = [ {
+    address = "192.168.1.109";
+    prefixLength = 24;
+  } ];
   services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
   networking.firewall.allowedTCPPorts = [
     5357 # wsdd
@@ -111,8 +126,8 @@ imports = [
   };
   networking.firewall.allowPing = true;
   services.samba.openFirewall = true;
-  # However, for this samba share to work you will need to run `sudo smbpasswd -a yeshey` after building your configuration!
-  # In windoows you can access them in file explorer with `\\192.168.1.xxx` or whatever your local IP is
+  # However, for this samba share to work you will need to run `sudo smbpasswd -a <yourusername>` after building your configuration!
+  # In windows you can access them in file explorer with `\\192.168.1.xxx` or whatever your local IP is
   # In Windowos you should also map them to a drive to use them in a lot of programs, for this:
   #   - Add a file MapNetworkDriveDataDisk and MapNetworkDriveHdd-ntfs to the folder C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup (to be accessible to every user in every startup):
   #      With these contents respectively:
@@ -138,10 +153,25 @@ imports = [
             --config-file ${location}/hosts/desktop/configFiles/thermal-conf.xml \
         '';
 
-  #services.thermald = {
-  #  debug = false;
-  #  enable = true;
-  #};
+/*
+  systemd.services.thermald.serviceConfig.ExecStart = let # running with --adaptive ignores the config file. Issue raised: https://github.com/NixOS/nixpkgs/issues/201402
+    cfg = config.services.thermald;
+  in lib.mkForce ''
+          ${cfg.package}/sbin/thermald \
+            --no-daemon \
+            --config-file ${location}/hosts/desktop/configFiles/thermal-conf.xml \
+        '';
+
+  services.thermald = let
+    myPkgs = import (builtins.fetchTarball {
+        url = "https://github.com/Yeshey/nixpkgs/archive/129d30ddafa76ae329c9aa1a93fdcccd47a5452d.tar.gz";
+    }) {};
+
+  in {
+    enable = true;
+    package = LookingGlassB6;
+  };
+*/
 
   # systemctl status borgbackup-job-rootBackup.service/timer
   services.borgbackup.jobs = { # for a local backup
@@ -295,9 +325,8 @@ imports = [
   };
 
   # OVERLAYS
-  nixpkgs.overlays = [                          # This overlay will pull the latest version of Discord (but I guess it doesnt work)
-
-  ];
+  #nixpkgs.overlays = [                          # This overlay will pull the latest version of Discord (but I guess it doesnt work)
+  #];
 
   # Check configuration: onedrive --display-config
   # config file documentation: https://github.com/abraunegg/onedrive/blob/master/docs/USAGE.md#configuration (get the default config file if you don't have any: wget https://raw.githubusercontent.com/abraunegg/onedrive/master/config -O ~/.config/onedrive/config)
@@ -305,8 +334,11 @@ imports = [
   # nixOS documentation: https://nixos.wiki/wiki/OneDrive
   services.onedrive= {
     enable = true;
-    package = pkgs.onedrive;
+  #  package = pkgs.onedrive;
   };
+  # To view real time logs: journalctl --user -t onedrive --follow
+  # Or maybe better: watch "systemctl --user status onedrive@onedrive-0.service"
+
 
   environment.systemPackages = with pkgs; [
 
