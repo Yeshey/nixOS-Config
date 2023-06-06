@@ -243,6 +243,30 @@ imports = [
   networking.hostName = "nixOS-Laptop"; # Define your hostname.
   # hardware.enableAllFirmware = true; #?
 
+  # Make a virtual screen: (as per these instructions: https://github.com/Yeshey/TechNotes/blob/main/techNotes.md#117-use-laptop-as-a-second-monitor)
+  /*systemd.services.virtual-display = {
+    description = "/etc/X11/xorg.conf.d/30-virtscreen.conf to have a second virtual display";
+    serviceConfig.PassEnvironment = "DISPLAY";
+    script = ''
+
+      CONFIG_FILE="/etc/X11/xorg.conf.d/30-virtscreen.conf"
+
+      echo 'Section "Device"
+          Identifier  "nvidiagpu"
+          Driver      "nvidia"
+      EndSection
+
+      Section "Screen"
+          Identifier  "nvidiascreen"
+          Device      "nvidiagpu"
+          Option      "ConnectedMonitor" "LVDS-0,DP-1,DP-2"
+      EndSection' > "$CONFIG_FILE"
+
+      echo "Configuration written to $CONFIG_FILE."
+    '';
+    wantedBy = [ "multi-user.target" ]; # starts after login
+  }; */
+
 #     ___            __ 
 #    / _ )___  ___  / /_
 #   / _  / _ \/ _ \/ __/
@@ -257,7 +281,6 @@ imports = [
     };
     grub = {
       enable = true;
-      version = 2;
       efiSupport = true;
       devices = [ "nodev" ];
       device = "nodev";
