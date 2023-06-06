@@ -55,7 +55,7 @@
   # boot.loader.efi.canTouchEfiVariables = true;
   # boot.loader.efi.efiSysMountPoint = "/boot/efi";
   #    -- grub --
-  boot.cleanTmpDir = true;
+  boot.tmp.cleanOnBoot = true;
   boot.supportedFilesystems = [ "ntfs" ];
 
 #     ___          __   __              ____         _                              __ 
@@ -91,53 +91,6 @@
     alsa.enable = true;
     alsa.support32Bit = true;
     pulse.enable = true;
-
-    # Trying to make a seperate virtual sink for recording, but failing
-    # https://www.reddit.com/r/NixOS/comments/thgkug/how_do_i_create_a_virtual_device_in_pipewire/
-    config.pipewire = let
-      defaultConf = lib.importJSON "${inputs.nixpkgs}/nixos/modules/services/desktops/pipewire/daemon/pipewire.conf.json";
-    in lib.recursiveUpdate defaultConf {
-      "context.modules" = defaultConf."context.modules" ++ [
-        {
-          factory = "adapter";
-          args = {
-            "factory.name" = "support.null-audio-sink";
-            "node.name" = "Microphone-Proxy";
-            "node.description" = "Microphone";
-            "media.class" = "Audio/Source/Virtual";
-            "audio.position" = "MONO";
-          };
-        }
-        {
-          factory = "adapter";
-          args = {
-            "factory.name" = "support.null-audio-sink";
-            "node.name" = "Main-Output-Proxy";
-            "node.description" = "Main Output";
-            "media.class" = "Audio/Sink";
-            "audio.position" = "FL,FR";
-          };
-        }
-      ];
-      "context.objects" = defaultConf."context.objects" ++ [
-        {
-          name = "libpipewire-module-loopback";
-          args = {
-            "audio.position" = [ "FL" "FR" ];
-            "capture.props" = {
-              "media.class" = "Audio/Sink";
-              "node.name" = "my_sink";
-              "node.description" = "my-sink";
-            };
-            "playback.props" = {
-              "node.name" = "my_sink";
-              "node.description" = "my-sink";
-              "node.target" = "my-default-sink";
-            };
-          };
-        }
-      ];
-    };
 
     # If you want to use JACK applications, uncomment this
     #jack.enable = true;
@@ -332,10 +285,10 @@
   # Enable the OpenSSH daemon.
   services.openssh = {
     enable = true;
-    forwardX11 = true; # forward graphical interfaces through SSH
-    #settings = { # wasn't even working..?
-    permitRootLogin = "yes"; # to let surface and Laptop connect to builds for the surface (https://github.com/NixOS/nixpkgs/issues/20718)
-    #};
+    settings = {
+      X11Forwarding = true; # forward graphical interfaces through SSH
+      PermitRootLogin = "yes"; # to let surface and Laptop connect to builds for the surface (https://github.com/NixOS/nixpkgs/issues/20718)
+    };
   };
   # # Backups!
   # services.restic.backups = {
@@ -581,9 +534,9 @@
       # https://forum.vivaldi.net/topic/62354/hardware-accelerated-video-encode/20 # in chrome its enabled by default, why not vivaldi
       # commandLineArgs = "--use-gl=desktop --enable-features=VaapiVideoDecoder --disable-features=UseOzonePlatform" ;  # wtf doesnt work?
     };
-    #permittedInsecurePackages = [
-    #    "openjdk-18+36"
-    #  ];
+    permittedInsecurePackages = [
+        "openssl-1.1.1u" # Needed for now in 23.05
+    ];
   };
 
   # OVERLAYS
