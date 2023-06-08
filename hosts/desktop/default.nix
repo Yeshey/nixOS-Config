@@ -59,7 +59,7 @@ imports = [
   };
 
   # For the VM
-  #boot.kernelPackages = pkgs.linuxPackages_5_10; # needed for this linuxPackages_5_19
+  boot.kernelPackages = pkgs.linuxPackages_5_15; # needed for this linuxPackages_5_19
   hardware.nvidia = {
     vgpu = {
       enable = true; # Install NVIDIA KVM vGPU + GRID driver

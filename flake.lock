@@ -24,15 +24,15 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1685776946,
-        "narHash": "sha256-twXuHcdT2CnuYaXB2V+aM3kvS6JE3CI6Xzm67itpcyA=",
-        "owner": "itstarsun",
+        "lastModified": 1686248613,
+        "narHash": "sha256-Pu91fayrFQijLZXoj/rbbrz1ntuOWpEvCd6irP9Mc4Y=",
+        "owner": "Yeshey",
         "repo": "frida-nix",
-        "rev": "cfdc7d6cfdbd03f91d0dfa9f0a87a69267ad01e8",
+        "rev": "633e638a84a3076a8d3fe9feaba8bedd32c5cfe8",
         "type": "github"
       },
       "original": {
-        "owner": "itstarsun",
+        "owner": "Yeshey",
         "repo": "frida-nix",
         "type": "github"
       }
@@ -74,28 +74,32 @@
         "frida": "frida"
       },
       "locked": {
-        "lastModified": 1686071164,
-        "narHash": "sha256-4UsaNT2DMvGtnvb3dpOlpktoeJ6JPtspV74rv89lVt8=",
-        "path": "/mnt/DataDisk/PersonalFiles/2023/Projects/Programming/nixos-nvidia-vgpu_nixOS22.11/",
-        "type": "path"
+        "lastModified": 1686252735,
+        "narHash": "sha256-CW2AnaOAk2zPo9dt4pz4qLabuk4e/axRvE9cpHMDSp4=",
+        "owner": "Yeshey",
+        "repo": "nixos-nvidia-vgpu",
+        "rev": "75eb47ac11921a62a5d0bbd7d189816ec20155a4",
+        "type": "github"
       },
       "original": {
-        "path": "/mnt/DataDisk/PersonalFiles/2023/Projects/Programming/nixos-nvidia-vgpu_nixOS22.11/",
-        "type": "path"
+        "owner": "Yeshey",
+        "ref": "master",
+        "repo": "nixos-nvidia-vgpu",
+        "type": "github"
       }
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1685655444,
-        "narHash": "sha256-6EujQNAeaUkWvpEZZcVF8qSfQrNVWFNNGbUJxv/A5a8=",
-        "owner": "NixOS",
+        "lastModified": 1686059680,
+        "narHash": "sha256-sp0WlCIeVczzB0G8f8iyRg3IYW7KG31mI66z7HIZwrI=",
+        "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "e635192892f5abbc2289eaac3a73cdb249abaefd",
+        "rev": "a558f7ac29f50c4b937fb5c102f587678ae1c9fb",
         "type": "github"
       },
       "original": {
-        "owner": "NixOS",
-        "ref": "nixos-unstable",
+        "owner": "nixos",
+        "ref": "nixos-23.05",
         "repo": "nixpkgs",
         "type": "github"
       }
