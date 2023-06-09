@@ -405,11 +405,11 @@
       dataDir = "/home/yeshey/Documents";    # Default folder for new synced folders
       configDir = "/home/yeshey/Documents/.config/syncthing";   # Folder for Syncthing's settings and keys
       devices = {
-        "nixOS-Laptop" = { id = "CAFH4IM-77ESFU5-26XFLN5-SVVMZ5F-G56DPXU-4X6AZAJ-E4HPZQ7-AJLQMQO"; };
+        "nixOS-Laptop" = { id = "DJEP7AL-WLBELBK-TISRAC6-BS6PEE2-X5LIAVZ-TLMDRUL-CC4SP2Q-TEV5JAA"; };
         "manjaro-Laptop" = { id = "HWPEE67-I7DPOPG-H3A3SDX-5HFJK5W-33OIOUO-S6TD5E7-52OAO3B-OFAUAAF"; };
         "windows-Laptop" = { id = "SST7QBM-2SKF4WK-F4RUAA2-ICQ7NBB-LDI3I33-O3DEZZJ-TVXZ3DB-M7IYTAQ"; };
         "nixOS-Surface" = { id = "7MRGXWS-QWTEGDF-YEIOM3M-5DM627F-DSYTRN3-JUECBF4-6A4Z26Y-PQVAUAC"; };
-        "nixOS-VM" = { id = "MZ4I7JN-XS5QKHQ-PDOQ73T-3SDTOKL-HNEO7KP-WSOSPCQ-7KKLYB6-ZNGCOAL"; };
+        "nixOS-VM" = { id = "GNY2ZH4-Y7W67RF-YXAB7KP-6ZYYAVB-OO2RB4I-UXM2J4X-UNLJGEL-77BHWQY"; };
         "windows-Surface" = { id = "4L2C6IN-PG25JP6-46WCN2B-EKFAHPR-3FE3B2F-JCXRQ5T-MO5PDAA-JWU2IA7"; };
         "android-A70Phone" = { id = "H6ETBYH-DGJCL3H-UUI7GJK-EK6WI5I-UFGTVZF-W6HKUPN-I5MOXCL-PDP4BAS"; };
       };
