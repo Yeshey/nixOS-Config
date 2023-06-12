@@ -27,6 +27,8 @@
 {
 imports = [
   (import ./hardware-configuration.nix)
+
+  (import ./nixFiles/dontStarveTogetherServer.nix)
   (import ./nixFiles/pci-passthrough.nix)
   (import (builtins.fetchurl{
         url = "https://github.com/NixOS/nixpkgs/raw/63c34abfb33b8c579631df6b5ca00c0430a395df/nixos/modules/programs/looking-glass.nix";
@@ -83,7 +85,7 @@ imports = [
     5357 # wsdd
   ];
   networking.firewall.allowedUDPPorts = [
-    3702 # wsdd
+    3702 # wsdd # FOR SAMBA FOLDERS FOR VM
   ];
   services.samba = {
     enable = true;
@@ -236,7 +238,7 @@ imports = [
       #  passphrase = "secret";
       #};
       compression = "auto,lzma";
-      startAt = "weekly"; # weekly # *:0/9 every 9 minutes # daily
+      startAt = "hourly"; # "weekly"; # daily # *:0/9 every 9 minutes # daily
     };
   };
 
