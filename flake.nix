@@ -13,7 +13,8 @@
     #};
     nixos-nvidia-vgpu.url = "github:Yeshey/nixos-nvidia-vgpu/master";
 
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    # Specific commit because microsoft Surface keeps breaking. 0fbf27af51a7c9bc68a168fdcd63513c4f100b15 # de3ec80522011e938a55c3964d9e1f8826215796
+    nixos-hardware.url = "https://github.com/NixOS/nixos-hardware/archive/30066d1886a111a917f82154ac90167b0042b29d.tar.gz"; # "github:NixOS/nixos-hardware/master";
 
     home-manager = {
       url = "https://github.com/nix-community/home-manager/archive/release-23.05.tar.gz";
