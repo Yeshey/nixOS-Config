@@ -55,13 +55,18 @@
     },
     "nixos-hardware": {
       "locked": {
-        "narHash": "sha256-wmaD6jHVq8vCGvO56ADmf6zk5i61VNI8O78CGY8A5Yw=",
-        "type": "tarball",
-        "url": "https://github.com/NixOS/nixos-hardware/archive/30066d1886a111a917f82154ac90167b0042b29d.tar.gz"
+        "lastModified": 1676886000,
+        "narHash": "sha256-t7nxEvJb4ISR7u54YADZiZi9EaKHJKbXQjyyf00Q8TA=",
+        "owner": "NixOS",
+        "repo": "nixos-hardware",
+        "rev": "26c9dbdc92abc370510be78889942f38a272d705",
+        "type": "github"
       },
       "original": {
-        "type": "tarball",
-        "url": "https://github.com/NixOS/nixos-hardware/archive/30066d1886a111a917f82154ac90167b0042b29d.tar.gz"
+        "owner": "NixOS",
+        "ref": "master",
+        "repo": "nixos-hardware",
+        "type": "github"
       }
     },
     "nixos-nvidia-vgpu": {

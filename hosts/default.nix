@@ -33,7 +33,7 @@
     modules = [                                         # Modules that are used.
       ./surface
       ./configuration.nix
-      nixos-hardware.nixosModules.microsoft-surface-common # microsoft-surface-pro-intel
+      nixos-hardware.nixosModules.microsoft-surface-pro-intel # Not broken anymore
 
       home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
         home-manager.useGlobalPkgs = true;
