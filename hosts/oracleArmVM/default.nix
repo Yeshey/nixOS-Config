@@ -1,27 +1,10 @@
-#
-#  Specific system configuration settings for desktop
-#
-#  flake.nix
-#   ├─ ./hosts
-#   │   └─ ./desktop
-#   │        ├─ default.nix *
-#   │        └─ hardware-configuration.nix
-#   └─ ./modules
-#       └─ ./desktop
-#           └─ ./qemu
-#               └─ default.nix
-#
-# Surface is underpowered, use this command in the more powerfull machine to build:
-# sudo nixos-rebuild --flake .#surface --target-host root@192.168.1.115 --build-host localhost switch
-#
-# Or use this one in the surface:
-# sudo nixos-rebuild --flake .#surface --build-host root@192.168.1.102 switch
-
 { config, pkgs, user, location, lib, dataStoragePath, ... }:
 
 {
-  imports =                                     # For now, if applying to other system, swap files
-    [(import ./hardware-configuration.nix)];    # Current system hardware config @ /etc/nixos/hardware-configuration.nix
+  imports = [                                     # For now, if applying to other system, swap files
+    (import ./configFiles/nextcloud.nix)
+    (import ./hardware-configuration.nix)
+  ];    # Current system hardware config @ /etc/nixos/hardware-configuration.nix
   
   time.timeZone = "Europe/Berlin";
 
@@ -44,5 +27,11 @@
   environment.systemPackages = with pkgs; [
     
   ];
+
+ #    ____             _               ____      ___                                 
+  #   / __/__ _____  __(_)______ ___   / __/___  / _ \_______  ___ ________ ___ _  ___
+  #  _\ \/ -_) __/ |/ / / __/ -_|_-<   > _/_ _/ / ___/ __/ _ \/ _ `/ __/ _ `/  ' \(_-<
+  # /___/\__/_/  |___/_/\__/\__/___/  |_____/  /_/  /_/  \___/\_, /_/  \_,_/_/_/_/___/
+  #                                                          /___/                                                               
 
 }
