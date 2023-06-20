@@ -88,7 +88,7 @@
         home-manager.useUserPackages = true;
         home-manager.extraSpecialArgs = { inherit user location host dataStoragePath; };  # Pass flake variable
         home-manager.users.${user} = {
-          imports = [(import ./baseHome.nix)] ++ [(import ./configFiles/homeApps.nix)] ++ [(import ./oracleArmVM/home.nix)];
+          imports = [(import ./baseHome.nix)] ++ [(import ./oracleArmVM/home.nix)];
         };
       }
     ];
