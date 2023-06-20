@@ -14,7 +14,7 @@
   imports = [
     (import ./configFiles/tmp.nix)
     (import ./configFiles/syncthing.nix)
-    (import ./configFiles/non-serverConfiguration.nix)
+    # (import ./configFiles/non-serverConfiguration.nix)
   ];
 
   #     ___            __  (ASCII art: https://patorjk.com/software/taag/#p=display&f=Small%20Slant&t=Boot)
