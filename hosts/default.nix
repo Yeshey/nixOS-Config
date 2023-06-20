@@ -9,8 +9,8 @@
     inherit system;
     specialArgs = { inherit user location inputs host dataStoragePath; };             # Pass flake variable
     modules = [                                         # Modules that are used.
-      ./desktop
-      ./configuration.nix
+      ./laptop
+      ./baseConfiguration.nix
       nixos-nvidia-vgpu.nixosModules.nvidia-vgpu
 
       home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
@@ -18,7 +18,7 @@
         home-manager.useUserPackages = true;
         home-manager.extraSpecialArgs = { inherit user location host dataStoragePath; };  # Pass flake variable
         home-manager.users.${user} = {
-          imports = [(import ./home.nix)] ++ [(import ./desktop/home.nix)];
+          imports = [(import ./home.nix)] ++ [(import ./laptop/home.nix)];
         };
       }
     ];
@@ -32,7 +32,7 @@
     specialArgs = { inherit user location inputs host dataStoragePath; };             # Pass flake variable
     modules = [                                         # Modules that are used.
       ./surface
-      ./configuration.nix
+      ./baseConfiguration.nix
       nixos-hardware.nixosModules.microsoft-surface-pro-intel # Not broken anymore
 
       home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
@@ -55,7 +55,7 @@
     specialArgs = { inherit user location inputs host dataStoragePath; };             # Pass flake variable
     modules = [                                         # Modules that are used.
       ./vm
-      ./configuration.nix
+      ./baseConfiguration.nix
 
       home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
         home-manager.useGlobalPkgs = true;
@@ -74,7 +74,7 @@
     specialArgs = { inherit user inputs; };
     modules = [
       ./vm
-      ./configuration.nix
+      ./baseConfiguration.nix
 
       home-manager.nixosModules.home-manager {
         home-manager.useGlobalPkgs = true;

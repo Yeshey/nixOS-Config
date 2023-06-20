@@ -28,8 +28,8 @@
 imports = [
   (import ./hardware-configuration.nix)
 
-  (import ./nixFiles/dontStarveTogetherServer.nix)
-  (import ./nixFiles/pci-passthrough.nix)
+  (import ./configFiles/dontStarveTogetherServer.nix)
+  (import ./configFiles/pci-passthrough.nix)
   (import (builtins.fetchurl{
         url = "https://github.com/NixOS/nixpkgs/raw/63c34abfb33b8c579631df6b5ca00c0430a395df/nixos/modules/programs/looking-glass.nix";
         sha256 = "sha256:1lfrqix8kxfawnlrirq059w1hk3kcfq4p8g6kal3kbsczw90rhki";
@@ -83,9 +83,11 @@ imports = [
   services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
   networking.firewall.allowedTCPPorts = [
     5357 # wsdd
+    25565 # For Minecraft
   ];
   networking.firewall.allowedUDPPorts = [
     3702 # wsdd # FOR SAMBA FOLDERS FOR VM
+    25565 # For Minecraft
   ];
   services.samba = {
     enable = true;
@@ -136,7 +138,6 @@ imports = [
       };
     };
   };
-  networking.firewall.allowPing = true;
   services.samba.openFirewall = true;
   # However, for this samba share to work you will need to run `sudo smbpasswd -a <yourusername>` after building your configuration!
   # In windows you can access them in file explorer with `\\192.168.1.xxx` or whatever your local IP is
@@ -239,7 +240,7 @@ imports = [
         within = "1d"; # Keep all archives from the last day
         daily = 2; # keep the latest backup on each day, up to 7 most recent days with backups (days without backups do not count)
         weekly = 2; 
-        monthly = 2;
+        monthly = 6;
         yearly = 3;
       };
       extraCreateArgs = "--stats";
@@ -248,12 +249,20 @@ imports = [
       #  passphrase = "secret";
       #};
       compression = "auto,lzma";
-      startAt = "hourly"; # "weekly"; # daily # *:0/9 every 9 minutes # daily
+      startAt = "*-*-1/3"; # every 3 days # "hourly"; # weekly # daily # *:0/9 every 9 minutes
     };
   };
 
   networking.hostName = "nixOS-Laptop"; # Define your hostname.
   # hardware.enableAllFirmware = true; #?
+
+  # Binary Cache for Haskell.nix
+  #nix.settings.trusted-public-keys = [
+  #  "hydra.iohk.io:f/Ea+s+dFdN+3Y/G+FDgSq+a5NEWhJGzdjvKNGv0/EQ="
+  #];
+  #nix.settings.substituters = [
+  #  "https://cache.iog.io"
+  #];
 
   # Make a virtual screen: (as per these instructions: https://github.com/Yeshey/TechNotes/blob/main/techNotes.md#117-use-laptop-as-a-second-monitor)
   /*systemd.services.virtual-display = {
@@ -365,7 +374,7 @@ imports = [
 
   # Check configuration: onedrive --display-config
   # config file documentation: https://github.com/abraunegg/onedrive/blob/master/docs/USAGE.md#configuration (get the default config file if you don't have any: wget https://raw.githubusercontent.com/abraunegg/onedrive/master/config -O ~/.config/onedrive/config)
-  # change config file here: /home/yeshey/.config/onedrive-0/config
+  # change config file here: /home/yeshey/.config/onedrive-0/config (and /home/yeshey/.config/onedrive/config?)
   # nixOS documentation: https://nixos.wiki/wiki/OneDrive
   services.onedrive= {
     enable = true;
