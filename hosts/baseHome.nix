@@ -74,8 +74,8 @@ in
       home-manager.enable = true;
       
       vscode = {
-        enable = false;
-         package = pkgs.vscodium;
+        enable = true;
+        package = pkgs.vscodium;
         #haskell = { ?
           #enable = true;
           #hie = {
