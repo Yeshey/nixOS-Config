@@ -23,8 +23,8 @@ in
   programs = {
     # general terminal shell config for all users
     zsh = {
-      ohMyZsh = {
-        theme = "robbyrussell"; # robbyrussell # agnoster # frisk
+      oh-my-zsh = {
+        theme = lib.mkForce "robbyrussell"; # robbyrussell # agnoster # frisk
       };
     };
   };
