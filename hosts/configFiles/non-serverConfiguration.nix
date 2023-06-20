@@ -101,4 +101,78 @@
     ];
   };
 
+  #    ____             _               ____      ___                                 
+  #   / __/__ _____  __(_)______ ___   / __/___  / _ \_______  ___ ________ ___ _  ___
+  #  _\ \/ -_) __/ |/ / / __/ -_|_-<   > _/_ _/ / ___/ __/ _ \/ _ `/ __/ _ `/  ' \(_-<
+  # /___/\__/_/  |___/_/\__/\__/___/  |_____/  /_/  /_/  \___/\_, /_/  \_,_/_/_/_/___/
+  #                                                          /___/                      
+
+  programs.adb.enable = true; # for android-studio and connecting phones
+
+  # for VMs
+  virtualisation.libvirtd.enable = true;
+  virtualisation.spiceUSBRedirection.enable = true; # to enable USB rederection in virt-manager (https://github.com/NixOS/nixpkgs/issues/106594)
+  #virtualisation.virtualbox.host.enable = true;
+  #virtualisation.virtualbox.host.enableExtensionPack = true;
+  #virtualisation.virtualbox.host.enableHardening = false;
+  
+  # More apps
+  services.flatpak.enable = true;
+  xdg.portal.enable = true; # needed for flatpaks
+
+  #    ___           __                   
+  #   / _ \___ _____/ /_____ ____ ____ ___
+  #  / ___/ _ `/ __/  '_/ _ `/ _ `/ -_|_-<
+  # /_/   \_,_/\__/_/\_\\_,_/\_, /\__/___/
+  #                         /___/         
+
+  # OVERLAYS
+  nixpkgs.overlays = [                          # This overlay will pull the latest version of Discord (but I guess it doesnt work)
+    #(self: super: {
+    #  discord = super.discord.overrideAttrs (
+    #    _: { src = builtins.fetchTarball {
+    #      url = "https://discord.com/api/download?platform=linux&format=tar.gz"; 
+    #      sha256 = "sha256:1vw602k7dzqm2zxic88jaw9pbg5w436x9h2y74f7jmn3wzdg5bm3";
+    #    };}
+    #  );
+    #})
+
+    # Current exodus in nixpkgs not working, getting latest (and actually works!)
+    (self: super: {
+      exodus = super.exodus.overrideAttrs (
+        _: { 
+          src = builtins.fetchurl {
+            url = "https://downloads.exodus.com/releases/exodus-linux-x64-22.11.13.zip";
+            sha256 = "sha256:14xav91liz4xrlcwwin94gfh6w1iyq9z8dvbz34l017m7vqhn2nl";
+          };
+          unpackCmd = ''
+              ${pkgs.unzip}/bin/unzip "$src" -x "Exodus*/lib*so"
+          '';
+        }
+      );
+    })
+  ];
+
+  environment.systemPackages = with pkgs; [
+
+    ffmpeg
+    wine
+    gparted
+
+    # Development
+    jdk17 # java (alias for openJDK) 17.0.4.1
+    #jdk18
+    python3
+    # ghc # Haskell
+    # haskell-language-server # Haskell    ?
+
+  ];
+
+  # App things
+  # for github-desktop to work (https://discourse.nixos.org/t/unlocking-gnome-keyring-automatically-upon-login-with-kde-sddm/6966)
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.sddm.enableGnomeKeyring = true;
+  # for steam to work
+  hardware.opengl.driSupport32Bit = true;
+
 }

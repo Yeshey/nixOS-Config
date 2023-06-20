@@ -140,8 +140,6 @@ imports = [
   #nixpkgs.config.pulseaudio = true;
   #hardware.pulseaudio.extraConfig = "load-module module-combine-sink";
 
-  networking.hostName = "nixOS-VM"; # Define your hostname.
-
   #https://discourse.nixos.org/t/unknown-network-problem/10669/9
   networking.useDHCP = false;
   networking.interfaces.eno1.useDHCP = true;

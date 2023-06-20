@@ -94,6 +94,7 @@
   console.keyMap = "pt-latin1";
 
   # Enable networking
+  networking.hostName = "nixOS-${host}"; # Define your hostname.
   networking.networkmanager.enable = true;
   networking.resolvconf.dnsExtensionMechanism = false; # fixes internet connectivity problems with some sites (https://discourse.nixos.org/t/domain-name-resolve-problem/885/2)nvidia
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -164,19 +165,6 @@
   #  _\ \/ -_) __/ |/ / / __/ -_|_-<   > _/_ _/ / ___/ __/ _ \/ _ `/ __/ _ `/  ' \(_-<
   # /___/\__/_/  |___/_/\__/\__/___/  |_____/  /_/  /_/  \___/\_, /_/  \_,_/_/_/_/___/
   #                                                          /___/                                                                   
-
-  programs.adb.enable = true; # for android-studio and connecting phones
-
-  # for VMs
-  virtualisation.libvirtd.enable = true;
-  virtualisation.spiceUSBRedirection.enable = true; # to enable USB rederection in virt-manager (https://github.com/NixOS/nixpkgs/issues/106594)
-  #virtualisation.virtualbox.host.enable = true;
-  #virtualisation.virtualbox.host.enableExtensionPack = true;
-  #virtualisation.virtualbox.host.enableHardening = false;
-  
-  # More apps
-  services.flatpak.enable = true;
-  xdg.portal.enable = true; # needed for flatpaks
 
   programs = {
     #firejail.enable = true; # so you can start apps in a sandbox?
@@ -273,106 +261,20 @@
     ];
   };
 
-  # OVERLAYS
-  nixpkgs.overlays = [                          # This overlay will pull the latest version of Discord (but I guess it doesnt work)
-    #(self: super: {
-    #  discord = super.discord.overrideAttrs (
-    #    _: { src = builtins.fetchTarball {
-    #      url = "https://discord.com/api/download?platform=linux&format=tar.gz"; 
-    #      sha256 = "sha256:1vw602k7dzqm2zxic88jaw9pbg5w436x9h2y74f7jmn3wzdg5bm3";
-    #    };}
-    #  );
-    #})
-
-    # Current exodus in nixpkgs not working, getting latest (and actually works!)
-    (self: super: {
-      exodus = super.exodus.overrideAttrs (
-        _: { 
-          src = builtins.fetchurl {
-            url = "https://downloads.exodus.com/releases/exodus-linux-x64-22.11.13.zip";
-            sha256 = "sha256:14xav91liz4xrlcwwin94gfh6w1iyq9z8dvbz34l017m7vqhn2nl";
-          };
-          unpackCmd = ''
-              ${pkgs.unzip}/bin/unzip "$src" -x "Exodus*/lib*so"
-          '';
-        }
-      );
-    })
-  ];
-
   environment.systemPackages = with pkgs; [
-    #Follow the ask for help you did: (https://discourse.nixos.org/t/compiling-and-adding-program-not-in-nixpkgs-to-pc-compiling-error/25239/3)
-    (callPackage ./configFiles/playit-cli.nix {})
-    
     vim # The Nano editor is installed by default.
-    htop
     neovim
+    htop
     tmux
     git
     wget
     tree
     unzip
     unrar # also to extract .rar with ark in KDE # unrar x Lab5.rar
-
-
-    # Development
-    jdk17 # java (alias for openJDK) 17.0.4.1
-    #jdk18
-    python3
-    # ghc # Haskell
-    # haskell-language-server # Haskell    ?
-    
     bat
     btop
-    ffmpeg
     tldr
-    #wine64
-    wine
-    vlc
-    gparted
-    anydesk
-    pdfarranger
-    # helvum # To control pipewire Not Working?
-    virt-manager # virtual machines
-    virt-viewer # needed to choose share folders with windows VM (guide and video: https://www.guyrutenberg.com/2018/10/25/sharing-a-folder-a-windows-guest-under-virt-manager/ and https://www.youtube.com/watch?v=Ow3gVbkWj-c)
-    spice-gtk # for virtual machines (to connect usbs and everything else)
-    linux-wifi-hotspot # hotspot
-    scrcpy # screen cast android phone
-    #mdevctl
-
-    # tmp
-    # texlive.combined.scheme-full # LaTeX
-    ocrmypdf # ocrmypdf -l eng+por combined.pdf ok.pdf
-
-    # for amov, flutter need this
-    #flutter # Dart, for amov # Make it detect android studio: https://github.com/flutter/flutter/issues/18970#issuecomment-762399686
-    # also do this: https://stackoverflow.com/questions/60475481/flutter-doctor-error-android-sdkmanager-tool-not-found-windows
-    #clang
-    #cmake
-    #ninja
-    #pkg-config
-
-    # gnome.seahorse # to manage the gnome keyring
-
-    # Games
-    
-    # Overlayed
-    discord
-    exodus
   ];
-
-  # for virtual machines (to connect usbs and everything else)
-  # Not working rn (https://discourse.nixos.org/t/having-an-issue-with-virt-manager-not-allowing-usb-passthrough/6272/3)
-  #security.wrappers.spice-client-glib-usb-acl-helper.source = "${pkgs.spice-gtk}/bin/spice-client-glib-usb-acl-helper";
-  #security.wrappers.spice-client-glib-usb-acl-helper.owner = "${user}";
-  #security.wrappers.spice-client-glib-usb-acl-helper.group = "libvirtd";
-
-  # App things
-  # for github-desktop to work (https://discourse.nixos.org/t/unlocking-gnome-keyring-automatically-upon-login-with-kde-sddm/6966)
-  services.gnome.gnome-keyring.enable = true;
-  security.pam.services.sddm.enableGnomeKeyring = true;
-  # for steam to work
-  hardware.opengl.driSupport32Bit = true;
 
   # Some programs need SUID wrappers, can be configured further or are started in user sessions.
 
