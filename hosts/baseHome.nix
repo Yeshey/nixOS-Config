@@ -207,6 +207,15 @@ in
 
     };
 
+  home = {
+    packages = with pkgs; [
+      # SHELL
+      oh-my-zsh
+      zsh
+      thefuck
+      #autojump
+    ];
+  };
     
     # My home files 
     home.file = /* let
