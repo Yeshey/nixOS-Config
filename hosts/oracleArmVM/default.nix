@@ -26,6 +26,9 @@
   time.timeZone = "Europe/Berlin";
 
   # swap in btrfs:
+  # ...
+
+  # allowUnsupportedSystem = true;
 
   #     ___            __ 
   #    / _ )___  ___  / /_
