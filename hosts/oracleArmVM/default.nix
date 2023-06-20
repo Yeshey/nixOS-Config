@@ -1,10 +1,11 @@
 { config, pkgs, user, location, lib, dataStoragePath, ... }:
 
 {
-  imports = [                                     # For now, if applying to other system, swap files
+  imports = [
     (import ./configFiles/nextcloud.nix)
+    (import ./configFiles/minecraft.nix)
     (import ./hardware-configuration.nix)
-  ];    # Current system hardware config @ /etc/nixos/hardware-configuration.nix
+  ];
   
   time.timeZone = "Europe/Berlin";
 
