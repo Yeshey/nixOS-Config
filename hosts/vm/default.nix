@@ -140,7 +140,6 @@ imports = [
   #nixpkgs.config.pulseaudio = true;
   #hardware.pulseaudio.extraConfig = "load-module module-combine-sink";
 
-  # networking.wireless.enable = true;
   networking.hostName = "nixOS-VM"; # Define your hostname.
 
   #https://discourse.nixos.org/t/unknown-network-problem/10669/9

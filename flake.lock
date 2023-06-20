@@ -1,34 +1,15 @@
 {
   "nodes": {
-    "flake-utils": {
-      "inputs": {
-        "systems": "systems"
-      },
-      "locked": {
-        "lastModified": 1685518550,
-        "narHash": "sha256-o2d0KcvaXzTrPRIo0kOLV0/QXHhDQ5DTi+OxcjO8xqY=",
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "rev": "a1720a10a6cfe8234c0e93907ffe81be440f4cef",
-        "type": "github"
-      },
-      "original": {
-        "owner": "numtide",
-        "repo": "flake-utils",
-        "type": "github"
-      }
-    },
     "frida": {
       "inputs": {
-        "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1686248613,
-        "narHash": "sha256-Pu91fayrFQijLZXoj/rbbrz1ntuOWpEvCd6irP9Mc4Y=",
+        "lastModified": 1686756088,
+        "narHash": "sha256-LmWHqJbcYlYLotc/DZsXXjlEGZHF5+IEudFNEjz1vE8=",
         "owner": "Yeshey",
         "repo": "frida-nix",
-        "rev": "633e638a84a3076a8d3fe9feaba8bedd32c5cfe8",
+        "rev": "935227e6525b493adc1bbf58d2869513bf2f5792",
         "type": "github"
       },
       "original": {
@@ -44,7 +25,7 @@
         ]
       },
       "locked": {
-        "narHash": "sha256-Tob4CMOVHue0D3RzguDBCtUmX5ji2PsdbQDbIOIKvsc=",
+        "narHash": "sha256-CmG/ZdswJrWM0CMgJiVyWfO6LqaI4SKEAx9IrnYDrpI=",
         "type": "tarball",
         "url": "https://github.com/nix-community/home-manager/archive/release-23.05.tar.gz"
       },
@@ -74,11 +55,11 @@
         "frida": "frida"
       },
       "locked": {
-        "lastModified": 1686252735,
-        "narHash": "sha256-CW2AnaOAk2zPo9dt4pz4qLabuk4e/axRvE9cpHMDSp4=",
+        "lastModified": 1686685699,
+        "narHash": "sha256-oQS2wy0ksZdKUNBJR+Pl0+0gfMO2/WoSY3mQ0pzcOG4=",
         "owner": "Yeshey",
         "repo": "nixos-nvidia-vgpu",
-        "rev": "75eb47ac11921a62a5d0bbd7d189816ec20155a4",
+        "rev": "eb2a98704c3c7c54c61f3efea5fff614b44277fe",
         "type": "github"
       },
       "original": {
@@ -90,11 +71,11 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1686059680,
-        "narHash": "sha256-sp0WlCIeVczzB0G8f8iyRg3IYW7KG31mI66z7HIZwrI=",
+        "lastModified": 1686736559,
+        "narHash": "sha256-YyUSVoOKIDAscTx7IZhF9x3qgZ9dPNF19fKk+4c5irc=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "a558f7ac29f50c4b937fb5c102f587678ae1c9fb",
+        "rev": "ddf4688dc7aeb14e8a3c549cb6aa6337f187a884",
         "type": "github"
       },
       "original": {
@@ -106,11 +87,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1685952468,
-        "narHash": "sha256-YCOr9kttCqoa9IZMjHxX6SlwenTg7FsSmG9TaT76mSE=",
+        "lastModified": 1686513595,
+        "narHash": "sha256-H3JNqj7TEiMx5rd8lRiONvgFZvmf3kmwHI2umDdqgFY=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "70f7275b32f49bc67ae3532b758b80cb6c27f98a",
+        "rev": "bb8b5735d6f7e06b9ddd27de115b0600c1ffbdb4",
         "type": "github"
       },
       "original": {
@@ -126,21 +107,6 @@
         "nixos-hardware": "nixos-hardware",
         "nixos-nvidia-vgpu": "nixos-nvidia-vgpu",
         "nixpkgs": "nixpkgs_2"
-      }
-    },
-    "systems": {
-      "locked": {
-        "lastModified": 1681028828,
-        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
-        "owner": "nix-systems",
-        "repo": "default",
-        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nix-systems",
-        "repo": "default",
-        "type": "github"
       }
     }
   },
