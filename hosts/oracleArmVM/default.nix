@@ -39,7 +39,17 @@
   services.nginx.virtualHosts."130.61.219.132" = {
       #addSSL = true;
       #enableACME = true;
-      #root = "/var/www/myhost.org";
+      root = builtins.toFile "index.html" ''
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Example</title>
+    </head>
+    <body>
+        <p>This is an example of a simple HTML page with one paragraph.</p>
+    </body>
+</html>
+          '';
   };
   security.acme = {
     acceptTerms = true;
