@@ -20,6 +20,15 @@ in
     ];
   };
 
+  programs = {
+    # general terminal shell config for all users
+    zsh = {
+      ohMyZsh = {
+        theme = "robbyrussell"; # robbyrussell # agnoster # frisk
+      };
+    };
+  };
+
     # Make some folders not sync please
     home.file = {
       "${shortenedPath}/PersonalFiles/2023/.stignore".source = builtins.toFile ".stignore" ''
