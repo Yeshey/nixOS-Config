@@ -61,12 +61,6 @@
       # Overlayed
       discord
       exodus
-
-      # SHELL
-      oh-my-zsh
-      zsh
-      thefuck
-      #autojump
     ];
   };
 }
