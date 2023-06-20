@@ -23,12 +23,15 @@
   imports =                                     # For now, if applying to other system, swap files
     [(import ./hardware-configuration.nix)];    # Current system hardware config @ /etc/nixos/hardware-configuration.nix
   
-  time.timeZone = "Europe/Berlin";
+  # time.timeZone = "Europe/Berlin";
 
   # swap in btrfs:
   # ...
 
-  allowUnsupportedSystem = true;
+  nixpkgs.config = {
+  
+  	allowUnsupportedSystem = true;
+  };
 
   #     ___            __ 
   #    / _ )___  ___  / /_
