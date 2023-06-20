@@ -11,6 +11,7 @@
     modules = [                                         # Modules that are used.
       ./laptop
       ./baseConfiguration.nix
+      ./configFiles/non-serverConfiguration.nix
       nixos-nvidia-vgpu.nixosModules.nvidia-vgpu
 
       home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
@@ -18,7 +19,7 @@
         home-manager.useUserPackages = true;
         home-manager.extraSpecialArgs = { inherit user location host dataStoragePath; };  # Pass flake variable
         home-manager.users.${user} = {
-          imports = [(import ./home.nix)] ++ [(import ./laptop/home.nix)];
+          imports = [(import ./baseHome.nix)] ++ [(import ./configFiles/homeApps.nix)] ++ [(import ./laptop/home.nix)];
         };
       }
     ];
@@ -33,6 +34,7 @@
     modules = [                                         # Modules that are used.
       ./surface
       ./baseConfiguration.nix
+      ./configFiles/non-serverConfiguration.nix
       nixos-hardware.nixosModules.microsoft-surface-pro-intel # Not broken anymore
 
       home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
@@ -40,7 +42,7 @@
         home-manager.useUserPackages = true;
         home-manager.extraSpecialArgs = { inherit user location host dataStoragePath; };  # Pass flake variable
         home-manager.users.${user} = {
-          imports = [(import ./home.nix)] ++ [(import ./surface/home.nix)];
+          imports = [(import ./baseHome.nix)] ++ [(import ./configFiles/homeApps.nix)] ++ [(import ./surface/home.nix)];
         };
       }
     ];
@@ -56,17 +58,42 @@
     modules = [                                         # Modules that are used.
       ./vm
       ./baseConfiguration.nix
+      ./configFiles/non-serverConfiguration.nix
 
       home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
         home-manager.extraSpecialArgs = { inherit user location host dataStoragePath; };  # Pass flake variable
         home-manager.users.${user} = {
-          imports = [(import ./home.nix)] ++ [(import ./vm/home.nix)];
+          imports = [(import ./baseHome.nix)] ++ [(import ./configFiles/homeApps.nix)] ++ [(import ./vm/home.nix)];
         };
       }
     ];
   };
+
+  arm-oracle = let 
+    host = "arm-oracle";
+    dataStoragePath = "~/Documents";
+  in
+   lib.nixosSystem {                           # Desktop profile
+    inherit system;
+    specialArgs = { inherit user location inputs host dataStoragePath; };             # Pass flake variable
+    modules = [                                         # Modules that are used.
+      ./oracleArmVM
+      ./baseConfiguration.nix
+      # ./configFiles/non-serverConfiguration.nix
+
+      home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+        home-manager.extraSpecialArgs = { inherit user location host dataStoragePath; };  # Pass flake variable
+        home-manager.users.${user} = {
+          imports = [(import ./baseHome.nix)] ++ [(import ./configFiles/homeApps.nix)] ++ [(import ./oracleArmVM/home.nix)];
+        };
+      }
+    ];
+  };
+
 
 /*
   vm = lib.nixosSystem {                               # VM profile

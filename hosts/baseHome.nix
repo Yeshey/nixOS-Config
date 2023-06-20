@@ -64,43 +64,6 @@ in
     home = {
       username = "${user}";
       homeDirectory = "/home/${user}";
-
-      packages = with pkgs; [
-        github-desktop
-        libnotify # so you can use notify-send
-        obs-studio
-        stremio
-        barrier
-        libsForQt5.neochat # plasma client for matrix
-        # etcher #insecure?
-
-        # Browsers
-        vivaldi
-        brave
-        tor-browser-bundle-bin
-
-        # tmp
-        #teams
-        skypeforlinux
-        #staruml # UML diagrams
-        #jetbrains.clion # C++
-        #jetbrains.idea-community # java
-
-        # Games
-        osu-lazer
-        lutris
-        # tetrio-desktop # runs horribly, better on the web
-        prismlauncher # polymc # prismlauncher # for Minecraft
-        heroic
-        minetest
-        the-powder-toy
- 
-        # SHELL
-        oh-my-zsh
-        zsh
-        thefuck
-        #autojump
-      ];
     };
 
     nixpkgs.config.allowUnfree = true;
