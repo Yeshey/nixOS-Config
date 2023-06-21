@@ -35,6 +35,7 @@
   # /___/\__/_/  |___/_/\__/\__/___/  |_____/  /_/  /_/  \___/\_, /_/  \_,_/_/_/_/___/
   #                                                          /___/                                                               
 
+  # Doesn't work
   services.nginx.enable = true;
   services.nginx.virtualHosts."130.61.219.132" = {
       #addSSL = true;
