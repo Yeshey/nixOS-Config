@@ -1,13 +1,16 @@
 { config, pkgs, user, location, lib, dataStoragePath, ... }:
 
 {
+  # Connect to codium-server: (ssh -L 9090:localhost:3000 -t yeshey@130.61.219.132 "sleep 90" &) && xdg-open http://localhost:9090
+  # http://130.61.219.132 - Nextcloud
+
   imports = [
     (import ./hardware-configuration.nix)
 
     (import ./configFiles/nextcloud.nix)
     (import ./configFiles/minecraft.nix)
     (import ./configFiles/openvscode-server.nix)
-    # (import ./configFiles/ngix-server.nix)
+    (import ./configFiles/ngix-server.nix)
   ];
   
   time.timeZone = "Europe/Berlin";
@@ -17,7 +20,7 @@
 
   nixpkgs.config = {
   	allowUnsupportedSystem = true;
-    permittedInsecurePackages = [ # for package openvscode-server
+     permittedInsecurePackages = [ # for package openvscode-server
                     "nodejs-16.20.0"
                   ];
   };
