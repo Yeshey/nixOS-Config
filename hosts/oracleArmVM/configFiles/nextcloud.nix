@@ -5,7 +5,6 @@
         # ...
     ];
 
-/*
     # NextCloud
     services.nextcloud = {
         enable = true;
@@ -16,7 +15,7 @@
         # See here: https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/web-apps/nextcloud.nix#L529
 
         # Use HTTPS for links
-        https = true;
+        # https = true;
         
         # Auto-update Nextcloud Apps
         autoUpdateApps.enable = true;
@@ -26,7 +25,7 @@
         config.adminpassFile = "${pkgs.writeText "adminpass" "test123"}";
     };
 
-    # networking.firewall.enable = false;
+    networking.firewall.enable = false;
     networking.firewall.allowedTCPPorts = [ 80 443 ];
-*/
+
 }

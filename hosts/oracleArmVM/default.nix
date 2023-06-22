@@ -2,9 +2,9 @@
 
 {
   imports = [
-    # (import ./configFiles/nextcloud.nix)
+    (import ./configFiles/nextcloud.nix)
     (import ./configFiles/minecraft.nix)
-    (import ./configFiles/ngix-server.nix)
+    # (import ./configFiles/ngix-server.nix)
     (import ./hardware-configuration.nix)
   ];
   
