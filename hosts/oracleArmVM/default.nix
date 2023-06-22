@@ -40,7 +40,7 @@
   services.nginx.virtualHosts."130.61.219.132" = {
       #addSSL = true;
       #enableACME = true;
-      root = ./ngix-server; 
+      root = ./configFiles/ngix-server; 
       
       /*builtins.toFile "index.html" ''
 <!DOCTYPE html>
