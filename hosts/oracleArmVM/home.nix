@@ -7,7 +7,7 @@ in
 
   home = {                                # Specific packages
     packages = with pkgs; [
-      
+
     ];
   };
 
