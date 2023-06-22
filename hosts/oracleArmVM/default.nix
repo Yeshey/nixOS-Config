@@ -4,6 +4,7 @@
   imports = [
     # (import ./configFiles/nextcloud.nix)
     (import ./configFiles/minecraft.nix)
+    (import ./configFiles/ngix-server.nix)
     (import ./hardware-configuration.nix)
   ];
   
@@ -34,44 +35,5 @@
   #  _\ \/ -_) __/ |/ / / __/ -_|_-<   > _/_ _/ / ___/ __/ _ \/ _ `/ __/ _ `/  ' \(_-<
   # /___/\__/_/  |___/_/\__/\__/___/  |_____/  /_/  /_/  \___/\_, /_/  \_,_/_/_/_/___/
   #                                                          /___/                                                               
-
-  # Doesn't work
-  services.nginx.enable = true;
-  services.nginx.virtualHosts."130.61.219.132" = {
-      #addSSL = true;
-      #enableACME = true;
-      root = ./configFiles/ngix-server; 
-      
-      /*builtins.toFile "index.html" ''
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Example</title>
-    </head>
-    <body>
-        <p>This is an example of a simple HTML page with one paragraph.</p>
-    </body>
-</html>
-          ''; */
-  };
-  security.acme = {
-    acceptTerms = true;
-    defaults.email = "yesheysangpo@gmail.com";
-  };
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
-
-/*
-  services.nginx = {
-    enable = true;
-    recommendedTlsSettings = true;
-    virtualHosts."130.61.219.132" = {
-      enableACME = true;
-      locations."/".proxyPass = "http://localhost:8080";
-    };
-  };
-  security.acme = {
-    acceptTerms = true;
-    defaults.email = "yesheysangpo@gmail.com";
-  }; */
 
 }
