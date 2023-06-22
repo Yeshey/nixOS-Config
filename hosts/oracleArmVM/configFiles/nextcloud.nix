@@ -15,8 +15,10 @@
         # Takes care of somewhat complicated setup
         # See here: https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/web-apps/nextcloud.nix#L529
 
+        enableBrokenCiphersForSSE = false;
+
         # Use HTTPS for links
-        https = true;
+        # https = true;
         
         # Auto-update Nextcloud Apps
         autoUpdateApps.enable = true;
