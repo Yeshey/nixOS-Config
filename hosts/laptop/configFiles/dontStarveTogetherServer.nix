@@ -6,7 +6,7 @@
     dst-server = {
       image = "jamesits/dst-server:latest";
       volumes = [
-        "${dataStoragePath}/PersonalFiles/2023/DoNotStarveTogetherServer:/data:rw"
+        "${dataStoragePath}/PersonalFiles/Servers/DoNotStarveTogetherServer:/data:rw"
       ];
       environment = {
         DST_SERVER_ARCH = "amd64";
