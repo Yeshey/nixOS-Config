@@ -40,7 +40,9 @@
   services.nginx.virtualHosts."130.61.219.132" = {
       #addSSL = true;
       #enableACME = true;
-      root = builtins.toFile "index.html" ''
+      root = ./ngix-server; 
+      
+      /*builtins.toFile "index.html" ''
 <!DOCTYPE html>
 <html>
     <head>
@@ -50,7 +52,7 @@
         <p>This is an example of a simple HTML page with one paragraph.</p>
     </body>
 </html>
-          '';
+          ''; */
   };
   security.acme = {
     acceptTerms = true;

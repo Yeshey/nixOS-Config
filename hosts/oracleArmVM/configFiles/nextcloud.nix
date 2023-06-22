@@ -5,6 +5,7 @@
         # ...
     ];
 
+/*
     # NextCloud
     services.nextcloud = {
         enable = true;
@@ -27,5 +28,5 @@
 
     # networking.firewall.enable = false;
     networking.firewall.allowedTCPPorts = [ 80 443 ];
-
+*/
 }
