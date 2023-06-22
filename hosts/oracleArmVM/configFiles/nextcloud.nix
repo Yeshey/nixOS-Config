@@ -24,7 +24,7 @@
         # Set what time makes sense for you
         autoUpdateApps.startAt = "05:00:00";
 
-        config.adminpassFile = "${pkgs.writeText "adminpass" "test123"}";
+        config.adminpassFile = "${pkgs.writeText "adminpass" "test123"}"; # user: root, pass: test123
     };
 
     networking.firewall.enable = false;
