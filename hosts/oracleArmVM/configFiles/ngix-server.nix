@@ -14,7 +14,7 @@ in
         #addSSL = true;
         #enableACME = true;
         root = ./ngix-server; 
-        listen = [{port = port;  addr="0.0.0.0"; }];
+        listen = [{port = port;  addr="0.0.0.0"; }]; #(https://discourse.nixos.org/t/nginx-multiple-different-ports-in-one-virtual-host/2988/6)
         #listen.port = 80;
     };
   }; 
