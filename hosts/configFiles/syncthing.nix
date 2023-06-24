@@ -13,8 +13,8 @@
     syncthing = {
       enable = true;
       user = "yeshey";
-      dataDir = "/home/yeshey/Documents";    # Default folder for new synced folders
-      configDir = "/home/yeshey/Documents/.config/syncthing";   # Folder for Syncthing's settings and keys
+      dataDir = "/home/${user}/Documents";    # Default folder for new synced folders
+      configDir = "/home/${user}/.config/syncthing";   # Folder for Syncthing's settings and keys
       devices = {
         "nixOS-Laptop" = { id = "DJEP7AL-WLBELBK-TISRAC6-BS6PEE2-X5LIAVZ-TLMDRUL-CC4SP2Q-TEV5JAA"; };
         "manjaro-Laptop" = { id = "HWPEE67-I7DPOPG-H3A3SDX-5HFJK5W-33OIOUO-S6TD5E7-52OAO3B-OFAUAAF"; };

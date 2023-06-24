@@ -73,7 +73,7 @@
 
   arm-oracle = let 
     host = "arm-oracle";
-    dataStoragePath = "~/Documents";
+    dataStoragePath = "/home/${user}";
   in
    lib.nixosSystem {                           # Desktop profile
     inherit system;
