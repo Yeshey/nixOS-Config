@@ -29,7 +29,7 @@
     (import ./hardware-configuration.nix)
 
     (import ./configFiles/VM.nix)
-    (import ./configFiles/dontStarveTogetherServer.nix)
+    # (import ./configFiles/dontStarveTogetherServer.nix)
   ];
 
   # Manage Temperature, prevent throttling
