@@ -24,7 +24,7 @@
     qemu
   ];
   # boot.binfmt.emulatedSystems = [ "x86_64-linux" ];  
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ]; # this breaks with this error:
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ]; # this breaks with this error: <---------
   /*
 restarting the following units: nix-daemon.service
 open3: exec of /nix/store/j1c20f57gn0y9y9kr61dlgjll2hlhbnp-system-path/bin/busctl --json=short call org.freedesktop.systemd1 /org/freedesktop/systemd1 org.freedesktop.systemd1.Manager ListUnitsByPatterns asas 0 0 failed: Too many levels of symbolic links at /nix/store/82a9ld0177rnnsfklwlf27bvk733vyln-perl-5.36.0/lib/perl5/5.36.0/IPC/Cmd.pm line 1531.
