@@ -1,6 +1,7 @@
 { config, pkgs, user, location, dataStoragePath, lib, ... }:
 
 {
+  /*
   # Dont starve together server:
   virtualisation.oci-containers.containers = {
     dst-server = {
@@ -20,9 +21,15 @@
       autoStart = true;
     };
   };
-  environment.systemPackages = with pkgs; [
-    qemu
-  ];
+  */
+
+  #virtualisation.docker.enable = true;
+  #virtualisation.docker.enableOnBoot = true; # Big WTF
+  #virtualisation.docker.storageDriver = "btrfs";
+
+  #environment.systemPackages = with pkgs; [
+  # box64
+  #];
   # boot.binfmt.emulatedSystems = [ "x86_64-linux" ];  
   # boot.binfmt.emulatedSystems = [ "aarch64-linux" ]; # this breaks with this error: <---------
   /*
