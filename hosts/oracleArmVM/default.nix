@@ -12,6 +12,7 @@
     (import ./configFiles/minecraft.nix)
     (import ./configFiles/openvscode-server.nix)
     (import ./configFiles/ngix-server.nix)
+    # (import ./configFiles/kubo.nix)
   ];
   
   time.timeZone = "Europe/Berlin";

@@ -38,6 +38,7 @@
 
       #Follow the ask for help you did: (https://discourse.nixos.org/t/compiling-and-adding-program-not-in-nixpkgs-to-pc-compiling-error/25239/3)
       (callPackage ./playit-cli.nix {})
+      (callPackage ./ipfs-sync.nix {})
       vlc
       anydesk
       pdfarranger

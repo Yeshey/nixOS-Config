@@ -259,6 +259,7 @@
     permittedInsecurePackages = [
         "openssl-1.1.1u" # Needed for now in 23.05?
     ];
+    # allowUnsupportedSystem = true;
   };
 
   environment.systemPackages = with pkgs; [

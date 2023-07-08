@@ -20,6 +20,7 @@
       autoStart = true;
     };
   };
+
   networking.firewall.allowedUDPPorts = [
     10999
     11000
