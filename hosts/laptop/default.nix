@@ -30,6 +30,8 @@
 
     (import ./configFiles/VM.nix)
     # (import ./configFiles/dontStarveTogetherServer.nix)
+    (import ./configFiles/kubo.nix)
+    (import ./../oracleArmVM/configFiles/ngix-server.nix)
   ];
 
   # Manage Temperature, prevent throttling

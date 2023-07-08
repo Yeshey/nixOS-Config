@@ -1,7 +1,7 @@
 { config, pkgs, user, location, lib, dataStoragePath, ... }:
 
 let
-  port = 7843;
+  port = 8000; # 7843
 in
 {
     imports = [
