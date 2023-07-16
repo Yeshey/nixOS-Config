@@ -101,12 +101,28 @@
         "type": "github"
       }
     },
+    "nur": {
+      "locked": {
+        "lastModified": 1689543935,
+        "narHash": "sha256-eg4TSJ4SdsRx7s3uxYfW3+/8H/9hInnwLsGTB79/h6Y=",
+        "owner": "nix-community",
+        "repo": "NUR",
+        "rev": "543fd83b04aee430edfa04ec0566562f14a726f7",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "NUR",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "nixos-hardware": "nixos-hardware",
         "nixos-nvidia-vgpu": "nixos-nvidia-vgpu",
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": "nixpkgs_2",
+        "nur": "nur"
       }
     }
   },

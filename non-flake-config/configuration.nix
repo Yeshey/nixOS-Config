@@ -292,7 +292,7 @@ in
     steam
     stremio
     vlc
-    firefox
+    librewolf
     gparted
     lutris
     anydesk
