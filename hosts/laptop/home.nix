@@ -23,7 +23,14 @@
       grapejuice # roblox
 
       # Browser
-      firefox
+      # firefox
+
+      # tmp for rust
+      #cargo
+      #rustc
+      #rustfmt
+      #gcc
+      #protobuf
 
       # Surface and Desktop apps
       yt-dlp # download youtube videos
