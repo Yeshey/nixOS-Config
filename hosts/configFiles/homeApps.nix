@@ -12,7 +12,7 @@
       obs-studio
       stremio
       barrier
-      libsForQt5.neochat # plasma client for matrix
+      #libsForQt5.neochat # plasma client for matrix
       # etcher #insecure?
 
       # Browsers
@@ -68,6 +68,7 @@
     ];
   };
 
+  # https://discourse.nixos.org/t/help-setting-up-firefox-with-home-manager/23333
   programs.firefox = {
           enable = true;
           package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
@@ -95,28 +96,24 @@
               };
           };
           profiles = {
+              # to switch profile go to about:profiles
               ${user} = {
                   extensions = with pkgs.nur.repos.rycee.firefox-addons; [
                       ublock-origin
                       privacy-badger
-                      https-everywhere
+                      # https-everywhere
                       bitwarden
-                      clearurls
-                      decentraleyes
-                      duckduckgo-privacy-essentials
-                      floccus
-                      ghostery
-                      privacy-redirect
+                      # clearurls
+                      # floccus
+                      # privacy-redirect
                       privacy-badger
                       languagetool
-                      disconnect
-                      react-devtools
                   ];
                   id = 0;
                   name = "${user}";
                   search = {
                       force = true;
-                      default = "DuckDuckGo";
+                      default = "google"; #DuckDuckGo
                       engines = {
                           "Nix Packages" = {
                               urls = [{
@@ -142,8 +139,17 @@
                           "eBay".metaData.hidden = true;
                       };
                   };
-                  settings = {
+                  settings = { # Check /home/yeshey/.mozilla/firefox/<user>/prefs.js to see these settings change
                       "general.smoothScroll" = true;
+                      "general.autoScroll" = true;
+                      "browser.shell.checkDefaultBrowser" = false;
+                      "browser.toolbars.bookmarks.visibility" = "always";
+
+                      "browser.contentblocking.category" = "strict";
+                      "dom.security.https_only_mode" = true;
+                      # Enable secure DNS Max protection
+                      "doh-rollout.disable-heuristics" = true;
+                      "network.trr.mode" = 3;
                   };
                   extraConfig = ''
                       user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
@@ -158,6 +164,13 @@
                   # Here too
                   '';
               };
+            #test = {
+            #  id = 1;
+            #  name = "test";
+            #  settings = {
+            #      "general.autoScroll" = true;
+            #  };
+            #};
           };
       };
 
