@@ -12,6 +12,7 @@
   #           |___/                                                 |___/ 
 
   imports = [
+    (import ./i2p.nix)
     #...
   ];
 

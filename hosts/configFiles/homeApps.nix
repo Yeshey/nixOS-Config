@@ -20,7 +20,7 @@
       brave
       tor-browser-bundle-bin
       qutebrowser
-      librewolf
+      # librewolf
 
       # tmp
       #teams
@@ -98,22 +98,23 @@
           profiles = {
               # to switch profile go to about:profiles
               ${user} = {
-                  extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+                  extensions = with pkgs.nur.repos.rycee.firefox-addons; [ # You need to activate the extensions manually
                       ublock-origin
                       privacy-badger
                       # https-everywhere
                       bitwarden
-                      # clearurls
                       # floccus
                       # privacy-redirect
                       privacy-badger
                       languagetool
+                      darkreader
+                      metamask
                   ];
-                  id = 0;
+                  id = 0; # default profile
                   name = "${user}";
                   search = {
                       force = true;
-                      default = "google"; #DuckDuckGo
+                      default = "Google"; #DuckDuckGo
                       engines = {
                           "Nix Packages" = {
                               urls = [{
@@ -133,7 +134,7 @@
                               definedAliases = [ "@nw" ];
                           };
                           "Wikipedia (en)".metaData.alias = "@wiki";
-                          "Google".metaData.hidden = true;
+                          #"Google".metaData.hidden = true;
                           "Amazon.com".metaData.hidden = true;
                           "Bing".metaData.hidden = true;
                           "eBay".metaData.hidden = true;
@@ -164,6 +165,84 @@
                   # Here too
                   '';
               };
+
+              i2p = {
+                  extensions = with pkgs.nur.repos.rycee.firefox-addons; [ # You need to activate the extensions manually
+                      ublock-origin
+                      privacy-badger
+                      # https-everywhere
+                      bitwarden
+                      # floccus
+                      # privacy-redirect
+                      privacy-badger
+                      languagetool
+                      darkreader
+                      metamask
+                  ];
+                  id = 1;
+                  name = "i2p";
+                  search = {
+                      force = true;
+                      default = "DuckDuckGo"; #DuckDuckGo
+                      engines = {
+                          "Nix Packages" = {
+                              urls = [{
+                                  template = "https://search.nixos.org/packages";
+                                  params = [
+                                      { name = "type"; value = "packages"; }
+                                      { name = "query"; value = "{searchTerms}"; }
+                                  ];
+                              }];
+                              icon = "${pkgs.nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake.svg";
+                              definedAliases = [ "@np" ];
+                          };
+                          "NixOS Wiki" = {
+                              urls = [{ template = "https://nixos.wiki/index.php?search={searchTerms}"; }];
+                              iconUpdateURL = "https://nixos.wiki/favicon.png";
+                              updateInterval = 24 * 60 * 60 * 1000;
+                              definedAliases = [ "@nw" ];
+                          };
+                          "Wikipedia (en)".metaData.alias = "@wiki";
+                          # "Google".metaData.hidden = true;
+                          "Amazon.com".metaData.hidden = true;
+                          "Bing".metaData.hidden = true;
+                          "eBay".metaData.hidden = true;
+                      };
+                  };
+                  settings = { # Check /home/yeshey/.mozilla/firefox/<user>/prefs.js to see these settings change
+                      "general.smoothScroll" = true;
+                      "general.autoScroll" = true;
+                      "browser.shell.checkDefaultBrowser" = false;
+                      "browser.toolbars.bookmarks.visibility" = "always";
+
+                      "browser.contentblocking.category" = "strict";
+                      "dom.security.https_only_mode" = true;
+                      # Enable secure DNS Max protection
+                      "doh-rollout.disable-heuristics" = true;
+                      "network.trr.mode" = 3;
+
+                      # Make i2p work, other sites won't work anymore, (or be very slow?) however
+                      "media.peerconnection.ice.proxy_only" = true;
+                      "network.proxy.http" = "127.0.0.1";
+                      "network.proxy.http_port" = 4444;
+                      "network.proxy.no_proxies_on" = "localhost, 127.0.0.1";
+                      "network.proxy.ssl" = "127.0.0.1";
+                      "network.proxy.ssl_port" = 4444;
+                      "network.proxy.type" = 1;
+                  };
+                  extraConfig = ''
+                      user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
+                      user_pref("full-screen-api.ignore-widgets", true);
+                      user_pref("media.ffmpeg.vaapi.enabled", true);
+                      user_pref("media.rdd-vpx.enabled", true);
+                  '';
+                  userChrome = ''
+                  # a css 
+                  '';
+                  userContent = ''
+                  # Here too
+                  '';
+              };
             #test = {
             #  id = 1;
             #  name = "test";
@@ -173,5 +252,18 @@
             #};
           };
       };
+
+      # Shortcut to FIrfox i2p profile, but you need to be running the service: services.i2p.enable
+      home.file.".local/share/applications/i2p.desktop".source = builtins.toFile "i2p.desktop" ''
+[Desktop Entry]
+Version=1.0
+Name=i2p
+Comment=i2p enabled firefox profile
+Exec=firefox -no-remote -P "i2p"
+Terminal=false
+StartupNotify=true
+Icon=firefox
+Type=Application
+          '';
 
 }

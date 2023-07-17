@@ -31,7 +31,6 @@
     (import ./configFiles/VM.nix)
     # (import ./configFiles/dontStarveTogetherServer.nix)
     (import ./configFiles/kubo.nix) # for ipfs
-    (import ./configFiles/i2p.nix)
     (import ./../oracleArmVM/configFiles/ngix-server.nix)
   ];
 
