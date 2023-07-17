@@ -1,4 +1,4 @@
-{ lib, inputs, system, home-manager, user, location, nixos-hardware, nixos-nvidia-vgpu, ... }:
+{ lib, inputs, system, home-manager, user, location, nixos-hardware, nixos-nvidia-vgpu, nur, ... }:
 
 {
   laptop = let 
@@ -7,20 +7,22 @@
   in
    lib.nixosSystem {                           # Desktop profile
     inherit system;
-    specialArgs = { inherit user location inputs host dataStoragePath; };             # Pass flake variable
+    specialArgs = { inherit user location inputs host dataStoragePath ; };             # Pass flake variable
     modules = [                                         # Modules that are used.
       ./laptop
       ./baseConfiguration.nix
       ./configFiles/non-serverConfiguration.nix
+      # nur.nixosModules.nur
       nixos-nvidia-vgpu.nixosModules.nvidia-vgpu
 
       home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
-        home-manager.extraSpecialArgs = { inherit user location host dataStoragePath; };  # Pass flake variable
+        home-manager.extraSpecialArgs = { inherit user location host dataStoragePath ; };  # Pass flake variable
         home-manager.users.${user} = {
           imports = [(import ./baseHome.nix)] ++ [(import ./configFiles/homeApps.nix)] ++ [(import ./laptop/home.nix)];
         };
+        nixpkgs.overlays = [ nur.overlay ]; # To use nur packages in home manager (https://www.reddit.com/r/NixOS/comments/r9544v/comment/hnbw3df/?utm_source=share&utm_medium=web2x&context=3)
       }
     ];
   };

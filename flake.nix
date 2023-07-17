@@ -19,9 +19,15 @@
       url = "https://github.com/nix-community/home-manager/archive/release-23.05.tar.gz";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nur = {
+      url = "github:nix-community/NUR";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
-  outputs = inputs @ { self, nixpkgs, home-manager, nixos-hardware, nixos-nvidia-vgpu, ...}:
+  outputs = inputs @ { self, nixpkgs, home-manager, nixos-hardware, nixos-nvidia-vgpu, nur, ...}:
     let
       system = "x86_64-linux";                                # System architecture
       user = "yeshey";
@@ -32,12 +38,18 @@
         config.allowUnfree = true;                            # Allow proprietary software
       };
 
+      # Not needed apperently?
+      #nur-no-pkgs = import nur { # nur packages for home manager (https://github.com/SheetKey/nixos-dotfiles/blob/main/flake.nix)
+      #  pkgs = null;
+      #  nurpkgs = import nixpkgs { inherit system; };
+      #};
+
       lib = nixpkgs.lib;
     in {
       nixosConfigurations = (                                 # Location of the available configurations
         import ./hosts {                                      # Imports ./hosts/default.nix
           inherit (nixpkgs) lib;
-          inherit inputs user location system home-manager nixos-hardware nixos-nvidia-vgpu;            # Also inherit home-manager so it does not need to be defined here.
+          inherit inputs user location system home-manager nixos-hardware nixos-nvidia-vgpu nur;            # Also inherit home-manager so it does not need to be defined here.
         }
       );
 
