@@ -46,6 +46,7 @@
         home-manager.users.${user} = {
           imports = [(import ./baseHome.nix)] ++ [(import ./configFiles/homeApps.nix)] ++ [(import ./surface/home.nix)];
         };
+        nixpkgs.overlays = [ nur.overlay ]; # To use nur packages in home manager (https://www.reddit.com/r/NixOS/comments/r9544v/comment/hnbw3df/?utm_source=share&utm_medium=web2x&context=3)
       }
     ];
   };
@@ -69,6 +70,7 @@
         home-manager.users.${user} = {
           imports = [(import ./baseHome.nix)] ++ [(import ./configFiles/homeApps.nix)] ++ [(import ./vm/home.nix)];
         };
+        nixpkgs.overlays = [ nur.overlay ]; # To use nur packages in home manager (https://www.reddit.com/r/NixOS/comments/r9544v/comment/hnbw3df/?utm_source=share&utm_medium=web2x&context=3)
       }
     ];
   };
@@ -92,6 +94,7 @@
         home-manager.users.${user} = {
           imports = [(import ./baseHome.nix)] ++ [(import ./oracleArmVM/home.nix)];
         };
+        nixpkgs.overlays = [ nur.overlay ]; # To use nur packages in home manager (https://www.reddit.com/r/NixOS/comments/r9544v/comment/hnbw3df/?utm_source=share&utm_medium=web2x&context=3)
       }
     ];
   };
@@ -112,6 +115,7 @@
         home-manager.users.${user} = {
           imports = [(import ./home.nix)] ++ [(import ./vm/home.nix)];
         };
+        nixpkgs.overlays = [ nur.overlay ]; # To use nur packages in home manager (https://www.reddit.com/r/NixOS/comments/r9544v/comment/hnbw3df/?utm_source=share&utm_medium=web2x&context=3)
       }
     ];
   };
