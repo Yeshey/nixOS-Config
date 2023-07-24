@@ -72,7 +72,10 @@ let
 in
 {
   imports =                                     # For now, if applying to other system, swap files
-    [(import ./hardware-configuration.nix)];    # Current system hardware config @ /etc/nixos/hardware-configuration.nix
+    [
+      (import ./hardware-configuration.nix)
+      (import ./configFiles/iptsd.nix)
+    ];    # Current system hardware config @ /etc/nixos/hardware-configuration.nix
 
   # Manage Temperature, prevent throttling
   # https://github.com/linux-surface/linux-surface/issues/221
