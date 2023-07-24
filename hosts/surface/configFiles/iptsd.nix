@@ -4,9 +4,10 @@ let
   
 in
 {
-  imports = [
-    <nixos-hardware/microsoft/surface>
-  ];
+  # https://github.com/linux-surface/iptsd/issues/44#issuecomment-1356331101
+  #imports = [
+  #  <nixos-hardware/microsoft/surface>
+  #];
 
   boot.extraModulePackages = [
     config.boot.kernelPackages.ithc
@@ -23,7 +24,10 @@ in
     "intel_lpss_pci"
   ];
 
-  boot.kernelPatches = [{ name = "ipts-hid"; patch = builtins.fetchurl "https://patch-diff.githubusercontent.com/raw/linux-surface/kernel/pull/132.diff"; }];
+  boot.kernelPatches = [{ name = "ipts-hid"; patch = builtins.fetchurl {
+    url="https://patch-diff.githubusercontent.com/raw/linux-surface/kernel/pull/132.diff";
+    sha256="sha256:0xi4ygc9lgadmpk07jvai8qk490fj6n6kiays7myxzwp0bd0gfl5";
+  }; }];
 
   nixpkgs.overlays = [
     (self: super: {
