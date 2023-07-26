@@ -321,6 +321,15 @@ X-WebApp-Isolated=true
 // Ignore everything else in osu folder
 *
         '';
+
+      # So it doesn't sync for example the mouse sensitivity between devices
+      ".local/share/Mindustry/.stignore".source = builtins.toFile ".stignore" ''
+settings.bin
+settings.log
+last_log.txt
+settings_backup.bin
+        '';
+
       # For discord to start correctly (from nixOS wiki discord page)
       ".config/discord/settings.json".source = builtins.toFile "MSwhiteboard.desktop" ''
 {
