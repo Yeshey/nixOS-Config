@@ -324,10 +324,12 @@ X-WebApp-Isolated=true
 
       # So it doesn't sync for example the mouse sensitivity between devices
       ".local/share/Mindustry/.stignore".source = builtins.toFile ".stignore" ''
-settings.bin
-settings.log
-last_log.txt
-settings_backup.bin
+// Don't ignore these files...
+!/saves
+!/schematics
+
+// Ignore everything else in Mindustry folder
+*
         '';
 
       # For discord to start correctly (from nixOS wiki discord page)
