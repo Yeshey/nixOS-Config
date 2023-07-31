@@ -327,6 +327,8 @@ X-WebApp-Isolated=true
 // Don't ignore these files...
 !/saves
 !/schematics
+!/settings.bins
+
 
 // Ignore everything else in Mindustry folder
 *
