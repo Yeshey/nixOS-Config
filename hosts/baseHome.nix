@@ -328,6 +328,7 @@ X-WebApp-Isolated=true
 !/saves
 !/schematics
 !/settings.bin
+!/maps
 
 
 // Ignore everything else in Mindustry folder
