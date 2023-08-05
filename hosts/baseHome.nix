@@ -328,6 +328,8 @@ X-WebApp-Isolated=true
 !/saves
 !/schematics
 !/settings.bin
+!/mods
+!/settings_backup.bin
 
 
 // Ignore everything else in Mindustry folder
