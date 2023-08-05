@@ -104,7 +104,7 @@
         };
         "Mindustry" = {
           path = "~/.local/share/Mindustry/";
-          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" ]; 
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" "windows-Surface" "windows-Laptop" ]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: settings.bin settings.log
         };
