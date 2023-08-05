@@ -330,6 +330,7 @@ X-WebApp-Isolated=true
 !/settings.bin
 !/mods
 !/settings_backup.bin
+!/maps
 
 
 // Ignore everything else in Mindustry folder
