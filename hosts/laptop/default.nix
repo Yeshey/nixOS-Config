@@ -48,7 +48,7 @@
   in lib.mkForce ''
           ${cfg.package}/sbin/thermald \
             --no-daemon \
-            --config-file ${location}/hosts/desktop/configFiles/thermal-conf.xml \
+            --config-file ${location}/hosts/laptop/configFiles/thermal-conf.xml \
         '';
 
   # systemctl status borgbackup-job-rootBackup.service/timer
