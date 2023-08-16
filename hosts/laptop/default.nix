@@ -57,6 +57,7 @@
       # Use `sudo borg list -v /mnt/hdd-btrfs/Backups/borgbackup` to check the archives created
       # Use `sudo borg info /mnt/hdd-btrfs/Backups/borgbackup::<NameOfArchive>` to see details
       # Use `sudo borg extract /mnt/hdd-btrfs/Backups/borgbackup::<NameOfArchive>` to extract the specified archive to the current directory
+      # Use `sudo borg extract /mnt/hdd-btrfs/Backups/borgbackup::nixOS-laptop-rootBackup-2023-08-07T00:00:06 /mnt/DataDisk/PersonalFiles/Timeless/Music/AllMusic/` to extract the specified folder in the archive to the current directory
       # Use `sudo systemctl start borgbackup-job-rootBackup.service` to make a backup right now
       # Watch size of repo: `watch "sudo du -sh /mnt/hdd-btrfs/Backups/borgbackup/ && echo && sudo du -s /mnt/hdd-btrfs/Backups/borgbackup/"`
       paths = [ "${dataStoragePath}/PersonalFiles" "/home/${user}"]; 
@@ -114,7 +115,7 @@
       #  passphrase = "secret";
       #};
       compression = "auto,lzma";
-      startAt = "*-*-1/3"; # every 3 days # "hourly"; # weekly # daily # *:0/9 every 9 minutes
+      startAt = "*:0/3"; # every 3 hours # "*-*-1/3"; # every 3 days # "hourly"; # weekly # daily # *:0/9 every 9 minutes
     };
   };
 
