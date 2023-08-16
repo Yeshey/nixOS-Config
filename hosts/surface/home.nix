@@ -7,8 +7,11 @@
 #           └─ home.nix *
 #
 
-{ pkgs, ... }:
+{ pkgs, lib, dataStoragePath, ... }:
 
+let
+  shortenedPath = lib.strings.removePrefix "~/" dataStoragePath; # so "~/Documents" becomes "Documents"
+in
 rec { 
   imports = [ ./configFiles/dconf.nix ]; # gnome configuration
   # Generated with: nix-shell -p dconf2nix --command "dconf dump / | dconf2nix -e --timeout 15 --verbose > dconf.nix"
@@ -47,7 +50,27 @@ rec {
     ];
   };
 
-  # Raw configuration files (https://ghedam.at/24353/tutorial-getting-started-with-home-manager-for-nix)
-  home.file.".config/user-dirs.dirs".source = ./configFiles/user-dirs.dirs; # nautilus configuration for surface
-  
+  # Make some folders not sync please
+  home.file = {
+    # Raw configuration files (https://ghedam.at/24353/tutorial-getting-started-with-home-manager-for-nix)
+    ".config/user-dirs.dirs".source = ./configFiles/user-dirs.dirs; # nautilus configuration for surface
+
+# These dont work because they have to be inside the home folder
+#    "${shortenedPath}/PersonalFiles/2023/.stignore".source = builtins.toFile ".stignore" ''
+#*
+#        '';
+#    "${shortenedPath}/PersonalFiles/2022/.stignore".source = builtins.toFile ".stignore" ''
+#*
+#        '';
+#    "${shortenedPath}/PersonalFiles/Timeless/Syncthing/PhoneCamera/.stignore".source = builtins.toFile ".stignore" ''
+#*
+#        '';
+#    "${shortenedPath}/PersonalFiles/Timeless/Syncthing/Allsync/.stignore".source = builtins.toFile ".stignore" ''
+#*
+#        '';
+#    "${shortenedPath}/PersonalFiles/Timeless/Music/.stignore".source = builtins.toFile ".stignore" ''
+#AllMusic
+#        '';
+  };
+
 }
