@@ -268,6 +268,9 @@
     kate # KDEs notepad    
   ];
 
+  # Allow libp2p browser to browser to work:
+  networking.firewall.allowedUDPPorts = [ 5353 ]; # (this was the worst thing to figure out! And seems to only be required in the laptop, not surface? All the documentation I found was this: https://github.com/libp2p/libp2p/issues/28)
+
   # Syncthing, there's no easy way to add ignore patters, so we're doing it like this for now:
   # But it looks like there also isn't an easy way to add them like we can in home manager with file.source...
 
