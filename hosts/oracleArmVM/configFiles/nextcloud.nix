@@ -27,7 +27,7 @@
         config.adminpassFile = "${pkgs.writeText "adminpass" "test123"}"; # user: root, pass: test123
     };
 
-    networking.firewall.enable = false;
+    # networking.firewall.enable = false;
     networking.firewall.allowedTCPPorts = [ 80 443 ];
 
 }
