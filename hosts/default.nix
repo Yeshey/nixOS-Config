@@ -13,7 +13,7 @@
       ./baseConfiguration.nix
       ./configFiles/non-serverConfiguration.nix
       # nur.nixosModules.nur
-      nixos-nvidia-vgpu.nixosModules.nvidia-vgpu
+      #nixos-nvidia-vgpu.nixosModules.nvidia-vgpu
 
       home-manager.nixosModules.home-manager {          # Home-Manager module that is used.
         home-manager.useGlobalPkgs = true;

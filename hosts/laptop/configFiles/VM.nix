@@ -34,6 +34,7 @@
   };
 
   # For the VM
+  /*
   boot.kernelPackages = pkgs.linuxPackages_5_15; # needed for this linuxPackages_5_19
   hardware.nvidia = {
     vgpu = {
@@ -47,6 +48,7 @@
       };
     };
   };
+  */
 
   # For sharing folders with the windows VM
   # Make your local IP static for the VM to never lose the folders
