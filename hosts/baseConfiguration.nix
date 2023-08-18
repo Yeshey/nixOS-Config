@@ -257,7 +257,7 @@
       # commandLineArgs = "--use-gl=desktop --enable-features=VaapiVideoDecoder --disable-features=UseOzonePlatform" ;  # wtf doesnt work?
     };
     permittedInsecurePackages = [
-        "openssl-1.1.1u" # Needed for now in 23.05?
+        "openssl-1.1.1v" # Needed for now in 23.05?
     ];
     # allowUnsupportedSystem = true;
   };
