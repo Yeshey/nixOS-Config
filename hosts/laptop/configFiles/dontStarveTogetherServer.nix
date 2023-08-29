@@ -6,11 +6,11 @@
     dst-server = {
       image = "jamesits/dst-server:latest";
       volumes = [
-        "${dataStoragePath}/PersonalFiles/Servers/DoNotStarveTogetherServer:/data:rw"
+        "${dataStoragePath}/PersonalFiles/Servers/dontstarvetogether/SurvivalServerMadeiraSummer2/DoNotStarveTogetherServer:/data:rw"
       ];
       environment = {
         DST_SERVER_ARCH = "amd64";
-        DST_CLUSTER_TOKEN = "pds-g^KU_sJttONn9^Mk79OnW7xsITFY4PnG7ME+WS9Or86mhQ7+/kNzUGb30=";
+        DST_CLUSTER_TOKEN = "pds-g^KU_sJttONn9^jdHxLoAxJiKM4tH3lfWVuLxp3vq8mNTToe1OOGn0Fs8="; # "pds-g^KU_sJttONn9^Mk79OnW7xsITFY4PnG7ME+WS9Or86mhQ7+/kNzUGb30=";
       };
       extraOptions = [];
       ports = [
