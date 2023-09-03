@@ -11,7 +11,7 @@ in
   imports = [
     (import ./hardware-configuration.nix)
 
-    (import ./configFiles/dontStarveTogetherServer.nix)
+    #(import ./configFiles/dontStarveTogetherServer.nix)
     (import ./configFiles/nextcloud.nix)
     (import ./configFiles/minecraft.nix)
     (import ./configFiles/openvscode-server.nix)
