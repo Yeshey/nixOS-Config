@@ -44,6 +44,7 @@ in
 
   # For Syncthing
   # Access syncthing with (ssh -L 9091:localhost:8384 -t yeshey@143.47.53.175 "sleep 90" &) && xdg-open http://localhost:9091
+  # https://discourse.nixos.org/t/is-it-possible-to-declare-a-directory-creation-in-the-nixos-configuration/27846/5
   systemd.tmpfiles.rules = [
         "d ${shortenedPath}/PersonalFiles/2023 0770 ${user} users -"
         "d ${shortenedPath}/PersonalFiles/2022 0770 ${user} users -"
