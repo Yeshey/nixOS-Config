@@ -1,7 +1,8 @@
 { config, pkgs, user, location, lib, dataStoragePath, ... }:
 
 let
-  port = 8000; # 7843
+  port = 7843; # 7843
+  # Access with (ssh -L 9092:localhost:7843 -t yeshey@143.47.53.175 "sleep 90" &) && xdg-open http://localhost:9092
 in
 {
     imports = [
