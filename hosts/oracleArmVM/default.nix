@@ -16,7 +16,8 @@
     # (import ./configFiles/kubo.nix)
   ];
   
-  time.timeZone = "Europe/Berlin";
+  #time.timeZone = "Europe/Berlin";
+  time.timeZone = "Europe/Madrid";
 
   # swap in btrfs:
   # ...
@@ -24,7 +25,7 @@
   nixpkgs.config = {
   	allowUnsupportedSystem = true;
      permittedInsecurePackages = [ # for package openvscode-server
-                    "nodejs-16.20.0"
+                    "nodejs-16.20.2"
                   ];
   };
 

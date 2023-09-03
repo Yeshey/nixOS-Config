@@ -13,7 +13,7 @@
   #};
 
   # journalctl -fu openvscode-server.service
-  # connect to the VScodium server with `ssh -L 9090:localhost:3000 yeshey@130.61.219.132`, and go to http://localhost:9090 in your browser
+  # connect to the VScodium server with `ssh -L 9090:localhost:3000 yeshey@143.47.53.175`, and go to http://localhost:9090 in your browser
   # This seems to work:
   # (ssh -L 9090:localhost:3000 -t yeshey@130.61.219.132 "sleep 90" &) && xdg-open http://localhost:9090
   services.openvscode-server = {
