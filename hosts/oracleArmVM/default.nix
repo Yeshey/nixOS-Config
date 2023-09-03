@@ -1,5 +1,8 @@
 { config, pkgs, user, location, lib, dataStoragePath, ... }:
 
+let
+  shortenedPath = lib.strings.removePrefix "~/" dataStoragePath; # so "~/Documents" becomes "Documents"
+in
 {
   # Connect to codium-server: (ssh -L 9090:localhost:3000 -t yeshey@130.61.219.132 "sleep 90" &) && xdg-open http://localhost:9090
   # http://130.61.219.132 - Nextcloud # root / test123
@@ -38,6 +41,16 @@
   environment.systemPackages = with pkgs; [
 
   ];          
+
+  # For Syncthing
+  # Access syncthing with (ssh -L 9091:localhost:8384 -t yeshey@143.47.53.175 "sleep 90" &) && xdg-open http://localhost:9091
+  systemd.tmpfiles.rules = [
+        "d ${shortenedPath}/PersonalFiles/2023 0770 ${user} users -"
+        "d ${shortenedPath}/PersonalFiles/2022 0770 ${user} users -"
+        "d ${shortenedPath}/PersonalFiles/Timeless/Syncthing/PhoneCamera 0770 ${user} users -"
+        "d ${shortenedPath}/PersonalFiles/Timeless/Syncthing/Allsync/ 0770 ${user} users -"
+        "d ${shortenedPath}/PersonalFiles/Timeless/Music/ 0770 ${user} users -"
+  ];
 
   #     ___            __ 
   #    / _ )___  ___  / /_
