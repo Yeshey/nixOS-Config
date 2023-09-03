@@ -23,6 +23,7 @@
         "nixOS-VM" = { id = "GNY2ZH4-Y7W67RF-YXAB7KP-6ZYYAVB-OO2RB4I-UXM2J4X-UNLJGEL-77BHWQY"; };
         "windows-Surface" = { id = "4L2C6IN-PG25JP6-46WCN2B-EKFAHPR-3FE3B2F-JCXRQ5T-MO5PDAA-JWU2IA7"; };
         "android-A70Phone" = { id = "H6ETBYH-DGJCL3H-UUI7GJK-EK6WI5I-UFGTVZF-W6HKUPN-I5MOXCL-PDP4BAS"; };
+        "nixOS-arm-oracle" = { id = "VZHXEOO-QDU4DMZ-NMOSJYI-K5ZFPPQ-TXH2QBV-7YKBHJY-V2XO7KK-HVAHZQZ"; };
       };
       folders = 
       let 
@@ -36,7 +37,7 @@
       in {
         "2023" = {
           path = "${dataStoragePath}/PersonalFiles/2023"; 
-          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" "android-A70Phone" ]; 
+          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" "android-A70Phone" "nixOS-arm-oracle"]; 
           versioning = myVersioning;
           # Ignore patterns: Recorded_Classes 
         };
@@ -48,19 +49,19 @@
         #};
         "A70Camera" = {
           path = "${dataStoragePath}/PersonalFiles/Timeless/Syncthing/PhoneCamera";
-          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" "android-A70Phone" ]; 
+          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" "android-A70Phone" "nixOS-arm-oracle"]; 
           versioning = myVersioning;
           # Ignore patterns: 
         };
         "Allsync" = {
           path = "${dataStoragePath}/PersonalFiles/Timeless/Syncthing/Allsync";
-          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" "android-A70Phone" ]; 
+          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" "android-A70Phone" "nixOS-arm-oracle"]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: watch
         };
         "Music" = {
           path = "${dataStoragePath}/PersonalFiles/Timeless/Music";
-          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" "android-A70Phone" ]; 
+          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" "android-A70Phone" "nixOS-arm-oracle"]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: AllMusic
         };
@@ -68,43 +69,43 @@
         # Config and game files sync
         "ssh" = {
           path = "~/.ssh";
-          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" ]; 
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" "nixOS-arm-oracle"]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
         "bash&zshHistory" = { # added ignore batterns with home-manager to sync only those files
           path = "~/";
-          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" ]; 
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" "nixOS-arm-oracle"]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
         "MinecraftPrismLauncher" = {
           path = "~/.local/share/PrismLauncher/instances";
-          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" ]; 
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" "nixOS-arm-oracle"]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
         "Osu-Lazer" = {
           path = "~/.local/share/osu";
-          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" ]; 
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" "nixOS-arm-oracle"]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
         "Minetest" = {
           path = "~/.minetest";
-          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" ]; 
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" "nixOS-arm-oracle"]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
         "PowderToy" = {
           path = "~/.local/share/The Powder Toy/";
-          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" ]; 
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" "nixOS-arm-oracle"]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: 
         };
         "Mindustry" = {
           path = "~/.local/share/Mindustry/";
-          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" "windows-Surface" "windows-Laptop" ]; 
+          devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" "windows-Surface" "windows-Laptop" "nixOS-arm-oracle"]; 
           versioning = myVersioning;
           # Potencial Ignore patterns: settings.bin settings.log
         };
