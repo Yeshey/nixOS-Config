@@ -17,7 +17,7 @@
         mineclone-server = {
         image = "lscr.io/linuxserver/minetest:latest";
         volumes = [
-            "${dataStoragePath}/PersonalFiles/Servers/minetest/ServerFirst:/config/.minetest"
+            "${dataStoragePath}/PersonalFiles/Servers/minetest/MineCloneServerFirst:/config/.minetest"
         ];
         environment = {
             PUID = "1000";
