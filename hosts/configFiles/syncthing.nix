@@ -65,6 +65,12 @@
           versioning = myVersioning;
           # Potencial Ignore patterns: AllMusic
         };
+        "Servers" = {
+          path = "${dataStoragePath}/PersonalFiles/Servers";
+          devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "android-A70Phone" "nixOS-arm-oracle"]; 
+          versioning = myVersioning;
+          # Potencial Ignore patterns: AllMusic
+        };
 
         # Config and game files sync
         "ssh" = {
