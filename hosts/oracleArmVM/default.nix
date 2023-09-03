@@ -48,6 +48,7 @@ in
   systemd.tmpfiles.rules = [
         "d ${shortenedPath}/PersonalFiles/2023 0770 ${user} users -"
         "d ${shortenedPath}/PersonalFiles/2022 0770 ${user} users -"
+        "d ${shortenedPath}/PersonalFiles/Servers 0770 ${user} users -"
         "d ${shortenedPath}/PersonalFiles/Timeless/Syncthing/PhoneCamera 0770 ${user} users -"
         "d ${shortenedPath}/PersonalFiles/Timeless/Syncthing/Allsync/ 0770 ${user} users -"
         "d ${shortenedPath}/PersonalFiles/Timeless/Music/ 0770 ${user} users -"
