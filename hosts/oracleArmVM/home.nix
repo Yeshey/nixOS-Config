@@ -24,18 +24,21 @@ in
     home.file = {
       "${shortenedPath}/PersonalFiles/2023/.stignore".source = builtins.toFile ".stignore" ''
 //*
+//Photos&Videos
           '';
-      "${shortenedPath}/PersonalFiles/2022/.stignore".source = builtins.toFile ".stignore" ''
-//*
-          '';
+#      "${shortenedPath}/PersonalFiles/2022/.stignore".source = builtins.toFile ".stignore" ''
+#//*
+#          '';
       "${shortenedPath}/PersonalFiles/Timeless/Syncthing/PhoneCamera/.stignore".source = builtins.toFile ".stignore" ''
 //*
           '';
       "${shortenedPath}/PersonalFiles/Timeless/Syncthing/Allsync/.stignore".source = builtins.toFile ".stignore" ''
 //*
+watch
           '';
       "${shortenedPath}/PersonalFiles/Timeless/Music/.stignore".source = builtins.toFile ".stignore" ''
 //*
+AllMusic
           '';
     };
 }
