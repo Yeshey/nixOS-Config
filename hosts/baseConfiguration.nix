@@ -275,6 +275,54 @@
     bat
     btop
     tldr
+
+    (vscode-with-extensions.override {
+      vscode = vscodium;
+      vscodeExtensions = with vscode-extensions; [
+          # vscodevim.vim # this is later when you're a chad
+          ms-vsliveshare.vsliveshare
+          bbenoist.nix # nix language highlighting
+          ms-azuretools.vscode-docker
+          usernamehw.errorlens # Improve highlighting of errors, warnings and other language diagnostics.
+          ritwickdey.liveserver # for html and css development
+          # glenn2223.live-sass # not in nixpkgs
+          yzhang.markdown-all-in-one # markdown
+          formulahendry.code-runner
+          james-yu.latex-workshop
+          bungcip.better-toml # TOML language support
+          matklad.rust-analyzer
+          arrterian.nix-env-selector # nix environment selector
+          tamasfe.even-better-toml # Fully-featured TOML support
+
+          haskell.haskell
+
+          # python
+          # ms-python.python # Gives this error for now:
+          #ERROR: Could not find a version that satisfies the requirement lsprotocol>=2022.0.0a9 (from jedi-language-server) (from versions: none)
+          #ERROR: No matching distribution found for lsprotocol>=2022.0.0a9
+          ms-python.vscode-pylance
+          ms-python.python
+
+          # java
+          redhat.java
+          #search for extension pack for java
+          vscjava.vscode-java-debug 
+          # vscjava.vscode-java-dependency
+          # vscjava.vscode-java-pack
+          vscjava.vscode-java-test
+          # vscjava.vscode-maven
+
+          # C
+          llvm-vs-code-extensions.vscode-clangd
+      ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+        {
+          name = "remote-ssh-edit";
+          publisher = "ms-vscode-remote";
+          version = "0.47.2";
+          sha256 = "1hp6gjh4xp2m1xlm1jsdzxw9d8frkiidhph6nvl24d0h8z34w49g";
+        }
+      ];
+    })
   ];
 
   # Some programs need SUID wrappers, can be configured further or are started in user sessions.

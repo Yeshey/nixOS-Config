@@ -73,7 +73,8 @@ in
     programs = {
       home-manager.enable = true;
       
-      vscode = {
+      # This method isn't installing extensions..? Installing in baseConfig
+      /* vscode = {
         enable = true;
         package = pkgs.vscodium;
         #haskell = { ?
@@ -125,7 +126,7 @@ in
           # ms-vscode-remote.remote-ssh # doesn't work in vscodium
         ];
         userSettings = vscUserSettings;
-      };
+      }; */
 
       # Github Desktop is complaining about .git config being read only
       git = {

@@ -257,7 +257,7 @@
 
     # tmp
     # virtualbox
-    # texlive.combined.scheme-full # LaTeX
+    texlive.combined.scheme-full # LaTeX
     #LookingGlassB6
 
     # FOR PLASMA DESKTOP
@@ -273,5 +273,21 @@
 
   # Syncthing, there's no easy way to add ignore patters, so we're doing it like this for now:
   # But it looks like there also isn't an easy way to add them like we can in home manager with file.source...
+
+
+  # tmp
+  # https://www.tweag.io/blog/2022-11-22-wasm-backend-merged-in-ghc/
+  # following https://medium.com/@jlanssie/compile-haskell-to-webassembly-with-asterius-4eacfbde14bf
+  virtualisation.oci-containers.containers = {
+    web-tanks = {
+      image = "terrorjack/asterius";  # Replace with the appropriate image name and tag
+      volumes = [
+        "${dataStoragePath}/PersonalFiles/2023/Projects/Programming/webTanks:/workspace"
+      ];
+      environment = {};
+      ports = [];
+      workdir = "/workspace";
+    };
+  };
 
 }
