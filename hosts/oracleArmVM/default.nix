@@ -28,9 +28,10 @@ in
 
   nixpkgs.config = {
   	allowUnsupportedSystem = true;
-     permittedInsecurePackages = [ # for package openvscode-server
-                    "nodejs-16.20.2"
-                  ];
+#    allowUnfree = true;
+    permittedInsecurePackages = [ # for package openvscode-server
+      "nodejs-16.20.2"
+    ];
   };
 
   #    ____             _               ____      ___                                 
@@ -39,8 +40,43 @@ in
   # /___/\__/_/  |___/_/\__/\__/___/  |_____/  /_/  /_/  \___/\_, /_/  \_,_/_/_/_/___/
   #                                                          /___/                                                     
 
+  # use x86_64 steam and allow unfree license
+  # https://discourse.nixos.org/t/how-to-install-steam-x86-64-on-a-pinephone-aarch64/19297/4
+  # You need to copy the relevant things manualy
+  /*
+  nix.settings.system-features = [ "nixos-test" "benchmark" "big-parallel" "kvm" ];
+  nixpkgs.overlays = [(self: super: let
+    x86pkgs = import pkgs.path { system = "x86_64-linux";
+      config = {
+        allowUnfree = true;
+        allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+          "steam"
+          "steam-original"
+          "steam-runtime"
+        ];
+      };
+    };
+  in {
+    inherit (x86pkgs) steam steam-run;
+  })];
+  # allow build for x86_64-linux architecture through emulation
+  boot.binfmt.emulatedSystems = [ "x86_64-linux" ];
   environment.systemPackages = with pkgs; [
+    steam steam-run
+  ];
+  */
 
+
+  services.xserver.enable = true;
+  services.xserver.displayManager.sddm.enable = true;
+  services.xserver.desktopManager.plasma5.enable = true;
+
+  services.xrdp.enable = true;
+  services.xrdp.defaultWindowManager = "startplasma-x11";
+  networking.firewall.allowedTCPPorts = [ 3389 ];
+
+  environment.systemPackages = with pkgs; [
+    #turbovnc
   ];          
 
   # For Syncthing, create folders (not sure if necessary)
