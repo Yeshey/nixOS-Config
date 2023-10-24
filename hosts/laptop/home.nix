@@ -17,6 +17,9 @@
       lbry
       teams
       waydroid
+      remmina # makes it try to compile webkitgtk-2.40.5+abi=4.1
+
+      # remmina # to connect to the server with XRDP
 
       # Games
       steam
