@@ -17,6 +17,7 @@
       lbry
       teams
       waydroid
+      keepass
       # remmina # makes it try to compile webkitgtk-2.40.5+abi=4.1
       freerdp # xfreerdp /v:143.47.53.175 /u:yeshey /dynamic-resolution
 

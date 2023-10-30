@@ -276,6 +276,7 @@
 
 
   # tmp
+  /*
   # https://www.tweag.io/blog/2022-11-22-wasm-backend-merged-in-ghc/
   # following https://medium.com/@jlanssie/compile-haskell-to-webassembly-with-asterius-4eacfbde14bf
   virtualisation.oci-containers.containers = {
@@ -289,5 +290,6 @@
       workdir = "/workspace";
     };
   };
+  */
 
 }
