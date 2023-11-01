@@ -266,10 +266,34 @@
     ark # Compress and Uncompress files
     sddm-kcm # for sddm configuration in settings
     kate # KDEs notepad    
+
+    # For KDE animated wallpapers plugin
+    /*
+    # Video/Audio data composition framework tools like "gst-inspect", "gst-launch" ...
+    gst_all_1.gstreamer
+    # Common plugins like "filesrc" to combine within e.g. gst-launch
+    gst_all_1.gst-plugins-base
+    # Specialized plugins separated by quality
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    # Plugins to reuse ffmpeg to play almost every video format
+    gst_all_1.gst-libav
+    # Support the Video Audio (Hardware) Acceleration API
+    gst_all_1.gst-vaapi
+    */
   ];
 
   # Allow libp2p browser to browser to work:
   networking.firewall.allowedUDPPorts = [ 5353 ]; # (this was the worst thing to figure out! And seems to only be required in the laptop, not surface? All the documentation I found was this: https://github.com/libp2p/libp2p/issues/28)
+
+  nixpkgs.config = {
+     permittedInsecurePackages = [ # for package openvscode-server
+                    "teams-1.5.00.23861"
+                    "openssl-1.1.1w"
+                  ];
+  };
+
 
   # Syncthing, there's no easy way to add ignore patters, so we're doing it like this for now:
   # But it looks like there also isn't an easy way to add them like we can in home manager with file.source...
