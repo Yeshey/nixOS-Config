@@ -12,6 +12,7 @@
       obs-studio
       stremio
       barrier
+      bitwarden
       #libsForQt5.neochat # plasma client for matrix
       # etcher #insecure?
 
