@@ -21,6 +21,8 @@
     libvirtUsers = [ "${user}" ];
   };
 
+  /*
+  # This requires impure if you add so....
   programs.looking-glass = let
     # Looking glass B6 version in nix: https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/virtualization/looking-glass-client/default.nix
     myPkgs = import (builtins.fetchTarball {
@@ -33,6 +35,7 @@
     enable = true;
     package = LookingGlassB6;
   };
+  */
 
   # For the VM
   /*
