@@ -282,6 +282,33 @@
     # Support the Video Audio (Hardware) Acceleration API
     gst_all_1.gst-vaapi
     */
+
+    # Took from home manager for some reason
+    gwe
+    lbry
+    teams
+    waydroid
+    helm
+    keepass
+    # remmina # makes it try to compile webkitgtk-2.40.5+abi=4.1
+    freerdp # xfreerdp /v:143.47.53.175 /u:yeshey /dynamic-resolution
+
+    # remmina # to connect to the server with XRDP
+
+    # Games
+    steam
+
+    # Browser
+    # firefox
+
+    # tmp for rust
+    #cargo
+    #rustc
+    #rustfmt
+    #gcc
+    #protobuf
+
+
   ];
 
   # Allow libp2p browser to browser to work:
