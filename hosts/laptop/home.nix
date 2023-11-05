@@ -13,7 +13,7 @@
   home = {                                # Specific packages
     packages = with pkgs; [
       # Surface and Desktop apps
-      github-desktop
+      # github-desktop
       # grapejuice # roblox
       yt-dlp # download youtube videos
       qbittorrent
