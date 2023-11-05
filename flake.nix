@@ -5,7 +5,7 @@
     # Release Notes: https://nixos.org/manual/nixos/stable/release-notes.html
     # sudo nix-channel --add https://nixos.org/channels/nixos-22.11 nixpkgs
     # sudo nix-channel --add https://nixos.org/channels/nixos-22.11 nixos
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.05";
 
     #nixos-nvidia-vgpu = { # sudo nixos-rebuild --flake ~/.setup#laptop switch --update-input nixos-nvidia-vgpu --impure
     #  type = "path";
