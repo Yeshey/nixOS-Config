@@ -4,7 +4,7 @@ let
   shortenedPath = lib.strings.removePrefix "~/" dataStoragePath; # so "~/Documents" becomes "Documents"
 in
 {
-  # Connect to codium-server: (ssh -L 9090:localhost:3000 -t yeshey@130.61.219.132 "sleep 90" &) && xdg-open http://localhost:9090
+  # Connect to codium-server: (ssh -L 9090:localhost:3000 -t yeshey@143.47.53.175 "sleep 90" &) && xdg-open http://localhost:9090
   # http://130.61.219.132 - Nextcloud # root / test123
   # http://130.61.219.132:7843 - nginx
 
