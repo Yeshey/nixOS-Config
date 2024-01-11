@@ -7,7 +7,10 @@ in
 
   home = {                                # Specific packages
     packages = with pkgs; [
-
+      texlive.combined.scheme-full
+      
+      # osu-lazer
+      gcc
     ];
   };
 
