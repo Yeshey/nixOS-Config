@@ -10,29 +10,11 @@
 { pkgs, dataStoragePath, ... }:
 
 {
-
   home = {                                # Specific packages
     packages = with pkgs; [
-      gwe
-      lbry
-      teams
-      waydroid
-
-      # Games
-      steam
-      grapejuice # roblox
-
-      # Browser
-      # firefox
-
-      # tmp for rust
-      #cargo
-      #rustc
-      #rustfmt
-      #gcc
-      #protobuf
-
       # Surface and Desktop apps
+      # github-desktop
+      # grapejuice # roblox
       yt-dlp # download youtube videos
       qbittorrent
       baobab

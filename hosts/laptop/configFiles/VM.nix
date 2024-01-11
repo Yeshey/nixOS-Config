@@ -21,10 +21,13 @@
     libvirtUsers = [ "${user}" ];
   };
 
+  /*
+  # This requires impure if you add so....
   programs.looking-glass = let
     # Looking glass B6 version in nix: https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/virtualization/looking-glass-client/default.nix
     myPkgs = import (builtins.fetchTarball {
         url = "https://github.com/NixOS/nixpkgs/archive/9fa5c1f0a85f83dfa928528a33a28f063ae3858d.tar.gz";
+        sha256 = "sha256:1f98dpg7jw8i913m4wag6amp49535dg0vr4qms9r63y4h3llw7s7";
     }) {};
 
     LookingGlassB6 = myPkgs.looking-glass-client;
@@ -32,6 +35,7 @@
     enable = true;
     package = LookingGlassB6;
   };
+  */
 
   # For the VM
   /*
@@ -52,10 +56,14 @@
 
   # For sharing folders with the windows VM
   # Make your local IP static for the VM to never lose the folders
-  networking.interfaces.eth0.ipv4.addresses = [ {
+  networking.interfaces.eth0.ipv4.addresses = [ { # for ethernet
     address = "192.168.1.109";
     prefixLength = 24;
   } ];
+  #networking.interfaces.wlp0s20f3.ipv4.addresses = [ { # for wifi (see ifconfig), also you have to disconnect eth0 in the GUI # Check https://discourse.nixos.org/t/setting-static-ip-over-wifi/6107
+  #  address = "192.168.1.109";
+  #  prefixLength = 24;
+  #} ];
   services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
   networking.firewall.allowedTCPPorts = [
     5357 # wsdd

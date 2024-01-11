@@ -7,11 +7,12 @@
 {
   home = {
     packages = with pkgs; [
-      github-desktop
+      # github-desktop
       libnotify # so you can use notify-send
       obs-studio
       stremio
       barrier
+      bitwarden
       #libsForQt5.neochat # plasma client for matrix
       # etcher #insecure?
 
