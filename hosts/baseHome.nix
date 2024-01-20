@@ -5,14 +5,9 @@
 { config, lib, pkgs, user, location, host, ... }:
 
 let
-  vscUserSettings = {
-    "files.autoSave" = "afterDelay"; # basically on
-    "java.jdt.ls.java.home" = "/run/current-system/sw/lib/openjdk/"; # Show VSCodium where jdk is
-    "code-runner.runInTerminal" = true;
-    "code-runner.executorMap" = {
-      "python" = "python3 -u";
-    };
-  };
+  # the latex code: https://stackoverflow.com/questions/56743092/modifying-settings-json-in-vscode-to-add-shell-escape-flag-to-pdflatex-in-latex
+  # You need to add this code here as well but you don't know how, so latex works with svgs
+  vscUserSettings = builtins.fromJSON (builtins.readFile ./configFiles/VSCsettings.json);
 in
 {
 
@@ -42,20 +37,31 @@ in
       before = [];
       data = ''
         if [ -d ~/.config/VSCodium/User ]; then
-          userDir=~/.config/VSCodium/User
+          userDir=$HOME/.config/VSCodium/User
+          mkdir -p "$userDir"
           rm -rf $userDir/settings.json
           cat \
             ${(pkgs.formats.json {}).generate "blabla"
               userSettings} \
-            > $userDir/settings.json
+            > "$userDir/settings.json"
 
           # as I changed the name to Visual Studio Code, I need to maintain VSC settings too
-          userDir2="~/.config/Visual Studio Code/User"
-          rm -rf $userDir/settings.json
+          userDir2="$HOME/.config/Visual Studio Code/User"
+          mkdir -p "$userDir2"
+          rm -rf $userDir2/settings.json
           cat \
             ${(pkgs.formats.json {}).generate "blabla"
               userSettings} \
-            > $userDir/settings.json
+            > "$userDir2/settings.json"
+
+          # Also for .openvscode-server (I think you can put it here..?)
+          userDir3="$HOME/.openvscode-server/data/Machine"
+          mkdir -p "$userDir3"
+          rm -rf $userDir3/settings.json
+          cat \
+            ${(pkgs.formats.json {}).generate "blabla"
+              userSettings} \
+            > "$userDir3/settings.json"
         fi
       '';
     };

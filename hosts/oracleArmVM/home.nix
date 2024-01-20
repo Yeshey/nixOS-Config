@@ -8,8 +8,10 @@ in
   home = {                                # Specific packages
     packages = with pkgs; [
       texlive.combined.scheme-full
+      inkscape
       
       # osu-lazer
+      openvscode-server
       gcc
     ];
   };
