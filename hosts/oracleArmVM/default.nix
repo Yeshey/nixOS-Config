@@ -4,7 +4,8 @@ let
   shortenedPath = lib.strings.removePrefix "~/" dataStoragePath; # so "~/Documents" becomes "Documents"
 in
 {
-  # Connect to codium-server: (ssh -L 9090:localhost:3000 -t yeshey@130.61.219.132 "sleep 90" &) && xdg-open http://localhost:9090
+  # Connect to codium-server: (ssh -L 9090:localhost:3000 -t yeshey@143.47.53.175 "sleep 90" &) && xdg-open http://localhost:9090
+  # In powershell: ssh -L 9090:localhost:3000 -t yeshey@143.47.53.175 "sleep 90" # http://localhost:9090
   # http://130.61.219.132 - Nextcloud # root / test123
   # http://130.61.219.132:7843 - nginx
 
@@ -66,11 +67,28 @@ in
   ];
   */
 
+  /*
+  # SOund redirection not working
+  sound.enable = true;
+  hardware.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+    # If you want to use JACK applications, uncomment this
+    #jack.enable = true;
 
+    # use the example session manager (no others are packaged yet so this is enabled by default,
+    # no need to redefine it in your config for now)
+    #media-session.enable = true;
+  }; */
+
+  # Remote Desktop with XRDP
   services.xserver.enable = true;
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
-
   services.xrdp.enable = true;
   services.xrdp.defaultWindowManager = "startplasma-x11";
   networking.firewall.allowedTCPPorts = [ 3389 ];

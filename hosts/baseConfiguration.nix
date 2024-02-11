@@ -301,7 +301,7 @@
           #ERROR: Could not find a version that satisfies the requirement lsprotocol>=2022.0.0a9 (from jedi-language-server) (from versions: none)
           #ERROR: No matching distribution found for lsprotocol>=2022.0.0a9
           ms-python.vscode-pylance
-          ms-python.python
+          # ms-python.python # Causing an error now
 
           # java
           redhat.java
