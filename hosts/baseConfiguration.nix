@@ -293,6 +293,7 @@
           matklad.rust-analyzer
           arrterian.nix-env-selector # nix environment selector
           tamasfe.even-better-toml # Fully-featured TOML support
+          vscode-extensions.eamodio.gitlens
 
           haskell.haskell
 
