@@ -102,6 +102,14 @@
   # DNS server was not working (https://unix.stackexchange.com/questions/510940/how-can-i-set-a-custom-dns-server-within-nixos) (maybe should put in general config?)
   networking.nameservers = [ "1.1.1.1" "8.8.8.8" "9.9.9.9" ];
 
+  # needed to access coimbra-dev raspberrypi
+  systemd.network.wait-online.enable = false;
+  networking.useNetworkd = true;
+
+  #networking.useDHCP = false;
+  #networking.useHostResolvConf = false;
+  #networking.firewall.enable = false;
+
   # Select internationalisation properties.
   i18n.defaultLocale = "en_GB.utf8";
 
@@ -293,7 +301,8 @@
           matklad.rust-analyzer
           arrterian.nix-env-selector # nix environment selector
           tamasfe.even-better-toml # Fully-featured TOML support
-          vscode-extensions.eamodio.gitlens
+          eamodio.gitlens
+          valentjn.vscode-ltex
 
           haskell.haskell
 
@@ -315,14 +324,17 @@
 
           # C
           llvm-vs-code-extensions.vscode-clangd
-      ] ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-        {
-          name = "remote-ssh-edit";
-          publisher = "ms-vscode-remote";
-          version = "0.47.2";
-          sha256 = "1hp6gjh4xp2m1xlm1jsdzxw9d8frkiidhph6nvl24d0h8z34w49g";
-        }
-      ];
+
+          ms-vscode-remote.remote-ssh
+
+      ]; #++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+        #{
+        #  name = "remote-ssh-edit";
+        #  publisher = "ms-vscode-remote";
+        #  version = "0.47.2";
+        #  sha256 = "1hp6gjh4xp2m1xlm1jsdzxw9d8frkiidhph6nvl24d0h8z34w49g";
+        #}
+      #];
     })
   ];
 

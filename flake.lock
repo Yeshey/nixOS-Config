@@ -25,7 +25,7 @@
         ]
       },
       "locked": {
-        "narHash": "sha256-Lxmjez0nfNBptdqV5GsXKm7Bb7swjGsrxiLxWJu0tL8=",
+        "narHash": "sha256-jSCHB1+9eA0S2h7G8Aju8XARK0vbDuOR7uFFvCEsKhk=",
         "type": "tarball",
         "url": "https://github.com/nix-community/home-manager/archive/release-23.05.tar.gz"
       },

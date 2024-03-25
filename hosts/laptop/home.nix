@@ -16,6 +16,7 @@
       # github-desktop
       # grapejuice # roblox
       yt-dlp # download youtube videos
+      gnome.gnome-clocks
       qbittorrent
       baobab
       gnome.cheese
@@ -31,6 +32,9 @@
       # premid # show youtube videos watching in discord
       # Libreoffice
       libreoffice
+      corefonts # fonts
+      vistafonts # fonts
+
       hunspell
       hunspellDicts.uk_UA
     ];
