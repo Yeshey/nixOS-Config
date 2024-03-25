@@ -79,5 +79,6 @@
     "workbench.editorAssociations": {
         "*.ipynb": "jupyter.notebook.ipynb"
     },
-    "editor.codeActionsOnSave": null
+    "editor.codeActionsOnSave": null,
+    "editor.wrappingColumn": 0
 }

@@ -45,6 +45,15 @@ in
               userSettings} \
             > "$userDir/settings.json"
 
+          # for Code
+          userDir3="$HOME/.config/Code/User"
+          mkdir -p "$userDir3"
+          rm -rf $userDir3/settings.json
+          cat \
+            ${(pkgs.formats.json {}).generate "blabla"
+              userSettings} \
+            > "$userDir3/settings.json"
+
           # as I changed the name to Visual Studio Code, I need to maintain VSC settings too
           userDir2="$HOME/.config/Visual Studio Code/User"
           mkdir -p "$userDir2"
@@ -55,17 +64,28 @@ in
             > "$userDir2/settings.json"
 
           # Also for .openvscode-server (I think you can put it here..?)
-          userDir3="$HOME/.openvscode-server/data/Machine"
-          mkdir -p "$userDir3"
-          rm -rf $userDir3/settings.json
+          userDir4="$HOME/.openvscode-server/data/Machine"
+          mkdir -p "$userDir4"
+          rm -rf $userDir4/settings.json
           cat \
             ${(pkgs.formats.json {}).generate "blabla"
               userSettings} \
-            > "$userDir3/settings.json"
+            > "$userDir4/settings.json"
         fi
       '';
     };
     # ====== ============================ ======    
+
+/*
+          # for Code
+          # userDir3="$HOME/.config/Code/User"
+          # mkdir -p "$userDir3"
+          # rm -rf $userDir3/settings.json
+          # cat \
+          #   ${(pkgs.formats.json {}).generate "blabla"
+          #     userSettings} \
+          #   > "$userDir3/settings.json"
+*/
 
     home = {
       username = "${user}";
