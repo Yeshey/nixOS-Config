@@ -212,7 +212,7 @@ in
         };
         enableAutosuggestions = true;
   #      autosuggestions.enable = true;
-        enableSyntaxHighlighting = true;
+        syntaxHighlighting.enable = true;
         enableCompletion = true;
         history = {
           size = 100000;

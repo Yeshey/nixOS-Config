@@ -24,7 +24,6 @@
       # librewolf
 
       # tmp
-      #teams
       skypeforlinux
       #staruml # UML diagrams
       #jetbrains.clion # C++
@@ -44,7 +43,7 @@
       (callPackage ./playit-cli.nix {})
       (callPackage ./ipfs-sync.nix {})
       vlc
-      anydesk
+      # anydesk
       pdfarranger
       # helvum # To control pipewire Not Working?
       virt-manager # virtual machines

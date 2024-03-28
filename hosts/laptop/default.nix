@@ -286,7 +286,6 @@
     # Took from home manager for some reason
     gwe
     lbry
-    teams
     waydroid
     helm
     keepass
@@ -314,12 +313,12 @@
   # Allow libp2p browser to browser to work:
   networking.firewall.allowedUDPPorts = [ 5353 ]; # (this was the worst thing to figure out! And seems to only be required in the laptop, not surface? All the documentation I found was this: https://github.com/libp2p/libp2p/issues/28)
 
-  nixpkgs.config = {
-     permittedInsecurePackages = [ # for package openvscode-server
-                    "teams-1.5.00.23861"
-                    "openssl-1.1.1w"
-                  ];
-  };
+  #nixpkgs.config = {
+  #   permittedInsecurePackages = [ # for package openvscode-server
+  #                  "teams-1.5.00.23861"
+  #                  "openssl-1.1.1w"
+  #                ];
+  #};
 
 
   # Syncthing, there's no easy way to add ignore patters, so we're doing it like this for now:

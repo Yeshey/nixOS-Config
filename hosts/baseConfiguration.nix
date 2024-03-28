@@ -125,11 +125,12 @@
     flake = "${location}#${host}"; # my flake online uri is for example github:yeshey/nixos-config#laptop
     flags = [
       # "--upgrade --option fallback false --update-input nixos-hardware --update-input home-manager --update-input nixpkgs || (cd ${location} && git checkout --flake.lock)"
+
       # "--upgrade" (seems to be redundant) # upgrade NixOS to the latest version in your chosen channel
-      "--option fallback false" # fallback false should force it to use pre-built packages (https://github.com/NixOS/nixpkgs/issues/77971)
-      "--update-input nixos-hardware --update-input home-manager --update-input nixpkgs" # To update all the packages
+      # "--option fallback false" # fallback false should force it to use pre-built packages (https://github.com/NixOS/nixpkgs/issues/77971)
+      # "--update-input nixos-hardware --update-input home-manager --update-input nixpkgs" # To update all the packages
       # "--commit-lock-file" # commit the new lock file with git
-      # || cd ${location} && git checkout -- flake.lock '' # reverts the changes to flake.lock if things went south (doesn't work because they aren't placed in this order)
+      # || cd ${location} && git checkout -- flake.lock '' # reverts the changes to flake.lock if things went south (doesn't work because the commands in this list they aren't placed in this order in the end)
     ];
     allowReboot = false; # set to false
   };
@@ -154,18 +155,24 @@
 */
 
   # Garbage Collect
-  nix = {
+  nix = let
+    age.secrets.nix-access-tokens-github.file = "${location}/secrets/root.nix-access-tokens-github.age";
+  in {
     settings = {
       auto-optimise-store = true;
-      experimental-features = [ "nix-command" "flakes" ];
+      experimental-features = [ "nix-command" "flakes" ]; # "ca-derivations"
       trusted-users = [ "root" "yeshey" "@wheel" ];
+
+      #substituters = [ "https://numtide.cachix.org" "https://cache.nixos.org" ];
+      #trusted-public-keys = [ "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE=" ];
+      # substituters = [ "https://cache.nixos.org/" "https://nixcache.reflex-frp.org" "https://cache.iog.io" "https://digitallyinduced.cachix.org" "https://ghc-nix.cachix.org" "https://ic-hs-test.cachix.org" "https://kaleidogen.cachix.org" "https://static-haskell-nix.cachix.org" "https://tttool.cachix.org" "https://cache.nixos.org/" "https://numtide.cachix.org" ];
     };
     gc = {
       automatic = true;
       dates = "weekly";
       options = "--delete-older-than 10d";
     };
-    extraOptions = ''preallocate-contents = false ''; # for compression to work with btrfs (https://github.com/NixOS/nix/issues/3550) ...?
+    extraOptions = ''preallocate-contents = false''; # for compression to work with btrfs (https://github.com/NixOS/nix/issues/3550) ...?
   };
 
   #    ____             _               ____      ___                                 
@@ -191,6 +198,7 @@
         update = "sudo nixos-rebuild switch --flake ${location}#${host}"; # --impure # old: "sudo nixos-rebuild switch";
         update-re = "sudo nixos-rebuild boot --flake ${location}#${host} --impure && reboot"; # old: "sudo nixos-rebuild switch";
         upgrade = "trap \"cd ${location} && git checkout -- flake.lock\" INT ; sudo nixos-rebuild switch --flake ${location}#${host} --upgrade --update-input nixos-hardware --update-input nixos-nvidia-vgpu --update-input home-manager --update-input nixpkgs --impure || (cd ${location} && git checkout -- flake.lock)"; /*--commit-lock-file*/ #upgrade: upgrade NixOS to the latest version in your chosen channel";
+        upgrade-nixpkgs = "trap \"cd ${location} && git checkout -- flake.lock\" INT ; sudo nixos-rebuild switch --flake ${location}#${host} --upgrade --update-input nixpkgs --impure || (cd ${location} && git checkout -- flake.lock)";
         clean = "echo \"This will clean all generations, and optimise the store\" ; sudo sh -c 'nix-collect-garbage -d ; nix-store --optimise'";
         cp = "cp -i";                                   # Confirm before overwriting something
         df = "df -h";                                   # Human-readable sizes
@@ -264,10 +272,11 @@
       # https://forum.vivaldi.net/topic/62354/hardware-accelerated-video-encode/20 # in chrome its enabled by default, why not vivaldi
       # commandLineArgs = "--use-gl=desktop --enable-features=VaapiVideoDecoder --disable-features=UseOzonePlatform" ;  # wtf doesnt work?
     };
-    permittedInsecurePackages = [
-        "openssl-1.1.1v" # Needed for now in 23.05?
-    ];
+    #permittedInsecurePackages = [
+    #    "openssl-1.1.1v" # Needed for now in 23.05?
+    #];
     # allowUnsupportedSystem = true;
+    # contentAddressedByDefault = true; # for the experimental feature "ca-derivations" # https://discourse.nixos.org/t/content-addressed-nix-call-for-testers/12881
   };
 
   environment.systemPackages = with pkgs; [
