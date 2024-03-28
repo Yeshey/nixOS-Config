@@ -45,7 +45,7 @@ in
     boot.extraModprobeConfig ="options vfio-pci ids=${cfg.pciIDs}";
 
     environment.systemPackages = with pkgs; [
-      virtmanager
+      virt-manager
       qemu
       OVMF
       pciutils
