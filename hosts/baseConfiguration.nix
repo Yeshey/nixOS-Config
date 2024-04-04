@@ -314,6 +314,8 @@
           tamasfe.even-better-toml # Fully-featured TOML support
           eamodio.gitlens
           valentjn.vscode-ltex
+          # you should try adding this one to have better nix code
+          # b4dm4n.vscode-nixpkgs-fmt # for consistent nix code formatting (https://github.com/nix-community/nixpkgs-fmt)
 
           haskell.haskell
 
