@@ -44,7 +44,8 @@
   };
 
   mySystem = {
-    #gnome.enable = true;
+    gnome.enable = false; # TODO, we can do better
+    plasma.enable = true;
     gaming.enable = true;
     vmHost = true;
     dockerHost = true;

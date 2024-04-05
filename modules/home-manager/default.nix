@@ -1,9 +1,12 @@
 # Add your reusable home-manager modules to this directory, on their own file (https://nixos.wiki/wiki/Module).
 # These should be stuff you would like to share with others, not your personal configurations.
+
+# TODO nur apps and firefox
+
 {
   default = { config, lib, ... }: {
     home = rec {
-      username = lib.mkDefault "yeshey";
+      username = lib.mkDefault "yeshey"; # TODO username
       homeDirectory = lib.mkDefault "/home/${username}";
       stateVersion = lib.mkDefault "22.11";
     };
@@ -66,19 +69,6 @@ XDG_VIDEOS_DIR="$HOME/Videos"
           autostartPrograms)
           // */
           {
-    # Change VSCodium to be able to use pylance (https://github.com/VSCodium/vscodium/pull/674#issuecomment-1137920704)
-      ".config/VSCodium/product.json".source = builtins.toFile "product.json" ''
-{
-  "nameShort": "Visual Studio Code",
-  "nameLong": "Visual Studio Code",
-}
-      '';
- # if you want to activate the MS extension store, add this as well:
- #"extensionsGallery": {
- #   "serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
- #   "cacheUrl": "https://vscode.blob.core.windows.net/gallery/index",
- #   "itemUrl": "https://marketplace.visualstudio.com/items"
- # }
 
       # Syncthing shortcut, based on webapp manager created shortcut (https://github.com/linuxmint/webapp-manager)
       ".local/share/applications/vivaldi-syncthing.desktop".source = builtins.toFile "vivaldi-syncthing.desktop" ''
