@@ -1,0 +1,44 @@
+{
+    "code-runner.executorMap": {
+      "python": "python3 -u"
+    },
+    "code-runner.runInTerminal": true,
+    "files.autoSave": "afterDelay",
+    "java.jdt.ls.java.home": "/run/current-system/sw/lib/openjdk/",
+    "ltex.java.path": "/run/current-system/sw/lib/openjdk/",
+    "ltex.language": "pt-PT",
+    "editor.wordWrap": "on",
+    "latex-workshop.latex.tools": [
+      {
+          "name": "latexmk",
+          "command": "latexmk",
+          "args": [
+              "--shell-escape",
+              "-f",
+              "-synctex=1",
+              "-interaction=nonstopmode",
+              "-file-line-error",
+              "-pdf",
+              "%DOC%"
+          ]
+      },
+      {
+          "name": "pdflatex",
+          "command": "pdflatex",
+          "args": [
+              "--shell-escape",
+              "-synctex=1",
+              "-interaction=nonstopmode",
+              "-file-line-error",
+              "%DOC%"
+          ]
+      },
+      {
+          "name": "bibtex",
+          "command": "bibtex",
+          "args": [
+              "%DOCFILE%"
+          ]
+      }
+    ]
+  }
