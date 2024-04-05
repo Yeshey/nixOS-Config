@@ -47,25 +47,45 @@ in
   options.mySystem = with lib; {
     nix.substituters = mkOption {
       type = types.listOf types.str;
-      default = lib.attrValues substituters; # by default use all
+      default = ["cachenixosorg" "cachethalheimio" "numtidecachixorg" "hydranixosorg" "nrdxpcachixorg" "nixcommunitycachixorg"];
+      # default = builtins.attrValues substituters; # TODO, make it loop throught the list # by default use all
     };
   };
 
   config = {
     zramSwap.enable = lib.mkDefault true;
     boot.tmp.cleanOnBoot = lib.mkDefault true; # delete all files in /tmp during boot.
-    boot.supportedFilesystems = lib.mkDefault [ "ntfs" ]; # TODO is this right
+    boot.supportedFilesystems = mkOption {
+      type = types.listOf types.str;
+      default = [ "ntfs" ]; # TODO, other lists should be done like this instead of just with lib.mkDefault that I use in several places
+    };
 
     time.timeZone = lib.mkDefault "Europe/Lisbon";
     i18n.defaultLocale = lib.mkDefault "en_GB.utf8";
+    i18n.extraLocaleSettings = {
+      LC_ADDRESS = lib.mkDefault "pt_PT.utf8";
+      LC_IDENTIFICATION = lib.mkDefault "pt_PT.utf8";
+      LC_MEASUREMENT = lib.mkDefault "pt_PT.utf8";
+      LC_MONETARY = lib.mkDefault "pt_PT.utf8";
+      LC_NAME = lib.mkDefault "pt_PT.utf8";
+      LC_NUMERIC = lib.mkDefault "pt_PT.utf8";
+      LC_PAPER = lib.mkDefault "pt_PT.utf8";
+      LC_TELEPHONE = lib.mkDefault "pt_PT.utf8";
+      LC_TIME = lib.mkDefault "pt_PT.utf8";
+    };
     console.keyMap = lib.mkDefault "pt-latin1";
 
     nixpkgs.overlays = builtins.attrValues outputs.overlays;
     nixpkgs.config.allowUnfree = true;
     nix = {
       package = pkgs.nix;
-      experimental-features = lib.mkDefault "nix-command flakes";
-      extraOptions = ''preallocate-contents = false''; # for compression to work with btrfs (https://github.com/NixOS/nix/issues/3550) ...?
+      extraOptions = 
+      # for compression to work with btrfs (https://github.com/NixOS/nix/issues/3550) ...?
+      ''
+        preallocate-contents = false 
+      '' + '' 
+         experimental-features = nix-command flakes
+      '';
 
       gc = {
         automatic = lib.mkDefault true;
@@ -160,7 +180,6 @@ in
       enableCompletion = lib.mkDefault true;
       histSize = lib.mkDefault 100000;
       ohMyZsh = lib.mkDefault {
-        enable = lib.mkDefault true;
         plugins = lib.mkDefault [ "git" 
                     "colored-man-pages" 
                     "alias-finder" 
@@ -184,6 +203,15 @@ in
         tree
         unzip
         unrar # also to extract .rar with ark in KDE # unrar x Lab5.rar
+
+        # TODO check if these are needed
+        ffmpeg
+        wine
+        gparted
+        # Development
+        jdk17 # java (alias for openJDK) 17.0.4.1
+        #jdk18
+        python3
       ];
       shells = [ pkgs.zsh ];
       pathsToLink = [ "/share/zsh" ];
@@ -350,7 +378,57 @@ in
     
     # More apps
     services.flatpak.enable = true;
-    # xdg.portal.enable = true; # needed for flatpaks # TODO not needed anymore?
+    # needed for flatpak to work
+    xdg.portal = {
+      enable = true;
+      config.common.default = "*";
+      extraPortals = with pkgs; [
+        xdg-desktop-portal-wlr
+        xdg-desktop-portal-kde
+        xdg-desktop-portal-gtk
+      ];
+
+      # TODO this should eventually be looked into
+      /*
+        trace: warning: xdg-desktop-portal 1.17 reworked how portal implementations are loaded, you
+        should either set `xdg.portal.config` or `xdg.portal.configPackages`
+        to specify which portal backend to use for the requested interface.
+
+        https://github.com/flatpak/xdg-desktop-portal/blob/1.18.1/doc/portals.conf.rst.in
+
+        If you simply want to keep the behaviour in < 1.17, which uses the first
+        portal implementation found in lexicographical order, use the following:
+
+        xdg.portal.config.common.default = "*";
+      */
+
+      #configPackages = [pkgs.gnome.gnome-session]; # TODO, how to do this?
+      /*
+      config = 
+      {
+        common = {
+          default = [
+            "gtk"
+          ];
+        };
+        pantheon = {
+          default = [
+            "pantheon"
+            "gtk"
+          ];
+          "org.freedesktop.impl.portal.Secret" = [
+            "gnome-keyring"
+          ];
+        };
+        x-cinnamon = {
+          default = [
+            "xapp"
+            "gtk"
+          ];
+        };
+      };
+      */
+    };
 
     #    ___           __                   
     #   / _ \___ _____/ /_____ ____ ____ ___
@@ -358,8 +436,8 @@ in
     # /_/   \_,_/\__/_/\_\\_,_/\_, /\__/___/
     #                         /___/         
 
-    # OVERLAYS
-    nixpkgs.overlays = [                          # This overlay will pull the latest version of Discord (but I guess it doesnt work)
+    # OVERLAYS # TODO remove?
+    # nixpkgs.overlays = [                          # This overlay will pull the latest version of Discord (but I guess it doesnt work)
       #(self: super: {
       #  discord = super.discord.overrideAttrs (
       #    _: { src = builtins.fetchTarball {
@@ -383,22 +461,7 @@ in
       #    }
       #  );
       #})
-    ];
-
-    environment.systemPackages = with pkgs; [ # TODO review this
-
-      ffmpeg
-      wine
-      gparted
-
-      # Development
-      jdk17 # java (alias for openJDK) 17.0.4.1
-      #jdk18
-      python3
-      # ghc # Haskell
-      # haskell-language-server # Haskell    ?
-
-    ];
+    # ];
 
     # App things
     # for github-desktop to work (https://discourse.nixos.org/t/unlocking-gnome-keyring-automatically-upon-login-with-kde-sddm/6966)

@@ -1,5 +1,5 @@
 # initialy generated with nixos-generate-config
-{ config, lib, pkgs, modulesPath, dataStoragePath, ... }:
+{ config, lib, pkgs, modulesPath, ... }:
 
 let
   nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
@@ -9,6 +9,9 @@ let
     export __VK_LAYER_NV_optimus=NVIDIA_only
     exec -a "$0" "$@"
   '';
+
+  # TODO dataStoragePath = "/mnt/DataDisk";
+  dataStoragePath = "/mnt/DataDisk";
 in
 {
   imports =

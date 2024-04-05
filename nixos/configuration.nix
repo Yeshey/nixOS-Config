@@ -1,3 +1,4 @@
+# this file is part of the template # TODO delete
 # This is your system's configuration file.
 # Use this to configure your system environment (it replaces /etc/nixos/configuration.nix)
 {
@@ -64,12 +65,13 @@
     })
     config.nix.registry;
 
-  nix.settings = {
-    # Enable flakes and new 'nix' command
-    experimental-features = "nix-command flakes";
-    # Deduplicate and optimize nix store
-    auto-optimise-store = true;
-  };
+  # TODO remove?
+  #nix.settings = {
+  #  # Enable flakes and new 'nix' command
+  #  experimental-features = "nix-command flakes";
+  #  # Deduplicate and optimize nix store
+  #  auto-optimise-store = true;
+  #};
 
   # FIXME: Add the rest of your current configuration
 

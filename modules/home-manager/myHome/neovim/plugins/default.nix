@@ -30,7 +30,7 @@ let
     { plugin = pkgs.vimPlugins.vim-sleuth; }
   ];
   lspPlugins = importPlugins [
-    ./lspconfig.nix
+    # ./lspconfig.nix
     ./cmp.nix
   ];
 in
