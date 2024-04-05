@@ -36,6 +36,7 @@ in
     ./android.nix
     ./gaming.nix
     ./gnome.nix
+    ./plasma.nix
     ./user.nix
     ./virt.nix
 
@@ -50,15 +51,18 @@ in
       default = ["cachenixosorg" "cachethalheimio" "numtidecachixorg" "hydranixosorg" "nrdxpcachixorg" "nixcommunitycachixorg"];
       # default = builtins.attrValues substituters; # TODO, make it loop throught the list # by default use all
     };
+    #boot.supportedFilesystems = lib.mkOption {
+    #  default = [ "ntfs" ];
+    #  type = lib.types.listOf lib.types.str;
+    #  description = "List of supported filesystems for boot";
+    #};
   };
 
   config = {
+    # lib.mkDefault is for booleans only https://discourse.nixos.org/t/mkenableoption-vs-mkoption-type-bool/27736/4
     zramSwap.enable = lib.mkDefault true;
     boot.tmp.cleanOnBoot = lib.mkDefault true; # delete all files in /tmp during boot.
-    boot.supportedFilesystems = lib.mkOption {
-      type = types.listOf types.str;
-      default = [ "ntfs" ]; # TODO, other lists should be done like this instead of just with lib.mkDefault that I use in several places
-    };
+    boot.supportedFilesystems = [ "ntfs" ]; # TODO lib.mkdefault?
 
     time.timeZone = lib.mkDefault "Europe/Lisbon";
     i18n.defaultLocale = lib.mkDefault "en_GB.utf8";
@@ -376,7 +380,9 @@ in
     #virtualisation.libvirtd.enable = true; # TODO put them in the right place
     #virtualisation.spiceUSBRedirection.enable = true; # to enable USB rederection in virt-manager (https://github.com/NixOS/nixpkgs/issues/106594)
     
-    # More apps
+/*
+
+    # More apps # TODO, doesnt work when in gnome??
     services.flatpak.enable = true;
     # needed for flatpak to work
     xdg.portal = {
@@ -428,7 +434,9 @@ in
         };
       };
       */
-    };
+    #};
+
+
 
     #    ___           __                   
     #   / _ \___ _____/ /_____ ____ ____ ___

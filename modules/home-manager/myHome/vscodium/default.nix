@@ -1,17 +1,76 @@
-{ lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
+let
+  cfg = config.myHome.vscodium;
+in
 {
   options.myHome.vscodium = with lib; {
     enable = mkEnableOption "vscodium";
   };
 
-  config = 
-    let
-			# the latex code: https://stackoverflow.com/questions/56743092/modifying-settings-json-in-vscode-to-add-shell-escape-flag-to-pdflatex-in-latex
-			# You need to add this code here as well but you don't know how, so latex works with svgs
-			vscUserSettings = builtins.fromJSON (builtins.readFile ./VSCsettings.json);
-    in 
-		{
+		config =
+			let
+				# the latex code: https://stackoverflow.com/questions/56743092/modifying-settings-json-in-vscode-to-add-shell-escape-flag-to-pdflatex-in-latex
+				# You need to add this code here as well but you don't know how, so latex works with svgs
+				vscUserSettings = builtins.fromJSON (builtins.readFile ./VSCsettings.json);
+			in lib.mkIf cfg.enable {
+
+			home.packages = with pkgs; [
+				(vscode-with-extensions.override {
+					vscode = vscodium;
+					vscodeExtensions = with vscode-extensions; [
+							# vscodevim.vim # this is later when you're a chad
+							ms-vsliveshare.vsliveshare
+							bbenoist.nix # nix language highlighting
+							ms-azuretools.vscode-docker
+							usernamehw.errorlens # Improve highlighting of errors, warnings and other language diagnostics.
+							ritwickdey.liveserver # for html and css development
+							# glenn2223.live-sass # not in nixpkgs
+							yzhang.markdown-all-in-one # markdown
+							formulahendry.code-runner
+							james-yu.latex-workshop
+							bungcip.better-toml # TOML language support
+							matklad.rust-analyzer
+							arrterian.nix-env-selector # nix environment selector
+							tamasfe.even-better-toml # Fully-featured TOML support
+							eamodio.gitlens
+							valentjn.vscode-ltex
+							# you should try adding this one to have better nix code
+							# b4dm4n.vscode-nixpkgs-fmt # for consistent nix code formatting (https://github.com/nix-community/nixpkgs-fmt)
+
+							haskell.haskell
+
+							# python
+							# ms-python.python # Gives this error for now:
+							#ERROR: Could not find a version that satisfies the requirement lsprotocol>=2022.0.0a9 (from jedi-language-server) (from versions: none)
+							#ERROR: No matching distribution found for lsprotocol>=2022.0.0a9
+							ms-python.vscode-pylance
+							# ms-python.python # Causing an error now
+
+							# java
+							redhat.java
+							#search for extension pack for java
+							vscjava.vscode-java-debug 
+							# vscjava.vscode-java-dependency
+							# vscjava.vscode-java-pack
+							vscjava.vscode-java-test
+							# vscjava.vscode-maven
+
+							# C
+							llvm-vs-code-extensions.vscode-clangd
+
+							ms-vscode-remote.remote-ssh
+
+					]; #++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+						#{
+						#  name = "remote-ssh-edit";
+						#  publisher = "ms-vscode-remote";
+						#  version = "0.47.2";
+						#  sha256 = "1hp6gjh4xp2m1xlm1jsdzxw9d8frkiidhph6nvl24d0h8z34w49g";
+						#}
+					#];
+				})
+			];
 
 			# ====== Making VScodium settings writable ======
 			# Allowing VScode to change settings on run time, see last response: https://github.com/nix-community/home-manager/issues/1800
@@ -91,6 +150,23 @@
 						#     userSettings} \
 						#   > "$userDir3/settings.json"
 	*/
+
+	home.file =
+	{
+    # Change VSCodium to be able to use pylance (https://github.com/VSCodium/vscodium/pull/674#issuecomment-1137920704)
+      ".config/VSCodium/product.json".source = builtins.toFile "product.json" ''
+{
+  "nameShort": "Visual Studio Code",
+  "nameLong": "Visual Studio Code",
+}
+      '';
+	# if you want to activate the MS extension store, add this as well:
+	#"extensionsGallery": {
+	#   "serviceUrl": "https://marketplace.visualstudio.com/_apis/public/gallery",
+	#   "cacheUrl": "https://vscode.blob.core.windows.net/gallery/index",
+	#   "itemUrl": "https://marketplace.visualstudio.com/items"
+	# }
+ 	};
 
   	};
 }

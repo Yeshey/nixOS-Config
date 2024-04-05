@@ -5,10 +5,12 @@
     # gnome.enable = true;
     tmux.enable = true;
     zsh.enable = true;
+    homeapps.enable = true;
     neovim = {
       enable = true;
       enableLSP = true;
     };
+    vscodium.enable = true;
   };
 
   home = {                                # Specific packages
