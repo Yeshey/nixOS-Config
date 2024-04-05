@@ -8,7 +8,7 @@
     ./non-nixos.nix
     ./tmux.nix
     ./zsh
-    ./homeapps # TODO not okay
+    ./homeapps.nix # TODO not okay
     ./vscodium # TODO not rly okay
   ];
 }

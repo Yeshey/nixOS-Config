@@ -17,7 +17,10 @@
 			# Allowing VScode to change settings on run time, see last response: https://github.com/nix-community/home-manager/issues/1800
 			# VScodium is now free to write to its settings, but they will be overwritten when I run nixos rebuild
 			# check also how he implemented in his repository: https://github.com/rgbatty/cauldron (nope!)
-			home.activation.boforeCheckLinkTargets = {
+			# TODO user = "yeshey";
+			home.activation.boforeCheckLinkTargets = let
+				user = "yeshey";
+			in {
 				after = [];
 				before = [ "checkLinkTargets" ];
 				data = ''

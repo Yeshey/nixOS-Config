@@ -66,11 +66,20 @@
   };
   systemd.services.thermald.serviceConfig.ExecStart = let # running with --adaptive ignores the config file. Issue raised: https://github.com/NixOS/nixpkgs/issues/201402
     cfg = config.services.thermald;
-  in lib.mkForce ''
+      in lib.mkForce ''
+          ${cfg.package}/sbin/thermald \
+            --no-daemon \
+            --config-file /home/yeshey/.setup/hosts/laptop/configFiles/thermal-conf.xml \
+        '';
+  # TODO above was like so:
+  # user = "yeshey";
+  # location = "/home/${user}/.setup"; # "$HOME/.setup"
+  /* in lib.mkForce ''
           ${cfg.package}/sbin/thermald \
             --no-daemon \
             --config-file ${location}/hosts/laptop/configFiles/thermal-conf.xml \
         '';
+        */
 
   # systemctl status borgbackup-job-rootBackup.service/timer
   services.borgbackup.jobs = { # for a local backup
@@ -82,7 +91,9 @@
       # Use `sudo borg break-lock /mnt/hdd-btrfs/Backups/borgbackup/` to remove the lock in case you can't access it, make sure nothing is using it
       # Use `sudo systemctl start borgbackup-job-rootBackup.service` to make a backup right now
       # Watch size of repo: `watch "sudo du -sh /mnt/hdd-btrfs/Backups/borgbackup/ && echo && sudo du -s /mnt/hdd-btrfs/Backups/borgbackup/"`
-      paths = [ "${dataStoragePath}/PersonalFiles" "/home/${user}"]; 
+      # TODO dataStoragePath = "/mnt/DataDisk"; and user = "yeshey";
+      # paths = [ "${dataStoragePath}/PersonalFiles" "/home/${user}"]; 
+      paths = [ "/mnt/DataDisk/PersonalFiles" "/home/yeshey"]; 
       exclude = [ 
           # Largest cache dirs
           ".cache"
@@ -180,7 +191,7 @@
   #};
 
   networking = {
-    hostName = "hyrule";
+    hostName = "hyrulecastle"; # TODO make into variable
   };
 
   system.stateVersion = "22.05";

@@ -1,3 +1,4 @@
+# this file is part of the template # TODO delete
 # This is just an example, you should generate yours with nixos-generate-config and put it in here.
 {
   fileSystems."/" = {

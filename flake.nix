@@ -1,5 +1,6 @@
+# base config generated with `nix flake init -t github:misterio77/nix-starter-config#standard`
 {
-  description = "My config";
+  description = "Hyrule";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-23.11";
@@ -7,6 +8,10 @@
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
       url = "github:nix-community/home-manager/release-23.11";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    neovim-plugins = {
+      url = "github:LongerHV/neovim-plugins-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     /* 
@@ -24,10 +29,6 @@
         home-manager.follows = "home-manager";
       };
     }; */
-    /* neovim-plugins = {
-      url = "github:LongerHV/neovim-plugins-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    }; */
     /* nixgl = { # Might be needed for non-nixOS setups
       url = "github:guibou/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -44,7 +45,7 @@
     , nixos-hardware
     , home-manager
 #    , agenix
-#    , neovim-plugins
+    , neovim-plugins
 #    , nixgl
     , ...
   }@inputs: 
@@ -70,8 +71,31 @@
     # Using the official nixpkgs formatter (article: https://drakerossman.com/blog/overview-of-nix-formatters-ecosystem)
     formatter = forAllSystems (system: nixpkgs-unstable.legacyPackages.${system}.nixfmt-rfc-style);
 
+    # TODO not importing overlays like this anymore? review how to do overlays
     # Your custom packages and modifications, exported as overlays
     overlays = import ./overlays {inherit inputs;};
+    # Overlays
+    /*
+    overlays = {
+      default = import ./overlays/default.nix;
+      unstable = final: prev: {
+        unstable = nixpkgs-unstable.legacyPackages.${prev.system};
+        inherit (nixpkgs-unstable.legacyPackages.${prev.system}) neovim-unwrapped;
+      };
+      # call the overlays
+      neovimPlugins = neovim-plugins.overlays.default;
+      # agenix = agenix.overlays.default; # TODO ? remove
+      # nixgl = nixgl.overlays.default;
+    };
+    */
+
+    legacyPackages = forAllSystems (system:
+      import inputs.nixpkgs {
+        inherit system;
+        overlays = builtins.attrValues overlays;
+        config.allowUnfree = true;
+      }
+    );
 
     nixosModules = import ./modules/nixos;
     homeManagerModules = import ./modules/home-manager;
@@ -87,10 +111,10 @@
         specialArgs = { inherit inputs outputs; };
       in
       {
-        hyrule = nixpkgs.lib.nixosSystem { # Lenovo Laptop - Main Machine
+        hyrulecastle = nixpkgs.lib.nixosSystem { # Lenovo Laptop - Main Machine
           inherit specialArgs;
           modules = defaultModules ++ [
-            ./nixos/hyrule
+            ./nixos/hyrulecastle
           ];
         };
         kakariko = nixpkgs.lib.nixosSystem { # Surface Pro 7 - Portable Machine
@@ -118,7 +142,7 @@
     homeConfigurations = {
       # For Non-NixOS
       "yeshey@zoras" = home-manager.lib.homeManagerConfiguration {
-        pkgs = legacyPackages.exodus-linux;
+        pkgs = legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
         extraSpecialArgs = { inherit inputs outputs; };
         modules = (builtins.attrValues homeManagerModules) ++ [
           ./home-manager/home.nix
