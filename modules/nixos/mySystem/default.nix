@@ -55,7 +55,7 @@ in
   config = {
     zramSwap.enable = lib.mkDefault true;
     boot.tmp.cleanOnBoot = lib.mkDefault true; # delete all files in /tmp during boot.
-    boot.supportedFilesystems = mkOption {
+    boot.supportedFilesystems = lib.mkOption {
       type = types.listOf types.str;
       default = [ "ntfs" ]; # TODO, other lists should be done like this instead of just with lib.mkDefault that I use in several places
     };
