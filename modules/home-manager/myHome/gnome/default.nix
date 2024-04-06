@@ -11,7 +11,10 @@ in
     enable = mkEnableOption "gnome";
     wallpaper = mkOption {
       type = types.package;
-      default = pkgs.nierWallpaper;
+      default = builtins.fetchurl {
+        url = "https://cdna.artstation.com/p/assets/images/images/018/711/480/large/john-kearney-cityscape-poster-artstation-update.jpg";
+        sha256 = "sha256:1a2krq61502z5zka0a97zll4s8x9dv2qaap5hivpr7fpzl46qp2n";
+      };
     };
     font = {
       package = mkOption {
