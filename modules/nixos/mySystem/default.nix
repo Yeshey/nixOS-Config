@@ -135,6 +135,8 @@ in
       startAgent = true;
       forwardX11 = true;
     };
+    #programs.zsh.enable = true;
+    #programs.zsh.shellAliases = { vim = "echo 'hello'"; };
     programs.zsh = {
       enable = true;
       # TODO lib.mkDefault doesn't work with {} and [] values? 
@@ -186,7 +188,7 @@ in
       syntaxHighlighting.enable = lib.mkDefault true;
       enableCompletion = lib.mkDefault true;
       histSize = lib.mkDefault 100000;
-      ohMyZsh = {
+      ohMyZsh = { # TODO this doesn't work?
         plugins = [ "git" 
                     "colored-man-pages" 
                     "alias-finder" 
@@ -194,7 +196,7 @@ in
                     #"autojump" 
                     "urltools" 
                     "bgnotify"];
-        theme = lib.mkDefault "agnoster"; # robbyrussell # agnoster # frisk
+        theme = lib.mkDefault "frisk"; # robbyrussell # agnoster # frisk
       };
     };
 

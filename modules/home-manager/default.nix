@@ -43,6 +43,12 @@ XDG_VIDEOS_DIR="$HOME/Videos"
 
     programs.git.enable = lib.mkDefault true;
 
+    programs.direnv = {
+      enable = lib.mkDefault true;
+      enableZshIntegration = lib.mkDefault true; # TODO check if zsh enabled?
+      nix-direnv.enable = lib.mkDefault true;
+    };
+
     # TODO organize this:
     
     # My home files 
