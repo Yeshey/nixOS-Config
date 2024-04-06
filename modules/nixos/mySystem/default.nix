@@ -124,8 +124,8 @@ in
       settings.PermitRootLogin = lib.mkDefault "yes"; # TODO no
       settings.X11Forwarding = lib.mkDefault true;
     };
-    # security.sudo.wheelNeedsPassword = false;
-    security.pam.enableSSHAgentAuth = true;
+    # security.sudo.wheelNeedsPassword = false; # TODO remove (how do you do secrets management)
+    # security.pam.enableSSHAgentAuth = true;
 
     programs.neovim = {
       enable = lib.mkDefault true;
