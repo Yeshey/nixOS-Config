@@ -34,5 +34,6 @@
       #};
 
   # call the overlays
-  neovimPlugins = inputs.neovim-plugins.overlays.default;
+  # Used here: pkgs.nvimPlugins.plenary # TODO see if there is a better way to do this
+  neovimPluginsss = inputs.neovim-plugins.overlays.default;
 }
