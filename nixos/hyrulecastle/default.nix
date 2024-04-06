@@ -52,9 +52,11 @@
     home-manager = {
       enable = true;
       home = ./home.nix;
+      # useGlobalPkgs = lib.mkForce false;
     };
     #nix.substituters = [ "nasgul" ];
   };
+  # mySystem.home-manager.useGlobalPkgs = false;
 
   # Manage Temperature, prevent throttling
   # https://github.com/linux-surface/linux-surface/issues/221
