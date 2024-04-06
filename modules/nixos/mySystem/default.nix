@@ -124,6 +124,7 @@ in
       settings.PermitRootLogin = lib.mkDefault "yes"; # TODO no
       settings.X11Forwarding = lib.mkDefault true;
     };
+    security.sudo.wheelNeedsPassword = false;
 
     programs.neovim = {
       enable = lib.mkDefault true;
