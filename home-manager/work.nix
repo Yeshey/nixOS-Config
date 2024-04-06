@@ -2,7 +2,7 @@
   home = rec {
     username = "mmieszczak";
     homeDirectory = "/home/${username}";
-    stateVersion = "22.05";
+    stateVersion = "22.11";
   };
 
   myHome = {
