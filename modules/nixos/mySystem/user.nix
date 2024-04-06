@@ -20,6 +20,7 @@ in
 
   config = {
     home-manager = lib.mkIf cfg.home-manager.enable {
+      backupFileExtension = lib.mkDefault "backup"; # let hm overwrite files (https://nix-community.github.io/home-manager/nixos-options.xhtml#nixos-opt-home-manager.backupFileExtension)
       useGlobalPkgs = lib.mkDefault true;
       useUserPackages = lib.mkDefault true;
       extraSpecialArgs = { inherit inputs; };
