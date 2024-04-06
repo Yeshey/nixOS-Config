@@ -1,11 +1,4 @@
 {inputs, ...}: {
-  default = final: prev: {
-    nierWallpaper = builtins.fetchurl {
-      url = "https://images6.alphacoders.com/655/655990.jpg";
-      sha256 = "b09b411a9c7fc7dc5be312ca9e4e4b8ee354358daa792381f207c9f4946d95fe";
-    };
-  };
-
   # This one brings our custom packages from the 'pkgs' directory
   additions = final: _prev: import ../pkgs {pkgs = final;};
 
@@ -33,5 +26,6 @@
       #};
 
   # call the overlays
-  neovimPlugins = inputs.neovim-plugins.overlays.default;
+  # Used here: pkgs.nvimPlugins.plenary # TODO see if there is a better way to do this
+  neovimPluginsss = inputs.neovim-plugins.overlays.default;
 }
