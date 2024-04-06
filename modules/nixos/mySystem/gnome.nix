@@ -13,7 +13,6 @@ in
       systemPackages = with pkgs; [
         firefox
         wl-clipboard
-        spotify
         gnomeExtensions.appindicator
         gnomeExtensions.gsconnect
       ];
