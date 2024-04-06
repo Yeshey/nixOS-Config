@@ -62,7 +62,7 @@ in
     # lib.mkDefault is for booleans only https://discourse.nixos.org/t/mkenableoption-vs-mkoption-type-bool/27736/4
     zramSwap.enable = lib.mkDefault true;
     boot.tmp.cleanOnBoot = lib.mkDefault true; # delete all files in /tmp during boot.
-    boot.supportedFilesystems = [ "ntfs" ]; # TODO lib.mkdefault?
+    boot.supportedFilesystems = [ "ntfs" ]; # TODO lib.mkdefault? Doesn't work with [] and {}?
 
     time.timeZone = lib.mkDefault "Europe/Lisbon";
     i18n.defaultLocale = lib.mkDefault "en_GB.utf8";
@@ -119,7 +119,7 @@ in
       config.nix.registry;
 
     services.openssh = with lib; {
-      enable = lib.mkDefault true;
+      enable = true;
       settings.PasswordAuthentication = lib.mkDefault true; # TODO false
       settings.PermitRootLogin = lib.mkDefault "yes"; # TODO no
       settings.X11Forwarding = lib.mkDefault true;
@@ -128,7 +128,7 @@ in
     # security.pam.enableSSHAgentAuth = true;
 
     programs.neovim = {
-      enable = lib.mkDefault true;
+      enable = true;
       defaultEditor = lib.mkDefault true;
     };
     programs.ssh = {
@@ -136,8 +136,9 @@ in
       forwardX11 = true;
     };
     programs.zsh = {
-      enable = lib.mkDefault true;
-      shellAliases = lib.mkDefault {
+      enable = true;
+      # TODO lib.mkDefault doesn't work with {} and [] values? 
+      shellAliases = {
         # vim = "nvim";
         # ls = "lsd -l --group-dirs first";
         clean = "echo \"This will clean all generations, and optimise the store\" ; sudo sh -c 'nix-collect-garbage -d ; nix-store --optimise'";
@@ -185,15 +186,15 @@ in
       syntaxHighlighting.enable = lib.mkDefault true;
       enableCompletion = lib.mkDefault true;
       histSize = lib.mkDefault 100000;
-      ohMyZsh = lib.mkDefault {
-        plugins = lib.mkDefault [ "git" 
+      ohMyZsh = {
+        plugins = [ "git" 
                     "colored-man-pages" 
                     "alias-finder" 
                     "command-not-found" 
                     #"autojump" 
                     "urltools" 
                     "bgnotify"];
-        theme = "agnoster"; # robbyrussell # agnoster # frisk
+        theme = lib.mkDefault "agnoster"; # robbyrussell # agnoster # frisk
       };
     };
 
@@ -227,7 +228,7 @@ in
     # networking.hostName = "nixOS-${host}"; # TODO hostname is defined in each machine, decide if you can make it global in here.
     networking.networkmanager.enable = lib.mkDefault true;
     networking.resolvconf.dnsExtensionMechanism = lib.mkDefault false; # fixes internet connectivity problems with some sites (https://discourse.nixos.org/t/domain-name-resolve-problem/885/2)
-    networking.nameservers = lib.mkDefault [ "1.1.1.1" "8.8.8.8" "9.9.9.9" ]; # (https://unix.stackexchange.com/questions/510940/how-can-i-set-a-custom-dns-server-within-nixos)
+    networking.nameservers = [ "1.1.1.1" "8.8.8.8" "9.9.9.9" ]; # (https://unix.stackexchange.com/questions/510940/how-can-i-set-a-custom-dns-server-within-nixos)
     # needed to access coimbra-dev raspberrypi from localnetwork
     systemd.network.wait-online.enable = lib.mkDefault false;
     networking.useNetworkd = lib.mkDefault true;
