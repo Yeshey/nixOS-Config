@@ -18,12 +18,13 @@ in
 
     # TODO can any of these be made into general modules?
     #./dontStarveTogetherServer.nix
-    ./nextcloud.nix # TODO not working right boy nixos-rebuild build-vm --flake ~/.setup#skyloft not working
-    ./minecraft.nix
-    ./openvscode-server.nix
-    ./ngix-server
-    ./mineclone.nix
-    ./kubo.nix
+
+    #./nextcloud.nix # TODO not working right boy nixos-rebuild build-vm --flake ~/.setup#skyloft not working
+    #./minecraft.nix
+    #./openvscode-server.nix
+    #./ngix-server
+    #./mineclone.nix
+    #./kubo.nix
   ];
 
   nixpkgs = {
@@ -57,7 +58,7 @@ in
     gaming.enable = false;
     vmHost = true;
     dockerHost = true;
-    host = "skyloft";
+    host = "skyloft"; # TODO make this mandatory?
     home-manager = {
       enable = true;
       home = ./home.nix;

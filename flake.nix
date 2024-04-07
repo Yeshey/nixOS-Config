@@ -124,20 +124,12 @@
             };
 
           skyloft = # Oracle Arm Ampere - Server
-            let
-              host = "skyloft";
-              dataStoragePath = "~";
-            in
             nixpkgs.lib.nixosSystem {
               inherit specialArgs;
               modules = defaultModules ++ [ ./nixos/skyloft ];
             };
 
           twilightrealm = # Virtual Machines
-            let
-              host = "twilightrealm";
-              dataStoragePath = "~/Documents";
-            in
             nixpkgs.lib.nixosSystem {
               inherit specialArgs;
               modules = defaultModules ++ [ ./nixos/twilightrealm ];

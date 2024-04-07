@@ -1,14 +1,14 @@
 { config, lib, pkgs, ... }:
 
 let
-  
+  cfg = config.mySystem.plasma;
 in
 {
   options.mySystem.plasma = {
     enable = lib.mkEnableOption "plasma";
   };
 
-  config = lib.mkIf config.mySystem.plasma.enable {
+  config = lib.mkIf cfg.enable {
     # KDE Plasma
     services.xserver = {
         enable = true; # Enable the X11 windowing system.
