@@ -20,11 +20,11 @@ in
     #./dontStarveTogetherServer.nix
 
     #./nextcloud.nix # TODO not working right boy nixos-rebuild build-vm --flake ~/.setup#skyloft not working
-    #./minecraft.nix
-    #./openvscode-server.nix
-    #./ngix-server
-    #./mineclone.nix
-    #./kubo.nix
+    ./minecraft.nix
+    ./openvscode-server.nix
+    ./ngix-server
+    ./mineclone.nix
+    ./kubo.nix
   ];
 
   nixpkgs = {

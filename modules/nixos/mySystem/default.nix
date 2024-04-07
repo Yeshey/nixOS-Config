@@ -135,7 +135,7 @@ in
 
     services.openssh = with lib; {
       enable = true;
-      settings.PasswordAuthentication = lib.mkDefault true; # TODO false
+      # settings.PasswordAuthentication = lib.mkDefault true; # TODO false
       settings.PermitRootLogin = lib.mkDefault "yes"; # TODO no
       settings.X11Forwarding = lib.mkDefault true;
     };
