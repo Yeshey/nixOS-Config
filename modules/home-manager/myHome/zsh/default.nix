@@ -133,15 +133,27 @@
           name = "you-should-use";
           src = "${pkgs.zsh-you-should-use}/share/zsh/plugins/you-should-use";
         }
-        #{ # TODO possibly reenable, also oh-my-zsh doesnt work? can't add the theme
-        #  name = "zsh-vi-mode";
-        #  src = "${pkgs.unstable.zsh-vi-mode}/share/zsh-vi-mode";
-        #}
+        { # TODO possibly reenable, also oh-my-zsh doesnt work? can't add the theme
+          name = "zsh-vi-mode";
+          src = "${pkgs.unstable.zsh-vi-mode}/share/zsh-vi-mode";
+        }
         {
           name = "zsh-z";
           src = "${pkgs.zsh-z}/share/zsh-z";
         }
       ];
+      # TODO why doesn't this work, zsh is fucked 🤦
+      /*oh-my-zsh = {
+        enable = true;
+        plugins = [ "git" 
+                    "colored-man-pages" 
+                    "alias-finder" 
+                    "command-not-found" 
+                    #"autojump" 
+                    "urltools" 
+                    "bgnotify"];
+        theme = "agnoster"; # robbyrussell # agnoster # frisk
+      }; */
     };
     home.file.".config/spaceship.zsh".source = ./spaceship.zsh;
   };
