@@ -25,6 +25,7 @@ in
     ./ngix-server
     ./mineclone.nix
     ./kubo.nix
+    #(import ./configFiles/syncthing.nix)
   ];
 
   nixpkgs = {
