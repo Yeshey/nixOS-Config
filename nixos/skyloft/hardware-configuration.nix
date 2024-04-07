@@ -33,6 +33,7 @@ options = [ "compress=zstd" ];
   networking.useDHCP = lib.mkDefault true;
   # networking.interfaces.eth0.useDHCP = lib.mkDefault true;
 
+  #nixpkgs.buildPlatform.system = "x86_64-linux";
   nixpkgs.hostPlatform = lib.mkDefault "aarch64-linux";
   #nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 }
