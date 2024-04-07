@@ -49,6 +49,9 @@ XDG_VIDEOS_DIR="$HOME/Videos"
       nix-direnv.enable = lib.mkDefault true;
     };
 
+    # TODO, seems like backupFileExtension is enough? it 
+    # xdg.configFile."*".force = true;
+
     # TODO organize this:
     
     # My home files 
