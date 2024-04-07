@@ -16,7 +16,7 @@ in
         remotePlay.openFirewall = true;
       };
       gamemode.enable = true; # allows games to request a set of optimisations be temporarily applied
-      # corectrl = {
+      # corectrl = { # TODO ?
       #   enable = true;
       #   gpuOverclock.enable = true;
       # };

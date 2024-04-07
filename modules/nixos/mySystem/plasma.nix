@@ -26,5 +26,14 @@ in
         };
         # windowManager.bspwm.enable = true; # but doesn't work
     };
+    environment.systemPackages = with pkgs; [
+      # FOR PLASMA DESKTOP
+      scrot # for plasma config saver widget
+      kdialog # for plasma config saver widget
+      ark # Compress and Uncompress files
+      sddm-kcm # for sddm configuration in settings
+      kate # KDEs notepad    
+    ];
+
   };
 }

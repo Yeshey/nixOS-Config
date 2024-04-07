@@ -60,7 +60,6 @@ in
 							llvm-vs-code-extensions.vscode-clangd
 
 							ms-vscode-remote.remote-ssh
-
 					]; #++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
 						#{
 						#  name = "remote-ssh-edit";

@@ -1,4 +1,4 @@
-{ pkgs, lib, dataStoragePath, ... }:
+{ pkgs, lib, ... }:
 
 rec { 
   imports = [ 
