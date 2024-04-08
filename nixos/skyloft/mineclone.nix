@@ -1,4 +1,4 @@
-{ config, pkgs, user, location, lib, dataStoragePath, ... }:
+{ config, pkgs, user, location, lib, ... }:
 
 {
     imports = [
@@ -17,7 +17,8 @@
         mineclone-server = {
         image = "lscr.io/linuxserver/minetest:latest";
         volumes = [
-            "${dataStoragePath}/PersonalFiles/Servers/minetest/MineCloneServerFirst:/config/.minetest"
+            # "${dataStoragePath}/PersonalFiles/Servers/minetest/MineCloneServerFirst:/config/.minetest" # TODO dataStoragePath?
+            "~/PersonalFiles/Servers/minetest/MineCloneServerFirst:/config/.minetest"
         ];
         environment = {
             PUID = "1000";
