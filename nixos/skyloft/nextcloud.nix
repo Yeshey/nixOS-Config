@@ -1,4 +1,4 @@
-{ config, pkgs, user, location, lib, dataStoragePath, ... }:
+{ config, pkgs, user, location, lib, ... }:
 
 {
     imports = [
@@ -8,13 +8,13 @@
     # NextCloud
     services.nextcloud = {
         enable = true;
-        package = pkgs.nextcloud26;
+        package = pkgs.nextcloud27;
         hostName = "143.47.53.175";
         # Enable built-in virtual host management
         # Takes care of somewhat complicated setup
         # See here: https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/web-apps/nextcloud.nix#L529
 
-        enableBrokenCiphersForSSE = false;
+        # enableBrokenCiphersForSSE = false; #TODO remove?
 
         # Use HTTPS for links
         # https = true;

@@ -229,13 +229,13 @@ in
         unrar # also to extract .rar with ark in KDE # unrar x Lab5.rar
 
         # TODO check if these are needed
-        ffmpeg
-        wine
-        gparted
+        #ffmpeg
+        #wine
+        #gparted
         # Development
-        jdk17 # java (alias for openJDK) 17.0.4.1
+        #jdk17 # java (alias for openJDK) 17.0.4.1
         #jdk18
-        python3
+        #python3
       ];
       shells = [ pkgs.zsh ];
       pathsToLink = [ "/share/zsh" ];

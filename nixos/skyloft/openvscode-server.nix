@@ -1,4 +1,4 @@
-{ config, pkgs, user, location, lib, dataStoragePath, ... }:
+{ config, pkgs, location, lib, ... }:
 
 {
     imports = [
@@ -20,9 +20,11 @@
     enable = true;
     host = "localhost";
     port = 3000;
-    user = "${user}";
-    extensionsDir = "/home/${user}/.vscode-oss/extensions";
+    user = "yeshey"; # TODO user variable?
+    extensionsDir = "/home/yeshey/.vscode-oss/extensions"; # TODO user variable?
     withoutConnectionToken = true; # So you don't need to grab the token that it generates here
   };
+
+  networking.firewall.allowedTCPPorts = [ 80 443 ]; # TODO needed?
 
 }
