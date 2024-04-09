@@ -44,7 +44,7 @@ It has my personal configuration for two devices, my Lenovo Legion laptop and my
 - Make it so the surface doesn't die when you suspend it, or find an alternative to suspending it.
 
 - figure out how to add functions aliases to zsh
-  - Make it so upgrade and update tries three times before giving up
+  - Make it so upgrade and update tries three times before giving up?
 
 ## Notes
 

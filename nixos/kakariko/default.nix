@@ -7,7 +7,11 @@
   ...
 }:
 
-let # TODO find a better way? see if its still needed
+let 
+    # user = "yeshey";
+    dataStoragePath = "/mnt/ntfsMicroSD-DataDisk";
+
+    # TODO find a better way? see if its still needed
     # Wrapper to run steam with env variable GDK_SCALE=2 to scale correctly
     # nixOS wiki on wrappers: https://nixos.wiki/wiki/Nix_Cookbook#Wrapping_packages
     # Reddit: https://www.reddit.com/r/NixOS/comments/qha9t5/comment/hid3w3z/
@@ -91,6 +95,7 @@ in
     gaming.enable = true;
     vmHost = true;
     dockerHost = true;
+    host = "kakariko";
     home-manager = {
       enable = true;
       home = ./home;
@@ -154,9 +159,9 @@ in
     steam-scalled
   ];
 
-  networking = {
-    hostName = "kakariko"; # TODO make into variable
-  };
+  #networking = { # TODO can you remove
+  #  hostName = "kakariko"; # TODO make into variable
+  #};
 
   system.stateVersion = "22.05";
 }

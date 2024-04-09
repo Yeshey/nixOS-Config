@@ -1,5 +1,5 @@
 # initialy generated with nixos-generate-config
-{ config, lib, pkgs, modulesPath, ... }:
+{ inputs, config, lib, pkgs, modulesPath, ... }:
 
 let
   nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
@@ -9,9 +9,6 @@ let
     export __VK_LAYER_NV_optimus=NVIDIA_only
     exec -a "$0" "$@"
   '';
-
-  # TODO dataStoragePath = "/mnt/DataDisk";
-  dataStoragePath = "/mnt/DataDisk";
 in
 {
   imports =
@@ -89,7 +86,7 @@ in
   ];
 
   # MY MOUNTS
-  fileSystems."${dataStoragePath}" = {
+  fileSystems."/mnt/DataDisk" = {
     device = "/dev/disk/by-label/DataDisk";
     fsType = "auto";
     options = [ "nosuid" "nodev" "nofail" "x-gvfs-show" "defaults" "users" "windows_names" "big_writes" "streams_interface=windows" "nls=utf8" ]; # x-systemd.device-timeout=3s

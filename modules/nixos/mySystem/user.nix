@@ -40,6 +40,10 @@ in
         # needed to make home-manager zsh work with gdm TODO add/remove
         #shell = pkgs.zsh;
         #useDefaultShell = false;
+
+        # generated with `diceware -w en_eff` and hashed using `mkpasswd --method=sha-512 --rounds=2000000`
+        # Works, but is it safe?
+        hashedPassword = "$6$rounds=2000000$/pvZKZOnJE51jPnR$FDiOHyOvkouz36fW8MLiPYOFdEYf/SknZWVc9tqV039bOEvQMfH9TsezvITcbsMwqVHFzA0uEPwS0msabEUKg1";
       };
       users.root = {
         openssh.authorizedKeys.keys = [ 
