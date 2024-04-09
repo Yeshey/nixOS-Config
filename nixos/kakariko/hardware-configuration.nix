@@ -17,7 +17,7 @@ in
   boot.kernelModules = [ "coretemp" "kvm-intel" "kvm-amd" "dm-cache" "dm-cache-smq" "dm-persistent-data" "dm-bio-prison" "dm-clone" "dm-crypt" "dm-writecache" "dm-mirror" "dm-snapshot" ]; # "coretemp" for temp sensors
   boot.extraModulePackages = [ ];
 
-  # for LVM: (https://github.com/NixOS/nixpkgs/issues/15516)
+  # for LVM: (https://github.com/NixOS/nixpkgs/issues/15516) # TODO separate the LVM specific things into a different file/module
   services.lvm.boot.thin.enable = true;
 
   fileSystems."/boot/efi" =
