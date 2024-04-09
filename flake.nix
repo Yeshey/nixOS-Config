@@ -110,32 +110,31 @@
         ];
         specialArgs = { inherit inputs outputs; };
       in
-      {
-        hyrulecastle = nixpkgs.lib.nixosSystem { # Lenovo Laptop - Main Machine
-          inherit specialArgs;
-          modules = defaultModules ++ [
-            ./nixos/hyrulecastle
-          ];
+        {
+          hyrulecastle = # Lenovo Laptop - Main Machine
+            nixpkgs.lib.nixosSystem {
+              inherit specialArgs;
+              modules = defaultModules ++ [ ./nixos/hyrulecastle ];
+            };
+
+          kakariko = # Surface Pro 7 - Portable Machine
+            nixpkgs.lib.nixosSystem {
+              inherit specialArgs;
+              modules = defaultModules ++ [ ./nixos/kakariko ];
+            };
+
+          skyloft = # Oracle Arm Ampere - Server
+            nixpkgs.lib.nixosSystem {
+              inherit specialArgs;
+              modules = defaultModules ++ [ ./nixos/skyloft ];
+            };
+
+          twilightrealm = # Virtual Machines
+            nixpkgs.lib.nixosSystem {
+              inherit specialArgs;
+              modules = defaultModules ++ [ ./nixos/twilightrealm ];
+            };
         };
-        kakariko = nixpkgs.lib.nixosSystem { # Surface Pro 7 - Portable Machine
-          inherit specialArgs;
-          modules = defaultModules ++ [
-            ./nixos/kakariko
-          ];
-        };
-        skyloft = nixpkgs.lib.nixosSystem { # Oracle Arm Ampere - Server
-          inherit specialArgs;
-          modules = defaultModules ++ [
-            ./nixos/skyloft
-          ];
-        };
-        twilightrealm = nixpkgs.lib.nixosSystem { # Virtual Machines
-          inherit specialArgs;
-          modules = defaultModules ++ [
-            ./nixos/twilightrealm
-          ];
-        };
-      };
 
     # Standalone home-manager configuration entrypoint
     # Available through 'home-manager --flake .#your-username@your-hostname'

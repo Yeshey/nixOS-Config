@@ -41,6 +41,10 @@ in
     ./virt.nix
 
     ./i2p.nix # TODO review and possibly clump together with the non-server Configuration below
+    ./bluetooth.nix
+    ./sound.nix
+    ./printers.nix
+    ./flatpaks.nix
 
     # ./syncthing.nix
   ];
@@ -51,15 +55,26 @@ in
       default = ["cachenixosorg" "cachethalheimio" "numtidecachixorg" "hydranixosorg" "nrdxpcachixorg" "nixcommunitycachixorg"];
       # default = builtins.attrValues substituters; # TODO, make it loop throught the list # by default use all
     };
+    host = mkOption {
+      type = types.str; 
+      description = "Name of the machine, usually what was used in --flake .#hostname. Used for setting the network host name and zsh aliases";
+      # default = 
+      # default = builtins.attrValues substituters; # TODO, make it loop throught the list # by default use all
+    };
     #boot.supportedFilesystems = lib.mkOption {
     #  default = [ "ntfs" ];
     #  type = lib.types.listOf lib.types.str;
     #  description = "List of supported filesystems for boot";
     #};
+    dedicatedServer = lib.mkEnableOption "dedicatedServer"; # TODO use this to say in the config if it is a dedicatedServer or not, with sub-options to enable each the bluetooth, printers, and sound, ponder adding the gnome and plasma desktops and gaming too
   };
 
   config = {
-    # lib.mkDefault is for booleans only https://discourse.nixos.org/t/mkenableoption-vs-mkoption-type-bool/27736/4
+    mySystem.bluetooth.enable = lib.mkDefault true;
+    mySystem.printers.enable = lib.mkDefault true;
+    mySystem.sound.enable = lib.mkDefault true;
+    mySystem.flatpaks.enable = lib.mkDefault true;
+
     zramSwap.enable = lib.mkDefault true;
     boot.tmp.cleanOnBoot = lib.mkDefault true; # delete all files in /tmp during boot.
     boot.supportedFilesystems = [ "ntfs" ]; # TODO lib.mkdefault? Doesn't work with [] and {}?
@@ -79,7 +94,7 @@ in
     };
     console.keyMap = lib.mkDefault "pt-latin1";
 
-    nixpkgs.overlays = builtins.attrValues outputs.overlays;
+    nixpkgs.overlays = builtins.attrValues outputs.overlays; # TODO what is this, do I need?
     nixpkgs.config.allowUnfree = true;
     nix = {
       package = pkgs.nix;
@@ -97,7 +112,7 @@ in
         dates = lib.mkDefault "weekly";
       };
       settings = {
-        trusted-users = [ "root" "yeshey" "@wheel" ]; # TODO remove
+        trusted-users = [ "root" "yeshey" "@wheel" ]; # TODO remove (check the original guys config)
         auto-optimise-store = lib.mkDefault true;
         substituters = map (x: substituters.${x}.url) cfg.nix.substituters;
         trusted-public-keys = map (x: substituters.${x}.key) cfg.nix.substituters;
@@ -120,7 +135,7 @@ in
 
     services.openssh = with lib; {
       enable = true;
-      settings.PasswordAuthentication = lib.mkDefault true; # TODO false
+      # settings.PasswordAuthentication = lib.mkDefault true; # TODO false
       settings.PermitRootLogin = lib.mkDefault "yes"; # TODO no
       settings.X11Forwarding = lib.mkDefault true;
     };
@@ -135,6 +150,8 @@ in
       startAgent = true;
       forwardX11 = true;
     };
+    #programs.zsh.enable = true;
+    #programs.zsh.shellAliases = { vim = "echo 'hello'"; };
     programs.zsh = {
       enable = true;
       # TODO lib.mkDefault doesn't work with {} and [] values? 
@@ -186,7 +203,7 @@ in
       syntaxHighlighting.enable = lib.mkDefault true;
       enableCompletion = lib.mkDefault true;
       histSize = lib.mkDefault 100000;
-      ohMyZsh = {
+      ohMyZsh = { # TODO this doesn't work?
         plugins = [ "git" 
                     "colored-man-pages" 
                     "alias-finder" 
@@ -194,7 +211,7 @@ in
                     #"autojump" 
                     "urltools" 
                     "bgnotify"];
-        theme = lib.mkDefault "agnoster"; # robbyrussell # agnoster # frisk
+        theme = lib.mkDefault "frisk"; # robbyrussell # agnoster # frisk
       };
     };
 
@@ -212,13 +229,13 @@ in
         unrar # also to extract .rar with ark in KDE # unrar x Lab5.rar
 
         # TODO check if these are needed
-        ffmpeg
-        wine
-        gparted
+        #ffmpeg
+        #wine
+        #gparted
         # Development
-        jdk17 # java (alias for openJDK) 17.0.4.1
+        #jdk17 # java (alias for openJDK) 17.0.4.1
         #jdk18
-        python3
+        #python3
       ];
       shells = [ pkgs.zsh ];
       pathsToLink = [ "/share/zsh" ];
@@ -232,6 +249,9 @@ in
     # needed to access coimbra-dev raspberrypi from localnetwork
     systemd.network.wait-online.enable = lib.mkDefault false;
     networking.useNetworkd = lib.mkDefault true;
+    networking = {
+      hostName = "nixos-${cfg.host}";
+    };
     # TODO maybe take a look at how he did network cuz I'm lost
     /*
       networking = {
@@ -308,51 +328,12 @@ in
 # =======================================================================
 # ========================== NON SERVER CONFIG ==========================
 # =======================================================================
-    #     ____                  __
-    #    / __/__  __ _____  ___/ /
-    #   _\ \/ _ \/ // / _ \/ _  / 
-    #  /___/\___/\_,_/_//_/\_,_/                             
-
-    # Enable sound with pipewire.
-    sound.enable = true;
-    hardware.pulseaudio.enable = false;
-    security.rtkit.enable = true;
-    services.pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
-
-      # If you want to use JACK applications, uncomment this
-      #jack.enable = true;
-
-      # use the example session manager (no others are packaged yet so this is enabled by default,
-      # no need to redefine it in your config for now)
-      #media-session.enable = true;
-    };
 
     #      __                 __                            ____     
     #   __/ /_  ___ __ _____ / /____ __ _    _______  ___  / _(_)__ _
     #  /_  __/ (_-</ // (_-</ __/ -_)  ' \  / __/ _ \/ _ \/ _/ / _ `/
     #   /_/   /___/\_, /___/\__/\__/_/_/_/  \__/\___/_//_/_//_/\_, / 
     #             /___/                                       /___/
-
-    # Enable CUPS to print documents.
-    services.printing.enable = true; # TODO check if it works with your printer
-
-    # Bluetooth
-    hardware.bluetooth = { # TODO Check if it's still needed
-      powerOnBoot = true;
-      enable = true;
-      # package = pkgs.bluezFull;
-    };
-    # https://github.com/NixOS/nixpkgs/issues/63703 (issue that helped me override it)
-    # https://discourse.nixos.org/t/how-to-override-nixpkg-services-execstart/17699 (general systemd service override)
-    # https://forum.manjaro.org/t/how-to-monitor-battery-level-of-bluetooth-device/117769 (where I found the solution to report connected bluetooth devices battery)
-    systemd.services.bluetooth.serviceConfig.ExecStart = [  # I guess you don't need this: lib.mkForce
-      ""
-      "${pkgs.bluez}/libexec/bluetooth/bluetoothd -f /etc/bluetooth/main.conf --experimental" 
-    ];
 
     # Enable touchpad support (enabled default in most desktopManager).
     # services.xserver.libinput.enable = true;
@@ -383,63 +364,6 @@ in
     #virtualisation.libvirtd.enable = true; # TODO put them in the right place
     #virtualisation.spiceUSBRedirection.enable = true; # to enable USB rederection in virt-manager (https://github.com/NixOS/nixpkgs/issues/106594)
     
-/*
-
-    # More apps # TODO, doesnt work when in gnome??
-    services.flatpak.enable = true;
-    # needed for flatpak to work
-    xdg.portal = {
-      enable = true;
-      config.common.default = "*";
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-wlr
-        xdg-desktop-portal-kde
-        xdg-desktop-portal-gtk
-      ];
-
-      # TODO this should eventually be looked into
-      /*
-        trace: warning: xdg-desktop-portal 1.17 reworked how portal implementations are loaded, you
-        should either set `xdg.portal.config` or `xdg.portal.configPackages`
-        to specify which portal backend to use for the requested interface.
-
-        https://github.com/flatpak/xdg-desktop-portal/blob/1.18.1/doc/portals.conf.rst.in
-
-        If you simply want to keep the behaviour in < 1.17, which uses the first
-        portal implementation found in lexicographical order, use the following:
-
-        xdg.portal.config.common.default = "*";
-      */
-
-      #configPackages = [pkgs.gnome.gnome-session]; # TODO, how to do this?
-      /*
-      config = 
-      {
-        common = {
-          default = [
-            "gtk"
-          ];
-        };
-        pantheon = {
-          default = [
-            "pantheon"
-            "gtk"
-          ];
-          "org.freedesktop.impl.portal.Secret" = [
-            "gnome-keyring"
-          ];
-        };
-        x-cinnamon = {
-          default = [
-            "xapp"
-            "gtk"
-          ];
-        };
-      };
-      */
-    #};
-
-
 
     #    ___           __                   
     #   / _ \___ _____/ /_____ ____ ____ ___

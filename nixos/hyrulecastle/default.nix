@@ -7,6 +7,10 @@
   ...
 }:
 
+let
+  # user = "yeshey";
+  dataStoragePath = "/mnt/DataDisk";
+in
 {
   imports = [
     inputs.nixos-hardware.nixosModules.common-cpu-intel
@@ -49,11 +53,16 @@
     gaming.enable = true;
     vmHost = true;
     dockerHost = true;
+    host = "hyrulecastle";
     home-manager = {
       enable = true;
       home = ./home.nix;
       # useGlobalPkgs = lib.mkForce false;
     };
+    #bluetooth.enable = true;
+    #printers.enable = true;
+    #sound.enable = true;
+    #flatpaks.enable = true;
     #nix.substituters = [ "nasgul" ];
   };
   # mySystem.home-manager.useGlobalPkgs = false;
@@ -95,8 +104,10 @@
       # Use `sudo systemctl start borgbackup-job-rootBackup.service` to make a backup right now
       # Watch size of repo: `watch "sudo du -sh /mnt/hdd-btrfs/Backups/borgbackup/ && echo && sudo du -s /mnt/hdd-btrfs/Backups/borgbackup/"`
       # TODO dataStoragePath = "/mnt/DataDisk"; and user = "yeshey";
+      # see if the ~ works
+      paths = [ "${dataStoragePath}/PersonalFiles" "~"]; 
       # paths = [ "${dataStoragePath}/PersonalFiles" "/home/${user}"]; 
-      paths = [ "/mnt/DataDisk/PersonalFiles" "/home/yeshey"]; 
+      #paths = [ "/mnt/DataDisk/PersonalFiles" "/home/yeshey"]; 
       exclude = [ 
           # Largest cache dirs
           ".cache"
@@ -193,9 +204,9 @@
   #  cpufreq.max = 4700000;
   #};
 
-  networking = {
-    hostName = "hyrulecastle"; # TODO make into variable
-  };
+  #networking = { # TODO can you remove?
+  #  hostName = "nixos-${inputs.host}"; # TODO make into variable
+  #};
 
   system.stateVersion = "22.05";
 }

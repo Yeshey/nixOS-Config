@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, user, location, host, dataStoragePath, ... }:
+{ config, lib, pkgs, inputs, user, location, host, ... }:
 
 {
   # Open ports in the firewall.

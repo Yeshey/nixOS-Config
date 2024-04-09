@@ -1,3 +1,4 @@
+# TODO what is this
 {
   myHome = {
     neovim = {

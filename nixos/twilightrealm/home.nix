@@ -4,7 +4,7 @@
   myHome = {
     # gnome.enable = true;
     tmux.enable = true;
-    zsh.enable = true; # TODO make so it you comment, it should be bash
+    zsh.enable = false; # TODO make so it you comment, it should be bash
     homeapps.enable = true;
     neovim = {
       enable = true;
