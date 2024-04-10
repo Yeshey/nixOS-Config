@@ -23,7 +23,7 @@ in
     #./minecraft.nix
     ./openvscode-server.nix # vscoduium is not well
     ./ngix-server
-    # ./mineclone.nix
+    ./mineclone.nix
     ./kubo.nix
     #(import ./configFiles/syncthing.nix)
   ];
