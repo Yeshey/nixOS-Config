@@ -229,13 +229,13 @@ in
         unrar # also to extract .rar with ark in KDE # unrar x Lab5.rar
 
         # TODO check if these are needed
-        ffmpeg
-        wine
-        gparted
+        #ffmpeg
+        #wine
+        #gparted
         # Development
-        jdk17 # java (alias for openJDK) 17.0.4.1
+        #jdk17 # java (alias for openJDK) 17.0.4.1
         #jdk18
-        python3
+        #python3
       ];
       shells = [ pkgs.zsh ];
       pathsToLink = [ "/share/zsh" ];
@@ -277,9 +277,24 @@ in
     */
 
 
-    # TODO Fix & add auto Upgrades, also set it to boot
+    
   /*
+    # TODO Fix & add auto Upgrades, also set it to boot
     # Auto Upgrade
+    # a guy told you in nix wiki to make auto upgrades use boot, to be atomic, meaning, that if they get interrupted it's safe. But notice this:
+$ sudo nixos-rebuild switch --flake ~/.setup#skyloft && echo "success"          
+[...]
+abr 08 22:00:50 nixos-skyloft systemd[1]: podman-mineclone-server.service: Consumed 162ms CPU time, received 16.2K IP traffic, sent 4.5K IP traffic.
+warning: error(s) occurred while switching to the new configuration
+
+$ sudo nixos-rebuild boot --flake ~/.setup#skyloft && echo "success"            
+[...]
+warning: Git tree '/home/yeshey/.setup' is dirty
+success
+
+# this command makes a podman service fail, notice how I can detect that if fais with switch, but not with boot, if I want to detect that it fails and roll back in the automatic upgrades, I'll probably have to use switch
+
+
     system.autoUpgrade = {
       enable = true;
       # dates = "23:01";
