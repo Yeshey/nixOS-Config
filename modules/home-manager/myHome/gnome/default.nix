@@ -6,7 +6,7 @@ let
   inherit (config.myHome) colors;
 in
 {
-  imports = [ ./terminal.nix ];
+  imports = [ ./alacritty.nix ];
   options.myHome.gnome = with lib; {
     enable = mkEnableOption "gnome";
     wallpaper = mkOption {
@@ -58,6 +58,7 @@ in
       "org/gnome/desktop/screensaver" = {
         picture-uri = "file://${cfg.wallpaper}";
       };
+      /*
       "org/gnome/terminal/legacy" = {
         theme-variant = "dark";
       };
@@ -79,6 +80,7 @@ in
         use-transparent-background = true;
         background-transparency-percent = 10;
       };
+      */
       "org/gnome/settings-daemon/plugins/color" = {
         night-light-enabled = true;
         night-light-temperature = "uint32 3000";

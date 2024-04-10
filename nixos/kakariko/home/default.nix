@@ -1,9 +1,9 @@
 { pkgs, lib, ... }:
 
 rec { 
-  imports = [ 
-    ./dconf.nix 
-  ];
+  #imports = [ 
+  #  ./dconf.nix 
+  #];
 
   myHome = {
     gnome.enable = true;
