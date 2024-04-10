@@ -12,9 +12,9 @@ in
     environment = {
       systemPackages = with pkgs; [
         firefox
-        wl-clipboard
-        gnomeExtensions.appindicator
-        gnomeExtensions.gsconnect
+        #wl-clipboard
+        #gnomeExtensions.appindicator
+        #gnomeExtensions.gsconnect
       ];
       gnome.excludePackages = with pkgs.gnome; [
         cheese # webcam tool
@@ -23,10 +23,9 @@ in
         geary # email reader
         evince # document viewer
         totem # video player
-        pkgs.gnome-console
         pkgs.gnome-connections
         gnome-contacts
-        gnome-maps
+        # gnome-maps
         gnome-music
         gnome-weather
       ];
@@ -50,15 +49,6 @@ in
         alsa.enable = true;
         pulse.enable = true;
         jack.enable = true;
-      };
-    };
-
-    programs = {
-      gnome-terminal.enable = true;
-      zsh.vteIntegration = true;
-      kdeconnect = {
-        enable = true;
-        package = pkgs.gnomeExtensions.gsconnect;
       };
     };
 
