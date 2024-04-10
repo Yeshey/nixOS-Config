@@ -20,7 +20,6 @@ in
             serverAnnounce = false;
             enableDamage = true;
             creativeMode = false;
-            selectedWorldPath = "../worlds/world";
         }; #TODO put the whole config here instead
         world = /var/lib/minetest/.minetest/worlds/MineCloneFirstServerAnarchy;
         gameId = "mineclone2";
