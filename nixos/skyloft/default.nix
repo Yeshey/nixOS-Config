@@ -53,6 +53,8 @@ in
     #};
   };
 
+  # set an alias to poweroff ask if you're sure
+
   mySystem = {
     gnome.enable = false; # TODO, we can do better
     plasma.enable = false;
