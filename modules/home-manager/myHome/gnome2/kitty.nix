@@ -69,8 +69,8 @@ in
             color15 = "#ffffff";
             */
 
-            # OS specific tweaks
-            # macos_option_as_alt = true;
+            wayland_titlebar_color = "background";
+            #linux_display_server = "x11";
 
             # Keyboard shortcuts
             "map.kitty_mod" = "ctrl+shift";
