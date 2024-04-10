@@ -19,9 +19,9 @@ in
     # TODO can any of these be made into general modules?
     #./dontStarveTogetherServer.nix
 
-    #./nextcloud.nix # TODO not working right boy nixos-rebuild build-vm --flake ~/.setup#skyloft not working
-    ./minecraft.nix
-    ./openvscode-server.nix
+    ./nextcloud.nix # TODO not working right boy nixos-rebuild build-vm --flake ~/.setup#skyloft not working
+    #./minecraft.nix
+    ./openvscode-server.nix # vscoduium is not well
     ./ngix-server
     ./mineclone.nix
     ./kubo.nix
@@ -70,7 +70,7 @@ in
     bluetooth.enable = false;
     printers.enable = false;
     sound.enable = false;
-    #flatpaks.enable = true;
+    flatpaks.enable = false;
     #nix.substituters = [ "nasgul" ];
   };
   # mySystem.home-manager.useGlobalPkgs = false;

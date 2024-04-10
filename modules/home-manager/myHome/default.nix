@@ -3,7 +3,7 @@
     ./cli.nix
     ./colors.nix
     ./devops.nix
-    ./gnome
+    ./gnome2
     ./neovim
     ./non-nixos.nix
     ./tmux.nix

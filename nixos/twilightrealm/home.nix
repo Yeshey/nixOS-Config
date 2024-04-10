@@ -2,7 +2,7 @@
 
 {
   myHome = {
-    # gnome.enable = true;
+    gnome.enable = true;
     tmux.enable = true;
     zsh.enable = false; # TODO make so it you comment, it should be bash
     homeapps.enable = true;
