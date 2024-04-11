@@ -1,11 +1,16 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 let
+  c = config.colorScheme.palette;
+  cfg = config.myHome.alacritty;
   fontName = config.myHome.gnome.font.name;
   fontSize = config.myHome.gnome.font.size;
-in
-{
-  config = lib.mkIf config.myHome.gnome.enable {
+in {
+  options.myHome.alacritty = with lib; {
+    enable = mkEnableOption "alacritty";
+  };
+
+  config = lib.mkIf cfg.enable {
     programs.alacritty = {
       enable = true;
       settings = {
@@ -37,7 +42,14 @@ in
           size = fontSize;
         };
         colors = {
-          inherit (config.myHome.colors) primary cursor normal bright;
+            primary = {
+                background = "#${c.base00}"; #1B2B34
+                foreground = "#${c.base05}"; #CDD3DE
+            };
+            cursor = {
+                text = "#${c.base00}"; #1B2B34
+                cursor = "#${c.base05}"; #CDD3DE
+            };
         };
       };
     };

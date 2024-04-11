@@ -11,6 +11,9 @@
       enableLSP = true;
     };
     vscodium.enable = true;
+    discord.enable = true;
+    kitty.enable = true;
+    alacritty.enable = true;
   };
 
   home = {                                # Specific packages

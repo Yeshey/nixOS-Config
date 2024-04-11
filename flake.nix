@@ -14,6 +14,7 @@
       url = "github:LongerHV/neovim-plugins-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-colors.url = "github:misterio77/nix-colors";
     /* 
     nur = {
       url = "github:nix-community/NUR";
@@ -47,6 +48,7 @@
 #    , agenix
     , neovim-plugins
 #    , nixgl
+    , nix-colors
     , ...
   }@inputs: 
   let
@@ -73,7 +75,7 @@
 
     # TODO not importing overlays like this anymore? review how to do overlays
     # Your custom packages and modifications, exported as overlays
-    overlays = import ./overlays {inherit inputs;};
+    overlays = import ./overlays {inherit inputs outputs;};
     # Overlays
     /*
     overlays = {

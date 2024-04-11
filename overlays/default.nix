@@ -1,4 +1,4 @@
-{inputs, ...}: {
+{inputs, outputs, ...}: {
   # TODO check if this can be put in one of the others
   #default = final: prev: {
   #  nierWallpaper = builtins.fetchurl {
