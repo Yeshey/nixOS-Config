@@ -19,8 +19,16 @@ in
     ./kitty.nix # TODO not rly okay
     ./alacritty.nix
   ];
+  options.myHome = with lib; {
+    colorScheme = mkOption {
+      #type = types.listOf types.str;
+      default = inputs.nix-colors.colorSchemes.ocean; # by default use all
+      #default = ""; # by default use all # TODO by default, nothing?
+    };
+  };
   config = {
+    colorScheme = cfg.colorScheme;
     # themes: https://github.com/tinted-theming/base16-schemes
-    colorScheme = inputs.nix-colors.colorSchemes.ocean; # black-metal-venom; # TODO add option 
+    # colorScheme = inputs.nix-colors.colorSchemes.ocean; # black-metal-venom; # TODO add option 
   };
 }
