@@ -1,12 +1,16 @@
 { config, lib, pkgs, ... }:
 
 let
+  c = config.colorScheme.palette;
+  cfg = config.myHome.kitty;
   fontName = config.myHome.gnome.font.name;
   fontSize = config.myHome.gnome.font.size;
-in
-{
-  config = lib.mkIf config.myHome.gnome.enable {
+in {
+  options.myHome.kitty = with lib; {
+    enable = mkEnableOption "kitty";
+  };
 
+  config = lib.mkIf cfg.enable {
     programs.kitty = {
         enable = true;
         package = pkgs.kitty;
@@ -46,28 +50,28 @@ in
 
             # Color scheme
             background_opacity = "0.8";
-            foreground = "#d4d4d4";
-            background = "#303030";
-            selection_foreground = "#d4d4d4";
-            selection_background = "#464646";
-            /*
-            color0 = "#202020";
-            color8 = "#565656";
-            color1 = "#f58c84";
-            color9 = "#e25256";
-            color2 = "#a5d75a";
-            color10 = "#d6fb8b";
-            color3 = "#fadf78";
-            color11 = "#fcf19c";
-            color4 = "#78bcfb";
-            color12 = "#9ad7fc";
-            color5 = "#c9a2f4";
-            color13 = "#e1c8f8";
-            color6 = "#5e9df2";
-            color14 = "#4e8de2";
-            color7 = "#e4e4e4";
-            color15 = "#ffffff";
-            */
+            foreground = "#${c.base05}"; #"#d3c6aa";
+            background = "#${c.base00}"; #"#272e33";
+            selection_foreground = "#${c.base05}"; #"#d3c6aa";
+            selection_background = "#${c.base02}"; #"#414b50";
+
+
+            color0 = "#${c.base00}"; #"#272e33";
+            color1 = "#${c.base0E}"; #"#e67e80";
+            color2 = "#${c.base0B}"; #"#83c092";
+            color3 = "#${c.base0A}"; #"#dbbc7f";
+            color4 = "#${c.base08}"; #"#7fbbb3";
+            color5 = "#${c.base09}"; #"#d699b6";
+            color6 = "#${c.base0D}"; #"#a7c080";
+            color7 = "#${c.base06}"; #"#e4e1cd";
+            color8 = "#${c.base02}"; #"#414b50";
+            color9 = "#${c.base0E}"; #"#e67e80";
+            color10 = "#${c.base0D}"; #"#a7c080";
+            color11 = "#${c.base0A}"; #"#dbbc7f";
+            color12 = "#${c.base04}"; #"#9da9a0";
+            color13 = "#${c.base05}"; #"#d3c6aa";
+            color14 = "#${c.base0B}"; #"#83c092";
+            color15 = "#${c.base07}"; #"#fdf6e3";
 
             wayland_titlebar_color = "background";
             #linux_display_server = "x11";

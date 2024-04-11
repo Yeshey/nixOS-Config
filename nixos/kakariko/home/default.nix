@@ -1,10 +1,6 @@
 { pkgs, lib, ... }:
 
-rec { 
-  #imports = [ 
-  #  ./dconf.nix 
-  #];
-
+{ 
   myHome = {
     gnome.enable = true;
     tmux.enable = true;
@@ -15,9 +11,12 @@ rec {
       enableLSP = true;
     };
     vscodium.enable = true;
+    discord.enable = true;
+    kitty.enable = true;
+    alacritty.enable = true;
   };
 
-  home = {                                # Specific packages
+  home = { # Specific packages
     packages = with pkgs; [
       psensor
       lbry
@@ -42,12 +41,6 @@ rec {
       libreoffice-qt
       hunspell
       hunspellDicts.uk_UA
-
-      # For gnome # TODO put in the myHome module?
-      # gnomeExtensions.clipboard-indicator
-      # gnomeExtensions.burn-my-windows
-      # gnomeExtensions.hibernate-status-button
-      # gnomeExtensions.tray-icons-reloaded
     ];
   };
 

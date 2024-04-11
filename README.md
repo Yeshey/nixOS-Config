@@ -1,11 +1,15 @@
 # nix & nixOS Configuration / Linux Config
+The spiciest config on the market 😳🥵💦
+
 My reproducible nix Configuration & other configuration files.  
 More Documentation for myself about nixOS in my [TechNotes Repo](https://github.com/Yeshey/TechNotes).  
 It has my personal configuration for two devices, my Lenovo Legion laptop and my MS Surface Pro 7.
 
 ## Credits
 
-- Highly Inspiered by [Matthias Benaets](https://github.com/MatthiasBenaets) [configuration](https://github.com/MatthiasBenaets/nixos-config) and his [video](https://www.youtube.com/watch?v=AGVXJ-TIv3Y)
+- Initially Inspiered by [Matthias Benaets](https://github.com/MatthiasBenaets) [configuration](https://github.com/MatthiasBenaets/nixos-config) and his [video](https://www.youtube.com/watch?v=AGVXJ-TIv3Y);
+- Derived on [LongerHV's](https://github.com/LongerHV) [nixos-configuration](https://github.com/LongerHV/nixos-configuration/tree/master);
+- Based on [Misterio77's](https://github.com/Misterio77) [nix-starter-configs](https://github.com/Misterio77/nix-starter-configs);
 
 ## Notes
 

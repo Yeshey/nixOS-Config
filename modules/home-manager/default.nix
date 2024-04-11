@@ -155,7 +155,7 @@ X-WebApp-Isolated=true
         '';
 
       # For discord to start correctly (from nixOS wiki discord page)
-      ".config/discord/settings.json".source = builtins.toFile "MSwhiteboard.desktop" ''
+      ".config/discord/settings.json".source = builtins.toFile "file.file" ''
 {
   "IS_MAXIMIZED": false,
   "IS_MINIMIZED": true,

@@ -14,6 +14,7 @@ in
 {
   imports = [
     inputs.nixos-hardware.nixosModules.common-cpu-intel
+    inputs.nixos-hardware.nixosModules.common-pc-ssd
     ./hardware-configuration.nix
 
     # (import ./configFiles/VM/VM.nix) # TODO
@@ -52,8 +53,9 @@ in
     plasma.enable = true;
     gaming.enable = true;
     vmHost = true;
-    dockerHost = true;
+    dockerHost = true; # TODO make users have the docker group then? Instead of everyone already having, same for adbuser 
     host = "hyrulecastle";
+    user = "yeshey"; # TODO make this into an option where you can do user."yeshey".home-manager.enable ) true etc.
     home-manager = {
       enable = true;
       home = ./home.nix;
@@ -65,7 +67,6 @@ in
     #flatpaks.enable = true;
     #nix.substituters = [ "nasgul" ];
   };
-  # mySystem.home-manager.useGlobalPkgs = false;
 
   # Manage Temperature, prevent throttling
   # https://github.com/linux-surface/linux-surface/issues/221
@@ -193,7 +194,6 @@ in
           linux ($drive2)/@/nix/store/ll70jpkp1wgh6qdp3spxl684m0rj9ws4-linux-5.15.68/bzImage init=/nix/store/c2mg9sck85ydls81xrn8phh3i1rn8bph-nixos-system-nixos-22.11pre410602.ae1dc133ea5/init loglevel=4 3
           initrd ($drive2)/@/nix/store/s38fgk7axcjryrp5abkvzqmyhc3m4pd1-initrd-linux-5.15.68/initrd
         }
-
       '';
     };
   };

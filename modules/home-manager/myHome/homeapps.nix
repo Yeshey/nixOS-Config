@@ -66,8 +66,7 @@ in
       #ninja
       #pkg-config
       
-      # Overlayed
-      discord
+      #discord
       exodus
     ];
   };
