@@ -253,8 +253,7 @@
                     #"autojump" 
                     "urltools" 
                     "bgnotify"];
-        theme = "agnoster"; # robbyrussell # agnoster # frisk
-      };
+      };        theme = "agnoster"; # robbyrussell # agnoster # frisk
     };
   };
 
