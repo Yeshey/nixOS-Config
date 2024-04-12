@@ -20,7 +20,19 @@ in
     ./alacritty.nix
   ];
   options.myHome = with lib; {
-    
+    wallpaper = mkOption {
+      type = types.package;
+      default = 
+      builtins.fetchurl {
+        url = "https://images6.alphacoders.com/655/655990.jpg";
+        sha256 = "b09b411a9c7fc7dc5be312ca9e4e4b8ee354358daa792381f207c9f4946d95fe";
+      };
+      /*
+      builtins.fetchurl {
+        url = "https://cdna.artstation.com/p/assets/images/images/018/711/480/large/john-kearney-cityscape-poster-artstation-update.jpg";
+        sha256 = "sha256:1a2krq61502z5zka0a97zll4s8x9dv2qaap5hivpr7fpzl46qp2n";
+      }; */ 
+    };
     colorScheme = mkOption {
       type = types.attrs;
       default = inputs.nix-colors.colorSchemes.rose-pine-moon;
@@ -30,7 +42,7 @@ in
     };
   };
   config = {
-    colorscheme = cfg.colorScheme;
+    #colorscheme = cfg.colorScheme;
     #colorScheme = inputs.nix-colors.colorSchemes.${cfg.passthru};
     #colorscheme = inputs.nix-colors.colorSchemes.rose-pine-moon;
     # themes: https://github.com/tinted-theming/base16-schemes

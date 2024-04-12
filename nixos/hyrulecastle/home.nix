@@ -23,7 +23,7 @@ in
     discord.enable = true;
     kitty.enable = true;
     alacritty.enable = true;
-    colorScheme = colorSchemes.ocean;
+    colorScheme = colorSchemes.rose-pine-moon;
   };
 
   #colorscheme = lib.mkDefault colorSchemes.rose-pine-moon;
