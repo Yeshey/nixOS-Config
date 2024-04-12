@@ -4,7 +4,11 @@
 # TODO nur apps and firefox
 
 {
-  default = { config, lib, ... }: {
+  default = { inputs, config, lib, ... }: {
+
+    #imports = [inputs.nix-colors.homeManagerModules.default];
+    #colorScheme = inputs.nix-colors.colorSchemes.ocean;
+
     home = rec {
       username = lib.mkDefault "yeshey"; # TODO username
       homeDirectory = lib.mkDefault "/home/${username}";

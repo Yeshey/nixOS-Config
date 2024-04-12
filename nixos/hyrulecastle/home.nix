@@ -1,6 +1,15 @@
-{ pkgs, ... }:
+{ pkgs, inputs, lib, ... }:
 
+let
+  inherit (inputs.nix-colors) colorSchemes;
+in
 {
+  imports = [
+    # inputs.nix-colors.homeManagerModules.default
+  ];
+
+  # colorScheme = inputs.nix-colors.colorSchemes.ocean;
+
   myHome = {
     # gnome.enable = true;
     tmux.enable = true;
@@ -14,7 +23,10 @@
     discord.enable = true;
     kitty.enable = true;
     alacritty.enable = true;
+    colorScheme = colorSchemes.ocean;
   };
+
+  #colorscheme = lib.mkDefault colorSchemes.rose-pine-moon;
 
   home = {                                # Specific packages
     packages = with pkgs; [
@@ -45,6 +57,8 @@
       hunspellDicts.uk_UA
     ];
   };
+
+  
 
   # Github PlasmaManager Repo: https://github.com/pjones/plasma-manager
   # got with this command: nix run github:pjones/plasma-manager > plasmaconf.nix
