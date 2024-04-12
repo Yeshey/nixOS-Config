@@ -88,6 +88,7 @@
         ns = "sudo nixos-rebuild switch --flake .";
         hs = "home-manager switch --impure --flake .";
       };
+      /*
       # bash
       initExtraBeforeCompInit = ''
         # Completion
@@ -97,11 +98,14 @@
         source ${pkgs.spaceship-prompt}/lib/spaceship-prompt/spaceship.zsh
         autoload -U promptinit; promptinit
       '';
+      */
       # bash
       initExtra = ''
         source ${./kubectl.zsh}
         source ${./git.zsh}
 
+        bindkey "^[[1;5C" forward-word
+        bindkey "^[[1;5D" backward-word
         bindkey '^[[Z' reverse-menu-complete
 
         # Workaround for ZVM overwriting keybindings
@@ -124,6 +128,7 @@
       historySubstringSearch = {
         enable = true;
       };
+      
       plugins = [
         {
           name = "nix-shell";
@@ -142,18 +147,16 @@
           src = "${pkgs.zsh-z}/share/zsh-z";
         }
       ];
-      # TODO why doesn't this work, zsh is fucked 🤦
-      /*oh-my-zsh = {
+      oh-my-zsh = {
         enable = true;
         plugins = [ "git" 
                     "colored-man-pages" 
                     "alias-finder" 
                     "command-not-found" 
-                    #"autojump" 
                     "urltools" 
                     "bgnotify"];
         theme = "agnoster"; # robbyrussell # agnoster # frisk
-      }; */
+      };
     };
     home.file.".config/spaceship.zsh".source = ./spaceship.zsh;
   };
