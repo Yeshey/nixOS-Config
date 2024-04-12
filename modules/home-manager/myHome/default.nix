@@ -20,14 +20,19 @@ in
     ./alacritty.nix
   ];
   options.myHome = with lib; {
+    
     colorScheme = mkOption {
-      #type = types.listOf types.str;
-      default = inputs.nix-colors.colorSchemes.ocean; # by default use all
+      type = types.attrs;
+      default = inputs.nix-colors.colorSchemes.rose-pine-moon;
+      #type = types.lazyAttrsOf appType;
+      #default = {}; # inputs.nix-colors.colorSchemes.ocean; # by default use all
       #default = ""; # by default use all # TODO by default, nothing?
     };
   };
   config = {
-    colorScheme = cfg.colorScheme;
+    colorscheme = cfg.colorScheme;
+    #colorScheme = inputs.nix-colors.colorSchemes.${cfg.passthru};
+    #colorscheme = inputs.nix-colors.colorSchemes.rose-pine-moon;
     # themes: https://github.com/tinted-theming/base16-schemes
     # colorScheme = inputs.nix-colors.colorSchemes.ocean; # black-metal-venom; # TODO add option 
   };

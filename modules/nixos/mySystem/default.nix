@@ -252,6 +252,7 @@ in
     networking = {
       hostName = "nixos-${cfg.host}";
     };
+    
     # TODO maybe take a look at how he did network cuz I'm lost
     /*
       networking = {

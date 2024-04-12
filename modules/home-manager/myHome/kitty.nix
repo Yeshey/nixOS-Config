@@ -1,7 +1,8 @@
-{ config, lib, pkgs, ... }:
+{ inputs, config, lib, pkgs, ... }:
 
 let
   c = config.colorScheme.palette;
+  # c = inputs.nix-colors.colorSchemes.ocean.palette;
   cfg = config.myHome.kitty;
   fontName = config.myHome.gnome.font.name;
   fontSize = config.myHome.gnome.font.size;
