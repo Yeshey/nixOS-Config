@@ -5,7 +5,7 @@ let
 in
 {
   imports = [
-    inputs.nix-colors.homeManagerModules.default
+    # inputs.nix-colors.homeManagerModules.default
     ./cli.nix
     ./devops.nix
     ./gnome
