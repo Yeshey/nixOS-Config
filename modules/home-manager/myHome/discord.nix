@@ -5,7 +5,7 @@
   pkgs,
   ...
 }: let
-  c = config.colorScheme.palette;
+  c = config.myHome.colorScheme.palette;
   cfg = config.myHome.discord;
 in {
   options.myHome.discord = with lib; {

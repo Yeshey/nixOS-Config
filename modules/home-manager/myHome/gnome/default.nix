@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }:
 
 let
+  wallpaper = config.myHome.wallpaper;
   cfg = config.myHome.gnome;
-  inherit (config.myHome) colors;
 in
 {
   imports = [ 
@@ -12,6 +12,7 @@ in
   ];
   options.myHome.gnome = with lib; {
     enable = mkEnableOption "gnome";
+    /*
     wallpaper = mkOption {
       type = types.package;
       default = 
@@ -23,8 +24,8 @@ in
       builtins.fetchurl {
         url = "https://cdna.artstation.com/p/assets/images/images/018/711/480/large/john-kearney-cityscape-poster-artstation-update.jpg";
         sha256 = "sha256:1a2krq61502z5zka0a97zll4s8x9dv2qaap5hivpr7fpzl46qp2n";
-      }; */ 
-    };
+      }; 
+    }; */ 
     font = {
       package = mkOption {
         type = types.package;
@@ -51,8 +52,8 @@ in
     ];
     dconf.settings = {
       "org/gnome/desktop/background" = {
-        picture-uri = "file://${cfg.wallpaper}";
-        picture-uri-dark = "file://${cfg.wallpaper}";
+        picture-uri = "file://${wallpaper}";
+        picture-uri-dark = "file://${wallpaper}";
       };
     };
   };

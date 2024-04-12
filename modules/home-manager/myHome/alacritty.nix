@@ -1,7 +1,7 @@
 { inputs, config, lib, pkgs, ... }:
 
 let
-  c = config.colorScheme.palette;
+  c = config.myHome.colorScheme.palette;
   cfg = config.myHome.alacritty;
   fontName = config.myHome.gnome.font.name;
   fontSize = config.myHome.gnome.font.size;
