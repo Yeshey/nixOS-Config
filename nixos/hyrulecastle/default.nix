@@ -53,6 +53,7 @@ in
     plasma.enable = true;
     gaming.enable = true;
     vmHost = true;
+    zsh.enable = false;
     dockerHost = true; # TODO make users have the docker group then? Instead of everyone already having, same for adbuser 
     host = "hyrulecastle";
     user = "yeshey"; # TODO make this into an option where you can do user."yeshey".home-manager.enable ) true etc.
@@ -67,6 +68,9 @@ in
     #flatpaks.enable = true;
     #nix.substituters = [ "nasgul" ];
   };
+
+  #programs.zsh.enable = true;
+  #users.users.yeshey.shell = pkgs.zsh;
 
   # Manage Temperature, prevent throttling
   # https://github.com/linux-surface/linux-surface/issues/221
