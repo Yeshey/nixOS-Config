@@ -150,8 +150,7 @@ in
       startAgent = true;
       forwardX11 = true;
     };
-    #programs.zsh.enable = true;
-    #programs.zsh.shellAliases = { vim = "echo 'hello'"; };
+    programs.command-not-found.enable = lib.mkDefault true;
     programs.zsh = {
       enable = true;
       # TODO lib.mkDefault doesn't work with {} and [] values? 

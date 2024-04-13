@@ -138,7 +138,7 @@
           name = "you-should-use";
           src = "${pkgs.zsh-you-should-use}/share/zsh/plugins/you-should-use";
         }
-        { # TODO possibly reenable, also oh-my-zsh doesnt work? can't add the theme
+        {
           name = "zsh-vi-mode";
           src = "${pkgs.unstable.zsh-vi-mode}/share/zsh-vi-mode";
         }
