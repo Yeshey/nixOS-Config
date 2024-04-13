@@ -33,12 +33,13 @@ let
 in
 {
   imports = [
+    ./user.nix
     ./android.nix
     ./gaming.nix
     ./gnome.nix
     ./plasma.nix
-    ./user.nix
     ./virt.nix
+    ./zsh
 
     ./i2p.nix # TODO review and possibly clump together with the non-server Configuration below
     ./bluetooth.nix
@@ -57,7 +58,7 @@ in
     };
     host = mkOption {
       type = types.str; 
-      description = "Name of the machine, usually what was used in --flake .#hostname. Used for setting the network host name and zsh aliases";
+      description = "Name of the machine, usually what was used in --flake .#hostname. Used for setting the network host name";
       # default = 
       # default = builtins.attrValues substituters; # TODO, make it loop throught the list # by default use all
     };
@@ -135,7 +136,6 @@ in
 
     services.openssh = with lib; {
       enable = true;
-      # settings.PasswordAuthentication = lib.mkDefault true; # TODO false
       settings.PermitRootLogin = lib.mkDefault "yes"; # TODO no
       settings.X11Forwarding = lib.mkDefault true;
     };
@@ -151,68 +151,6 @@ in
       forwardX11 = true;
     };
     programs.command-not-found.enable = lib.mkDefault true;
-    programs.zsh = {
-      enable = true;
-      # TODO lib.mkDefault doesn't work with {} and [] values? 
-      shellAliases = {
-        # vim = "nvim";
-        # ls = "lsd -l --group-dirs first";
-        clean = "echo \"This will clean all generations, and optimise the store\" ; sudo sh -c 'nix-collect-garbage -d ; nix-store --optimise'";
-        cp = "cp -i";                                   # Confirm before overwriting something
-        df = "df -h";                                   # Human-readable sizes
-        free = "free -m";                               # Show sizes in MB
-        gitu = "git add . && git commit && git push";
-        zshreload = "clear && zsh";
-        zshconfig = "nano ~/.zshrc";
-        # killall latte-dock && latte-dock & && kquitapp5 plasmashell || killall plasmashell && kstart5 plasmashell"
-        re-kde = "nix-shell -p killall --command \"kquitapp5 plasmashell || killall plasmashell ; kstart5 plasmashell\""; # Restart gui in KDE
-        mount = "mount|column -t";                      # Pretty mount
-        speedtest = "nix-shell -p python3 --command \"curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -\"";
-        temperature = "watch \"nix-shell -p lm_sensors --command sensors | grep temp1 | awk '{print $2}' | sed 's/+//'\"";
-        rvt = "nix-shell -p ffmpeg --command \"bash <(curl -s https://raw.githubusercontent.com/Yeshey/RecursiveVideoTranscoder/main/RecursiveVideoTranscoder.sh)\"";
-        win10-vm = "sh <(curl -s https://raw.githubusercontent.com/Yeshey/nixos-nvidia-vgpu_nixOS/master/run-vm.sh)";
-        ping = "ping -c 5";                             # Control output of ping
-        fastping = "ping -c 100 -s 1";
-        ports = "netstat -tulanp";                      # Show Open ports
-        l="ls -l";
-        la="ls -a";
-        lla="ls -la";
-        lt="ls --tree";
-        grep="grep --color=auto";
-        egrep="egrep --color=auto";
-        fgrep="fgrep --color=auto";
-        diff="colordiff";
-        dir="dir --color=auto";
-        vdir="vdir --color=auto";
-        week = "
-          now=$(date '+%V %B %Y');
-          echo \"Week Date:\" $now
-        ";
-        myip = "  
-          echo \"Your external IP address is:\"
-          curl -w '\n' https://ipinfo.io/ip
-        ";
-        chtp = " curl cht.sh/python/\"$1\" ";           # alias to use cht.sh for python help
-        chtc = " curl cht.sh/c/\"$1\" ";                # alias to use cht.sh for c help
-        chtsharp = " curl cht.sh/csharp/\"$1\" ";           # alias to use cht.sh for c# help
-        cht = " curl cht.sh/\"$1\" ";                   # alias to use cht.sh in general
-      };
-      # TODO the above should also go into a file
-      autosuggestions.enable = lib.mkDefault true;
-      syntaxHighlighting.enable = lib.mkDefault true;
-      enableCompletion = lib.mkDefault true;
-      histSize = lib.mkDefault 100000;
-      ohMyZsh = { # TODO this doesn't work?
-        plugins = [ "git" 
-                    "colored-man-pages" 
-                    "alias-finder" 
-                    "command-not-found" 
-                    #"autojump" 
-                    "urltools" 
-                    "bgnotify"];
-        theme = lib.mkDefault "frisk"; # robbyrussell # agnoster # frisk
-      };
-    };
 
     environment = {
       systemPackages = with pkgs; [
@@ -226,18 +164,7 @@ in
         tree
         unzip
         unrar # also to extract .rar with ark in KDE # unrar x Lab5.rar
-
-        # TODO check if these are needed
-        #ffmpeg
-        #wine
-        #gparted
-        # Development
-        #jdk17 # java (alias for openJDK) 17.0.4.1
-        #jdk18
-        #python3
       ];
-      shells = [ pkgs.zsh ];
-      pathsToLink = [ "/share/zsh" ];
     };
 
     # TODO put in own file
