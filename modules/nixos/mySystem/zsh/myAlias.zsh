@@ -3,6 +3,9 @@ alias df="df -h";                                   # Human-readable sizes
 alias free="free -m";                               # Show sizes in MB
 alias zshreload="clear && zsh";
 alias zshconfig="nano ~/.zshrc";
+#re-kde() { 
+#    nix-shell -p killall --command "kquitapp5 plasmashell || killall plasmashell ; kstart5 plasmashell"
+#};
 alias re-kde="nix-shell -p killall --command \"kquitapp5 plasmashell || killall plasmashell ; kstart5 plasmashell\""; # Restart gui in KDE
 alias mount="mount|column -t";                      # Pretty mount
 alias speedtest="nix-shell -p python3 --command \"curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -\"";

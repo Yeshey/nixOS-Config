@@ -15,6 +15,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-colors.url = "github:misterio77/nix-colors";
+    plasma-manager = {
+      url = "github:pjones/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
     /* 
     nur = {
       url = "github:nix-community/NUR";
@@ -49,6 +54,7 @@
     , neovim-plugins
 #    , nixgl
     , nix-colors
+    , plasma-manager
     , ...
   }@inputs: 
   let
@@ -109,6 +115,7 @@
         defaultModules = (builtins.attrValues nixosModules) ++ [
           # agenix.nixosModules.default # for secrets
           home-manager.nixosModules.default
+          # plasma-manager.homeManagerModules.plasma-manager
         ];
         specialArgs = { inherit inputs outputs; };
       in
