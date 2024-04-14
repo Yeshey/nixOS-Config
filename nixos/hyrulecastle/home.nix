@@ -11,9 +11,11 @@ in
   # colorScheme = inputs.nix-colors.colorSchemes.ocean;
 
   myHome = {
+    zsh.enable = true;
+
+    plasma.enable = true;
     # gnome.enable = true;
     tmux.enable = true;
-    zsh.enable = false; # TODO make so it you comment, it should be bash
     homeapps.enable = true;
     neovim = {
       enable = true;
@@ -24,6 +26,7 @@ in
     kitty.enable = true;
     alacritty.enable = true;
     colorScheme = colorSchemes.rose-pine-moon;
+    wallpaper = pkgs.myWallpaper;
   };
 
   #colorscheme = lib.mkDefault colorSchemes.rose-pine-moon;
