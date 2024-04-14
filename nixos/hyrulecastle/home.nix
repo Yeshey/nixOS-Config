@@ -26,7 +26,7 @@ in
     kitty.enable = true;
     alacritty.enable = true;
     colorScheme = colorSchemes.rose-pine-moon;
-    wallpaper = pkgs.myWallpaper;
+    wallpaper = pkgs.wallpapers.nierWallpaper;
   };
 
   #colorscheme = lib.mkDefault colorSchemes.rose-pine-moon;
