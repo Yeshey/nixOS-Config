@@ -24,7 +24,7 @@ in
         la = lib.mkDefault "eza -la --icons=auto";
       };
       # theme
-      initExtraBeforeCompInit = lib.mkDefault ''
+      initExtraBeforeCompInit = ''
         # Completion
         zstyle ':completion:*' menu yes select
 
@@ -33,7 +33,7 @@ in
         autoload -U promptinit; promptinit
       ''; 
       # bash
-      initExtra = lib.mkDefault ''
+      initExtra = ''
         source ${./kubectl.zsh}
         source ${./git.zsh}
         source ${./myAlias.zsh}

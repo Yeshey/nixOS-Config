@@ -35,7 +35,7 @@ in
       gnomeExtensions.tray-icons-reloaded
     ];
     dconf.settings = {
-      "org/gnome/desktop/background" = {
+      "org/gnome/desktop/background" = lib.mkIf ( wallpaper != null ) {
         picture-uri = "file://${wallpaper}";
         picture-uri-dark = "file://${wallpaper}";
       };

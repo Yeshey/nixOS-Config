@@ -15,7 +15,7 @@ in
 		sha256 = "sha256:01g135ydn19ci1gky48dva1pdb198dkcnpfq6b4g37zlj5vhbx9r"; # TODO, sha always changing?
 	}; 
 	stellarCollisionByKuldarleement = builtins.fetchurl {
-	    url = "file://${current_folder}/stellar_collision_by_kuldarleement_d6kvnyd-pre.jpg";
-	    sha256 = "sha256:0zks0jcs1bjn5qf1bjfq7zcqskyc2vcicqc19csrxfm783wnxc94";
+	    url = "file://${current_folder}/StellarCollisionByKuldarLeement.jpg";
+	    sha256 = "sha256:1bl7d7qm4ln1bg72c8y2d236a0wn31kgji1h6zsf611qa0b43adm";
 	};
 }
