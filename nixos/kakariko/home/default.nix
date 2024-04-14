@@ -18,13 +18,7 @@ in
     kitty.enable = true;
     alacritty.enable = true;
     colorScheme = colorSchemes.ocean; #rose-pine-moon;
-    wallpaper = pkgs.wallpapers.nierWallpaper;
-    /*
-    builtins.fetchurl {
-        url = "https://cdna.artstation.com/p/assets/images/images/018/711/480/large/john-kearney-cityscape-poster-artstation-update.jpg";
-        sha256 = "sha256:01g135ydn19ci1gky48dva1pdb198dkcnpfq6b4g37zlj5vhbx9r";
-      }; 
-      */
+    wallpaper = pkgs.wallpapers.nierAutomataWallpaper; #johnKearneyCityscapePoster;
   };
 
   home = { # Specific packages
