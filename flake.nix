@@ -59,6 +59,7 @@
   }@inputs: 
   let
     inherit (self) outputs;
+    lib = nixpkgs.lib // home-manager.lib;
     # Supported systems for your flake packages, shell, etc.
     systems = [
       "aarch64-linux"
@@ -69,15 +70,25 @@
     ];
     # This is a function that generates an attribute by calling a function you
     # pass to it, with each system as an argument
-    forAllSystems = nixpkgs.lib.genAttrs systems;
+    forEachSystem = f: lib.genAttrs systems (system: f pkgsFor.${system});
+    pkgsFor = lib.genAttrs systems (
+      system:
+        import nixpkgs {
+          inherit system;
+          config.allowUnfree = true;
+        }
+    );
   in rec { # rec makes it pass several times, makes for example nixosModules be visible inside nixosConfigurations
     # Your custom packages
     # Accessible through 'nix build', 'nix shell', etc
-    packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+    #packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+    packages = forEachSystem (pkgs: import ./pkgs {inherit pkgs;});
     # Formatter for your nix files, available through 'nix fmt'
     # Other options include 'alejandra' & 'nixpkgs-fmt'
     # Using the official nixpkgs formatter (article: https://drakerossman.com/blog/overview-of-nix-formatters-ecosystem)
-    formatter = forAllSystems (system: nixpkgs-unstable.legacyPackages.${system}.nixfmt-rfc-style);
+    formatter = forEachSystem (pkgs: pkgs.nixfmt-rfc-style);
+    # formatter = forAllSystems (system: nixpkgs-unstable.legacyPackages.${system}.nixfmt-rfc-style);
+    devShells = forEachSystem (pkgs: import ./shell.nix {inherit pkgs;});
 
     # TODO not importing overlays like this anymore? review how to do overlays
     # Your custom packages and modifications, exported as overlays
@@ -97,6 +108,7 @@
     };
     */
 
+/*
     legacyPackages = forAllSystems (system:
       import inputs.nixpkgs {
         inherit system;
@@ -104,6 +116,7 @@
         config.allowUnfree = true;
       }
     );
+    */
 
     nixosModules = import ./modules/nixos;
     homeManagerModules = import ./modules/home-manager;
@@ -150,7 +163,7 @@
     homeConfigurations = {
       # For Non-NixOS
       "yeshey@zoras" = home-manager.lib.homeManagerConfiguration {
-        pkgs = legacyPackages.x86_64-linux; # Home-manager requires 'pkgs' instance
+        pkgs = pkgsFor.x86_64-linux; # Home-manager requires 'pkgs' instance
         extraSpecialArgs = { inherit inputs outputs; };
         modules = (builtins.attrValues homeManagerModules) ++ [
           ./home-manager/home.nix

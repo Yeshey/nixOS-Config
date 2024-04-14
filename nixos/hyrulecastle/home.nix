@@ -26,7 +26,7 @@ in
     kitty.enable = true;
     alacritty.enable = true;
     colorScheme = colorSchemes.rose-pine-moon;
-    wallpaper = pkgs.wallpapers.nierWallpaper;
+    wallpaper = pkgs.wallpapers.stellarCollisionByKuldarleement;
   };
 
   #colorscheme = lib.mkDefault colorSchemes.rose-pine-moon;
