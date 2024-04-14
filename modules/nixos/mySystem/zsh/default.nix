@@ -20,10 +20,10 @@ in
         ll = lib.mkOverride 995 "eza -l --icons=auto"; # TODO add lib.mkOverride 995 everywhere
         la = lib.mkDefault "eza -la --icons=auto";
       };
-      shellInit = lib.mkDefault ''
+      shellInit = ''
         autoload -U promptinit; promptinit
       '';
-      interactiveShellInit = lib.mkDefault ''
+      interactiveShellInit = ''
         source ${./kubectl.zsh}
         source ${./git.zsh}
         source ${./myAlias.zsh}

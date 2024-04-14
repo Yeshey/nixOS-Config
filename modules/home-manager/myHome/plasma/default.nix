@@ -26,7 +26,7 @@ in
       lookAndFeel = "org.kde.breezedark.desktop";
       cursorTheme = "Bibata-Modern-Ice";
       iconTheme = "Papirus-Dark";
-      wallpaper = wallpaper;
+      wallpaper =  lib.mkIf ( wallpaper != null ) wallpaper;
     };
   };
 

@@ -5,10 +5,7 @@ let
 in
 {
   imports = [
-    # inputs.nix-colors.homeManagerModules.default
   ];
-
-  # colorScheme = inputs.nix-colors.colorSchemes.ocean;
 
   myHome = {
     zsh.enable = true;
@@ -28,8 +25,6 @@ in
     colorScheme = colorSchemes.rose-pine-moon;
     wallpaper = pkgs.wallpapers.stellarCollisionByKuldarleement;
   };
-
-  #colorscheme = lib.mkDefault colorSchemes.rose-pine-moon;
 
   home = {                                # Specific packages
     packages = with pkgs; [
