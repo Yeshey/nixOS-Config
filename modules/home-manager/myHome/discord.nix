@@ -16,14 +16,15 @@ in {
 
     home.packages = with pkgs; [vesktop];
 
+    # TODO check and install themes? https://github.com/s-k-y-l-i/discord-themes
+
     #home.persistence = {
     #  "/persist/home/misterio".directories = [".config/vesktop"];
     #};
 
-    xdg.configFile."vesktop/themes/base16.css".text =
-      /*
-      css
-      */
+    /*
+    xdg.configFile."vesktop/themes/base16.css".text = lib.mkIf ( config.myHome.colorScheme != null )
+      # css
       ''
         @import url("https://slowstab.github.io/dracula/BetterDiscord/source.css");
         @import url("https://mulverinex.github.io/legacy-settings-icons/dist-native.css");
@@ -54,5 +55,6 @@ in {
           content: none;
         }
       '';
+      */
   };
 }
