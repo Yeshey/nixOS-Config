@@ -18,7 +18,7 @@ in
     kitty.enable = true;
     alacritty.enable = true;
     colorScheme = colorSchemes.ocean; #rose-pine-moon;
-    wallpaper = pkgs.wallpapers.nierAutomataWallpaper; #johnKearneyCityscapePoster;
+    wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; #johnKearneyCityscapePoster;
   };
 
   home = { # Specific packages

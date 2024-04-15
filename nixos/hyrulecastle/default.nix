@@ -67,7 +67,6 @@ in
     #printers.enable = true;
     #sound.enable = true;
     #flatpaks.enable = true;
-    #nix.substituters = [ "nasgul" ];
   };
 
   #programs.zsh.enable = true;

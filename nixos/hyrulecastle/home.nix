@@ -23,7 +23,7 @@ in
     kitty.enable = true;
     alacritty.enable = true;
     colorScheme = colorSchemes.rose-pine-moon;
-    wallpaper = pkgs.wallpapers.stellarCollisionByKuldarleement;
+    wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; #stellarCollisionByKuldarleement;
   };
 
   home = {                                # Specific packages
