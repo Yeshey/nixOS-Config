@@ -8,6 +8,7 @@ in
   ];
 
   myHome = {
+    nonNixos.enable = false;
     plasma.enable = true;
     gnome.enable = false;
     zsh.enable = true;
@@ -29,6 +30,8 @@ in
         variant = "dark"; # or light
       };
     };
+
+    devops.enable = false;
   };
 
   home = {                                # Specific packages
