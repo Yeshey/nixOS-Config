@@ -15,17 +15,17 @@ in
 
   config = lib.mkIf cfg.enable {
 
-  programs.plasma = {
-    enable = true;
+    programs.plasma = {
+      enable = true;
 
-    workspace = {
-      clickItemTo = "select";
-      lookAndFeel = "org.kde.breezedark.desktop";
-      cursorTheme = "Bibata-Modern-Ice";
-      iconTheme = "Papirus-Dark";
-      wallpaper =  lib.mkIf ( wallpaper != null ) wallpaper;
+      workspace = {
+        clickItemTo = "select";
+        lookAndFeel = "org.kde.breezedark.desktop";
+        cursorTheme = "Bibata-Modern-Ice";
+        iconTheme = "Papirus-Dark";
+        wallpaper =  lib.mkIf ( wallpaper != null ) wallpaper;
+      };
     };
-  };
 
   };
 }

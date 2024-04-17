@@ -100,6 +100,10 @@ in
       enable = true;
       home = ./home;
     };
+    bluetooth.enable = true;
+    printers.enable = true;
+    sound.enable = true;
+    flatpaks.enable = true;
   };
 
   # Manage Temperature, prevent throttling
