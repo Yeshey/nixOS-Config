@@ -14,13 +14,12 @@ in
     # theme from https://gitlab.com/pinage404/dotfiles
     programs.starship = {
       enable = true;
-      settings = pkgs.lib.importTOML ./starship.toml;
+      settings = pkgs.lib.importTOML ./starship.toml; # or ./starship2.toml
     };
     # Need these fonts for starship theme to work
     fonts.fontconfig.enable = true;
     home.packages = with pkgs; [
-      nerdfonts
-      /*
+      eza
       (
         nerdfonts.override {
           fonts = [
@@ -29,7 +28,7 @@ in
             "SourceCodePro"
           ];
         }
-      ) */
+      )
       oxygenfonts
       source-sans-pro
     ];
