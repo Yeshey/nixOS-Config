@@ -7,7 +7,7 @@
 }:
 
 let
-  c = config.myHome.colorScheme.palette;
+  c = config.myHome.colorScheme.theme.palette;
   cfg = config.myHome.alacritty;
   fontName = config.myHome.gnome.font.name;
   fontSize = config.myHome.gnome.font.size;
