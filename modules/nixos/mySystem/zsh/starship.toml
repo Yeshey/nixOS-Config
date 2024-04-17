@@ -1,0 +1,333 @@
+# starship configs: https://github.com/starship/starship/discussions/1107
+# https://starship.rs/config/
+# fredericrous
+# grabed symbols from https://starship.rs/presets/nerd-font
+
+command_timeout = 1000
+right_format = """$time"""
+
+[time]
+disabled = false
+style = "#939594"
+format = "[$time]($style)"
+
+[aws]
+style = "bg:#f9a600 fg:black"
+symbol = "☁ "
+format = "[](fg:black bg:#f9a600)[$symbol$profile]($style)[](fg:#f9a600 bg:black)"
+
+[character]
+success_symbol = "[❯](#ff9400)"
+error_symbol = "[✗](#ff4b00)"
+
+[cmd_duration]
+style = "#f9a600"
+format = "[](fg:black bg:#f9a600)[祥$duration](bg:$style fg:black)[](fg:$style)"
+
+[directory]
+style = "#c05303"
+truncate_to_repo = false
+fish_style_pwd_dir_length = 1
+format = "[](fg:black bg:#c05303)[$path[$read_only](bg:$style fg:black)](bg:$style fg:black)[](fg:$style)"
+read_only = " "
+
+[docker_context]
+style = "fg:black bg:#eb9606"
+symbol = "🐳  "
+format = "[](fg:black bg:#eb9606)[$symbol$context]($style)[](fg:#eb9606)"
+
+[status]
+disabled = false
+style = "#C00311"
+symbol = "\\(╯°□°）╯ ┻━┻ " # "\\(╯°□°）╯︵ ┻━┻ "
+format = "[](fg:black bg:$style)[$symbol$status](fg:black bg:$style)[ ](fg:$style)"
+
+[git_branch]
+style = "#d8712c"
+format = "[](fg:black bg:$style)[ $symbol$branch](fg:black bg:$style)[](fg:$style)"
+
+[git_commit]
+style = "#d8712c"
+format = "\b[ ](bg:$style)[\\($hash$tag\\)](fg:black bg:$style)[](fg:$style)"
+
+[git_state]
+style = "#d8712c"
+format = "\b[ ](bg:$style)[ \\($state( $progress_current/$progress_total)\\)](fg:black bg:$style)[](fg:$style)"
+
+[git_status]
+style = "#d8712c"
+format = "(\b[ ](bg:$style fg:black)$conflicted$staged$modified$renamed$deleted$untracked$stashed$ahead_behind[](fg:$style))"
+conflicted = "[ ](bold fg:88 bg:#d8712c)[   ${count} ](fg:black bg:#d8712c)"
+staged = "[M$count ](fg:black bg:#d8712c)"
+modified = "[M${count} ](fg:black bg:#d8712c)"
+renamed = "[ ${count} ](fg:black bg:#d8712c)"
+deleted = "[ ${count} ](fg:black bg:#d8712c)"
+untracked = "[?${count} ](fg:black bg:#d8712c)"
+stashed = "[ ${count} ](fg:black bg:#d8712c)"
+ahead = "[ ${count} ](fg:#523333 bg:#d8712c)"
+behind = "[ ${count} ](fg:black bg:#d8712c)"
+diverged = "[ ](fg:88 bg:#d8712c)[  נּ ](fg:black bg:#d8712c)[ ${ahead_count} ](fg:black bg:#d8712c)[ ${behind_count} ](fg:black bg:#d8712c)"
+
+[golang]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[helm]
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol($version)]($style)[](fg:#eb9606)"
+
+[java]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[kotlin]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[kubernetes]
+format = "[](fg:black bg:#ad4007)[$symbol$context](fg:black bg:#ad4007)[](fg:#ad4007)"
+disabled = false
+
+#[memory_usage]
+#style = "#f9a600"
+#symbol = " "
+#format = "[](fg:black bg:#f9a600)[$symbol$ram](bg:$style fg:black)[](fg:$style)"
+#threshold = 95
+#disabled = false
+
+[nodejs]
+symbol = " "
+style = "green"
+format = "[](fg:black bg:#eb9606)[$symbol($version)](fg:black bg:#eb9606)[](fg:#eb9606)"
+
+[ocaml]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[package]
+disabled = true
+
+[php]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[python]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$pyenv_prefix$version$virtualenv]($style)[](fg:#eb9606)"
+
+[ruby]
+symbol = " "
+format = "[](fg:black bg:#eb9606)[$symbol$version](fg:black bg:#eb9606)(fg:black bg:#eb9606)[](fg:#eb9606)"
+
+[rust]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[scala]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[swift]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[shell]
+fish_indicator = ""
+bash_indicator = "bash "
+zsh_indicator = "zsh "
+powershell_indicator = ""
+format = "[$indicator](fg:#ad4007)"
+disabled = false
+
+[shlvl]
+symbol = " "
+style = "fg:black bg:#ad4007"
+format = "[](fg:black bg:#ad4007)[$symbol$shlvl]($style)[](fg:#ad4007)"
+disabled = false
+
+[terraform]
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$workspace]($style)[](fg:#eb9606)"
+
+[username]
+style_user = "#0370C0"
+style_root = "#C00311"
+format = "[](fg:black bg:$style)[$user](fg:black bg:$style)[](fg:$style)"
+
+[vagrant]
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+
+# ----------------
+
+
+[buf]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+ 
+[c]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[conda]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[crystal]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[dart]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[elixir]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[elm]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[fennel]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[fossil_branch]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[guix_shell]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[haskell]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[haxe]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[hg_branch]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[hostname]
+ssh_symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[julia]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[lua]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[memory_usage]
+symbol = "󰍛 "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[meson]
+symbol = "󰔷 "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[nim]
+symbol = "󰆥 "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[nix_shell]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[os.symbols]
+Alpaquita = " "
+Alpine = " "
+Amazon = " "
+Android = " "
+Arch = " "
+Artix = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = "󰛓 "
+Gentoo = " "
+HardenedBSD = "󰞌 "
+Illumos = "󰈸 "
+Linux = " "
+Mabox = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+OpenBSD = "󰈺 "
+openSUSE = " "
+OracleLinux = "󰌷 "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+Redox = "󰀘 "
+Solus = "󰠳 "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Windows = "󰍲 "
+
+[perl]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[pijul_channel]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[rlang]
+symbol = "󰟔 "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"
+
+[zig]
+symbol = " "
+style = "fg:black bg:#eb9606"
+format = "[](fg:black bg:#eb9606)[$symbol$version]($style)[](fg:#eb9606)"

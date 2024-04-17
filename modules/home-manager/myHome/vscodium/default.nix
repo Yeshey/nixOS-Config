@@ -139,7 +139,6 @@ in
 			};
 			# ====== ============================ ======    
 
-	/*
 						# for Code
 						# userDir3="$HOME/.config/Code/User"
 						# mkdir -p "$userDir3"
@@ -148,7 +147,6 @@ in
 						#   ${(pkgs.formats.json {}).generate "blabla"
 						#     userSettings} \
 						#   > "$userDir3/settings.json"
-	*/
 
 	home.file =
 	{

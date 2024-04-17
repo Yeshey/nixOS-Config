@@ -1,4 +1,23 @@
 {
+    "terminal.integrated.defaultProfile.linux": "zsh",
+    "customPresentationMode.overrides": {
+        "workbench.colorTheme": "Visual Studio Light",
+        "window.zoomLevel": 1,
+        "debug.console.fontSize": 26,
+        "editor.fontSize": 26,
+        "markdown.preview.fontSize": 26,
+        "terminal.integrated.fontSize": 26,
+        "gitlens.codeLens.enabled": false,
+        "gitlens.currentLine.enabled": false
+    },
+    "workbench.colorTheme": "Monokai Dark Soda",
+    "workbench.iconTheme": "material-icon-theme",
+    "editor.fontFamily": "'FuraCode Nerd Font Mono', 'FiraCode Nerd Font Mono', 'Fira Code', 'Droid Sans Mono', Menlo, Monaco, 'Courier New', monospace, 'Droid Sans Fallback'",
+    "debug.console.fontSize": 16,
+    "editor.fontSize": 16,
+    "markdown.preview.fontSize": 16,
+    "terminal.integrated.fontSize": 16,
+    "editor.fontLigatures": true,
     "code-runner.executorMap": {
       "python": "python3 -u"
     },
