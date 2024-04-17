@@ -86,6 +86,6 @@ in
 
     # TODO backups?
 
-    networking.firewall.allowedUDPPorts = [ port ]; # TODO, make port a variable
+    networking.firewall.allowedUDPPorts = [ port ];
 
 }

@@ -54,7 +54,7 @@ in
     zsh.enable = true;
     gaming.enable = true;
     vmHost = true;
-    dockerHost = true; # TODO make users have the docker group then? Instead of everyone already having, same for adbuser 
+    dockerHost = true; 
     host = "hyrulecastle";
     user = "yeshey"; # TODO make this into an option where you can do user."yeshey".home-manager.enable ) true etc.
     home-manager = {
@@ -68,6 +68,16 @@ in
     flatpaks.enable = true;
 
     android.enable = false;
+  };
+
+  virtualisation.docker.storageDriver = "btrfs"; # for docker
+
+  hardware.opengl = {
+    enable = true;
+    extraPackages = [
+      pkgs.vaapiVdpau
+      pkgs.libvdpau-va-gl
+    ];
   };
 
   #programs.zsh.enable = true;
