@@ -66,6 +66,8 @@ in
     printers.enable = true;
     sound.enable = true;
     flatpaks.enable = true;
+
+    android.enable = false;
   };
 
   #programs.zsh.enable = true;

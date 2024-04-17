@@ -62,12 +62,7 @@ in
       # default = 
       # default = builtins.attrValues substituters; # TODO, make it loop throught the list # by default use all
     };
-    #boot.supportedFilesystems = lib.mkOption {
-    #  default = [ "ntfs" ];
-    #  type = lib.types.listOf lib.types.str;
-    #  description = "List of supported filesystems for boot";
-    #};
-    dedicatedServer = lib.mkEnableOption "dedicatedServer"; # TODO use this to say in the config if it is a dedicatedServer or not, with sub-options to enable each the bluetooth, printers, and sound, ponder adding the gnome and plasma desktops and gaming too
+    # dedicatedServer = lib.mkEnableOption "dedicatedServer"; # TODO use this to say in the config if it is a dedicatedServer or not, with sub-options to enable each the bluetooth, printers, and sound, ponder adding the gnome and plasma desktops and gaming too
   };
 
   config = {
@@ -162,8 +157,6 @@ in
       ];
     };
 
-    # TODO put in own file
-    # networking.hostName = "nixOS-${host}"; # TODO hostname is defined in each machine, decide if you can make it global in here.
     networking.networkmanager.enable = lib.mkDefault true;
     networking.resolvconf.dnsExtensionMechanism = lib.mkDefault false; # fixes internet connectivity problems with some sites (https://discourse.nixos.org/t/domain-name-resolve-problem/885/2)
     networking.nameservers = [ "1.1.1.1" "8.8.8.8" "9.9.9.9" ]; # (https://unix.stackexchange.com/questions/510940/how-can-i-set-a-custom-dns-server-within-nixos)
@@ -173,30 +166,6 @@ in
     networking = {
       hostName = "nixos-${cfg.host}";
     };
-    
-    # TODO maybe take a look at how he did network cuz I'm lost
-    /*
-      networking = {
-        useNetworkd = true;
-        enableIPv6 = false;
-        # "Predictable" interface names are not that predictable lol
-        usePredictableInterfaceNames = false;
-        # NetworkManager is implicitly enabled by gnome
-        networkmanager.enable = false;
-        # DHCPCD is still the default on NixOS
-        dhcpcd.enable = false;
-      };
-      systemd.network = {
-        enable = true;
-        wait-online.extraArgs = [ "--interface" "eth0" ];
-      };
-      services.resolved = {
-        enable = true;
-        extraConfig = ''
-          DNS = 10.69.1.243
-        '';
-      };
-    */
 
 
     

@@ -34,7 +34,7 @@ in
     enable = mkEnableOption "nonNixos";
     nix.substituters = mkOption {
       type = types.listOf types.str;
-      default = builtins.attrValues substituters; # by default use all
+      default = builtins.attrValues substituters; # by default use all # TODO check if works, 
     };
   };
   config = lib.mkIf cfg.enable {
