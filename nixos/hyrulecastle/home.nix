@@ -8,10 +8,9 @@ in
   ];
 
   myHome = {
-    zsh.enable = true;
-
     plasma.enable = true;
-    # gnome.enable = true;
+    gnome.enable = false;
+    zsh.enable = true;
     tmux.enable = true;
     homeapps.enable = true;
     neovim = {
@@ -20,12 +19,12 @@ in
     };
     vscodium.enable = true;
     discord.enable = true;
-    kitty.enable = true;
+    kitty.enable = false;
     alacritty.enable = true;
-    wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; #stellarCollisionByKuldarleement;
+    wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; #stellarCollisionByKuldarleement; #nierAutomataWallpaper;
     colorScheme = {
       theme = colorSchemes.rose-pine-moon;
-      setBasedOnWallpaper = {
+      setBasedOnWallpaper = { # only takes effect if theme is not set
         enable = true;
         variant = "dark"; # or light
       };
