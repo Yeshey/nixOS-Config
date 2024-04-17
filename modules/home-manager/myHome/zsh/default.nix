@@ -5,10 +5,7 @@ let
 in
 {
   options.myHome.zsh = with lib; {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-    };
+    enable = mkEnableOption "zsh";
   };
 
   # TODO make everything lib.mkDefault?

@@ -10,10 +10,7 @@ in
     # ./plasmaconf.nix 
   ];
   options.myHome.plasma = with lib; {
-    enable = mkOption {
-      type = types.bool;
-      default = false;
-    };
+    enable = mkEnableOption "plasma";
   };
 
   config = lib.mkIf cfg.enable {

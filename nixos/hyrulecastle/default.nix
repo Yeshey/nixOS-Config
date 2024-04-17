@@ -49,10 +49,9 @@ in
   };
 
   mySystem = {
-    zsh.enable = true;
-
-    gnome.enable = false; # TODO, we can do better
     plasma.enable = true;
+    gnome.enable = false; # TODO, we can do better
+    zsh.enable = true;
     gaming.enable = true;
     vmHost = true;
     dockerHost = true; # TODO make users have the docker group then? Instead of everyone already having, same for adbuser 
