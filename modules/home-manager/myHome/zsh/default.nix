@@ -11,6 +11,29 @@ in
   # TODO make everything lib.mkDefault?
 
   config = lib.mkIf cfg.enable {
+    # theme from https://gitlab.com/pinage404/dotfiles
+    programs.starship = {
+      enable = true;
+      settings = pkgs.lib.importTOML ./starship.toml;
+    };
+    # Need these fonts for starship theme to work
+    fonts.fontconfig.enable = true;
+    home.packages = with pkgs; [
+      nerdfonts
+      /*
+      (
+        nerdfonts.override {
+          fonts = [
+            "FiraCode"
+            "RobotoMono"
+            "SourceCodePro"
+          ];
+        }
+      ) */
+      oxygenfonts
+      source-sans-pro
+    ];
+
     programs.zsh = {
       enable = lib.mkDefault true;
       history = {
@@ -20,15 +43,6 @@ in
         ll = lib.mkDefault "eza -l --icons=auto";
         la = lib.mkDefault "eza -la --icons=auto";
       };
-      # theme
-      initExtraBeforeCompInit = ''
-        # Completion
-        zstyle ':completion:*' menu yes select
-
-        # Prompt
-        source ${pkgs.spaceship-prompt}/lib/spaceship-prompt/spaceship.zsh
-        autoload -U promptinit; promptinit
-      ''; 
       # bash
       initExtra = ''
         source ${./kubectl.zsh}
@@ -72,7 +86,7 @@ in
         }
         {
           name = "zsh-vi-mode";
-          src = "${pkgs.unstable.zsh-vi-mode}/share/zsh-vi-mode";
+          src = "${pkgs.zsh-vi-mode}/share/zsh-vi-mode";
         }
         {
           name = "zsh-z";
@@ -92,6 +106,5 @@ in
       };
       */
     };
-    home.file.".config/spaceship.zsh".source = ./spaceship.zsh;
   };
 }
