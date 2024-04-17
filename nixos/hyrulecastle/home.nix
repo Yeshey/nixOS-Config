@@ -22,8 +22,14 @@ in
     discord.enable = true;
     kitty.enable = true;
     alacritty.enable = true;
-    colorScheme = colorSchemes.rose-pine-moon;
     wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; #stellarCollisionByKuldarleement;
+    colorScheme = {
+      theme = colorSchemes.rose-pine-moon;
+      setBasedOnWallpaper = {
+        enable = true;
+        variant = "dark"; # or light
+      };
+    };
   };
 
   home = {                                # Specific packages
