@@ -9,39 +9,22 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    programs.starship = {
-      enable = true;
-      settings = pkgs.lib.importTOML ./starship.toml;
-    };
-    # Need these fonts for starship theme to work
-    fonts.fontconfig.enable = true;
-    fonts.packages = with pkgs; [
-      noto-fonts
-      noto-fonts-cjk
-      noto-fonts-emoji
-      liberation_ttf
-      fira-code
-      fira-code-symbols
-      mplus-outline-fonts.githubRelease
-      dina-font
-      proggyfonts
-      (nerdfonts.override { fonts = [ "FiraCode" "DroidSansMono" ]; })
-    ];
     environment = {
       systemPackages = with pkgs; [
-        nerdfonts
-        /*
+        eza
         (
           nerdfonts.override {
             fonts = [
               "FiraCode"
-              "RobotoMono"
-              "SourceCodePro"
             ];
           }
-        )*/
+        )
       ];
     };
+    #programs.starship = {
+    #  enable = true;
+    #  settings = pkgs.lib.importTOML ./starship.toml;
+    #};
 
     programs.zsh = {
       enable = lib.mkDefault true;
@@ -50,7 +33,7 @@ in
       enableCompletion = lib.mkDefault true;
       histSize = lib.mkDefault 100000;
       shellAliases = {
-        ll = lib.mkOverride 995 "eza -l --icons=auto"; # TODO add lib.mkOverride 995 everywhere
+        ll = lib.mkOverride 995 "eza -l --icons=auto";
         la = lib.mkDefault "eza -la --icons=auto";
       };
       shellInit = ''
@@ -69,11 +52,16 @@ in
         source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
         source ${pkgs.zsh-you-should-use}/share/zsh/plugins/you-should-use/you-should-use.plugin.zsh
       '';
-# TODO do I need to install them? Figure out
-    #environment.systemPackages = with pkgs; [ 
-    #  zsh-you-should-use
-    #];
-
+      ohMyZsh = {
+        enable = true;
+        plugins = [ "git" 
+                    "colored-man-pages" 
+                    "alias-finder" 
+                    "command-not-found" 
+                    "urltools" 
+                    "bgnotify"];
+        theme = "agnoster"; # robbyrussell # agnoster # frisk
+      };
     };
 
     environment = {

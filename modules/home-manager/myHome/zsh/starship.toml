@@ -8,7 +8,8 @@ error_symbol = ""
 truncate_to_repo = false
 fish_style_pwd_dir_length = 1
 style = "#4169e1"
-format = "[](bg:$style fg:black)[$path[$read_only]($read_only_style)](bg:$style)[](fg:$style) "
+format = "[](bg:$style fg:black)[$path[$read_only](bg:$style fg:black)](bg:$style)[](fg:$style) "
+read_only = " "
 
 [cmd_duration]
 min_time = 50
