@@ -50,7 +50,7 @@ in
 
   mySystem = {
     plasma.enable = true;
-    gnome.enable = false; # TODO, we can do better
+    gnome.enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
     zsh.enable = true;
     gaming.enable = true;
     vmHost = true;
@@ -62,10 +62,10 @@ in
       home = ./home.nix;
       # useGlobalPkgs = lib.mkForce false;
     };
-    #bluetooth.enable = true;
-    #printers.enable = true;
-    #sound.enable = true;
-    #flatpaks.enable = true;
+    bluetooth.enable = true;
+    printers.enable = true;
+    sound.enable = true;
+    flatpaks.enable = true;
   };
 
   #programs.zsh.enable = true;

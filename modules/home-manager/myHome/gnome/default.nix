@@ -10,20 +10,6 @@ in
   ];
   options.myHome.gnome = with lib; {
     enable = mkEnableOption "gnome";
-    font = {
-      package = mkOption {
-        type = types.package;
-        default = pkgs.nerdfonts.override { fonts = [ "Hack" ]; };
-      };
-      name = mkOption {
-        type = types.str;
-        default = "Hack Nerd Font";
-      };
-      size = mkOption {
-        type = types.int;
-        default = 14;
-      };
-    };
   };
 
   config = lib.mkIf cfg.enable {

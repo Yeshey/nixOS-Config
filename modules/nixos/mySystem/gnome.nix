@@ -12,9 +12,6 @@ in
     environment = {
       systemPackages = with pkgs; [
         firefox
-        #wl-clipboard
-        #gnomeExtensions.appindicator
-        #gnomeExtensions.gsconnect
       ];
       gnome.excludePackages = with pkgs.gnome; [
         cheese # webcam tool
@@ -34,7 +31,7 @@ in
     services = {
       xserver = {
         enable = true;
-        layout = "pt";
+        # layout = "pt";
         displayManager.gdm = {
           enable = true;
           settings = {
@@ -44,16 +41,8 @@ in
         desktopManager.gnome.enable = true;
       };
       udev.packages = [ pkgs.gnome.gnome-settings-daemon ];
-      pipewire = {
-        enable = true;
-        alsa.enable = true;
-        pulse.enable = true;
-        jack.enable = true;
-      };
     };
 
-    hardware.pulseaudio.enable = false;
     security.rtkit.enable = true;
-    sound.enable = true;
   };
 }

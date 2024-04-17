@@ -71,11 +71,6 @@ in
   };
 
   config = {
-    mySystem.bluetooth.enable = lib.mkDefault true;
-    mySystem.printers.enable = lib.mkDefault true;
-    mySystem.sound.enable = lib.mkDefault true;
-    mySystem.flatpaks.enable = lib.mkDefault true;
-
     zramSwap.enable = lib.mkDefault true;
     boot.tmp.cleanOnBoot = lib.mkDefault true; # delete all files in /tmp during boot.
     boot.supportedFilesystems = [ "ntfs" ]; # TODO lib.mkdefault? Doesn't work with [] and {}?
