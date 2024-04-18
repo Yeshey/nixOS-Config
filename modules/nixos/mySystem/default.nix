@@ -53,8 +53,9 @@ in
   options.mySystem = with lib; {
     nix.substituters = mkOption {
       type = types.listOf types.str;
-      default = ["cachenixosorg" "cachethalheimio" "numtidecachixorg" "hydranixosorg" "nrdxpcachixorg" "nixcommunitycachixorg"];
-      # default = builtins.attrValues substituters; # TODO, make it loop throught the list # by default use all
+      example = ["cachethalheimio" "cachenixosorg"];
+      # by default use all
+      default = mapAttrsToList (name: value: name) substituters; # mapAttrsToList: https://ryantm.github.io/nixpkgs/functions/library/attrsets/#function-library-lib.attrsets.mapAttrsToList
     };
     host = mkOption {
       type = types.str; 
@@ -103,7 +104,7 @@ in
         dates = lib.mkDefault "weekly";
       };
       settings = {
-        trusted-users = [ "root" "yeshey" "@wheel" ]; # TODO remove (check the original guys config)
+        trusted-users = [ "root" "${config.mySystem.user}" "@wheel" ]; # TODO remove (check the original guys config)
         auto-optimise-store = lib.mkDefault true;
         substituters = map (x: substituters.${x}.url) cfg.nix.substituters;
         trusted-public-keys = map (x: substituters.${x}.key) cfg.nix.substituters;
