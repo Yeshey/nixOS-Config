@@ -22,10 +22,6 @@
     };
     nurpkgs.url = "github:nix-community/NUR";
     /* 
-    nur = {
-      url = "github:nix-community/NUR";
-      inputs.nixpkgs.follows = "nixpkgs";
-    }; 
     nixos-nvidia-vgpu.url = "github:Yeshey/nixos-nvidia-vgpu/master";
     */ 
 
@@ -40,9 +36,6 @@
       url = "github:guibou/nixGL";
       inputs.nixpkgs.follows = "nixpkgs";
     }; */
-    # Shameless plug: looking for a way to nixify your themes and make
-    # everything match nicely? Try nix-colors!
-    # nix-colors.url = "github:misterio77/nix-colors";
   };
 
   outputs =

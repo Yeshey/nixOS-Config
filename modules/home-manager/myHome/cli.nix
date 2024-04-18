@@ -6,7 +6,15 @@ in
 {
   options.myHome.cli = {
     enable = (lib.mkEnableOption "cli") // { default = true; };
-    personalGitEnable = (lib.mkEnableOption "personalGitEnable") // { default = true; };
+    personalGit.enable = (lib.mkEnableOption "personalGitEnable") // { default = true; };
+    personalGit.userName = lib.mkOption {
+      type = lib.types.str;
+      default = "Yeshey";
+    };
+    personalGit.userEmail = lib.mkOption {
+      type = lib.types.str;
+      default = "yesheysangpo@hotmail.com";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -16,8 +24,8 @@ in
       };
       git = {
         enable = true;
-        userName = lib.mkIf cfg.personalGitEnable "Yeshey";
-        userEmail = lib.mkIf cfg.personalGitEnable "yesheysangpo@hotmail.com";
+        userName = lib.mkIf cfg.personalGit.enable ${cfg.personalGit.userName}; # "Yeshey";
+        userEmail = lib.mkIf cfg.personalGit.enable ${cfg.personalGit.userEmail} # "yesheysangpo@hotmail.com";
       };
     };
     home.packages = with pkgs; [
