@@ -9,6 +9,7 @@ in
     ./sound.nix
     ./printers.nix
     ./nvidia.nix
+    ./thermald.nix
   ];
 
   options.mySystem.hardware = {
@@ -20,6 +21,7 @@ in
     mySystem.hardware.printers.enable = lib.mkDefault true;
     mySystem.hardware.sound.enable = lib.mkDefault true;
     mySystem.hardware.nvidia.enable = lib.mkDefault true;
+    mySystem.hardware.thermald.enable = lib.mkDefault true;
   };
   
 }

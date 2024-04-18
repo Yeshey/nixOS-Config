@@ -16,7 +16,6 @@ in
     inputs.nixos-hardware.nixosModules.common-cpu-intel
     inputs.nixos-hardware.nixosModules.common-pc-ssd
     ./hardware-configuration.nix
-    ./thermald
 
     # (import ./configFiles/VM/VM.nix) # TODO
     # (import ./configFiles/dontStarveTogetherServer.nix) # TODO
@@ -69,6 +68,10 @@ in
       bluetooth.enable = true;
       printers.enable = true;
       sound.enable = true;
+      thermald = {
+        enable = true;
+        thermalConf = ./thermal-conf.xml;
+      };
       nvidia = {
         enable = true;
         intelBusId = "PCI:0:2:0";
@@ -82,10 +85,10 @@ in
     androidDevelopment.enable = false;
   };
 
-  environment.systemPackages = with pkgs; [
+  #environment.systemPackages = with pkgs; [
     #unstable.nixfmt-rfc-style
     #nixpkgs-fmt
-  ];
+  #];
 
   virtualisation.docker.storageDriver = "btrfs"; # for docker
 

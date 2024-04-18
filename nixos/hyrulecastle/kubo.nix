@@ -1,4 +1,4 @@
-{ config, pkgs, user, location, dataStoragePath, lib, ... }:
+{ config, pkgs, location, lib, ... }:
 
 let
   
