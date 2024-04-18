@@ -10,7 +10,6 @@
 {
   imports = [
     ./hardware-configuration.nix
-    #./nvidia.nix
   ];
 
   nixpkgs = {
@@ -54,6 +53,12 @@
     printers.enable = true;
     sound.enable = true;
     flatpaks.enable = true;
+
+    nvidia = {
+      enable = true;
+      intelBusId = "PCI:0:1:0";
+      nvidiaBusId = "PCI:8:0:0";
+    };
   };
 
   boot.kernelParams = [ "nouveau.modeset=0" ];
@@ -98,7 +103,7 @@
     {
       device = "/swapfile";
       priority = 0; # Higher numbers indicate higher priority.
-      size = 8*1024;
+      size = 6*1024;
       options = [ "nofail"];
     }
   ];
