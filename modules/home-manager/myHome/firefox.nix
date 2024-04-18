@@ -7,7 +7,6 @@
 }: let
   c = config.myHome.colorScheme.theme.palette;
   cfg = config.myHome.firefox;
-  user = "yeshey";
 in {
   options.myHome.firefox = with lib; {
     enable = mkEnableOption "firefox";
@@ -60,7 +59,7 @@ in {
               metamask
           ];
           id = 0; # default profile
-          name = "${user}";
+          name = "${config.myHome.user}";
           search = {
               force = true;
               default = "Google"; #DuckDuckGo
@@ -118,7 +117,7 @@ in {
         };
       in {
           # to switch profile go to about:profiles
-          ${user} = common-conf;
+          ${config.myHome.user} = common-conf;
           i2p = common-conf // lib.mkIf cfg.i2pFirefoxProfile {
             bookmarks = [
               { # does't work?

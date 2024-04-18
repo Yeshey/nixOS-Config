@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.mySystem.nvidia;
+  cfg = config.mySystem.hardware.nvidia;
   nvidia-offload = pkgs.writeShellScriptBin "nvidia-offload" ''
     export __NV_PRIME_RENDER_OFFLOAD=1
     export __NV_PRIME_RENDER_OFFLOAD_PROVIDER=NVIDIA-G0
@@ -11,7 +11,7 @@ let
   '';
 in
 {
-  options.mySystem.nvidia = with lib; {
+  options.mySystem.hardware.nvidia = with lib; {
     enable = mkEnableOption "nvidia";
     intelBusId = mkOption {
       type = types.str;

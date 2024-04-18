@@ -16,6 +16,7 @@ in
     inputs.nixos-hardware.nixosModules.common-cpu-intel
     inputs.nixos-hardware.nixosModules.common-pc-ssd
     ./hardware-configuration.nix
+    ./thermald
 
     # (import ./configFiles/VM/VM.nix) # TODO
     # (import ./configFiles/dontStarveTogetherServer.nix) # TODO
@@ -63,16 +64,19 @@ in
       enable = true;
       home = ./home.nix;
     };
-    autoUpgrades.enable = true;
-    bluetooth.enable = true;
-    printers.enable = true;
-    sound.enable = true;
-    flatpaks.enable = true;
-    nvidia = {
+    hardware = {
       enable = true;
-      intelBusId = "PCI:0:2:0";
-      nvidiaBusId = "PCI:1:0:0";
+      bluetooth.enable = true;
+      printers.enable = true;
+      sound.enable = true;
+      nvidia = {
+        enable = true;
+        intelBusId = "PCI:0:2:0";
+        nvidiaBusId = "PCI:1:0:0";
+      };
     };
+    autoUpgrades.enable = true;    
+    flatpaks.enable = true;
     i2p.enable = true;
     
     androidDevelopment.enable = false;
@@ -95,32 +99,6 @@ in
 
   #programs.zsh.enable = true;
   #users.users.yeshey.shell = pkgs.zsh;
-
-  # Manage Temperature, prevent throttling
-  # https://github.com/linux-surface/linux-surface/issues/221
-  # laptop thermald with: https://github.com/intel/thermal_daemon/issues/42#issuecomment-294567400
-  services.power-profiles-daemon.enable = true;
-  services.thermald = {
-    debug = false;
-    enable = true;
-    configFile = ./thermal-conf.xml; #(https://github.com/linux-surface/linux-surface/blob/master/contrib/thermald/thermal-conf.xml)
-  };
-  systemd.services.thermald.serviceConfig.ExecStart = let # running with --adaptive ignores the config file. Issue raised: https://github.com/NixOS/nixpkgs/issues/201402
-    cfg = config.services.thermald;
-      in lib.mkForce ''
-          ${cfg.package}/sbin/thermald \
-            --no-daemon \
-            --config-file /home/yeshey/.setup/hosts/laptop/configFiles/thermal-conf.xml \
-        '';
-  # TODO above was like so:
-  # user = "yeshey";
-  # location = "/home/${user}/.setup"; # "$HOME/.setup"
-  /* in lib.mkForce ''
-          ${cfg.package}/sbin/thermald \
-            --no-daemon \
-            --config-file ${location}/hosts/laptop/configFiles/thermal-conf.xml \
-        '';
-        */
 
   # systemctl status borgbackup-job-rootBackup.service/timer
   services.borgbackup.jobs = { # for a local backup

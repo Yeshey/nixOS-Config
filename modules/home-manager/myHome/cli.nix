@@ -24,8 +24,8 @@ in
       };
       git = {
         enable = true;
-        userName = lib.mkIf cfg.personalGit.enable ${cfg.personalGit.userName}; # "Yeshey";
-        userEmail = lib.mkIf cfg.personalGit.enable ${cfg.personalGit.userEmail} # "yesheysangpo@hotmail.com";
+        userName = lib.mkIf cfg.personalGit.enable "${cfg.personalGit.userName}";
+        userEmail = lib.mkIf cfg.personalGit.enable "${cfg.personalGit.userEmail}";
       };
     };
     home.packages = with pkgs; [

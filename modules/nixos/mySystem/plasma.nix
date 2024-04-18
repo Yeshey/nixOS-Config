@@ -14,7 +14,7 @@ in
         enable = true; # Enable the X11 windowing system.
         displayManager = {
           autoLogin.enable = true;
-          autoLogin.user = "yeshey"; # TODO
+          autoLogin.user = "${config.mySystem.user}"; # TODO
           sddm = {
               enable = true;
           };
