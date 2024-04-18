@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, user, location, host, ... }:
+{ config, lib, pkgs, inputs, location, host, ... }:
 
 {
   # Open ports in the firewall.
@@ -12,7 +12,7 @@
   services = {
     syncthing = {
       enable = true;
-      user = "yeshey";
+      user = ${config.mySystem.user};
       dataDir = "/home/${user}/Documents";    # Default folder for new synced folders
       configDir = "/home/${user}/.config/syncthing";   # Folder for Syncthing's settings and keys
 

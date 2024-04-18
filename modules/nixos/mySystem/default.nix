@@ -42,14 +42,11 @@ in
     ./zsh
 
     ./i2p.nix # TODO review and possibly clump together with the non-server Configuration below
-    ./bluetooth.nix
-    ./sound.nix
-    ./printers.nix
     ./flatpaks.nix
     ./cliTools.nix
-    ./nvidia.nix
     ./autoUpgrades.nix
     ./browser.nix
+    ./hardware
 
     # ./syncthing.nix
   ];

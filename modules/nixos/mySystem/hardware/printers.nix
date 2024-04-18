@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.mySystem.printers;
+  cfg = config.mySystem.hardware.printers;
 in
 {
-  options.mySystem.printers = {
+  options.mySystem.hardware.printers = {
     enable = lib.mkEnableOption "printers";
   };
 

@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.mySystem.sound;
+  cfg = config.mySystem.hardware.sound;
 in
 {
-  options.mySystem.sound = {
+  options.mySystem.hardware.sound = {
     enable = lib.mkEnableOption "sound";
   };
 

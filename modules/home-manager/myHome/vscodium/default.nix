@@ -76,18 +76,15 @@ in
 			# Allowing VScode to change settings on run time, see last response: https://github.com/nix-community/home-manager/issues/1800
 			# VScodium is now free to write to its settings, but they will be overwritten when I run nixos rebuild
 			# check also how he implemented in his repository: https://github.com/rgbatty/cauldron (nope!)
-			# TODO user = "yeshey";
-			home.activation.boforeCheckLinkTargets = let
-				user = "yeshey";
-			in {
+			home.activation.boforeCheckLinkTargets = {
 				after = [];
 				before = [ "checkLinkTargets" ];
 				data = ''
-					userDir=/home/${user}/.config/VSCodium/User
+					userDir=/home/${config.myHome.user}/.config/VSCodium/User
 					rm -rf $userDir/settings.json
 
 					# as I changed the name to Visual Studio Code, I need to maintain VSC settings too
-					userDir2="/home/${user}/.config/Visual Studio Code/User"
+					userDir2="/home/${config.myHome.user}/.config/Visual Studio Code/User"
 					rm -rf $userDir/settings.json
 				'';
 			};
