@@ -8,6 +8,7 @@ in
   ];
 
   myHome = {
+    user = "yeshey";
     nonNixos.enable = false;
     plasma.enable = true;
     gnome.enable = false;
@@ -17,9 +18,16 @@ in
     };
     cli = {
       enable = true;
-      personalGitEnable = true;
+      personalGit = {
+        enable = true;
+        userName = "Yeshey";
+        userEmail = "yesheysangpo@hotmail.com";
+      };
     };
-    zsh.enable = true;
+    zsh = {
+      enable = true;
+      starshipTheme = "pinage404"; # fredericrous # pinage404
+    };
     tmux.enable = true;
     homeapps.enable = true;
     gaming.enable = true;
@@ -31,7 +39,9 @@ in
     discord.enable = true;
     kitty.enable = true;
     alacritty.enable = true;
-    wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; #stellarCollisionByKuldarleement; #nierAutomataWallpaper;
+    libreoffice.enable = true;
+    direnv.enable = true;
+    wallpaper = pkgs.wallpapers.stellarCollisionByKuldarleement; #johnKearneyCityscapePoster #stellarCollisionByKuldarleement; #nierAutomataWallpaper;
     colorScheme = {
       theme = colorSchemes.rose-pine-moon;
       setBasedOnWallpaper = { # only takes effect if theme is not set
@@ -62,13 +72,6 @@ in
       inkscape
       arduino
       # premid # show youtube videos watching in discord
-
-      # Libreoffice
-      libreoffice
-      corefonts # fonts
-      vistafonts # fonts
-      hunspell
-      hunspellDicts.uk_UA
     ];
   };
 

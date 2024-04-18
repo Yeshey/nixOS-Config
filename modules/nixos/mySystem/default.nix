@@ -34,7 +34,7 @@ in
 {
   imports = [
     ./user.nix
-    ./android.nix
+    ./androidDevelopment.nix
     ./gaming.nix
     ./gnome.nix
     ./plasma.nix
@@ -156,8 +156,6 @@ in
     networking = {
       hostName = "nixos-${cfg.host}";
     };
-
-
 
   };
 }

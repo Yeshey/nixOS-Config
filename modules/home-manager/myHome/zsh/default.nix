@@ -6,6 +6,10 @@ in
 {
   options.myHome.zsh = with lib; {
     enable = mkEnableOption "zsh";
+    starshipTheme = mkOption {
+      type = types.str;
+      default = "pinage404";
+    };
   };
 
   # TODO make everything lib.mkDefault?
@@ -14,7 +18,7 @@ in
     # theme from https://gitlab.com/pinage404/dotfiles
     programs.starship = {
       enable = true;
-      settings = pkgs.lib.importTOML ./starship.toml; # or ./starship2.toml
+      settings = pkgs.lib.importTOML ./${cfg.starshipTheme}.toml; # or ./starship2.toml
     };
     # Need these fonts for starship theme to work
     fonts.fontconfig.enable = true;

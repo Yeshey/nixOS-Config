@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.mySystem.android;
+  cfg = config.mySystem.androidDevelopment;
 in
 {
-  options.mySystem.android = with lib; {
-    enable = mkEnableOption "android";
+  options.mySystem.androidDevelopment = with lib; {
+    enable = mkEnableOption "androidDevelopment";
   };
 
   config = lib.mkIf cfg.enable {

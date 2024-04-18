@@ -27,8 +27,14 @@ in
     ./alacritty.nix
     ./gaming.nix
     ./firefox.nix
+    ./libreoffice.nix
+    ./direnv.nix
   ];
   options.myHome = with lib; {
+    user = mkOption {
+      type = types.str;
+      default = "yeshey";
+    };
     wallpaper = mkOption {
       type = types.nullOr types.package;
       default = null;
@@ -56,6 +62,10 @@ in
     };
   };
   config = {
-    
+    home = rec {
+      username = lib.mkDefault cfg.user; # TODO username
+      homeDirectory = lib.mkDefault "/home/${username}";
+      stateVersion = lib.mkDefault "22.11";
+    };
   };
 }

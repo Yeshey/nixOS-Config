@@ -62,7 +62,6 @@ in
     home-manager = {
       enable = true;
       home = ./home.nix;
-      # useGlobalPkgs = lib.mkForce false;
     };
     autoUpgrades.enable = true;
     bluetooth.enable = true;
@@ -76,7 +75,7 @@ in
     };
     i2p.enable = true;
     
-    android.enable = false;
+    androidDevelopment.enable = false;
   };
 
   environment.systemPackages = with pkgs; [

@@ -9,11 +9,6 @@
     #imports = [inputs.nix-colors.homeManagerModules.default];
     #colorScheme = inputs.nix-colors.colorSchemes.ocean;
 
-    home = rec {
-      username = lib.mkDefault "yeshey"; # TODO username
-      homeDirectory = lib.mkDefault "/home/${username}";
-      stateVersion = lib.mkDefault "22.11";
-    };
     /*
   home.file.".config/user-dirs.dirs".source = builtins.toFile "user-dirs.dirs" ''
 XDG_DESKTOP_DIR="$HOME/Desktop"
@@ -44,12 +39,6 @@ XDG_VIDEOS_DIR="$HOME/Videos"
     */
     # Nicely reload system units when changing configs
     systemd.user.startServices = lib.mkDefault "sd-switch";
-
-    programs.direnv = {
-      enable = lib.mkDefault true;
-      enableZshIntegration = lib.mkDefault true; # TODO check if zsh enabled?
-      nix-direnv.enable = lib.mkDefault true;
-    };
 
     # TODO, seems like backupFileExtension is enough? it 
     # xdg.configFile."*".force = true;

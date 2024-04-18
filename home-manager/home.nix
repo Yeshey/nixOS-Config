@@ -10,13 +10,8 @@
   ...
 }: {
 
-  home = rec {
-    username = "yeshey";
-    homeDirectory = "/home/${username}";
-    stateVersion = "22.11";
-  };
-
   myHome = {
+    user = "yeshey";
     nonNixos.enable = true;
     gnome.enable = true;
     devops.enable = true;
