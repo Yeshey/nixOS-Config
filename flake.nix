@@ -20,6 +20,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+    nurpkgs.url = "github:nix-community/NUR";
     /* 
     nur = {
       url = "github:nix-community/NUR";
@@ -55,6 +56,7 @@
 #    , nixgl
     , nix-colors
     , plasma-manager
+    , nurpkgs
     , ...
   }@inputs: 
   let
@@ -86,7 +88,7 @@
     # Formatter for your nix files, available through 'nix fmt'
     # Other options include 'alejandra' & 'nixpkgs-fmt'
     # Using the official nixpkgs formatter (article: https://drakerossman.com/blog/overview-of-nix-formatters-ecosystem)
-    formatter = forEachSystem (pkgs: pkgs.nixfmt-rfc-style);
+    formatter = forEachSystem (pkgs: pkgs.unstable.nixfmt-rfc-style);
     # formatter = forAllSystems (system: nixpkgs-unstable.legacyPackages.${system}.nixfmt-rfc-style);
     devShells = forEachSystem (pkgs: import ./shell.nix {inherit pkgs;});
 

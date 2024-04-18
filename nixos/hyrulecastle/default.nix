@@ -74,9 +74,15 @@ in
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:1:0:0";
     };
+    i2p.enable = true;
     
     android.enable = false;
   };
+
+  environment.systemPackages = with pkgs; [
+    #unstable.nixfmt-rfc-style
+    #nixpkgs-fmt
+  ];
 
   virtualisation.docker.storageDriver = "btrfs"; # for docker
 

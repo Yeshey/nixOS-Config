@@ -7,6 +7,7 @@
 }: let
   c = config.myHome.colorScheme.theme.palette;
   cfg = config.myHome.firefox;
+  user = "yeshey";
 in {
   options.myHome.firefox = with lib; {
     enable = mkEnableOption "firefox";
@@ -14,8 +15,6 @@ in {
 
   config = lib.mkIf cfg.enable {
 
-
-    /* 
     # TODO can you fix this?
     # https://discourse.nixos.org/t/help-setting-up-firefox-with-home-manager/23333
     programs.firefox = {
@@ -154,7 +153,6 @@ in {
   Icon=firefox
   Type=Application
             '';
-            */
 
   };
 }
