@@ -25,6 +25,7 @@ in
       yt-dlp # download youtube videos
       scrcpy # screen cast android phone
       ocrmypdf
+      libnotify # so you can use notify-send
 
       curl
       vim # The Nano editor is installed by default.

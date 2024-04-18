@@ -334,6 +334,21 @@
         "type": "github"
       }
     },
+    "nurpkgs": {
+      "locked": {
+        "lastModified": 1713447875,
+        "narHash": "sha256-Rt0atfugUthSe80Q7lZarPBZ3PUWrf+hYBccnag9OVw=",
+        "owner": "nix-community",
+        "repo": "NUR",
+        "rev": "2d5139740cf17b30b1a720d5b9e482005b36468e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-community",
+        "repo": "NUR",
+        "type": "github"
+      }
+    },
     "nvim-cmp": {
       "flake": false,
       "locked": {
@@ -445,6 +460,7 @@
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
+        "nurpkgs": "nurpkgs",
         "plasma-manager": "plasma-manager"
       }
     },

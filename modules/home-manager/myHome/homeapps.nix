@@ -12,7 +12,6 @@ in
     home = {
       packages = with pkgs; [
         github-desktop
-        libnotify # so you can use notify-send
         obs-studio
         stremio
         barrier

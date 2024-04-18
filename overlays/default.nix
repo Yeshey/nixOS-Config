@@ -1,11 +1,7 @@
 {inputs, outputs, ...}: {
-  # TODO check if this can be put in one of the others
-  #default = final: prev: {
-  #  nierWallpaper = builtins.fetchurl {
-  #    url = "https://images6.alphacoders.com/655/655990.jpg";
-  #    sha256 = "b09b411a9c7fc7dc5be312ca9e4e4b8ee354358daa792381f207c9f4946d95fe";
-  #  };
-  #};
+  # call the overlays
+  neovimPluginsss = inputs.neovim-plugins.overlays.default;
+  nur = inputs.nurpkgs.overlay; # gives access to pkgs.nur.
 
   # This one brings our custom packages from the 'pkgs' directory
   additions = final: _prev: import ../pkgs {pkgs = final;};
@@ -27,13 +23,5 @@
       config.allowUnfree = true;
     };
   };
-  # TODO, check if this is right
-      #unstable = final: prev: {
-      #  unstable = nixpkgs-unstable.legacyPackages.${prev.system};
-      #  inherit (nixpkgs-unstable.legacyPackages.${prev.system}) neovim-unwrapped;
-      #};
 
-  # call the overlays
-  # Used here: pkgs.nvimPlugins.plenary # TODO see if there is a better way to do this
-  neovimPluginsss = inputs.neovim-plugins.overlays.default;
 }
