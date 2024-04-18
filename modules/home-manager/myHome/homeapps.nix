@@ -17,7 +17,6 @@ in
         stremio
         barrier
         bitwarden
-        #libsForQt5.neochat # plasma client for matrix
         # etcher #insecure?
 
         # Browsers
@@ -25,13 +24,8 @@ in
         brave
         tor-browser-bundle-bin
         qutebrowser
+        # firefox
         # librewolf
-
-        # tmp
-        # skypeforlinux
-        #staruml # UML diagrams
-        #jetbrains.clion # C++
-        #jetbrains.idea-community # java
 
         helvum
 

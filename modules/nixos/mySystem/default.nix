@@ -49,6 +49,7 @@ in
     ./cliTools.nix
     ./nvidia.nix
     ./autoUpgrades.nix
+    ./browser.nix
 
     # ./syncthing.nix
   ];
