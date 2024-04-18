@@ -52,7 +52,7 @@
     bluetooth.enable = true;
     printers.enable = true;
     sound.enable = true;
-    flatpaks.enable = true;
+    flatpaks.enable = false;
 
     nvidia = {
       enable = true;

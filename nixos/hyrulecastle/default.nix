@@ -63,6 +63,7 @@ in
       home = ./home.nix;
       # useGlobalPkgs = lib.mkForce false;
     };
+    autoUpgrades.enable = true;
     bluetooth.enable = true;
     printers.enable = true;
     sound.enable = true;
