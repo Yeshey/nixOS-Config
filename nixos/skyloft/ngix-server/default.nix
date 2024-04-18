@@ -1,4 +1,4 @@
-{ config, pkgs, user, location, lib, dataStoragePath, ... }:
+{ config, pkgs, user, location, lib, ... }:
 
 let
   port = 7843; # 7843

@@ -100,6 +100,17 @@ in
       enable = true;
       home = ./home;
     };
+    hardware = {
+      enable = true;
+      bluetooth.enable = true;
+      printers.enable = true;
+      sound.enable = true;
+      thermald = {
+        enable = true;
+        thermalConf = ./thermal-conf.xml;
+      };
+      nvidia.enable = false;
+    };
     bluetooth.enable = true;
     printers.enable = true;
     sound.enable = true;
