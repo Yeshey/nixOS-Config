@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ inputs, config, lib, pkgs, ... }:
 
 let
   cfg = config.mySystem.gaming;
@@ -9,7 +9,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [  ];
+    environment.systemPackages = with pkgs; [ 
+      inputs.nix-gaming.packages.${pkgs.system}.osu-stable
+    ];
     programs = {
       steam = {
         enable = true;

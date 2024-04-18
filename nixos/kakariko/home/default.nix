@@ -24,11 +24,8 @@ in
   home = { # Specific packages
     packages = with pkgs; [
       psensor
-      lbry
-      arduino
 
       # Surface and Desktop apps
-      yt-dlp # download youtube videos
       qbittorrent
       baobab
       gnome.cheese
@@ -40,7 +37,6 @@ in
       gimp
       krita
       inkscape
-      arduino
       premid # show youtube videos watching in discord
       # Libreoffice
       libreoffice-qt
