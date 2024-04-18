@@ -46,6 +46,8 @@ in
     ./sound.nix
     ./printers.nix
     ./flatpaks.nix
+    ./cliTools.nix
+    ./nvidia.nix
 
     # ./syncthing.nix
   ];
@@ -142,21 +144,6 @@ in
       forwardX11 = true;
     };
     programs.command-not-found.enable = lib.mkDefault true;
-
-    environment = {
-      systemPackages = with pkgs; [
-        git
-        dnsutils
-        pciutils
-        vim # The Nano editor is installed by default.
-        htop
-        tmux
-        wget
-        tree
-        unzip
-        unrar # also to extract .rar with ark in KDE # unrar x Lab5.rar
-      ];
-    };
 
     networking.networkmanager.enable = lib.mkDefault true;
     networking.resolvconf.dnsExtensionMechanism = lib.mkDefault false; # fixes internet connectivity problems with some sites (https://discourse.nixos.org/t/domain-name-resolve-problem/885/2)

@@ -45,8 +45,6 @@ XDG_VIDEOS_DIR="$HOME/Videos"
     # Nicely reload system units when changing configs
     systemd.user.startServices = lib.mkDefault "sd-switch";
 
-    programs.git.enable = lib.mkDefault true;
-
     programs.direnv = {
       enable = lib.mkDefault true;
       enableZshIntegration = lib.mkDefault true; # TODO check if zsh enabled?

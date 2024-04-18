@@ -51,6 +51,7 @@ in
   mySystem = {
     plasma.enable = true;
     gnome.enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
+    cliTools.enable = true;
     zsh.enable = true;
     gaming.enable = true;
     vmHost = true;
@@ -66,7 +67,12 @@ in
     printers.enable = true;
     sound.enable = true;
     flatpaks.enable = true;
-
+    nvidia = {
+      enable = true;
+      intelBusId = "PCI:0:2:0";
+      nvidiaBusId = "PCI:1:0:0";
+    };
+    
     android.enable = false;
   };
 

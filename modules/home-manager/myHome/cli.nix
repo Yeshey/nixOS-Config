@@ -11,7 +11,6 @@ in
 
   config = lib.mkIf cfg.enable {
     programs = {
-      gh.enable = true;
       zsh.shellAliases = {
         lg = "lazygit";
       };
@@ -22,24 +21,17 @@ in
       };
     };
     home.packages = with pkgs; [
-      bat
-      colordiff
-      curl
-      file
-      fzf
-      htop
-      jq
       neofetch
-      nix-tree
-      openssh
-      p7zip
-      ranger
+      yt-dlp # download youtube videos
+
+      curl
+      vim # The Nano editor is installed by default.
+      htop
+      tmux
+      wget
       tree
       unzip
-      wget
-      xh
-      yj
-      yq
+      unrar # also to extract .rar with ark in KDE # unrar x Lab5.rar
     ];
   };
 }
