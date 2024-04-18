@@ -26,6 +26,7 @@ in
     ./kitty.nix # TODO not rly okay
     ./alacritty.nix
     ./gaming.nix
+    ./firefox.nix
   ];
   options.myHome = with lib; {
     wallpaper = mkOption {
