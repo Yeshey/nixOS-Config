@@ -11,7 +11,10 @@ in
     nonNixos.enable = false;
     plasma.enable = true;
     gnome.enable = false;
-    firefox.enable = true;
+    firefox = {
+      enable = true;
+      i2pFirefoxProfile = true;
+    };
     cli = {
       enable = true;
       personalGitEnable = true;

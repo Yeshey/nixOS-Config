@@ -11,6 +11,7 @@
 in {
   options.myHome.firefox = with lib; {
     enable = mkEnableOption "firefox";
+    i2pFirefoxProfile = mkEnableOption "i2pFirefoxProfile";
   };
 
   config = lib.mkIf cfg.enable {
@@ -45,6 +46,7 @@ in {
       };
       profiles = let
         common-conf = {
+          bookmarks = [  ];
           extensions = with pkgs.nur.repos.rycee.firefox-addons; [ # You need to activate the extensions manually
               ublock-origin
               privacy-badger
@@ -117,7 +119,20 @@ in {
       in {
           # to switch profile go to about:profiles
           ${user} = common-conf;
-          i2p = common-conf // {
+          i2p = common-conf // lib.mkIf cfg.i2pFirefoxProfile {
+            bookmarks = [
+              { # does't work?
+                name = "Bookmarks";
+                toolbar = true;
+                bookmarks = [
+                  {
+                    name = "TPB";
+                    keyword = "tpb";
+                    url = "https//thepiratebay.org";
+                  }
+                ];
+              }
+            ];
             id = 1;
             name = "i2p";
             settings = common-conf.settings // {
@@ -131,28 +146,20 @@ in {
               "network.proxy.type" = 1;
             };
           };
-        #test = {
-        #  id = 1;
-        #  name = "test";
-        #  settings = {
-        #      "general.autoScroll" = true;
-        #  };
-        #};
       };
     };
 
-        # Shortcut to FIrfox i2p profile, but you need to be running the service: services.i2p.enable
-        home.file.".local/share/applications/i2p.desktop".source = builtins.toFile "i2p.desktop" ''
-  [Desktop Entry]
-  Version=1.0
-  Name=i2p
-  Comment=i2p enabled firefox profile
-  Exec=firefox -no-remote -P "i2p"
-  Terminal=false
-  StartupNotify=true
-  Icon=firefox
-  Type=Application
-            '';
-
+    home.packages = 
+      let
+        i2p = pkgs.makeDesktopItem {
+          name = "i2p";
+          desktopName = "i2p";
+          genericName = "i2p";
+          exec = ''firefox -no-remote -P "i2p" %U'';
+          icon = "firefox";
+          categories = [ "Network" "WebBrowser" ];
+          mimeTypes = [ "text/html" "text/xml" "application/xhtml+xml" "application/vnd.mozilla.xul+xml" "x-scheme-handler/http" "x-scheme-handler/https" ];
+        };
+      in with pkgs; lib.mkIf cfg.i2pFirefoxProfile [ i2p ];
   };
 }
