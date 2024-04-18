@@ -18,6 +18,7 @@ in
     zsh.enable = true;
     tmux.enable = true;
     homeapps.enable = true;
+    gaming.enable = true;
     neovim = {
       enable = true;
       enableLSP = true;

@@ -21,27 +21,18 @@ in
         # etcher #insecure?
 
         # Browsers
-        vivaldi
+        #vivaldi
         brave
         tor-browser-bundle-bin
         qutebrowser
         # librewolf
 
         # tmp
-        skypeforlinux
+        # skypeforlinux
         #staruml # UML diagrams
         #jetbrains.clion # C++
         #jetbrains.idea-community # java
 
-        # Games
-        osu-lazer
-        lutris
-        # tetrio-desktop # runs horribly, better on the web
-        prismlauncher # polymc # prismlauncher # for Minecraft
-        heroic
-        minetest
-        the-powder-toy
-        mindustry
         helvum
 
         #Follow the ask for help you did: (https://discourse.nixos.org/t/compiling-and-adding-program-not-in-nixpkgs-to-pc-compiling-error/25239/3)
@@ -52,8 +43,6 @@ in
         pdfarranger
         # helvum # To control pipewire Not Working?
         linux-wifi-hotspot # hotspot
-        scrcpy # screen cast android phone
-        ocrmypdf
         # texlive.combined.scheme-full # LaTeX
 
         # for amov, flutter need this

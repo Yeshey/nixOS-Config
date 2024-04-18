@@ -9,6 +9,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    
+    services.flatpak.enable = true;
+
     /*
     # More apps # TODO, doesnt work when in gnome??
     services.flatpak.enable = true;

@@ -23,6 +23,8 @@ in
     home.packages = with pkgs; [
       neofetch
       yt-dlp # download youtube videos
+      scrcpy # screen cast android phone
+      ocrmypdf
 
       curl
       vim # The Nano editor is installed by default.

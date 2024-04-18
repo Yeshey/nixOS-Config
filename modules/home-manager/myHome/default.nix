@@ -25,6 +25,7 @@ in
     ./discord.nix # TODO not rly okay
     ./kitty.nix # TODO not rly okay
     ./alacritty.nix
+    ./gaming.nix
   ];
   options.myHome = with lib; {
     wallpaper = mkOption {
