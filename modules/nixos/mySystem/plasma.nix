@@ -32,7 +32,8 @@ in
       kdialog # for plasma config saver widget
       ark # Compress and Uncompress files
       sddm-kcm # for sddm configuration in settings
-      kate # KDEs notepad    
+      kate # KDEs notepad   
+      unrar # also to extract .rar with ark in KDE # unrar x Lab5.rar 
     ];
 
   };

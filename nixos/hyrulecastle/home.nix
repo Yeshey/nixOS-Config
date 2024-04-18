@@ -11,6 +11,10 @@ in
     nonNixos.enable = false;
     plasma.enable = true;
     gnome.enable = false;
+    cli = {
+      enable = true;
+      personalGitEnable = true;
+    };
     zsh.enable = true;
     tmux.enable = true;
     homeapps.enable = true;
@@ -20,11 +24,11 @@ in
     };
     vscodium.enable = true;
     discord.enable = true;
-    kitty.enable = false;
+    kitty.enable = true;
     alacritty.enable = true;
     wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; #stellarCollisionByKuldarleement; #nierAutomataWallpaper;
     colorScheme = {
-      # theme = colorSchemes.rose-pine-moon;
+      theme = colorSchemes.rose-pine-moon;
       setBasedOnWallpaper = { # only takes effect if theme is not set
         enable = true;
         variant = "dark"; # or light
@@ -39,7 +43,6 @@ in
       # Surface and Desktop apps
       # github-desktop
       # grapejuice # roblox
-      yt-dlp # download youtube videos
       gnome.gnome-clocks
       qbittorrent
       baobab
@@ -54,11 +57,11 @@ in
       inkscape
       arduino
       # premid # show youtube videos watching in discord
+
       # Libreoffice
       libreoffice
       corefonts # fonts
       vistafonts # fonts
-
       hunspell
       hunspellDicts.uk_UA
     ];
