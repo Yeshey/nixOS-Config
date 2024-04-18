@@ -9,9 +9,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [ 
-      inputs.nix-gaming.packages.${pkgs.system}.osu-stable
-    ];
+    environment.systemPackages = with pkgs; [  ];
     programs = {
       steam = {
         enable = true;
