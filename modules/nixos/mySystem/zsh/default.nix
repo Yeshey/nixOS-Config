@@ -11,7 +11,6 @@ in
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [
-        eza
         (
           nerdfonts.override {
             fonts = [
@@ -33,8 +32,13 @@ in
       enableCompletion = lib.mkDefault true;
       histSize = lib.mkDefault 100000;
       shellAliases = {
-        ll = lib.mkOverride 995 "eza -l --icons=auto";
-        la = lib.mkDefault "eza -la --icons=auto";
+        l="ls -l";
+        la="ls -a";
+        lla="ls -la";
+        lt="ls --tree";
+
+        #ll = lib.mkOverride 995 "eza -l --icons=auto";
+        #la = lib.mkDefault "eza -la --icons=auto";
       };
       shellInit = ''
         autoload -U promptinit; promptinit
