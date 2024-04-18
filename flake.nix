@@ -20,7 +20,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
-    nix-gaming.url = "github:fufexan/nix-gaming";
     /* 
     nur = {
       url = "github:nix-community/NUR";
@@ -56,7 +55,6 @@
 #    , nixgl
     , nix-colors
     , plasma-manager
-    , nix-gaming
     , ...
   }@inputs: 
   let
