@@ -24,7 +24,7 @@ in
     alacritty.enable = true;
     wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; #stellarCollisionByKuldarleement; #nierAutomataWallpaper;
     colorScheme = {
-      theme = colorSchemes.rose-pine-moon;
+      # theme = colorSchemes.rose-pine-moon;
       setBasedOnWallpaper = { # only takes effect if theme is not set
         enable = true;
         variant = "dark"; # or light

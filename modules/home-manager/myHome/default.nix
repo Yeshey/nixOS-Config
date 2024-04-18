@@ -44,12 +44,12 @@ in
     colorScheme.theme = mkOption {
       type = types.nullOr types.attrs;
       default =
-        if cfg.wallpaper == null || cfg.setBasedOnWallpaper == false then
+        if cfg.wallpaper == null || cfg.colorScheme.setBasedOnWallpaper.enable == false then
           null
         else
           nix-colors-lib.colorSchemeFromPicture {
             path = cfg.wallpaper;
-            variant = cfg.colorScheme.variant;
+            variant = cfg.colorScheme.setBasedOnWallpaper.variant;
           };
     };
   };
