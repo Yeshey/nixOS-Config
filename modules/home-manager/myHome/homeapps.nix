@@ -16,6 +16,8 @@ in
         stremio
         barrier
         bitwarden
+        gparted
+        baobab
         # etcher #insecure?
 
         # Browsers

@@ -2,11 +2,14 @@
 
 let
   cfg = config.mySystem.syncthing;
-  dataStoragePath = "/mnt/DataDisk";
 in
 {
   options.mySystem.syncthing = {
     enable = lib.mkEnableOption "syncthing";
+    dataStoragePath = lib.mkOption {
+        type = lib.types.path;
+        example = /mnt/DataDisk;
+      };
   };
 
   config = lib.mkIf cfg.enable {
@@ -26,6 +29,9 @@ in
         configDir = "/home/${config.mySystem.user}/.config/syncthing";   # Folder for Syncthing's settings and keys
 
         settings = {
+          options = {
+            relaysEnabled = true;
+          };
           devices = {
             "nixOS-Laptop" = { id = "WVB5HBT-QH4536U-T4SHK3I-J6EW2QY-KAW44KE-UFGO4KI-DDYZDKE-FQJUTAK"; };
             "manjaro-Laptop" = { id = "HWPEE67-I7DPOPG-H3A3SDX-5HFJK5W-33OIOUO-S6TD5E7-52OAO3B-OFAUAAF"; };
@@ -37,52 +43,59 @@ in
             "nixOS-arm-oracle" = { id = "VZHXEOO-QDU4DMZ-NMOSJYI-K5ZFPPQ-TXH2QBV-7YKBHJY-V2XO7KK-HVAHZQZ"; };
           };
           folders = 
-          let 
-            myVersioning = {
-                type = "staggered"; 
-                params = { 
-                  cleanInterval = "3600"; # 1 hour in seconds
-                  maxAge = "864000"; # 11 days in seconds
+            let 
+              myVersioning = {
+                  type = "staggered"; 
+                  params = { 
+                    cleanInterval = "3600"; # 1 hour in seconds
+                    maxAge = "864000"; # 11 days in seconds
+                  }; 
                 }; 
-              }; 
-          in {
+            in {
+              /*
+            "2024" = {
+              path = "${cfg.dataStoragePath}/PersonalFiles/2024"; 
+              devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" "android-A70Phone" "nixOS-arm-oracle"]; 
+              versioning = myVersioning;
+              # Ignore patterns: Recorded_Classes 
+            };
             "2023" = {
-              path = "${dataStoragePath}/PersonalFiles/2023"; 
+              path = "${cfg.dataStoragePath}/PersonalFiles/2023"; 
               devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" "android-A70Phone" "nixOS-arm-oracle"]; 
               versioning = myVersioning;
               # Ignore patterns: Recorded_Classes 
             };
             #"2022" = {
-            #  path = "${dataStoragePath}/PersonalFiles/2022"; 
+            #  path = "${cfg.dataStoragePath}/PersonalFiles/2022"; 
             #  devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" ]; 
             #  versioning = myVersioning;
               # Ignore patterns: Recorded_Classes 
             #};
             "A70Camera" = {
-              path = "${dataStoragePath}/PersonalFiles/Timeless/Syncthing/PhoneCamera";
+              path = "${cfg.dataStoragePath}/PersonalFiles/Timeless/Syncthing/PhoneCamera";
               devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" "android-A70Phone" "nixOS-arm-oracle"]; 
               versioning = myVersioning;
               # Ignore patterns: 
             };
             "Allsync" = {
-              path = "${dataStoragePath}/PersonalFiles/Timeless/Syncthing/Allsync";
+              path = "${cfg.dataStoragePath}/PersonalFiles/Timeless/Syncthing/Allsync";
               devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" "android-A70Phone" "nixOS-arm-oracle"]; 
               versioning = myVersioning;
               # Potencial Ignore patterns: watch
             };
             "Music" = {
-              path = "${dataStoragePath}/PersonalFiles/Timeless/Music";
+              path = "${cfg.dataStoragePath}/PersonalFiles/Timeless/Music";
               devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "nixOS-Surface" "windows-Surface" "android-A70Phone" "nixOS-arm-oracle"]; 
               versioning = myVersioning;
               # Potencial Ignore patterns: AllMusic
             };
-            "Servers" = {
-              path = "${dataStoragePath}/PersonalFiles/Servers";
+            */
+            "Servers" = { # So This makes the evaluation of the derivation take infinite space?
+              path = "${cfg.dataStoragePath}/PersonalFiles/Servers";
               devices = [ "nixOS-Laptop" "manjaro-Laptop" "windows-Laptop" "android-A70Phone" "nixOS-arm-oracle"]; 
               versioning = myVersioning;
               # Potencial Ignore patterns: AllMusic
             };
-
             # Config and game files sync
             "ssh" = {
               path = "~/.ssh";
@@ -120,6 +133,7 @@ in
               versioning = myVersioning;
               # Potencial Ignore patterns: 
             };
+
             "Mindustry" = {
               path = "~/.local/share/Mindustry/";
               devices = [ "nixOS-Laptop" "nixOS-Surface" "nixOS-VM" "android-A70Phone" "windows-Surface" "windows-Laptop" "nixOS-arm-oracle"]; 
@@ -128,6 +142,7 @@ in
             };
           };
         };
+
       };
     };
     # A systemd timer to delete all the sync-conflict files
@@ -141,6 +156,7 @@ in
     };
     systemd.services."delete-sync-conflicts" = {
       script = ''
+      # Ignore What's inside Trash etc...
         if [ -d "/mnt" ]; then
             ${pkgs.findutils}/bin/find /mnt -mount -mindepth 1 -type f -not \( -path '*/.Trash-1000/*' -or -path '*.local/share/Trash/*' \) -name '*.sync-conflict-*' -ls -delete
         fi
@@ -149,11 +165,53 @@ in
             ${pkgs.findutils}/bin/find /home -mount -mindepth 1 -type f -not \( -path '*/.Trash-1000/*' -or -path '*.local/share/Trash/*' \) -name '*.sync-conflict-*' -ls -delete
         fi
       '';
-      # Ignore What's inside Trash etc...
       serviceConfig = {
         Type = "oneshot";
         User= "${config.mySystem.user}";
       };
     };
+
+    # Syncthing shortcut, based on webapp manager created shortcut (https://github.com/linuxmint/webapp-manager)
+    /*
+    ".local/share/applications/vivaldi-syncthing.desktop".source = builtins.toFile "vivaldi-syncthing.desktop" ''
+[Desktop Entry]
+Version=1.0
+Name=Syncthing
+Comment=Web App
+Exec=vivaldi --app="http://127.0.0.1:8384#" --class=WebApp-Syncthingvivaldi5519 --user-data-dir=/home/yeshey/.local/share/ice/profiles/Syncthingvivaldi5519
+Terminal=false
+X-MultipleArgs=false
+Type=Application
+Icon=webapp-manager
+Categories=GTK;WebApps;
+MimeType=text/html;text/xml;application/xhtml_xml;
+StartupWMClass=WebApp-Syncthingvivaldi5519
+StartupNotify=true
+X-WebApp-Browser=Vivaldi
+X-WebApp-URL=http://127.0.0.1:8384#
+X-WebApp-CustomParameters=
+X-WebApp-Navbar=false
+X-WebApp-PrivateWindow=false
+X-WebApp-Isolated=true
+        ''; */
+
+    # makeDesktopItem https://discourse.nixos.org/t/proper-icon-when-using-makedesktopitem/32026
+    environment.systemPackages = with pkgs; 
+      let
+        syncthingWeb = makeDesktopItem {
+          name = "Syncthing";
+          desktopName = "Syncthing";
+          genericName = "Syncthing Web App";
+          exec = ''brave --app="http://127.0.0.1:8384#" --class=WebApp-Syncthingbrave5519 --user-data-dir=/home/yeshey/.local/share/ice/profiles/Syncthingbrave5519'';
+          icon = "webapp-manager";
+          categories = [ "GTK" "X-WebApps" ];
+          mimeTypes = [ "text/html" "text/xml" "application/xhtml_xml" ];
+        };
+
+      in
+      [
+        syncthingWeb
+      ];
+
   };
 }

@@ -77,7 +77,10 @@ in
     flatpaks.enable = true;
     i2p.enable = true;
 
-    syncthing.enable = false; # BACKUP EVERYTHING BEFORE TURNING INTO TRUE!
+    syncthing = {
+      enable = true; # BACKUP EVERYTHING BEFORE TURNING INTO TRUE!
+      dataStoragePath = /mnt/DataDisk;
+    };
     
     androidDevelopment.enable = false;
   };
