@@ -34,6 +34,7 @@ in
       scrcpy # screen cast android phone
       ocrmypdf
       libnotify # so you can use notify-send
+      xdotool
 
       curl
       vim # The Nano editor is installed by default.
