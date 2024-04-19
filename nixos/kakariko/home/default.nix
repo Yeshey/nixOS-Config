@@ -69,12 +69,6 @@ in
     ];
   };
 
-  # Make some folders not sync please # TODO ?
-  #home.file = {
-    # Raw configuration files (https://ghedam.at/24353/tutorial-getting-started-with-home-manager-for-nix)
-  #  ".config/user-dirs.dirs".source = ./user-dirs.dirs;
-  #};
-
   xdg = {
     enable = lib.mkDefault true;
     userDirs = {
@@ -90,32 +84,5 @@ in
       # publicShare = lib.mkDefault "${config.home.homeDirectory}/Publiczny";
     };
   };
-
-  /*
-    xdg = {
-      enable = lib.mkDefault true;
-      userDirs = {
-        enable = lib.mkDefault true;
-        createDirectories = lib.mkDefault true;
-        # desktop = lib.mkDefault "${config.home.homeDirectory}/Pulpit";
-        documents = lib.mkDefault "/mnt/ntfsMicroSD-DataDisk/PersonalFiles/";
-        download = lib.mkDefault "/mnt/ntfsMicroSD-DataDisk/Downloads/";
-        music = lib.mkDefault "/mnt/ntfsMicroSD-DataDisk/PersonalFiles/Timeless/Music/";
-        # pictures = lib.mkDefault "${config.home.homeDirectory}/Obrazy";
-        # videos = lib.mkDefault "${config.home.homeDirectory}/Wideo";
-        # templates = lib.mkDefault "${config.home.homeDirectory}/Szablony";
-        # publicShare = lib.mkDefault "${config.home.homeDirectory}/Publiczny";
-      };
-    };
-
-    XDG_DESKTOP_DIR="$HOME/Desktop"
-    XDG_DOWNLOAD_DIR="/mnt/ntfsMicroSD-DataDisk/Downloads/"
-    XDG_TEMPLATES_DIR="$HOME/Templates"
-    XDG_PUBLICSHARE_DIR="$HOME/Public"
-    XDG_DOCUMENTS_DIR="/mnt/ntfsMicroSD-DataDisk/PersonalFiles/"
-    XDG_MUSIC_DIR="/mnt/ntfsMicroSD-DataDisk/PersonalFiles/Timeless/Music/"
-    XDG_PICTURES_DIR="$HOME/Pictures"
-    XDG_VIDEOS_DIR="$HOME/Videos"
-   */
 
 }
