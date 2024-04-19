@@ -48,7 +48,7 @@ in
     ./browser.nix
     ./hardware
 
-    # ./syncthing.nix
+    ./syncthing.nix
   ];
 
   options.mySystem = with lib; {
