@@ -21,7 +21,6 @@
       yt-dlp # download youtube videos
       gnome.gnome-clocks
       qbittorrent
-      baobab
       gnome.cheese
       peek # doesn't work on wayland
       p3x-onenote # might be worth trying notekit(https://github.com/blackhole89/notekit) and Zettlr(https://github.com/Zettlr/Zettlr)

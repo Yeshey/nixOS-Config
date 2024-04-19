@@ -71,6 +71,7 @@ XDG_VIDEOS_DIR="$HOME/Videos"
           {
 
       # Syncthing shortcut, based on webapp manager created shortcut (https://github.com/linuxmint/webapp-manager)
+      /*
       ".local/share/applications/vivaldi-syncthing.desktop".source = builtins.toFile "vivaldi-syncthing.desktop" ''
 [Desktop Entry]
 Version=1.0
@@ -91,7 +92,7 @@ X-WebApp-CustomParameters=
 X-WebApp-Navbar=false
 X-WebApp-PrivateWindow=false
 X-WebApp-Isolated=true
-          '';
+          ''; */
 
       # MS WhiteBoard, based on webapp manager created shortcut (https://github.com/linuxmint/webapp-manager)
       ".local/share/applications/MSwhiteboard.desktop".source = builtins.toFile "MSwhiteboard.desktop" ''
