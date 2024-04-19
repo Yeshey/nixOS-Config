@@ -31,6 +31,7 @@ in
         git = pkgs.git;
         version = "0.86.2";
         targetDirectory = "/var/lib/minetest/.minetest/games/mineclone2";
+        mod = "https://git.minetest.land/MineClone2/MineClone2.git";
       in lib.mkForce ''
         # Define the target directory
         target_directory="${targetDirectory}"
@@ -47,7 +48,7 @@ in
         # Check if the directory is empty
         if [ -z "$(ls -A "$target_directory")" ]; then
             # Directory is empty, perform git clone
-            ${git}/bin/git clone https://git.minetest.land/MineClone2/MineClone2.git . || { echo "Failed to clone repository"; exit 1; }
+            ${git}/bin/git clone ${mod} . || { echo "Failed to clone repository"; exit 1; }
         else
             # Directory is not empty, perform git pull to get the latest changes
             ${git}/bin/git pull || { echo "Failed to pull latest changes"; exit 1; }

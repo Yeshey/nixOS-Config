@@ -46,11 +46,6 @@ in
       #   });
       # })
     ];
-    # Configure your nixpkgs instance
-    #config = { # TODO remove or find a better way to use overlays?
-      # Disable if you don't want unfree packages
-    #  allowUnfree = true;
-    #};
   };
 
   # set an alias to poweroff ask if you're sure
