@@ -79,7 +79,7 @@ in
 
     syncthing = {
       enable = true; # BACKUP EVERYTHING BEFORE TURNING INTO TRUE!
-      dataStoragePath = /mnt/DataDisk;
+      dataStoragePath = "/mnt/DataDisk";
     };
     
     androidDevelopment.enable = false;
