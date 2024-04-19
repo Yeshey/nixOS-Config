@@ -21,11 +21,11 @@ symbol = " "
 
 # harware config
 [battery]
-unknown_symbol = ""
-empty_symbol = ""
-discharging_symbol = ""
-charging_symbol = ""
-full_symbol = ""
+unknown_symbol = " "
+empty_symbol = " "
+discharging_symbol = " " #" " # "🪫"
+charging_symbol = " " # " " # "🔋"
+full_symbol = " "
 
 	[[battery.display]]
 	threshold = 10
@@ -75,7 +75,7 @@ style = "#f05133"
 format = "($conflicted$staged$modified$renamed$deleted$untracked$stashed$ahead_behind\b )"
 conflicted = "[ ](fg:88)[   ${count} ](fg:white bg:88)[ ](fg:88)"
 staged = "[S$count ](fg:green)"
-modified = "[M${count} ](fg:red)"
+modified = "[ ${count} ](fg:red)"
 renamed = "[R${count} ](fg:208)"
 deleted = "[ ${count} ](fg:208)"
 untracked = "[?${count} ](fg:red)"
