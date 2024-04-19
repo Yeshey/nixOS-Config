@@ -85,12 +85,16 @@ in
   };
 
   mySystem = {
-    gnome.enable = true; # TODO, we can do better
     plasma.enable = false;
+    gnome.enable = true; # TODO activate both plasma and gnome same time, maybe expose display manager
+    browser.enable = true;
+    cliTools.enable = true;
+    zsh.enable = true;
     gaming.enable = true;
     vmHost = true;
-    dockerHost = true;
+    dockerHost = true; 
     host = "kakariko";
+    user = "yeshey"; # TODO make this into an option where you can do user."yeshey".home-manager.enable ) true etc.
     home-manager = {
       enable = true;
       home = ./home;
@@ -106,10 +110,13 @@ in
       };
       nvidia.enable = false;
     };
-    bluetooth.enable = true;
-    printers.enable = true;
-    sound.enable = true;
+    autoUpgrades.enable = true;    
     flatpaks.enable = true;
+    i2p.enable = true;
+
+    syncthing.enable = false; # BACKUP EVERYTHING BEFORE TURNING INTO TRUE!
+    
+    androidDevelopment.enable = false;
   };
 
   # swap in ext4:
