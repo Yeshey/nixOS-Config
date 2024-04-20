@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.myHome.cli;
+  cfg = config.myHome.homeApps.cli.git;
 in
 {
-  options.myHome.cli = {
-    enable = (lib.mkEnableOption "cli") // { default = true; };
+  options.myHome.homeApps.cli.git = {
+    enable = (lib.mkEnableOption "git") // { default = true; };
     personalGit.enable = (lib.mkEnableOption "personalGitEnable") // { default = true; };
     personalGit.userName = lib.mkOption {
       type = lib.types.str;
@@ -28,22 +28,5 @@ in
         userEmail = lib.mkIf cfg.personalGit.enable "${cfg.personalGit.userEmail}";
       };
     };
-    home.packages = with pkgs; [
-      neofetch
-      yt-dlp # download youtube videos
-      scrcpy # screen cast android phone
-      ocrmypdf
-      libnotify # so you can use notify-send
-      xdotool
-
-      curl
-      vim # The Nano editor is installed by default.
-      htop
-      tmux
-      wget
-      tree
-      unzip
-      unrar # also to extract .rar with ark in KDE # unrar x Lab5.rar
-    ];
   };
 }

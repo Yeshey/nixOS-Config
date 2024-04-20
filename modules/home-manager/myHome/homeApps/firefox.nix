@@ -6,9 +6,9 @@
   ...
 }: let
   c = config.myHome.colorScheme.theme.palette;
-  cfg = config.myHome.firefox;
+  cfg = config.myHome.homeApps.firefox;
 in {
-  options.myHome.firefox = with lib; {
+  options.myHome.homeApps.firefox = with lib; {
     enable = mkEnableOption "firefox";
     i2pFirefoxProfile = mkEnableOption "i2pFirefoxProfile";
   };

@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.myHome.tmux;
+  cfg = config.myHome.homeApps.cli.tmux;
 in
 {
-  options.myHome.tmux = with lib; {
+  options.myHome.homeApps.cli.tmux = with lib; {
     enable = mkEnableOption "tmux";
   };
 

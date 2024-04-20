@@ -6,9 +6,9 @@
   ...
 }: let
   c = config.myHome.colorScheme.theme.palette;
-  cfg = config.myHome.discord;
+  cfg = config.myHome.homeApps.discord;
 in {
-  options.myHome.discord = with lib; {
+  options.myHome.homeApps.discord = with lib; {
     enable = mkEnableOption "discord";
   };
 

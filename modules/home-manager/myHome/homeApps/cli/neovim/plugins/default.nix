@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }@args:
 
 let
-  cfg = config.myHome.neovim;
+  cfg = config.myHome.homeApps.cli.neovim;
   importPlugins = plugins: (map (path: import path args) plugins);
   plugins = (importPlugins [
     ./telescope.nix
@@ -36,6 +36,6 @@ let
 in
 {
   config = lib.mkIf cfg.enable {
-    myHome.neovim.plugins = plugins ++ (lib.lists.optionals cfg.enableLSP lspPlugins);
+    myHome.homeApps.cli.neovim.plugins = plugins ++ (lib.lists.optionals cfg.enableLSP lspPlugins);
   };
 }

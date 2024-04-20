@@ -113,7 +113,6 @@ in
     autoUpgrades.enable = true;    
     flatpaks.enable = true;
     i2p.enable = true;
-
     syncthing = {
       enable = true;
       dataStoragePath = "/mnt/ntfsMicroSD-DataDisk";

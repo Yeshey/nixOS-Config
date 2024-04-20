@@ -7,10 +7,10 @@
 }:
 
 let
-  cfg = config.myHome.gaming;
+  cfg = config.myHome.homeApps.gaming;
 in
 {
-  options.myHome.gaming = with lib; {
+  options.myHome.homeApps.gaming = with lib; {
     enable = mkEnableOption "gaming";
   };
 
