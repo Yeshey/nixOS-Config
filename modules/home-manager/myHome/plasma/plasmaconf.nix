@@ -1021,7 +1021,6 @@ in
         "plasma-localerc"."Formats"."LANG".value = "en_GB.utf8";
         "plasmanotifyrc"."Notifications"."NormalAlwaysOnTop".value = true;
         "plasmanotifyrc"."Notifications"."PopupTimeout".value = 7000;
-        "plasmarc"."Wallpapers"."usersWallpapers".value = "/mnt/DataDisk/PersonalFiles/Timeless/Syncthing/Allsync/Pictures/Decoration Images/Background Pictures/AnimatedWallpapers/zenitsu-six-folds-kimetsu-no-yaiba-thumb.jpg,/mnt/DataDisk/PersonalFiles/Timeless/Syncthing/Allsync/Pictures/Decoration Images/Background Pictures/Stellar Collision by KuldarLeement.jpg";
       };
     };
   };

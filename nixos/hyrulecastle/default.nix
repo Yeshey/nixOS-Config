@@ -43,7 +43,7 @@ in
     ];
   };
 
-  mySystem = {
+  mySystem = rec {
     plasma.enable = true;
     gnome.enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
     browser.enable = true;
@@ -53,7 +53,7 @@ in
     vmHost = true;
     dockerHost = true; 
     host = "hyrulecastle";
-    user = "yeshey"; # TODO make this into an option where you can do user."yeshey".home-manager.enable ) true etc.
+    user = "yeshey";
     home-manager = {
       enable = true;
       home = ./home.nix;
@@ -77,21 +77,31 @@ in
     flatpaks.enable = true;
     i2p.enable = true;
 
+    borgBackups = {
+      enable = false;
+      paths = [ "/mnt/DataDisk/PersonalFiles" "/home/${user}" ];
+      repo = "/mnt/hdd-btrfs/Backups/borgbackup";
+      startAt = "*-*-* 00,03,06,09,12,15,18,21:00:00";
+      prune.keep = {
+          within = "1d"; # Keep all archives from the last day
+          daily = 2; # keep the latest backup on each day, up to 7 most recent days with backups (days without backups do not count)
+          weekly = 2; 
+          monthly = 6;
+          yearly = 3;
+        };
+      exclude = [ "*/RecordedClasses" ];
+    };
     syncthing = {
-      enable = true; # BACKUP EVERYTHING BEFORE TURNING INTO TRUE!
+      enable = true;
       dataStoragePath = "/mnt/DataDisk";
     };
     
     androidDevelopment.enable = false;
   };
 
-  #environment.systemPackages = with pkgs; [
-    #unstable.nixfmt-rfc-style
-    #nixpkgs-fmt
-  #];
-
   virtualisation.docker.storageDriver = "btrfs"; # for docker
 
+  # hardware accelaration
   hardware.opengl = {
     enable = true;
     extraPackages = [
@@ -102,79 +112,6 @@ in
 
   #programs.zsh.enable = true;
   #users.users.yeshey.shell = pkgs.zsh;
-
-  # systemctl status borgbackup-job-rootBackup.service/timer
-  services.borgbackup.jobs = { # for a local backup
-    rootBackup = {
-      # Use `sudo borg list -v /mnt/hdd-btrfs/Backups/borgbackup` to check the archives created
-      # Use `sudo borg info /mnt/hdd-btrfs/Backups/borgbackup::<NameOfArchive>` to see details
-      # Use `sudo borg extract /mnt/hdd-btrfs/Backups/borgbackup::<NameOfArchive>` to extract the specified archive to the current directory
-      # Use `sudo borg extract /mnt/hdd-btrfs/Backups/borgbackup::nixOS-laptop-rootBackup-2023-08-07T00:00:06 /mnt/DataDisk/PersonalFiles/Timeless/Music/AllMusic/` to extract the specified folder in the archive to the current directory
-      # Use `sudo borg break-lock /mnt/hdd-btrfs/Backups/borgbackup/` to remove the lock in case you can't access it, make sure nothing is using it
-      # Use `sudo systemctl start borgbackup-job-rootBackup.service` to make a backup right now
-      # Watch size of repo: `watch "sudo du -sh /mnt/hdd-btrfs/Backups/borgbackup/ && echo && sudo du -s /mnt/hdd-btrfs/Backups/borgbackup/"`
-      # TODO dataStoragePath = "/mnt/DataDisk"; and user = "yeshey";
-      # see if the ~ works
-      paths = [ "${dataStoragePath}/PersonalFiles" "~"]; 
-      # paths = [ "${dataStoragePath}/PersonalFiles" "/home/${user}"]; 
-      #paths = [ "/mnt/DataDisk/PersonalFiles" "/home/yeshey"]; 
-      exclude = [ 
-          # Largest cache dirs
-          ".cache"
-          "*/cache2" # firefox
-          "*/Cache"
-          ".config/Slack/logs"
-          ".config/Code/CachedData"
-          ".container-diff"
-          ".npm/_cacache"
-          # Work related dirs
-          "*/node_modules"
-          "*/bower_components"
-          "*/_build"
-          "*/.tox"
-          "*/venv"
-          "*/.venv"
-          # Personal Home Dirs
-          "*cache*"
-          "*/Android"
-          "*/.gradle"
-          "*/.var"
-          "*/.cabal"
-          "*/.vscode"
-          "*/.stremio-server"
-          "*/grapejuice"
-          "*/baloo"
-          "*/share/containers"
-          "*/lutris"
-          "*/Steam"
-          "*/.config"
-          "*/Trash"
-          "*/Games"
-
-          # Personal Dirs
-          "*/RecordedClasses"
-
-       ];
-      repo = "/mnt/hdd-btrfs/Backups/borgbackup";
-      encryption = {
-        mode = "none";
-      };
-      prune.keep = {
-        within = "1d"; # Keep all archives from the last day
-        daily = 2; # keep the latest backup on each day, up to 7 most recent days with backups (days without backups do not count)
-        weekly = 2; 
-        monthly = 6;
-        yearly = 3;
-      };
-      extraCreateArgs = "--stats";
-      #encryption = {
-      #  mode = "repokey";
-      #  passphrase = "secret";
-      #};
-      compression = "auto,lzma";
-      startAt = "*-*-* 00,03,06,09,12,15,18,21:00:00"; # every 3 hours # "*-*-1/3"; # every 3 days # "hourly"; # weekly # daily # *:0/9 every 9 minutes
-    };
-  };
 
   boot.loader = {
     timeout = 2;

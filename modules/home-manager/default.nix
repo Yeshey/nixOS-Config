@@ -5,43 +5,8 @@
 
 {
   default = { inputs, config, lib, ... }: {
-
-    #imports = [inputs.nix-colors.homeManagerModules.default];
-    #colorScheme = inputs.nix-colors.colorSchemes.ocean;
-
-    /*
-  home.file.".config/user-dirs.dirs".source = builtins.toFile "user-dirs.dirs" ''
-XDG_DESKTOP_DIR="$HOME/Desktop"
-XDG_DOWNLOAD_DIR="/mnt/DataDisk/Downloads/"
-XDG_TEMPLATES_DIR="$HOME/Templates"
-XDG_PUBLICSHARE_DIR="$HOME/Public"
-XDG_DOCUMENTS_DIR="/mnt/DataDisk/PersonalFiles/"
-XDG_MUSIC_DIR="/mnt/DataDisk/PersonalFiles/Timeless/Music/"
-XDG_PICTURES_DIR="$HOME/Pictures"
-XDG_VIDEOS_DIR="$HOME/Videos"
-  '';
-    # TODO change the above config to be like the one below
-    xdg = {
-      enable = lib.mkDefault true;
-      userDirs = {
-        enable = lib.mkDefault true;
-        createDirectories = lib.mkDefault true;
-        desktop = lib.mkDefault "${config.home.homeDirectory}/Pulpit";
-        documents = lib.mkDefault "${config.home.homeDirectory}/Dokumenty";
-        download = lib.mkDefault "${config.home.homeDirectory}/Pobrane";
-        music = lib.mkDefault "${config.home.homeDirectory}/Muzyka";
-        pictures = lib.mkDefault "${config.home.homeDirectory}/Obrazy";
-        videos = lib.mkDefault "${config.home.homeDirectory}/Wideo";
-        templates = lib.mkDefault "${config.home.homeDirectory}/Szablony";
-        publicShare = lib.mkDefault "${config.home.homeDirectory}/Publiczny";
-      };
-    };
-    */
     # Nicely reload system units when changing configs
     systemd.user.startServices = lib.mkDefault "sd-switch";
-
-    # TODO, seems like backupFileExtension is enough? it 
-    # xdg.configFile."*".force = true;
 
     # TODO organize this:
     
@@ -70,29 +35,6 @@ XDG_VIDEOS_DIR="$HOME/Videos"
           // */
           {
 
-      # Syncthing shortcut, based on webapp manager created shortcut (https://github.com/linuxmint/webapp-manager)
-      /*
-      ".local/share/applications/vivaldi-syncthing.desktop".source = builtins.toFile "vivaldi-syncthing.desktop" ''
-[Desktop Entry]
-Version=1.0
-Name=Syncthing
-Comment=Web App
-Exec=vivaldi --app="http://127.0.0.1:8384#" --class=WebApp-Syncthingvivaldi5519 --user-data-dir=/home/yeshey/.local/share/ice/profiles/Syncthingvivaldi5519
-Terminal=false
-X-MultipleArgs=false
-Type=Application
-Icon=webapp-manager
-Categories=GTK;WebApps;
-MimeType=text/html;text/xml;application/xhtml_xml;
-StartupWMClass=WebApp-Syncthingvivaldi5519
-StartupNotify=true
-X-WebApp-Browser=Vivaldi
-X-WebApp-URL=http://127.0.0.1:8384#
-X-WebApp-CustomParameters=
-X-WebApp-Navbar=false
-X-WebApp-PrivateWindow=false
-X-WebApp-Isolated=true
-          ''; */
 
       # MS WhiteBoard, based on webapp manager created shortcut (https://github.com/linuxmint/webapp-manager)
       ".local/share/applications/MSwhiteboard.desktop".source = builtins.toFile "MSwhiteboard.desktop" ''

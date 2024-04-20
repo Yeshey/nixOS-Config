@@ -49,6 +49,7 @@ in
     ./hardware
 
     ./syncthing.nix
+    ./borgBackups.nix
   ];
 
   options.mySystem = with lib; {
