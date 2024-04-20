@@ -167,16 +167,16 @@ in
             *
           "}
 
-          # Osu-Lazer
+          # Osu-Lazer 
           ${ignorePattern "Osu-Lazer" "
             // Don't ignore these files...
-            !/files
-            !/screenshots
-            !/collection.db
-            !/client.realm
+            // !/files
+            // !/screenshots
+            // !/collection.db
+            // !/client.realm
 
             // Ignore everything else in osu folder
-            *
+            // *
           "}
 
           # Mindustry
