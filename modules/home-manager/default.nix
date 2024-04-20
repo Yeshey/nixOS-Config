@@ -117,35 +117,6 @@ X-WebApp-PrivateWindow=false
 X-WebApp-Isolated=true
           '';
 
-      # Make a symlinks for Syncthing Ignore file:
-      ".stignore".source = builtins.toFile ".stignore" ''
-!/.zsh_history
-!/.bash_history
-!/.python_history
-// Ignore everything else:
-*
-          '';
-
-      # So it doesn't sync for example the mouse sensitivity between devices
-      ".local/share/osu/.stignore".source = builtins.toFile ".stignore" ''
-// Don't ignore these files...
-!/files
-!/screenshots
-!/collection.db
-!/client.realm
-
-// Ignore everything else in osu folder
-*
-        '';
-
-      # So it doesn't sync for example the mouse sensitivity between devices
-      ".local/share/Mindustry/.stignore".source = builtins.toFile ".stignore" ''
-// Don't ignore these files...
-
-// Ignore everything else in Mindustry folder
-// *
-        '';
-
       # For discord to start correctly (from nixOS wiki discord page)
       ".config/discord/settings.json".source = builtins.toFile "file.file" ''
 {
