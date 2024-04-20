@@ -124,44 +124,51 @@ in
     };
 
     # Ignore Patterns
-    system.activationScripts = { 
+    system.activationScripts = let
+      ignorePattern = folderName: patterns:
+        ''
+        mkdir -p ${folders.${folderName}.path}
+        echo "${patterns}" > ${folders.${folderName}.path}/.stignore
+        '';
+    in
+    { 
       syncthingIgnorePatterns.text =
         ''
           # 2024
-          echo "
+          ${ignorePattern "2024" "
             //*
             //Photos&Videos
-          " > ${folders."2024".path}/.stignore
+          "}
 
           # A70Camera
-          echo "
+          ${ignorePattern "A70Camera" "
             //*
             //Photos&Videos
-          " > ${folders."A70Camera".path}/.stignore
+          "}
 
           # Allsync
-          echo "
+          ${ignorePattern "Allsync" "
             //*
             watch
-          " > ${folders."Allsync".path}/.stignore
+          "}
 
           # Music
-          echo "
+          ${ignorePattern "Music" "
             //*
             AllMusic
-          " > ${folders."Music".path}/.stignore
+          "}
 
           # bash&zshHistory
-          echo "
+          ${ignorePattern "bash&zshHistory" "
             !/.zsh_history
             !/.bash_history
             !/.python_history
             // Ignore everything else:
             *
-          " > ${folders."bash&zshHistory".path}/.stignore
+          "}
 
           # Osu-Lazer
-          echo "
+          ${ignorePattern "Osu-Lazer" "
             // Don't ignore these files...
             !/files
             !/screenshots
@@ -170,16 +177,16 @@ in
 
             // Ignore everything else in osu folder
             *
-          " > ${folders."Osu-Lazer".path}/.stignore
+          "}
 
           # Mindustry
-          echo "
+          ${ignorePattern "Mindustry" "
             settings.bin 
             settings.log
 
             // Ignore everything else in Mindustry folder
             // *
-          " > ${folders."Mindustry".path}/.stignore
+          "}
         '';
       };
 
