@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.myHome.neovim;
+  cfg = config.myHome.homeApps.cli.neovim;
   pluginOptions = _: with lib; {
     options = {
       plugin = mkOption {
@@ -67,7 +67,7 @@ let
 in
 {
   imports = [ ./plugins ];
-  options.myHome.neovim = with lib; {
+  options.myHome.homeApps.cli.neovim = with lib; {
     enable = mkEnableOption "neovim";
     enableLSP = mkEnableOption "enableLSP";
     plugins = mkOption {

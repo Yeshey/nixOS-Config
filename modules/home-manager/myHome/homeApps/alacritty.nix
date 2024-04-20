@@ -8,10 +8,10 @@
 
 let
   c = config.myHome.colorScheme.theme.palette;
-  cfg = config.myHome.alacritty;
+  cfg = config.myHome.homeApps.alacritty;
 in
 {
-  options.myHome.alacritty = with lib; {
+  options.myHome.homeApps.alacritty = with lib; {
     enable = mkEnableOption "alacritty";
   };
 

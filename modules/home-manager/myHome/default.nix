@@ -12,23 +12,14 @@ let
 in
 {
   imports = [
-    ./cli.nix
-    ./devops.nix
     ./gnome
     ./plasma
-    ./neovim
     ./non-nixos.nix
-    ./tmux.nix
     ./zsh
-    ./homeapps.nix # TODO not okay
-    ./vscodium # TODO not rly okay
-    ./discord.nix # TODO not rly okay
-    ./kitty.nix # TODO not rly okay
-    ./alacritty.nix
-    ./gaming.nix
-    ./firefox.nix
-    ./libreoffice.nix
     ./direnv.nix
+    ./homeApps
+
+    # ./homeapps.nix
   ];
   options.myHome = with lib; {
     user = mkOption {

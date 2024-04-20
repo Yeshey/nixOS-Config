@@ -8,10 +8,10 @@
 
 let
   c = config.myHome.colorScheme.theme.palette;
-  cfg = config.myHome.kitty;
+  cfg = config.myHome.homeApps.kitty;
 in
 {
-  options.myHome.kitty = with lib; {
+  options.myHome.homeApps.kitty = with lib; {
     enable = mkEnableOption "kitty";
   };
 

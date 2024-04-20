@@ -5,38 +5,46 @@ let
 in
 { 
   myHome = {
+    # All the options
     user = "yeshey";
     nonNixos.enable = false;
     plasma.enable = false;
     gnome.enable = true;
-    firefox = {
+    homeApps = {
       enable = true;
-      i2pFirefoxProfile = true;
-    };
-    cli = {
-      enable = true;
-      personalGit = {
+      cli = {
         enable = true;
-        userName = "Yeshey";
-        userEmail = "yesheysangpo@hotmail.com";
+        general.enable = true;
+        git = {
+          enable = true;
+          personalGit = {
+            enable = true;
+            userName = "Yeshey";
+            userEmail = "yesheysangpo@hotmail.com";
+          };
+        };
+        tmux.enable = true;
+        neovim = {
+          enable = true;
+          enableLSP = true;
+        };
       };
+      firefox = {
+        enable = true;
+        i2pFirefoxProfile = true;
+      };
+      vscodium.enable = true;
+      discord.enable = true;
+      gaming.enable = true;
+      kitty.enable = true;
+      alacritty.enable = true;
+      libreoffice.enable = true;
+      devops.enable = false;
     };
     zsh = {
       enable = true;
       starshipTheme = "pinage404"; # fredericrous # pinage404
     };
-    tmux.enable = true;
-    homeapps.enable = true;
-    neovim = {
-      enable = true;
-      enableLSP = true;
-    };
-    gaming.enable = true;
-    vscodium.enable = true;
-    discord.enable = true;
-    kitty.enable = true;
-    alacritty.enable = true;
-    libreoffice.enable = true;
     direnv.enable = true;
     wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; #johnKearneyCityscapePoster #stellarCollisionByKuldarleement; #nierAutomataWallpaper;
     colorScheme = {
@@ -46,10 +54,7 @@ in
         variant = "dark"; # or light
       };
     };
-
-    devops.enable = false;
   };
-
 
   home = { # Specific packages
     packages = with pkgs; [

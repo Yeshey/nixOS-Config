@@ -8,10 +8,10 @@
 
 let
   c = config.myHome.colorScheme.theme.palette;
-  cfg = config.myHome.libreoffice;
+  cfg = config.myHome.homeApps.libreoffice;
 in
 {
-  options.myHome.libreoffice = with lib; {
+  options.myHome.homeApps.libreoffice = with lib; {
     enable = mkEnableOption "libreoffice";
   };
 

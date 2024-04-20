@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.myHome.homeapps;
+  cfg = config.myHome.homeApps.general;
 in
 {
-  options.myHome.homeapps = with lib; {
-    enable = mkEnableOption "homeapps";
+  options.myHome.homeApps.general = with lib; {
+    enable = mkEnableOption "general";
   };
 
   config = lib.mkIf cfg.enable {

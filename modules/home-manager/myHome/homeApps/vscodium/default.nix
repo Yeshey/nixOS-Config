@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 let
-  cfg = config.myHome.vscodium;
+  cfg = config.myHome.homeApps.vscodium;
 in
 {
-  options.myHome.vscodium = with lib; {
+  options.myHome.homeApps.vscodium = with lib; {
     enable = mkEnableOption "vscodium";
   };
 
