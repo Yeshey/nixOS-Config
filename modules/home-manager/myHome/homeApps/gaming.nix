@@ -17,7 +17,7 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
         # Games
-        osu-lazer
+        unstable.osu-lazer
         lutris
         # tetrio-desktop # runs horribly, better on the web
         prismlauncher # polymc # prismlauncher # for Minecraft

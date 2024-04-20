@@ -122,13 +122,19 @@ in
   };
 
   # Ignore Patterns Syncthing
-  system.activationScripts = { 
+  system.activationScripts = let
+    ignorePattern = path: patterns:
+        ''
+        mkdir -p ${path}
+        echo "${patterns}" > ${path}/.stignore
+        '';
+    in { 
     syncthingIgnorePatterns.text =
       ''
         # MinecraftPrismLauncher
-        echo "
+        ${ignorePattern "/home/yeshey/.local/share/PrismLauncher/instances" "
           *
-        " > /home/yeshey/.local/share/PrismLauncher/instances/.stignore
+        "}
       '';
   };
 
