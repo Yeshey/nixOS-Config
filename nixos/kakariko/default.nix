@@ -121,6 +121,17 @@ in
     androidDevelopment.enable = false;
   };
 
+  # Ignore Patterns Syncthing
+  system.activationScripts = { 
+    syncthingIgnorePatterns.text =
+      ''
+        # MinecraftPrismLauncher
+        echo "
+          *
+        " > /home/yeshey/.local/share/PrismLauncher/instances/.stignore
+      '';
+  };
+
   # swap in ext4:
   swapDevices = [ 
     {
