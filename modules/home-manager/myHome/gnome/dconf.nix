@@ -172,10 +172,6 @@ in with lib.hm.gvariant;
         application-id = "vivaldi-stable.desktop";
       };
 
-      "org/gnome/desktop/notifications/application/vivaldi-syncthing" = {
-        application-id = "vivaldi-syncthing.desktop";
-      };
-
       "org/gnome/desktop/peripherals/touchpad" = {
         click-method = "areas";
         tap-to-click = true;

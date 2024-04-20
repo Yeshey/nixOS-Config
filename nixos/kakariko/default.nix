@@ -97,7 +97,7 @@ in
     user = "yeshey"; # TODO make this into an option where you can do user."yeshey".home-manager.enable ) true etc.
     home-manager = {
       enable = true;
-      home = ./home;
+      home = ./home.nix;
     };
     hardware = {
       enable = true;
@@ -114,7 +114,10 @@ in
     flatpaks.enable = true;
     i2p.enable = true;
 
-    syncthing.enable = false; # BACKUP EVERYTHING BEFORE TURNING INTO TRUE!
+    syncthing = {
+      enable = true;
+      dataStoragePath = "/mnt/ntfsMicroSD-DataDisk";
+    };
     
     androidDevelopment.enable = false;
   };

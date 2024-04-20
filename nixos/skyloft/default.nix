@@ -7,11 +7,6 @@
   ...
 }:
 
-let
-  #shortenedPath = lib.strings.removePrefix "~/" inputs.dataStoragePath; # so "~/Documents" becomes "Documents" # TODO, what if the path didn't start with ~/ ??
-  dataStoragePath = "/home/yeshey"; #TODO can u use ~?
-  shortenedPath = lib.strings.removePrefix "~/" dataStoragePath; # TODO what???
-in
 {
   imports = [
     ./hardware-configuration.nix
@@ -25,7 +20,6 @@ in
     ./ngix-server
     ./mineclone.nix
     ./kubo.nix
-    #(import ./configFiles/syncthing.nix)
   ];
 
   nixpkgs = {
@@ -92,20 +86,6 @@ in
   environment.systemPackages = with pkgs; [
     
   ];   
-
-  # TODO is this needed?
-  # For Syncthing, create folders (not sure if necessary)
-  # Access syncthing with (ssh -L 9091:localhost:8384 -t yeshey@143.47.53.175 "sleep 90" &) && xdg-open http://localhost:9091
-  # https://discourse.nixos.org/t/is-it-possible-to-declare-a-directory-creation-in-the-nixos-configuration/27846/5
-  # TODO is there a better way than hardcoding the user? ${user}
-  systemd.tmpfiles.rules = [
-        "d ${shortenedPath}/PersonalFiles/2023 0770 yeshey users -"
-        "d ${shortenedPath}/PersonalFiles/2022 0770 yeshey users -"
-        "d ${shortenedPath}/PersonalFiles/Servers 0770 yeshey users -"
-        "d ${shortenedPath}/PersonalFiles/Timeless/Syncthing/PhoneCamera 0770 yeshey users -"
-        "d ${shortenedPath}/PersonalFiles/Timeless/Syncthing/Allsync/ 0770 yeshey users -"
-        "d ${shortenedPath}/PersonalFiles/Timeless/Music/ 0770 yeshey users -"
-  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
