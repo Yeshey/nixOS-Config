@@ -44,25 +44,41 @@
 
   # set an alias to poweroff ask if you're sure
 
-  mySystem = {
-    gnome.enable = false; # TODO, we can do better
+  mySystem = rec {
     plasma.enable = false;
+    gnome.enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
+    browser.enable = false;
+    cliTools.enable = true;
+    zsh.enable = true;
     gaming.enable = false;
     vmHost = true;
-    dockerHost = true;
-    host = "skyloft"; # TODO make this mandatory?
+    dockerHost = true; 
+    host = "kakariko";
+    user = "yeshey"; # TODO make this into an option where you can do user."yeshey".home-manager.enable ) true etc.
     home-manager = {
       enable = true;
       home = ./home.nix;
-      # useGlobalPkgs = lib.mkForce false;
     };
-    bluetooth.enable = false;
-    printers.enable = false;
-    sound.enable = false;
+    hardware = {
+      enable = false;
+      #bluetooth.enable = true;
+      #printers.enable = true;
+      #sound.enable = true;
+      #thermald = {
+      #  enable = true;
+      #  thermalConf = ./thermal-conf.xml;
+      #};
+      #nvidia.enable = false;
+    };
+    autoUpgrades.enable = true;    
     flatpaks.enable = false;
-    #nix.substituters = [ "nasgul" ];
+    i2p.enable = false;
+    syncthing = {
+      enable = true;
+      dataStoragePath = "/home/${user}";
+    };
+    androidDevelopment.enable = false;
   };
-  # mySystem.home-manager.useGlobalPkgs = false;
 
   time.timeZone = "Europe/Madrid";
 
