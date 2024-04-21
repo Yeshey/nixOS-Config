@@ -53,7 +53,7 @@
     gaming.enable = false;
     vmHost = true;
     dockerHost = true; 
-    host = "kakariko";
+    host = "skyloft";
     user = "yeshey"; # TODO make this into an option where you can do user."yeshey".home-manager.enable ) true etc.
     home-manager = {
       enable = true;

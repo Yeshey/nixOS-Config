@@ -30,7 +30,7 @@ in
       withoutConnectionToken = true; # So you don't need to grab the token that it generates here
     };
 
-    networking.firewall.allowedTCPPorts = [ 80 443 ]; # TODO needed?
+    networking.firewall.allowedTCPPorts = [ 80 443 ];
 
   };
 }
