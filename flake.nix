@@ -21,6 +21,14 @@
       inputs.home-manager.follows = "home-manager";
     };
     nurpkgs.url = "github:nix-community/NUR";
+    hyprland = {
+      url = "github:hyprwm/Hyprland";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+    hyprland-plugins = {
+      url = "github:hyprwm/hyprland-plugins";
+      inputs.hyprland.follows = "hyprland";
+    };
     /* 
     nixos-nvidia-vgpu.url = "github:Yeshey/nixos-nvidia-vgpu/master";
     */ 
@@ -50,6 +58,7 @@
     , nix-colors
     , plasma-manager
     , nurpkgs
+    , hyprland-plugins
     , ...
   }@inputs: 
   let

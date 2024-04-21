@@ -38,6 +38,7 @@ in
     ./gaming.nix
     ./gnome.nix
     ./plasma.nix
+    ./hyprland.nix
     ./virt.nix
     ./zsh
 
