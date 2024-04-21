@@ -79,7 +79,7 @@ in
     i2p.enable = true;
 
     borgBackups = {
-      enable = false;
+      enable = true;
       paths = [ "/mnt/DataDisk/PersonalFiles" "/home/${user}" ];
       repo = "/mnt/hdd-btrfs/Backups/borgbackup";
       startAt = "daily";
