@@ -58,7 +58,8 @@ in
         #  passphrase = "secret";
         #};
         compression = "auto,lzma";
-        user = "yeshey";
+        # user = "yeshey"; # yeshey doesnt have premission to access the minetest folder
+        postHook = "chown -R yeshey /home/yeshey/PersonalFiles/Servers/minetest/minetestborgbackup"; # after a backup change premissions to yeshey so syncthing can sync
         paths = [ "/var/lib/minetest/.minetest/games/mineclone2" ]; 
         repo = "/home/yeshey/PersonalFiles/Servers/minetest/minetestborgbackup";
         prune.keep = {
