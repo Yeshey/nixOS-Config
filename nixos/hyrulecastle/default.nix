@@ -82,7 +82,7 @@ in
       enable = false;
       paths = [ "/mnt/DataDisk/PersonalFiles" "/home/${user}" ];
       repo = "/mnt/hdd-btrfs/Backups/borgbackup";
-      startAt = "*-*-* 00,03,06,09,12,15,18,21:00:00";
+      startAt = "daily";
       prune.keep = {
           within = "1d"; # Keep all archives from the last day
           daily = 2; # keep the latest backup on each day, up to 7 most recent days with backups (days without backups do not count)
