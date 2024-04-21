@@ -10,6 +10,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./backups.nix
 
     # TODO can any of these be made into general modules?
     #./dontStarveTogetherServer.nix
