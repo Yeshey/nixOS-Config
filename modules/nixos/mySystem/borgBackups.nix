@@ -40,15 +40,13 @@ in
     services.borgbackup.jobs = {
       mySystemBackup = {
         # Use `sudo borg list -v /mnt/hdd-btrfs/Backups/borgbackup` to check the archives created
+        # Will spit out all the files inside: `sudo borg list /mnt/hdd-btrfs/Backups/borgbackup::<NameOfArchive>`
         # Use `sudo borg info /mnt/hdd-btrfs/Backups/borgbackup::<NameOfArchive>` to see details
         # Use `sudo borg extract /mnt/hdd-btrfs/Backups/borgbackup::<NameOfArchive>` to extract the specified archive to the current directory
         # Use `sudo borg extract /mnt/hdd-btrfs/Backups/borgbackup::nixOS-laptop-mySystemBackup-2023-08-07T00:00:06 /mnt/DataDisk/PersonalFiles/Timeless/Music/AllMusic/` to extract the specified folder in the archive to the current directory
         # Use `sudo borg break-lock /mnt/hdd-btrfs/Backups/borgbackup/` to remove the lock in case you can't access it, make sure nothing is using it
         # Use `sudo systemctl start borgbackup-job-mySystemBackup.service` to make a backup right now
         # Watch size of repo: `watch "sudo du -sh /mnt/hdd-btrfs/Backups/borgbackup/ && echo && sudo du -s /mnt/hdd-btrfs/Backups/borgbackup/"`
-        # TODO dataStoragePath = "/mnt/DataDisk"; and user = "yeshey";
-        # see if the ~ works
-        paths = cfg.paths; 
         exclude = [ 
             # Largest cache dirs
             ".cache"
@@ -82,21 +80,27 @@ in
             "*/Trash"
             "*/Games"
         ] ++ cfg.exclude;
-        repo = cfg.repo;
         encryption = {
           mode = "none";
         };
-        prune.keep = cfg.prune.keep;
         extraCreateArgs = "--stats";
         #encryption = {
         #  mode = "repokey";
         #  passphrase = "secret";
         #};
         compression = "auto,lzma";
+        user = config.mySystem.user;
+        paths = cfg.paths; 
+        repo = cfg.repo;
+        prune.keep = cfg.prune.keep;
         startAt = cfg.startAt;
         persistentTimer = true; # makes it run even if it was powered down
       };
     };
     
+    environment.systemPackages = with pkgs; [ 
+      borgbackup
+    ];
+
   };
 }
