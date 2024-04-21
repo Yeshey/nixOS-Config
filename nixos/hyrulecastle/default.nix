@@ -100,6 +100,16 @@ in
     androidDevelopment.enable = false;
   };
 
+  toHost = {
+    dontStarveTogetherServer.enable = false;
+    #nextcloud.enable = true;
+    #minecraft.enable = false;
+    #ngixServer.enable = true;
+    #mineclone.enable = true;
+    kubo.enable = true;
+  };
+
+
   virtualisation.docker.storageDriver = "btrfs"; # for docker
 
   # hardware accelaration
