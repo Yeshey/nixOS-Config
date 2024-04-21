@@ -87,6 +87,7 @@
     };
     nextcloud.enable = true;
     minecraft.enable = false;
+    openvscodeServer.enable = true;
     ngixServer.enable = true;
     mineclone.enable = true;
     kubo.enable = true;
