@@ -13,6 +13,7 @@ in
     nonNixos.enable = false;
     plasma.enable = true;
     gnome.enable = false;
+    hyprland.enable = true;
     homeApps = {
       enable = true;
       cli = {

@@ -12,6 +12,14 @@ It has my personal configuration for two devices, my Lenovo Legion laptop and my
 - Based on [Misterio77's](https://github.com/Misterio77) [nix-starter-configs](https://github.com/Misterio77/nix-starter-configs);
 - Inspiered by [pinage404](https://gitlab.com/pinage404) [dotfiles](https://gitlab.com/pinage404/dotfiles)
 
+Do something like this
+Special Thanks
+wlroots - For their amazing library
+tinywl - For showing how 2 do stuff
+Sway - For showing how 2 do stuff the overkill way
+Vivarium - For showing how 2 do stuff the simple way
+dwl - For showing how 2 do stuff the hacky way
+Wayfire - For showing how 2 do some graphics stuff
 ## Notes
 
 - Check the [languages-frameworks](https://github.com/NixOS/nixpkgs/tree/master/doc/languages-frameworks) if you ever want to do a project with nix in one of these programming languages

@@ -28,7 +28,7 @@ in
     # NVIDIA
     # Allow unfree packages
     nixpkgs.config = {
-        cudaSupport = true; # for blender (nvidia)
+        cudaSupport = lib.mkDefault true; # for blender (nvidia)
     };
     nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
         "nvidia-x11"
@@ -42,29 +42,28 @@ in
     ];
     # NVIDIA drivers 
     services.xserver.videoDrivers = [ "nvidia" ];
-    hardware.opengl.enable = true;
+    hardware.opengl.enable = lib.mkDefault true;
 
     # Comment this to use only the nvidia Grpahics card (discrete graphics option in BIOS instead of switchable graphics)
     hardware.nvidia = {
         #package = config.boot.kernelPackages.nvidiaPackages.stable;
-        modesetting.enable = true;
+        modesetting.enable = lib.mkDefault true;
         # nvidiaPersistenced = true; # It ensures all GPUs stay awake even during headless mode.
-        powerManagement.enable = true; # Experimental power management through systemd
+        powerManagement.enable = lib.mkDefault true; # Experimental power management through systemd
         prime = {
-        sync.enable = true; # gpu always # https://github.com/NixOS/nixpkgs/issues/199024#issuecomment-1300650034 # does not work with GPU passthrough
-        #offload.enable = true; # gpu on demand # works with GPU passthrough
-        intelBusId = cfg.intelBusId; # "PCI:0:2:0";
-        nvidiaBusId = cfg.nvidiaBusId; #"PCI:1:0:0";
+          sync.enable = lib.mkDefault true; # gpu always # https://github.com/NixOS/nixpkgs/issues/199024#issuecomment-1300650034 # does not work with GPU passthrough
+          #offload.enable = true; # gpu on demand # works with GPU passthrough
+          intelBusId = lib.mkDefault cfg.intelBusId; # "PCI:0:2:0";
+          nvidiaBusId = lib.mkDefault cfg.nvidiaBusId; #"PCI:1:0:0";
         };
     };
     # required for external monitor usage on nvidia offload (or not?)
     specialisation = {
         external-display.configuration = {
-        system.nixos.tags = [ "external-display" ];
-        hardware.nvidia.prime.offload.enable = lib.mkForce false;
-        hardware.nvidia.powerManagement.enable = lib.mkForce false;
-        };
+          system.nixos.tags = [ "external-display" ];
+          hardware.nvidia.prime.offload.enable = lib.mkForce false;
+          hardware.nvidia.powerManagement.enable = lib.mkForce false;
+      };
     };
-
   };
 }
