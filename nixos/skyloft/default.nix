@@ -93,6 +93,7 @@
   };
 
   # Remote Desktop with XRDP
+  # xfreerdp /v:143.47.53.175 /u:yeshey /dynamic-resolution /audio-mode:1
   services.xserver.enable = true;
   services.xserver.displayManager.sddm.enable = true;
   services.xserver.desktopManager.plasma5.enable = true;
