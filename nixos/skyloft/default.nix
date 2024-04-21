@@ -12,15 +12,14 @@
     ./hardware-configuration.nix
     ./backups.nix
 
-    # TODO can any of these be made into general modules?
     #./dontStarveTogetherServer.nix
 
-    ./nextcloud.nix # TODO not working right boy nixos-rebuild build-vm --flake ~/.setup#skyloft not working
+    #./nextcloud.nix # TODO not working right boy nixos-rebuild build-vm --flake ~/.setup#skyloft not working
     #./minecraft.nix
-    ./openvscode-server.nix # vscoduium is not well
-    ./ngix-server
-    ./mineclone.nix
-    ./kubo.nix
+    #./openvscode-server.nix # vscoduium is not well
+    #./ngix-server
+    #./mineclone.nix
+    #./kubo.nix
   ];
 
   nixpkgs = {
@@ -79,6 +78,18 @@
       dataStoragePath = "/home/${user}";
     };
     androidDevelopment.enable = false;
+  };
+
+  toHost = {
+    dontStarveTogetherServer = {
+      enable = false;
+      path = "/home/yeshey/PersonalFiles/Servers/dontstarvetogether/SurvivalServerMadeiraSummer2/DoNotStarveTogetherServer";
+    };
+    nextcloud.enable = true;
+    minecraft.enable = false;
+    ngixServer.enable = true;
+    mineclone.enable = true;
+    kubo.enable = true;
   };
 
   time.timeZone = "Europe/Madrid";

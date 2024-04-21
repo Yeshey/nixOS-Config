@@ -1,9 +1,14 @@
-{ config, pkgs, user, location, lib, ... }:
+{ config, lib, pkgs, ... }:
 
+let
+  cfg = config.toHost.nextcloud;
+in
 {
-    imports = [
-        # ...
-    ];
+  options.toHost.nextcloud = {
+    enable = (lib.mkEnableOption "nextcloud");
+  };
+
+  config = lib.mkIf cfg.enable {
 
     # NextCloud
     services.nextcloud = {
@@ -29,5 +34,5 @@
 
     # networking.firewall.enable = false;
     networking.firewall.allowedTCPPorts = [ 80 443 ];
-
+  };
 }
