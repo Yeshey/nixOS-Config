@@ -30,6 +30,7 @@ in
         "hyprctl setcursor ${pointer.name} ${toString pointer.size}"
         "systemctl --user start clight"
         "hyprlock"
+        "waybar"
       ];
 
       general = {
@@ -84,7 +85,9 @@ in
       };
 
       input = {
-        kb_layout = "ro";
+        # kb_layout = "ro";
+        kb_layout = "pt,br,us";
+        kb_options = "grp:alt_space_toggle ";
 
         # focus change on cursor move
         follow_mouse = 1;
@@ -100,18 +103,18 @@ in
 
       misc = {
         # disable auto polling for config file changes
-        disable_autoreload = true;
+        # disable_autoreload = true;
 
         force_default_wallpaper = 0;
 
         # disable dragging animation
-        animate_mouse_windowdragging = false;
+        # animate_mouse_windowdragging = false;
 
         # enable variable refresh rate (effective depending on hardware)
-        vrr = 1;
+        # vrr = 1;
 
         # we do, in fact, want direct scanout
-        no_direct_scanout = false;
+        # no_direct_scanout = false;
       };
 
       # touchpad gestures

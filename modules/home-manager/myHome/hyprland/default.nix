@@ -21,6 +21,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    # https://github.com/fufexan/dotfiles
     home.packages = [
       inputs.hyprland-contrib.packages.${pkgs.system}.grimblast # screenshot helper
       pkgs.wofi
