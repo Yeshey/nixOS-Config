@@ -38,7 +38,6 @@ in
         [
           "$mod, T, exec, kitty"
           "$mod, SPACE, exec, $menu"
-          "$mod, L, exec, $menu"
 
           # compositor commands
           "$mod SHIFT, E, exec, pkill Hyprland"
@@ -48,7 +47,7 @@ in
           "$mod SHIFT, N, changegroupactive, f"
           "$mod SHIFT, P, changegroupactive, b"
           "$mod, R, togglesplit,"
-          "$mod, T, togglefloating,"
+          "$mod, S, togglefloating,"
           "$mod, P, pseudo,"
           "$mod ALT, ,resizeactive,"
 

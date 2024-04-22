@@ -18,7 +18,7 @@ in
     ./zsh
     ./direnv.nix
     ./homeApps
-    ./hyprland
+    ./hyprland2
   ];
   options.myHome = with lib; {
     user = mkOption {
