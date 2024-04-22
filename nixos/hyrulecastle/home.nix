@@ -11,9 +11,12 @@ in
     # All the options
     user = "yeshey";
     nonNixos.enable = false;
-    plasma.enable = true;
+    # plasma.enable = true;
     gnome.enable = false;
-    hyprland.enable = true;
+    hyprland = {
+      enable = true;
+      nvidia = true;
+    };
     homeApps = {
       enable = true;
       cli = {

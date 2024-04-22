@@ -14,6 +14,7 @@ in
   ];
   options.myHome.hyprland = with lib; {
     enable = mkEnableOption "hyprland";
+    nvidia = mkEnableOption "nvidia";
   };
 
   config = lib.mkIf cfg.enable {
