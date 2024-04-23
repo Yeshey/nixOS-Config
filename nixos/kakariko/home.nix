@@ -10,6 +10,9 @@ in
     nonNixos.enable = false;
     plasma.enable = false;
     gnome.enable = true;
+    hyprland = {
+      enable = true;
+    };
     homeApps = {
       enable = true;
       cli = {
@@ -41,6 +44,7 @@ in
       libreoffice.enable = true;
       devops.enable = false;
     };
+    autoStartApps = [ pkgs.vesktop ]; # only works with gnome??
     zsh = {
       enable = true;
       starshipTheme = "pinage404"; # fredericrous # pinage404
@@ -73,7 +77,7 @@ in
     ];
   };
 
-  xdg = {
+  xdg = { # for favourits in nautilus
     enable = lib.mkDefault true;
     userDirs = {
       enable = lib.mkDefault true;
