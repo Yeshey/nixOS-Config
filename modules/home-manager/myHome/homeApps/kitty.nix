@@ -54,6 +54,8 @@ in
           remember_window_size = true;
           enabled_layouts = "*";
 
+          confirm_os_window_close = 0;
+
           # Color scheme
           background_opacity = "0.8";
 

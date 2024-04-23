@@ -8,6 +8,7 @@ in
 {
   config = lib.mkIf cfg.enable {
 
+    # https://github.com/fufexan/dotfiles
     wayland.windowManager.hyprland.settings = 
       let
         screenshotarea = "hyprctl keyword animation 'fadeOut,0,0,default'; grimblast --notify copysave area; hyprctl keyword animation 'fadeOut,1,4,default'";
@@ -96,7 +97,7 @@ in
       # ============================ SETTINGS ============================
 
       "$mod" = "SUPER";
-      "$menu" = "wofi --show drun";
+      "$menu" = "rofi -show drun";
       "$filemanager" = "nautilus";
       env = [
         "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
@@ -244,7 +245,7 @@ in
           "ALT SHIFT, Tab, cyclenext, prev"
 
           "$mod, M, exec, hyprctl keyword ${monocle} $(($(hyprctl getoption ${monocle} -j | jaq -r '.int') ^ 1))"
-          "$mod, V, exec, cliphist list | wofi --dmenu | cliphist decode | wl-copy"
+          "$mod, V, exec, cliphist list | rofi -dmenu | cliphist decode | wl-copy"
 
           # utility
           # terminal
