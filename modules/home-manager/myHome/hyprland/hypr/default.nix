@@ -51,7 +51,7 @@ in
           "systemctl --user start hyprland-session.target"
         ];
       };
-
     };
+    
   };
 }
