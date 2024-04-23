@@ -15,6 +15,7 @@ in
     ./libreoffice.nix
     ./devops.nix
     ./cli
+    ./webApps.nix
   ];
 
   options.myHome.homeApps = {
@@ -32,6 +33,7 @@ in
     myHome.homeApps.libreoffice.enable = lib.mkDefault true;
     myHome.homeApps.devops.enable = lib.mkDefault true;
     myHome.homeApps.cli.enable = lib.mkDefault true;
+    myHome.homeApps.webApps.enable = lib.mkDefault true;
   };
   
 }

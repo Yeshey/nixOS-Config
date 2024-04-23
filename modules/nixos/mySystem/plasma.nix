@@ -11,17 +11,17 @@ in
   config = lib.mkIf cfg.enable {
     # KDE Plasma
     services.xserver = {
-        enable = true; # Enable the X11 windowing system.
+        enable = lib.mkDefault true; # Enable the X11 windowing system.
         displayManager = {
-          autoLogin.enable = true;
-          autoLogin.user = "${config.mySystem.user}"; # TODO
+          autoLogin.enable = lib.mkDefault true;
+          autoLogin.user = lib.mkDefault "${config.mySystem.user}"; # TODO
           sddm = {
-              enable = true;
+              enable = lib.mkDefault true;
           };
-          defaultSession = "plasma"; # "none+bspwm" or "plasma"
+          defaultSession = lib.mkDefault "plasma"; # "none+bspwm" or "plasma"
         };
         desktopManager.plasma5 = {
-          enable = true;
+          enable = lib.mkDefault true;
           # supportDDC = true; # doesnt work with nvidia # to support changing brightness for external monitors (https://discourse.nixos.org/t/how-to-enable-ddc-brightness-control-i2c-permissions/20800)
         };
         # windowManager.bspwm.enable = true; # but doesn't work
