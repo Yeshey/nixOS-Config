@@ -97,6 +97,7 @@ in
 
       "$mod" = "SUPER";
       "$menu" = "wofi --show drun";
+      "$filemanager" = "nautilus";
       env = [
         "QT_WAYLAND_DISABLE_WINDOWDECORATION,1"
       ];
@@ -108,7 +109,9 @@ in
         "hyprlock"
         "waybar"
         "wlsunset" # for night light, idk how to configure :(
-        "nm-applet --indicator & disown"
+        "nm-applet --indicator & disown" # for internet
+        "copyq --start-server" # for clipboard
+        "wl-paste --watch cliphist store" #Stores only text data
       ];
 
       general = {
@@ -221,6 +224,7 @@ in
         [
           "$mod, T, exec, kitty"
           "$mod, SPACE, exec, $menu"
+          "$mod, E, exec, $filemanager"
 
           # compositor commands
           "$mod SHIFT, E, exec, pkill Hyprland"
@@ -234,8 +238,13 @@ in
           "$mod, P, pseudo,"
           "$mod ALT, ,resizeactive,"
 
-          # toggle "monocle" (no_gaps_when_only)
+          # alt tab
+          "ALT, Tab, cyclenext,"
+          "ALT, Tab, bringactivetotop,"
+          "ALT SHIFT, Tab, cyclenext, prev"
+
           "$mod, M, exec, hyprctl keyword ${monocle} $(($(hyprctl getoption ${monocle} -j | jaq -r '.int') ^ 1))"
+          "$mod, V, exec, cliphist list | wofi --dmenu | cliphist decode | wl-copy"
 
           # utility
           # terminal

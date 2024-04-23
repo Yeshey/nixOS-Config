@@ -149,6 +149,8 @@
     '';
     settings = [
       {
+        # "height" = 30; # If height property would be not present, it'd be calculated dynamically
+
         "layer" = "top";
         "position" = "top";
         modules-left = [
@@ -166,9 +168,11 @@
           "memory"
           "cpu"
           "network"
+          "bluetooth"
           "temperature"
           "battery"
           "custom/powermenu"
+          "custom/displays"
           "tray"
         ];
         "custom/launcher" = {
@@ -293,7 +297,16 @@
           "interval" = 1;
           "tooltip" = true;
           "tooltip-format" = "󰖩  {essid} ({ipaddr})";
-          "on-click" = "nm-applet --indicator";
+          "on-click" = "nm-connection-editor";
+        };
+        "bluetooth" = {
+          "format" = " {status}";
+          # "format-disabled" = "";
+          "format-connected" = " {num_connections}";
+          "tooltip-format" = "{device_alias}";
+          "tooltip-format-connected" = " {device_enumerate}";
+          "tooltip-format-enumerate-connected" = "{device_alias}";
+          "on-click" = "blueman-manager";
         };
         "temperature" = {
           #"critical-threshold"= 80;
@@ -301,14 +314,19 @@
           "format" = " {temperatureC}°C";
         };
         "custom/powermenu" = {
-          "format" = "";
+          "format" = " ";
           "on-click" = "wlogout";
           "tooltip" = false;
+        };
+        "custom/displays" = {
+          "format" = " ";
+          "on-click" = "wdisplays"; # sleep 0.1 &&
         };
         "tray" = {
           "icon-size" = 15;
           "spacing" = 5;
         };
+        
       }
     ];
   };
