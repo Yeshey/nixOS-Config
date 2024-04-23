@@ -16,22 +16,22 @@ in
   config = lib.mkIf cfg.enable {
 
     programs.hyprland = {
-     enable = true;
-     xwayland.enable = true;
+     enable = lib.mkDefault true;
+     xwayland.enable = lib.mkDefault true;
      package = inputs.hyprland.packages.${pkgs.system}.hyprland;
     };
 
     # to remember internet, idk if I need all this
-    networking.networkmanager.enable = true;
-    services.gnome.gnome-keyring.enable = true;
-    programs.seahorse.enable = true; # enable the graphical frontend
+    networking.networkmanager.enable = lib.mkDefault true;
+    services.gnome.gnome-keyring.enable = lib.mkDefault true;
+    programs.seahorse.enable = lib.mkIf (!config.mySystem.plasma.enable) true; # enable the graphical frontend
     environment.systemPackages = [ pkgs.libsecret ]; # libsecret api needed
-    security.pam.services.gdm.enableGnomeKeyring = true; # load gnome-keyring at startup
-    environment.variables.XDG_RUNTIME_DIR = "/run/user/$UID"; # set the runtime directory
+    security.pam.services.gdm.enableGnomeKeyring = lib.mkDefault true; # load gnome-keyring at startup
+    environment.variables.XDG_RUNTIME_DIR = lib.mkDefault "/run/user/$UID"; # set the runtime directory
 
     # displayManager
     services.greetd = {
-      enable = true;
+      enable = lib.mkDefault true;
       settings = {
         default_session = {
           command = "${tuigreet} --time --remember --cmd Hyprland";

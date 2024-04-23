@@ -21,7 +21,7 @@ in
         # etcher #insecure?
 
         # Browsers
-        #vivaldi
+        unstable.vivaldi
         brave
         tor-browser-bundle-bin
         qutebrowser
