@@ -40,6 +40,7 @@ in
         enable = true;
         i2pFirefoxProfile = true;
       };
+      webApps.enable = true;
       vscodium.enable = true;
       discord.enable = true;
       gaming.enable = true;
@@ -48,6 +49,7 @@ in
       libreoffice.enable = true;
       devops.enable = false;
     };
+    autoStartApps = [ pkgs.vesktop ]; # only works with gnome??
     zsh = {
       enable = true;
       starshipTheme = "pinage404"; # fredericrous # pinage404
@@ -83,23 +85,20 @@ in
     ];
   };
 
-  
-
-  # Github PlasmaManager Repo: https://github.com/pjones/plasma-manager
-  # got with this command: nix run github:pjones/plasma-manager > plasmaconf.nix
-  # Not working yet, keep an eye on it.
-  # programs.plasma5 = import ./nixFiles/plasmaconf.nix;
-
-  # Raw configuration files (https://ghedam.at/24353/tutorial-getting-started-with-home-manager-for-nix)
-  home.file.".config/user-dirs.dirs".source = builtins.toFile "user-dirs.dirs" ''
-XDG_DESKTOP_DIR="$HOME/Desktop"
-XDG_DOWNLOAD_DIR="/mnt/DataDisk/Downloads/"
-XDG_TEMPLATES_DIR="$HOME/Templates"
-XDG_PUBLICSHARE_DIR="$HOME/Public"
-XDG_DOCUMENTS_DIR="/mnt/DataDisk/PersonalFiles/"
-XDG_MUSIC_DIR="/mnt/DataDisk/PersonalFiles/Timeless/Music/"
-XDG_PICTURES_DIR="$HOME/Pictures"
-XDG_VIDEOS_DIR="$HOME/Videos"
-  '';
+  xdg = { # for favourits in nautilus
+    enable = lib.mkDefault true;
+    userDirs = {
+      enable = lib.mkDefault true;
+      createDirectories = lib.mkDefault true;
+      # desktop = lib.mkDefault "${config.home.homeDirectory}/Pulpit";
+      documents = lib.mkDefault "/mnt/DataDisk/PersonalFiles/";
+      download = lib.mkDefault "/mnt/DataDisk/Downloads/";
+      music = lib.mkDefault "/mnt/DataDisk/PersonalFiles/Timeless/Music/";
+      # pictures = lib.mkDefault "${config.home.homeDirectory}/Obrazy";
+      # videos = lib.mkDefault "${config.home.homeDirectory}/Wideo";
+      # templates = lib.mkDefault "${config.home.homeDirectory}/Szablony";
+      # publicShare = lib.mkDefault "${config.home.homeDirectory}/Publiczny";
+    };
+  };
 
 }

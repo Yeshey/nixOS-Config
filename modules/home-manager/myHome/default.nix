@@ -19,6 +19,7 @@ in
     ./direnv.nix
     ./homeApps
     ./hyprland
+    ./autoStartApps.nix
   ];
   options.myHome = with lib; {
     user = mkOption {
