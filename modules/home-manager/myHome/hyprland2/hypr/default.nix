@@ -43,7 +43,15 @@ in
       pkgs.wofi
       pkgs.wlsunset # for night light
       pkgs.networkmanagerapplet # for internet
-      # pkgs.swww
+
+      # clipboard manager
+      pkgs.cliphist 
+      pkgs.copyq
+      pkgs.wl-clipboard
+
+      pkgs.wdisplays
+      pkgs.wlogout
+      pkgs.blueman
     ];
     
     #test later systemd.user.targets.hyprland-session.Unit.Wants = [ "xdg-desktop-autostart.target" ];
@@ -58,17 +66,6 @@ in
         ];
       };
 
-      # enableNvidiaPatches = true;
-      # extraConfig = (builtins.readFile ./hyprland.conf);
-      settings = lib.mkIf cfg.nvidia {
-        env = [
-          "WLR_NO_HARDWARE_CURSORS,1"
-          "LIBVA_DRIVER_NAME,nvidia"
-          "XDG_SESSION_TYPE,wayland"
-          "GBM_BACKEND,nvidia-drm"
-          #"__GLX_VENDOR_LIBRARY_NAME,nvidia"
-        ];
-      };
     };
   /*
         home.file.".config/hypr/colors".text = ''
