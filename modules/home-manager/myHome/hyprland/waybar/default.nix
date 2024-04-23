@@ -1,28 +1,24 @@
 { config, lib, pkgs, ... }:
 
 {
-  # https://github.com/georgewhewell/nixos-host/blob/master/home/waybar.nix
+  # quickly try other configs with this
   # programs.waybar = {
   #   enable = true;
   #   style = (builtins.readFile ./style.css);
-  #   # settings = [
-  #   #   {
-  #         # mainBar = {
-  #         #     layer = "top";
-  #         #     position = "top";
-  #         #     height = 30;
-  #         #     modules-left = [ ];
-  #         #     modules-center = [ ];
-  #         #     modules-right = [ ];
-  #         # };
-  #   #   }
-  #   # ];
+  #   # settings = [  ];
   # };
   # home.file.".config/waybar/config".text = (builtins.readFile ./config);
 
+  home.packages = [ 
+    pkgs.gnome.nautilus
+    pkgs.networkmanagerapplet # for internet
+    pkgs.wdisplays
+    pkgs.wlogout
+    pkgs.blueman
+  ];
+
   # https://github.com/dxcently/dxflake/blob/main/home-manager/waybar.nix
   programs.waybar = {
-
     enable = true;
     systemd = {
       enable = false; # disable it,autostart it in hyprland conf
