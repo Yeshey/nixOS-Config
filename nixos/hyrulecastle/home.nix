@@ -14,8 +14,8 @@ in
     plasma.enable = true;
     gnome.enable = false;
     hyprland = {
-      enable = true;
-      nvidia = true;
+      enable = false;
+      nvidia = false;
     };
     homeApps = {
       enable = true;
