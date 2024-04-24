@@ -1,11 +1,17 @@
-{ inputs, config, lib, pkgs, ... }:
+{
+  inputs,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   wallpaper = config.myHome.wallpaper;
   cfg = config.myHome.plasma;
 in
 {
-  imports = [ 
+  imports = [
     inputs.plasma-manager.homeManagerModules.plasma-manager
     # ./plasmaconf.nix 
   ];
@@ -23,9 +29,8 @@ in
         lookAndFeel = "org.kde.breezedark.desktop";
         cursorTheme = "Bibata-Modern-Ice";
         iconTheme = "Papirus-Dark";
-        wallpaper =  lib.mkIf ( wallpaper != null ) wallpaper;
+        wallpaper = lib.mkIf (wallpaper != null) wallpaper;
       };
     };
-
   };
 }

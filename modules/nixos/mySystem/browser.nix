@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.mySystem.browser;
@@ -26,19 +31,19 @@ in
         OfferToSaveLoginsDefault = false;
         PasswordManagerEnabled = false;
         FirefoxHome = {
-            Search = true;
-            Pocket = false;
-            Snippets = false;
-            TopSites = false;
-            Highlights = false;
+          Search = true;
+          Pocket = false;
+          Snippets = false;
+          TopSites = false;
+          Highlights = false;
         };
         UserMessaging = {
-            ExtensionRecommendations = false;
-            SkipOnboarding = true;
+          ExtensionRecommendations = false;
+          SkipOnboarding = true;
         };
 
         EnableTrackingProtection = {
-          Value= true;
+          Value = true;
           Locked = true;
           Cryptomining = true;
           Fingerprinting = true;
@@ -51,7 +56,7 @@ in
         DisplayMenuBar = "default-off"; # alternatives: "always", "never" or "default-on"
         SearchBar = "unified"; # alternative: "separate"
 
-        /* ---- EXTENSIONS ---- */
+        # ---- EXTENSIONS ----
         # Check about:support for extension/add-on ID strings.
         # Valid strings for installation_mode are "allowed", "blocked",
         # "force_installed" and "normal_installed".
@@ -70,17 +75,17 @@ in
           };
           # 1Password:
           /*
-          "{d634138d-c276-4fc8-924b-40a0ea21d284}" = {
-            install_url = "https://addons.mozilla.org/firefox/downloads/latest/1password-x-password-manager/latest.xpi";
-            installation_mode = "force_installed";
-          }; */
+            "{d634138d-c276-4fc8-924b-40a0ea21d284}" = {
+              install_url = "https://addons.mozilla.org/firefox/downloads/latest/1password-x-password-manager/latest.xpi";
+              installation_mode = "force_installed";
+            };
+          */
         };
-
       };
       preferencesStatus = "default"; # "default" "locked" "user" "clear"
-      /* ---- PREFERENCES ---- */
+      # ---- PREFERENCES ----
       # Check about:config for options.
-      preferences = { 
+      preferences = {
         "browser.contentblocking.category" = false;
         "extensions.pocket.enabled" = false;
         "browser.newtabpage.activity-stream.showSponsored" = false;
@@ -88,6 +93,5 @@ in
         "browser.newtabpage.activity-stream.showSponsoredTopSites" = false;
       };
     };
-
   };
 }

@@ -1,5 +1,9 @@
 # Derivation, not a module!
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "ipfs-sync";
@@ -15,7 +19,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-Snu6GmDcKrX+QqrbdH5NasGQqwJhScT1+u/zFI9M/9I=";
 
-  nativeBuildInputs = [  ];
+  nativeBuildInputs = [ ];
 
   CGO_ENABLED = 0;
 

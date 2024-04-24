@@ -1,11 +1,17 @@
-{ inputs, config, lib, pkgs, ... }:
+{
+  inputs,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   wallpaper = config.myHome.wallpaper;
   cfg = config.myHome.plasma;
 in
 {
-  imports = [ 
+  imports = [
     inputs.plasma-manager.homeManagerModules.plasma-manager
     # ./plasmaconf.nix 
   ];
@@ -24,7 +30,10 @@ in
         "kcm_touchpad"."Enable Touchpad" = "Touchpad On";
         "kcm_touchpad"."Toggle Touchpad" = "Touchpad Toggle";
         "kded5"."Show System Activity" = "Ctrl+Esc";
-        "kded5"."display" = ["Display" "Meta+P"];
+        "kded5"."display" = [
+          "Display"
+          "Meta+P"
+        ];
         "khotkeys"."{4010362e-cfa5-4fd6-8d75-de63cf5d9034}" = "Ctrl+Alt+T";
         "khotkeys"."{5672d8e8-9555-48c8-a6d2-aa3943a7dcf4}" = "Ctrl+Alt+M";
         "khotkeys"."{76db9847-92c8-4d48-b2f7-4b9355507b44}" = [ ];
@@ -36,10 +45,17 @@ in
         "kmix"."decrease_volume" = "Volume Down";
         "kmix"."increase_microphone_volume" = "Microphone Volume Up";
         "kmix"."increase_volume" = "Volume Up";
-        "kmix"."mic_mute" = ["Microphone Mute" "Meta+Volume Mute"];
+        "kmix"."mic_mute" = [
+          "Microphone Mute"
+          "Meta+Volume Mute"
+        ];
         "kmix"."mute" = "Volume Mute";
         "ksmserver"."Halt Without Confirmation" = [ ];
-        "ksmserver"."Lock Session" = ["Meta+L" "Ctrl+Alt+L" "Screensaver"];
+        "ksmserver"."Lock Session" = [
+          "Meta+L"
+          "Ctrl+Alt+L"
+          "Screensaver"
+        ];
         "ksmserver"."Log Out" = "Ctrl+Alt+Del";
         "ksmserver"."Log Out Without Confirmation" = [ ];
         "ksmserver"."Reboot Without Confirmation" = [ ];
@@ -47,7 +63,10 @@ in
         "kwin"."Decrease Opacity" = [ ];
         "kwin"."Edit Tiles" = "Meta+T";
         "kwin"."Expose" = "Ctrl+F9";
-        "kwin"."ExposeAll" = ["Ctrl+F10" "Launch (C)"];
+        "kwin"."ExposeAll" = [
+          "Ctrl+F10"
+          "Launch (C)"
+        ];
         "kwin"."ExposeClass" = "Ctrl+F7";
         "kwin"."ExposeClassCurrentDesktop" = [ ];
         "kwin"."Increase Opacity" = [ ];
@@ -212,7 +231,11 @@ in
         "org.kde.konsole.desktop"."NewWindow" = [ ];
         "org.kde.konsole.desktop"."_launch" = [ ];
         "org.kde.krunner.desktop"."RunClipboard" = "Alt+Shift+F2";
-        "org.kde.krunner.desktop"."_launch" = ["Alt+Space" "Alt+F2" "Search"];
+        "org.kde.krunner.desktop"."_launch" = [
+          "Alt+Space"
+          "Alt+F2"
+          "Search"
+        ];
         "org.kde.plasma.emojier.desktop"."_launch" = "Meta+.";
         "org.kde.spectacle.desktop"."ActiveWindowScreenShot" = "Meta+Print";
         "org.kde.spectacle.desktop"."CurrentMonitorScreenShot" = [ ];

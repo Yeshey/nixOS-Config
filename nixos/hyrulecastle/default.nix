@@ -53,7 +53,7 @@ in
     zsh.enable = true;
     gaming.enable = true;
     vmHost = true;
-    dockerHost = true; 
+    dockerHost = true;
     host = "hyrulecastle";
     user = "yeshey";
     home-manager = {
@@ -75,29 +75,32 @@ in
         nvidiaBusId = "PCI:1:0:0";
       };
     };
-    autoUpgrades.enable = true;    
+    autoUpgrades.enable = true;
     flatpaks.enable = true;
     i2p.enable = true;
 
     borgBackups = {
       enable = true;
-      paths = [ "/mnt/DataDisk/PersonalFiles" "/home/${user}" ];
+      paths = [
+        "/mnt/DataDisk/PersonalFiles"
+        "/home/${user}"
+      ];
       repo = "/mnt/hdd-btrfs/Backups/borgbackup";
       startAt = "daily";
       prune.keep = {
-          within = "1d"; # Keep all archives from the last day
-          daily = 2; # keep the latest backup on each day, up to 7 most recent days with backups (days without backups do not count)
-          weekly = 2; 
-          monthly = 6;
-          yearly = 3;
-        };
+        within = "1d"; # Keep all archives from the last day
+        daily = 2; # keep the latest backup on each day, up to 7 most recent days with backups (days without backups do not count)
+        weekly = 2;
+        monthly = 6;
+        yearly = 3;
+      };
       exclude = [ "*/RecordedClasses" ];
     };
     syncthing = {
       enable = true;
       dataStoragePath = "/mnt/DataDisk";
     };
-    
+
     androidDevelopment.enable = false;
   };
 
@@ -110,7 +113,6 @@ in
     #mineclone.enable = true;
     kubo.enable = true;
   };
-
 
   virtualisation.docker.storageDriver = "btrfs"; # for docker
 

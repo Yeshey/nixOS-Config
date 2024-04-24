@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.myHome.zsh;
@@ -24,15 +29,13 @@ in
     fonts.fontconfig.enable = true;
     home.packages = with pkgs; [
       eza
-      (
-        nerdfonts.override {
-          fonts = [
-            "FiraCode"
-            "RobotoMono"
-            "SourceCodePro"
-          ];
-        }
-      )
+      (nerdfonts.override {
+        fonts = [
+          "FiraCode"
+          "RobotoMono"
+          "SourceCodePro"
+        ];
+      })
       oxygenfonts
       source-sans-pro
     ];
@@ -64,12 +67,15 @@ in
       '';
       localVariables = {
         ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE = "fg=13,underline";
-        ZSH_AUTOSUGGEST_STRATEGY = [ "history" "completion" ];
+        ZSH_AUTOSUGGEST_STRATEGY = [
+          "history"
+          "completion"
+        ];
         KEYTIMEOUT = 1;
         ZSHZ_CASE = "smart";
         ZSHZ_ECHO = 1;
       };
-      
+
       enableAutosuggestions = lib.mkDefault true;
       enableCompletion = lib.mkDefault true;
       syntaxHighlighting.enable = lib.mkDefault true;
@@ -77,7 +83,7 @@ in
       historySubstringSearch = {
         enable = lib.mkDefault true;
       };
-      
+
       plugins = [
         {
           name = "nix-shell";
@@ -97,16 +103,16 @@ in
         }
       ];
       /*
-      oh-my-zsh = {
-        enable = true;
-        plugins = [ "git" 
-                    "colored-man-pages" 
-                    "alias-finder" 
-                    "command-not-found" 
-                    "urltools" 
-                    "bgnotify"];
-        theme = "agnoster"; # robbyrussell # agnoster # frisk
-      };
+        oh-my-zsh = {
+          enable = true;
+          plugins = [ "git"
+                      "colored-man-pages"
+                      "alias-finder"
+                      "command-not-found"
+                      "urltools"
+                      "bgnotify"];
+          theme = "agnoster"; # robbyrussell # agnoster # frisk
+        };
       */
     };
   };

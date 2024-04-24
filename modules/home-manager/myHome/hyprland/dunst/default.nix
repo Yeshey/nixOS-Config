@@ -1,4 +1,10 @@
-{ inputs, config, lib, pkgs, ... }:
+{
+  inputs,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   wallpaper = config.myHome.wallpaper;
@@ -47,7 +53,7 @@ in
           corner_radius = 10;
           follow = "mouse";
           font = "Source Sans Pro 10";
-          format = "<b>%s</b>\\n%b"; #format = "<span foreground='#f3f4f5'><b>%s %p</b></span>\n%b"
+          format = "<b>%s</b>\\n%b"; # format = "<span foreground='#f3f4f5'><b>%s %p</b></span>\n%b"
           frame_color = "#232323";
           frame_width = 1;
           offset = "15x15";
@@ -68,7 +74,9 @@ in
           browser = "/usr/bin/env librewolf -new-tab";
         };
 
-        fullscreen_delay_everything = {fullscreen = "delay";};
+        fullscreen_delay_everything = {
+          fullscreen = "delay";
+        };
 
         urgency_critical = {
           background = "#d64e4e";

@@ -8,9 +8,7 @@
 }:
 
 {
-  imports = [
-    ./hardware-configuration.nix
-  ];
+  imports = [ ./hardware-configuration.nix ];
 
   nixpkgs = {
     # You can add overlays here
@@ -94,16 +92,16 @@
   };
 
   # swap in ext4:
-  swapDevices = [ 
+  swapDevices = [
     {
       device = "/swapfile";
       priority = 0; # Higher numbers indicate higher priority.
-      size = 6*1024;
-      options = [ "nofail"];
+      size = 6 * 1024;
+      options = [ "nofail" ];
     }
   ];
 
-  services.spice-vdagentd.enable=true;
+  services.spice-vdagentd.enable = true;
 
   environment.systemPackages = with pkgs; [
     # Games

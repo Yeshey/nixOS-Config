@@ -2,27 +2,59 @@
 # Generated with: nix-shell -p dconf2nix --command "dconf dump / | dconf2nix -e --timeout 15 --verbose > dconf.nix"
 
 # Generated via dconf2nix: https://github.com/gvolpe/dconf2nix
-{ config, lib, pkgs, ... }@args:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}@args:
 
 let
   cfg = config.myHome.gnome;
-in with lib.hm.gvariant;
+in
+with lib.hm.gvariant;
 {
   config = lib.mkIf cfg.enable {
 
     dconf.settings = {
       "org/gnome/Characters" = {
-        recent-characters = [ "🚌" "👍" "🥲" "🥰" "😆" "😁" "😊" "🤣" ];
+        recent-characters = [
+          "🚌"
+          "👍"
+          "🥲"
+          "🥰"
+          "😆"
+          "😁"
+          "😊"
+          "🤣"
+        ];
       };
 
       "org/gnome/Totem" = {
-        active-plugins = [ "vimeo" "screenshot" "autoload-subtitles" "mpris" "rotation" "recent" "variable-rate" "skipto" "save-file" "screensaver" "open-directory" "apple-trailers" "movie-properties" ];
+        active-plugins = [
+          "vimeo"
+          "screenshot"
+          "autoload-subtitles"
+          "mpris"
+          "rotation"
+          "recent"
+          "variable-rate"
+          "skipto"
+          "save-file"
+          "screensaver"
+          "open-directory"
+          "apple-trailers"
+          "movie-properties"
+        ];
         subtitle-encoding = "UTF-8";
       };
 
       "org/gnome/baobab/ui" = {
         is-maximized = false;
-        window-size = mkTuple [ 960 600 ];
+        window-size = mkTuple [
+          960
+          600
+        ];
       };
 
       "org/gnome/cheese" = {
@@ -36,20 +68,46 @@ in with lib.hm.gvariant;
       "org/gnome/clocks/state/window" = {
         maximized = false;
         panel-id = "world";
-        size = mkTuple [ 870 690 ];
+        size = mkTuple [
+          870
+          690
+        ];
       };
 
       "org/gnome/control-center" = {
         last-panel = "power";
-        window-state = mkTuple [ 980 640 ];
+        window-state = mkTuple [
+          980
+          640
+        ];
       };
 
       "org/gnome/desktop/app-folders" = {
-        folder-children = [ "Utilities" "YaST" ];
+        folder-children = [
+          "Utilities"
+          "YaST"
+        ];
       };
 
       "org/gnome/desktop/app-folders/folders/Utilities" = {
-        apps = [ "gnome-abrt.desktop" "gnome-system-log.desktop" "nm-connection-editor.desktop" "org.gnome.baobab.desktop" "org.gnome.Connections.desktop" "org.gnome.DejaDup.desktop" "org.gnome.Dictionary.desktop" "org.gnome.DiskUtility.desktop" "org.gnome.eog.desktop" "org.gnome.Evince.desktop" "org.gnome.FileRoller.desktop" "org.gnome.fonts.desktop" "org.gnome.seahorse.Application.desktop" "org.gnome.tweaks.desktop" "org.gnome.Usage.desktop" "vinagre.desktop" ];
+        apps = [
+          "gnome-abrt.desktop"
+          "gnome-system-log.desktop"
+          "nm-connection-editor.desktop"
+          "org.gnome.baobab.desktop"
+          "org.gnome.Connections.desktop"
+          "org.gnome.DejaDup.desktop"
+          "org.gnome.Dictionary.desktop"
+          "org.gnome.DiskUtility.desktop"
+          "org.gnome.eog.desktop"
+          "org.gnome.Evince.desktop"
+          "org.gnome.FileRoller.desktop"
+          "org.gnome.fonts.desktop"
+          "org.gnome.seahorse.Application.desktop"
+          "org.gnome.tweaks.desktop"
+          "org.gnome.Usage.desktop"
+          "vinagre.desktop"
+        ];
         categories = [ "X-GNOME-Utilities" ];
         name = "X-GNOME-Utilities.directory";
         translate = true;
@@ -67,7 +125,12 @@ in with lib.hm.gvariant;
 
       "org/gnome/desktop/input-sources" = {
         show-all-sources = false;
-        sources = [ (mkTuple [ "xkb" "pt" ]) ];
+        sources = [
+          (mkTuple [
+            "xkb"
+            "pt"
+          ])
+        ];
         xkb-options = [ "terminate:ctrl_alt_bksp" ];
       };
 
@@ -81,7 +144,21 @@ in with lib.hm.gvariant;
       };
 
       "org/gnome/desktop/notifications" = {
-        application-children = [ "org-gnome-nautilus" "org-gnome-console" "firefox" "com-google-androidstudio" "vivaldi-stable" "discord" "gnome-power-panel" "code" "org-gnome-epiphany" "github-desktop" "org-gnome-baobab" "com-uploadedlobster-peek" "steam" ];
+        application-children = [
+          "org-gnome-nautilus"
+          "org-gnome-console"
+          "firefox"
+          "com-google-androidstudio"
+          "vivaldi-stable"
+          "discord"
+          "gnome-power-panel"
+          "code"
+          "org-gnome-epiphany"
+          "github-desktop"
+          "org-gnome-baobab"
+          "com-uploadedlobster-peek"
+          "steam"
+        ];
       };
 
       "org/gnome/desktop/notifications/application/clion" = {
@@ -201,8 +278,8 @@ in with lib.hm.gvariant;
 
       "org/gnome/desktop/wm/keybindings" = {
         show-desktop = [ "<Super>d" ];
-        switch-applications = [];
-        switch-applications-backward = [];
+        switch-applications = [ ];
+        switch-applications-backward = [ ];
         switch-windows = [ "<Alt>Tab" ];
         switch-windows-backward = [ "<Shift><Alt>Tab" ];
       };
@@ -223,12 +300,21 @@ in with lib.hm.gvariant;
 
       "org/gnome/epiphany/state" = {
         is-maximized = false;
-        window-position = mkTuple [ (-1) (-1) ];
-        window-size = mkTuple [ 1024 768 ];
+        window-position = mkTuple [
+          (-1)
+          (-1)
+        ];
+        window-size = mkTuple [
+          1024
+          768
+        ];
       };
 
       "org/gnome/evince/default" = {
-        window-ratio = mkTuple [ 1.007889 0.712682 ];
+        window-ratio = mkTuple [
+          1.007889
+          0.712682
+        ];
       };
 
       "org/gnome/evolution-data-server" = {
@@ -261,7 +347,10 @@ in with lib.hm.gvariant;
         network-total-in-bits = false;
         show-dependencies = false;
         show-whose-processes = "user";
-        window-state = mkTuple [ 700 500 ];
+        window-state = mkTuple [
+          700
+          500
+        ];
       };
 
       "org/gnome/gnome-system-monitor/disktreenew" = {
@@ -272,7 +361,33 @@ in with lib.hm.gvariant;
       };
 
       "org/gnome/gnome-system-monitor/proctree" = {
-        columns-order = [ 0 1 2 3 4 6 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 ];
+        columns-order = [
+          0
+          1
+          2
+          3
+          4
+          6
+          8
+          9
+          10
+          11
+          12
+          13
+          14
+          15
+          16
+          17
+          18
+          19
+          20
+          21
+          22
+          23
+          24
+          25
+          26
+        ];
         sort-col = 8;
         sort-order = 0;
       };
@@ -300,7 +415,10 @@ in with lib.hm.gvariant;
       };
 
       "org/gnome/nautilus/window-state" = {
-        initial-size = mkTuple [ 890 550 ];
+        initial-size = mkTuple [
+          890
+          550
+        ];
         maximized = false;
       };
 
@@ -319,7 +437,10 @@ in with lib.hm.gvariant;
       };
 
       "org/gnome/settings-daemon/plugins/media-keys" = {
-        custom-keybindings = [ "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/" "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/" ];
+        custom-keybindings = [
+          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/"
+          "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/"
+        ];
       };
 
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
@@ -350,9 +471,23 @@ in with lib.hm.gvariant;
       "org/gnome/shell" = {
         app-picker-layout = "[{'org.gnome.Geary.desktop': <{'position': <0>}>, 'org.gnome.Contacts.desktop': <{'position': <1>}>, 'org.gnome.Weather.desktop': <{'position': <2>}>, 'org.gnome.clocks.desktop': <{'position': <3>}>, 'org.gnome.Maps.desktop': <{'position': <4>}>, 'org.gnome.Photos.desktop': <{'position': <5>}>, 'org.gnome.Totem.desktop': <{'position': <6>}>, 'org.gnome.Calculator.desktop': <{'position': <7>}>, 'simple-scan.desktop': <{'position': <8>}>, 'org.gnome.Settings.desktop': <{'position': <9>}>, 'gnome-system-monitor.desktop': <{'position': <10>}>, 'yelp.desktop': <{'position': <11>}>, 'Utilities': <{'position': <12>}>, 'org.gnome.Cheese.desktop': <{'position': <13>}>, 'AnyDesk.desktop': <{'position': <14>}>, 'btop.desktop': <{'position': <15>}>, 'org.gnome.Calendar.desktop': <{'position': <16>}>, 'discord.desktop': <{'position': <17>}>, 'org.gnome.Extensions.desktop': <{'position': <18>}>, 'firefox.desktop': <{'position': <19>}>, 'github-desktop.desktop': <{'position': <20>}>, 'gparted.desktop': <{'position': <21>}>, 'org.pipewire.Helvum.desktop': <{'position': <22>}>, 'htop.desktop': <{'position': <23>}>}, {'startcenter.desktop': <{'position': <0>}>, 'base.desktop': <{'position': <1>}>, 'calc.desktop': <{'position': <2>}>, 'draw.desktop': <{'position': <3>}>, 'impress.desktop': <{'position': <4>}>, 'math.desktop': <{'position': <5>}>, 'writer.desktop': <{'position': <6>}>, 'cups.desktop': <{'position': <7>}>, 'org.gnome.Music.desktop': <{'position': <8>}>, 'nixos-manual.desktop': <{'position': <9>}>, 'com.obsproject.Studio.desktop': <{'position': <10>}>, 'p3x-onenote.desktop': <{'position': <11>}>, 'com.github.jeromerobert.pdfarranger.desktop': <{'position': <12>}>, 'psensor.desktop': <{'position': <13>}>, 'org.qbittorrent.qBittorrent.desktop': <{'position': <14>}>, 'org.gnome.Software.desktop': <{'position': <15>}>, 'smartcode-stremio.desktop': <{'position': <16>}>, 'org.gnome.TextEditor.desktop': <{'position': <17>}>, 'org.gnome.Tour.desktop': <{'position': <18>}>, 'code.desktop': <{'position': <19>}>, 'vlc.desktop': <{'position': <20>}>, 'xterm.desktop': <{'position': <21>}>}]";
         disable-user-extensions = false;
-        disabled-extensions = [ "rounded-window-corners@yilozt" "workspace-indicator@gnome-shell-extensions.gcampax.github.com" ];
-        enabled-extensions = [ "clipboard-history@alexsaveau.dev" "burn-my-windows@schneegans.github.com" "clipboard-indicator@tudmotu.com" "hibernate-status@dromi" "trayIconsReloaded@selfmade.pl" ];
-        favorite-apps = [ "org.gnome.Epiphany.desktop" "vivaldi-stable.desktop" "org.gnome.Nautilus.desktop" "org.gnome.Console.desktop" ];
+        disabled-extensions = [
+          "rounded-window-corners@yilozt"
+          "workspace-indicator@gnome-shell-extensions.gcampax.github.com"
+        ];
+        enabled-extensions = [
+          "clipboard-history@alexsaveau.dev"
+          "burn-my-windows@schneegans.github.com"
+          "clipboard-indicator@tudmotu.com"
+          "hibernate-status@dromi"
+          "trayIconsReloaded@selfmade.pl"
+        ];
+        favorite-apps = [
+          "org.gnome.Epiphany.desktop"
+          "vivaldi-stable.desktop"
+          "org.gnome.Nautilus.desktop"
+          "org.gnome.Console.desktop"
+        ];
         last-selected-power-profile = "power-saver";
         welcome-dialog-last-shown-version = "42.4";
       };
@@ -423,12 +558,23 @@ in with lib.hm.gvariant;
         sort-directories-first = false;
         sort-order = "ascending";
         type-format = "category";
-        window-size = mkTuple [ 896 682 ];
+        window-size = mkTuple [
+          896
+          682
+        ];
       };
 
       "org/gtk/settings/color-chooser" = {
-        custom-colors = [ (mkTuple [ 0.988235 0.686275 ]) ];
-        selected-color = mkTuple [ true 0.988235 ];
+        custom-colors = [
+          (mkTuple [
+            0.988235
+            0.686275
+          ])
+        ];
+        selected-color = mkTuple [
+          true
+          0.988235
+        ];
       };
 
       "org/gtk/settings/file-chooser" = {
@@ -442,15 +588,19 @@ in with lib.hm.gvariant;
         sort-directories-first = false;
         sort-order = "ascending";
         type-format = "category";
-        window-position = mkTuple [ 165 32 ];
-        window-size = mkTuple [ 1203 833 ];
+        window-position = mkTuple [
+          165
+          32
+        ];
+        window-size = mkTuple [
+          1203
+          833
+        ];
       };
 
       "system/proxy" = {
         mode = "none";
       };
-
     };
-
   };
 }

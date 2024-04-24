@@ -1,4 +1,9 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 let
   cfg = config.myHome.homeApps.devops;
@@ -36,7 +41,10 @@ in
       unstable.teleport.client
       (writeShellApplication {
         name = "kctx";
-        runtimeInputs = [ kubectl fzf ];
+        runtimeInputs = [
+          kubectl
+          fzf
+        ];
         text = ''
           kubectl config get-contexts -o name \
           | fzf --height=10 \
@@ -45,7 +53,10 @@ in
       })
       (writeShellApplication {
         name = "kctn";
-        runtimeInputs = [ kubectl fzf ];
+        runtimeInputs = [
+          kubectl
+          fzf
+        ];
         text = ''
           kubectl get namespaces -o jsonpath='{range .items[*]}{.metadata.name}{"\n"}{end}' \
             | fzf --height=10 \

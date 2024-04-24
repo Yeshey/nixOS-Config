@@ -17,7 +17,8 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    home = { # Specific packages
+    home = {
+      # Specific packages
       packages = with pkgs; [
         # Libreoffice
         libreoffice
@@ -27,6 +28,5 @@ in
         hunspellDicts.uk_UA
       ];
     };
-    
   };
 }

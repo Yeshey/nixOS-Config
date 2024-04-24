@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.mySystem.hardware.printers;
@@ -12,11 +17,7 @@ in
     # Enable CUPS to print documents.
     services.printing.enable = true; # TODO check if it works with your printer
     environment = {
-      systemPackages = with pkgs; [
-        xsane
-      ];
+      systemPackages = with pkgs; [ xsane ];
     };
-
   };
-  
 }

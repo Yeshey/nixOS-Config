@@ -52,7 +52,7 @@
     zsh.enable = true;
     gaming.enable = false;
     vmHost = true;
-    dockerHost = true; 
+    dockerHost = true;
     host = "skyloft";
     user = "yeshey"; # TODO make this into an option where you can do user."yeshey".home-manager.enable ) true etc.
     home-manager = {
@@ -70,7 +70,7 @@
       #};
       #nvidia.enable = false;
     };
-    autoUpgrades.enable = true;    
+    autoUpgrades.enable = true;
     flatpaks.enable = false;
     i2p.enable = false;
     syncthing = {
@@ -96,8 +96,8 @@
   time.timeZone = "Europe/Madrid";
 
   nixpkgs.config = {
-  	allowUnsupportedSystem = true;
-#    allowUnfree = true;
+    allowUnsupportedSystem = true;
+    #    allowUnfree = true;
     # TODO remove this below 
     #permittedInsecurePackages = [ # for package openvscode-server
     #  "nodejs-16.20.2"
@@ -114,8 +114,8 @@
   networking.firewall.allowedTCPPorts = [ 3389 ];
 
   environment.systemPackages = with pkgs; [
-    
-  ];   
+
+  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;

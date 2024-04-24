@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.mySystem.hardware;
@@ -23,5 +28,4 @@ in
     mySystem.hardware.nvidia.enable = lib.mkDefault true;
     mySystem.hardware.thermald.enable = lib.mkDefault true;
   };
-  
 }

@@ -1,4 +1,10 @@
-{ inputs, config, lib, pkgs, ... }:
+{
+  inputs,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   wallpaper = config.myHome.wallpaper;
@@ -11,7 +17,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-      
+
     # quickly try other configs with this
     # programs.waybar = {
     #   enable = true;
@@ -20,7 +26,7 @@ in
     # };
     # home.file.".config/waybar/config".text = (builtins.readFile ./config);
 
-    home.packages = [ 
+    home.packages = [
       pkgs.gnome.nautilus
       pkgs.networkmanagerapplet # for internet
       pkgs.wdisplays
@@ -333,7 +339,6 @@ in
             "icon-size" = 15;
             "spacing" = 5;
           };
-          
         }
       ];
     };

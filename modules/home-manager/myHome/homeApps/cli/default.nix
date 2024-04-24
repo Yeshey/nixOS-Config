@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.myHome.homeApps.cli;
@@ -21,5 +26,4 @@ in
     myHome.homeApps.cli.tmux.enable = lib.mkDefault true;
     myHome.homeApps.cli.neovim.enable = lib.mkDefault true;
   };
-  
 }

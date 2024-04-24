@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.mySystem.hardware.sound;
@@ -32,5 +37,4 @@ in
       #media-session.enable = true;
     };
   };
-  
 }

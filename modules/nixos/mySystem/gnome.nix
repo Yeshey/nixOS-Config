@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.mySystem.gnome;
@@ -10,9 +15,7 @@ in
 
   config = lib.mkIf cfg.enable {
     environment = {
-      systemPackages = with pkgs; [
-        firefox
-      ];
+      systemPackages = with pkgs; [ firefox ];
       gnome.excludePackages = with pkgs.gnome; [
         cheese # webcam tool
         gedit # text editor
