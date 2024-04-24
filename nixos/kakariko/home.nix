@@ -44,7 +44,7 @@ in
       libreoffice.enable = true;
       devops.enable = false;
     };
-    autoStartApps = [ pkgs.vesktop ]; # only works with gnome??
+    # autoStartApps = [ pkgs.vesktop ]; # only works with gnome??
     zsh = {
       enable = true;
       starshipTheme = "pinage404"; # fredericrous # pinage404
