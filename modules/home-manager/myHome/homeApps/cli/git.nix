@@ -1,12 +1,21 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.myHome.homeApps.cli.git;
 in
 {
   options.myHome.homeApps.cli.git = {
-    enable = (lib.mkEnableOption "git") // { default = true; };
-    personalGit.enable = (lib.mkEnableOption "personalGitEnable") // { default = true; };
+    enable = (lib.mkEnableOption "git") // {
+      default = true;
+    };
+    personalGit.enable = (lib.mkEnableOption "personalGitEnable") // {
+      default = true;
+    };
     personalGit.userName = lib.mkOption {
       type = lib.types.str;
       default = "Yeshey";

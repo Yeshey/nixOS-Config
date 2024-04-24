@@ -19,9 +19,7 @@
     };
   };
 
-  nixpkgs.overlays = [
-    (filal: prev: { kubectl = prev.kubectl_1_26; })
-  ];
+  nixpkgs.overlays = [ (filal: prev: { kubectl = prev.kubectl_1_26; }) ];
 
   # Workaround for freezing during activity switching on Ubuntu
   dconf.settings."org/gnome/desktop/interface".enable-animations = false;
@@ -29,9 +27,7 @@
   dconf.settings = {
     "org/gnome/shell" = {
       disable-user-extensions = false;
-      enabled-extensions = [
-        "forge@jmmaranan.com"
-      ];
+      enabled-extensions = [ "forge@jmmaranan.com" ];
     };
     "org/gnome/shell/extensions/forge" = {
       tiling-mode-enabled = true;

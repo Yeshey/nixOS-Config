@@ -1,4 +1,10 @@
-{ inputs, config, lib, pkgs, ... }:
+{
+  inputs,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   wallpaper = config.myHome.wallpaper;
@@ -18,6 +24,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    
+
   };
 }

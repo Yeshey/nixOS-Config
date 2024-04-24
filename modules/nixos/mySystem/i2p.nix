@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.mySystem.i2p;
@@ -18,7 +23,8 @@ in
     # TODO can't make general firefox profiles, the desktop file would be made like this tho:
 
     # makeDesktopItem https://discourse.nixos.org/t/proper-icon-when-using-makedesktopitem/32026
-    /* environment.systemPackages = with pkgs; 
+    /*
+      environment.systemPackages = with pkgs;
       let
         profile = ./i2p;
         i2ptest = makeDesktopItem {
@@ -33,8 +39,7 @@ in
       in
       [
         i2ptest
-      ]; */
-    
+      ];
+    */
   };
 }
-

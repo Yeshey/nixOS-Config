@@ -1,4 +1,11 @@
-{ inputs, outputs, config, lib, pkgs, ... }:
+{
+  inputs,
+  outputs,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.mySystem;
@@ -56,12 +63,15 @@ in
   options.mySystem = with lib; {
     nix.substituters = mkOption {
       type = types.listOf types.str;
-      example = ["cachethalheimio" "cachenixosorg"];
+      example = [
+        "cachethalheimio"
+        "cachenixosorg"
+      ];
       # by default use all
       default = mapAttrsToList (name: value: name) substituters; # mapAttrsToList: https://ryantm.github.io/nixpkgs/functions/library/attrsets/#function-library-lib.attrsets.mapAttrsToList
     };
     host = mkOption {
-      type = types.str; 
+      type = types.str;
       description = "Name of the machine, usually what was used in --flake .#hostname. Used for setting the network host name";
       # default = 
       # default = builtins.attrValues substituters; # TODO, make it loop throught the list # by default use all
@@ -93,13 +103,14 @@ in
     nixpkgs.config.allowUnfree = true;
     nix = {
       package = pkgs.nix;
-      extraOptions = 
-      # for compression to work with btrfs (https://github.com/NixOS/nix/issues/3550) ...?
-      ''
-        preallocate-contents = false 
-      '' + '' 
-         experimental-features = nix-command flakes
-      '';
+      extraOptions =
+        # for compression to work with btrfs (https://github.com/NixOS/nix/issues/3550) ...?
+        ''
+          preallocate-contents = false 
+        ''
+        + ''
+          experimental-features = nix-command flakes
+        '';
 
       gc = {
         automatic = lib.mkDefault true;
@@ -107,7 +118,11 @@ in
         dates = lib.mkDefault "weekly";
       };
       settings = {
-        trusted-users = [ "root" "${config.mySystem.user}" "@wheel" ]; # TODO remove (check the original guys config)
+        trusted-users = [
+          "root"
+          "${config.mySystem.user}"
+          "@wheel"
+        ]; # TODO remove (check the original guys config)
         auto-optimise-store = lib.mkDefault true;
         substituters = map (x: substituters.${x}.url) cfg.nix.substituters;
         trusted-public-keys = map (x: substituters.${x}.key) cfg.nix.substituters;
@@ -115,18 +130,17 @@ in
     };
     # This will add each flake input as a registry
     # To make nix3 commands consistent with your flake
-    nix.registry = (lib.mapAttrs (_: flake: {inherit flake;})) ((lib.filterAttrs (_: lib.isType "flake")) inputs);
+    nix.registry = (lib.mapAttrs (_: flake: { inherit flake; })) (
+      (lib.filterAttrs (_: lib.isType "flake")) inputs
+    );
 
     # This will additionally add your inputs to the system's legacy channels
     # Making legacy nix commands consistent as well, awesome!
-    nix.nixPath = ["/etc/nix/path"];
-    environment.etc =
-      lib.mapAttrs'
-      (name: value: {
-        name = "nix/path/${name}";
-        value.source = value.flake;
-      })
-      config.nix.registry;
+    nix.nixPath = [ "/etc/nix/path" ];
+    environment.etc = lib.mapAttrs' (name: value: {
+      name = "nix/path/${name}";
+      value.source = value.flake;
+    }) config.nix.registry;
 
     services.openssh = with lib; {
       enable = true;
@@ -148,13 +162,16 @@ in
 
     networking.networkmanager.enable = lib.mkDefault true;
     networking.resolvconf.dnsExtensionMechanism = lib.mkDefault false; # fixes internet connectivity problems with some sites (https://discourse.nixos.org/t/domain-name-resolve-problem/885/2)
-    networking.nameservers = [ "1.1.1.1" "8.8.8.8" "9.9.9.9" ]; # (https://unix.stackexchange.com/questions/510940/how-can-i-set-a-custom-dns-server-within-nixos)
+    networking.nameservers = [
+      "1.1.1.1"
+      "8.8.8.8"
+      "9.9.9.9"
+    ]; # (https://unix.stackexchange.com/questions/510940/how-can-i-set-a-custom-dns-server-within-nixos)
     # needed to access coimbra-dev raspberrypi from localnetwork
     systemd.network.wait-online.enable = lib.mkDefault false;
     networking.useNetworkd = lib.mkDefault true;
     networking = {
       hostName = "nixos-${cfg.host}";
     };
-
   };
 }

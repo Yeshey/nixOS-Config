@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.myHome.homeApps.general;
@@ -47,7 +52,7 @@ in
         #cmake
         #ninja
         #pkg-config
-        
+
         #discord
         exodus
       ];

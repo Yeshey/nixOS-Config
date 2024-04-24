@@ -1,24 +1,23 @@
-{ inputs, outputs, config, lib, pkgs, ... }:
+{
+  inputs,
+  outputs,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.mySystem.zsh;
 in
 {
   options.mySystem.zsh = {
-      enable = lib.mkEnableOption "zsh";
+    enable = lib.mkEnableOption "zsh";
   };
 
   config = lib.mkIf cfg.enable {
     environment = {
-      systemPackages = with pkgs; [
-        (
-          nerdfonts.override {
-            fonts = [
-              "FiraCode"
-            ];
-          }
-        )
-      ];
+      systemPackages = with pkgs; [ (nerdfonts.override { fonts = [ "FiraCode" ]; }) ];
     };
     #programs.starship = {
     #  enable = true;
@@ -32,10 +31,10 @@ in
       enableCompletion = lib.mkDefault true;
       histSize = lib.mkDefault 100000;
       shellAliases = {
-        l="ls -l";
-        la="ls -a";
-        lla="ls -la";
-        lt="ls --tree";
+        l = "ls -l";
+        la = "ls -a";
+        lla = "ls -la";
+        lt = "ls --tree";
 
         #ll = lib.mkOverride 995 "eza -l --icons=auto";
         #la = lib.mkDefault "eza -la --icons=auto";
@@ -58,12 +57,14 @@ in
       '';
       ohMyZsh = {
         enable = true;
-        plugins = [ "git" 
-                    "colored-man-pages" 
-                    "alias-finder" 
-                    "command-not-found" 
-                    "urltools" 
-                    "bgnotify"];
+        plugins = [
+          "git"
+          "colored-man-pages"
+          "alias-finder"
+          "command-not-found"
+          "urltools"
+          "bgnotify"
+        ];
         theme = "agnoster"; # robbyrussell # agnoster # frisk
       };
     };
@@ -73,6 +74,5 @@ in
       pathsToLink = [ "/share/zsh" ];
     };
     users.defaultUserShell = lib.mkOverride 995 pkgs.zsh;
-
   };
 }

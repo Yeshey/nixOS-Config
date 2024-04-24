@@ -1,9 +1,14 @@
-{ inputs, pkgs, lib, ... }:
+{
+  inputs,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   inherit (inputs.nix-colors) colorSchemes;
 in
-{ 
+{
   myHome = {
     # All the options
     user = "yeshey";
@@ -50,17 +55,19 @@ in
       starshipTheme = "pinage404"; # fredericrous # pinage404
     };
     direnv.enable = true;
-    wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; #johnKearneyCityscapePoster #stellarCollisionByKuldarleement; #nierAutomataWallpaper;
+    wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; # johnKearneyCityscapePoster #stellarCollisionByKuldarleement; #nierAutomataWallpaper;
     colorScheme = {
       # theme = colorSchemes.rose-pine-moon;
-      setBasedOnWallpaper = { # only takes effect if theme is not set
+      setBasedOnWallpaper = {
+        # only takes effect if theme is not set
         enable = true;
         variant = "dark"; # or light
       };
     };
   };
 
-  home = { # Specific packages
+  home = {
+    # Specific packages
     packages = with pkgs; [
       psensor
 
@@ -77,7 +84,8 @@ in
     ];
   };
 
-  xdg = { # for favourits in nautilus
+  xdg = {
+    # for favourits in nautilus
     enable = lib.mkDefault true;
     userDirs = {
       enable = lib.mkDefault true;
@@ -92,5 +100,4 @@ in
       # publicShare = lib.mkDefault "${config.home.homeDirectory}/Publiczny";
     };
   };
-
 }

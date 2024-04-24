@@ -5,7 +5,12 @@
 
 # https://gist.github.com/WhittlesJr/a6de35b995e8c14b9093c55ba41b697c
 
-{config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 let
@@ -30,41 +35,54 @@ in
     libvirtUsers = mkOption {
       description = "Extra users to add to libvirtd (root is already included)";
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
     };
   };
 
   ###### implementation
-  config = (mkIf cfg.enable {
+  config = (
+    mkIf cfg.enable {
 
-    boot.kernelParams = [ "${cfg.cpuType}_iommu=on" "kvm.ignore_msrs=1" "iommu=pt"];
+      boot.kernelParams = [
+        "${cfg.cpuType}_iommu=on"
+        "kvm.ignore_msrs=1"
+        "iommu=pt"
+      ];
 
-    # These modules are required for PCI passthrough, and must come before early modesetting stuff
-    boot.kernelModules = [ "vfio" "vfio_iommu_type1" "vfio_pci" "vfio_virqfd" ];
+      # These modules are required for PCI passthrough, and must come before early modesetting stuff
+      boot.kernelModules = [
+        "vfio"
+        "vfio_iommu_type1"
+        "vfio_pci"
+        "vfio_virqfd"
+      ];
 
-    boot.extraModprobeConfig ="options vfio-pci ids=${cfg.pciIDs}";
+      boot.extraModprobeConfig = "options vfio-pci ids=${cfg.pciIDs}";
 
-    environment.systemPackages = with pkgs; [
-      virt-manager
-      qemu
-      OVMF
-      pciutils
-    ];
+      environment.systemPackages = with pkgs; [
+        virt-manager
+        qemu
+        OVMF
+        pciutils
+      ];
 
-    # ===== My added conf =====
-    boot.blacklistedKernelModules = [ "nvidia" "nouveau" ];
-    # ===== My added conf =====
+      # ===== My added conf =====
+      boot.blacklistedKernelModules = [
+        "nvidia"
+        "nouveau"
+      ];
+      # ===== My added conf =====
 
-    virtualisation.libvirtd.enable = true;
-    virtualisation.libvirtd.qemu.package = pkgs.qemu_kvm;
+      virtualisation.libvirtd.enable = true;
+      virtualisation.libvirtd.qemu.package = pkgs.qemu_kvm;
 
-    users.groups.libvirtd.members = [ "root" ] ++ cfg.libvirtUsers;
+      users.groups.libvirtd.members = [ "root" ] ++ cfg.libvirtUsers;
 
-    virtualisation.libvirtd.qemu.verbatimConfig = ''
-      nvram = [
-      "${pkgs.OVMF}/FV/OVMF.fd:${pkgs.OVMF}/FV/OVMF_VARS.fd"
-      ]
-    '';
-  });
-
+      virtualisation.libvirtd.qemu.verbatimConfig = ''
+        nvram = [
+        "${pkgs.OVMF}/FV/OVMF.fd:${pkgs.OVMF}/FV/OVMF_VARS.fd"
+        ]
+      '';
+    }
+  );
 }

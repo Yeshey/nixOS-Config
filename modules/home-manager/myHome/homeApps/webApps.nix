@@ -19,7 +19,8 @@ in
 
     # makeDesktopItem https://discourse.nixos.org/t/proper-icon-when-using-makedesktopitem/32026
     # Syncthing desktop shortcut
-    home.packages = with pkgs; 
+    home.packages =
+      with pkgs;
       let
         syncthingWeb = pkgs.makeDesktopItem {
           name = "MS WhiteBoard";
@@ -27,14 +28,20 @@ in
           genericName = "MS WhiteBoard Web App";
           exec = ''xdg-open "https://whiteboard.office.com"'';
           icon = "firefox";
-          categories = [ "GTK" "X-WebApps" ];
-          mimeTypes = [ "text/html" "text/xml" "application/xhtml_xml" ];
+          categories = [
+            "GTK"
+            "X-WebApps"
+          ];
+          mimeTypes = [
+            "text/html"
+            "text/xml"
+            "application/xhtml_xml"
+          ];
         };
       in
       [
         xdg-utils
         syncthingWeb
       ];
-
   };
 }

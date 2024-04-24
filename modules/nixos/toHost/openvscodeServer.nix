@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.toHost.openvscodeServer;
@@ -8,7 +13,7 @@ in
     enable = (lib.mkEnableOption "openvscodeServer");
   };
 
-    config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     # Why does this not work here???
     #nixpkgs.config = {
@@ -30,7 +35,9 @@ in
       withoutConnectionToken = true; # So you don't need to grab the token that it generates here
     };
 
-    networking.firewall.allowedTCPPorts = [ 80 443 ];
-
+    networking.firewall.allowedTCPPorts = [
+      80
+      443
+    ];
   };
 }

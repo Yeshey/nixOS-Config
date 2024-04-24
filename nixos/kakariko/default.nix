@@ -7,51 +7,47 @@
   ...
 }:
 
-let 
-    # user = "yeshey";
-    dataStoragePath = "/mnt/ntfsMicroSD-DataDisk";
+let
+  # user = "yeshey";
+  dataStoragePath = "/mnt/ntfsMicroSD-DataDisk";
 
-    # TODO find a better way? see if its still needed
-    # Wrapper to run steam with env variable GDK_SCALE=2 to scale correctly
-    # nixOS wiki on wrappers: https://nixos.wiki/wiki/Nix_Cookbook#Wrapping_packages
-    # Reddit: https://www.reddit.com/r/NixOS/comments/qha9t5/comment/hid3w3z/
-    steam-scalled = pkgs.runCommand "steam" {
-      buildInputs = [ pkgs.makeWrapper ];
-    } ''
-      mkdir $out
-      # Link every top-level folder from pkgs.steam to our new target
-      ln -s ${pkgs.steam}/* $out
-      # Except the bin folder
-      rm $out/bin
-      mkdir $out/bin
-      # We create the bin folder ourselves and link every binary in it
-      ln -s ${pkgs.steam}/bin/* $out/bin
-      # Except the steam binary
-      rm $out/bin/steam
-      # Because we create this ourself, by creating a wrapper
-      makeWrapper ${pkgs.steam}/bin/steam $out/bin/steam \
-        --set GDK_SCALE 2 \
-        --add-flags "-t"
-    '';
+  # TODO find a better way? see if its still needed
+  # Wrapper to run steam with env variable GDK_SCALE=2 to scale correctly
+  # nixOS wiki on wrappers: https://nixos.wiki/wiki/Nix_Cookbook#Wrapping_packages
+  # Reddit: https://www.reddit.com/r/NixOS/comments/qha9t5/comment/hid3w3z/
+  steam-scalled = pkgs.runCommand "steam" { buildInputs = [ pkgs.makeWrapper ]; } ''
+    mkdir $out
+    # Link every top-level folder from pkgs.steam to our new target
+    ln -s ${pkgs.steam}/* $out
+    # Except the bin folder
+    rm $out/bin
+    mkdir $out/bin
+    # We create the bin folder ourselves and link every binary in it
+    ln -s ${pkgs.steam}/bin/* $out/bin
+    # Except the steam binary
+    rm $out/bin/steam
+    # Because we create this ourself, by creating a wrapper
+    makeWrapper ${pkgs.steam}/bin/steam $out/bin/steam \
+      --set GDK_SCALE 2 \
+      --add-flags "-t"
+  '';
 
-    stremio-scalled = pkgs.runCommand "stremio" {
-      buildInputs = [ pkgs.makeWrapper ];
-    } ''
-      mkdir $out
-      # Link every top-level folder from pkgs.stremio to our new target
-      ln -s ${pkgs.stremio}/* $out
-      # Except the bin folder
-      rm $out/bin
-      mkdir $out/bin
-      # We create the bin folder ourselves and link every binary in it
-      ln -s ${pkgs.stremio}/bin/* $out/bin
-      # Except the stremio binary
-      rm $out/bin/stremio
-      # Because we create this ourself, by creating a wrapper
-      makeWrapper ${pkgs.stremio}/bin/stremio $out/bin/stremio \
-        --set QT_AUTO_SCREEN_SCALE_FACTOR 1 \
-        --add-flags "-t"
-    '';
+  stremio-scalled = pkgs.runCommand "stremio" { buildInputs = [ pkgs.makeWrapper ]; } ''
+    mkdir $out
+    # Link every top-level folder from pkgs.stremio to our new target
+    ln -s ${pkgs.stremio}/* $out
+    # Except the bin folder
+    rm $out/bin
+    mkdir $out/bin
+    # We create the bin folder ourselves and link every binary in it
+    ln -s ${pkgs.stremio}/bin/* $out/bin
+    # Except the stremio binary
+    rm $out/bin/stremio
+    # Because we create this ourself, by creating a wrapper
+    makeWrapper ${pkgs.stremio}/bin/stremio $out/bin/stremio \
+      --set QT_AUTO_SCREEN_SCALE_FACTOR 1 \
+      --add-flags "-t"
+  '';
 in
 {
   imports = [
@@ -93,7 +89,7 @@ in
     zsh.enable = true;
     gaming.enable = true;
     vmHost = true;
-    dockerHost = true; 
+    dockerHost = true;
     host = "kakariko";
     user = "yeshey"; # TODO make this into an option where you can do user."yeshey".home-manager.enable ) true etc.
     home-manager = {
@@ -111,41 +107,41 @@ in
       };
       nvidia.enable = false;
     };
-    autoUpgrades.enable = true;    
+    autoUpgrades.enable = true;
     flatpaks.enable = true;
     i2p.enable = true;
     syncthing = {
       enable = true;
       dataStoragePath = "/mnt/ntfsMicroSD-DataDisk";
     };
-    
+
     androidDevelopment.enable = false;
   };
 
   # Ignore Patterns Syncthing
-  system.activationScripts = let
-    ignorePattern = path: patterns:
-        ''
+  system.activationScripts =
+    let
+      ignorePattern = path: patterns: ''
         mkdir -p ${path}
         echo "${patterns}" > ${path}/.stignore
-        '';
-    in { 
-    syncthingIgnorePatterns.text =
-      ''
+      '';
+    in
+    {
+      syncthingIgnorePatterns.text = ''
         # MinecraftPrismLauncher
         ${ignorePattern "/home/yeshey/.local/share/PrismLauncher/instances" "
           *
         "}
       '';
-  };
+    };
 
   # swap in ext4:
-  swapDevices = [ 
+  swapDevices = [
     {
       device = "/swapfile";
       priority = 0; # Higher numbers indicate higher priority.
-      size = 10*1024;
-      options = [ "nofail"];
+      size = 10 * 1024;
+      options = [ "nofail" ];
     }
   ];
 

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.myHome.homeApps;
@@ -35,5 +40,4 @@ in
     myHome.homeApps.cli.enable = lib.mkDefault true;
     myHome.homeApps.webApps.enable = lib.mkDefault true;
   };
-  
 }

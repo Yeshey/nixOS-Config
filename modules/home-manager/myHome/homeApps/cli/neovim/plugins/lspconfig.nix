@@ -31,10 +31,16 @@ let
       };
     };
     cssls = { };
-    eslint = { settings.format = false; };
-    jsonls = { init_options.provideFormatter = false; };
+    eslint = {
+      settings.format = false;
+    };
+    jsonls = {
+      init_options.provideFormatter = false;
+    };
     yamlls = { };
-    html = { init_options.provideFormatter = false; };
+    html = {
+      init_options.provideFormatter = false;
+    };
     volar.init_options.typescript.tsdk = "${pkgs.nodePackages.typescript}/lib/node_modules/typescript/lib";
     elixirls.cmd = [ "elixir-ls" ];
     lua_ls = {
@@ -67,7 +73,11 @@ let
             {
               lintCommand = "markdownlint --stdin";
               lintStdin = true;
-              lintFormats = [ "%f:%l %m" "%f:%l:%c %m" "%f: %l: %m" ];
+              lintFormats = [
+                "%f:%l %m"
+                "%f:%l:%c %m"
+                "%f: %l: %m"
+              ];
             }
             prettier
           ];
@@ -75,7 +85,9 @@ let
       in
       {
         init_options.documentFormatting = true;
-        settings = { inherit languages; };
+        settings = {
+          inherit languages;
+        };
         filetypes = builtins.attrNames languages;
       };
     efm_python = {
@@ -98,29 +110,33 @@ let
         ];
       };
       filetypes = [ "python" ];
-      root_dir = [ "pyproject.toml" "setup.cfg" "seput.py" ".git" ];
+      root_dir = [
+        "pyproject.toml"
+        "setup.cfg"
+        "seput.py"
+        ".git"
+      ];
     };
   };
 in
 {
   plugin = pkgs.nvimPlugins.nvim-lspconfig;
-  preConfig = /* lua */ ''
-    dofile("${./lspconfig.lua}").setup_servers(vim.fn.json_decode([[${builtins.toJSON lsp_servers}]]))
-  '';
-  dependencies = [
-    pkgs.nvimPlugins.schemastore
-  ];
+  preConfig = # lua
+    ''
+      dofile("${./lspconfig.lua}").setup_servers(vim.fn.json_decode([[${builtins.toJSON lsp_servers}]]))
+    '';
+  dependencies = [ pkgs.nvimPlugins.schemastore ];
   extraPackages = with pkgs; [
-    (python3.withPackages (ps: with ps; [
-      setuptools # Required by pylama for some reason
-      pylama
-      black
-      isort
-      yamllint
-    ]))
-    (nodePackages.pyright.override {
-      inherit (unstable.nodePackages.pyright) src version name;
-    })
+    (python3.withPackages (
+      ps: with ps; [
+        setuptools # Required by pylama for some reason
+        pylama
+        black
+        isort
+        yamllint
+      ]
+    ))
+    (nodePackages.pyright.override { inherit (unstable.nodePackages.pyright) src version name; })
     unstable.elixir-ls
     unstable.lua-language-server
     unstable.nil

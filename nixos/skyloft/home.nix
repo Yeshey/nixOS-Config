@@ -1,11 +1,17 @@
-{ inputs, pkgs, lib, dataStoragePath, ... }:
+{
+  inputs,
+  pkgs,
+  lib,
+  dataStoragePath,
+  ...
+}:
 
 let
   #shortenedPath = lib.strings.removePrefix "~/" inputs.dataStoragePath; # so "~/Documents" becomes "Documents" # TODO, what if the path didn't start with ~/ ??
-  dataStoragePath = "/home/yeshey"; #TODO can u use ~?
+  dataStoragePath = "/home/yeshey"; # TODO can u use ~?
   shortenedPath = lib.strings.removePrefix "~/" dataStoragePath; # TODO what???
-  # TODO how to inherit datastoragepath from default.nix? inherit dataStoragePath;?
 in
+# TODO how to inherit datastoragepath from default.nix? inherit dataStoragePath;?
 {
   imports = [ ];
 
@@ -53,7 +59,7 @@ in
     direnv.enable = true;
     #wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; #johnKearneyCityscapePoster #stellarCollisionByKuldarleement; #nierAutomataWallpaper;
     #colorScheme = {
-      # theme = colorSchemes.rose-pine-moon;
+    # theme = colorSchemes.rose-pine-moon;
     #  setBasedOnWallpaper = { # only takes effect if theme is not set
     #    enable = true;
     #    variant = "dark"; # or light
@@ -61,15 +67,15 @@ in
     #};
   };
 
-  home = { # Specific packages # TODO check if you need these
+  home = {
+    # Specific packages # TODO check if you need these
     packages = with pkgs; [
       # texlive.combined.scheme-full
       inkscape
-      
+
       # osu-lazer
       openvscode-server
       gcc
     ];
   };
-
 }

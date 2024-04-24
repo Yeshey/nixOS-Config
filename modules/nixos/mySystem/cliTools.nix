@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.mySystem.cliTools;
@@ -15,7 +20,7 @@ in
         lg = "lazygit";
       };
     };
-    environment.systemPackages = with pkgs; [ 
+    environment.systemPackages = with pkgs; [
       dnsutils
       pciutils
       curl
@@ -26,6 +31,5 @@ in
       tree
       unzip
     ];
-
   };
 }

@@ -4,9 +4,11 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.myHome.direnv;
-in {
+in
+{
   options.myHome.direnv = with lib; {
     enable = mkEnableOption "direnv";
   };
@@ -18,6 +20,5 @@ in {
       enableZshIntegration = lib.mkDefault true; # TODO check if zsh enabled?
       nix-direnv.enable = lib.mkDefault true;
     };
-
   };
 }

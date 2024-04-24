@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.mySystem.hardware.thermald;
@@ -21,16 +26,16 @@ in
     services.thermald = {
       debug = false;
       enable = true;
-      configFile = cfg.thermalConf; #(https://github.com/linux-surface/linux-surface/blob/master/contrib/thermald/thermal-conf.xml)
+      configFile = cfg.thermalConf; # (https://github.com/linux-surface/linux-surface/blob/master/contrib/thermald/thermal-conf.xml)
     };
-    systemd.services.thermald.serviceConfig.ExecStart = let # running with --adaptive ignores the config file. Issue raised: https://github.com/NixOS/nixpkgs/issues/201402
-      cfgt = config.services.thermald;
-        in lib.mkForce ''
-            ${cfgt.package}/sbin/thermald \
-              --no-daemon \
-              --config-file ${cfgt.configFile} \
-          '';
-
+    systemd.services.thermald.serviceConfig.ExecStart =
+      let # running with --adaptive ignores the config file. Issue raised: https://github.com/NixOS/nixpkgs/issues/201402
+        cfgt = config.services.thermald;
+      in
+      lib.mkForce ''
+        ${cfgt.package}/sbin/thermald \
+          --no-daemon \
+          --config-file ${cfgt.configFile} \
+      '';
   };
-  
 }

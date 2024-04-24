@@ -1,13 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   wallpaper = config.myHome.wallpaper;
   cfg = config.myHome.gnome;
 in
 {
-  imports = [ 
-    ./dconf.nix 
-  ];
+  imports = [ ./dconf.nix ];
   options.myHome.gnome = with lib; {
     enable = mkEnableOption "gnome";
   };
@@ -21,7 +24,7 @@ in
       gnomeExtensions.tray-icons-reloaded
     ];
     dconf.settings = {
-      "org/gnome/desktop/background" = lib.mkIf ( wallpaper != null ) {
+      "org/gnome/desktop/background" = lib.mkIf (wallpaper != null) {
         picture-uri = "file://${wallpaper}";
         picture-uri-dark = "file://${wallpaper}";
       };

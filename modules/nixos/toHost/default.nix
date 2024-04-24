@@ -1,4 +1,11 @@
-{ inputs, outputs, config, lib, pkgs, ... }:
+{
+  inputs,
+  outputs,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.toHost;
@@ -16,7 +23,7 @@ in
   ];
 
   options.toHost = with lib; {
-    
+
   };
 
   config = lib.mkIf cfg.enable {

@@ -1,10 +1,11 @@
-{inputs, outputs, ...}: {
+{ inputs, outputs, ... }:
+{
   # call the overlays
   neovimPluginsss = inputs.neovim-plugins.overlays.default;
   nur = inputs.nurpkgs.overlay; # nur packages available at pkgs.nur
 
   # This one brings our custom packages from the 'pkgs' directory
-  additions = final: _prev: import ../pkgs {pkgs = final;};
+  additions = final: _prev: import ../pkgs { pkgs = final; };
 
   # This one contains whatever you want to overlay
   # You can change versions, add patches, set compilation flags, anything really.
@@ -23,5 +24,4 @@
       config.allowUnfree = true;
     };
   };
-
 }

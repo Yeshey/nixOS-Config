@@ -1,11 +1,18 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.myHome.homeApps.cli.general;
 in
 {
   options.myHome.homeApps.cli.general = {
-    enable = (lib.mkEnableOption "general") // { default = true; };
+    enable = (lib.mkEnableOption "general") // {
+      default = true;
+    };
   };
 
   config = lib.mkIf cfg.enable {
