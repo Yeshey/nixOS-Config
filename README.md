@@ -1,12 +1,25 @@
 # nix & nixOS Configuration / Linux Config
+The spiciest config on the market 😳🥵💦
+
 My reproducible nix Configuration & other configuration files.  
 More Documentation for myself about nixOS in my [TechNotes Repo](https://github.com/Yeshey/TechNotes).  
 It has my personal configuration for two devices, my Lenovo Legion laptop and my MS Surface Pro 7.
 
 ## Credits
 
-- Highly Inspiered by [Matthias Benaets](https://github.com/MatthiasBenaets) [configuration](https://github.com/MatthiasBenaets/nixos-config) and his [video](https://www.youtube.com/watch?v=AGVXJ-TIv3Y)
+- Initially Inspiered by [Matthias Benaets](https://github.com/MatthiasBenaets) [configuration](https://github.com/MatthiasBenaets/nixos-config) and his [video](https://www.youtube.com/watch?v=AGVXJ-TIv3Y);
+- Derived from [LongerHV's](https://github.com/LongerHV) [nixos-configuration](https://github.com/LongerHV/nixos-configuration/tree/master);
+- Based on [Misterio77's](https://github.com/Misterio77) [nix-starter-configs](https://github.com/Misterio77/nix-starter-configs);
+- Inspiered by [pinage404](https://gitlab.com/pinage404) [dotfiles](https://gitlab.com/pinage404/dotfiles)
 
+Do something like this
+Special Thanks
+wlroots - For their amazing library
+tinywl - For showing how 2 do stuff
+Sway - For showing how 2 do stuff the overkill way
+Vivarium - For showing how 2 do stuff the simple way
+dwl - For showing how 2 do stuff the hacky way
+Wayfire - For showing how 2 do some graphics stuff
 ## Notes
 
 - Check the [languages-frameworks](https://github.com/NixOS/nixpkgs/tree/master/doc/languages-frameworks) if you ever want to do a project with nix in one of these programming languages
@@ -44,7 +57,7 @@ It has my personal configuration for two devices, my Lenovo Legion laptop and my
 - Make it so the surface doesn't die when you suspend it, or find an alternative to suspending it.
 
 - figure out how to add functions aliases to zsh
-  - Make it so upgrade and update tries three times before giving up
+  - Make it so upgrade and update tries three times before giving up?
 
 ## Notes
 
