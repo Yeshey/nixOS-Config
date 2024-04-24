@@ -17,6 +17,8 @@ in
 
   config = lib.mkIf cfg.enable {
 
+    myHome.homeApps.kitty.enable = true; # activate the kitty terminal from config
+
     dconf.settings = {
       "org/gnome/desktop/interface" = {
         color-scheme = "prefer-dark";
