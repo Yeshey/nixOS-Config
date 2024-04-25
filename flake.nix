@@ -70,6 +70,7 @@
       plasma-manager,
       nurpkgs,
       hyprland-plugins,
+      nixos-nvidia-vgpu,
       ...
     }@inputs:
     let

@@ -1,8 +1,3 @@
-# put this file in /etc/nixos/
-# and add 
-#   ./pci-passthrough.nix
-# to /etc/nixos/configuration.nix in `imports`
-
 # https://gist.github.com/WhittlesJr/a6de35b995e8c14b9093c55ba41b697c
 
 {
@@ -71,6 +66,9 @@ in
         "nvidia"
         "nouveau"
       ];
+      # also need prime.offload for it to work
+      hardware.nvidia.prime.offload.enable = lib.mkForce true;
+      hardware.nvidia.prime.sync.enable = lib.mkForce false;
       # ===== My added conf =====
 
       virtualisation.libvirtd.enable = true;
