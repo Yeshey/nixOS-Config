@@ -58,19 +58,20 @@ in
       # nvidiaPersistenced = true; # It ensures all GPUs stay awake even during headless mode.
       powerManagement.enable = lib.mkDefault true; # Experimental power management through systemd
       prime = {
-        sync.enable = lib.mkDefault true; # gpu always # https://github.com/NixOS/nixpkgs/issues/199024#issuecomment-1300650034 # does not work with GPU passthrough
-        #offload.enable = true; # gpu on demand # works with GPU passthrough
+        # sync.enable = lib.mkDefault true; # gpu always # https://github.com/NixOS/nixpkgs/issues/199024#issuecomment-1300650034 # does not work with GPU passthrough
+        offload.enable = true; # gpu on demand # works with GPU passthrough
         intelBusId = lib.mkDefault cfg.intelBusId; # "PCI:0:2:0";
         nvidiaBusId = lib.mkDefault cfg.nvidiaBusId; # "PCI:1:0:0";
       };
     };
     # required for external monitor usage on nvidia offload (or not?)
+    /*
     specialisation = {
       external-display.configuration = {
         system.nixos.tags = [ "external-display" ];
         hardware.nvidia.prime.offload.enable = lib.mkForce false;
         hardware.nvidia.powerManagement.enable = lib.mkForce false;
       };
-    };
+    }; */
   };
 }
