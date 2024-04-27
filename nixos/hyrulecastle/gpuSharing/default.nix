@@ -13,7 +13,7 @@ in
 {
   imports = [
     ./pci-passthrough.nix
-    #inputs.nixos-nvidia-vgpu
+    inputs.nixos-nvidia-vgpu.nixosModules.nvidia-vgpu
   ];
   
   options.mySystem.gpuSharing = {
@@ -40,13 +40,15 @@ in
   };
 
   config = {
-
+/*
     assertions = [
       {
         assertion = !(cfg.pciPassthrough.enable && cfg.nvidiaVgpuSharing.enable);
         message = "You cannot use both pciPassthrough and nvidiaVgpuSharing methods to share GPU power, pick one";
       }
     ];
+
+    */
 
     # https://gist.github.com/WhittlesJr/a6de35b995e8c14b9093c55ba41b697c
     # Enable the module with pciIDs = ""; and then run one of these commands to find the pciIDs:
@@ -61,16 +63,24 @@ in
       libvirtUsers = cfg.pciPassthrough.libvirtUsers;
     };
 
-    boot.kernelPackages = lib.mkIf cfg.nvidiaVgpuSharing.enable pkgs.linuxPackages_5_15; # needed for this linuxPackages_5_19
+    environment.systemPackages = with pkgs; [
+      looking-glass-client
+    ];
+
+    # This doesnt work, the network is being managed by networkmanager, you can make changes in the gui or figure out how to manage that declaritivley
+    # networking.interfaces.eth0.ipv4.addresses = [ {
+    #   address = "192.168.1.2";
+    #   prefixLength = 24;
+    # } ];
+
     hardware.nvidia = lib.mkIf cfg.nvidiaVgpuSharing.enable {
       vgpu = {
         enable = true; # Install NVIDIA KVM vGPU + GRID driver
-        unlock.enable = true; # Unlock vGPU functionality on consumer cards using DualCoder/vgpu_unlock project.
         fastapi-dls = {
           enable = true;
-          local_ipv4 = "localhost"; #"192.168.1.109";
-          timezone = "Europe/Lisbon";
-          #docker-directory = /mnt/dockers;
+          #local_ipv4 = "192.168.1.109"; # "localhost"; #"192.168.1.109";
+          #timezone = "Europe/Lisbon";
+          #docker-directory = "/mnt/dockers";
         };
       };
     };

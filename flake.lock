@@ -483,11 +483,12 @@
     },
     "nixos-nvidia-vgpu": {
       "inputs": {
-        "frida": "frida"
+        "frida": "frida",
+        "systems": "systems_2"
       },
       "locked": {
         "lastModified": 0,
-        "narHash": "sha256-wrq/HWtE470UMLNPvRVMPZfW/NqpbBBFHdnNwMROIrs=",
+        "narHash": "sha256-/TVa+9yTw/h9TbvuSPiaS+K9F0C5yl1EJIxaXdkByfk=",
         "path": "/mnt/DataDisk/PersonalFiles/2023/Projects/Programming/nixos-nvidia-vgpu_nixOS/",
         "type": "path"
       },
@@ -722,6 +723,20 @@
         "owner": "nix-systems",
         "repo": "default-linux",
         "type": "github"
+      }
+    },
+    "systems_2": {
+      "locked": {
+        "lastModified": 1681028828,
+        "narHash": "sha256-Vy1rq5AaRuLzOxct8nz4T6wlgyUR7zLU309k9mBC768=",
+        "owner": "nix-systems",
+        "repo": "default",
+        "rev": "da67096a3b9bf56a91d16901293e51ba5b49a27e",
+        "type": "github"
+      },
+      "original": {
+        "id": "systems",
+        "type": "indirect"
       }
     },
     "telescope": {
