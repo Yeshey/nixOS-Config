@@ -128,24 +128,6 @@
         "type": "github"
       }
     },
-    "frida": {
-      "inputs": {
-        "nixpkgs": "nixpkgs"
-      },
-      "locked": {
-        "lastModified": 1686756088,
-        "narHash": "sha256-LmWHqJbcYlYLotc/DZsXXjlEGZHF5+IEudFNEjz1vE8=",
-        "owner": "Yeshey",
-        "repo": "frida-nix",
-        "rev": "935227e6525b493adc1bbf58d2869513bf2f5792",
-        "type": "github"
-      },
-      "original": {
-        "owner": "Yeshey",
-        "repo": "frida-nix",
-        "type": "github"
-      }
-    },
     "gitsigns": {
       "flake": false,
       "locked": {
@@ -483,12 +465,14 @@
     },
     "nixos-nvidia-vgpu": {
       "inputs": {
-        "frida": "frida",
+        "nixpkgs": [
+          "nixpkgs"
+        ],
         "systems": "systems_2"
       },
       "locked": {
         "lastModified": 0,
-        "narHash": "sha256-/TVa+9yTw/h9TbvuSPiaS+K9F0C5yl1EJIxaXdkByfk=",
+        "narHash": "sha256-AbjxuXPgIjHrjIlNVqujbkQVotUTN/XD45x2/1b4RFA=",
         "path": "/mnt/DataDisk/PersonalFiles/2023/Projects/Programming/nixos-nvidia-vgpu_nixOS/",
         "type": "path"
       },
@@ -499,16 +483,16 @@
     },
     "nixpkgs": {
       "locked": {
-        "lastModified": 1704290814,
-        "narHash": "sha256-LWvKHp7kGxk/GEtlrGYV68qIvPHkU9iToomNFGagixU=",
-        "owner": "nixos",
+        "lastModified": 1712168706,
+        "narHash": "sha256-XP24tOobf6GGElMd0ux90FEBalUtw6NkBSVh/RlA6ik=",
+        "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "70bdadeb94ffc8806c0570eb5c2695ad29f0e421",
+        "rev": "1487bdea619e4a7a53a4590c475deabb5a9d1bfb",
         "type": "github"
       },
       "original": {
-        "owner": "nixos",
-        "ref": "nixos-23.05",
+        "owner": "NixOS",
+        "ref": "nixos-23.11",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -540,22 +524,6 @@
       "original": {
         "owner": "NixOS",
         "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_2": {
-      "locked": {
-        "lastModified": 1712168706,
-        "narHash": "sha256-XP24tOobf6GGElMd0ux90FEBalUtw6NkBSVh/RlA6ik=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "1487bdea619e4a7a53a4590c475deabb5a9d1bfb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-23.11",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -688,7 +656,7 @@
         "nix-colors": "nix-colors",
         "nixos-hardware": "nixos-hardware",
         "nixos-nvidia-vgpu": "nixos-nvidia-vgpu",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nurpkgs": "nurpkgs",
         "plasma-manager": "plasma-manager"

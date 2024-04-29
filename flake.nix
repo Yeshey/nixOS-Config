@@ -38,6 +38,7 @@
       type = "path";
       #path = "/mnt/DataDisk/Downloads/nixos-nvidia-vgpu/";
       path = "/mnt/DataDisk/PersonalFiles/2023/Projects/Programming/nixos-nvidia-vgpu_nixOS/";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     /*

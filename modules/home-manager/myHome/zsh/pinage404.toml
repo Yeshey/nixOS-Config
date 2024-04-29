@@ -73,7 +73,7 @@ format = "\b\b[ \\($state( $progress_current/$progress_total)\\)](fg:white bg:$s
 [git_status]
 style = "#f05133"
 format = "($conflicted$staged$modified$renamed$deleted$untracked$stashed$ahead_behind\b )"
-conflicted = "[ ](fg:88)[   ${count} ](fg:white bg:88)[ ](fg:88)"
+conflicted = "[](fg:88)[   ${count} ](fg:white bg:88)[ ](fg:88)"
 staged = "[S$count ](fg:green)"
 modified = "[ ${count} ](fg:red)"
 renamed = "[R${count} ](fg:208)"
