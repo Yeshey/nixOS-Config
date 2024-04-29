@@ -9,11 +9,11 @@
 
 with lib;
 let
-  cfg = config.pciPassthrough;
+  cfg = config.mySystem.pciPassthrough;
 in
 {
   ###### interface
-  options.pciPassthrough = {
+  options.mySystem.pciPassthrough = {
     enable = mkEnableOption "PCI Passthrough";
 
     cpuType = mkOption {
@@ -37,6 +37,13 @@ in
   ###### implementation
   config = (
     mkIf cfg.enable {
+
+      assertions = [
+        {
+          assertion = !(config.mySystem.pciPassthrough.enable && config.mySystem.vgpu.enable);
+          message = "You cannot use both pciPassthrough and nvidiaVgpuSharing methods to share GPU power, pick one";
+        }
+      ];
 
       boot.kernelParams = [
         "${cfg.cpuType}_iommu=on"

@@ -16,7 +16,8 @@ in
     inputs.nixos-hardware.nixosModules.common-cpu-intel
     inputs.nixos-hardware.nixosModules.common-pc-ssd
     ./hardware-configuration.nix
-    ./gpuSharing
+    ./pci-passthrough.nix
+    ./vgpu.nix
 
     # (import ./configFiles/VM/VM.nix) # TODO
   ];
@@ -101,17 +102,18 @@ in
 
     androidDevelopment.enable = false;
 
-    # from ./gpuSharing
-    gpuSharing = {
-      pciPassthrough ={
-        # Then add all the PCI devices in the group in virt-manager, the VM will run in the second screen that was previously black
-        enable = false;
-        pciIDs = "";
-        #pciIDs = "10de:1f11,10de:10f9,8086:1901,10de:1ada"; # Nvidia VGA, Nvidia Audia,... ;
-        libvirtUsers = [ "yeshey" ];
-      };
-      nvidiaVgpuSharing.enable = true;
+    # https://gist.github.com/WhittlesJr/a6de35b995e8c14b9093c55ba41b697c
+    # Enable the module with pciIDs = ""; and then run one of these commands to find the pciIDs:
+    # for d in /sys/kernel/iommu_groups/*/devices/*; do n="${d#*/iommu_groups/*}"; n="${n%%/*}"; printf 'IOMMU Group %s \t' "$n"; lspci -nns "${d##*/}"; done | sort -h -k 3 | grep --color -e ".*NVIDIA.*" -e "^"
+    # nix-shell -p pciutils --command "sudo lspci -nnk" | grep --color -e ".*NVIDIA.*" -e "^"
+    pciPassthrough = {
+      # you will also need to set hardware.nvidia.prime.offload.enable = true for this GPU passthrough to work  (or the sync method?)
+      enable = false;
+      pciIDs = "";
+      #pciIDs = "10de:1f11,10de:10f9,8086:1901,10de:1ada"; # Nvidia VGA, Nvidia Audia,... ;
+      #libvirtUsers = [ "yeshey" ];
     };
+    vgpu.enable = true;
   };
 
   toHost = {
