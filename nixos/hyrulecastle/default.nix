@@ -100,6 +100,9 @@ in
       dataStoragePath = "/mnt/DataDisk";
     };
 
+    # todo add samba support properly, rn its being added just to the laptop if vgpu is enabled
+    # samba = {...}
+
     androidDevelopment.enable = false;
 
     # https://gist.github.com/WhittlesJr/a6de35b995e8c14b9093c55ba41b697c
