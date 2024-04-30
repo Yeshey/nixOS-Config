@@ -104,4 +104,4 @@ gacp() {
 }
 alias cp="cp -i";                                   # Confirm before overwriting something
 alias rvt="nix-shell -p ffmpeg --command \"bash <(curl -s https://raw.githubusercontent.com/Yeshey/RecursiveVideoTranscoder/main/RecursiveVideoTranscoder.sh)\"";
-alias win10-vm="sh <(curl -s https://raw.githubusercontent.com/Yeshey/nixos-nvidia-vgpu_nixOS/master/run-vm.sh)";
+alias win10-vm="sh <(curl -s https://raw.githubusercontent.com/Yeshey/nixos-nvidia-vgpu/535.129/guides/run-vm.sh)";
