@@ -107,15 +107,20 @@ in
                           (
                             echo "Errors encountered, no upgrade possible, rolling back flake.lock..."
                             ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
+                            exit
                           )
                       )
                   ) 
               )
-              #${pkgs.git}/bin/git -C "${cfg.location}" add flake.lock
-              #${pkgs.git}/bin/git -C "${cfg.location}" commit -m "Auto Upgrade flake.lock"
-              # git rev-parse --verify HEAD
+              ${pkgs.git}/bin/git -C "${cfg.location}" add flake.lock
+              ${pkgs.git}/bin/git -C "${cfg.location}" commit -m "Auto Upgrade flake.lock"
+              ${pkgs.git}/bin/git -C "${cfg.location}" push
+              # git rev-parse --verify HEAD && git rebase -i to put this commit into the last place and commit only it # TODO
 
           '';
+        postStop = ''
+          ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
+        '';
       };
   };
 
