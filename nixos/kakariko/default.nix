@@ -119,7 +119,7 @@ in
     androidDevelopment.enable = false;
   };
 
-  # Ignore Patterns Syncthing
+  # Ignore Patterns Syncthing # Ignore Patterns Syncthing # You need to check that this doesnt override every other activation script, make lib.append? maybe make a function
   system.activationScripts =
     let
       ignorePattern = path: patterns: ''
