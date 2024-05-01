@@ -119,7 +119,7 @@ in
               # git rebase -i HEAD~<number of commits to SHA>
               # git push origin <post-rebase SHA>:master
 
-              # 
+              # 1
 
           '';
         postStop = ''
