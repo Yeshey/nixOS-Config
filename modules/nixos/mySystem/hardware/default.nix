@@ -15,6 +15,7 @@ in
     ./printers.nix
     ./nvidia.nix
     ./thermald.nix
+    ./lvm.nix
   ];
 
   options.mySystem.hardware = {

@@ -106,6 +106,7 @@ in
         thermalConf = ./thermal-conf.xml;
       };
       nvidia.enable = false;
+      lvm.enable = true;
     };
     autoUpgrades.enable = true;
     flatpaks.enable = true;
