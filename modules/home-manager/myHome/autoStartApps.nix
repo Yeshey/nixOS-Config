@@ -19,6 +19,7 @@ in
 
   config = lib.mkIf (cfg == null) {
 
+/*
     home.file = builtins.listToAttrs (
       map (pkg: {
         name = ".config/autostart/" + pkg.pname + ".desktop";
@@ -37,6 +38,6 @@ in
               source = (pkg + "/share/applications/" + pkg.pname + ".desktop");
             };
       }) cfg
-    );
+    ); */
   };
 }
