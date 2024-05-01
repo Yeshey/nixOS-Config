@@ -31,7 +31,7 @@ in
   config = lib.mkIf cfg.enable {
 
     /*
-          # TODO Fix & add auto Upgrades, also set it to boot
+          # TODO Fix & add auto Upgrades
           # Auto Upgrade
           # a guy told you in nix wiki to make auto upgrades use boot, to be atomic, meaning, that if they get interrupted it's safe. But notice this:
       $ sudo nixos-rebuild switch --flake ~/.setup#skyloft && echo "success"
@@ -52,7 +52,7 @@ in
     system.autoUpgrade = {
       enable = true;
       # dates = "23:01";
-      dates = "weekly";
+      dates = "daily"; #weekly
       operation = "switch";
       flake = "${cfg.location}#${cfg.host}"; # my flake online uri is for example github:yeshey/nixos-config#laptop
       flags = [
@@ -68,6 +68,7 @@ in
       persistent = true; # upgrades even if PC was off when it would upgrade
     };
     
+    # taking from https://github.com/NixOS/nixpkgs/blob/nixos-23.11/nixos/modules/tasks/auto-upgrade.nix
     systemd.services.nixos-upgrade = 
       let
         cfgau = config.system.autoUpgrade;
@@ -82,7 +83,35 @@ in
           in 
           lib.mkForce # makes it override the script, instead of appending
           ''
-            ${nixos-rebuild} ${cfgau.operation} ${toString (cfgau.flags)} poop
+            echo "Trying to upgrade all flake inputs"
+            nix flake update ${cfg.location}
+            ${nixos-rebuild} ${cfgau.operation} ${toString (cfgau.flags)} || 
+              (
+                echo "Upgrading all flake inputs failed, rolling back flake.lock..."
+                ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
+
+                echo "Trying to upgrade only nixpkgs, home-manager and nixos-hardware"
+                ${nixos-rebuild} ${cfgau.operation} --flake ${cfgau.flake} --update-input nixpkgs --update-input home-manager --update-input nixos-hardware || 
+                  (
+                    echo "Upgrading nixpkgs, home-manager and nixos-hardware inputs failed, rolling back flake.lock..."
+                    ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
+
+                    echo "Trying to upgrade only nixpkgs and home-manager"
+                    ${nixos-rebuild} ${cfgau.operation} --flake ${cfgau.flake} --update-input nixpkgs --update-input home-manager || 
+                      (
+                        echo "Upgrading nixpkgs and home-manager inputs failed, rolling back flake.lock..."
+                        ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
+
+                        echo "Trying to upgrade only nixpkgs"
+                        ${nixos-rebuild} ${cfgau.operation} --flake ${cfgau.flake} --update-input nixpkgs || 
+                          (
+                            echo "Errors encountered, no upgrade possible, rolling back flake.lock..."
+                            ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
+                          )
+                      )
+                  ) 
+              )
+
           '';
       };
   };
