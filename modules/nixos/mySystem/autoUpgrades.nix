@@ -120,6 +120,7 @@ in
               # git push origin <post-rebase SHA>:master
 
               # commit 1
+              # commit 2
 
           '';
         postStop = ''
