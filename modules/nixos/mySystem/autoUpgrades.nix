@@ -46,10 +46,14 @@ in
 
       # this command makes a podman service fail, notice how I can detect that if fails with switch, but not with boot, if I want to detect that it fails and roll back in the automatic upgrades, I'll probably have to use switch
     */
+
+    # check service with `sudo systemctl status nixos-upgrade`
+    # run service with `sudo systemctl start nixos-upgrade.service`
     system.autoUpgrade = {
       enable = true;
       # dates = "23:01";
       dates = "weekly";
+      operation = "switch";
       flake = "${cfg.location}#${cfg.host}"; # my flake online uri is for example github:yeshey/nixos-config#laptop
       flags = [
         # "--upgrade --option fallback false --update-input nixos-hardware --update-input home-manager --update-input nixpkgs || (cd ${location} && git checkout --flake.lock)"
@@ -63,7 +67,29 @@ in
       allowReboot = false; # set to false
       persistent = true; # upgrades even if PC was off when it would upgrade
     };
+    
+    systemd.services.nixos-upgrade = 
+      let
+        cfgau = config.system.autoUpgrade;
+      in
+      { 
+        script = 
+          let
+            nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
+            date     = "${pkgs.coreutils}/bin/date";
+            readlink = "${pkgs.coreutils}/bin/readlink";
+            shutdown = "${config.systemd.package}/bin/shutdown";
+          in 
+          lib.mkForce # makes it override the script, instead of appending
+          ''
+            ${nixos-rebuild} ${cfgau.operation} ${toString (cfgau.flags)} poop
+          '';
+      };
+  };
+
+
     /*
+    # Make the service be less CPU instensive
     systemd.services.nixos-upgrade.serviceConfig = let
       cfg = config.services.nixos-upgrade;
     in {
@@ -83,5 +109,4 @@ in
       ExecStopPost= [ "sh -c 'if [ \"$$SERVICE_RESULT\" != \"success\" ]; then cd ${location} && git checkout -- flake.lock; fi'" ];
     };
     */
-  };
 }
