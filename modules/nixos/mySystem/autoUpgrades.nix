@@ -50,7 +50,7 @@ in
       enable = true;
       # dates = "23:01";
       dates = "weekly";
-      flake = "${location}#${host}"; # my flake online uri is for example github:yeshey/nixos-config#laptop
+      flake = "${cfg.location}#${cfg.host}"; # my flake online uri is for example github:yeshey/nixos-config#laptop
       flags = [
         # "--upgrade --option fallback false --update-input nixos-hardware --update-input home-manager --update-input nixpkgs || (cd ${location} && git checkout --flake.lock)"
 

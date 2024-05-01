@@ -108,7 +108,7 @@ in
       nvidia.enable = false;
       lvm.enable = true;
     };
-    autoUpgrades.enable = true;
+    autoUpgrades.enable = false;
     flatpaks.enable = true;
     i2p.enable = true;
     syncthing = {
