@@ -119,6 +119,8 @@ in
               # git rebase -i HEAD~<number of commits to SHA>
               # git push origin <post-rebase SHA>:master
 
+              # commit 1
+
           '';
         postStop = ''
           ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
