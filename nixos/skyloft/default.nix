@@ -11,15 +11,6 @@
   imports = [
     ./hardware-configuration.nix
     ./backups.nix
-
-    #./dontStarveTogetherServer.nix
-
-    #./nextcloud.nix # TODO not working right boy nixos-rebuild build-vm --flake ~/.setup#skyloft not working
-    #./minecraft.nix
-    #./openvscode-server.nix # vscoduium is not well
-    #./ngix-server
-    #./mineclone.nix
-    #./kubo.nix
   ];
 
   nixpkgs = {
