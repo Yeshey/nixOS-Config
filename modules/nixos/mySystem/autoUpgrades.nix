@@ -107,6 +107,7 @@ in
                           (
                             echo "Errors encountered, no upgrade possible, rolling back flake.lock..."
                             ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
+                            exit
                           )
                       )
                   ) 
@@ -119,6 +120,9 @@ in
               # git push origin <post-rebase SHA>:master
 
           '';
+        postStop = ''
+          ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
+        '';
       };
   };
 
