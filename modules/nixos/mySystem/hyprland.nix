@@ -23,6 +23,17 @@ in
       enable = lib.mkDefault true;
       xwayland.enable = lib.mkDefault true;
       package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+      portalPackage = pkgs.xdg-desktop-portal-hyprland;
+    };
+
+    xdg.portal = {
+      enable = true;
+      wlr.enable = false;
+      xdgOpenUsePortal = false;
+      extraPortals = [
+        pkgs.xdg-desktop-portal-hyprland
+        pkgs.xdg-desktop-portal-gtk
+      ];
     };
 
     # to remember internet, idk if I need all this

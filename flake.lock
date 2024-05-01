@@ -469,14 +469,18 @@
         "nixpkgs-nixos2311": "nixpkgs-nixos2311"
       },
       "locked": {
-        "lastModified": 0,
-        "narHash": "sha256-XAoV6kzstAWyCPm6kfR+YKeP3FratgnCZ3lr7oaRWW0=",
-        "path": "/mnt/DataDisk/PersonalFiles/2023/Projects/Programming/nixos-nvidia-vgpu_nixOS/",
-        "type": "path"
+        "lastModified": 1714492193,
+        "narHash": "sha256-9tsPGsHKhkGNIx//RL0hTfizDs/rMAdALmeB5KIR7I4=",
+        "owner": "Yeshey",
+        "repo": "nixos-nvidia-vgpu",
+        "rev": "e1ae2daa9a617370bd2c5c2f6731d5ac9c3865d9",
+        "type": "github"
       },
       "original": {
-        "path": "/mnt/DataDisk/PersonalFiles/2023/Projects/Programming/nixos-nvidia-vgpu_nixOS/",
-        "type": "path"
+        "owner": "Yeshey",
+        "ref": "535.129",
+        "repo": "nixos-nvidia-vgpu",
+        "type": "github"
       }
     },
     "nixpkgs": {
@@ -508,11 +512,11 @@
     },
     "nixpkgs-nixos2311": {
       "locked": {
-        "lastModified": 1714272655,
-        "narHash": "sha256-3/ghIWCve93ngkx5eNPdHIKJP/pMzSr5Wc4rNKE1wOc=",
+        "lastModified": 1714409183,
+        "narHash": "sha256-Wacm/DrzLD7mjFGnSxxyGkJgg2unU/dNdNgdngBH+RU=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "12430e43bd9b81a6b4e79e64f87c624ade701eaf",
+        "rev": "576ecd43d3b864966b4423a853412d6177775e8b",
         "type": "github"
       },
       "original": {
@@ -520,18 +524,6 @@
         "ref": "nixos-23.11",
         "repo": "nixpkgs",
         "type": "github"
-      }
-    },
-    "nixpkgs-special": {
-      "locked": {
-        "lastModified": 1686225137,
-        "narHash": "sha256-/QV0wW3myeTUk/faHoW8dNqeB4db5KmgeFktrkpe2W8=",
-        "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/d5994dc91c226cc7ca9e869bad464805cf3d65c0.tar.gz"
-      },
-      "original": {
-        "type": "tarball",
-        "url": "https://github.com/NixOS/nixpkgs/archive/d5994dc91c226cc7ca9e869bad464805cf3d65c0.tar.gz"
       }
     },
     "nixpkgs-unstable": {
@@ -695,7 +687,6 @@
         "nixos-hardware": "nixos-hardware",
         "nixos-nvidia-vgpu": "nixos-nvidia-vgpu",
         "nixpkgs": "nixpkgs_2",
-        "nixpkgs-special": "nixpkgs-special",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nurpkgs": "nurpkgs",
         "plasma-manager": "plasma-manager"

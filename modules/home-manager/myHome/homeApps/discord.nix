@@ -16,7 +16,7 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    home.packages = with pkgs; [ vesktop xwaylandvideobridge ];
+    home.packages = with pkgs; [ vesktop ];
 
     # TODO check and install themes? https://github.com/s-k-y-l-i/discord-themes
 
