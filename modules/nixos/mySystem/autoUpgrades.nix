@@ -111,6 +111,9 @@ in
                       )
                   ) 
               )
+              #${pkgs.git}/bin/git -C "${cfg.location}" add flake.lock
+              #${pkgs.git}/bin/git -C "${cfg.location}" commit -m "Auto Upgrade flake.lock"
+              # git rev-parse --verify HEAD
 
           '';
       };
