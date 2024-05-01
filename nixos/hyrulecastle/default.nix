@@ -75,7 +75,11 @@ in
       };
       lvm.enable = false;
     };
-    autoUpgrades.enable = true;
+    autoUpgrades = {
+      enable = true;
+      location = "/home/yeshey/.setup";
+      host = "hyrulecastle";
+    };
     flatpaks.enable = true;
     i2p.enable = true;
 
