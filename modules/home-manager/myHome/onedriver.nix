@@ -11,6 +11,10 @@ in
 {
   options.myHome.onedriver = with lib; {
     enable = mkEnableOption "onedriver";
+    onedriverFolder = mkOption {
+      type = types.str;
+      example = "/mnt/hdd-btrfs/Yeshey/OneDriver";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -30,21 +34,22 @@ in
       wrapperDir = "/run/wrappers/";
     in {
 
-      "onedriver@mnt-hdd\\x2dbtrfs-Yeshey-OneDriver" = {
+      #"onedriver@mnt-hdd\\x2dbtrfs-Yeshey-OneDriver" = {
+        "onedriver@home-yeshey-OneDriver" = {
         #shellHook = ''
         #export GIO_MODULE_DIR=${pkgs.glib-networking}/lib/gio/modules/
         #'';
-        environment = {
-          GIO_MODULE_DIR="${pkgs.glib-networking}/lib/gio/modules/";
-        };
+        #environment = {
+        #  GIO_MODULE_DIR="${pkgs.glib-networking}/lib/gio/modules/";
+        #};
 
         Unit = {
           Description = "onedriver";
         };
 
         Service = {
-          ExecStart = "${pkgs.onedriver}/bin/onedriver /mnt/hdd-btrfs/Yeshey/OneDriver/";
-          ExecStopPost = "${wrapperDir}/bin/fusermount -uz /mnt/hdd-btrfs/Yeshey/OneDriver/";
+          ExecStart = "${pkgs.onedriver}/bin/onedriver ${cfg.onedriverFolder}";
+          ExecStopPost = "${wrapperDir}/bin/fusermount -uz ${cfg.onedriverFolder}";
           Restart = "on-abnormal";
           RestartSec = "3";
           RestartForceExitStatus = "2";
