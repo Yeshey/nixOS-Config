@@ -26,7 +26,7 @@ in
     # security.pam.enableSSHAgentAuth = true;
 
     #networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ 22 ];
-    networking.firewall.enable = false;
+    # networking.firewall.enable = false;
 
   };
 }
