@@ -23,7 +23,7 @@ in
 
       home.packages = with pkgs; [
         (vscode-with-extensions.override {
-          vscode = vscodium;
+          vscode = unstable.vscodium;
           vscodeExtensions = with vscode-extensions; [
             # vscodevim.vim # this is later when you're a chad
             ms-vsliveshare.vsliveshare
