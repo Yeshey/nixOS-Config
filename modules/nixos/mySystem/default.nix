@@ -58,6 +58,7 @@ in
 
     ./syncthing.nix
     ./borgBackups.nix
+    ./openssh.nix
   ];
 
   options.mySystem = with lib; {
@@ -141,14 +142,6 @@ in
       name = "nix/path/${name}";
       value.source = value.flake;
     }) config.nix.registry;
-
-    services.openssh = with lib; {
-      enable = true;
-      settings.PermitRootLogin = lib.mkDefault "yes"; # TODO no
-      settings.X11Forwarding = lib.mkDefault true;
-    };
-    # security.sudo.wheelNeedsPassword = false; # TODO remove (how do you do secrets management)
-    # security.pam.enableSSHAgentAuth = true;
 
     programs.neovim = {
       enable = true;

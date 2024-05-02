@@ -34,6 +34,7 @@
     gnome.enable = true; # TODO, we can do better
     plasma.enable = false;
     gaming.enable = true;
+    openssh.enable = true;
     vmHost = true;
     dockerHost = true;
     host = "twilightrealm"; # TODO make this mandatory?

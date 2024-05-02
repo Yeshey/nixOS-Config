@@ -38,6 +38,7 @@
   mySystem = rec {
     plasma.enable = false;
     gnome.enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
+    openssh.enable = true;
     browser.enable = false;
     cliTools.enable = true;
     zsh.enable = true;
