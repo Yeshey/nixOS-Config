@@ -61,7 +61,12 @@
       #};
       #nvidia.enable = false;
     };
-    autoUpgrades.enable = true;
+    autoUpgrades = {
+      enable = true;
+      location = "/home/yeshey/.setup";
+      host = "skyloft";
+      dates = "weekly";
+    };
     flatpaks.enable = false;
     i2p.enable = false;
     syncthing = {

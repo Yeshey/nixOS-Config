@@ -108,7 +108,12 @@ in
       nvidia.enable = false;
       lvm.enable = true;
     };
-    autoUpgrades.enable = false;
+    autoUpgrades = {
+      enable = true;
+      location = "/home/yeshey/.setup";
+      host = "kakariko";
+      dates = "weekly";
+    };
     flatpaks.enable = true;
     i2p.enable = true;
     syncthing = {
