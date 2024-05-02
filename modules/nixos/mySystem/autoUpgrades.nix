@@ -26,6 +26,13 @@ in
         name of config to build
       '';
     };
+    dates = lib.mkOption {
+      type = lib.types.str;
+      example = "weekly";
+      description = ''
+        how frequently to update
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -52,7 +59,7 @@ in
     system.autoUpgrade = {
       enable = true;
       # dates = "23:01";
-      dates = "daily"; #weekly
+      dates = cfg.dates; #weekly
       operation = "switch";
       flake = "${cfg.location}#${cfg.host}"; # my flake online uri is for example github:yeshey/nixos-config#laptop
       flags = [
@@ -83,6 +90,8 @@ in
           in 
           lib.mkForce # makes it override the script, instead of appending
           ''
+            echo "grabbing latest version of repo"            
+            ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" pull'
             echo "Trying to upgrade all flake inputs"
             nix flake update ${cfg.location}
             ${nixos-rebuild} ${cfgau.operation} ${toString (cfgau.flags)} || 
@@ -112,17 +121,17 @@ in
                       )
                   ) 
               )
-              ${pkgs.git}/bin/git -C "${cfg.location}" add flake.lock
-              ${pkgs.git}/bin/git -C "${cfg.location}" commit -m "Auto Upgrade flake.lock"
-              ${pkgs.git}/bin/git -C "${cfg.location}" push
-              # git rev-parse --verify HEAD && git rebase -i to put this commit into the last place and commit only it # TODO
-              # git rebase -i HEAD~<number of commits to SHA>
-              # git push origin <post-rebase SHA>:master
+              ${pkgs.git}/bin/git -C "${cfg.location}" add flake.lock &&
+                (
+                  ${pkgs.git}/bin/git -C "${cfg.location}" commit -m "Auto Upgrade flake.lock"
+                  ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" push' # changes to user yeshey to push, which is not good
+                ) || echo "no commit executed"
 
-              # 1
-              # 2
-              # 3 1 one files
+              # Holy shit. awk doesnt work, sed doesnt as well
 
+              # this swaps last two commits: GIT_SEQUENCE_EDITOR="sed -i -n 'h;1n;2p;g;p'" git rebase -i HEAD~2
+
+              # awk attempt (works, but doesnt write file in place?: gawk -i inplace '{a[NR]=$0; if ($0 ~ /^pick/) {last_pick_line = $0; last_pick_position = NR}} END {print last_pick_line; for (i=1; i<NR; i++) {if (i != last_pick_position) {print a[i]}}}' /mnt/DataDisk/Downloads/test.txt
           '';
         postStop = ''
           ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock

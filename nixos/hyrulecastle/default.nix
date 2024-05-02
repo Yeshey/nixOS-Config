@@ -79,6 +79,7 @@ in
       enable = true;
       location = "/home/yeshey/.setup";
       host = "hyrulecastle";
+      dates = "daily";
     };
     flatpaks.enable = true;
     i2p.enable = true;
