@@ -24,9 +24,11 @@ in
 
     # failing with TLS/SSL support not available; install glib-networking
 
+    
+
     home.packages = with pkgs; [
-      onedriver
-      glib-networking
+      myOnedriver
+      # glib-networking
     ];
 
     # Automount Onedriver

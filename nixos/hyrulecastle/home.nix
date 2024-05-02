@@ -68,7 +68,10 @@ in
         variant = "dark"; # or light
       };
     };
-    # onedriver.enable = true;
+    onedriver = {
+      enable = true;
+      onedriverFolder = "/home/yeshey/OneDriver";
+    };
   };
 
   home = {

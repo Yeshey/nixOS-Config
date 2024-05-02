@@ -6,5 +6,6 @@
 rec {
   wallpapers = pkgs.callPackage ./wallpapers { };
 
+  myOnedriver = pkgs.callPackage ./onedriver { };
   # example = pkgs.callPackage ./example { };
 }
