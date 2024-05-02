@@ -68,6 +68,7 @@ in
         variant = "dark"; # or light
       };
     };
+    # onedriver.enable = true;
   };
 
   home = {
