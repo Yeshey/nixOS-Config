@@ -37,7 +37,7 @@ in
         # layout = "pt";
         displayManager.gdm = {
           enable = true;
-          autoSuspend = false;
+          # autoSuspend = false;
           settings = {
             greeter.IncludeAll = true;
           };
