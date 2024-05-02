@@ -25,7 +25,8 @@ in
     # security.sudo.wheelNeedsPassword = false; # TODO remove (how do you do secrets management)
     # security.pam.enableSSHAgentAuth = true;
 
-    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ 22 ];
+    #networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ 22 ];
+    networking.firewall.enable = false;
 
   };
 }
