@@ -84,6 +84,7 @@ in
     plasma.enable = false;
     gnome.enable = true; # TODO activate both plasma and gnome same time, maybe expose display manager
     hyprland.enable = false;
+    openssh.enable = true;
     browser.enable = true;
     cliTools.enable = true;
     zsh.enable = true;
