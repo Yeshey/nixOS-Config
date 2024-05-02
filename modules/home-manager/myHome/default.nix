@@ -20,6 +20,7 @@ in
     ./homeApps
     ./hyprland
     ./autoStartApps.nix
+    ./onedriver.nix
   ];
   options.myHome = with lib; {
     user = mkOption {
