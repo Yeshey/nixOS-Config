@@ -54,6 +54,10 @@ in
       enable = true;
       starshipTheme = "pinage404"; # fredericrous # pinage404
     };
+    onedriver = {
+      enable = true;
+      onedriverFolder = "/home/yeshey/OneDriver";
+    };
     direnv.enable = true;
     wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; # johnKearneyCityscapePoster #stellarCollisionByKuldarleement; #nierAutomataWallpaper;
     colorScheme = {
