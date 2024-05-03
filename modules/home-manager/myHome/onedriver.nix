@@ -72,8 +72,9 @@ in
       Timer = {
         Unit = "delete-onedriver-cache";
         OnCalendar = "*-*-1,4,7,10,13,16,19,22,25,28"; # "*-*-1,4,7,10,13,16,19,22,25,28"; # Every three days approximatley (every minute: "*-*-* *:*:00")
+        Persistent = true; # If missed, run on boot (https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
       };
-      Install.WantedBy = [ "timers.target" ];
+      Install.WantedBy = [ "timers.target" ]; # If missed, run on boot (https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
     };
 
 
