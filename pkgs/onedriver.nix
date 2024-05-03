@@ -1,4 +1,5 @@
 # Derivation, not a module!
+# onedriver from nixpkgs doesnt work on plasma, made an issue: https://github.com/NixOS/nixpkgs/issues/308666
 { buildGoModule
 , fetchFromGitHub
 , lib
@@ -7,6 +8,8 @@
 , glib
 , fuse
 , installShellFiles
+, glib-networking
+, wrapGAppsHook
 }:
 let
   pname = "onedriver";
@@ -23,8 +26,8 @@ buildGoModule {
   inherit pname version src;
   vendorHash = "sha256-OOiiKtKb+BiFkoSBUQQfqm4dMfDW3Is+30Kwcdg8LNA=";
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
-  buildInputs = [ webkitgtk glib fuse ];
+  nativeBuildInputs = [ wrapGAppsHook pkg-config installShellFiles ];
+  buildInputs = [ glib-networking webkitgtk glib fuse ];
 
   ldflags = [ "-X github.com/jstaf/onedriver/cmd/common.commit=v${version}" ];
 

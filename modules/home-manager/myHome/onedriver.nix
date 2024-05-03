@@ -19,16 +19,9 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    # https://github.com/NixOS/nixpkgs/issues/291608
-    # if you're here, there has to be a better way already
-
-    # failing with TLS/SSL support not available; install glib-networking
-
-    
-
     home.packages = with pkgs; [
       myOnedriver
-      # glib-networking
+      # onedriver
     ];
 
     # Automount Onedriver
@@ -37,13 +30,7 @@ in
     in {
 
       #"onedriver@mnt-hdd\\x2dbtrfs-Yeshey-OneDriver" = {
-        "onedriver@home-yeshey-OneDriver" = {
-        #shellHook = ''
-        #export GIO_MODULE_DIR=${pkgs.glib-networking}/lib/gio/modules/
-        #'';
-        #environment = {
-        #  GIO_MODULE_DIR="${pkgs.glib-networking}/lib/gio/modules/";
-        #};
+      "onedriver@home-yeshey-OneDriver" = {
 
         Unit = {
           Description = "onedriver";
