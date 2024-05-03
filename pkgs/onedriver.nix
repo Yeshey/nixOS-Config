@@ -4,30 +4,31 @@
 , fetchFromGitHub
 , lib
 , pkg-config
-, webkitgtk
+, webkitgtk_4_1
 , glib
 , fuse
 , installShellFiles
-, glib-networking
 , wrapGAppsHook
+, glib-networking
+, wrapperDir ? "/run/wrappers/bin"
 }:
 let
   pname = "onedriver";
-  version = "0.13.0-2";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "jstaf";
     repo = "onedriver";
     rev = "v${version}";
-    hash = "sha256-Bcjgmx9a4pTRhkzR3tbOB6InjvuH71qomv4t+nRNc+w=";
+    hash = "sha256-mA5otgqXQAw2UYUOJaC1zyJuzEu2OS/pxmjJnWsVdxs=";
   };
 in
 buildGoModule {
   inherit pname version src;
   vendorHash = "sha256-OOiiKtKb+BiFkoSBUQQfqm4dMfDW3Is+30Kwcdg8LNA=";
 
-  nativeBuildInputs = [ wrapGAppsHook pkg-config installShellFiles ];
-  buildInputs = [ glib-networking webkitgtk glib fuse ];
+  nativeBuildInputs = [ pkg-config installShellFiles wrapGAppsHook ];
+  buildInputs = [ glib-networking webkitgtk_4_1 glib fuse ];
 
   ldflags = [ "-X github.com/jstaf/onedriver/cmd/common.commit=v${version}" ];
 
@@ -38,18 +39,26 @@ buildGoModule {
 
   postInstall = ''
     echo "Running postInstall"
-    install -Dm644 ./resources/onedriver.svg $out/share/icons/onedriver/onedriver.svg
-    install -Dm644 ./resources/onedriver.png $out/share/icons/onedriver/onedriver.png
-    install -Dm644 ./resources/onedriver-128.png $out/share/icons/onedriver/onedriver-128.png
+    install -Dm644 ./pkg/resources/onedriver.svg $out/share/icons/onedriver/onedriver.svg
+    install -Dm644 ./pkg/resources/onedriver.png $out/share/icons/onedriver/onedriver.png
+    install -Dm644 ./pkg/resources/onedriver-128.png $out/share/icons/onedriver/onedriver-128.png
 
-    install -Dm644 ./resources/onedriver.desktop $out/share/applications/onedriver.desktop
+    install -Dm644 ./pkg/resources/onedriver.desktop $out/share/applications/onedriver.desktop
+    install -Dm644 ./pkg/resources/onedriver@.service $out/lib/systemd/user/onedriver@.service
 
     mkdir -p $out/share/man/man1
-    installManPage ./resources/onedriver.1
+    installManPage ./pkg/resources/onedriver.1
 
     substituteInPlace $out/share/applications/onedriver.desktop \
       --replace "/usr/bin/onedriver-launcher" "$out/bin/onedriver-launcher" \
       --replace "/usr/share/icons" "$out/share/icons"
+
+    substituteInPlace $out/lib/systemd/user/onedriver@.service \
+      --replace "/usr/bin/onedriver" "$out/bin/onedriver" \
+      --replace "/usr/bin/fusermount" "${wrapperDir}/fusermount"
+
+    # doesnt work, see cat $(which onedriver-launcher)
+    wrapProgram "$out/bin/onedriver-launcher" --set GIO_EXTRA_MODULES ${glib-networking.out}/lib/gio/modules
   '';
 
   meta = with lib; {
