@@ -38,7 +38,7 @@ in
   config = lib.mkIf cfg.enable {
 
     /*
-          # TODO Fix & add auto Upgrades
+          # Fix & add auto Upgrades
           # Auto Upgrade
           # a guy told you in nix wiki to make auto upgrades use boot, to be atomic, meaning, that if they get interrupted it's safe. But notice this:
       $ sudo nixos-rebuild switch --flake ~/.setup#skyloft && echo "success"
