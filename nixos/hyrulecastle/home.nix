@@ -70,7 +70,8 @@ in
     };
     onedriver = {
       enable = true;
-      onedriverFolder = "/home/yeshey/OneDriver";
+      onedriverFolder = "/mnt/hdd-btrfs/Yeshey/OneDriver/";
+      serviceName = "onedriver@mnt-hdd\\x2dbtrfs-Yeshey-OneDriver";
     };
   };
 
