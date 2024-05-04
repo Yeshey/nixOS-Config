@@ -45,6 +45,12 @@
     #};
 
     /*
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    */
+    /*
       agenix = { # For secrets management
         url = "github:ryantm/agenix";
         inputs = {
