@@ -23,6 +23,7 @@ in
         bitwarden
         gparted
         baobab
+        anki
         xclip # for vim clipboard support :)
         # etcher #insecure?
 
