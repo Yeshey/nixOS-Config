@@ -43,6 +43,20 @@ let
     };
   };
   folders = {
+    "2026" = {
+      path = "${cfg.dataStoragePath}/PersonalFiles/2026";
+      devices = lib.mapAttrsToList (name: value: name) devices; # all devices
+      # mapAttrsToList: https://ryantm.github.io/nixpkgs/functions/library/attrsets/#function-library-lib.attrsets.mapAttrsToList
+      versioning = myVersioning;
+      # Ignore patterns: Recorded_Classes 
+    };
+    "2025" = {
+      path = "${cfg.dataStoragePath}/PersonalFiles/2025";
+      devices = lib.mapAttrsToList (name: value: name) devices; # all devices
+      # mapAttrsToList: https://ryantm.github.io/nixpkgs/functions/library/attrsets/#function-library-lib.attrsets.mapAttrsToList
+      versioning = myVersioning;
+      # Ignore patterns: Recorded_Classes 
+    };
     "2024" = {
       path = "${cfg.dataStoragePath}/PersonalFiles/2024";
       devices = lib.mapAttrsToList (name: value: name) devices; # all devices
