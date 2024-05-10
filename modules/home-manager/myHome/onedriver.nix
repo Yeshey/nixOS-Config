@@ -7,7 +7,16 @@
 }:
 let
   cfg = config.myHome.onedriver;
-  onedriverPackage = pkgs.unstable.onedriver; #pkgs.myOnedriver
+  #onedriverPackage = pkgs.unstable.onedriver; #pkgs.myOnedriver
+  #onedriverPackage = pkgs.myOnedriver;
+  #onedriverPackage = patchedPkgs.onedriver;
+  onedriverPackage = pkgs.myOnedriver;
+
+  # Using my package this shouldn't be needed anymore in the system config:
+  # environment.variables.GIO_EXTRA_MODULES = lib.mkDefault [ "${pkgs.glib-networking.out}/lib/gio/modules" ]; # needed for now for onedriver (made an issue: https://github.com/NixOS/nixpkgs/issues/308666)
+
+  # check my issue on it: https://github.com/NixOS/nixpkgs/issues/308666
+
 in
 {
   options.myHome.onedriver = with lib; {
@@ -45,7 +54,7 @@ in
         };
 
         Service = {
-          ExecStart = "${pkgs.onedriver}/bin/onedriver ${cfg.onedriverFolder}";
+          ExecStart = "${onedriverPackage}/bin/onedriver ${cfg.onedriverFolder}";
           # ExecStopPost = "${wrapperDir}/bin/fusermount -uz ${cfg.onedriverFolder}";
           Restart = "on-abnormal";
           RestartSec = "3";
