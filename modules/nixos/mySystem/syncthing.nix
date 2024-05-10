@@ -171,6 +171,18 @@ in
       in
       {
         syncthingIgnorePatterns.text = ''
+          # 2026
+          ${ignorePattern "2026" "
+            //*
+            //Photos&Videos
+          "}
+
+          # 2025
+          ${ignorePattern "2025" "
+            //*
+            //Photos&Videos
+          "}
+
           # 2024
           ${ignorePattern "2024" "
             //*
