@@ -6,6 +6,6 @@
 rec {
   wallpapers = pkgs.callPackage ./wallpapers { };
 
-  myOnedriver = pkgs.callPackage ./onedriver.nix { };
+  myOnedriver = pkgs.callPackage ./onedriver-his.nix { };
   # example = pkgs.callPackage ./example { };
 }

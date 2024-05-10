@@ -166,7 +166,5 @@ in
     networking = {
       hostName = "nixos-${cfg.host}";
     };
-
-    environment.variables.GIO_EXTRA_MODULES = lib.mkDefault [ "${pkgs.glib-networking.out}/lib/gio/modules" ]; # needed for now for onedriver (made an issue: https://github.com/NixOS/nixpkgs/issues/308666)
   };
 }
