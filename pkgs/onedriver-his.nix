@@ -1,5 +1,4 @@
-# Derivation, not a module!
-# onedriver from nixpkgs doesnt work on plasma, made an issue: https://github.com/NixOS/nixpkgs/issues/308666
+# From this issue https://github.com/NixOS/nixpkgs/issues/308666
 { buildGoModule
 , fetchFromGitHub
 , lib
@@ -8,7 +7,7 @@
 , glib
 , fuse
 , installShellFiles
-, wrapGAppsHook
+, wrapGAppsHook #(3)?
 , glib-networking
 , wrapperDir ? "/run/wrappers/bin"
 }:
@@ -28,7 +27,7 @@ buildGoModule {
   vendorHash = "sha256-OOiiKtKb+BiFkoSBUQQfqm4dMfDW3Is+30Kwcdg8LNA=";
 
   nativeBuildInputs = [ pkg-config installShellFiles wrapGAppsHook ];
-  buildInputs = [ glib-networking webkitgtk_4_1 glib fuse ];
+  buildInputs = [ webkitgtk_4_1 glib fuse glib-networking ];
 
   ldflags = [ "-X github.com/jstaf/onedriver/cmd/common.commit=v${version}" ];
 
@@ -56,9 +55,6 @@ buildGoModule {
     substituteInPlace $out/lib/systemd/user/onedriver@.service \
       --replace "/usr/bin/onedriver" "$out/bin/onedriver" \
       --replace "/usr/bin/fusermount" "${wrapperDir}/fusermount"
-
-    # doesnt work, see cat $(which onedriver-launcher)
-    wrapProgram "$out/bin/onedriver-launcher" --set GIO_EXTRA_MODULES ${glib-networking.out}/lib/gio/modules
   '';
 
   meta = with lib; {

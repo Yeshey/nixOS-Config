@@ -37,6 +37,9 @@ in
 
   config = lib.mkIf cfg.enable {
 
+# make it run when shuting down?
+# https://www.reddit.com/r/NixOS/comments/f3twx0/upgrade_on_shutdownidle/
+
     /*
           # Fix & add auto Upgrades
           # Auto Upgrade
