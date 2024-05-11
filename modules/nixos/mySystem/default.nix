@@ -53,6 +53,7 @@ in
     ./flatpaks.nix
     ./cliTools.nix
     ./autoUpgrades.nix
+    ./autoUpgradesOnShutdown.nix
     ./browser.nix
     ./hardware
 
