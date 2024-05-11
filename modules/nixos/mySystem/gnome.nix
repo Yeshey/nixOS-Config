@@ -21,7 +21,7 @@ in
         gedit # text editor
         epiphany # web browser
         geary # email reader
-        evince # document viewer
+        #evince # document viewer
         totem # video player
         pkgs.gnome-connections
         gnome-contacts
