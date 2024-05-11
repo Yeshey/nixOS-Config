@@ -111,6 +111,7 @@ in
 
     # https://unix.stackexchange.com/a/479048/366800
     # runs after the root filestystem is readonly_ doesnt run on reboot
+    /*
     systemd.services."test4" = {
       #before = [ "shutdown.target" "reboot.target" ];
       after = [ "poweroff.target" ];
@@ -127,10 +128,11 @@ in
       };
       wantedBy = [ "poweroff.target" ]; # runs when the root filesystem has been stopped?
       #wantedBy = [ "final.target" ]; # [ "shutdown.target" ];
-    };
+    }; */
 
     # https://superuser.com/questions/1705683/raspberry-pi-systemd-run-script-on-shutdown-poweroff-but-not-on-restart
     # doesnt run on reboot
+    /*
     systemd.services."test5" = {
       # before = [ "shutdown.target" "reboot.target" ];
       preStop = ''
@@ -148,9 +150,10 @@ in
       };
       wantedBy = [ "multi-user.target" ];
       #wantedBy = [ "final.target" ]; # [ "shutdown.target" ];
-    };
+    }; */
 
     # https://unix.stackexchange.com/questions/284598/systemd-how-to-execute-script-at-shutdown-only-not-at-reboot
+    /*
     systemd.services."test6" = {
       path = with pkgs; [
         coreutils
@@ -174,9 +177,10 @@ in
       };
       wantedBy = [ "multi-user.target" ];
       #wantedBy = [ "final.target" ]; # [ "shutdown.target" ];
-    };
+    }; */
 
     # Use a timer to activate the service that will execute preStop on shutdown and not reboot
+    /*
     systemd.timers."test7" = {
       wantedBy = [ "timers.target" ];
       timerConfig = {
@@ -186,7 +190,6 @@ in
       };
     };
     systemd.services."test7" = {
-      # before = [ "shutdown.target" "reboot.target" ];
       preStop = ''
         if ! systemctl list-jobs | egrep -q 'reboot.target.*start'; then
           echo "test7 poweroff" > /home/yeshey/Downloads/test7.txt
@@ -201,9 +204,18 @@ in
         RemainAfterExit="true";
       };
       #wantedBy = [ "multi-user.target" ];
-      #wantedBy = [ "final.target" ]; # [ "shutdown.target" ];
     };
+    */
 
+    # Use a timer to activate the service that will execute preStop on shutdown and not reboot
+    systemd.timers.my-nixos-upgrade = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        Persistent = true; # If missed, run on boot (https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
+        OnCalendar = "Fri *-*-* 20:00:00"; # Every Friday at 19:00
+        Unit = "my-nixos-upgrade.service";
+      };
+    };
     systemd.services.my-nixos-upgrade = {
       description = "My NixOS Upgrade";
       # before = [ "shutdown.target" "reboot.target" ];
@@ -235,8 +247,8 @@ in
         in 
         lib.mkForce # makes it override the script, instead of appending
         ''
-          if [ "$(date +%u)" -eq 2 ]; then # Check if today is Tuesday (Monday is 1, Tuesday is 2, and so on)
-            echo "It's tuesday!"
+          if ! systemctl list-jobs | egrep -q 'reboot.target.*start'; then
+            echo "will poweroff, not reboot, upgrading..."
             
             
             echo "grabbing latest version of repo"            
@@ -286,19 +298,22 @@ in
 
 
           else
-            echo "Not tuesday"
+            echo "Is rebooting, not upgrading..."
+            # but then I should activate the timer again right? otherwise, it will only get activated next week...
           fi
         '';
       postStop = ''
         ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
       '';
+      unitConfig = {
+        Conflicts="reboot.target";
+      };
       serviceConfig = {
+        #User = "yeshey";
         Type = "oneshot";
-        # User = "yeshey";
         RemainAfterExit="true";
       };
-      wantedBy = [ "multi-user.target" ];
-      #wantedBy = [ "final.target" ]; # [ "shutdown.target" ];
+      #wantedBy = [ "multi-user.target" ];
     };
 
   };
