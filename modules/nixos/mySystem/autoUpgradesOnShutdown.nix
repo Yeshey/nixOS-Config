@@ -7,6 +7,28 @@
 
 let
   cfg = config.mySystem.autoUpgradesOnShutdown;
+
+  # from https://github.com/NixOS/nixpkgs/blob/master/nixos/lib/systemd-lib.nix
+  /*
+  makeJobScript = name: text:
+  with lib;
+    let
+      shellEscape = s: (replaceStrings [ "\\" ] [ "\\\\" ] s);
+      scriptName = replaceStrings [ "\\" "@" ] [ "-" "_" ] (shellEscape name);
+      out = (pkgs.writeShellScriptBin scriptName ''
+        set -e
+        ${text}
+      '').overrideAttrs (_: {
+        # The derivation name is different from the script file name
+        # to keep the script file name short to avoid cluttering logs.
+        name = "unit-script-${scriptName}";
+      });
+    in "${out}/bin/${scriptName}";*/
+
+
+
+  
+
 in
 {
   options.mySystem.autoUpgradesOnShutdown = {
@@ -35,7 +57,77 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = let 
+  /*
+    autoUpgradeScript =         let
+          nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
+          date     = "${pkgs.coreutils}/bin/date";
+          readlink = "${pkgs.coreutils}/bin/readlink";
+          shutdown = "${config.systemd.package}/bin/shutdown";
+          flake = "${cfg.location}#${cfg.host}";
+        in ''
+          
+          set -e
+
+          if ! systemctl list-jobs | egrep -q 'reboot.target.*start'; then
+            echo "will poweroff, not reboot, upgrading..."
+            
+            
+            echo "grabbing latest version of repo"            
+            #${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" pull'
+            ${pkgs.git}/bin/git -C "${cfg.location}" pull
+            echo "Trying to upgrade all flake inputs"
+            nix flake update ${cfg.location}
+            ${nixos-rebuild} boot --flake ${flake} || 
+              (
+                echo "Upgrading all flake inputs failed, rolling back flake.lock..."
+                ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
+
+                echo "Trying to upgrade only nixpkgs, home-manager and nixos-hardware"
+                ${nixos-rebuild} switch --flake ${flake} --update-input nixpkgs --update-input home-manager --update-input nixos-hardware || 
+                  (
+                    echo "Upgrading nixpkgs, home-manager and nixos-hardware inputs failed, rolling back flake.lock..."
+                    ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
+
+                    echo "Trying to upgrade only nixpkgs and home-manager"
+                    ${nixos-rebuild} switch --flake ${flake} --update-input nixpkgs --update-input home-manager || 
+                      (
+                        echo "Upgrading nixpkgs and home-manager inputs failed, rolling back flake.lock..."
+                        ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
+
+                        echo "Trying to upgrade only nixpkgs"
+                        ${nixos-rebuild} switch --flake ${flake} --update-input nixpkgs || 
+                          (
+                            echo "Errors encountered, no upgrade possible, rolling back flake.lock..."
+                            ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
+                            echo "Activating previous config..."
+                            ${nixos-rebuild} switch --flake ${flake}
+                            exit
+                          )
+                      )
+                  ) 
+              )
+              ${pkgs.git}/bin/git -C "${cfg.location}" add flake.lock &&
+                (
+                  ${pkgs.git}/bin/git -C "${cfg.location}" commit -m "Auto Upgrade flake.lock"
+                  #${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" push' # changes to user yeshey to push, which is not good
+                  ${pkgs.git}/bin/git -C "${cfg.location}" push
+                ) || echo "no commit executed"
+
+              # Holy shit. awk doesnt work, sed doesnt as well
+
+              # this swaps last two commits: GIT_SEQUENCE_EDITOR="sed -i -n 'h;1n;2p;g;p'" git rebase -i HEAD~2
+
+              # awk attempt (works, but doesnt write file in place?: gawk -i inplace '{a[NR]=$0; if ($0 ~ /^pick/) {last_pick_line = $0; last_pick_position = NR}} END {print last_pick_line; for (i=1; i<NR; i++) {if (i != last_pick_position) {print a[i]}}}' /mnt/DataDisk/Downloads/test.txt
+
+
+          else
+            echo "Is rebooting, not upgrading..."
+            # but then I should activate the timer again right? otherwise, it will only get activated next week...
+          fi
+        '';*/
+  
+  in lib.mkIf cfg.enable {
 
 /*
     systemd.timers."test" = {
@@ -216,7 +308,7 @@ in
         Unit = "my-nixos-upgrade.service";
       };
     };
-    systemd.services.my-nixos-upgrade = {
+    systemd.services.my-nixos-upgrade = rec {
       description = "My NixOS Upgrade";
       # before = [ "shutdown.target" "reboot.target" ];
       restartIfChanged = false;
@@ -244,41 +336,44 @@ in
           readlink = "${pkgs.coreutils}/bin/readlink";
           shutdown = "${config.systemd.package}/bin/shutdown";
           flake = "${cfg.location}#${cfg.host}";
+          operation = "boot"; # switch doesnt work, gets stuck in `setting up tmpfiles`
         in 
-        lib.mkForce # makes it override the script, instead of appending
+#         lib.mkForce # makes it override the script, instead of appending
         ''
           if ! systemctl list-jobs | egrep -q 'reboot.target.*start'; then
             echo "will poweroff, not reboot, upgrading..."
+            # export HOME=/home/yeshey
             
-            
-            echo "grabbing latest version of repo"            
+            echo "grabbing latest version of repo"   
+            #${pkgs.git}/bin/git config --global --add safe.directory "${cfg.location}"        
             ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" pull'
+            #${pkgs.git}/bin/git -C "${cfg.location}" pull
             echo "Trying to upgrade all flake inputs"
             nix flake update ${cfg.location}
-            ${nixos-rebuild} switch --flake ${flake} || 
+            ${nixos-rebuild} ${operation} --flake ${flake} || 
               (
                 echo "Upgrading all flake inputs failed, rolling back flake.lock..."
                 ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
 
                 echo "Trying to upgrade only nixpkgs, home-manager and nixos-hardware"
-                ${nixos-rebuild} switch --flake ${flake} --update-input nixpkgs --update-input home-manager --update-input nixos-hardware || 
+                ${nixos-rebuild} ${operation} --flake ${flake} --update-input nixpkgs --update-input home-manager --update-input nixos-hardware || 
                   (
                     echo "Upgrading nixpkgs, home-manager and nixos-hardware inputs failed, rolling back flake.lock..."
                     ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
 
                     echo "Trying to upgrade only nixpkgs and home-manager"
-                    ${nixos-rebuild} switch --flake ${flake} --update-input nixpkgs --update-input home-manager || 
+                    ${nixos-rebuild} ${operation} --flake ${flake} --update-input nixpkgs --update-input home-manager || 
                       (
                         echo "Upgrading nixpkgs and home-manager inputs failed, rolling back flake.lock..."
                         ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
 
                         echo "Trying to upgrade only nixpkgs"
-                        ${nixos-rebuild} switch --flake ${flake} --update-input nixpkgs || 
+                        ${nixos-rebuild} ${operation} --flake ${flake} --update-input nixpkgs || 
                           (
                             echo "Errors encountered, no upgrade possible, rolling back flake.lock..."
                             ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
                             echo "Activating previous config..."
-                            ${nixos-rebuild} switch --flake ${flake}
+                            ${nixos-rebuild} ${operation} --flake ${flake}
                             exit
                           )
                       )
@@ -286,8 +381,10 @@ in
               )
               ${pkgs.git}/bin/git -C "${cfg.location}" add flake.lock &&
                 (
-                  ${pkgs.git}/bin/git -C "${cfg.location}" commit -m "Auto Upgrade flake.lock"
+                  #${pkgs.git}/bin/git -C "${cfg.location}" commit -m "Auto Upgrade flake.lock"
+                  ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" commit -m "Auto Upgrade flake.lock"' # changes to user yeshey to push, which is not good
                   ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" push' # changes to user yeshey to push, which is not good
+                  #${pkgs.git}/bin/git -C "${cfg.location}" push
                 ) || echo "no commit executed"
 
               # Holy shit. awk doesnt work, sed doesnt as well
@@ -302,16 +399,26 @@ in
             # but then I should activate the timer again right? otherwise, it will only get activated next week...
           fi
         '';
+        
       postStop = ''
         ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
       '';
       unitConfig = {
         Conflicts="reboot.target";
       };
-      serviceConfig = {
+      # after = [ "network.target" ]; # will run before network turns of, bc in shutdown order is reversed
+      serviceConfig = rec {
         #User = "yeshey";
         Type = "oneshot";
         RemainAfterExit="true";
+        TimeoutSec=28800; # 8 hours max, so systemd doesnt killthe process so early
+        # run as a user with sudo https://stackoverflow.com/questions/36959877/using-sudo-with-execstart-systemd
+        /*ExecStop = let # https://stackoverflow.com/questions/36959877/using-sudo-with-execstart-systemd
+          jobScripts = makeJobScript "my-nixos-upgrade-pre-stop" preStop;
+        in lib.mkForce "${pkgs.sudo}/bin/sudo" + (toString jobScripts);*/
+        /*ExecStop = let
+          myScript = pkgs.writeShellScriptBin "autoUpgradeScript.sh" autoUpgradeScript;
+        in "${pkgs.sudo}/bin/sudo ${myScript}/bin/autoUpgradeScript.sh"; */
       };
       #wantedBy = [ "multi-user.target" ];
     };
