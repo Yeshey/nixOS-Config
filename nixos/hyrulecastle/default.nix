@@ -80,6 +80,12 @@ in
       lvm.enable = false;
     };
     autoUpgrades = {
+      enable = false;
+      location = "/home/yeshey/.setup";
+      host = "hyrulecastle";
+      dates = "daily";
+    };
+    autoUpgradesOnShutdown = {
       enable = true;
       location = "/home/yeshey/.setup";
       host = "hyrulecastle";

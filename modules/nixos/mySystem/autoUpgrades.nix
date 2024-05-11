@@ -84,6 +84,7 @@ in
         cfgau = config.system.autoUpgrade;
       in
       { 
+        # before = [ "shutdown.target" ]; # "reboot.target"
         script = 
           let
             nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
@@ -119,6 +120,8 @@ in
                           (
                             echo "Errors encountered, no upgrade possible, rolling back flake.lock..."
                             ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
+                            echo "Activating previous config..."
+                            ${nixos-rebuild} ${cfgau.operation} --flake ${cfgau.flake}
                             exit
                           )
                       )
