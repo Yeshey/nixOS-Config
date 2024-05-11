@@ -110,7 +110,7 @@ in
       lvm.enable = true;
     };
     autoUpgrades = {
-      enable = true;
+      enable = false;
       location = "/home/yeshey/.setup";
       host = "kakariko";
       dates = "weekly";
