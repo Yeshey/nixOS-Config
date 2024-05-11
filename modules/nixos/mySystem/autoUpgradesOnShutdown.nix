@@ -109,6 +109,100 @@ in
       #wantedBy = [ "final.target" ]; # [ "shutdown.target" ];
     };*/
 
+    # https://unix.stackexchange.com/a/479048/366800
+    # runs after the root filestystem is readonly_ doesnt run on reboot
+    systemd.services."test4" = {
+      #before = [ "shutdown.target" "reboot.target" ];
+      after = [ "poweroff.target" ];
+      script = ''
+        echo "test4 poweroff" > /home/yeshey/Downloads/test4.txt
+      '';
+      unitConfig = {
+        DefaultDependencies = "no";
+      };
+      serviceConfig = {
+        #User = "yeshey";
+        Type = "oneshot";
+        #RemainAfterExit="true";
+      };
+      wantedBy = [ "poweroff.target" ]; # runs when the root filesystem has been stopped?
+      #wantedBy = [ "final.target" ]; # [ "shutdown.target" ];
+    };
+
+    # https://superuser.com/questions/1705683/raspberry-pi-systemd-run-script-on-shutdown-poweroff-but-not-on-restart
+    # doesnt run on reboot
+    systemd.services."test5" = {
+      # before = [ "shutdown.target" "reboot.target" ];
+      preStop = ''
+        if ! systemctl list-jobs | egrep -q 'reboot.target.*start'; then
+          echo "test5 poweroff" > /home/yeshey/Downloads/test5.txt
+        fi
+      '';
+      unitConfig = {
+        Conflicts="reboot.target";
+      };
+      serviceConfig = {
+        #User = "yeshey";
+        Type = "oneshot";
+        RemainAfterExit="true";
+      };
+      wantedBy = [ "multi-user.target" ];
+      #wantedBy = [ "final.target" ]; # [ "shutdown.target" ];
+    };
+
+    # https://unix.stackexchange.com/questions/284598/systemd-how-to-execute-script-at-shutdown-only-not-at-reboot
+    systemd.services."test6" = {
+      path = with pkgs; [
+        coreutils
+      ];
+
+      # before = [ "shutdown.target" "reboot.target" ];
+      preStop = ''
+        if ! systemctl list-jobs | egrep -q 'reboot.target.*start'; then
+          echo "test6 poweroff" > /home/yeshey/Downloads/test6.txt
+        fi
+      '';
+      after = [ "network.target" ]; # will run before network turns of, bc in shutdown order is reversed
+      unitConfig = {
+        Conflicts="reboot.target";
+      };
+      serviceConfig = {
+        #User = "yeshey";
+        Type = "oneshot";
+        ExecStart="${pkgs.coreutils}/bin/true";
+        RemainAfterExit="yes";
+      };
+      wantedBy = [ "multi-user.target" ];
+      #wantedBy = [ "final.target" ]; # [ "shutdown.target" ];
+    };
+
+    # Use a timer to activate the service that will execute preStop on shutdown and not reboot
+    systemd.timers."test7" = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        Persistent = true; # If missed, run on boot (https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
+        OnCalendar = "Fri *-*-* 20:00:00"; # Every Friday at 19:00
+        Unit = "test7.service";
+      };
+    };
+    systemd.services."test7" = {
+      # before = [ "shutdown.target" "reboot.target" ];
+      preStop = ''
+        if ! systemctl list-jobs | egrep -q 'reboot.target.*start'; then
+          echo "test7 poweroff" > /home/yeshey/Downloads/test7.txt
+        fi
+      '';
+      unitConfig = {
+        Conflicts="reboot.target";
+      };
+      serviceConfig = {
+        #User = "yeshey";
+        Type = "oneshot";
+        RemainAfterExit="true";
+      };
+      #wantedBy = [ "multi-user.target" ];
+      #wantedBy = [ "final.target" ]; # [ "shutdown.target" ];
+    };
 
     systemd.services.my-nixos-upgrade = {
       description = "My NixOS Upgrade";
