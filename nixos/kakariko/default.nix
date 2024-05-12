@@ -118,7 +118,7 @@ in
     flatpaks.enable = true;
     i2p.enable = true;
     syncthing = {
-      enable = true;
+      enable = false;
       dataStoragePath = "/mnt/ntfsMicroSD-DataDisk";
     };
 
