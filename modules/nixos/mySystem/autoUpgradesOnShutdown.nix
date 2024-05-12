@@ -304,7 +304,7 @@ in
       wantedBy = [ "timers.target" ];
       timerConfig = {
         Persistent = true; # If missed, run on boot (https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
-        OnCalendar = "Fri *-*-* 20:00:00"; # Every Friday at 19:00 "*:0/5"; # Every 5 minutes
+        OnCalendar = cfg.dates; # "Fri *-*-* 20:00:00"; # Every Friday at 19:00 "*:0/5"; # Every 5 minutes
         Unit = "my-nixos-upgrade.service";
       };
     };
