@@ -304,7 +304,7 @@ in
       wantedBy = [ "timers.target" ];
       timerConfig = {
         Persistent = true; # If missed, run on boot (https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
-        OnCalendar = "Fri *-*-* 20:00:00"; # Every Friday at 19:00
+        OnCalendar = "Fri *-*-* 20:00:00"; # Every Friday at 19:00 "*:0/5"; # Every 5 minutes
         Unit = "my-nixos-upgrade.service";
       };
     };
@@ -341,6 +341,7 @@ in
 #         lib.mkForce # makes it override the script, instead of appending
         ''
           if ! systemctl list-jobs | egrep -q 'reboot.target.*start'; then
+
             echo "will poweroff, not reboot, upgrading..."
             # export HOME=/home/yeshey
             
@@ -393,7 +394,6 @@ in
 
               # awk attempt (works, but doesnt write file in place?: gawk -i inplace '{a[NR]=$0; if ($0 ~ /^pick/) {last_pick_line = $0; last_pick_position = NR}} END {print last_pick_line; for (i=1; i<NR; i++) {if (i != last_pick_position) {print a[i]}}}' /mnt/DataDisk/Downloads/test.txt
 
-
           else
             echo "Is rebooting, not upgrading..."
             # but then I should activate the timer again right? otherwise, it will only get activated next week...
@@ -406,11 +406,22 @@ in
       unitConfig = {
         Conflicts="reboot.target";
       };
-      # after = [ "network.target" ]; # will run before network turns of, bc in shutdown order is reversed
+      # https://www.freedesktop.org/wiki/Software/systemd/NetworkTarget/
+      #wants = [ "local-fs.target" "remote-fs.target" "network.target" "network-online.target" "nss-lookup.target" "systemd-resolved.service" ];
+      #after = [ "local-fs.target" "remote-fs.target" "network.target" "network-online.target" "nss-lookup.target" "systemd-resolved.service" ]; # will run before network turns of, bc in shutdown order is reversed
+      #requires = [ "local-fs.target" "remote-fs.target" "network.target" "network-online.target" "nss-lookup.target" "systemd-resolved.service" ];
+
+      # https://www.reddit.com/r/systemd/comments/rbde3o/running_a_script_on_shutdown_that_needs_wifi/
+      # With network amnager, you will always need to set "let all users connect to this network", so you still have internet after logging out
+      wants = [ "network-online.target" "nss-lookup.target" ];
+      after = [ "network-online.target" "nss-lookup.target" ]; # will run before network turns of, bc in shutdown order is reversed
+      requires = [ "network-online.target" "nss-lookup.target" ];
+
       serviceConfig = rec {
         #User = "yeshey";
         Type = "oneshot";
-        RemainAfterExit="true";
+        RemainAfterExit="yes"; # true?
+        ExecStart="${pkgs.coreutils}/bin/true";
         TimeoutSec=28800; # 8 hours max, so systemd doesnt killthe process so early
         # run as a user with sudo https://stackoverflow.com/questions/36959877/using-sudo-with-execstart-systemd
         /*ExecStop = let # https://stackoverflow.com/questions/36959877/using-sudo-with-execstart-systemd
