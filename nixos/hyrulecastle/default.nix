@@ -89,7 +89,7 @@ in
       enable = true;
       location = "/home/yeshey/.setup";
       host = "hyrulecastle";
-      dates = "daily";
+      dates = "Fri *-*-* 20:00:00"; # Every Friday at 19:00 "*:0/5"; # Every 5 minutes
     };
     flatpaks.enable = true;
     i2p.enable = true;
