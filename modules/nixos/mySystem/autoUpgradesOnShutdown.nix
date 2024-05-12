@@ -51,6 +51,7 @@ in
     dates = lib.mkOption {
       type = lib.types.str;
       example = "weekly";
+      default = "*-*-1/3"; # every 3 days
       description = ''
         how frequently to update
       '';
