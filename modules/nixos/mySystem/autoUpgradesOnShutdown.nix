@@ -1,3 +1,5 @@
+# my reddit ran on how this works: https://www.reddit.com/r/NixOS/comments/f3twx0/comment/l3rzd5f/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+
 {
   config,
   lib,
@@ -7,28 +9,6 @@
 
 let
   cfg = config.mySystem.autoUpgradesOnShutdown;
-
-  # from https://github.com/NixOS/nixpkgs/blob/master/nixos/lib/systemd-lib.nix
-  /*
-  makeJobScript = name: text:
-  with lib;
-    let
-      shellEscape = s: (replaceStrings [ "\\" ] [ "\\\\" ] s);
-      scriptName = replaceStrings [ "\\" "@" ] [ "-" "_" ] (shellEscape name);
-      out = (pkgs.writeShellScriptBin scriptName ''
-        set -e
-        ${text}
-      '').overrideAttrs (_: {
-        # The derivation name is different from the script file name
-        # to keep the script file name short to avoid cluttering logs.
-        name = "unit-script-${scriptName}";
-      });
-    in "${out}/bin/${scriptName}";*/
-
-
-
-  
-
 in
 {
   options.mySystem.autoUpgradesOnShutdown = {
@@ -51,6 +31,7 @@ in
     dates = lib.mkOption {
       type = lib.types.str;
       example = "weekly";
+      default = "*-*-1/3"; # every 3 days
       description = ''
         how frequently to update
       '';
@@ -58,75 +39,7 @@ in
   };
 
   config = let 
-  /*
-    autoUpgradeScript =         let
-          nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
-          date     = "${pkgs.coreutils}/bin/date";
-          readlink = "${pkgs.coreutils}/bin/readlink";
-          shutdown = "${config.systemd.package}/bin/shutdown";
-          flake = "${cfg.location}#${cfg.host}";
-        in ''
-          
-          set -e
 
-          if ! systemctl list-jobs | egrep -q 'reboot.target.*start'; then
-            echo "will poweroff, not reboot, upgrading..."
-            
-            
-            echo "grabbing latest version of repo"            
-            #${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" pull'
-            ${pkgs.git}/bin/git -C "${cfg.location}" pull
-            echo "Trying to upgrade all flake inputs"
-            nix flake update ${cfg.location}
-            ${nixos-rebuild} boot --flake ${flake} || 
-              (
-                echo "Upgrading all flake inputs failed, rolling back flake.lock..."
-                ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
-
-                echo "Trying to upgrade only nixpkgs, home-manager and nixos-hardware"
-                ${nixos-rebuild} switch --flake ${flake} --update-input nixpkgs --update-input home-manager --update-input nixos-hardware || 
-                  (
-                    echo "Upgrading nixpkgs, home-manager and nixos-hardware inputs failed, rolling back flake.lock..."
-                    ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
-
-                    echo "Trying to upgrade only nixpkgs and home-manager"
-                    ${nixos-rebuild} switch --flake ${flake} --update-input nixpkgs --update-input home-manager || 
-                      (
-                        echo "Upgrading nixpkgs and home-manager inputs failed, rolling back flake.lock..."
-                        ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
-
-                        echo "Trying to upgrade only nixpkgs"
-                        ${nixos-rebuild} switch --flake ${flake} --update-input nixpkgs || 
-                          (
-                            echo "Errors encountered, no upgrade possible, rolling back flake.lock..."
-                            ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
-                            echo "Activating previous config..."
-                            ${nixos-rebuild} switch --flake ${flake}
-                            exit
-                          )
-                      )
-                  ) 
-              )
-              ${pkgs.git}/bin/git -C "${cfg.location}" add flake.lock &&
-                (
-                  ${pkgs.git}/bin/git -C "${cfg.location}" commit -m "Auto Upgrade flake.lock"
-                  #${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" push' # changes to user yeshey to push, which is not good
-                  ${pkgs.git}/bin/git -C "${cfg.location}" push
-                ) || echo "no commit executed"
-
-              # Holy shit. awk doesnt work, sed doesnt as well
-
-              # this swaps last two commits: GIT_SEQUENCE_EDITOR="sed -i -n 'h;1n;2p;g;p'" git rebase -i HEAD~2
-
-              # awk attempt (works, but doesnt write file in place?: gawk -i inplace '{a[NR]=$0; if ($0 ~ /^pick/) {last_pick_line = $0; last_pick_position = NR}} END {print last_pick_line; for (i=1; i<NR; i++) {if (i != last_pick_position) {print a[i]}}}' /mnt/DataDisk/Downloads/test.txt
-
-
-          else
-            echo "Is rebooting, not upgrading..."
-            # but then I should activate the timer again right? otherwise, it will only get activated next week...
-          fi
-        '';*/
-  
   in lib.mkIf cfg.enable {
 
 /*
@@ -304,7 +217,7 @@ in
       wantedBy = [ "timers.target" ];
       timerConfig = {
         Persistent = true; # If missed, run on boot (https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
-        OnCalendar = "Fri *-*-* 20:00:00"; # Every Friday at 19:00 "*:0/5"; # Every 5 minutes
+        OnCalendar = cfg.dates; # "Fri *-*-* 20:00:00"; # Every Friday at 19:00 "*:0/5"; # Every 5 minutes
         Unit = "my-nixos-upgrade.service";
       };
     };
@@ -412,7 +325,7 @@ in
       #requires = [ "local-fs.target" "remote-fs.target" "network.target" "network-online.target" "nss-lookup.target" "systemd-resolved.service" ];
 
       # https://www.reddit.com/r/systemd/comments/rbde3o/running_a_script_on_shutdown_that_needs_wifi/
-      # With network amnager, you will always need to set "let all users connect to this network", so you still have internet after logging out
+      # With network manager, you will always need to set "let all users connect to this network", so you still have internet after logging out
       wants = [ "network-online.target" "nss-lookup.target" ];
       after = [ "network-online.target" "nss-lookup.target" ]; # will run before network turns of, bc in shutdown order is reversed
       requires = [ "network-online.target" "nss-lookup.target" ];
