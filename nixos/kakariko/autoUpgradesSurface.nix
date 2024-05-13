@@ -75,6 +75,22 @@ in
       persistent = true; # upgrades even if PC was off when it would upgrade
     };
 
+    systemd.services.nixos-upgrade = 
+      let
+        cfgau = config.system.autoUpgrade;
+      in {
+        path = with pkgs; [
+          busybox
+        ];
+
+        preStart = ''
+          until ${pkgs.busybox}/bin/ping -c1 192.168.1.109 ; do sleep 300 ; done
+        '';
+
+# echo -n "Waiting for host..." ; until ${pkgs.busybox}/bin/ping -c1 192.168.1.109 >/dev/null 2>&1; do sleep 60 && echo -n "." ; done
+
+    };
+
     /*
     # Make the service be less CPU instensive
     systemd.services.nixos-upgrade.serviceConfig = let
