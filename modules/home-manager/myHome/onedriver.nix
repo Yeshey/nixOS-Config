@@ -10,7 +10,8 @@ let
   #onedriverPackage = pkgs.unstable.onedriver; #pkgs.myOnedriver
   #onedriverPackage = pkgs.myOnedriver;
   #onedriverPackage = patchedPkgs.onedriver;
-  onedriverPackage = pkgs.myOnedriver;
+  onedriverPackage = pkgs.myOnedriver; # TODO check if the latest version works already, currently its a grey screen https://github.com/jstaf/onedriver/issues/398
+  #onedriverPackage = pkgs.unstable.onedriver;
 
   # Using my package this shouldn't be needed anymore in the system config:
   # environment.variables.GIO_EXTRA_MODULES = lib.mkDefault [ "${pkgs.glib-networking.out}/lib/gio/modules" ]; # needed for now for onedriver (made an issue: https://github.com/NixOS/nixpkgs/issues/308666)
