@@ -87,7 +87,8 @@ upgrade-nixpkgs() {
     fi
 }
 space() {
-    watch "df -h $1 && df $1"
+    local target_dir=${1:-.}
+    watch "df -h $target_dir && df $target_dir"
 }
 gacp() {
     local commitMsg="$1"
