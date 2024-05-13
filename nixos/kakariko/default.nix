@@ -53,11 +53,7 @@ in
   imports = [
     inputs.nixos-hardware.nixosModules.microsoft-surface-pro-intel
     ./hardware-configuration.nix
-
-    # (import ./configFiles/VM/VM.nix) # TODO
-    # (import ./configFiles/dontStarveTogetherServer.nix) # TODO
-    # (import ./configFiles/kubo.nix) # for ipfs # TODO
-    # (import ./../oracleArmVM/configFiles/ngix-server.nix) # TODO ???
+    ./autoUpgradesSurface.nix
   ];
 
   nixpkgs = {
@@ -114,6 +110,12 @@ in
       location = "/home/yeshey/.setup";
       host = "kakariko";
       dates = "weekly";
+    };
+    autoUpgradesSurface = {
+      enable = true;
+      location = "github:yeshey/nixOS-Config";
+      host = "kakariko";
+      dates = "daily";
     };
     flatpaks.enable = true;
     i2p.enable = true;
