@@ -70,13 +70,6 @@ in
       flags = [
         "--build-host root@192.168.1.109"
         "--verbose"
-        # "--upgrade --option fallback false --update-input nixos-hardware --update-input home-manager --update-input nixpkgs || (cd ${location} && git checkout --flake.lock)"
-
-        # "--upgrade" (seems to be redundant) # upgrade NixOS to the latest version in your chosen channel
-        # "--option fallback false" # fallback false should force it to use pre-built packages (https://github.com/NixOS/nixpkgs/issues/77971)
-        # "--update-input nixos-hardware --update-input home-manager --update-input nixpkgs" # To update all the packages
-        # "--commit-lock-file" # commit the new lock file with git
-        # || cd ${location} && git checkout -- flake.lock '' # reverts the changes to flake.lock if things went south (doesn't work because the commands in this list they aren't placed in this order in the end)
       ];
       allowReboot = false; # set to false
       persistent = true; # upgrades even if PC was off when it would upgrade
