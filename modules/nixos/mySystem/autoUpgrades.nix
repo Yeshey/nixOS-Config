@@ -128,6 +128,9 @@ in
                   ) 
               )
               ${pkgs.git}/bin/git config --global --add safe.directory "${cfg.location}"
+              ${pkgs.git}/bin/git config --global user.email "yesheysangpo@hotmail.com"
+              ${pkgs.git}/bin/git config --global user.name "Yeshey"
+
               ${pkgs.git}/bin/git -C "${cfg.location}" add flake.lock &&
                 (
                   ${pkgs.git}/bin/git -C "${cfg.location}" commit -m "Auto Upgrade flake.lock"
