@@ -91,7 +91,7 @@ in
       gimp
       krita
       inkscape
-      arduino
+      # arduino
       # premid # show youtube videos watching in discord
     ];
   };
