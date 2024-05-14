@@ -127,11 +127,14 @@ in
                       )
                   ) 
               )
+              ${pkgs.git}/bin/git config --global --add safe.directory "${cfg.location}"
               ${pkgs.git}/bin/git -C "${cfg.location}" add flake.lock &&
                 (
                   ${pkgs.git}/bin/git -C "${cfg.location}" commit -m "Auto Upgrade flake.lock"
                   ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" push' # changes to user yeshey to push, which is not good
                 ) || echo "no commit executed"
+              
+              cd ${cfg.location}/.git/objects && chown -R yeshey:users *
 
               # Holy shit. awk doesnt work, sed doesnt as well
 

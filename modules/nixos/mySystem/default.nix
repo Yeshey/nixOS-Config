@@ -153,6 +153,7 @@ in
       forwardX11 = true;
     };
     programs.command-not-found.enable = lib.mkDefault true;
+    environment.systemPackages = [ pkgs.deploy-rs ];
 
     networking.networkmanager.enable = lib.mkDefault true;
     networking.resolvconf.dnsExtensionMechanism = lib.mkDefault false; # fixes internet connectivity problems with some sites (https://discourse.nixos.org/t/domain-name-resolve-problem/885/2)

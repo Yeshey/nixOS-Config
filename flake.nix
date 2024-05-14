@@ -44,12 +44,12 @@
       #inputs.nixpkgs.follows = "nixpkgs-special";
     #};
 
-    /*
+    
     deploy-rs = {
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    */
+    
     /*
       agenix = { # For secrets management
         url = "github:ryantm/agenix";
@@ -77,6 +77,7 @@
       #    , agenix
       neovim-plugins,
       #    , nixgl
+      deploy-rs,
       nix-colors,
       plasma-manager,
       nurpkgs,
@@ -210,5 +211,33 @@
         #  ];
         #};
       };
+
+      # For remote deployment, use with Ex: `deploy '.#hyrulecastle' --debug-logs --skip-checks`
+      # the deploy-rs package is added globally in modules/nixos/mySystem/default.nix
+      deploy.nodes =
+        let
+          mkDeployConfig = hostname: configuration: {
+            inherit hostname;
+            profiles.system =
+              let
+                inherit (configuration.config.nixpkgs.hostPlatform) system;
+              in
+              {
+                path = deploy-rs.lib."${system}".activate.nixos configuration;
+                sshUser = "yeshey";
+                user = "root";
+                sshOpts = [ "-t" ];
+                magicRollback = true; # Disable because it breaks remote sudo :<
+                interactiveSudo = true;
+              };
+          };
+        in
+        {
+          hyrulecastle = mkDeployConfig "192.168.1.109" self.nixosConfigurations.hyrulecastle;
+          kakariko = mkDeployConfig "kakariko.lan" self.nixosConfigurations.kakariko;
+          skyloft = mkDeployConfig "143.47.53.175" self.nixosConfigurations.skyloft;
+        };
+
+      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
     };
 }
