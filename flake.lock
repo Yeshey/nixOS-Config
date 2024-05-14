@@ -105,11 +105,11 @@
         "utils": "utils"
       },
       "locked": {
-        "lastModified": 1711973905,
-        "narHash": "sha256-UFKME/N1pbUtn+2Aqnk+agUt8CekbpuqwzljivfIme8=",
+        "lastModified": 1715699772,
+        "narHash": "sha256-sKhqIgucN5sI/7UQgBwsonzR4fONjfMr9OcHK/vPits=",
         "owner": "serokell",
         "repo": "deploy-rs",
-        "rev": "88b3059b020da69cbe16526b8d639bd5e0b51c8b",
+        "rev": "b3ea6f333f9057b77efd9091119ba67089399ced",
         "type": "github"
       },
       "original": {
@@ -121,11 +121,11 @@
     "devicons": {
       "flake": false,
       "locked": {
-        "lastModified": 1715028064,
-        "narHash": "sha256-DSUTxUFCesXuaJjrDNvurILUt1IrO5MI5ukbZ8D87zQ=",
+        "lastModified": 1715644375,
+        "narHash": "sha256-1trRSUVyWFl3K+7xHXQGNl/EwE0ggyigQpZ+kmRPsk8=",
         "owner": "nvim-tree",
         "repo": "nvim-web-devicons",
-        "rev": "5b9067899ee6a2538891573500e8fd6ff008440f",
+        "rev": "e37bb1feee9e7320c76050a55443fa843b4b6f83",
         "type": "github"
       },
       "original": {
@@ -244,11 +244,11 @@
         "xdph": "xdph"
       },
       "locked": {
-        "lastModified": 1715610558,
-        "narHash": "sha256-7A61/9QZAIgakcut6b1ZYR6+HItwrHymFC89hfxXKDA=",
+        "lastModified": 1715701512,
+        "narHash": "sha256-bgXvHS/Gj6RZTes0oWXziQ7CJbLJWvu/xDei117tZro=",
         "owner": "hyprwm",
         "repo": "Hyprland",
-        "rev": "47874f09f4d14703fe0c483a46b345c7be601ace",
+        "rev": "4cdddcfe466cb21db81af0ac39e51cc15f574da9",
         "type": "github"
       },
       "original": {
@@ -264,11 +264,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1713780596,
-        "narHash": "sha256-DDAYNGSnrBwvVfpKx+XjkuecpoE9HiEf6JW+DBQgvm0=",
+        "lastModified": 1715621965,
+        "narHash": "sha256-S5Wzi3hhFOiCaeZqmx3zBdrv8KzaEafD5hCfY8ixz0A=",
         "owner": "hyprwm",
         "repo": "contrib",
-        "rev": "110e6dc761d5c3d352574def3479a9c39dfc4358",
+        "rev": "46d2206858657d439792926958f52b037534de49",
         "type": "github"
       },
       "original": {
@@ -453,11 +453,11 @@
         "telescope-file-browser": "telescope-file-browser"
       },
       "locked": {
-        "lastModified": 1715559227,
-        "narHash": "sha256-Xni/J1w67XafiLtH0SjS2SHab8+CE9u8hvMQ6cKgkLw=",
+        "lastModified": 1715645592,
+        "narHash": "sha256-TXBckEu8hHFr31j8gKojswWSRusxVGzH+OL6DKCrqi0=",
         "owner": "LongerHV",
         "repo": "neovim-plugins-overlay",
-        "rev": "e2864e6a4fa0d6c330f96778d419d3c63d569f0e",
+        "rev": "51c49bd7527a5220ee54ead90f59d321bcc3c470",
         "type": "github"
       },
       "original": {
@@ -598,11 +598,11 @@
     },
     "nurpkgs": {
       "locked": {
-        "lastModified": 1715611234,
-        "narHash": "sha256-i7zIWbB8ohyStvfWsyLTEL4MYOVL9ZUHEdlAiapo6P4=",
+        "lastModified": 1715701631,
+        "narHash": "sha256-QFeFEtmq2QTdVyTm6fKhObUcVMpSxg/J6wLdsXWzg5A=",
         "owner": "nix-community",
         "repo": "NUR",
-        "rev": "323f4977a915d531bcf6ca0fd86d6e18c53070e4",
+        "rev": "7f4595810bbd28bfe024aa3fbc3358a34df18d4d",
         "type": "github"
       },
       "original": {
@@ -662,11 +662,11 @@
     "oil": {
       "flake": false,
       "locked": {
-        "lastModified": 1715022210,
-        "narHash": "sha256-KMD9mqFCqZKfQexHoP58cptyOg19deZd3VH41tDKEwY=",
+        "lastModified": 1715621750,
+        "narHash": "sha256-jmrJQdYC12RRLgqhP5ilZSOJQ8jxCrJQyawcstCm2D4=",
         "owner": "stevearc",
         "repo": "oil.nvim",
-        "rev": "010b44a79d497c697686e2727049d3dd215bbbd6",
+        "rev": "aa0c00c7fd51982ac476d165cd021f348cf5ea71",
         "type": "github"
       },
       "original": {
@@ -734,11 +734,11 @@
     "schemastore": {
       "flake": false,
       "locked": {
-        "lastModified": 1715187644,
-        "narHash": "sha256-aJ64CRW1+aBjH9vjRF/Bs8KyznB9a4ucEE+3W7h1Y+U=",
+        "lastModified": 1715623263,
+        "narHash": "sha256-UVy8uedHr97kXMOOmb5fL9bzeUSxV7UzF0uTUodbeYE=",
         "owner": "b0o",
         "repo": "SchemaStore.nvim",
-        "rev": "35a0998728380a17b8590447e8207391411c667a",
+        "rev": "8706b99e1253f54f640fbc4f4ae13cdf034c135a",
         "type": "github"
       },
       "original": {
