@@ -49,16 +49,13 @@
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    
-    /*
-      agenix = { # For secrets management
-        url = "github:ryantm/agenix";
-        inputs = {
-          nixpkgs.follows = "nixpkgs";
-          home-manager.follows = "home-manager";
-        };
+    agenix = { # For secrets management
+      url = "github:ryantm/agenix";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        home-manager.follows = "home-manager";
       };
-    */
+    };
     /*
       nixgl = { # Might be needed for non-nixOS setups
         url = "github:guibou/nixGL";
@@ -74,7 +71,7 @@
       nixpkgs-unstable,
       nixos-hardware,
       home-manager,
-      #    , agenix
+      agenix,
       neovim-plugins,
       #    , nixgl
       deploy-rs,
