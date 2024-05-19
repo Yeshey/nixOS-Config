@@ -13,7 +13,7 @@ let
 in
 {
   # These are the users and systems that will be able to decrypt the .age files later with their corresponding private keys. You can obtain the public keys from
-  "nasgul_wireguard_priv_key.age".publicKeys = [ nasgul mordor_user ];
+  # "nasgul_wireguard_priv_key.age".publicKeys = [ nasgul mordor_user ];
 
   /*
   # Tokens

@@ -23,10 +23,10 @@ in
     environment.systemPackages = [ inputs.agenix.packages.${system}.agenix ]; # adds agenix
 
     # to provide key for agenix
-    openssh = {
-      enable = true;
+    #openssh = {
+    #  enable = true;
       # openFirewall = false;
-    };
+    #};
 
     age = {
       secrets = {
