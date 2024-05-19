@@ -15,7 +15,12 @@ in
 
   config = lib.mkIf cfg.enable {
     # Enable CUPS to print documents.
-    services.printing.enable = true; # TODO check if it works with your printer
+    services.printing = {
+      enable = true; # TODO check if it works with your printer
+      #drivers = with pkgs; [
+      #  xerox-generic-driver
+      #];
+    };
     environment = {
       systemPackages = with pkgs; [ xsane ];
     };

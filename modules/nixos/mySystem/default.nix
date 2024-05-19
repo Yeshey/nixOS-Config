@@ -60,7 +60,7 @@ in
     ./syncthing.nix
     ./borgBackups.nix
     ./openssh.nix
-    ./secrets
+    ./agenix.nix
   ];
 
   options.mySystem = with lib; {
