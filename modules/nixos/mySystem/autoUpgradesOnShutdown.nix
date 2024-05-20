@@ -253,9 +253,13 @@ in
         in 
 #         lib.mkForce # makes it override the script, instead of appending
         ''
-          if ! systemctl list-jobs | egrep -q 'reboot.target.*start'; then
+          if ! systemctl list-jobs | egrep -q 'poweroff.target.*start'; then
 
-            echo "will poweroff, not reboot, upgrading..."
+            echo "will not poweroff, doing something else, not upgrading..."
+            # but then I should activate the timer again right? otherwise, it will only get activated next week...
+
+          else
+            echo "Is powering off, upgrading..."
             # export HOME=/home/yeshey
             
             echo "grabbing latest version of repo"   
@@ -307,9 +311,6 @@ in
 
               # awk attempt (works, but doesnt write file in place?: gawk -i inplace '{a[NR]=$0; if ($0 ~ /^pick/) {last_pick_line = $0; last_pick_position = NR}} END {print last_pick_line; for (i=1; i<NR; i++) {if (i != last_pick_position) {print a[i]}}}' /mnt/DataDisk/Downloads/test.txt
 
-          else
-            echo "Is rebooting, not upgrading..."
-            # but then I should activate the timer again right? otherwise, it will only get activated next week...
           fi
         '';
         
