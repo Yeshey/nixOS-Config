@@ -7,46 +7,74 @@
 }:
 
 let
-  cfg = config.mySystem.agenix;
+  cfg = config.myHome.agenix;
   inherit (pkgs.stdenv.hostPlatform) system; # for agenix pkg
+
+  mystuff = pkgs.writeShellScriptBin "echo-secret" ''
+        ${pkgs.coreutils}/bin/cat ${config.age.secrets.my_identity.path} > /home/yeshey/Downloads/ImOkay.txt
+      '';
 in
 {
   imports = [
-    inputs.agenix.nixosModules.default
+    inputs.agenix.homeManagerModules.default
+    # inputs.agenix.nixosModules.default
   ];
 
-  options.mySystem.agenix = with lib; {
+  options.myHome.agenix = with lib; {
     enable = mkEnableOption "agenix";
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ inputs.agenix.packages.${system}.agenix ]; # adds agenix
 
-    # to provide key for agenix
-    services.openssh = {
-      enable = true;
-      # openFirewall = false;
-    };
+    home.packages = [
+      inputs.agenix.packages.${system}.agenix
+      mystuff
+    ];
 
-    systemd.services."test" = {
+    # we need services.openssh enabled in the system (I think)
+
+    systemd.user.services."test" = {
       # before = [ "shutdown.target" "reboot.target" ];
-      script = ''
-        cat ${config.age.secrets.my_identity.path} > /home/yeshey/Downloads/test.txt
-      '';
-      serviceConfig = {
+      #script = ''
+      #  # cat ${config.age.secrets.my_identity.path} > /home/yeshey/Downloads/test.txt
+      #  ${pkgs.coreutils}/bin/cat /home/yeshey/Downloads/therealthing.txt > /home/yeshey/Downloads/test.txt
+      #'';
+      Unit = {
+        Description = "test";
+        After = [ "agenix.service" ];
+      };
+      Service = {
         #User = "yeshey";
         Type = "oneshot";
+        ExecStart = "${mystuff}/bin/echo-secret";
         #RemainAfterExit="true";
       };
-      wantedBy = [ "multi-user.target" ];
+      Install.WantedBy = [ "default.target" ];
       #wantedBy = [ "final.target" ]; # [ "shutdown.target" ];
     };
 
+
+    #home.file."Downloads/mySecret.txt".source = builtins.toFile "mySecret.txt" ''
+    #  $(${pkgs.coreutils}/bin/cat ${config.age.secrets.my_identity.path})
+    #'';
+
+/*
+    systemd.user.services."mytest" = {
+      script = ''
+        cat ${config.age.secrets.my_identity.path} > $HOME/Downloads/
+      '';
+      Service = {
+        Type = "oneshot";
+      };
+    }; */
+
     age = {
+      identityPaths = [ "/home/yeshey/.ssh/my_identity" ];
       secrets = {
 
         my_identity = {
           file = ../../../secrets/my_identity.age;
+          # path = "$HOME/Downloads/mymymymy.txt";
           #mode = "0440";
           #group = config.users.groups.keys.name;
         };

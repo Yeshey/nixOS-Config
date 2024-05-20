@@ -16,6 +16,7 @@ in
   config = lib.mkIf cfg.enable {
     home = {
       packages = with pkgs; [
+
         github-desktop
         obs-studio
         stremio

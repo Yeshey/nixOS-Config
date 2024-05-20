@@ -44,6 +44,8 @@ in
 
   mySystem = rec {
     # all the options
+    host = "hyrulecastle";
+    user = "yeshey";
     plasma.enable = true;
     gnome.enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
     hyprland.enable = false;
@@ -57,8 +59,6 @@ in
     gaming.enable = true;
     vmHost = true;
     dockerHost = true;
-    host = "hyrulecastle";
-    user = "yeshey";
     home-manager = {
       enable = true;
       home = ./home.nix;
@@ -121,7 +121,7 @@ in
 
     androidDevelopment.enable = false;
 
-    agenix.enable = true;
+    agenix.enable = false;
 
     # https://gist.github.com/WhittlesJr/a6de35b995e8c14b9093c55ba41b697c
     # Enable the module with pciIDs = ""; and then run one of these commands to find the pciIDs:
