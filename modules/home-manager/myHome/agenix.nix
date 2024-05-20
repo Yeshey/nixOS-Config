@@ -33,24 +33,17 @@ in
 
     # we need services.openssh enabled in the system (I think)
 
+    # My comment on this https://github.com/ryantm/agenix/issues/50#issuecomment-2119528799
     systemd.user.services."test" = {
-      # before = [ "shutdown.target" "reboot.target" ];
-      #script = ''
-      #  # cat ${config.age.secrets.my_identity.path} > /home/yeshey/Downloads/test.txt
-      #  ${pkgs.coreutils}/bin/cat /home/yeshey/Downloads/therealthing.txt > /home/yeshey/Downloads/test.txt
-      #'';
       Unit = {
         Description = "test";
         After = [ "agenix.service" ];
       };
       Service = {
-        #User = "yeshey";
         Type = "oneshot";
         ExecStart = "${mystuff}/bin/echo-secret";
-        #RemainAfterExit="true";
       };
       Install.WantedBy = [ "default.target" ];
-      #wantedBy = [ "final.target" ]; # [ "shutdown.target" ];
     };
 
 
