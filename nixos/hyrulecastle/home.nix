@@ -73,6 +73,8 @@ in
       onedriverFolder = "/mnt/hdd-btrfs/Yeshey/OneDriver/";
       serviceName = "onedriver@mnt-hdd\\x2dbtrfs-Yeshey-OneDriver";
     };
+
+    agenix.enable = true;
   };
 
   home = {
