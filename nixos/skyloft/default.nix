@@ -75,6 +75,10 @@
       dataStoragePath = "/home/${user}";
     };
     androidDevelopment.enable = false;
+    agenix = {
+      enable = true;
+      sshKeys.enable = true;
+    };
   };
 
   toHost = {

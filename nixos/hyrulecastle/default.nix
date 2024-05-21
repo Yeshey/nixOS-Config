@@ -121,7 +121,10 @@ in
 
     androidDevelopment.enable = false;
 
-    agenix.enable = false;
+    agenix = {
+      enable = true;
+      sshKeys.enable = true;
+    };
 
     # https://gist.github.com/WhittlesJr/a6de35b995e8c14b9093c55ba41b697c
     # Enable the module with pciIDs = ""; and then run one of these commands to find the pciIDs:

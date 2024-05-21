@@ -53,6 +53,10 @@
       intelBusId = "PCI:0:1:0";
       nvidiaBusId = "PCI:8:0:0";
     };
+    agenix = {
+      enable = true;
+      sshKeys.enable = true;
+    };
   };
 
   boot.kernelParams = [ "nouveau.modeset=0" ];
