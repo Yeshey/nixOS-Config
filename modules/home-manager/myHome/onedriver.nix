@@ -75,7 +75,7 @@ in
         Type = "oneshot";
         ExecStart = "${onedriverPackage}/bin/onedriver --wipe-cache";
       };
-      Install.WantedBy = [ "default.target" ];
+      #Install.WantedBy = [ "default.target" ];
     };
     systemd.user.timers."delete-onedriver-cache" = {
       Unit.Description = "delete-onedriver-cache schedule";
@@ -84,7 +84,7 @@ in
         OnCalendar = "*-*-1,4,7,10,13,16,19,22,25,28"; # "*-*-1,4,7,10,13,16,19,22,25,28"; # Every three days approximatley (every minute: "*-*-* *:*:00")
         Persistent = true; # If missed, run on boot (https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
       };
-      Install.WantedBy = [ "timers.target" ]; # If missed, run on boot (https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
+      Install.WantedBy = [ "timers.target" ]; # the timer starts with timers
     };
 
 
