@@ -10,14 +10,15 @@ let
   cfg = config.myHome.agenix;
   inherit (pkgs.stdenv.hostPlatform) system; # for agenix pkg
 
-  mystuff = pkgs.writeShellScriptBin "echo-secret" ''
-        ${pkgs.coreutils}/bin/cat ${config.age.secrets.my_identity.path} > /home/yeshey/Downloads/ImOkay.txt
-      '';
+  #mystuff = pkgs.writeShellScriptBin "echo-secret" ''
+  #      ${pkgs.coreutils}/bin/cat ${config.age.secrets.my_identity.path} > /home/yeshey/Downloads/ImOkay.txt
+  #    '';
 in
 {
   imports = [
     inputs.agenix.homeManagerModules.default
     ./sshKeys.nix
+    ./onedriver.nix
   ];
 
   options.myHome.agenix = with lib; {
@@ -25,10 +26,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    myHome.agenix.sshKeys.enable = lib.mkDefault true;  
+    myHome.agenix.onedriver.enable = lib.mkDefault true;  
 
     home.packages = [
       inputs.agenix.packages.${system}.agenix
-      mystuff
+      # mystuff
     ];
 
     # we need services.openssh enabled in the system (I think)
@@ -55,6 +58,13 @@ in
 
         my_identity = {
           file = ../../../../secrets/my_identity.age;
+          # path = "$HOME/Downloads/mymymymy.txt";
+          #mode = "0440";
+          #group = config.users.groups.keys.name;
+        };
+
+        onedriver_auth = {
+          file = ../../../../secrets/onedriver_auth.age;
           # path = "$HOME/Downloads/mymymymy.txt";
           #mode = "0440";
           #group = config.users.groups.keys.name;

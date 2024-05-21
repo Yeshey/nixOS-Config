@@ -69,13 +69,26 @@ in
 
 
     # A systemd timer and service to delete all the cahched files so it doesnt start taking up space
-    systemd.user.services."delete-onedriver-cache" = {
-      Unit.Description = "delete-onedriver-cache";
+    systemd.user.services."delete-onedriver-cache" = let
+      mystuff = pkgs.writeShellScriptBin "doyojob" ''
+            ${onedriverPackage}/bin/onedriver --wipe-cache
+
+            # FUCK THIS SHIT DOESNT WORK
+            #mkdir -p "/home/yeshey/.cache/onedriver/mnt-hdd\x2dbtrfs-Yeshey-OneDriver/"
+            #${pkgs.coreutils}/bin/cat ${config.age.secrets.onedriver_auth.path} > "/home/yeshey/.cache/onedriver/mnt-hdd\x2dbtrfs-Yeshey-OneDriver/auth_tokens.json" 
+          '';
+    in {
+      Unit = {
+        Description = "delete-onedriver-cache";
+        #After = [ "agenix.service" ];
+        #Requires = [ "agenix.service" ];
+      };
       Service = {
         Type = "oneshot";
-        ExecStart = "${onedriverPackage}/bin/onedriver --wipe-cache";
+        ExecStart = "${mystuff}/bin/doyojob";
+        WantedBy="onedriverAgenixYeshey.target";
       };
-      #Install.WantedBy = [ "default.target" ];
+      # Install.WantedBy = [ "default.target" ];
     };
     systemd.user.timers."delete-onedriver-cache" = {
       Unit.Description = "delete-onedriver-cache schedule";
@@ -86,7 +99,6 @@ in
       };
       Install.WantedBy = [ "timers.target" ]; # the timer starts with timers
     };
-
 
   };
 }
