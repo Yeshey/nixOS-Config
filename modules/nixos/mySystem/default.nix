@@ -59,7 +59,7 @@ in
 
     ./syncthing.nix
     ./borgBackups.nix
-    ./openssh.nix
+    ./ssh
     ./agenix.nix
   ];
 
@@ -148,10 +148,6 @@ in
     programs.neovim = {
       enable = true;
       defaultEditor = lib.mkDefault true;
-    };
-    programs.ssh = {
-      startAgent = true;
-      forwardX11 = true;
     };
     programs.command-not-found.enable = lib.mkDefault true;
     environment.systemPackages = [ pkgs.deploy-rs ];

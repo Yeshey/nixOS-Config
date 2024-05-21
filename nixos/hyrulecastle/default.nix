@@ -49,8 +49,8 @@ in
     plasma.enable = true;
     gnome.enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
     hyprland.enable = false;
-    openssh = {
-      enable = true;
+    ssh = {
+      enable = false;
       openFirewall = true;
     };
     browser.enable = true;

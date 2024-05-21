@@ -22,6 +22,7 @@ in
     ./autoStartApps.nix
     ./onedriver.nix
     ./agenix.nix
+    ./ssh
   ];
   options.myHome = with lib; {
     user = mkOption {
