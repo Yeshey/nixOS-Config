@@ -72,6 +72,7 @@ in
     agenix = {
       enable = true;
       sshKeys.enable = true;
+      onedriver = true;
     };
   };
 
