@@ -69,19 +69,16 @@ in
       };
 
 
-    # A systemd timer and service to delete all the cahched files so it doesnt start taking up space
+    # A systemd timer and service to delete all the cached files so it doesnt start taking up space
     systemd.user.services."delete-onedriver-cache" = {
       Unit = {
         Description = "delete-onedriver-cache";
-        #After = [ "agenix.service" ];
-        #Requires = [ "agenix.service" ];
       };
-      Service = {
+      Service = { 
         Type = "oneshot";
         ExecStart = "${pkgs.myOnedriver}/bin/onedriver --wipe-cache"; # "${mystuff}/bin/doyojob";
-        # WantedBy="onedriverAgenixYeshey.target";
       };
-      Install.WantedBy = [ "default.target" ];
+      # Install.WantedBy = [ "default.target" ]; # makes it start on every boot
     };
     systemd.user.timers."delete-onedriver-cache" = {
       Unit.Description = "delete-onedriver-cache schedule";
@@ -96,23 +93,3 @@ in
 
   };
 }
-
-/*
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        Persistent = true; # If missed, run on boot (https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
-        OnCalendar = "*-*-* *:*:00"; # every minute # "*-*-1,4,7,10,13,16,19,22,25,28"; # Every three days approximatley
-        Unit = "delete-onedriver-cache schedule";
-      };
-
-
-
-
-            script = ''
-              ${onedriverPackage}/bin/onedriver --wipe-cache
-            '';
-            serviceConfig = {
-              Type = "oneshot";
-              User = "${config.mySystem.user}";
-            };
- */
