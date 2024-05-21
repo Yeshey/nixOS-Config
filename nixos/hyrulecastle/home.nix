@@ -17,6 +17,7 @@ in
     nonNixos.enable = false;
     plasma.enable = true;
     gnome.enable = false;
+    ssh.enable = true;
     hyprland = {
       enable = false;
       nvidia = false;
