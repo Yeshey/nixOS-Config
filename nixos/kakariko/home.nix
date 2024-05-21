@@ -57,7 +57,7 @@ in
     onedriver = {
       enable = true;
       onedriverFolder = "/home/yeshey/OneDriver";
-      serviceName = "onedriver@home-yeshey-OneDriver";
+      serviceName = "home-yeshey-OneDriver";
     };
     direnv.enable = true;
     wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; # johnKearneyCityscapePoster #stellarCollisionByKuldarleement; #nierAutomataWallpaper;
