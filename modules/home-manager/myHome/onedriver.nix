@@ -28,7 +28,7 @@ in
     };
     serviceName = mkOption {
       type = types.str;
-      example = "onedriver@home-yeshey-OneDriver";
+      example = "home-yeshey-OneDriver";
       description = "use `systemd-escape --template onedriver@.service --path /path/to/mountpoint` to figure out";
     };
   };
@@ -40,7 +40,7 @@ in
     ];
 
     # Automount Onedriver
-    systemd.user.services."${cfg.serviceName}" = {
+    systemd.user.services."onedriver@${cfg.serviceName}" = {
     #= let
       #wrapperDir = "/run/wrappers/";
       # serviceName = builtins.exec "${pkgs.systemd}/bin/systemd-escape --template onedriver@.service --path ${cfg.onedriverFolder}";
@@ -52,6 +52,7 @@ in
 
         Unit = {
           Description = "onedriver";
+          #After = [ "onedriverAgenixYeshey.service" ]; # "onedriver@mnt-hdd\x2dbtrfs-Yeshey-OneDriver.service"]; # "onedriver@${config.myHome.onedriver.serviceName}" ];
         };
 
         Service = {
@@ -69,15 +70,7 @@ in
 
 
     # A systemd timer and service to delete all the cahched files so it doesnt start taking up space
-    systemd.user.services."delete-onedriver-cache" = let
-      mystuff = pkgs.writeShellScriptBin "doyojob" ''
-            ${onedriverPackage}/bin/onedriver --wipe-cache
-
-            # FUCK THIS SHIT DOESNT WORK
-            #mkdir -p "/home/yeshey/.cache/onedriver/mnt-hdd\x2dbtrfs-Yeshey-OneDriver/"
-            #${pkgs.coreutils}/bin/cat ${config.age.secrets.onedriver_auth.path} > "/home/yeshey/.cache/onedriver/mnt-hdd\x2dbtrfs-Yeshey-OneDriver/auth_tokens.json" 
-          '';
-    in {
+    systemd.user.services."delete-onedriver-cache" = {
       Unit = {
         Description = "delete-onedriver-cache";
         #After = [ "agenix.service" ];
@@ -85,20 +78,21 @@ in
       };
       Service = {
         Type = "oneshot";
-        ExecStart = "${mystuff}/bin/doyojob";
-        WantedBy="onedriverAgenixYeshey.target";
+        ExecStart = "${pkgs.myOnedriver}/bin/onedriver --wipe-cache"; # "${mystuff}/bin/doyojob";
+        # WantedBy="onedriverAgenixYeshey.target";
       };
-      # Install.WantedBy = [ "default.target" ];
+      Install.WantedBy = [ "default.target" ];
     };
     systemd.user.timers."delete-onedriver-cache" = {
       Unit.Description = "delete-onedriver-cache schedule";
       Timer = {
-        Unit = "delete-onedriver-cache";
+        Unit = "delete-onedriver-cache.service";
         OnCalendar = "*-*-1,4,7,10,13,16,19,22,25,28"; # "*-*-1,4,7,10,13,16,19,22,25,28"; # Every three days approximatley (every minute: "*-*-* *:*:00")
         Persistent = true; # If missed, run on boot (https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
       };
       Install.WantedBy = [ "timers.target" ]; # the timer starts with timers
     };
+    
 
   };
 }

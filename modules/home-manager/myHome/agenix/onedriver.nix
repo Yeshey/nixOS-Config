@@ -16,7 +16,6 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    # DOESNT FUCKING WORK, GETS WIPED OUT BY MY OTHER SERVICE
     systemd.user.services."onedriverAgenixYeshey" = let 
       mystuff = pkgs.writeShellScriptBin "echo-secret" ''
             mkdir -p "/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceName}"
@@ -25,7 +24,13 @@ in
     in {
       Unit = {
         Description = "onedriverAgenixYeshey";
-        After = [ "agenix.service" ];
+        # After = [ "agenix.service" ];
+
+        #Wants = [ "local-fs.target" "remote-fs.target" "network.target" "network-online.target" "nss-lookup.target" "systemd-resolved.service" ];
+        After = [ "agenix.service" ]; # "local-fs.target" "remote-fs.target" "network.target" "network-online.target" "nss-lookup.target" "systemd-resolved.service" ]; # will run before network turns of, bc in shutdown order is reversed
+        # Before = [ "onedriver@mnt-hdd\x2dbtrfs-Yeshey-OneDriver.service" ];
+        #Requires = [ "local-fs.target" "remote-fs.target" "network.target" "network-online.target" "nss-lookup.target" "systemd-resolved.service" ];
+
         # non of this shit works, so I had to also add it to the service in normal onedrive
         #After = [ "agenix.service delete-onedriver-cache.service" ];#"delete-onedriver-cache.service" ];
         #Requires = [ "agenix.service delete-onedriver-cache.service" ];#"delete-onedriver-cache.service" ];
@@ -37,7 +42,7 @@ in
         Type = "oneshot";
         ExecStart = "${mystuff}/bin/echo-secret";
       };
-      Install.WantedBy = [ "default.target" ];
+      Install.WantedBy = [ "graphical-session.target"  ]; # "default.target"
     };
 
   };
