@@ -39,6 +39,23 @@ in
       onedriverPackage
     ];
 
+    # Make sure mountpoint folder exists
+    systemd.user.services."mountpoint-folder-onedriver" = let
+      script = pkgs.writeShellScriptBin "mountpoint-folder-onedriver-script" ''
+          mkdir -p '${cfg.onedriverFolder}' 
+        '';
+    in {
+      Unit = {
+        Description = "mountpoint-folder-onedriver";
+      };
+      Service = { 
+        Type = "oneshot";
+        ExecStart = "${script}/bin/mountpoint-folder-onedriver-script";
+        #ExecStart = "mkdir -p '${cfg.onedriverFolder}' "; # "${mystuff}/bin/doyojob";
+      };
+      Install.WantedBy = [ "default.target" ]; # makes it start on every boot
+    };
+
     # Automount Onedriver
     systemd.user.services."onedriver@${cfg.serviceName}" = {
     #= let
