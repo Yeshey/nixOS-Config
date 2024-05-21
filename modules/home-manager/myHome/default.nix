@@ -21,7 +21,7 @@ in
     ./hyprland
     ./autoStartApps.nix
     ./onedriver.nix
-    ./agenix.nix
+    ./agenix
     ./ssh
   ];
   options.myHome = with lib; {

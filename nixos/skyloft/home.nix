@@ -65,6 +65,10 @@ in
     #    variant = "dark"; # or light
     #  };
     #};
+    agenix = {
+      enable = true;
+      sshKeys.enable = true;
+    };
   };
 
   home = {

@@ -125,6 +125,11 @@ in
     };
 
     androidDevelopment.enable = false;
+
+    agenix = {
+      enable = true;
+      sshKeys.enable = true;
+    };
   };
 
   # Ignore Patterns Syncthing # Ignore Patterns Syncthing # You need to check that this doesnt override every other activation script, make lib.append? - if it was lib.mkFOrce it would override, like this it appends
