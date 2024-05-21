@@ -2,6 +2,7 @@ let
   # Usually the public key of your user can be found in ~/.ssh/id_rsa.pub and the system one in /etc/ssh/ssh_host_rsa_key.pub
   # If you change the public keys in secrets.nix, you should rekey your secrets:
   # agenix --rekey
+  # agenix -e <filename>.age # to create new secrets
 
   # User key
   # ~/.ssh/my_identity.pub
@@ -12,11 +13,11 @@ let
   # Host key
   # /etc/ssh/ssh_host_rsa_key.pub
   hyrulecastle = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCpi5nzHpzQmwWZ+lVcJnrlTpKKqyNSS924TtqGeUSquXo87NFzXzy1vOqDFWK8x5FWMDWI8G+M0yY3UvBGYTuqG+O+cgozxfcDyDw51afGpfSRBwWoTyZKROFCebkERMms59snFFybyUh8hDFAzMHxiKoyqqaXuJ9yPLDNw+XIaqBO8CjT90+U7MqT1SPVjgwmLO+SD+SC43xZf+Y7iGgRIovkgqcddoHCaSS3XrtNRyv5/7F1J50XA8/3Qq57vpoRT4e8tEQaCm9GpQfQCECfckms3ipQnB3QQ/yheX78xpy0MMFvtySYhgkC9W9o2RRj2U9pDm8HsxOSyjoKrP3v80UF3Zf3SN9w3YmCb9JWOrbeM/mHsvNy7sQ1DG9iOFFbsp0phPPrufxoPejGBhXEOWVFUeq3OY0Yq6VfnRgDi1Ab15L+50NHh/Kw5vpYbZSgwPl4u1iE33x+lYMFnmokWndgyPBSkROSAKsMYhWoNbXWq4aWhRomVP3EMhyv+vgWqr2M9KYbfQHN0DMmFCAELx05QuIGb7nvX0OGT503Lfei+Q7uglEWv8L/C5z99uO/n19oYOC/ORoZFBIbFmGa2uyqhQamiViItu6J3+arx5PXAuENArDuT/MvBvwP6pd5kKnwqPMfNhUQNsoqTIeeirgM8pdBU9Moimkxzzpl2Q== root@nixos";
-  #kakariko = "";
+  kakariko = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQC+ZsURn1EAaIVLi1MPYu1pnXH3/pijJrJPMiLoo6qrXbXTdfv0zwbU2TmVUAoERh5/bMRWLC9PnFlSL7yLkpLsBe4Fofc4cVXWJc+h6jkDeNVfsNU9ZpXjIJm+aVZ/Gg3n5JseWbLZ/G3RuPIraalOpkQDzN3MfR7Vpn4XlEiYeAho+4W/XeRbmaS/dl4QLPq8bO/Vs7IDvrAAtxJXFExTv48eUZDNHhi7wMCzsLJBu1KACx70/oJxpVkQxi3fpjy3uyLSkEWND9PRAZG9Sdx7WJWqAWl/C7sFr+tAlgBjGpmflFdLLPmgGXW8EiiXrXYz+GP1cTO6ZNLQj81aAKpWFgA7Mnt+549NzCkbnr0KoFlZWkZYkKITwpd0QWS0ncAXvWcYAJGq1JukeGuYu76/cGbUK1vEYiPEF7fxbuumv1btEqyO/++jTsNGu6wsM/eHIRkfnuU7wtCV2ZSPb14vCj/mKRGR5Rw5jElZ/xSapmKALJ/henarvn/OPj7N2wkJ4ln3rxC3/Lc0gct8SxTW7Tq+EUc/GMQToKPEf/edw9L8edXmv/o1fk8hr3kwCHu42nNsOU0TrTBUuK8mCtS84/0t6xalehPWqF9b5acPccWpxK9K+xv6fmHNRRp7geqBMLlgQdrzTGV6OBGqQ8Pjez44/U6PcuyaeyfP9PUInw== root@nixos";
   skyloft = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCcxnXRmBcFrMY90gEJJvqtYqaQH7NLxXS6ndGzlciim78j+uEdk61gH+gRveHZMHIbycIHXvHGPEMKVHy3oIuudctmn88J36QHE1Y8bH8FrjDyBiCEgyOTnz3pRmS+YvsMJyPtC1UJBqnj0/MzorvS+HrFXCfNfWFDYSEj6/w0yHosqjsIhXjvQ/JIgaJvt+67xJlvsbYbbdtjijk+EmtxHtBB3ofKK2B0kUBbwYulbPzYKiZ/0sP/WtF5nm6DXt5DPpPYd4GAFx2lOVok38ZZuc2DyLM+lxMfMOTZied3RgTagly+VkhQtIHh+FNH5mY3JQnLRDxORa/+3BOFeaufCkewT8xRc8ZBbFMJJswRTiwVSwSr+2Phi+qy/+dUKuWrB2PLWgbqatwKc0RJ56EoPWOgIEqBFS30reO5N4BaNxiQGFpKqezkQ7vzDKpuI2FpLIruA+OAWZkHKBl0ZLs2jJ45SkkkvgACq4iCdjLBFYOUQ+GxNS/eaf4l/SvGF0ImzJnt2TlY6co69XuHlnqx9iebl9DXqh6ArYOZX1ZbarjaHCd2efeL0B6FThT50xyis8mSVrMchrfogf2oKr1JECaYcbLpujGt4FOXp/v45+W1ZIvIeR7UC2NA5J0na2LGmH3fXnuNcOmJg8Uu2V1dbH+ZL4XJZXznmnsVI0Eozw== root@nixOS-OracleArm";
   # mordor = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGdT6E0OwCh/fF1ji0ExyH+4zhh1znuoT+sCeDgYn9N1";
 
-  systems = [ hyrulecastle ];
+  systems = [ hyrulecastle kakariko skyloft ];
 
   # Backup keys
   # backup = "";
@@ -24,41 +25,5 @@ in
 {
   # You need at least one to decrypt. These are the users and systems that will be able to decrypt the .age files later with their corresponding private keys.
   "my_identity.age".publicKeys = systems ++ users; # [hyrulecastle2];
-
-  /*
-  # Tokens
-  "extra_access_tokens.age".publicKeys = [ nasgul mordor mordor_user ];
-
-  # Nasgul
-  "nasgul_wireguard_priv_key.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_mullvad_priv_key.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_cache_priv_key.pem.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_authelia_jwt_secret.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_authelia_storage_encryption_key.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_authelia_hmac_secret.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_authelia_issuer_private_key.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_authelia_mysql_password.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_authelia_config.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_nextcloud_admin_password.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_authelia_session_secret.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_ldap_password.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_minio_root_credentials.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_sendgrid_token.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_gitea_actions_token.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_restic_s3_key.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_restic_password.age".publicKeys = [ nasgul mordor_user backup ];
-  "nasgul_lldap_private_key.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_lldap_jwt_secret.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_lldap_user_pass.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_miniflux_admin_credentials.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_miniflux_client_id.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_miniflux_client_secret.age".publicKeys = [ nasgul mordor_user ];
-  "nasgul_minio_credentials.age".publicKeys = [ nasgul mordor_user ];
-  "cloudflare_token.age".publicKeys = [ nasgul mordor_user ];
-  "cloudflare_email.age".publicKeys = [ nasgul mordor_user ];
-
-  # Mordor
-  "mordor_cache_priv_key.pem.age".publicKeys = [ mordor mordor_user ];
-  "mordor_mullvad_priv_key.age".publicKeys = [ mordor mordor_user ];
-  */
+  "onedriver_auth.age".publicKeys = systems ++ users;
 }
