@@ -87,6 +87,10 @@ in
           until ${pkgs.busybox}/bin/ping -c1 192.168.1.109 ; do sleep 300 ; done
         '';
 
+        serviceConfig = {
+          TimeoutSec=28800;
+        };
+
 # echo -n "Waiting for host..." ; until ${pkgs.busybox}/bin/ping -c1 192.168.1.109 >/dev/null 2>&1; do sleep 60 && echo -n "." ; done
 
     };
