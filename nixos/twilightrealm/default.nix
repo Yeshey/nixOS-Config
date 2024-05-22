@@ -34,7 +34,7 @@
     gnome.enable = true; # TODO, we can do better
     plasma.enable = false;
     gaming.enable = true;
-    openssh.enable = true;
+    ssh.enable = true;
     vmHost = true;
     dockerHost = true;
     host = "twilightrealm"; # TODO make this mandatory?
@@ -52,6 +52,10 @@
       enable = true;
       intelBusId = "PCI:0:1:0";
       nvidiaBusId = "PCI:8:0:0";
+    };
+    agenix = {
+      enable = true;
+      sshKeys.enable = true;
     };
   };
 

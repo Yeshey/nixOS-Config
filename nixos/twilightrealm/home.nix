@@ -11,6 +11,10 @@
       enableLSP = true;
     };
     vscodium.enable = true;
+    agenix = {
+      enable = true;
+      sshKeys.enable = true;
+    };
   };
 
   home = {

@@ -44,11 +44,13 @@ in
 
   mySystem = rec {
     # all the options
+    host = "hyrulecastle";
+    user = "yeshey";
     plasma.enable = true;
     gnome.enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
     hyprland.enable = false;
-    openssh = {
-      enable = true;
+    ssh = {
+      enable = false;
       openFirewall = true;
     };
     browser.enable = true;
@@ -57,8 +59,6 @@ in
     gaming.enable = true;
     vmHost = true;
     dockerHost = true;
-    host = "hyrulecastle";
-    user = "yeshey";
     home-manager = {
       enable = true;
       home = ./home.nix;
@@ -89,7 +89,7 @@ in
       enable = true;
       location = "/home/yeshey/.setup";
       host = "hyrulecastle";
-      #dates = "Fri *-*-* 20:00:00"; # Every Friday at 19:00 "*:0/5"; # Every 5 minutes
+      dates = "*-*-1/3"; # "Fri *-*-* 20:00:00"; # Every Friday at 19:00 "*:0/5"; # Every 5 minutes
     };
     flatpaks.enable = true;
     i2p.enable = true;
@@ -121,7 +121,10 @@ in
 
     androidDevelopment.enable = false;
 
-    agenix.enable = true;
+    agenix = {
+      enable = true;
+      sshKeys.enable = true;
+    };
 
     # https://gist.github.com/WhittlesJr/a6de35b995e8c14b9093c55ba41b697c
     # Enable the module with pciIDs = ""; and then run one of these commands to find the pciIDs:
