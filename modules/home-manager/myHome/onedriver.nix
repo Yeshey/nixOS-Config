@@ -69,6 +69,7 @@ in
 
         Unit = {
           Description = "onedriver";
+          After = ["onedriverAgenixYeshey.service"];
           #After = [ "onedriverAgenixYeshey.service" ]; # "onedriver@mnt-hdd\x2dbtrfs-Yeshey-OneDriver.service"]; # "onedriver@${config.myHome.onedriver.serviceName}" ];
         };
 
@@ -81,21 +82,31 @@ in
         };
 
         Install = {
-          WantedBy = [ "graphical-session.target" ];
+          WantedBy = [ "graphical-session.target" ]; # "graphical-session.target" ];
         };
       };
 
 
     # A systemd timer and service to delete all the cached files so it doesnt start taking up space
-    systemd.user.services."delete-onedriver-cache" = {
+    systemd.user.services."delete-onedriver-cache" = let
+      script = pkgs.writeShellScriptBin "delete-onedriver-cache-script" ''
+            ${onedriverPackage}/bin/onedriver --wipe-cache
+
+            # if setting agenix keys, set'em afterwards
+            ${lib.strings.optionalString config.myHome.agenix.onedriver.enable "mkdir -p '/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceName}'"}
+            ${lib.strings.optionalString config.myHome.agenix.onedriver.enable "${pkgs.coreutils}/bin/cat ${config.age.secrets.onedriver_auth.path} > '/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceName}/auth_tokens.json'"}
+          '';
+    in {
       Unit = {
         Description = "delete-onedriver-cache";
+        # Before = ["onedriverAgenixYeshey"]; # idk if this does anything
       };
       Service = { 
         Type = "oneshot";
-        ExecStart = "${pkgs.myOnedriver}/bin/onedriver --wipe-cache"; # "${mystuff}/bin/doyojob";
+        #ExecStart = "${onedriverPackage}/bin/onedriver --wipe-cache"; # "${mystuff}/bin/doyojob";
+        ExecStart = "${script}/bin/delete-onedriver-cache-script"; # "${mystuff}/bin/doyojob";
       };
-      # Install.WantedBy = [ "default.target" ]; # makes it start on every boot
+      # Install.WantedBy = [ "graphical-session.target" ]; # "default.target" ]; # makes it start on every boot
     };
     systemd.user.timers."delete-onedriver-cache" = {
       Unit.Description = "delete-onedriver-cache schedule";
