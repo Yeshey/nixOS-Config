@@ -57,7 +57,13 @@ in
     };
 
     # Automount Onedriver
-    systemd.user.services."onedriver@${cfg.serviceName}" = {
+    systemd.user.services."onedriver@${cfg.serviceName}" = let
+      wrapperDir = "/run/wrappers/"; 
+      # I hate it so much that I-m waiting for network like this bc there in no fucking way to make it work with After in a systemd user service
+      waitForNetwork = pkgs.writeShellScriptBin "wait_for_network" ''
+            until ${pkgs.iputils}/bin/ping -c1 google.com ; do ${pkgs.coreutils}/bin/sleep 5 ; done
+          '';
+    in {
     #= let
       #wrapperDir = "/run/wrappers/";
       # serviceName = builtins.exec "${pkgs.systemd}/bin/systemd-escape --template onedriver@.service --path ${cfg.onedriverFolder}";
@@ -69,20 +75,24 @@ in
 
         Unit = {
           Description = "onedriver";
-          After = ["onedriverAgenixYeshey.service"];
+          After = ["onedriverAgenixYeshey.service" "mountpoint-folder-onedriver.service"
+          "network.target" "vpn-launch.service" "mnt-wibble.mount" "network-online.target" "nss-lookup.target" ];
+          #Wants = [ "network-online.target" ];
+          #Requires = [ "network-online.target" ];
           #After = [ "onedriverAgenixYeshey.service" ]; # "onedriver@mnt-hdd\x2dbtrfs-Yeshey-OneDriver.service"]; # "onedriver@${config.myHome.onedriver.serviceName}" ];
         };
 
         Service = {
-          ExecStart = "${onedriverPackage}/bin/onedriver ${cfg.onedriverFolder}";
-          # ExecStopPost = "${wrapperDir}/bin/fusermount -uz ${cfg.onedriverFolder}";
+          ExecStartPre = "${waitForNetwork}/bin/wait_for_network";
+          ExecStart = "${onedriverPackage}/bin/onedriver '${cfg.onedriverFolder}'";
+          ExecStopPost = "${wrapperDir}/bin/fusermount -uz '${cfg.onedriverFolder}'";
           Restart = "on-abnormal";
           RestartSec = "3";
           RestartForceExitStatus = "2";
         };
 
         Install = {
-          WantedBy = [ "graphical-session.target" ]; # "graphical-session.target" ];
+          WantedBy = [ "default.target" ]; # "graphical-session.target" ]; default.target
         };
       };
 

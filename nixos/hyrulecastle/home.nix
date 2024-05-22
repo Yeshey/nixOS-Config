@@ -72,7 +72,10 @@ in
     onedriver = {
       enable = true;
       onedriverFolder = "/mnt/hdd-btrfs/Yeshey/OneDriver/";
-      serviceName = "mnt-hdd\\x2dbtrfs-Yeshey-OneDriver";
+      serviceName = "mnt-hdd\\x2dbtrfs-Yeshey-OneDriver"; 
+      #enable = true;
+      #onedriverFolder = "/home/yeshey/OneDriver";
+      #serviceName = "home-yeshey-OneDriver";
     };
 
     agenix = {
