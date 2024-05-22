@@ -17,6 +17,7 @@ in
     nonNixos.enable = false;
     plasma.enable = true;
     gnome.enable = false;
+    ssh.enable = true;
     hyprland = {
       enable = false;
       nvidia = false;
@@ -71,7 +72,16 @@ in
     onedriver = {
       enable = true;
       onedriverFolder = "/mnt/hdd-btrfs/Yeshey/OneDriver/";
-      serviceName = "onedriver@mnt-hdd\\x2dbtrfs-Yeshey-OneDriver";
+      serviceName = "mnt-hdd\\x2dbtrfs-Yeshey-OneDriver"; 
+      #enable = true;
+      #onedriverFolder = "/home/yeshey/OneDriver";
+      #serviceName = "home-yeshey-OneDriver";
+    };
+
+    agenix = {
+      enable = true;
+      sshKeys.enable = true;
+      onedriver.enable = true;
     };
   };
 

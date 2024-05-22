@@ -21,6 +21,8 @@ in
     ./hyprland
     ./autoStartApps.nix
     ./onedriver.nix
+    ./agenix
+    ./ssh
   ];
   options.myHome = with lib; {
     user = mkOption {

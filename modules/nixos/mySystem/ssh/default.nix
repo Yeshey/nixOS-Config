@@ -6,11 +6,11 @@
 }:
 
 let
-  cfg = config.mySystem.openssh;
+  cfg = config.mySystem.ssh;
 in
 {
-  options.mySystem.openssh = with lib; {
-    enable = mkEnableOption "openssh";
+  options.mySystem.ssh = with lib; {
+    enable = mkEnableOption "ssh";
 
     openFirewall = mkEnableOption "openFirewall";
   };
@@ -27,6 +27,12 @@ in
 
     #networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ 22 ];
     # networking.firewall.enable = false;
+
+    programs.ssh = {
+      startAgent = true;
+      forwardX11 = true;
+      extraConfig = builtins.readFile ./config; # puts in /etc/ssh/ssh_config that goes for everyone
+    };
 
   };
 }

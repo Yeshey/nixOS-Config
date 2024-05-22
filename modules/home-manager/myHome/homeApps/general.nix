@@ -16,6 +16,8 @@ in
   config = lib.mkIf cfg.enable {
     home = {
       packages = with pkgs; [
+        wineWow64Packages.full
+
         github-desktop
         obs-studio
         stremio

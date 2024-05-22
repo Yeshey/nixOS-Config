@@ -13,6 +13,7 @@ in
 {
   imports = [
     inputs.agenix.nixosModules.default
+    ./sshKeys.nix
   ];
 
   options.mySystem.agenix = with lib; {
@@ -22,46 +23,33 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ inputs.agenix.packages.${system}.agenix ]; # adds agenix
 
+    # to provide key for agenix
+    services.openssh = {
+      enable = true;
+      # openFirewall = false;
+    };
+
+    /*
+    systemd.services."test" = {
+      script = ''
+        cat ${config.age.secrets.my_identity.path} > /home/yeshey/Downloads/test.txt
+      '';
+      serviceConfig = {
+        #User = "yeshey";
+        Type = "oneshot";
+      };
+      wantedBy = [ "multi-user.target" ];
+    }; */
+
     age = {
       secrets = {
-        # Nix-serve
-        cache_priv_key.file = ./secrets/nasgul_cache_priv_key.pem.age;
 
-        # Nix (github token)
-        extra_access_tokens = {
-          file = ./secrets/extra_access_tokens.age;
-          mode = "0440";
-          group = config.users.groups.keys.name;
+        my_identity = {
+          file = ../../../../secrets/my_identity.age;
+          #mode = "0440";
+          #group = config.users.groups.keys.name;
         };
 
-        # SMTP (sendgrid)
-        sendgrid_token = {
-          file = ./secrets/nasgul_sendgrid_token.age;
-          mode = "0440";
-          group = "sendgrid";
-        };
-
-        # Traefik
-        cloudflare_email = {
-          file = ./secrets/cloudflare_email.age;
-          owner = "traefik";
-        };
-        cloudflare_token = {
-          file = ./secrets/cloudflare_token.age;
-          owner = "traefik";
-        };
-
-        # Restic
-        restic_credentials = {
-          file = ./secrets/nasgul_restic_s3_key.age;
-          mode = "0440";
-          group = "restic";
-        };
-        restic_password = {
-          file = ./secrets/nasgul_restic_password.age;
-          mode = "0440";
-          group = "restic";
-        };
       };
     };
 
