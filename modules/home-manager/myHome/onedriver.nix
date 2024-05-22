@@ -56,9 +56,11 @@ in
       Install.WantedBy = [ "default.target" ]; # makes it start on every boot
     };
 
+
     # Automount Onedriver
+    # doesnt work without a DE, for the server if you run xfreerdp and restart the service it will work
     systemd.user.services."onedriver@${cfg.serviceName}" = let
-      wrapperDir = "/run/wrappers/"; 
+      wrapperDir = "/run/wrappers"; 
       # I hate it so much that I-m waiting for network like this bc there in no fucking way to make it work with After in a systemd user service
       waitForNetwork = pkgs.writeShellScriptBin "wait_for_network" ''
             until ${pkgs.iputils}/bin/ping -c1 google.com ; do ${pkgs.coreutils}/bin/sleep 5 ; done
