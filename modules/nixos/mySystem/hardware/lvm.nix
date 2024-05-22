@@ -15,6 +15,15 @@ in
 
   config = lib.mkIf cfg.enable {
 
+    # Tutorial
+    # Check everything `sudo lsblk`
+    # Check Logical Volumes(LV): df -h /dev/VG/my_lv
+ , lvdisplay , and lvscan
+    # Check Physical Volumes(PV): pvs , pvdisplay , and pvscan
+    # Check Volume Groups(VG): vgs and vgdisplay
+    # Tutorial to create a cache on faster drive with LVM: https://gist.github.com/gabrieljcs/805c183753046dcc6131
+    # Use Gparted to increase or decrease PVs
+
     boot.initrd.availableKernelModules = [
       "usbhid" # not sure if needed
     ];
