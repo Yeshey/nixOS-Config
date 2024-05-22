@@ -25,13 +25,17 @@ in
       Unit = {
         Description = "onedriverAgenixYeshey";
 
-        After = [ "agenix.service" ]; 
+        After = [ "agenix.service" "delete-onedriver-cache.service" ]; 
+
+        # Afters work, but not Before, the inverse 🤡
+        #Before = [ "onedriver@${config.myHome.onedriver.serviceName}" ];         
+        # Wants and Requires make the service start the other services
       };
       Service = {
         Type = "oneshot";
         ExecStart = "${mystuff}/bin/echo-secret";
       };
-      Install.WantedBy = [ "graphical-session.target"  ]; # "default.target"
+      Install.WantedBy = [ "graphical-session.target" ]; # "graphical-session.target"  ]; # "default.target"
     };
 
   };
