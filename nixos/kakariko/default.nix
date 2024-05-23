@@ -103,7 +103,11 @@ in
         thermalConf = ./thermal-conf.xml;
       };
       nvidia.enable = false;
-      lvm.enable = true;
+      lvm = {
+        enable = true;
+        cache.enable = true;
+        luks.enable = false;
+      };
     };
     autoUpgrades = {
       enable = false;
@@ -158,6 +162,10 @@ in
       options = [ "nofail" ];
     }
   ];
+
+  #boot.kernelModules = [
+  #  "coretemp" # for temp sensors in intel (??)
+  #];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
