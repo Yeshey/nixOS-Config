@@ -24,6 +24,9 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDgOfJysYZT/VOwxg/FWCYDnjrSEilzK+YO1JVF5mfk
     systemd.user.services."sshKeysYeshey" = let 
       mystuff = pkgs.writeShellScriptBin "echo-secret" ''
             ${pkgs.coreutils}/bin/cat ${config.age.secrets.my_identity_yeshey.path} > /home/yeshey/.ssh/my_identity
+
+            chmod 700 ~/.ssh
+            chmod 600 ~/.ssh/*
           '';
     in {
       Unit = {
