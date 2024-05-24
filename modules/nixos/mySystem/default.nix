@@ -85,7 +85,7 @@ in
   config = {
     zramSwap.enable = lib.mkDefault true;
     boot.tmp.cleanOnBoot = lib.mkDefault true; # delete all files in /tmp during boot.
-    boot.supportedFilesystems = [ "ntfs" ]; # TODO lib.mkdefault? Doesn't work with [] and {}?
+    boot.supportedFilesystems = [ "ntfs" "btrfs" ]; # TODO lib.mkdefault? Doesn't work with [] and {}?
 
     time.timeZone = lib.mkDefault "Europe/Lisbon";
     i18n.defaultLocale = lib.mkDefault "en_GB.utf8";

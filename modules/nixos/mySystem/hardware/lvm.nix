@@ -30,6 +30,11 @@ in
     #boot.initrd.availableKernelModules = [
     #  "usbhid" # not sure if needed
     #];
+    environment.systemPackages = with pkgs; [
+      lvm2
+    ] ++ lib.lists.optionals cfg.luks.enable [
+      cryptsetup
+    ];
 
     boot.initrd.kernelModules = [
       # common config
