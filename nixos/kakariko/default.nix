@@ -154,6 +154,7 @@ in
     };
 
   # swap in ext4:
+  /*
   swapDevices = [
     {
       device = "/swapfile";
@@ -161,7 +162,7 @@ in
       size = 10 * 1024;
       options = [ "nofail" ];
     }
-  ];
+  ]; */
 
   #boot.kernelModules = [
   #  "coretemp" # for temp sensors in intel (??)
@@ -173,7 +174,7 @@ in
     configurationLimit = 20; # You can leave it null for no limit, but it is not recommended, as it can fill your boot partition.
   };
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+  boot.loader.efi.efiSysMountPoint = "/boot";
 
   #powerManagement = { # TODO ???
   #  cpuFreqGovernor = "ondemand";

@@ -21,6 +21,7 @@ in
       enable = true;
       settings.PermitRootLogin = lib.mkDefault "yes"; # TODO no
       settings.X11Forwarding = lib.mkDefault true;
+      # settings.AllowUsers = [ "root" ];
     };
     # security.sudo.wheelNeedsPassword = false; # TODO remove (how do you do secrets management)
     # security.pam.enableSSHAgentAuth = true;
