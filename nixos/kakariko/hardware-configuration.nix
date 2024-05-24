@@ -38,7 +38,7 @@
       fsType = "btrfs";
     };
 
-boot.initrd.preLVMCommands = lib.mkOrder 400 "sleep 10";
+boot.initrd.preLVMCommands = lib.mkOrder 400 "sleep 5";
 
   boot.initrd.luks.devices = {
     "cryptroot" = {

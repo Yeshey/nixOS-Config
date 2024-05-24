@@ -45,7 +45,7 @@ in
       secrets = {
 
         my_identity = {
-          file = ../../../../secrets/my_identity.age;
+          file = ./../../../../secrets/my_identity.age;
           #mode = "0440";
           #group = config.users.groups.keys.name;
         };

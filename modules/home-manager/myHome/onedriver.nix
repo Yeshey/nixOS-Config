@@ -77,8 +77,7 @@ in
 
         Unit = {
           Description = "onedriver";
-          After = ["onedriverAgenixYeshey.service" "mountpoint-folder-onedriver.service"
-          "network.target" "vpn-launch.service" "mnt-wibble.mount" "network-online.target" "nss-lookup.target" ];
+          After = ["onedriverAgenixYeshey.service" "network.target" "network-online.target" ];
           #Wants = [ "network-online.target" ];
           #Requires = [ "network-online.target" ];
           #After = [ "onedriverAgenixYeshey.service" ]; # "onedriver@mnt-hdd\x2dbtrfs-Yeshey-OneDriver.service"]; # "onedriver@${config.myHome.onedriver.serviceName}" ];
@@ -106,7 +105,7 @@ in
 
             # if setting agenix keys, set'em afterwards
             ${lib.strings.optionalString config.myHome.agenix.onedriver.enable "mkdir -p '/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceName}'"}
-            ${lib.strings.optionalString config.myHome.agenix.onedriver.enable "${pkgs.coreutils}/bin/cat ${config.age.secrets.onedriver_auth.path} > '/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceName}/auth_tokens.json'"}
+            ${lib.strings.optionalString config.myHome.agenix.onedriver.enable "${pkgs.coreutils}/bin/cat ${config.age.secrets.onedriver_auth_yeshey.path} > '/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceName}/auth_tokens.json'"}
           '';
     in {
       Unit = {

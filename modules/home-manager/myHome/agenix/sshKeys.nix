@@ -23,12 +23,13 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDgOfJysYZT/VOwxg/FWCYDnjrSEilzK+YO1JVF5mfk
     # home.file.".ssh/my_identitytest".source = builtins.toPath "${fullPath}/bin/fullPath"; # doesnt work :(
     systemd.user.services."sshKeysYeshey" = let 
       mystuff = pkgs.writeShellScriptBin "echo-secret" ''
-            ${pkgs.coreutils}/bin/cat ${config.age.secrets.my_identity.path} > /home/yeshey/.ssh/my_identity
+            ${pkgs.coreutils}/bin/cat ${config.age.secrets.my_identity_yeshey.path} > /home/yeshey/.ssh/my_identity
           '';
     in {
       Unit = {
         Description = "sshKeysYeshey";
         After = [ "agenix.service" ];
+        Require = [ "agenix.service" ];
       };
       Service = {
         Type = "oneshot";

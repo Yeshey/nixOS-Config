@@ -11,7 +11,7 @@ let
   inherit (pkgs.stdenv.hostPlatform) system; # for agenix pkg
 
   #mystuff = pkgs.writeShellScriptBin "echo-secret" ''
-  #      ${pkgs.coreutils}/bin/cat ${config.age.secrets.my_identity.path} > /home/yeshey/Downloads/ImOkay.txt
+  #      ${pkgs.coreutils}/bin/cat ${config.age.secrets.my_identity_yeshey.path} > /home/yeshey/Downloads/ImOkay.txt
   #    '';
 in
 {
@@ -56,14 +56,14 @@ in
       identityPaths = [ "/home/yeshey/.ssh/my_identity" ];
       secrets = {
 
-        my_identity = {
+        my_identity_yeshey = {
           file = ../../../../secrets/my_identity.age;
           # path = "$HOME/Downloads/mymymymy.txt";
           #mode = "0440";
           #group = config.users.groups.keys.name;
         };
 
-        onedriver_auth = {
+        onedriver_auth_yeshey = {
           file = ../../../../secrets/onedriver_auth.age;
           # path = "$HOME/Downloads/mymymymy.txt";
           #mode = "0440";

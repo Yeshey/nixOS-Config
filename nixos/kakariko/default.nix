@@ -136,6 +136,8 @@ in
     };
   };
 
+  virtualisation.docker.storageDriver = "btrfs"; # for docker
+
   # Ignore Patterns Syncthing # Ignore Patterns Syncthing # You need to check that this doesnt override every other activation script, make lib.append? - if it was lib.mkFOrce it would override, like this it appends
   system.activationScripts =
     let
@@ -171,13 +173,13 @@ in
   # Bootloader.
   boot.loader.systemd-boot = {
     enable = true;
-    configurationLimit = 20; # You can leave it null for no limit, but it is not recommended, as it can fill your boot partition.
+    configurationLimit = 15; # You can leave it null for no limit, but it is not recommended, as it can fill your boot partition.
   };
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot";
 
   #powerManagement = { # TODO ???
-  #  cpuFreqGovernor = "ondemand";
+  #  cpuFreqGovernor = "ondemancdd";
   #  cpufreq.min = 800000;
   #  cpufreq.max = 4700000;
   #};
