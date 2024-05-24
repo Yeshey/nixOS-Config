@@ -51,6 +51,7 @@ in
     boot.kernelModules = [
       # common config
       "kvm-amd"
+      "dm_mod"
       "dm-persistent-data"
       "dm-clone"
       "dm-mirror"
