@@ -26,6 +26,8 @@ in
         #User = "yeshey";
         Type = "oneshot";
       };
+      #after = [ "agenix.service" ];
+      #requires = [ "agenix.service" ];
       wantedBy = [ "multi-user.target" ];
     }; 
 
