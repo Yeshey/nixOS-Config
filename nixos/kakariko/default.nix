@@ -80,7 +80,9 @@ in
     plasma.enable = false;
     gnome.enable = true; # TODO activate both plasma and gnome same time, maybe expose display manager
     hyprland.enable = false;
-    ssh.enable = true;
+    ssh = {
+      enable = false;
+    };
     browser.enable = true;
     cliTools.enable = true;
     zsh.enable = true;
@@ -173,11 +175,45 @@ in
   # Bootloader.
   boot.loader.systemd-boot = {
     enable = true;
-    configurationLimit = 15; # You can leave it null for no limit, but it is not recommended, as it can fill your boot partition.
+    configurationLimit = 5; # You can leave it null for no limit, but it is not recommended, as it can fill your boot partition.
   };
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot";
 
+  boot.initrd.preLVMCommands = lib.mkOrder 400 "sleep 5";
+  boot.initrd.luks.devices = {
+    "cryptroot" = {
+      device = "/dev/VG/cryptroot";
+      allowDiscards = true; # for ssd primary?
+      preLVM = false; # informs that its LUKS on LVM and not LVM on LUKS
+    };
+    "cryptswap" = {
+      device = "/dev/VG/cryptswap";
+      allowDiscards = true; # for ssd primary?
+      preLVM = false; # informs that its LUKS on LVM and not LVM on LUKS
+    };
+  }; 
+
+  fileSystems."/" =
+    { device = "/dev/disk/by-uuid/6e60cc35-882f-45bf-8402-719a14a74a74";
+      #device = "/dev/mapper/cryptroot";
+      fsType = "btrfs";
+      #options = [ "compress=zstd" ];
+    };
+  swapDevices =
+    [ 
+      { device = "/dev/mapper/cryptswap"; }
+    ];
+  # MY MOUNTS
+  fileSystems."/mnt/ntfsMicroSD-DataDisk" = {
+    device = "/dev/disk/by-label/ntfsMicroSD-DataDisk";
+    fsType = "auto";
+    options = [
+      "nodev"
+      "nofail"
+      "x-gvfs-show"
+    ]; # "uid=1000" "gid=1000" "dmask=007" "fmask=117"
+  };
   #powerManagement = { # TODO ???
   #  cpuFreqGovernor = "ondemancdd";
   #  cpufreq.min = 800000;

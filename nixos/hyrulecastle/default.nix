@@ -51,7 +51,6 @@ in
     hyprland.enable = false;
     ssh = {
       enable = false;
-      openFirewall = true;
     };
     browser.enable = true;
     cliTools.enable = true;
