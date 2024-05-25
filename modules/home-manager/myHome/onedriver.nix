@@ -56,7 +56,6 @@ in
       Install.WantedBy = [ "default.target" ]; # makes it start on every boot
     };
 
-
     # Automount Onedriver
     # doesnt work without a DE, for the server if you run xfreerdp and restart the service it will work
     systemd.user.services."onedriver@${cfg.serviceName}" = let
