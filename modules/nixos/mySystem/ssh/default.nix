@@ -19,7 +19,7 @@ in
 
     services.openssh = with lib; {
       enable = true;
-      settings.PermitRootLogin = lib.mkDefault "yes"; # TODO no
+      #settings.PermitRootLogin = lib.mkDefault "yes"; # TODO no
       settings.X11Forwarding = lib.mkDefault true;
       # settings.AllowUsers = [ "root" ];
     };
