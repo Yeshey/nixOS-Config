@@ -12,7 +12,7 @@ in
   options.mySystem.ssh = with lib; {
     enable = mkEnableOption "ssh";
 
-    openFirewall = mkEnableOption "openFirewall";
+    #openFirewall = mkEnableOption "openFirewall";
   };
 
   config = lib.mkIf cfg.enable {
