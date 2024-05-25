@@ -46,6 +46,11 @@ boot.initrd.preLVMCommands = lib.mkOrder 400 "sleep 5";
       allowDiscards = true; # for ssd primary?
       preLVM = false; # informs that its LUKS on LVM and not LVM on LUKS
     };
+    "cryptswap" = {
+      device = "/dev/VG/cryptswap";
+      allowDiscards = true; # for ssd primary?
+      preLVM = false; # informs that its LUKS on LVM and not LVM on LUKS
+    };
   }; 
 
 #boot.initrd.preLVMCommands = ''
@@ -71,6 +76,7 @@ boot.initrd.preLVMCommands = lib.mkOrder 400 "sleep 5";
 
   swapDevices =
     [ #{ device = "/dev/disk/by-uuid/9ad37198-50fd-4c0e-9e1b-7bf5d0aeabe6"; }
+      { device = "/dev/mapper/cryptswap"; }
     ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
