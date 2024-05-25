@@ -21,6 +21,7 @@ in
     nonNixos.enable = false;
     plasma.enable = false;
     gnome.enable = false;
+    ssh.enable = true;
     homeApps = {
       enable = false;
       cli = {
