@@ -178,7 +178,16 @@ in
     configurationLimit = 5; # You can leave it null for no limit, but it is not recommended, as it can fill your boot partition.
   };
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot";
+  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+
+  fileSystems."/boot/efi" =
+    { device = "/dev/disk/by-uuid/84A9-3C95";
+      fsType = "vfat";
+      #options = [ "fmask=0022" "dmask=0022" ]; 
+      # ⚠️ fix the security issue ⚠️
+      # https://github.com/NixOS/nixpkgs/issues/279362#issuecomment-1883970541
+      options = [ "uid=0" "gid=0" "fmask=0077" "dmask=0077" ];
+    };
 
   boot.initrd.preLVMCommands = lib.mkOrder 400 "sleep 5";
   boot.initrd.luks.devices = {
@@ -195,10 +204,10 @@ in
   }; 
 
   fileSystems."/" =
-    { device = "/dev/disk/by-uuid/6e60cc35-882f-45bf-8402-719a14a74a74";
-      #device = "/dev/mapper/cryptroot";
+    { #device = "/dev/disk/by-uuid/6e60cc35-882f-45bf-8402-719a14a74a74";
+      device = "/dev/mapper/cryptroot";
       fsType = "btrfs";
-      #options = [ "compress=zstd" ];
+      options = [ "compress=zstd" ];
     };
   swapDevices =
     [ 
@@ -214,6 +223,7 @@ in
       "x-gvfs-show"
     ]; # "uid=1000" "gid=1000" "dmask=007" "fmask=117"
   };
+  
   #powerManagement = { # TODO ???
   #  cpuFreqGovernor = "ondemancdd";
   #  cpufreq.min = 800000;

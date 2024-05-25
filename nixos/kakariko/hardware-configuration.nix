@@ -13,15 +13,18 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
 
+/*
   fileSystems."/boot/efi" =
     { device = "/dev/disk/by-uuid/84A9-3C95";
       fsType = "vfat";
       options = [ "fmask=0022" "dmask=0022" ];
     };
+    */
+    /*
   fileSystems."/" =
     { device = "/dev/disk/by-uuid/6e60cc35-882f-45bf-8402-719a14a74a74";
       fsType = "btrfs";
-    };
+    };*/
 
 /*
   fileSystems."/" =
