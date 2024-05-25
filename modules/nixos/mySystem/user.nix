@@ -50,6 +50,7 @@ in
           "libvirtd"
           "surface-control"
           "audio"
+          "tss" # For TPM access
         ]; # TODO if you ever extend the module to be able to have several users, you need to see how to handle this
         openssh.authorizedKeys.keys = [
           # ssh public key of my_identity key
