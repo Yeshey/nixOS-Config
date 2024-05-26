@@ -43,8 +43,6 @@
     #  path = "/mnt/DataDisk/PersonalFiles/2023/Projects/Programming/nixos-nvidia-vgpu_nixOS/";
       #inputs.nixpkgs.follows = "nixpkgs-special";
     #};
-
-    
     deploy-rs = {
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
