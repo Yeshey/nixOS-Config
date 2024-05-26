@@ -186,8 +186,12 @@ in
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
   #boot.initrd.systemd.enable = true;
-  #boot.plymouth.enable = true; # graphical luks interface
+  #boot.plymouth.enable = true; # soft locks the PC - graphical luks interface
   #boot.kernelParams = ["debug"]; # Pretty sure this one's the default.
+
+  boot.initrd.systemd.enable = true;
+  boot.initrd.systemd.enableTpm2 = true;
+  #security.tpm2.enable = true;
 
   fileSystems."/boot/efi" =
     { device = "/dev/disk/by-uuid/84A9-3C95";
@@ -198,7 +202,18 @@ in
       options = [ "uid=0" "gid=0" "fmask=0077" "dmask=0077" ];
     };
 
-  boot.initrd.preLVMCommands = lib.mkOrder 400 "sleep 5";
+
+
+  boot.initrd.preLVMCommands = let
+    waitForMicroSD = pkgs.writeShellScriptBin "waitForMicroSD" ''
+echo "Waiting for logical volumes to become accessible."
+sleep 3
+exit 1
+        '';
+  in lib.mkOrder 400 ''
+    ${waitForMicroSD}/bin/waitForMicroSD
+  '';
+  # sleep 5
   boot.initrd.luks.devices = {
     "cryptroot" = {
       device = "/dev/VG/cryptroot";
