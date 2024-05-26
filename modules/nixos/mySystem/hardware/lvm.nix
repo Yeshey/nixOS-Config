@@ -7,6 +7,7 @@
 
 let
   cfg = config.mySystem.hardware.lvm;
+  lvs-cache = pkgs.writeShellScriptBin "lvs-cache" (builtins.readFile ./lvs-cache.sh);
 in
 {
   options.mySystem.hardware.lvm = with lib; {
@@ -34,6 +35,9 @@ in
       lvm2
     ] ++ lib.lists.optionals cfg.luks.enable [
       cryptsetup
+    ] ++ lib.lists.optionals cfg.cache.enable [
+      bc # for the below script to work
+      lvs-cache
     ];
 
     boot.initrd.kernelModules = [

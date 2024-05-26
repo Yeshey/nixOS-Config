@@ -109,7 +109,7 @@ in
       lvm = {
         enable = true;
         cache.enable = true;
-        luks.enable = false;
+        luks.enable = true;
       };
     };
     autoUpgrades = {
