@@ -496,6 +496,14 @@ with lib.hm.gvariant;
         current-workspace-only = false;
       };
 
+      /*
+      # you are better off doing it manually
+      active-profile = "/home/yeshey/.config/burn-my-windows/profiles/1716743297152538.conf"; # with
+      [burn-my-windows-profile]
+      fire-enable-effect=false
+      hexagon-enable-effect=true
+      hexagon-animation-time=550
+      */
       "org/gnome/shell/extensions/burn-my-windows" = {
         close-preview-effect = "";
         fire-close-effect = false;
