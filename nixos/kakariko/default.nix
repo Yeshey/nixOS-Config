@@ -54,6 +54,7 @@ in
     inputs.nixos-hardware.nixosModules.microsoft-surface-pro-intel
     ./hardware-configuration.nix
     ./autoUpgradesSurface.nix
+    ./boot.nix
   ];
 
   nixpkgs = {
@@ -157,96 +158,11 @@ in
       '';
     };
 
-  # swap in ext4:
-  /*
-  swapDevices = [
-    {
-      device = "/swapfile";
-      priority = 0; # Higher numbers indicate higher priority.
-      size = 10 * 1024;
-      options = [ "nofail" ];
-    }
-  ]; */
-
   #boot.kernelModules = [
   #  "coretemp" # for temp sensors in intel (??)
   #];
 
   # Trusted Platform Module:
-  security.tpm2.enable = true;
-  security.tpm2.pkcs11.enable = true;  # expose /run/current-system/sw/lib/libtpm2_pkcs11.so
-  security.tpm2.tctiEnvironment.enable = true;  # TPM2TOOLS_TCTI and TPM2_PKCS11_TCTI env variables
-
-  # Bootloader.
-  boot.loader.systemd-boot = {
-    enable = true;
-    configurationLimit = 5; # You can leave it null for no limit, but it is not recommended, as it can fill your boot partition.
-  };
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot/efi";
-
-  #boot.initrd.systemd.enable = true;
-  #boot.plymouth.enable = true; # soft locks the PC - graphical luks interface
-  #boot.kernelParams = ["debug"]; # Pretty sure this one's the default.
-
-  boot.initrd.systemd.enable = true;
-  boot.initrd.systemd.enableTpm2 = true;
-  #security.tpm2.enable = true;
-
-  fileSystems."/boot/efi" =
-    { device = "/dev/disk/by-uuid/84A9-3C95";
-      fsType = "vfat";
-      #options = [ "fmask=0022" "dmask=0022" ]; 
-      # ⚠️ fix the security issue ⚠️
-      # https://github.com/NixOS/nixpkgs/issues/279362#issuecomment-1883970541
-      options = [ "uid=0" "gid=0" "fmask=0077" "dmask=0077" ];
-    };
-
-
-
-  boot.initrd.preLVMCommands = let
-    waitForMicroSD = pkgs.writeShellScriptBin "waitForMicroSD" ''
-echo "Waiting for logical volumes to become accessible."
-sleep 3
-exit 1
-        '';
-  in lib.mkOrder 400 ''
-    ${waitForMicroSD}/bin/waitForMicroSD
-  '';
-  # sleep 5
-  boot.initrd.luks.devices = {
-    "cryptroot" = {
-      device = "/dev/VG/cryptroot";
-      allowDiscards = true; # for ssd primary?
-      preLVM = false; # informs that its LUKS on LVM and not LVM on LUKS
-    };
-    "cryptswap" = {
-      device = "/dev/VG/cryptswap";
-      allowDiscards = true; # for ssd primary?
-      preLVM = false; # informs that its LUKS on LVM and not LVM on LUKS
-    };
-  }; 
-
-  fileSystems."/" =
-    { #device = "/dev/disk/by-uuid/6e60cc35-882f-45bf-8402-719a14a74a74";
-      device = "/dev/mapper/cryptroot";
-      fsType = "btrfs";
-      options = [ "compress=zstd" ];
-    };
-  swapDevices =
-    [ 
-      { device = "/dev/mapper/cryptswap"; }
-    ];
-  # MY MOUNTS
-  fileSystems."/mnt/ntfsMicroSD-DataDisk" = {
-    device = "/dev/disk/by-label/ntfsMicroSD-DataDisk";
-    fsType = "auto";
-    options = [
-      "nodev"
-      "nofail"
-      "x-gvfs-show"
-    ]; # "uid=1000" "gid=1000" "dmask=007" "fmask=117"
-  };
   
   #powerManagement = { # TODO ???
   #  cpuFreqGovernor = "ondemancdd";
