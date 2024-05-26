@@ -10,8 +10,17 @@ let
 in
 {
   imports = [
+    # https://discourse.nixos.org/t/a-modern-and-secure-desktop-setup/41154
     #inputs.lanzaboote.nixosModules.lanzaboote
   ];
+
+  /*
+  # secure boot is a little too complicated
+  boot.loader.systemd-boot.enable = lib.mkForce false;
+  boot.lanzaboote = {
+    enable = true;
+    pkiBundle = "/etc/secureboot";
+  };*/
 
   security.tpm2.enable = true;
   security.tpm2.pkcs11.enable = true;  # expose /run/current-system/sw/lib/libtpm2_pkcs11.so
@@ -27,6 +36,7 @@ in
     };
 
   # Bootloader.
+  # Using secure boot now
   boot.loader.systemd-boot = {
     enable = true;
     configurationLimit = 10; # You can leave it null for no limit, but it is not recommended, as it can fill your boot partition.
