@@ -165,9 +165,11 @@ in
       "8.8.8.8"
       "9.9.9.9"
     ];
+    #networking.useNetworkd = true;
     networking.networkmanager.enable = lib.mkDefault true;
     networking = {
       hostName = "nixos-${cfg.host}";
     };
+    networking.firewall.enable = false;
   };
 }
