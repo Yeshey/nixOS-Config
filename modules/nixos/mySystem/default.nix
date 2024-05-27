@@ -152,24 +152,21 @@ in
     programs.command-not-found.enable = lib.mkDefault true;
     environment.systemPackages = [ pkgs.deploy-rs ];
 
-/*
     networking.networkmanager.enable = lib.mkDefault true;
     networking.resolvconf.dnsExtensionMechanism = lib.mkDefault false; # fixes internet connectivity problems with some sites (https://discourse.nixos.org/t/domain-name-resolve-problem/885/2)
-     # (https://unix.stackexchange.com/questions/510940/how-can-i-set-a-custom-dns-server-within-nixos)
-    # needed to access coimbra-dev raspberrypi from localnetwork
-    systemd.network.wait-online.enable = lib.mkDefault false;
-    networking.useNetworkd = lib.mkDefault true;
-    */
     networking.nameservers = [
       "1.1.1.1"
       "8.8.8.8"
       "9.9.9.9"
-    ];
-    #networking.useNetworkd = true;
-    networking.networkmanager.enable = lib.mkDefault true;
+    ]; # (https://unix.stackexchange.com/questions/510940/how-can-i-set-a-custom-dns-server-within-nixos)
+    # needed to access coimbra-dev raspberrypi from localnetwork
+    systemd.network.wait-online.enable = lib.mkDefault false;
+    networking.useNetworkd = lib.mkDefault true;
     networking = {
       hostName = "nixos-${cfg.host}";
     };
-    networking.firewall.enable = false;
+
+    #networking.useNetworkd = true;
+    #networking.firewall.enable = false;
   };
 }

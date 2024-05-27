@@ -24,7 +24,7 @@ in
       heroic
       minetest
       the-powder-toy
-      mindustry
     ];
+
   };
 }
