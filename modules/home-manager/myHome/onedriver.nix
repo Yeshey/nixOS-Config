@@ -96,7 +96,6 @@ in
         };
       };
 
-
     # A systemd timer and service to delete all the cached files so it doesnt start taking up space
     systemd.user.services."delete-onedriver-cache" = let
       script = pkgs.writeShellScriptBin "delete-onedriver-cache-script" ''
