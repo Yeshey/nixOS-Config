@@ -41,4 +41,5 @@ in
     environment.systemPackages = with pkgs; [
       mindustry-server # you will have to run manually there
     ];
+  };
 }
