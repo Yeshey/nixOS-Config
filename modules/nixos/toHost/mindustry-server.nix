@@ -15,7 +15,6 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    # had to run sudo netstat -punta to figure it out
     networking.firewall.allowedTCPPorts = [
       6567 # for mindustry hosting
       7657
@@ -25,6 +24,7 @@ in
       7657
     ];
 
+    # had to run sudo netstat -punta to figure it out
     networking.firewall.allowedUDPPortRanges = [
       {
         from = 30000;
@@ -39,8 +39,6 @@ in
     ];
 
     environment.systemPackages = with pkgs; [
-      mindustry-server
+      mindustry-server # you will have to run manually there
     ];
-
-  };
 }
