@@ -160,6 +160,8 @@ in
     ];
   };
 
+  #services.onedrive.enable = true;
+
   #programs.zsh.enable = true;
   #users.users.yeshey.shell = pkgs.zsh;
 
