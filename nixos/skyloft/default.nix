@@ -92,6 +92,7 @@
     ngixServer.enable = true;
     mineclone.enable = true;
     kubo.enable = true;
+    mindustry-server.enable = true;
   };
 
   time.timeZone = "Europe/Madrid";

@@ -17,17 +17,31 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ mindustry ];
 
-    # had to run sudo netstat -punta to figure it out
+    /*
     networking.firewall.allowedTCPPorts = [
       6567 # for mindustry hosting
       7657
+      1707
     ];
     networking.firewall.allowedUDPPorts = [
       6567 # for mindustry hosting
       7657
+      1707
+    ];*/
+    # had to run sudo netstat -punta to figure it out, using a lot of random ports?, how aweful this is kkk
+    networking.firewall.allowedUDPPortRanges = [
+      {
+        from = 30000;
+        to = 65535;
+      }
     ];
-
-    networking.firewall.enable = false; # TODO, the fuck, what ports do I need t open
+    networking.firewall.allowedTCPPortRanges = [
+      {
+        from = 47000;
+        to = 65535;
+      }
+    ];
+    # networking.firewall.enable = false;
 
     programs = {
       steam = {
