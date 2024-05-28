@@ -20,6 +20,7 @@ in
     ./ngixServer
     ./mineclone.nix
     ./kubo.nix
+    ./mindustry-server.nix
   ];
 
   options.toHost = with lib; {
