@@ -17,13 +17,16 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ mindustry ];
 
-    /*
+    # had to run sudo netstat -punta to figure it out
     networking.firewall.allowedTCPPorts = [
       6567 # for mindustry hosting
+      7657
     ];
     networking.firewall.allowedUDPPorts = [
       6567 # for mindustry hosting
-    ];*/
+      7657
+    ];
+
     networking.firewall.enable = false; # TODO, the fuck, what ports do I need t open
 
     programs = {
