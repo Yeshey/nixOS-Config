@@ -60,7 +60,7 @@ in
     # check service with `sudo systemctl status nixos-upgrade`
     # run service with `sudo systemctl start nixos-upgrade.service`
     system.autoUpgrade = {
-      enable = true;
+      enable = lib.mkDefault true;
       # dates = "23:01";
       dates = cfg.dates; #weekly
       operation = "switch";
@@ -74,8 +74,8 @@ in
         # "--commit-lock-file" # commit the new lock file with git
         # || cd ${location} && git checkout -- flake.lock '' # reverts the changes to flake.lock if things went south (doesn't work because the commands in this list they aren't placed in this order in the end)
       ];
-      allowReboot = false; # set to false
-      persistent = true; # upgrades even if PC was off when it would upgrade
+      allowReboot = lib.mkDefault false; # set to false
+      persistent = lib.mkDefault true; # upgrades even if PC was off when it would upgrade
     };
     
     # taking from https://github.com/NixOS/nixpkgs/blob/nixos-23.11/nixos/modules/tasks/auto-upgrade.nix
