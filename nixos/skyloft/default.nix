@@ -97,6 +97,8 @@
 
   time.timeZone = "Europe/Madrid";
 
+  system.autoUpgrade.allowReboot = true;
+
   nixpkgs.config = {
     allowUnsupportedSystem = true;
     #    allowUnfree = true;
