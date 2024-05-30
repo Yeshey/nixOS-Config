@@ -33,7 +33,8 @@ in
   config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [
-      box86Pkgs.box86
+      #box86Pkgs.box86
+      #pkgs.mybox86
     ];
 
   };

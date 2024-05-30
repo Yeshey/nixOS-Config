@@ -8,4 +8,6 @@ rec {
 
   myOnedriver = pkgs.callPackage ./onedriver-his.nix { };
   # example = pkgs.callPackage ./example { };
+
+  mybox86 = pkgs.callPackage ./box86.nix { };
 }
