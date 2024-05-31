@@ -87,7 +87,7 @@ in
     browser.enable = true;
     cliTools.enable = true;
     zsh.enable = true;
-    gaming.enable = true;
+    gaming.enable = false;
     vmHost = true;
     dockerHost = true;
     host = "kakariko";
@@ -99,7 +99,7 @@ in
     hardware = {
       enable = true;
       bluetooth.enable = true;
-      printers.enable = true;
+      printers.enable = false;
       sound.enable = true;
       thermald = {
         enable = true;
@@ -173,7 +173,7 @@ in
   environment.systemPackages = with pkgs; [
     stremio-scalled
     # Games
-    steam-scalled
+    #steam-scalled
   ];
 
   #networking = { # TODO can you remove
