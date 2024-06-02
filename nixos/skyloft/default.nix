@@ -81,7 +81,7 @@
       sshKeys.enable = true;
     };
 
-    #box86.enable = true;
+    box86.enable = true;
   };
 
   toHost = {
