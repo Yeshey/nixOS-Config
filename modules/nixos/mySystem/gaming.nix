@@ -17,6 +17,7 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ mindustry ];
 
+    # for mindustry hosting
     /*
     networking.firewall.allowedTCPPorts = [
       6567 # for mindustry hosting
