@@ -34,7 +34,7 @@ in
 
     environment.systemPackages = [
       #box86Pkgs.box86
-      #pkgs.mybox86
+      pkgs.mybox86
     ];
 
   };
