@@ -1,13 +1,14 @@
 { lib
-, stdenv
+#, stdenv
+, gccMultiStdenv
 , fetchFromGitHub
 , cmake
 , python3
 }:
 
-stdenv.mkDerivation rec {
+gccMultiStdenv.mkDerivation rec {
   pname = "box86";
-  version = "0.2.6";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "ptitSeb";
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DNOGIT=1"
   ] ++ (
-    if stdenv.hostPlatform.system == "armv7l-linux" then
+    if gccMultiStdenv.hostPlatform.system == "armv7l-linux" then
       [
         "-DARM_DYNAREC=ON"
       ]
