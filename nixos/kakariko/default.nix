@@ -87,7 +87,7 @@ in
     browser.enable = true;
     cliTools.enable = true;
     zsh.enable = true;
-    gaming.enable = false;
+    gaming.enable = true;
     vmHost = true;
     dockerHost = true;
     host = "kakariko";
