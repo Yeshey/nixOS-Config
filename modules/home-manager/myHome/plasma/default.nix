@@ -25,10 +25,10 @@ in
       enable = true;
 
       workspace = {
-        clickItemTo = "select";
-        lookAndFeel = "org.kde.breezedark.desktop";
-        cursorTheme = "Bibata-Modern-Ice";
-        iconTheme = "Papirus-Dark";
+        clickItemTo = "open";
+        #lookAndFeel = "org.kde.breezedark.desktop";
+        #cursorTheme = "Bibata-Modern-Ice";
+        #iconTheme = "Papir";
         wallpaper = lib.mkIf (wallpaper != null) wallpaper;
       };
     };
