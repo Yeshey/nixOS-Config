@@ -76,7 +76,7 @@ in
         ZSHZ_ECHO = 1;
       };
 
-      enableAutosuggestions = lib.mkDefault true;
+      autosuggestion.enable = lib.mkDefault true;
       enableCompletion = lib.mkDefault true;
       syntaxHighlighting.enable = lib.mkDefault true;
       enableVteIntegration = lib.mkDefault true;

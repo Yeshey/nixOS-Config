@@ -58,7 +58,7 @@ in
         #pkg-config
 
         #discord
-        exodus
+        unstable.exodus # wasn't being able to grab, TODO should downgrade soon 
       ];
     };
   };
