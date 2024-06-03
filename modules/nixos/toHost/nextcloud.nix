@@ -18,7 +18,7 @@ in
     # NextCloud
     services.nextcloud = {
       enable = true;
-      package = pkgs.nextcloud27;
+      package = pkgs.nextcloud29;
       hostName = "143.47.53.175";
       # Enable built-in virtual host management
       # Takes care of somewhat complicated setup

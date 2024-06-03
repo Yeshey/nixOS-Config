@@ -1,26 +1,47 @@
 { lib
 , stdenv
+, gccMultiStdenv
 , fetchFromGitHub
 , cmake
 , python3
+, pkgsCross
+, gcc-arm-embedded
+#, gcc-arm-embedded-13
 }:
 
-stdenv.mkDerivation rec {
+#pkgsCross.arm-embedded.
+let
+  crossPkgs = pkgsCross.armv7l-hf-multiplatform;
+in
+crossPkgs.stdenv.mkDerivation rec {
   pname = "box86";
-  version = "0.2.6";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "ptitSeb";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-rLh29Li3vyvaVaqg4USUNJ/Xm8YWpEZCLVMENxlOx9c=";
+    hash = "sha256-Ywsf+q7tWcAbrwbE/KvM6AJFNMJvqHKWD6tuANxrUt8=";
   };
+
+  buildInputs = [
+    gcc-arm-embedded
+  ];
 
   nativeBuildInputs = [
     cmake
     python3
+    gcc-arm-embedded
   ];
 
+  cmakeFlags = [
+    "-DNOGIT=1"
+    "-DARM_DYNAREC=ON"
+  ];
+
+
+
+/*
   cmakeFlags = [
     "-DNOGIT=1"
   ] ++ (
@@ -34,7 +55,7 @@ stdenv.mkDerivation rec {
         "-DLD80BITS=1"
         "-DNOALIGN=1"
       ]
-  );
+  ); */
 
   installPhase = ''
     runHook preInstall
