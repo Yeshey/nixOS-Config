@@ -18,6 +18,7 @@ in
     ./hardware-configuration.nix
     ./pci-passthrough.nix
     ./vgpu.nix
+    ./../skyloft/box86.nix
 
     # (import ./configFiles/VM/VM.nix) # TODO
   ];
@@ -137,6 +138,16 @@ in
       #libvirtUsers = [ "yeshey" ];
     };
     vgpu.enable = false;
+  };
+
+  mySystem.box86.enable = true;
+  nixpkgs.config = {
+    allowUnsupportedSystem = true;
+    #    allowUnfree = true;
+    # TODO remove this below 
+    #permittedInsecurePackages = [ # for package openvscode-server
+    #  "nodejs-16.20.2"
+    #];
   };
 
   toHost = {

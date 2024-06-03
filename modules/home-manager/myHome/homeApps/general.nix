@@ -15,7 +15,13 @@ in
 
   config = lib.mkIf cfg.enable {
     home = {
-      packages = with pkgs; [
+      packages = with pkgs; let
+        cus_vivaldi = pkgs.vivaldi.overrideAttrs (oldAttrs: {
+          dontWrapQtApps = false;
+          dontPatchELF = true;
+          nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ pkgs.kdePackages.wrapQtAppsHook ];
+        });
+      in [
         wineWow64Packages.full
 
         github-desktop
@@ -30,7 +36,8 @@ in
         # etcher #insecure?
 
         # Browsers
-        unstable.vivaldi
+        cus_vivaldi
+        #vivaldi
         brave
         tor-browser-bundle-bin
         qutebrowser
@@ -58,7 +65,7 @@ in
         #pkg-config
 
         #discord
-        exodus
+        #exodus # wasn't being able to grab, TODO should downgrade soon 
       ];
     };
   };

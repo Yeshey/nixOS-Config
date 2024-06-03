@@ -32,9 +32,15 @@ in
 
   config = lib.mkIf cfg.enable {
 
+    #boot.binfmt.emulatedSystems = [ "armv7l-linux" ];
+
+    # https://github.com/NixOS/nixpkgs/pull/174113
+    # Jogos que funcionam: https://box86.org/app/
+
     environment.systemPackages = [
       #box86Pkgs.box86
-      #pkgs.mybox86
+      pkgs.mybox86
+      pkgs.box64
     ];
 
   };

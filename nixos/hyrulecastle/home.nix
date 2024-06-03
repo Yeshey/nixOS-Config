@@ -22,6 +22,7 @@ in
       enable = false;
       nvidia = false;
     };
+
     homeApps = {
       enable = true;
       cli = {
@@ -54,13 +55,17 @@ in
       libreoffice.enable = true;
       devops.enable = false;
     };
-    autoStartApps = [ pkgs.vesktop ]; # only works with gnome??
+    
+    # autoStartApps = [ pkgs.vesktop ]; # doesnt work
+
     zsh = {
       enable = true;
       starshipTheme = "pinage404"; # fredericrous # pinage404
     };
     direnv.enable = true;
+    
     wallpaper = pkgs.wallpapers.stellarCollisionByKuldarleement; # johnKearneyCityscapePoster #stellarCollisionByKuldarleement; #nierAutomataWallpaper;
+    
     colorScheme = {
       theme = colorSchemes.rose-pine-moon;
       setBasedOnWallpaper = {
@@ -68,7 +73,8 @@ in
         enable = true;
         variant = "dark"; # or light
       };
-    };
+    }; 
+    
     onedriver = {
       enable = true;
       onedriverFolder = "/mnt/hdd-btrfs/Yeshey/OneDriver/";
@@ -122,4 +128,5 @@ in
       # publicShare = lib.mkDefault "${config.home.homeDirectory}/Publiczny";
     };
   };
+
 }

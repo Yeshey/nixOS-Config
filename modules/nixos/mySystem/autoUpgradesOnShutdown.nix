@@ -305,6 +305,8 @@ in
                   #${pkgs.git}/bin/git -C "${cfg.location}" push
                 ) || echo "no commit executed"
 
+              chown -R yeshey:users "${cfg.location}"
+
               # Holy shit. awk doesnt work, sed doesnt as well
 
               # this swaps last two commits: GIT_SEQUENCE_EDITOR="sed -i -n 'h;1n;2p;g;p'" git rebase -i HEAD~2

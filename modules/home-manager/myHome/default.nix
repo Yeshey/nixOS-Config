@@ -9,6 +9,7 @@
 let
   cfg = config.myHome;
   nix-colors-lib = inputs.nix-colors.lib.contrib { inherit pkgs; };
+  inherit (inputs.nix-colors) colorSchemes;
 in
 {
   imports = [
@@ -47,7 +48,8 @@ in
       type = types.nullOr types.attrs;
       default =
         if cfg.wallpaper == null || cfg.colorScheme.setBasedOnWallpaper.enable == false then
-          null
+          #null # doesnt work 
+          colorSchemes.rose-pine-moon
         else
           nix-colors-lib.colorSchemeFromPicture {
             path = cfg.wallpaper;
