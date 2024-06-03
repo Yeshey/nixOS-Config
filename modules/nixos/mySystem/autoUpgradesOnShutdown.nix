@@ -267,14 +267,29 @@ in
             ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" pull'
             #${pkgs.git}/bin/git -C "${cfg.location}" pull
             echo "Trying to upgrade all flake inputs"
-            nix flake update ${cfg.location}
+            # nix flake update ${cfg.location}
+            # I cant update --update-input nixos-hardware cuz it breaks a lot the surface
+            nix flake lock --update-input nixpkgs \
+                          --update-input nixpkgs-unstable \
+                          --update-input home-manager \
+                          --update-input neovim-plugins \
+                          --update-input nix-colors \
+                          --update-input plasma-manager \
+                          --update-input nurpkgs \
+                          --update-input hyprland \
+                          --update-input hyprland-plugins \
+                          --update-input hyprland-contrib \
+                          --update-input nixos-nvidia-vgpu \
+                          --update-input deploy-rs \
+                          --update-input agenix
+
             ${nixos-rebuild} ${operation} --flake ${flake} || 
               (
                 echo "Upgrading all flake inputs failed, rolling back flake.lock..."
                 ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
 
-                echo "Trying to upgrade only nixpkgs, home-manager and nixos-hardware"
-                ${nixos-rebuild} ${operation} --flake ${flake} --update-input nixpkgs --update-input home-manager --update-input nixos-hardware || 
+                echo "Trying to upgrade only nixpkgs, home-manager"
+                ${nixos-rebuild} ${operation} --flake ${flake} --update-input nixpkgs --update-input home-manager || 
                   (
                     echo "Upgrading nixpkgs, home-manager and nixos-hardware inputs failed, rolling back flake.lock..."
                     ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
