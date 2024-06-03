@@ -16,18 +16,18 @@ in
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [ firefox gnome.gnome-tweaks ];
-      gnome.excludePackages = with pkgs.gnome; [
-        cheese # webcam tool
+      gnome.excludePackages = with pkgs; [
+        gnome.cheese # webcam tool
         gedit # text editor
         epiphany # web browser
-        geary # email reader
+        gnome.geary # email reader
         #evince # document viewer
-        totem # video player
-        pkgs.gnome-connections
-        gnome-contacts
+        gnome.totem # video player
+        gnome-connections
+        gnome.gnome-contacts
         # gnome-maps
-        gnome-music
-        gnome-weather
+        gnome.gnome-music
+        gnome.gnome-weather
       ];
     };
 
