@@ -114,8 +114,8 @@
   # Remote Desktop with XRDP
   # xfreerdp /v:143.47.53.175 /u:yeshey /dynamic-resolution /audio-mode:1
   services.xserver.enable = true;
-  services.xserver.displayManager.sddm.enable = true;
-  services.xserver.desktopManager.plasma5.enable = true;
+  services.displayManager.sddm.enable = true;
+  services.desktopManager.plasma6.enable = true;
   services.xrdp.enable = true;
   services.xrdp.defaultWindowManager = "startplasma-x11";
   networking.firewall.allowedTCPPorts = [ 3389 ];
