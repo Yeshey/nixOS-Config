@@ -160,6 +160,8 @@ in
     kubo.enable = true;
   };
 
+  # nix.package = lib.mkForce pkgs.nixVersions.latest; # needed for clean to work without illigal character error?
+
   virtualisation.docker.storageDriver = "btrfs"; # for docker
 
   # hardware accelaration
