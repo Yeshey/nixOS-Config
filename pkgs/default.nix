@@ -10,4 +10,5 @@ rec {
   # example = pkgs.callPackage ./example { };
 
   mybox86 = pkgs.callPackage ./box86.nix { };
+  mybox86-x86 = pkgs.callPackage ./box86-x86.nix { };
 }
