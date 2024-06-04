@@ -13,7 +13,7 @@
 let
   crossPkgs = pkgsCross.armv7l-hf-multiplatform;
 in
-crossPkgs.stdenv.mkDerivation rec {
+gccMultiStdenv.mkDerivation rec {
   pname = "box86";
   version = "0.3.6";
 
@@ -33,13 +33,13 @@ crossPkgs.stdenv.mkDerivation rec {
     python3
     gcc-arm-embedded
   ];
-
+/*
   cmakeFlags = [
     "-DNOGIT=1"
     "-DARM_DYNAREC=ON"
-  ];
+  ];*/
 
-/*
+
   cmakeFlags = [
     "-DNOGIT=1"
   ] ++ (
@@ -53,7 +53,7 @@ crossPkgs.stdenv.mkDerivation rec {
         "-DLD80BITS=1"
         "-DNOALIGN=1"
       ]
-  ); */
+  );
 
   installPhase = ''
     runHook preInstall

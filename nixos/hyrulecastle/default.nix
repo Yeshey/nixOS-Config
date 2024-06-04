@@ -18,7 +18,6 @@ in
     ./hardware-configuration.nix
     ./pci-passthrough.nix
     ./vgpu.nix
-    ./../skyloft/box86.nix
 
     # (import ./configFiles/VM/VM.nix) # TODO
   ];
@@ -140,7 +139,6 @@ in
     vgpu.enable = false;
   };
 
-  mySystem.box86.enable = true;
   nixpkgs.config = {
     allowUnsupportedSystem = true;
     #    allowUnfree = true;
@@ -172,6 +170,10 @@ in
       pkgs.libvdpau-va-gl
     ];
   };
+
+  environment.systemPackages = [
+    pkgs.mybox86-x86
+  ];
 
   # services.onedrive.enable = true;
 
