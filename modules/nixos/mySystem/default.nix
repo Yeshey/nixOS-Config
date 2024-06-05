@@ -61,6 +61,7 @@ in
     ./borgBackups.nix
     ./ssh
     ./agenix
+    ./waydroid.nix
   ];
 
   options.mySystem = with lib; {
