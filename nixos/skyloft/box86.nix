@@ -32,7 +32,32 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    #boot.binfmt.emulatedSystems = [ "armv7l-linux" ];
+    boot.binfmt.emulatedSystems = [ "armv7l-linux" ];
+    boot.binfmt.registrations.armv7l-linux.preserveArgvZero = true;
+
+  containers.gaming = {
+    autoStart = true;
+    path = ./boxcontainer;
+    /*config = { config, pkgs, ... }: {
+      imports = [
+        # Import the container configuration from the flake
+        (import (fetchTarball {
+          url = "/home/yeshey/PersonalFiles/tmp/container/flake.nix";
+          inputs = { inherit pkgs lib; };
+        }) { inherit pkgs lib; }).nixosConfigurations.container;
+      ];
+    };*/
+  };
+
+/*
+    containers.gaming.autoStart = true;
+    containers.gaming =
+      { config =
+          { config, pkgs, ... }:
+          { services.postgresql.enable = true;
+          services.postgresql.package = pkgs.postgresql_14;
+          };
+      }; */
 
     # https://github.com/NixOS/nixpkgs/pull/174113
     # Jogos que funcionam: https://box86.org/app/
