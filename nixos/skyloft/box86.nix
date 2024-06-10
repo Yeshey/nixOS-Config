@@ -32,22 +32,10 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    boot.binfmt.emulatedSystems = [ "armv7l-linux" ];
-    boot.binfmt.registrations.armv7l-linux.preserveArgvZero = true;
+    boot.binfmt.emulatedSystems = [ "armv7l-linux" "x86_64-linux" ];
+    # boot.binfmt.registrations.armv7l-linux.preserveArgvZero = true;
 
-  containers.gaming = {
-    autoStart = true;
-    path = ./boxcontainer;
-    /*config = { config, pkgs, ... }: {
-      imports = [
-        # Import the container configuration from the flake
-        (import (fetchTarball {
-          url = "/home/yeshey/PersonalFiles/tmp/container/flake.nix";
-          inputs = { inherit pkgs lib; };
-        }) { inherit pkgs lib; }).nixosConfigurations.container;
-      ];
-    };*/
-  };
+    #nix.settings.extra-platforms = "armv7l-linux";
 
 /*
     containers.gaming.autoStart = true;
@@ -66,6 +54,8 @@ in
       #box86Pkgs.box86
       pkgs.mybox86
       pkgs.box64
+
+      #pkgs.steam pkgs.steam-run
     ];
 
   };
