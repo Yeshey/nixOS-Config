@@ -1,87 +1,102 @@
-{ lib
-, stdenv
-, gccMultiStdenv
-, fetchFromGitHub
-, cmake
-, python3
-, pkgsCross
-, gcc-arm-embedded
-#, gcc-arm-embedded-13
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+  cmake,
+  python3,
+  withDynarec ? stdenv.hostPlatform.isAarch32,
+  runCommand,
+  hello-x86_32,
 }:
 
-#pkgsCross.arm-embedded.
-let
-  crossPkgs = pkgsCross.armv7l-hf-multiplatform;
-in
-crossPkgs.stdenv.mkDerivation rec {
+# Currently only supported on specific archs
+assert withDynarec -> stdenv.hostPlatform.isAarch32;
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "box86";
   version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "ptitSeb";
-    repo = pname;
-    rev = "v${version}";
+    repo = "box86";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-Ywsf+q7tWcAbrwbE/KvM6AJFNMJvqHKWD6tuANxrUt8=";
   };
-
-  buildInputs = [
-    gcc-arm-embedded
-  ];
 
   nativeBuildInputs = [
     cmake
     python3
-    gcc-arm-embedded
   ];
 
-  cmakeFlags = [
-    "-DNOGIT=1"
-    "-DARM_DYNAREC=ON"
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "NOGIT" true)
 
-/*
-  cmakeFlags = [
-    "-DNOGIT=1"
-  ] ++ (
-    if stdenv.hostPlatform.system == "armv7l-linux" then
-      [
-        "-DARM_DYNAREC=ON"
-      ]
-    else
-      [
-        "-DCMAKE_C_FLAGS=\"-m32\""
-        "-DLD80BITS=1"
-        "-DNOALIGN=1"
-      ]
-  ); */
+      # Arch mega-option
+      (lib.cmakeBool "POWERPCLE" (stdenv.hostPlatform.isPower && stdenv.hostPlatform.isLittleEndian))
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isi686 [
+      # x86 has no arch-specific mega-option, manually enable the options that apply to it
+      (lib.cmakeBool "LD80BITS" true)
+      (lib.cmakeBool "NOALIGN" true)
+    ]
+    ++ [
+      # Arch dynarec
+      (lib.cmakeBool "ARM_DYNAREC" (withDynarec && stdenv.hostPlatform.isAarch))
+    ];
 
   installPhase = ''
     runHook preInstall
+
     install -Dm 0755 box86 "$out/bin/box86"
+
     runHook postInstall
   '';
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  checkPhase = ''
-    runHook preCheck
-    ctest
-    runHook postCheck
-  '';
-
-  doInstallCheck = true;
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   installCheckPhase = ''
     runHook preInstallCheck
+
+    echo Checking if it works
     $out/bin/box86 -v
+
+    echo Checking if Dynarec option was respected
+    $out/bin/box86 -v | grep ${lib.optionalString (!withDynarec) "-v"} Dynarec
+
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
-    homepage = "https://box86.org/";
-    description = "Lets you run 32-bit Linux programs on arch 32-bit Linux systems";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gador ];
-    platforms = [ "armv7l-linux" ];
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests.hello =
+      runCommand "box86-test-hello" { nativeBuildInputs = [ finalAttrs.finalPackage ]; }
+        # There is no actual "Hello, world!" with any of the logging enabled, and with all logging disabled it's hard to
+        # tell what problems the emulator has run into.
+        ''
+          BOX86_NOBANNER=0 BOX86_LOG=1 box86 ${lib.getExe hello-x86_32} --version | tee $out
+        '';
   };
-}
+
+  meta = {
+    homepage = "https://box86.org/";
+    description = "Lets you run x86 Linux programs on non-x86 Linux systems";
+    changelog = "https://github.com/ptitSeb/box86/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      gador
+      OPNA2608
+    ];
+    mainProgram = "box86";
+    platforms = [
+      "i686-linux"
+      "armv7l-linux"
+      "powerpcle-linux"
+      "loongarch64-linux"
+      "mipsel-linux"
+    ];
+  };
+})
