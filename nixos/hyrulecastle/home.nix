@@ -67,7 +67,7 @@ in
     stylix = {
       # https://www.youtube.com/watch?v=ljHkWgBaQWU
       enable = true;
-      base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-medium.yaml"; #pop.yaml
+      base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-mirage.yaml"; #gruvbox-dark-medium #pop
       wallpaper = pkgs.wallpapers.stellarCollisionByKuldarleement; # johnKearneyCityscapePoster #nierAutomataWallpaper
       cursor = {
         package = pkgs.banana-cursor;
