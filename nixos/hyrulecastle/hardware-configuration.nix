@@ -39,6 +39,7 @@
     fsType = "vfat";
   };
 
+/*
   fileSystems."/swap" = {
     device = "/dev/disk/by-uuid/69e9ba80-fb1f-4c2d-981d-d44e59ff9e21";
     fsType = "btrfs";
@@ -46,7 +47,7 @@
       "subvol=swap"
       "nofail"
     ];
-  };
+  }; */
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
@@ -78,14 +79,8 @@
   #} ];
   # swap in btrfs as followed from https://nixos.wiki/wiki/Btrfs#:~:text=btrfs%20is%20a%20modern%20copy,tolerance,%20repair%20and%20easy%20administration.
   swapDevices = [
-    {
-      device = "/mnt/hdd-btrfs/swap/swaphdd";
+    { device = "/var/swapfile"; size = 1*1024; 
       priority = 0; # Higher numbers indicate higher priority.
-      options = [ "nofail" ];
-    }
-    {
-      device = "/swap/swapfile";
-      priority = 1; # Higher numbers indicate higher priority.
     }
     {
       device = "/dev/disk/by-label/DataDiskSwap";
