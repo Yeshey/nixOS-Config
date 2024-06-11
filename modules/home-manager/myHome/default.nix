@@ -63,5 +63,10 @@ in
       homeDirectory = lib.mkDefault "/home/${username}";
       stateVersion = lib.mkDefault "22.11";
     };
+    nix.gc = {
+      automatic = lib.mkDefault true;
+      options = lib.mkDefault "-d";
+      frequency = lib.mkDefault "weekly";
+    };
   };
 }
