@@ -65,7 +65,7 @@ in
       # https://www.youtube.com/watch?v=ljHkWgBaQWU
       enable = true;
       #base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-medium.yaml"; #pop.yaml
-      wallpaper = pkgs.wallpapers.nierAutomataWallpaper; # johnKearneyCityscapePoster #nierAutomataWallpaper
+      wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement
       cursor = {
         package = pkgs.banana-cursor;
         name = "Banana";
