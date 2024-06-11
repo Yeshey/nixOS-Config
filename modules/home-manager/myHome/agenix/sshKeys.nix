@@ -26,7 +26,7 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDgOfJysYZT/VOwxg/FWCYDnjrSEilzK+YO1JVF5mfk
             ${pkgs.coreutils}/bin/cat ${config.age.secrets.my_identity_yeshey.path} > /home/yeshey/.ssh/my_identity
 
             chmod 700 ~/.ssh
-            chmod 600 ~/.ssh/*
+            find ~/.ssh/ -type f -exec chmod 600 {} +
           '';
     in {
       Unit = {
