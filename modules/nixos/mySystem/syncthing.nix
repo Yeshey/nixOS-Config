@@ -198,7 +198,7 @@ in
           # Allsync
           ${ignorePattern "Allsync" "
             //*
-            watch
+            //watch
           "}
 
           # Music
