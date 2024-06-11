@@ -1,4 +1,6 @@
-alias clean="echo \"This will clean all generations, and optimise the store\" ; sudo sh -c 'nix-collect-garbage -d ; nix-store --optimise' && echo \"You should do a nixos-rebuild boot and a reboot to clean the boot generations now\"";
+# clean https://nixos.wiki/wiki/Cleaning_the_nix_store
+# also need to run as nix-collect-garbage -d non root: https://github.com/NixOS/nix/issues/8508
+alias clean="echo \"This will clean all generations, and optimise the store\" ; sudo sh -c 'nix-collect-garbage -d ; nix-store --optimise ; nix-store --gc ; echo \"You should do a nixos-rebuild boot and a reboot to clean the boot generations now, displaying stray roots:\" ; nix-store --gc --print-roots | egrep -v \"^(/nix/var|/run/current-system|/run/booted-system|/proc|{memory|{censored)\"' ; nix-collect-garbage -d";
 alias df="df -h";                                   # Human-readable sizes
 alias free="free -m";                               # Show sizes in MB
 alias zshreload="clear && zsh";
