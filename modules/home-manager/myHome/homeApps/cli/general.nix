@@ -30,6 +30,8 @@ in
       tmux
       wget
       tree
+      btop
+      #file
       unzip
       unrar # also to extract .rar with ark in KDE # unrar x Lab5.rar
     ];

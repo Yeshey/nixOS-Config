@@ -6,7 +6,7 @@
 }:
 
 let
-  inherit (inputs.nix-colors) colorSchemes;
+
 in
 {
   myHome = {
@@ -45,8 +45,8 @@ in
       vscodium.enable = true;
       discord.enable = true;
       gaming.enable = true;
-      kitty.enable = true;
-      alacritty.enable = true;
+      kitty.enable = false;
+      alacritty.enable = false;
       libreoffice.enable = true;
       devops.enable = false;
     };
@@ -61,13 +61,14 @@ in
       serviceName = "home-yeshey-OneDriver";
     };
     direnv.enable = true;
-    wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; # johnKearneyCityscapePoster #stellarCollisionByKuldarleement; #nierAutomataWallpaper;
-    colorScheme = {
-      # theme = colorSchemes.rose-pine-moon;
-      setBasedOnWallpaper = {
-        # only takes effect if theme is not set
-        enable = true;
-        variant = "dark"; # or light
+    stylix = {
+      # https://www.youtube.com/watch?v=ljHkWgBaQWU
+      enable = true;
+      #base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-medium.yaml"; #pop.yaml
+      wallpaper = pkgs.wallpapers.nierAutomataWallpaper; # johnKearneyCityscapePoster #nierAutomataWallpaper
+      cursor = {
+        package = pkgs.banana-cursor;
+        name = "Banana";
       };
     };
     agenix = {

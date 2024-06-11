@@ -31,8 +31,8 @@ in
     myHome.homeApps.general.enable = lib.mkDefault true;
     myHome.homeApps.vscodium.enable = lib.mkDefault true;
     myHome.homeApps.discord.enable = lib.mkDefault true;
-    myHome.homeApps.kitty.enable = lib.mkDefault true;
-    myHome.homeApps.alacritty.enable = lib.mkDefault true;
+    myHome.homeApps.kitty.enable = lib.mkDefault false;
+    myHome.homeApps.alacritty.enable = lib.mkDefault false;
     myHome.homeApps.gaming.enable = lib.mkDefault true;
     myHome.homeApps.firefox.enable = lib.mkDefault true;
     myHome.homeApps.libreoffice.enable = lib.mkDefault true;

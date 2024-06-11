@@ -14,7 +14,10 @@
       url = "github:LongerHV/neovim-plugins-overlay";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nix-colors.url = "github:misterio77/nix-colors";
+    stylix = {
+      url = "github:danth/stylix";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     plasma-manager = {
       url = "github:pjones/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -80,7 +83,7 @@
       neovim-plugins,
       #    , nixgl
       deploy-rs,
-      nix-colors,
+      stylix,
       plasma-manager,
       nurpkgs,
       hyprland-plugins,

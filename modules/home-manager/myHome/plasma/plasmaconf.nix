@@ -7,7 +7,6 @@
 }:
 
 let
-  wallpaper = config.myHome.wallpaper;
   cfg = config.myHome.plasma;
 in
 {

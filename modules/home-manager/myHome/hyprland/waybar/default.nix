@@ -7,7 +7,6 @@
 }:
 
 let
-  wallpaper = config.myHome.wallpaper;
   cfg = config.myHome.hyprland;
   c = config.myHome.colorScheme.theme.palette;
 in
