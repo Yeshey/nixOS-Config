@@ -173,10 +173,10 @@ in
     ];
   };
 
-  boot.binfmt.emulatedSystems = [ "armv7l-linux" ];
-  environment.systemPackages = [
-    pkgs.mybox86
-  ];
+  #boot.binfmt.emulatedSystems = [ "armv7l-linux" ];
+  #environment.systemPackages = [
+  #  pkgs.mybox86
+  #];
 
   # services.onedrive.enable = true;
 
