@@ -6,7 +6,7 @@
 }:
 
 let
-  inherit (inputs.nix-colors) colorSchemes;
+
 in
 {
   imports = [ ];
@@ -51,7 +51,7 @@ in
       discord.enable = true;
       gaming.enable = true;
       kitty.enable = true;
-      alacritty.enable = true;
+      alacritty.enable = false;
       libreoffice.enable = true;
       devops.enable = false;
     };
@@ -64,17 +64,17 @@ in
     };
     direnv.enable = true;
     
-    wallpaper = pkgs.wallpapers.stellarCollisionByKuldarleement; # johnKearneyCityscapePoster #stellarCollisionByKuldarleement; #nierAutomataWallpaper;
-    
-    colorScheme = {
-      theme = colorSchemes.rose-pine-moon;
-      setBasedOnWallpaper = {
-        # only takes effect if theme is not set
-        enable = true;
-        variant = "dark"; # or light
+    stylix = {
+      # https://www.youtube.com/watch?v=ljHkWgBaQWU
+      enable = true;
+      base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-medium.yaml"; #pop.yaml
+      wallpaper = pkgs.wallpapers.stellarCollisionByKuldarleement; # johnKearneyCityscapePoster #nierAutomataWallpaper
+      cursor = {
+        package = pkgs.banana-cursor;
+        name = "Banana";
       };
-    }; 
-    
+    };
+
     onedriver = {
       enable = true;
       onedriverFolder = "/mnt/hdd-btrfs/Yeshey/OneDriver/";

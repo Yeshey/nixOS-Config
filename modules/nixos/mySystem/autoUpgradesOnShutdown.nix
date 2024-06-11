@@ -273,7 +273,7 @@ in
                           --update-input nixpkgs-unstable \
                           --update-input home-manager \
                           --update-input neovim-plugins \
-                          --update-input nix-colors \
+                          --update-input stylix \
                           --update-input plasma-manager \
                           --update-input nurpkgs \
                           --update-input hyprland \

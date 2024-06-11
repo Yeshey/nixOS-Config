@@ -6,7 +6,6 @@
 }:
 
 let
-  wallpaper = config.myHome.wallpaper;
   cfg = config.myHome.gnome;
 in
 {
@@ -23,11 +22,5 @@ in
       gnomeExtensions.hibernate-status-button
       gnomeExtensions.tray-icons-reloaded
     ];
-    dconf.settings = {
-      "org/gnome/desktop/background" = lib.mkIf (wallpaper != null) {
-        picture-uri = "file://${wallpaper}";
-        picture-uri-dark = "file://${wallpaper}";
-      };
-    };
   };
 }

@@ -27,9 +27,9 @@ in
       settings =
         {
           # Fonts
-          font_family = "Fira Code";
-          bold_font = "Fira Code Bold";
-          font_size = "14.0";
+          #font_family = "Fira Code";
+          #bold_font = "Fira Code Bold";
+          #font_size = "14.0";
 
           # Cursor customization
           cursor_blink_interval = 0;
@@ -57,7 +57,7 @@ in
           confirm_os_window_close = 0;
 
           # Color scheme
-          background_opacity = "0.8";
+          #background_opacity = "0.8";
 
           wayland_titlebar_color = "background";
           #linux_display_server = "x11";
@@ -78,35 +78,7 @@ in
           "map.kitty_mod+a+1" = "set_background_opacity 1";
           "map.kitty_mod+a+d" = "set_background_opacity default";
           "map.kitty_mod+delete" = "clear_terminal reset active";
-        }
-        // (
-          if config.myHome.colorScheme != null then
-            {
-              foreground = "#${c.base05}"; # "#d3c6aa";
-              background = "#${c.base00}"; # "#272e33";
-              selection_foreground = "#${c.base05}"; # "#d3c6aa";
-              selection_background = "#${c.base02}"; # "#414b50";
-
-              color0 = "#${c.base00}"; # "#272e33";
-              color1 = "#${c.base0E}"; # "#e67e80";
-              color2 = "#${c.base0B}"; # "#83c092";
-              color3 = "#${c.base0A}"; # "#dbbc7f";
-              color4 = "#${c.base08}"; # "#7fbbb3";
-              color5 = "#${c.base09}"; # "#d699b6";
-              color6 = "#${c.base0D}"; # "#a7c080";
-              color7 = "#${c.base06}"; # "#e4e1cd";
-              color8 = "#${c.base02}"; # "#414b50";
-              color9 = "#${c.base0E}"; # "#e67e80";
-              color10 = "#${c.base0D}"; # "#a7c080";
-              color11 = "#${c.base0A}"; # "#dbbc7f";
-              color12 = "#${c.base04}"; # "#9da9a0";
-              color13 = "#${c.base05}"; # "#d3c6aa";
-              color14 = "#${c.base0B}"; # "#83c092";
-              color15 = "#${c.base07}"; # "#fdf6e3";
-            }
-          else
-            { }
-        );
+        };
     };
   };
 }
