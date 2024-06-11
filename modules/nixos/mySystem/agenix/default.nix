@@ -50,6 +50,12 @@ in
           #group = config.users.groups.keys.name;
         };
 
+        free_games = {
+          file = ./../../../../secrets/free_games.age;
+          #mode = "0440";
+          #group = config.users.groups.keys.name;
+        };
+
       };
     };
 

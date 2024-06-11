@@ -21,6 +21,7 @@ in
     ./mineclone.nix
     ./kubo.nix
     ./mindustry-server.nix
+    ./freeGames.nix
   ];
 
   options.toHost = with lib; {
