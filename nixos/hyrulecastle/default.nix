@@ -158,6 +158,7 @@ in
     #ngixServer.enable = true;
     #mineclone.enable = true;
     kubo.enable = true;
+    freeGames.enable = false;
   };
 
   # nix.package = lib.mkForce pkgs.nixVersions.latest; # needed for clean to work without illigal character error?
@@ -172,11 +173,6 @@ in
       pkgs.libvdpau-va-gl
     ];
   };
-
-  #boot.binfmt.emulatedSystems = [ "armv7l-linux" ];
-  #environment.systemPackages = [
-  #  pkgs.mybox86
-  #];
 
   # services.onedrive.enable = true;
 
