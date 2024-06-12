@@ -44,7 +44,7 @@ in
         # firefox
         # librewolf
 
-        helvum
+        qpwgraph
 
         #Follow the ask for help you did: (https://discourse.nixos.org/t/compiling-and-adding-program-not-in-nixpkgs-to-pc-compiling-error/25239/3)
         # (callPackage ./playit-cli.nix {}) # TODO the files have been moved to /pkgs, fix
@@ -52,7 +52,6 @@ in
         vlc
         # anydesk
         pdfarranger
-        # helvum # To control pipewire Not Working?
         linux-wifi-hotspot # hotspot
         # texlive.combined.scheme-full # LaTeX
 
