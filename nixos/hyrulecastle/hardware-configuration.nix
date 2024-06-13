@@ -104,7 +104,8 @@
       "windows_names"
       "big_writes"
       "streams_interface=windows"
-      "nls=utf8"
+      "nls=utf8" 
+      "umask=000" "dmask=027" "fmask=137" "uid=1000" "gid=1000"
     ]; # x-systemd.device-timeout=3s
   };
   fileSystems."/mnt/hdd-ntfs" = {
@@ -121,6 +122,7 @@
       "big_writes"
       "streams_interface=windows"
       "nls=utf8"
+      "umask=000" "dmask=027" "fmask=137" "uid=1000" "gid=1000"
     ]; # "uid=1000" "gid=1000" "dmask=027" "fmask=137" # defaults,nls=utf8,umask=000,dmask=027,fmask=137,uid=1000,gid=1000,windows_names [ "uid=1000" "gid=1000" "dmask=007" "fmask=117" "nofail"]; norecover,big_writes,streams_interface=windows,inherit
   };
   fileSystems."/mnt/hdd-btrfs" = {
