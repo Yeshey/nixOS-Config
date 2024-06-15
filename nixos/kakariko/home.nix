@@ -72,7 +72,7 @@ in
         name = "Banana";
       };
     };
-    agenix = {
+    agenix = { # TODO allow to easily turn of agenix?
       enable = true;
       sshKeys.enable = true;
       onedriver.enable = true;

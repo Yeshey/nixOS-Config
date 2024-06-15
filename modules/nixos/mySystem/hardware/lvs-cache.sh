@@ -24,6 +24,8 @@
 ##################################################################
 set -o nounset
 
+# run with for example `sudo lvs-cache /dev/VG/cryptroot`
+
 #LVCACHED=/dev/VG/cryptroot
 #LVCACHED=/dev/vg00/lvol0
 LVCACHED=$1
