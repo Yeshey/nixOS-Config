@@ -5,6 +5,12 @@ My reproducible nix Configuration & other configuration files.
 More Documentation for myself about nixOS in my [TechNotes Repo](https://github.com/Yeshey/TechNotes).  
 It has my personal configuration for two devices, my Lenovo Legion laptop and my MS Surface Pro 7.
 
+## Installing on a new computer
+
+- You might need to create the home manager folder manually `mkdir ~/.local/state/nix/profiles`
+- Yo'll have to find the syncthing ID by going to http://127.0.0.1:8384, getting the ID, and adding it in the syncthing config
+- You'll have to add the new machine public key to the secrets for agenix with `cat /etc/ssh/ssh_host_rsa_key.pub` and add it in the `secrets/secrets.nix` and rekey the keys `cd ~/.setup/secrets` and `agenix --rekey`.
+
 ## Credits
 
 - Initially Inspiered by [Matthias Benaets](https://github.com/MatthiasBenaets) [configuration](https://github.com/MatthiasBenaets/nixos-config) and his [video](https://www.youtube.com/watch?v=AGVXJ-TIv3Y);

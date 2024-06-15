@@ -32,6 +32,7 @@ in
       #after = [ "agenix.service" ];
       #requires = [ "agenix.service" ];
       wantedBy = [ "multi-user.target" ];
+      #after = [ "agenix.service" ]; 
     }; 
 
   };
