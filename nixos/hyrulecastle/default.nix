@@ -121,7 +121,7 @@ in
     androidDevelopment.enable = false;
 
     agenix = {
-      enable = false;
+      enable = true;
       sshKeys.enable = true;
     };
 
@@ -141,15 +141,6 @@ in
     vgpu.enable = false;
   };
 
-  nixpkgs.config = {
-    allowUnsupportedSystem = true;
-    #    allowUnfree = true;
-    # TODO remove this below 
-    #permittedInsecurePackages = [ # for package openvscode-server
-    #  "nodejs-16.20.2"
-    #];
-  };
-
   toHost = {
     dontStarveTogetherServer.enable = false;
     #nextcloud.enable = true;
@@ -159,6 +150,15 @@ in
     #mineclone.enable = true;
     kubo.enable = true;
     freeGames.enable = false;
+  };
+
+  nixpkgs.config = {
+    # allowUnsupportedSystem = true;
+    #    allowUnfree = true;
+    # TODO remove this below 
+    #permittedInsecurePackages = [ # for package openvscode-server
+    #  "nodejs-16.20.2"
+    #];
   };
 
   # nix.package = lib.mkForce pkgs.nixVersions.latest; # needed for clean to work without illigal character error?

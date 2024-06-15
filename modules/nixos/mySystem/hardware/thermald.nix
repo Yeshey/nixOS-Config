@@ -5,19 +5,22 @@
   ...
 }:
 
+with lib;
+
 let
   cfg = config.mySystem.hardware.thermald;
 in
 {
   options.mySystem.hardware.thermald = {
-    enable = lib.mkEnableOption "thermald";
-    thermalConf = lib.mkOption {
-      type = lib.types.path;
+    enable = mkEnableOption "thermald";
+    thermalConf = mkOption {
+      type = types.nullOr types.path;
+      default = null;
       example = ./thermal-conf.xml;
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
 
     # Manage Temperature, prevent throttling
     # https://github.com/linux-surface/linux-surface/issues/221
@@ -32,10 +35,13 @@ in
       let # running with --adaptive ignores the config file. Issue raised: https://github.com/NixOS/nixpkgs/issues/201402
         cfgt = config.services.thermald;
       in
-      lib.mkForce ''
+      mkForce ''
         ${cfgt.package}/sbin/thermald \
           --no-daemon \
-          --config-file ${cfgt.configFile} \
+          ${optionalString cfgt.debug "--loglevel=debug"} \
+          ${optionalString cfgt.ignoreCpuidCheck "--ignore-cpuid-check"} \
+          ${if cfgt.configFile != null then "--config-file ${cfgt.configFile}" else "--adaptive"} \
+          --dbus-enable
       '';
   };
 }
