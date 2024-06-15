@@ -9,7 +9,6 @@
 
 let
   # user = "yeshey";
-  dataStoragePath = "/mnt/ntfsMicroSD-DataDisk";
 
   # TODO find a better way? see if its still needed
   # Wrapper to run steam with env variable GDK_SCALE=2 to scale correctly
@@ -78,6 +77,13 @@ in
   };
 
   mySystem = {
+    dataStoragePath = "/mnt/ntfsMicroSD-DataDisk";
+    host = "kakariko";
+    user = "yeshey"; # TODO make this into an option where you can do user."yeshey".home-manager.enable ) true etc.
+    home-manager = {
+      enable = true;
+      home = ./home.nix;
+    };
     plasma.enable = false;
     gnome.enable = true; # TODO activate both plasma and gnome same time, maybe expose display manager
     hyprland.enable = false;
@@ -90,12 +96,6 @@ in
     gaming.enable = true;
     vmHost = true;
     dockerHost = true;
-    host = "kakariko";
-    user = "yeshey"; # TODO make this into an option where you can do user."yeshey".home-manager.enable ) true etc.
-    home-manager = {
-      enable = true;
-      home = ./home.nix;
-    };
     hardware = {
       enable = true;
       bluetooth.enable = true;
@@ -128,7 +128,6 @@ in
     i2p.enable = true;
     syncthing = {
       enable = true;
-      dataStoragePath = "/mnt/ntfsMicroSD-DataDisk";
     };
 
     androidDevelopment.enable = false;

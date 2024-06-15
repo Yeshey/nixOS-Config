@@ -14,6 +14,7 @@ in
   myHome = {
     # All the options
     user = "yeshey";
+    xdgPersonalFilesOrganization.enable = true;
     nonNixos.enable = false;
     plasma.enable = true;
     gnome.enable = false;
@@ -110,23 +111,6 @@ in
       # arduino
       # premid # show youtube videos watching in discord
     ];
-  };
-
-  xdg = {
-    # for favourits in nautilus
-    enable = lib.mkDefault true;
-    userDirs = {
-      enable = lib.mkDefault true;
-      createDirectories = lib.mkDefault true;
-      # desktop = lib.mkDefault "${config.home.homeDirectory}/Pulpit";
-      documents = lib.mkDefault "/mnt/DataDisk/PersonalFiles/";
-      download = lib.mkDefault "/mnt/DataDisk/Downloads/";
-      music = lib.mkDefault "/mnt/DataDisk/PersonalFiles/Timeless/Music/";
-      # pictures = lib.mkDefault "${config.home.homeDirectory}/Obrazy";
-      # videos = lib.mkDefault "${config.home.homeDirectory}/Wideo";
-      # templates = lib.mkDefault "${config.home.homeDirectory}/Szablony";
-      # publicShare = lib.mkDefault "${config.home.homeDirectory}/Publiczny";
-    };
   };
 
 }

@@ -44,43 +44,43 @@ let
   };
   folders = {
     "2026" = {
-      path = "${cfg.dataStoragePath}/PersonalFiles/2026";
+      path = "${config.mySystem.dataStoragePath}/PersonalFiles/2026";
       devices = lib.mapAttrsToList (name: value: name) devices; # all devices
       # mapAttrsToList: https://ryantm.github.io/nixpkgs/functions/library/attrsets/#function-library-lib.attrsets.mapAttrsToList
       versioning = myVersioning;
       # Ignore patterns: Recorded_Classes 
     };
     "2025" = {
-      path = "${cfg.dataStoragePath}/PersonalFiles/2025";
+      path = "${config.mySystem.dataStoragePath}/PersonalFiles/2025";
       devices = lib.mapAttrsToList (name: value: name) devices; # all devices
       # mapAttrsToList: https://ryantm.github.io/nixpkgs/functions/library/attrsets/#function-library-lib.attrsets.mapAttrsToList
       versioning = myVersioning;
       # Ignore patterns: Recorded_Classes 
     };
     "2024" = {
-      path = "${cfg.dataStoragePath}/PersonalFiles/2024";
+      path = "${config.mySystem.dataStoragePath}/PersonalFiles/2024";
       devices = lib.mapAttrsToList (name: value: name) devices; # all devices
       # mapAttrsToList: https://ryantm.github.io/nixpkgs/functions/library/attrsets/#function-library-lib.attrsets.mapAttrsToList
       versioning = myVersioning;
       # Ignore patterns: Recorded_Classes 
     };
     "A70Camera" = {
-      path = "${cfg.dataStoragePath}/PersonalFiles/Timeless/Syncthing/PhoneCamera";
+      path = "${config.mySystem.dataStoragePath}/PersonalFiles/Timeless/Syncthing/PhoneCamera";
       devices = lib.mapAttrsToList (name: value: name) devices;
       versioning = myVersioning;
     };
     "Allsync" = {
-      path = "${cfg.dataStoragePath}/PersonalFiles/Timeless/Syncthing/Allsync";
+      path = "${config.mySystem.dataStoragePath}/PersonalFiles/Timeless/Syncthing/Allsync";
       devices = lib.mapAttrsToList (name: value: name) devices;
       versioning = myVersioning;
     };
     "Music" = {
-      path = "${cfg.dataStoragePath}/PersonalFiles/Timeless/Music";
+      path = "${config.mySystem.dataStoragePath}/PersonalFiles/Timeless/Music";
       devices = lib.mapAttrsToList (name: value: name) devices;
       versioning = myVersioning;
     };
     "Servers" = {
-      path = "${cfg.dataStoragePath}/PersonalFiles/Servers";
+      path = "${config.mySystem.dataStoragePath}/PersonalFiles/Servers";
       devices = lib.mapAttrsToList (name: value: name) devices;
       versioning = myVersioning;
     };

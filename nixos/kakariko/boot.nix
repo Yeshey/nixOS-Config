@@ -72,7 +72,7 @@ in
       }
     ];
   # MY MOUNTS
-  fileSystems."/mnt/ntfsMicroSD-DataDisk" = {
+  fileSystems."${config.mySystem.dataStoragePath}" = {
     device = "/dev/disk/by-label/ntfsMicroSD-DataDisk";
     fsType = "auto";
     options = [

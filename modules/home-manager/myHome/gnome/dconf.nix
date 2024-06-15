@@ -445,13 +445,13 @@ with lib.hm.gvariant;
 
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0" = {
         binding = "<Control><Alt>m";
-        command = "vlc /mnt/ntfsMicroSD-DataDisk/PersonalFiles/Timeless/Music/AllMusic-mp3";
+        command = "vlc ${config.mySystem.dataStoragePath}/PersonalFiles/Timeless/Music/AllMusic-mp3";
         name = "AllMusic";
       };
 
       "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1" = {
         binding = "<Control><Alt>e";
-        command = "vlc \"/mnt/ntfsMicroSD-DataDisk/PersonalFiles/Timeless/Music/Playlists for mp3/Músicas de Estudo.m3u8\"";
+        command = "vlc \"${config.mySystem.dataStoragePath}/PersonalFiles/Timeless/Music/Playlists for mp3/Músicas de Estudo.m3u8\"";
         name = "StudyMusic";
       };
 
