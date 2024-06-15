@@ -30,31 +30,56 @@
     ];
   };
 
-  mySystem = {
-    gnome.enable = true; # TODO, we can do better
-    plasma.enable = false;
-    gaming.enable = true;
-    ssh.enable = true;
-    vmHost = true;
-    dockerHost = true;
-    host = "twilightrealm"; # TODO make this mandatory?
+  mySystem = rec {
+    # all the options
+    host = "twilightrealm";
+    user = "yeshey";
+    dataStoragePath = "~/Documents";
+    plasma.enable = true;
+    gnome.enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
+    hyprland.enable = false;
+    ssh = {
+      enable = true;
+    };
+    browser.enable = true;
+    cliTools.enable = true;
+    zsh.enable = true;
+    gaming.enable = false;
+    vmHost = false;
+    dockerHost = false;
     home-manager = {
       enable = true;
       home = ./home.nix;
-      # useGlobalPkgs = lib.mkForce false;
+      #dataStoragePath = dataStoragePath;
     };
-    bluetooth.enable = true;
-    printers.enable = true;
-    sound.enable = true;
+    hardware = {
+      enable = true;
+      bluetooth.enable = true;
+      printers.enable = false;
+      sound.enable = true;
+      nvidia = {
+        enable = true;
+        intelBusId = "PCI:0:2:0";
+        nvidiaBusId = "PCI:1:0:0";
+      };
+      lvm.enable = false;
+    };
+    autoUpgrades = {
+      enable = false;
+      location = "/home/yeshey/.setup";
+      host = "hyrulecastle";
+      dates = "daily";
+    };
     flatpaks.enable = false;
+    i2p.enable = false;
 
-    nvidia = {
-      enable = true;
-      intelBusId = "PCI:0:1:0";
-      nvidiaBusId = "PCI:8:0:0";
+    hardware.thermald = {
+      #enable = false;
+      #thermalConf = ./../kakariko/thermal-conf.xml;
     };
+
     agenix = {
-      enable = true;
+      enable = false;
       sshKeys.enable = true;
     };
   };
@@ -96,7 +121,6 @@
     };
   };
 
-  # swap in ext4:
   swapDevices = [
     {
       device = "/swapfile";
@@ -106,6 +130,7 @@
     }
   ];
 
+  
   services.spice-vdagentd.enable = true;
 
   environment.systemPackages = with pkgs; [
