@@ -121,8 +121,8 @@ in
     androidDevelopment.enable = false;
 
     agenix = {
-      enable = true;
-      sshKeys.enable = false;
+      enable = false;
+      sshKeys.enable = true;
     };
 
     waydroid.enable = true;

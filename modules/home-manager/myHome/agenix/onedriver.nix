@@ -14,7 +14,7 @@ in
     enable = mkEnableOption "onedriverAgenix";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && config.myHome.agenix.enable) {
     # Mount or unmount selected OneDriver account not turned on automatically
 
     systemd.user.services."onedriverAgenixYeshey" = let 
@@ -38,6 +38,20 @@ in
         ExecStart = "${mystuff}/bin/echo-secret";
       };
       Install.WantedBy = [ "default.target" ]; # "graphical-session.target"  ]; # "default.target"
+    };
+
+    systemd.user.services."delete-onedriver-cache" = let
+      script = pkgs.writeShellScriptBin "delete-onedriver-cache-script" ''
+            ${pkgs.myOnedriver}/bin/onedriver --wipe-cache
+
+            # if setting agenix keys, set'em afterwards
+            ${lib.strings.optionalString config.myHome.agenix.onedriver.enable "mkdir -p '/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceName}'"}
+            ${lib.strings.optionalString config.myHome.agenix.onedriver.enable "${pkgs.coreutils}/bin/cat ${config.age.secrets.onedriver_auth_yeshey.path} > '/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceName}/auth_tokens.json'"}
+          '';
+    in {
+      Service = { 
+        ExecStart = lib.mkIf config.myHome.onedriver.enable (lib.mkForce "${script}/bin/delete-onedriver-cache-script");
+      };
     };
 
   };

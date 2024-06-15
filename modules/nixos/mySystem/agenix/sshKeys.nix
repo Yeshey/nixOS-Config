@@ -14,7 +14,7 @@ in
     enable = mkEnableOption "sshKeys";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && config.mySystem.agenix.enable) {
 
     # puts my_identity private and public keys in root folder
     systemd.services."sshKeys" = {

@@ -10,7 +10,7 @@ let
   #onedriverPackage = pkgs.unstable.onedriver; #pkgs.myOnedriver
   #onedriverPackage = pkgs.myOnedriver;
   #onedriverPackage = patchedPkgs.onedriver;
-  onedriverPackage = pkgs.myOnedriver; # TODO check if the latest version works already, currently its a grey screen https://github.com/jstaf/onedriver/issues/398
+  onedriverPackage = pkgs.myOnedriver; #  when you change this, change the package in agenix onedriver as well check if the latest version works already, currently its a grey screen https://github.com/jstaf/onedriver/issues/398
   #onedriverPackage = pkgs.unstable.onedriver;
 
   # Using my package this shouldn't be needed anymore in the system config:
@@ -100,10 +100,6 @@ in
     systemd.user.services."delete-onedriver-cache" = let
       script = pkgs.writeShellScriptBin "delete-onedriver-cache-script" ''
             ${onedriverPackage}/bin/onedriver --wipe-cache
-
-            # if setting agenix keys, set'em afterwards
-            ${lib.strings.optionalString config.myHome.agenix.onedriver.enable "mkdir -p '/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceName}'"}
-            ${lib.strings.optionalString config.myHome.agenix.onedriver.enable "${pkgs.coreutils}/bin/cat ${config.age.secrets.onedriver_auth_yeshey.path} > '/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceName}/auth_tokens.json'"}
           '';
     in {
       Unit = {

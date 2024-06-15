@@ -14,7 +14,7 @@ in
     enable = mkEnableOption "sshKeysHome";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && config.myHome.agenix.enable) {
 
     # puts my_identity private and public keys in root folder
     home.file.".ssh/my_identity.pub".text = ''

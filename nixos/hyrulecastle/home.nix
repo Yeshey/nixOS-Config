@@ -87,8 +87,8 @@ in
 
     agenix = {
       enable = true;
-      sshKeys.enable = false;
-      onedriver.enable = false;
+      sshKeys.enable = true;
+      onedriver.enable = true;
     };
   };
 
