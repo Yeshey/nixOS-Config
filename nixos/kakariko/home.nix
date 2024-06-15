@@ -12,6 +12,7 @@ in
   myHome = {
     # All the options
     user = "yeshey";
+    xdgPersonalFilesOrganization.enable = true;
     nonNixos.enable = false;
     plasma.enable = false;
     gnome.enable = true;
@@ -96,20 +97,4 @@ in
     ];
   };
 
-  xdg = {
-    # for favourits in nautilus
-    enable = lib.mkDefault true;
-    userDirs = {
-      enable = lib.mkDefault true;
-      createDirectories = lib.mkDefault true;
-      # desktop = lib.mkDefault "${config.home.homeDirectory}/Pulpit";
-      documents = lib.mkDefault "/mnt/ntfsMicroSD-DataDisk/PersonalFiles/";
-      download = lib.mkDefault "/mnt/ntfsMicroSD-DataDisk/Downloads/";
-      music = lib.mkDefault "/mnt/ntfsMicroSD-DataDisk/PersonalFiles/Timeless/Music/";
-      # pictures = lib.mkDefault "${config.home.homeDirectory}/Obrazy";
-      # videos = lib.mkDefault "${config.home.homeDirectory}/Wideo";
-      # templates = lib.mkDefault "${config.home.homeDirectory}/Szablony";
-      # publicShare = lib.mkDefault "${config.home.homeDirectory}/Publiczny";
-    };
-  };
 }

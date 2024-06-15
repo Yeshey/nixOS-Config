@@ -74,6 +74,12 @@ in
       # by default use all
       default = mapAttrsToList (name: value: name) substituters; # mapAttrsToList: https://ryantm.github.io/nixpkgs/functions/library/attrsets/#function-library-lib.attrsets.mapAttrsToList
     };
+    dataStoragePath = mkOption {
+      type = types.str;
+      description = "Storage drive to put everything";
+      default = "/home/${config.mySystem.user}/Documents"
+      # default = builtins.attrValues substituters; # TODO, make it loop throught the list # by default use all
+    };
     host = mkOption {
       type = types.str;
       description = "Name of the machine, usually what was used in --flake .#hostname. Used for setting the network host name";

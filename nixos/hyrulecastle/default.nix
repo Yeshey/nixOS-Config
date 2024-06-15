@@ -9,7 +9,6 @@
 
 let
   # user = "yeshey";
-  dataStoragePath = "/mnt/DataDisk";
 in
 {
   imports = [
@@ -46,6 +45,7 @@ in
     # all the options
     host = "hyrulecastle";
     user = "yeshey";
+    dataStoragePath = "/mnt/DataDisk";
     plasma.enable = true;
     gnome.enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
     hyprland.enable = false;
@@ -112,7 +112,6 @@ in
     };
     syncthing = {
       enable = true;
-      dataStoragePath = "/mnt/DataDisk";
     };
 
     # todo add samba support properly, rn its being added just to the laptop if vgpu is enabled
