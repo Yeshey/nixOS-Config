@@ -8,7 +8,7 @@ Change the password of the user `yeshey` in `modules/nixos/mySystem/user.nix` in
 
 ```bash
 nixos-rebuild build-vm --flake .#hyrulecastle
-result/bin/run-hyrulecastle-vm
+result/bin/run-nixos-hyrulecastle-vm
 
 # Remove disk image after you are done
 rm hyrulecastle.qcow2
