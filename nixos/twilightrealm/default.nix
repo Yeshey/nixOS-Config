@@ -35,8 +35,8 @@
     host = "twilightrealm";
     user = "yeshey";
     dataStoragePath = "~/Documents";
-    plasma.enable = true;
-    gnome.enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
+    plasma.enable = false;
+    gnome.enable = true; # TODO activate both plasma and gnome same time, maybe expose display manager
     hyprland.enable = false;
     ssh = {
       enable = true;
@@ -130,8 +130,11 @@
     }
   ];
 
-  
+  # Guest VM options
   services.spice-vdagentd.enable = true;
+  services.spice-autorandr.enable = true; # auto resize guest
+  services.spice-webdavd.enable = true;
+  virtualisation.spiceUSBRedirection.enable = true;
 
   environment.systemPackages = with pkgs; [
     # Games
