@@ -122,7 +122,7 @@ in
 
     agenix = {
       enable = true;
-      sshKeys.enable = true;
+      sshKeys.enable = false;
     };
 
     waydroid.enable = true;
