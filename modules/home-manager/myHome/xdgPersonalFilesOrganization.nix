@@ -3,7 +3,7 @@
   config,
   lib,
   pkgs,
-  cfgSystem,
+  osConfig,
   ...
 }:
 let
@@ -23,9 +23,9 @@ in
         enable = lib.mkDefault true;
         createDirectories = lib.mkDefault true;
         # desktop = lib.mkDefault "${config.home.homeDirectory}/Pulpit";
-        documents = lib.mkDefault "${cfgSystem.mySystem.dataStoragePath}/PersonalFiles/";
-        download = lib.mkDefault "${cfgSystem.mySystem.dataStoragePath}/Downloads/";
-        music = lib.mkDefault "${cfgSystem.mySystem.dataStoragePath}/PersonalFiles/Timeless/Music/";
+        documents = lib.mkDefault "${osConfig.mySystem.dataStoragePath}/PersonalFiles/";
+        download = lib.mkDefault "${osConfig.mySystem.dataStoragePath}/Downloads/";
+        music = lib.mkDefault "${osConfig.mySystem.dataStoragePath}/PersonalFiles/Timeless/Music/";
         # pictures = lib.mkDefault "${config.home.homeDirectory}/Obrazy";
         # videos = lib.mkDefault "${config.home.homeDirectory}/Wideo";
         # templates = lib.mkDefault "${config.home.homeDirectory}/Szablony";
