@@ -77,7 +77,7 @@ in
     dataStoragePath = mkOption {
       type = types.str;
       description = "Storage drive to put everything";
-      default = "/home/${config.mySystem.user}/Documents"
+      default = "/home/${config.mySystem.user}/Documents";
       # default = builtins.attrValues substituters; # TODO, make it loop throught the list # by default use all
     };
     host = mkOption {
