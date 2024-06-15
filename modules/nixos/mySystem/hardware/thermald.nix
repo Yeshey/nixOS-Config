@@ -35,13 +35,10 @@ in
       let # running with --adaptive ignores the config file. Issue raised: https://github.com/NixOS/nixpkgs/issues/201402
         cfgt = config.services.thermald;
       in
-      mkForce ''
+      lib.mkForce ''
         ${cfgt.package}/sbin/thermald \
           --no-daemon \
-          ${optionalString cfgt.debug "--loglevel=debug"} \
-          ${optionalString cfgt.ignoreCpuidCheck "--ignore-cpuid-check"} \
           ${if cfgt.configFile != null then "--config-file ${cfgt.configFile}" else "--adaptive"} \
-          --dbus-enable
       '';
   };
 }
