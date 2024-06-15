@@ -61,6 +61,7 @@ in
     home-manager = {
       enable = true;
       home = ./home.nix;
+      #dataStoragePath = dataStoragePath;
     };
     hardware = {
       enable = true;

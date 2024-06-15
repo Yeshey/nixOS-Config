@@ -23,6 +23,7 @@ in
     ./agenix
     ./ssh
     ./stylix.nix
+    ./xdgPersonalFilesOrganization.nix
   ];
   options.myHome = with lib; {
     user = mkOption {

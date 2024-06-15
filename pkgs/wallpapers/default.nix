@@ -8,8 +8,8 @@ in
     sha256 = "b09b411a9c7fc7dc5be312ca9e4e4b8ee354358daa792381f207c9f4946d95fe";
   };
   johnKearneyCityscapePoster = builtins.fetchurl {
-    url = "https://cdna.artstation.com/p/assets/images/images/018/711/480/large/john-kearney-cityscape-poster-artstation-update.jpg";
-    sha256 = "sha256:01g135ydn19ci1gky48dva1pdb198dkcnpfq6b4g37zlj5vhbx9r"; # TODO, sha always changing?
+    url = "file://${current_folder}/john-kearney-cityscape-poster-artstation.jpg";
+    sha256 = "sha256:1a2krq61502z5zka0a97zll4s8x9dv2qaap5hivpr7fpzl46qp2n";
   };
   stellarCollisionByKuldarleement = builtins.fetchurl {
     url = "file://${current_folder}/StellarCollisionByKuldarLeement.jpg";

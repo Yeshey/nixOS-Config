@@ -9,6 +9,7 @@
 
 let
   cfg = config.mySystem;
+  cfgSystem = config;
 in
 {
   options.mySystem = {
@@ -31,7 +32,7 @@ in
       useGlobalPkgs = lib.mkDefault true;
       useUserPackages = lib.mkDefault true;
       extraSpecialArgs = {
-        inherit inputs;
+        inherit inputs cfgSystem;
       };
       sharedModules = builtins.attrValues outputs.homeManagerModules;
       users."${cfg.user}" = import cfg.home-manager.home;
