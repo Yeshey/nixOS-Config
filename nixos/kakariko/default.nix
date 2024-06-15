@@ -172,7 +172,7 @@ in
   environment.systemPackages = with pkgs; [
     stremio-scalled
     # Games
-    #steam-scalled
+    # steam-scalled
   ];
 
   #networking = { # TODO can you remove
