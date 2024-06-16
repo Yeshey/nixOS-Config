@@ -37,6 +37,7 @@
   # set an alias to poweroff ask if you're sure
 
   mySystem = rec {
+    enable = true;
     plasma.enable = false;
     gnome.enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
     ssh.enable = true;

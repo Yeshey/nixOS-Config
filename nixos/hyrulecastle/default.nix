@@ -42,6 +42,7 @@ in
   };
 
   mySystem = rec {
+    enable = true; # TODO Now I gotta make this affect all options below, and makkkke submodules a go and everything 🫠
     # all the options
     host = "hyrulecastle";
     user = "yeshey";

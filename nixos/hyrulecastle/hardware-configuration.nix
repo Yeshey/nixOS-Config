@@ -25,7 +25,7 @@
   boot.kernelParams = [ "i915.force_probe=46a6" ]; # "i915.force_probe=46a6"
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/69e9ba80-fb1f-4c2d-981d-d44e59ff9e21";
+    device = lib.mkDefault "/dev/disk/by-uuid/69e9ba80-fb1f-4c2d-981d-d44e59ff9e21";
     fsType = "btrfs";
     options = [
       "subvol=@"

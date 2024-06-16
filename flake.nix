@@ -57,6 +57,10 @@
         home-manager.follows = "home-manager";
       };
     };
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     /*
       nixgl = { # Might be needed for non-nixOS setups
         url = "github:guibou/nixGL";
@@ -88,6 +92,7 @@
       nurpkgs,
       hyprland-plugins,
       nixos-nvidia-vgpu,
+      nixos-generators,
       # lanzaboote,
       ...
     }@inputs:
@@ -163,9 +168,8 @@
       nixosConfigurations =
         let
           defaultModules = (builtins.attrValues nixosModules) ++ [
-            # agenix.nixosModules.default # for secrets
+            nixos-generators.nixosModules.all-formats # try nix build ~/.setup#nixosConfigurations.twilightrealm.config.formats.isa
             home-manager.nixosModules.default
-            # plasma-manager.homeManagerModules.plasma-manager
           ];
           specialArgs = {
             inherit inputs outputs;
@@ -194,6 +198,16 @@
             nixpkgs.lib.nixosSystem {
               inherit specialArgs;
               modules = defaultModules ++ [ ./nixos/twilightrealm ];
+            };
+
+          iso = # to create ISO and bootable usbs
+            nixpkgs.lib.nixosSystem {
+              inherit specialArgs;
+              #system = "x86_64-linux";
+              modules = defaultModules ++ [ 
+                ./nixos/iso
+                (nixpkgs + "/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix")
+              ];
             };
         };
 

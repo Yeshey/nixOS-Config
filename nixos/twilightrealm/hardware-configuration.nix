@@ -12,6 +12,43 @@
 {
   imports = [ (modulesPath + "/profiles/qemu-guest.nix") ];
 
+
+  boot.kernelParams = [ "nouveau.modeset=0" ];
+  boot.loader = {
+
+    timeout = lib.mkDefault 2;
+    efi = {
+      canTouchEfiVariables = lib.mkDefault true;
+      efiSysMountPoint = lib.mkDefault "/boot/efi";
+    };
+    grub = {
+      enable = lib.mkDefault true;
+      efiSupport = lib.mkDefault true;
+      devices = [ "nodev" ];
+      device = "nodev";
+      useOSProber = lib.mkDefault true;
+      # default = "saved"; # doesn't work with btrfs :(
+      extraEntries = lib.mkDefault ''
+        menuentry "Reboot" {
+            reboot
+        }
+
+        menuentry "Shut Down" {
+            halt
+        }
+
+        # Option info from /boot/grub/grub.cfg, technotes "Grub" section for more details
+        menuentry "NixOS - Console" --class nixos --unrestricted {
+        search --set=drive1 --fs-uuid 69e9ba80-fb1f-4c2d-981d-d44e59ff9e21
+        search --set=drive2 --fs-uuid 69e9ba80-fb1f-4c2d-981d-d44e59ff9e21
+          linux ($drive2)/@/nix/store/ll70jpkp1wgh6qdp3spxl684m0rj9ws4-linux-5.15.68/bzImage init=/nix/store/c2mg9sck85ydls81xrn8phh3i1rn8bph-nixos-system-nixos-22.11pre410602.ae1dc133ea5/init loglevel=4 3
+          initrd ($drive2)/@/nix/store/s38fgk7axcjryrp5abkvzqmyhc3m4pd1-initrd-linux-5.15.68/initrd
+        }
+
+      '';
+    };
+  };
+
   boot.initrd.availableKernelModules = [
     "ahci"
     "xhci_pci"
@@ -24,8 +61,8 @@
   boot.extraModulePackages = [ ];
 
   fileSystems."/" = {
-    device = "/dev/disk/by-uuid/e544a684-3717-4216-a008-1ec0cbb6b99a";
-    fsType = "ext4";
+    device = lib.mkDefault "/dev/disk/by-uuid/e544a684-3717-4216-a008-1ec0cbb6b99a";
+    fsType = lib.mkDefault "ext4";
   };
 
   fileSystems."/boot" = {
