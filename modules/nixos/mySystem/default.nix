@@ -65,6 +65,7 @@ in
   ];
 
   options.mySystem = with lib; {
+    enable = lib.mkEnableOption "mySystem";
     nix.substituters = mkOption {
       type = types.listOf types.str;
       example = [
@@ -83,13 +84,14 @@ in
     host = mkOption {
       type = types.str;
       description = "Name of the machine, usually what was used in --flake .#hostname. Used for setting the network host name";
+      default = "nixOS";
       # default = 
       # default = builtins.attrValues substituters; # TODO, make it loop throught the list # by default use all
     };
     # dedicatedServer = lib.mkEnableOption "dedicatedServer"; # TODO use this to say in the config if it is a dedicatedServer or not, with sub-options to enable each the bluetooth, printers, and sound, ponder adding the gnome and plasma desktops and gaming too
   };
 
-  config = {
+  config = lib.mkIf cfg.enable {
     zramSwap.enable = lib.mkDefault true;
     boot.tmp.cleanOnBoot = lib.mkDefault true; # delete all files in /tmp during boot.
     boot.supportedFilesystems = [ "ntfs" "btrfs" ]; # TODO lib.mkdefault? Doesn't work with [] and {}?
@@ -170,7 +172,7 @@ in
     systemd.network.wait-online.enable = lib.mkDefault false;
     networking.useNetworkd = lib.mkDefault true;
     networking = {
-      hostName = "nixos-${cfg.host}";
+      hostName = lib.mkDefault "nixos-${cfg.host}";
     };
 
     #networking.useNetworkd = true;
