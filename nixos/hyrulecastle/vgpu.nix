@@ -8,7 +8,7 @@
 
 with lib;
 let
-  cfg = config.mySystem.vgpu;
+  cfg = config.mySystemHyruleCastle.vgpu;
 
   # need to pin because of this error: https://discourse.nixos.org/t/cant-update-nvidia-driver-on-stable-branch/39246
   inherit (pkgs.stdenv.hostPlatform) system;
@@ -26,7 +26,7 @@ in
     inputs.nixos-nvidia-vgpu.nixosModules.nvidia-vgpu
   ];
   
-  options.mySystem.vgpu = {
+  options.mySystemHyruleCastle.vgpu = {
     enable = mkEnableOption "NvidiaVgpuSharing";
   };
 
