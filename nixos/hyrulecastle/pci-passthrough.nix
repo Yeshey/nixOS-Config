@@ -9,11 +9,11 @@
 
 with lib;
 let
-  cfg = config.mySystem.pciPassthrough;
+  cfg = config.mySystemHyruleCastle.pciPassthrough;
 in
 {
   ###### interface
-  options.mySystem.pciPassthrough = {
+  options.mySystemHyruleCastle.pciPassthrough = {
     enable = mkEnableOption "PCI Passthrough";
 
     cpuType = mkOption {
@@ -40,7 +40,7 @@ in
 
       assertions = [
         {
-          assertion = !(config.mySystem.pciPassthrough.enable && config.mySystem.vgpu.enable);
+          assertion = !(config.mySystemHyruleCastle.pciPassthrough.enable && config.mySystemHyruleCastle.vgpu.enable);
           message = "You cannot use both pciPassthrough and nvidiaVgpuSharing methods to share GPU power, pick one";
         }
       ];

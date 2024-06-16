@@ -17,8 +17,6 @@ in
     ./hardware-configuration.nix
     ./pci-passthrough.nix
     ./vgpu.nix
-
-    # (import ./configFiles/VM/VM.nix) # TODO
   ];
 
   nixpkgs = {
@@ -127,7 +125,20 @@ in
     };
 
     waydroid.enable = true;
+  };
 
+  toHost = {
+    dontStarveTogetherServer.enable = false;
+    #nextcloud.enable = true;
+    #minecraft.enable = false;
+    #openvscodeServer.enable = true;
+    #ngixServer.enable = true;
+    #mineclone.enable = true;
+    kubo.enable = true;
+    freeGames.enable = false;
+  };
+
+  mySystemHyruleCastle = {
     # https://gist.github.com/WhittlesJr/a6de35b995e8c14b9093c55ba41b697c
     # Enable the module with pciIDs = ""; and then run one of these commands to find the pciIDs:
     # for d in /sys/kernel/iommu_groups/*/devices/*; do n="${d#*/iommu_groups/*}"; n="${n%%/*}"; printf 'IOMMU Group %s \t' "$n"; lspci -nns "${d##*/}"; done | sort -h -k 3 | grep --color -e ".*NVIDIA.*" -e "^"
@@ -140,17 +151,6 @@ in
       #libvirtUsers = [ "yeshey" ];
     };
     vgpu.enable = false;
-  };
-
-  toHost = {
-    dontStarveTogetherServer.enable = false;
-    #nextcloud.enable = true;
-    #minecraft.enable = false;
-    #openvscodeServer.enable = true;
-    #ngixServer.enable = true;
-    #mineclone.enable = true;
-    kubo.enable = true;
-    freeGames.enable = false;
   };
 
   nixpkgs.config = {
