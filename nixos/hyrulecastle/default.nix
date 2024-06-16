@@ -63,18 +63,18 @@ in
       #dataStoragePath = dataStoragePath;
     };
     hardware = {
-      enable = true;
+      enable = true; # TODO, if you set this to false, should disable everything
+      nvidia = {
+        enable = true;
+        intelBusId = "PCI:0:2:0";
+        nvidiaBusId = "PCI:1:0:0";
+      };
       bluetooth.enable = true;
       printers.enable = true;
       sound.enable = true;
       thermald = {
         enable = true;
         thermalConf = ./thermal-conf.xml;
-      };
-      nvidia = {
-        enable = true;
-        intelBusId = "PCI:0:2:0";
-        nvidiaBusId = "PCI:1:0:0";
       };
       lvm.enable = false;
     };
