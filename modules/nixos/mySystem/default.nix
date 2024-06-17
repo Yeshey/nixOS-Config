@@ -47,7 +47,7 @@ in
     ./plasma.nix
     ./hyprland.nix
     ./virt.nix
-    ./zsh
+    ./zsh/default.nix
 
     ./i2p.nix # TODO review and possibly clump together with the non-server Configuration below
     ./flatpaks.nix
@@ -55,17 +55,22 @@ in
     ./autoUpgrades.nix
     ./autoUpgradesOnShutdown.nix
     ./browser.nix
-    ./hardware
+    ./hardware/default.nix
 
     ./syncthing.nix
     ./borgBackups.nix
-    ./ssh
-    ./agenix
+    ./ssh/default.nix
+    ./agenix/default.nix
     ./waydroid.nix
   ];
 
   options.mySystem = with lib; {
     enable = lib.mkEnableOption "mySystem";
+    #hardware = lib.types.submodule ./hardware;
+    #hardware = mkOption {
+    #  type = types.submodule ./hardware/default.nix;
+      # default = {};
+    #};
     nix.substituters = mkOption {
       type = types.listOf types.str;
       example = [
