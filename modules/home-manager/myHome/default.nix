@@ -11,17 +11,17 @@ let
 in
 {
   imports = [
-    ./gnome
-    ./plasma
+    ./gnome/default.nix
+    ./plasma/default.nix
     ./non-nixos.nix
-    ./zsh
+    ./zsh/default.nix
     ./direnv.nix
-    ./homeApps
-    ./hyprland
+    ./homeApps/default.nix
+    ./hyprland/default.nix
     ./autoStartApps.nix
     ./onedriver.nix
-    ./agenix
-    ./ssh
+    ./agenix/default.nix
+    ./ssh/default.nix
     ./stylix.nix
     ./xdgPersonalFilesOrganization.nix
   ];
