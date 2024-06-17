@@ -13,7 +13,7 @@ in
     enable = lib.mkEnableOption "flatpaks";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.mySystem.enable && cfg.enable) {
 
     services.flatpak.enable = true;
 

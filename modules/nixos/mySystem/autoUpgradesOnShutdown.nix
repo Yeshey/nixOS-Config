@@ -40,7 +40,7 @@ in
 
   config = let 
 
-  in lib.mkIf cfg.enable {
+  in lib.mkIf (config.mySystem.enable && cfg.enable) {
 
 /*
     systemd.timers."test" = {

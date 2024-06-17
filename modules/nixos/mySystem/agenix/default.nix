@@ -20,7 +20,7 @@ in
     enable = mkEnableOption "agenix";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.mySystem.enable && cfg.enable) {
     environment.systemPackages = [ inputs.agenix.packages.${system}.agenix ]; # adds agenix
 
     # to provide key for agenix

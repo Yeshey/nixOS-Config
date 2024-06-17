@@ -13,7 +13,7 @@ in
     enable = mkEnableOption "i2p";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.mySystem.enable && cfg.enable) {
 
     # http://127.0.0.1:7657/welcome
     services.i2p = {

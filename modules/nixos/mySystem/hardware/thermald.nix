@@ -20,7 +20,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = mkIf (config.mySystem.enable && config.mySystem.hardware.enable && cfg.enable) {
 
     # Manage Temperature, prevent throttling
     # https://github.com/linux-surface/linux-surface/issues/221

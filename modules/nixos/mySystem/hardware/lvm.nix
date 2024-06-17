@@ -18,7 +18,7 @@ in
     luks.enable = mkEnableOption "lvm luks encryption";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.mySystem.enable && config.mySystem.hardware.enable && cfg.enable) {
 
     # Tutorial
     # Check everything `sudo lsblk`

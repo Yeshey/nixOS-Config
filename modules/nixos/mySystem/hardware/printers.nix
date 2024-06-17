@@ -13,7 +13,7 @@ in
     enable = lib.mkEnableOption "printers";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.mySystem.enable && config.mySystem.hardware.enable && cfg.enable) {
     # Enable CUPS to print documents.
     services.printing = {
       enable = true; # TODO check if it works with your printer

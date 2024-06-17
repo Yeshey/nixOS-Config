@@ -132,7 +132,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.mySystem.enable && cfg.enable) {
     # Open ports in the firewall.
     # Ports for syncthing: https://docs.syncthing.net/users/firewall.html
     networking.firewall.allowedTCPPorts = [ 22000 ]; # for [ syncthing ]

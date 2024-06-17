@@ -13,7 +13,7 @@ in
     enable = mkEnableOption "androidDevelopment";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.mySystem.enable && cfg.enable) {
     users.users.${config.mySystem.user}.extraGroups = [ "adbusers" ];
     programs.adb.enable = true;
     services.udev.packages = with pkgs; [ android-udev-rules ];

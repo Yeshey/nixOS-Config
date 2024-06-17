@@ -13,7 +13,7 @@ in
     enable = lib.mkEnableOption "gnome";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.mySystem.enable && cfg.enable) {
     environment = {
       systemPackages = with pkgs; [ firefox gnome.gnome-tweaks ];
       gnome.excludePackages = with pkgs; [

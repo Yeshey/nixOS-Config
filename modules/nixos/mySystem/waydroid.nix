@@ -13,7 +13,7 @@ in
     enable = lib.mkEnableOption "waydroid";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.mySystem.enable && cfg.enable)  {
     virtualisation.waydroid.enable = true;
   };
 }

@@ -13,7 +13,7 @@ in
     enable = lib.mkEnableOption "bluetooth";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.mySystem.enable && config.mySystem.hardware.enable && cfg.enable) {
     # Bluetooth
     hardware.bluetooth = {
       # TODO Check if it's still needed

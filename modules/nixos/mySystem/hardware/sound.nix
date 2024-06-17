@@ -13,7 +13,7 @@ in
     enable = lib.mkEnableOption "sound";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.mySystem.enable && config.mySystem.hardware.enable && cfg.enable) {
     #     ____                  __
     #    / __/__  __ _____  ___/ /
     #   _\ \/ _ \/ // / _ \/ _  / 

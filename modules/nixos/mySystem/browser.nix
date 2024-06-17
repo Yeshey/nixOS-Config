@@ -13,7 +13,7 @@ in
     enable = (lib.mkEnableOption "browser");
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.mySystem.enable && cfg.enable) {
 
     # https://discourse.nixos.org/t/declare-firefox-extensions-and-settings/36265
     programs.firefox = {
