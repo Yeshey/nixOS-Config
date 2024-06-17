@@ -28,16 +28,16 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    myHome.homeApps.general.enable = lib.mkDefault true;
-    myHome.homeApps.vscodium.enable = lib.mkDefault true;
-    myHome.homeApps.discord.enable = lib.mkDefault true;
-    myHome.homeApps.kitty.enable = lib.mkDefault false;
-    myHome.homeApps.alacritty.enable = lib.mkDefault false;
-    myHome.homeApps.gaming.enable = lib.mkDefault true;
-    myHome.homeApps.firefox.enable = lib.mkDefault true;
-    myHome.homeApps.libreoffice.enable = lib.mkDefault true;
-    myHome.homeApps.devops.enable = lib.mkDefault true;
-    myHome.homeApps.cli.enable = lib.mkDefault true;
-    myHome.homeApps.webApps.enable = lib.mkDefault true;
+    myHome.homeApps.general.enable = lib.mkOverride 1010 true;
+    myHome.homeApps.vscodium.enable = lib.mkOverride 1010 true;
+    myHome.homeApps.discord.enable = lib.mkOverride 1010 true;
+    myHome.homeApps.kitty.enable = lib.mkOverride 1010 false;
+    myHome.homeApps.alacritty.enable = lib.mkOverride 1010 false;
+    myHome.homeApps.gaming.enable = lib.mkOverride 1010 true;
+    myHome.homeApps.firefox.enable = lib.mkOverride 1010 true;
+    myHome.homeApps.libreoffice.enable = lib.mkOverride 1010 true;
+    myHome.homeApps.devops.enable = lib.mkOverride 1010 true;
+    myHome.homeApps.cli.enable = lib.mkOverride 1010 true;
+    myHome.homeApps.webApps.enable = lib.mkOverride 1010 true;
   };
 }

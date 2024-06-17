@@ -14,7 +14,7 @@ let
   #onedriverPackage = pkgs.unstable.onedriver;
 
   # Using my package this shouldn't be needed anymore in the system config:
-  # environment.variables.GIO_EXTRA_MODULES = lib.mkDefault [ "${pkgs.glib-networking.out}/lib/gio/modules" ]; # needed for now for onedriver (made an issue: https://github.com/NixOS/nixpkgs/issues/308666)
+  # environment.variables.GIO_EXTRA_MODULES = lib.mkOverride 1010 [ "${pkgs.glib-networking.out}/lib/gio/modules" ]; # needed for now for onedriver (made an issue: https://github.com/NixOS/nixpkgs/issues/308666)
 
   # check my issue on it: https://github.com/NixOS/nixpkgs/issues/308666
 

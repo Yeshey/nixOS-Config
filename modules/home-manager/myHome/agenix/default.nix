@@ -26,8 +26,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    myHome.agenix.sshKeys.enable = lib.mkDefault true;  
-    myHome.agenix.onedriver.enable = lib.mkDefault true;  
+    myHome.agenix.sshKeys.enable = lib.mkOverride 1010 true;  
+    myHome.agenix.onedriver.enable = lib.mkOverride 1010 true;  
 
     home.packages = [
       inputs.agenix.packages.${system}.agenix

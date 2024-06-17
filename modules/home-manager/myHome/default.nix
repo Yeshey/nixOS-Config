@@ -33,14 +33,14 @@ in
   };
   config = {
     home = rec {
-      username = lib.mkDefault cfg.user; # TODO username
-      homeDirectory = lib.mkDefault "/home/${username}";
-      stateVersion = lib.mkDefault "22.11";
+      username = lib.mkOverride 1010 cfg.user; # TODO username
+      homeDirectory = lib.mkOverride 1010 "/home/${username}";
+      stateVersion = lib.mkOverride 1010 "22.11";
     };
     nix.gc = {
-      automatic = lib.mkDefault true;
-      options = lib.mkDefault "--delete-older-than 14d";
-      frequency = lib.mkDefault "weekly";
+      automatic = lib.mkOverride 1010 true;
+      options = lib.mkOverride 1010 "--delete-older-than 14d";
+      frequency = lib.mkOverride 1010 "weekly";
     };
   };
 }

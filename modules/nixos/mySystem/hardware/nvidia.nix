@@ -33,7 +33,7 @@ in
     # NVIDIA
     # Allow unfree packages
     nixpkgs.config = {
-      cudaSupport = lib.mkDefault true; # for blender (nvidia)
+      cudaSupport = lib.mkOverride 1010 true; # for blender (nvidia)
     };
     nixpkgs.config.allowUnfreePredicate =
       pkg:
@@ -49,19 +49,19 @@ in
     ];
     # NVIDIA drivers 
     services.xserver.videoDrivers = [ "nvidia" ];
-    hardware.opengl.enable = lib.mkDefault true;
+    hardware.opengl.enable = lib.mkOverride 1010 true;
 
     # Comment this to use only the nvidia Grpahics card (discrete graphics option in BIOS instead of switchable graphics)
     hardware.nvidia = {
       #package = config.boot.kernelPackages.nvidiaPackages.stable;
-      modesetting.enable = lib.mkDefault true;
+      modesetting.enable = lib.mkOverride 1010 true;
       # nvidiaPersistenced = true; # It ensures all GPUs stay awake even during headless mode.
-      powerManagement.enable = lib.mkDefault true; # Experimental power management through systemd
+      powerManagement.enable = lib.mkOverride 1010 true; # Experimental power management through systemd
       prime = {
-        # sync.enable = lib.mkDefault true; # gpu always # https://github.com/NixOS/nixpkgs/issues/199024#issuecomment-1300650034 # does not work with GPU passthrough
+        # sync.enable = lib.mkOverride 1010 true; # gpu always # https://github.com/NixOS/nixpkgs/issues/199024#issuecomment-1300650034 # does not work with GPU passthrough
         offload.enable = true; # gpu on demand # works with GPU passthrough
-        intelBusId = lib.mkDefault cfg.intelBusId; # "PCI:0:2:0";
-        nvidiaBusId = lib.mkDefault cfg.nvidiaBusId; # "PCI:1:0:0";
+        intelBusId = lib.mkOverride 1010 cfg.intelBusId; # "PCI:0:2:0";
+        nvidiaBusId = lib.mkOverride 1010 cfg.nvidiaBusId; # "PCI:1:0:0";
       };
     };
     # required for external monitor usage on nvidia offload (or not?)

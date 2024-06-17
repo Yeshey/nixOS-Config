@@ -19,8 +19,8 @@ in
 
     services.openssh = with lib; {
       enable = true;
-      #settings.PermitRootLogin = lib.mkDefault "yes"; # TODO no
-      settings.X11Forwarding = lib.mkDefault true;
+      #settings.PermitRootLogin = lib.mkOverride 1010 "yes"; # TODO no
+      settings.X11Forwarding = lib.mkOverride 1010 true;
       # settings.AllowUsers = [ "root" ];
     };
     # security.sudo.wheelNeedsPassword = false; # TODO remove (how do you do secrets management)
