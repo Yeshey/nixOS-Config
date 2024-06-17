@@ -13,7 +13,7 @@ in
   imports = [
     #<nixpkgs/nixos/modules/virtualisation/qemu-vm.nix>
     #(modulesPath + "/installer/scan/not-detected.nix")
-    (modulesPath + "/virtualisation/qemu-vm.nix")
+    # (modulesPath + "/virtualisation/qemu-vm.nix") # breaks everything wtf 🙂
   ];
 
   options.mySystem = {
