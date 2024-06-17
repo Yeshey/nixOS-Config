@@ -32,12 +32,12 @@ in
       useBootLoader = true;
     };*/
     
-    virtualisation.vmVariant = {
+    virtualisation.vmVariant.virtualisation = {
       useNixStoreImage = true;
       mountHostNixStore = false;
       useBootLoader = true;
     };
-    virtualisation.vmVariantWithBootLoader = {
+    virtualisation.vmVariantWithBootLoader.virtualisation = {
       useNixStoreImage = true;
       mountHostNixStore = false;
       useBootLoader = true;
