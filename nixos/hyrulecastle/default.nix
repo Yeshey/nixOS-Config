@@ -125,7 +125,7 @@ in
     };
 
     waydroid.enable = true;
-    isolateVMsNixStore = true;
+    #isolateVMsNixStore = true;
   };
 
   toHost = {
@@ -186,6 +186,14 @@ in
   security.tpm2.pkcs11.enable = true;  # expose /run/current-system/sw/lib/libtpm2_pkcs11.so
   security.tpm2.tctiEnvironment.enable = true;  # TPM2TOOLS_TCTI and TPM2_PKCS11_TCTI env variables
 
+/*
+  boot.loader.systemd-boot = {
+    enable = true;
+    configurationLimit = 10; # You can leave it null for no limit, but it is not recommended, as it can fill your boot partition.
+  };
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot/efi";
+*/
   boot.loader = {
     timeout = 2;
     efi = {
