@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  modulesPath,
   ...
 }:
 
@@ -10,7 +11,9 @@ let
 in
 {
   imports = [
-    
+    #<nixpkgs/nixos/modules/virtualisation/qemu-vm.nix>
+    #(modulesPath + "/installer/scan/not-detected.nix")
+    (modulesPath + "/virtualisation/qemu-vm.nix")
   ];
 
   options.mySystem = {
@@ -23,8 +26,22 @@ in
     # https://discourse.nixos.org/t/building-qemu-kvm-vms/33149/5
     
     # needs to be inside vmVariant? issue: https://github.com/NixOS/nixpkgs/issues/196755
-    virtualisation.vmVariant.mountHostNixStore = false;
-    virtualisation.vmVariant.useNixStoreImage = true;
-    virtualisation.vmVariant.useBootLoader = true;
+    virtualisation = {
+      useNixStoreImage = true;
+      mountHostNixStore = false;
+      useBootLoader = true;
+    };
+    /*
+    virtualisation.vmVariant = {
+      useNixStoreImage = true;
+      mountHostNixStore = false;
+      useBootLoader = true;
+    };
+    virtualisation.vmVariantWithBootLoader = {
+      useNixStoreImage = true;
+      mountHostNixStore = false;
+      useBootLoader = true;
+    };
+    */
   };
 }
