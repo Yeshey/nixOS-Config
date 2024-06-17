@@ -61,6 +61,7 @@ in
     ./ssh/default.nix
     ./agenix/default.nix
     ./waydroid.nix
+    ./isolateVMsNixStore.nix
   ];
 
   options.mySystem = with lib; {
