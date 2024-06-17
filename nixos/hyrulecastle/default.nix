@@ -125,6 +125,7 @@ in
     };
 
     waydroid.enable = true;
+    isolateVMsNixStore = true;
   };
 
   toHost = {
