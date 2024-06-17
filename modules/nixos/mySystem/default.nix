@@ -118,6 +118,12 @@ in
     ( lib.mkIf cfg.enable {
       # Conditional config
 
+      # defaults (enough for a minimal server)
+      mySystem.ssh.enable = lib.mkDefault true;
+      mySystem.zsh.enable = lib.mkDefault true;
+      mySystem.hardware.enable = lib.mkDefault true;
+      mySystem.hardware.thermald.enable = lib.mkDefault true;
+
       zramSwap.enable = lib.mkDefault true;
       boot.tmp.cleanOnBoot = lib.mkDefault true; # delete all files in /tmp during boot.
       boot.supportedFilesystems = [ "ntfs" "btrfs" ]; # lib.mkdefault? Doesn't work with [] and {}?
@@ -169,7 +175,7 @@ in
         enable = true;
         defaultEditor = lib.mkDefault true;
       };
-      programs.command-not-found.enable = lib.mkDefault true;
+      programs.command-not-found.enable = true;
       environment.systemPackages = [ pkgs.deploy-rs ];
 
       networking.networkmanager.enable = lib.mkDefault true;
