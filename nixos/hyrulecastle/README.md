@@ -8,7 +8,7 @@ Change the password of the user `yeshey` in `modules/nixos/mySystem/user.nix` in
 It will share your `/nix/store`
 
 ```bash
-nixos-rebuild build-vm --flake .#hyrulecastle
+nixos-rebuild build-vm --flake ~/.setup.#hyrulecastle
 result/bin/run-nixos-hyrulecastle-vm
 
 # Remove disk image after you are done
