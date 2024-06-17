@@ -9,5 +9,5 @@ It will share your `/nix/store`
 
 Build the ISO with
 ```bash
-nix build .#nixosConfigurations.iso.config.system.build.isoImage
+nix build ~/.setup.#nixosConfigurations.iso.config.system.build.isoImage
 ```
