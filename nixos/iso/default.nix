@@ -13,7 +13,7 @@
 {
   imports = [ 
     # ./hardware-configuration.nix 
-    (modulesPath + "/installer/cd-dvd/installation-cd-minimal.nix")
+    (modulesPath + "/installer/cd-dvd/installation-cd-graphical-calamares-plasma5.nix")
   ];
 
   nixpkgs = {
@@ -97,7 +97,8 @@
   networking.wireless.enable = false;
   networking.networkmanager.enable = true;
 
-  environment.systemPackages = with pkgs; [ 
-    calamares-nixos-extensions 
-  ];
+  #environment.systemPackages = with pkgs; [ 
+  #  calamares-nixos
+  #  calamares-nixos-extensions 
+  #];
 }
