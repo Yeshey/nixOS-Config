@@ -15,7 +15,7 @@ in
     #openFirewall = mkEnableOption "openFirewall";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.mySystem.enable && cfg.enable) {
 
     services.openssh = with lib; {
       enable = true;

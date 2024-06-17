@@ -13,7 +13,7 @@ in
     enable = lib.mkEnableOption "plasma";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.mySystem.enable && cfg.enable) {
     # KDE Plasma
     #programs.qt5ct.enable = true;
 /*

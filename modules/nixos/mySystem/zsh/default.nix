@@ -15,7 +15,7 @@ in
     enable = lib.mkEnableOption "zsh";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.mySystem.enable && cfg.enable) {
     environment = {
       systemPackages = with pkgs; [ (nerdfonts.override { fonts = [ "FiraCode" ]; }) ];
     };

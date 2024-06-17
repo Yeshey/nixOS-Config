@@ -40,7 +40,7 @@ in
   };
 
   mySystem = rec {
-    enable = true; # TODO Now I gotta make this affect all options below, and makkkke submodules a go and everything 🫠
+    enable = true; # if false, disables all below config, (TODO if true, sets my minimal server config & imports hm)
     # all the options
     host = "hyrulecastle";
     user = "yeshey";

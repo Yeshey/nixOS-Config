@@ -42,7 +42,7 @@ in
       example = [ "*/RecordedClasses" ];
     };
   };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.mySystem.enable && cfg.enable) {
 
     # systemctl status borgbackup-job-mySystemBackup.service/timer
     services.borgbackup.jobs = {

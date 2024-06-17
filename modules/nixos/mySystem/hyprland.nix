@@ -17,7 +17,7 @@ in
     enable = lib.mkEnableOption "hyprland";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.mySystem.enable && cfg.enable) {
 
     programs.hyprland = {
       enable = lib.mkDefault true;

@@ -40,7 +40,9 @@ let
 in
 {
   imports = [
-    ./user.nix
+    ./user.nix # always active
+    ./cliTools.nix # always active
+
     ./androidDevelopment.nix
     ./gaming.nix
     ./gnome.nix
@@ -48,15 +50,12 @@ in
     ./hyprland.nix
     ./virt.nix
     ./zsh/default.nix
-
     ./i2p.nix # TODO review and possibly clump together with the non-server Configuration below
     ./flatpaks.nix
-    ./cliTools.nix
     ./autoUpgrades.nix
     ./autoUpgradesOnShutdown.nix
     ./browser.nix
     ./hardware/default.nix
-
     ./syncthing.nix
     ./borgBackups.nix
     ./ssh/default.nix
@@ -96,91 +95,100 @@ in
     # dedicatedServer = lib.mkEnableOption "dedicatedServer"; # TODO use this to say in the config if it is a dedicatedServer or not, with sub-options to enable each the bluetooth, printers, and sound, ponder adding the gnome and plasma desktops and gaming too
   };
 
-  config = lib.mkIf cfg.enable {
-    zramSwap.enable = lib.mkDefault true;
-    boot.tmp.cleanOnBoot = lib.mkDefault true; # delete all files in /tmp during boot.
-    boot.supportedFilesystems = [ "ntfs" "btrfs" ]; # TODO lib.mkdefault? Doesn't work with [] and {}?
+  config = lib.mkMerge [
+    {
+      # Always activated config
+      nixpkgs.overlays = builtins.attrValues outputs.overlays; # needed for it to see the overlays declared in flake.nix
+      nixpkgs.config.allowUnfree = true;
+      # This will add each flake input as a registry
+      # To make nix3 commands consistent with your flake
+      nix.registry = (lib.mapAttrs (_: flake: { inherit flake; })) (
+        (lib.filterAttrs (_: lib.isType "flake")) inputs
+      );
 
-    time.timeZone = lib.mkDefault "Europe/Lisbon";
-    i18n.defaultLocale = lib.mkDefault "en_GB.utf8";
-    i18n.extraLocaleSettings = {
-      LC_ADDRESS = lib.mkDefault "pt_PT.utf8";
-      LC_IDENTIFICATION = lib.mkDefault "pt_PT.utf8";
-      LC_MEASUREMENT = lib.mkDefault "pt_PT.utf8";
-      LC_MONETARY = lib.mkDefault "pt_PT.utf8";
-      LC_NAME = lib.mkDefault "pt_PT.utf8";
-      LC_NUMERIC = lib.mkDefault "pt_PT.utf8";
-      LC_PAPER = lib.mkDefault "pt_PT.utf8";
-      LC_TELEPHONE = lib.mkDefault "pt_PT.utf8";
-      LC_TIME = lib.mkDefault "pt_PT.utf8";
-    };
-    console.keyMap = lib.mkDefault "pt-latin1";
+      # This will additionally add your inputs to the system's legacy channels
+      # Making legacy nix commands consistent as well, awesome!
+      nix.nixPath = [ "/etc/nix/path" ];
+      environment.etc = lib.mapAttrs' (name: value: {
+        name = "nix/path/${name}";
+        value.source = value.flake;
+      }) config.nix.registry;
 
-    nixpkgs.overlays = builtins.attrValues outputs.overlays; # TODO what is this, do I need?
-    nixpkgs.config.allowUnfree = true;
-    nix = {
-      package = pkgs.nix;
-      extraOptions =
-        # for compression to work with btrfs (https://github.com/NixOS/nix/issues/3550) ...?
-        ''
-          preallocate-contents = false 
-        ''
-        + ''
-          experimental-features = nix-command flakes
-        '';
+    }
+    ( lib.mkIf cfg.enable {
+      # Conditional config
 
-      gc = {
-        automatic = lib.mkDefault true;
-        options = lib.mkDefault "--delete-older-than 14d";
-        dates = lib.mkDefault "weekly";
+      zramSwap.enable = lib.mkDefault true;
+      boot.tmp.cleanOnBoot = lib.mkDefault true; # delete all files in /tmp during boot.
+      boot.supportedFilesystems = [ "ntfs" "btrfs" ]; # lib.mkdefault? Doesn't work with [] and {}?
+
+      time.timeZone = lib.mkDefault "Europe/Lisbon";
+      i18n.defaultLocale = lib.mkDefault "en_GB.utf8";
+      i18n.extraLocaleSettings = {
+        LC_ADDRESS = lib.mkDefault "pt_PT.utf8";
+        LC_IDENTIFICATION = lib.mkDefault "pt_PT.utf8";
+        LC_MEASUREMENT = lib.mkDefault "pt_PT.utf8";
+        LC_MONETARY = lib.mkDefault "pt_PT.utf8";
+        LC_NAME = lib.mkDefault "pt_PT.utf8";
+        LC_NUMERIC = lib.mkDefault "pt_PT.utf8";
+        LC_PAPER = lib.mkDefault "pt_PT.utf8";
+        LC_TELEPHONE = lib.mkDefault "pt_PT.utf8";
+        LC_TIME = lib.mkDefault "pt_PT.utf8";
       };
-      settings = {
-        trusted-users = [
-          "root"
-          "${config.mySystem.user}"
-          "@wheel"
-        ]; # TODO remove (check the original guys config)
-        auto-optimise-store = lib.mkDefault true;
-        substituters = map (x: substituters.${x}.url) cfg.nix.substituters;
-        trusted-public-keys = map (x: substituters.${x}.key) cfg.nix.substituters;
+      console.keyMap = lib.mkDefault "pt-latin1";
+
+      nix = {
+        package = pkgs.nix;
+        extraOptions =
+          # for compression to work with btrfs (https://github.com/NixOS/nix/issues/3550) ...?
+          ''
+            preallocate-contents = false 
+          ''
+          + ''
+            experimental-features = nix-command flakes
+          '';
+
+        gc = {
+          automatic = lib.mkDefault true;
+          options = lib.mkDefault "--delete-older-than 14d";
+          dates = lib.mkDefault "weekly";
+        };
+        settings = {
+          trusted-users = [
+            "root"
+            "${config.mySystem.user}"
+            "@wheel"
+          ]; # TODO remove (check the original guys config)
+          auto-optimise-store = lib.mkDefault true;
+          substituters = map (x: substituters.${x}.url) cfg.nix.substituters;
+          trusted-public-keys = map (x: substituters.${x}.key) cfg.nix.substituters;
+        };
       };
-    };
-    # This will add each flake input as a registry
-    # To make nix3 commands consistent with your flake
-    nix.registry = (lib.mapAttrs (_: flake: { inherit flake; })) (
-      (lib.filterAttrs (_: lib.isType "flake")) inputs
-    );
 
-    # This will additionally add your inputs to the system's legacy channels
-    # Making legacy nix commands consistent as well, awesome!
-    nix.nixPath = [ "/etc/nix/path" ];
-    environment.etc = lib.mapAttrs' (name: value: {
-      name = "nix/path/${name}";
-      value.source = value.flake;
-    }) config.nix.registry;
+      programs.neovim = {
+        enable = true;
+        defaultEditor = lib.mkDefault true;
+      };
+      programs.command-not-found.enable = lib.mkDefault true;
+      environment.systemPackages = [ pkgs.deploy-rs ];
 
-    programs.neovim = {
-      enable = true;
-      defaultEditor = lib.mkDefault true;
-    };
-    programs.command-not-found.enable = lib.mkDefault true;
-    environment.systemPackages = [ pkgs.deploy-rs ];
+      networking.networkmanager.enable = lib.mkDefault true;
+      networking.resolvconf.dnsExtensionMechanism = lib.mkDefault false; # fixes internet connectivity problems with some sites (https://discourse.nixos.org/t/domain-name-resolve-problem/885/2)
+      networking.nameservers = [
+        "1.1.1.1"
+        "8.8.8.8"
+        "9.9.9.9"
+      ]; # (https://unix.stackexchange.com/questions/510940/how-can-i-set-a-custom-dns-server-within-nixos)
+      # needed to access coimbra-dev raspberrypi from localnetwork
+      systemd.network.wait-online.enable = lib.mkDefault false;
+      networking.useNetworkd = lib.mkDefault true;
+      networking = {
+        hostName = lib.mkDefault "nixos-${cfg.host}";
+      };
 
-    networking.networkmanager.enable = lib.mkDefault true;
-    networking.resolvconf.dnsExtensionMechanism = lib.mkDefault false; # fixes internet connectivity problems with some sites (https://discourse.nixos.org/t/domain-name-resolve-problem/885/2)
-    networking.nameservers = [
-      "1.1.1.1"
-      "8.8.8.8"
-      "9.9.9.9"
-    ]; # (https://unix.stackexchange.com/questions/510940/how-can-i-set-a-custom-dns-server-within-nixos)
-    # needed to access coimbra-dev raspberrypi from localnetwork
-    systemd.network.wait-online.enable = lib.mkDefault false;
-    networking.useNetworkd = lib.mkDefault true;
-    networking = {
-      hostName = lib.mkDefault "nixos-${cfg.host}";
-    };
+      #networking.useNetworkd = true;
+      #networking.firewall.enable = false;
 
-    #networking.useNetworkd = true;
-    #networking.firewall.enable = false;
-  };
+    })
+  ];
 }

@@ -14,13 +14,14 @@ in
     personalGitEnable = (lib.mkEnableOption "personalGitEnable");
   };
 
-  config = lib.mkIf cfg.enable {
+  config = {
     programs = {
       zsh.shellAliases = {
         lg = "lazygit";
       };
     };
     environment.systemPackages = with pkgs; [
+      git
       dnsutils
       pciutils
       curl

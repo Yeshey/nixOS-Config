@@ -28,7 +28,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.mySystem.enable && config.mySystem.hardware.enable && cfg.enable) {
 
     # NVIDIA
     # Allow unfree packages

@@ -14,7 +14,7 @@ in
     enable = lib.mkEnableOption "gaming";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.mySystem.enable && cfg.enable) {
     environment.systemPackages = with pkgs; [ mindustry ];
 
     # for mindustry hosting
