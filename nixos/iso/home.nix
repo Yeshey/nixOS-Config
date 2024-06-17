@@ -6,7 +6,7 @@
     user = "yeshey";
     xdgPersonalFilesOrganization.enable = true;
     nonNixos.enable = false;
-    plasma.enable = true;
+    plasma.enable = false;
     gnome.enable = false;
     hyprland = {
       enable = false;

@@ -44,7 +44,7 @@
     user = "yeshey";
     dataStoragePath = "~/Documents";
     gnome.enable = false;
-    plasma.enable = true;
+    plasma.enable = false;
     ssh = {
       enable = true;
     };
@@ -57,7 +57,7 @@
       #dataStoragePath = dataStoragePath;
     };
     hardware = {
-      enable = true;
+      enable = false;
       bluetooth.enable = true;
       thermald.enable = true;
       printers.enable = false;

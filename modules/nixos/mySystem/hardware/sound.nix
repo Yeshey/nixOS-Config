@@ -20,14 +20,14 @@ in
     #  /___/\___/\_,_/_//_/\_,_/                             
 
     # Enable sound with pipewire.
-    sound.enable = true;
-    hardware.pulseaudio.enable = false;
-    security.rtkit.enable = true;
+    sound.enable = lib.mkDefault true;
+    hardware.pulseaudio.enable = lib.mkDefault false;
+    security.rtkit.enable = lib.mkDefault true;
     services.pipewire = {
-      enable = true;
-      alsa.enable = true;
-      alsa.support32Bit = true;
-      pulse.enable = true;
+      enable = lib.mkDefault true;
+      alsa.enable = lib.mkDefault true;
+      alsa.support32Bit = lib.mkDefault true;
+      pulse.enable = lib.mkDefault true;
 
       # If you want to use JACK applications, uncomment this
       #jack.enable = true;
