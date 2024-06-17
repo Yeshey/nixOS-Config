@@ -36,7 +36,7 @@
       # })
     ];
   };
-
+/*
   mySystem = rec {
     enable = true;
     # all the options
@@ -77,7 +77,7 @@
     };
     flatpaks.enable = false;
     i2p.enable = false;
-  };
+  };*/
 
   boot.loader.timeout = lib.mkForce 10;
 
