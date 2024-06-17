@@ -39,19 +39,19 @@ in
   config = lib.mkIf cfg.enable {
 
     stylix = {
-      enable = lib.mkDefault true;
-      autoEnable = lib.mkDefault true;
+      enable = lib.mkOverride 1010 true;
+      autoEnable = lib.mkOverride 1010 true;
       base16Scheme = lib.mkIf (cfg.base16Scheme != null) cfg.base16Scheme; #"${pkgs.base16-schemes}/share/themes/pop.yaml";
       image = lib.mkIf (cfg.wallpaper != null) cfg.wallpaper;
-      polarity = lib.mkDefault "dark";
+      polarity = lib.mkOverride 1010 "dark";
 
       cursor = cfg.cursor;
 
       opacity = {
-        applications = lib.mkDefault 0.88;
-        terminal = lib.mkDefault 0.88;
-        desktop = lib.mkDefault 0.88;
-        popups = lib.mkDefault 0.88;
+        applications = lib.mkOverride 1010 0.88;
+        terminal = lib.mkOverride 1010 0.88;
+        desktop = lib.mkOverride 1010 0.88;
+        popups = lib.mkOverride 1010 0.88;
       };
 
       /*

@@ -120,29 +120,29 @@ in
       # Conditional config
 
       # defaults (enough for a minimal server)
-      mySystem.ssh.enable = lib.mkDefault true;
-      mySystem.zsh.enable = lib.mkDefault true;
-      mySystem.hardware.enable = lib.mkDefault true;
-      mySystem.hardware.thermald.enable = lib.mkDefault true;
+      mySystem.ssh.enable = lib.mkOverride 1010 true;
+      mySystem.zsh.enable = lib.mkOverride 1010 true;
+      mySystem.hardware.enable = lib.mkOverride 1010 true;
+      mySystem.hardware.thermald.enable = lib.mkOverride 1010 true;
 
-      zramSwap.enable = lib.mkDefault true;
-      boot.tmp.cleanOnBoot = lib.mkDefault true; # delete all files in /tmp during boot.
-      boot.supportedFilesystems = [ "ntfs" "btrfs" ]; # lib.mkdefault? Doesn't work with [] and {}?
+      zramSwap.enable = lib.mkOverride 1010 true;
+      boot.tmp.cleanOnBoot = lib.mkOverride 1010 true; # delete all files in /tmp during boot.
+      boot.supportedFilesystems = [ "ntfs" "btrfs" ]; # lib.mkOverride 1010? Doesn't work with [] and {}?
 
-      time.timeZone = lib.mkDefault "Europe/Lisbon";
-      i18n.defaultLocale = lib.mkDefault "en_GB.utf8";
+      time.timeZone = lib.mkOverride 1010 "Europe/Lisbon";
+      i18n.defaultLocale = lib.mkOverride 1010 "en_GB.utf8";
       i18n.extraLocaleSettings = {
-        LC_ADDRESS = lib.mkDefault "pt_PT.utf8";
-        LC_IDENTIFICATION = lib.mkDefault "pt_PT.utf8";
-        LC_MEASUREMENT = lib.mkDefault "pt_PT.utf8";
-        LC_MONETARY = lib.mkDefault "pt_PT.utf8";
-        LC_NAME = lib.mkDefault "pt_PT.utf8";
-        LC_NUMERIC = lib.mkDefault "pt_PT.utf8";
-        LC_PAPER = lib.mkDefault "pt_PT.utf8";
-        LC_TELEPHONE = lib.mkDefault "pt_PT.utf8";
-        LC_TIME = lib.mkDefault "pt_PT.utf8";
+        LC_ADDRESS = lib.mkOverride 1010 "pt_PT.utf8";
+        LC_IDENTIFICATION = lib.mkOverride 1010 "pt_PT.utf8";
+        LC_MEASUREMENT = lib.mkOverride 1010 "pt_PT.utf8";
+        LC_MONETARY = lib.mkOverride 1010 "pt_PT.utf8";
+        LC_NAME = lib.mkOverride 1010 "pt_PT.utf8";
+        LC_NUMERIC = lib.mkOverride 1010 "pt_PT.utf8";
+        LC_PAPER = lib.mkOverride 1010 "pt_PT.utf8";
+        LC_TELEPHONE = lib.mkOverride 1010 "pt_PT.utf8";
+        LC_TIME = lib.mkOverride 1010 "pt_PT.utf8";
       };
-      console.keyMap = lib.mkDefault "pt-latin1";
+      console.keyMap = lib.mkOverride 1010 "pt-latin1";
 
       nix = {
         package = pkgs.nix;
@@ -156,9 +156,9 @@ in
           '';
 
         gc = {
-          automatic = lib.mkDefault true;
-          options = lib.mkDefault "--delete-older-than 14d";
-          dates = lib.mkDefault "weekly";
+          automatic = lib.mkOverride 1010 true;
+          options = lib.mkOverride 1010 "--delete-older-than 14d";
+          dates = lib.mkOverride 1010 "weekly";
         };
         settings = {
           trusted-users = [
@@ -166,7 +166,7 @@ in
             "${config.mySystem.user}"
             "@wheel"
           ]; # TODO remove (check the original guys config)
-          auto-optimise-store = lib.mkDefault true;
+          auto-optimise-store = lib.mkOverride 1010 true;
           substituters = map (x: substituters.${x}.url) cfg.nix.substituters;
           trusted-public-keys = map (x: substituters.${x}.key) cfg.nix.substituters;
         };
@@ -174,23 +174,23 @@ in
 
       programs.neovim = {
         enable = true;
-        defaultEditor = lib.mkDefault true;
+        defaultEditor = lib.mkOverride 1010 true;
       };
       programs.command-not-found.enable = true;
       environment.systemPackages = [ pkgs.deploy-rs ];
 
-      networking.networkmanager.enable = lib.mkDefault true;
-      networking.resolvconf.dnsExtensionMechanism = lib.mkDefault false; # fixes internet connectivity problems with some sites (https://discourse.nixos.org/t/domain-name-resolve-problem/885/2)
+      networking.networkmanager.enable = lib.mkOverride 1010 true;
+      networking.resolvconf.dnsExtensionMechanism = lib.mkOverride 1010 false; # fixes internet connectivity problems with some sites (https://discourse.nixos.org/t/domain-name-resolve-problem/885/2)
       networking.nameservers = [
         "1.1.1.1"
         "8.8.8.8"
         "9.9.9.9"
       ]; # (https://unix.stackexchange.com/questions/510940/how-can-i-set-a-custom-dns-server-within-nixos)
       # needed to access coimbra-dev raspberrypi from localnetwork
-      systemd.network.wait-online.enable = lib.mkDefault false;
-      networking.useNetworkd = lib.mkDefault true;
+      systemd.network.wait-online.enable = lib.mkOverride 1010 false;
+      networking.useNetworkd = lib.mkOverride 1010 true;
       networking = {
-        hostName = lib.mkDefault "nixos-${cfg.host}";
+        hostName = lib.mkOverride 1010 "nixos-${cfg.host}";
       };
 
       #networking.useNetworkd = true;

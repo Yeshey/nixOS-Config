@@ -25,11 +25,11 @@ in
     #};
 
     programs.zsh = {
-      enable = lib.mkDefault true;
-      autosuggestions.enable = lib.mkDefault true;
-      syntaxHighlighting.enable = lib.mkDefault true;
-      enableCompletion = lib.mkDefault true;
-      histSize = lib.mkDefault 100000;
+      enable = lib.mkOverride 1010 true;
+      autosuggestions.enable = lib.mkOverride 1010 true;
+      syntaxHighlighting.enable = lib.mkOverride 1010 true;
+      enableCompletion = lib.mkOverride 1010 true;
+      histSize = lib.mkOverride 1010 100000;
       shellAliases = {
         l = "ls -l";
         la = "ls -a";
@@ -37,7 +37,7 @@ in
         lt = "ls --tree";
 
         #ll = lib.mkOverride 995 "eza -l --icons=auto";
-        #la = lib.mkDefault "eza -la --icons=auto";
+        #la = lib.mkOverride 1010 "eza -la --icons=auto";
       };
       shellInit = ''
         autoload -U promptinit; promptinit

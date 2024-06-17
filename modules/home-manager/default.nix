@@ -13,7 +13,7 @@
     }:
     {
       # Nicely reload system units when changing configs
-      systemd.user.startServices = lib.mkDefault "sd-switch";
+      systemd.user.startServices = lib.mkOverride 1010 "sd-switch";
 
       # TODO organize this:
 

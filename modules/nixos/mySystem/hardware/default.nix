@@ -23,11 +23,11 @@ in
   };
 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
-    mySystem.hardware.bluetooth.enable = lib.mkDefault true;
-    mySystem.hardware.printers.enable = lib.mkDefault true;
-    mySystem.hardware.sound.enable = lib.mkDefault true;
-    mySystem.hardware.thermald.enable = lib.mkDefault true;
-    mySystem.hardware.nvidia.enable = lib.mkDefault false;
-    mySystem.hardware.lvm.enable = lib.mkDefault false;
+    mySystem.hardware.bluetooth.enable = lib.mkOverride 1010 true;
+    mySystem.hardware.printers.enable = lib.mkOverride 1010 true;
+    mySystem.hardware.sound.enable = lib.mkOverride 1010 true;
+    mySystem.hardware.thermald.enable = lib.mkOverride 1010 true;
+    mySystem.hardware.nvidia.enable = lib.mkOverride 1010 false;
+    mySystem.hardware.lvm.enable = lib.mkOverride 1010 false;
   };
 }

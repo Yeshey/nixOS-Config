@@ -17,7 +17,7 @@ in
     };
   };
 
-  # TODO make everything lib.mkDefault?
+  # TODO make everything lib.mkOverride 1010?
 
   config = lib.mkIf cfg.enable {
     # theme from https://gitlab.com/pinage404/dotfiles
@@ -41,13 +41,13 @@ in
     ];
 
     programs.zsh = {
-      enable = lib.mkDefault true;
+      enable = lib.mkOverride 1010 true;
       history = {
-        size = lib.mkDefault 10000;
+        size = lib.mkOverride 1010 10000;
       };
       shellAliases = {
-        ll = lib.mkDefault "eza -l --icons=auto";
-        la = lib.mkDefault "eza -la --icons=auto";
+        ll = lib.mkOverride 1010 "eza -l --icons=auto";
+        la = lib.mkOverride 1010 "eza -la --icons=auto";
       };
       # bash
       initExtra = ''
@@ -76,12 +76,12 @@ in
         ZSHZ_ECHO = 1;
       };
 
-      autosuggestion.enable = lib.mkDefault true;
-      enableCompletion = lib.mkDefault true;
-      syntaxHighlighting.enable = lib.mkDefault true;
-      enableVteIntegration = lib.mkDefault true;
+      autosuggestion.enable = lib.mkOverride 1010 true;
+      enableCompletion = lib.mkOverride 1010 true;
+      syntaxHighlighting.enable = lib.mkOverride 1010 true;
+      enableVteIntegration = lib.mkOverride 1010 true;
       historySubstringSearch = {
-        enable = lib.mkDefault true;
+        enable = lib.mkOverride 1010 true;
       };
 
       plugins = [

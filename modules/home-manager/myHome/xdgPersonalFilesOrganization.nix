@@ -18,18 +18,18 @@ in
 
     xdg = {
       # for favourits in nautilus
-      enable = lib.mkDefault true;
+      enable = lib.mkOverride 1010 true;
       userDirs = {
-        enable = lib.mkDefault true;
-        createDirectories = lib.mkDefault true;
-        # desktop = lib.mkDefault "${config.home.homeDirectory}/Pulpit";
-        documents = lib.mkDefault "${osConfig.mySystem.dataStoragePath}/PersonalFiles/";
-        download = lib.mkDefault "${osConfig.mySystem.dataStoragePath}/Downloads/";
-        music = lib.mkDefault "${osConfig.mySystem.dataStoragePath}/PersonalFiles/Timeless/Music/";
-        # pictures = lib.mkDefault "${config.home.homeDirectory}/Obrazy";
-        # videos = lib.mkDefault "${config.home.homeDirectory}/Wideo";
-        # templates = lib.mkDefault "${config.home.homeDirectory}/Szablony";
-        # publicShare = lib.mkDefault "${config.home.homeDirectory}/Publiczny";
+        enable = lib.mkOverride 1010 true;
+        createDirectories = lib.mkOverride 1010 true;
+        # desktop = lib.mkOverride 1010 "${config.home.homeDirectory}/Pulpit";
+        documents = lib.mkOverride 1010 "${osConfig.mySystem.dataStoragePath}/PersonalFiles/";
+        download = lib.mkOverride 1010 "${osConfig.mySystem.dataStoragePath}/Downloads/";
+        music = lib.mkOverride 1010 "${osConfig.mySystem.dataStoragePath}/PersonalFiles/Timeless/Music/";
+        # pictures = lib.mkOverride 1010 "${config.home.homeDirectory}/Obrazy";
+        # videos = lib.mkOverride 1010 "${config.home.homeDirectory}/Wideo";
+        # templates = lib.mkOverride 1010 "${config.home.homeDirectory}/Szablony";
+        # publicShare = lib.mkOverride 1010 "${config.home.homeDirectory}/Publiczny";
       };
     };
 

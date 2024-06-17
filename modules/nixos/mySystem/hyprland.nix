@@ -20,8 +20,8 @@ in
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
 
     programs.hyprland = {
-      enable = lib.mkDefault true;
-      xwayland.enable = lib.mkDefault true;
+      enable = lib.mkOverride 1010 true;
+      xwayland.enable = lib.mkOverride 1010 true;
       package = inputs.hyprland.packages.${pkgs.system}.hyprland;
       portalPackage = pkgs.xdg-desktop-portal-hyprland;
     };
@@ -37,16 +37,16 @@ in
     };
 
     # to remember internet, idk if I need all this
-    networking.networkmanager.enable = lib.mkDefault true;
-    services.gnome.gnome-keyring.enable = lib.mkDefault true;
+    networking.networkmanager.enable = lib.mkOverride 1010 true;
+    services.gnome.gnome-keyring.enable = lib.mkOverride 1010 true;
     programs.seahorse.enable = lib.mkIf (!config.mySystem.plasma.enable) true; # enable the graphical frontend
     environment.systemPackages = [ pkgs.libsecret ]; # libsecret api needed
-    security.pam.services.gdm.enableGnomeKeyring = lib.mkDefault true; # load gnome-keyring at startup
-    environment.variables.XDG_RUNTIME_DIR = lib.mkDefault "/run/user/$UID"; # set the runtime directory
+    security.pam.services.gdm.enableGnomeKeyring = lib.mkOverride 1010 true; # load gnome-keyring at startup
+    environment.variables.XDG_RUNTIME_DIR = lib.mkOverride 1010 "/run/user/$UID"; # set the runtime directory
 
     # displayManager
     services.greetd = {
-      enable = lib.mkDefault true;
+      enable = lib.mkOverride 1010 true;
       settings = {
         default_session = {
           command = "${tuigreet} --time --remember --cmd Hyprland";

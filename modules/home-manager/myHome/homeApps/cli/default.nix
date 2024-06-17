@@ -21,9 +21,9 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    myHome.homeApps.cli.git.enable = lib.mkDefault true;
-    myHome.homeApps.cli.general.enable = lib.mkDefault true;
-    myHome.homeApps.cli.tmux.enable = lib.mkDefault true;
-    myHome.homeApps.cli.neovim.enable = lib.mkDefault true;
+    myHome.homeApps.cli.git.enable = lib.mkOverride 1010 true;
+    myHome.homeApps.cli.general.enable = lib.mkOverride 1010 true;
+    myHome.homeApps.cli.tmux.enable = lib.mkOverride 1010 true;
+    myHome.homeApps.cli.neovim.enable = lib.mkOverride 1010 true;
   };
 }

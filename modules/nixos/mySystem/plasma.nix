@@ -38,18 +38,18 @@ in
     };*/
 
     services = {
-      xserver.enable = lib.mkDefault true; # Enable the X11 windowing system.
+      xserver.enable = lib.mkOverride 1010 true; # Enable the X11 windowing system.
       displayManager = {
-        autoLogin.enable = lib.mkDefault true;
-        autoLogin.user = lib.mkDefault "${config.mySystem.user}"; # TODO
+        autoLogin.enable = lib.mkOverride 1010 true;
+        autoLogin.user = lib.mkOverride 1010 "${config.mySystem.user}"; # TODO
         sddm = {
 	        wayland.enable = true;
-          enable = lib.mkDefault true;
+          enable = lib.mkOverride 1010 true;
         };
-        defaultSession = lib.mkDefault "plasma"; # "none+bspwm" or "plasma"
+        defaultSession = lib.mkOverride 1010 "plasma"; # "none+bspwm" or "plasma"
       };
       desktopManager.plasma6 = {
-        enable = lib.mkDefault true;
+        enable = lib.mkOverride 1010 true;
         enableQt5Integration = true;
         # supportDDC = true; # doesnt work with nvidia # to support changing brightness for external monitors (https://discourse.nixos.org/t/how-to-enable-ddc-brightness-control-i2c-permissions/20800)
       };

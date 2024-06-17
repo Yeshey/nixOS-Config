@@ -20,14 +20,14 @@ in
     #  /___/\___/\_,_/_//_/\_,_/                             
 
     # Enable sound with pipewire.
-    sound.enable = lib.mkDefault true;
-    hardware.pulseaudio.enable = lib.mkDefault false;
-    security.rtkit.enable = lib.mkDefault true;
+    sound.enable = lib.mkOverride 1010 true;
+    hardware.pulseaudio.enable = lib.mkOverride 990 false; # a bit more important than mkDefault to be able to build a VM smoothly
+    security.rtkit.enable = lib.mkOverride 1010 true;
     services.pipewire = {
-      enable = lib.mkDefault true;
-      alsa.enable = lib.mkDefault true;
-      alsa.support32Bit = lib.mkDefault true;
-      pulse.enable = lib.mkDefault true;
+      enable = lib.mkOverride 1010 true;
+      alsa.enable = lib.mkOverride 1010 true;
+      alsa.support32Bit = lib.mkOverride 1010 true;
+      pulse.enable = lib.mkOverride 1010 true;
 
       # If you want to use JACK applications, uncomment this
       #jack.enable = true;
