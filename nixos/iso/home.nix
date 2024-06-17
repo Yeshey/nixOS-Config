@@ -6,8 +6,8 @@
     user = "yeshey";
     xdgPersonalFilesOrganization.enable = true;
     nonNixos.enable = false;
-    plasma.enable = false;
-    gnome.enable = true;
+    plasma.enable = true;
+    gnome.enable = false;
     hyprland = {
       enable = false;
       nvidia = false;
@@ -52,7 +52,7 @@
     };
     direnv.enable = true;
     
-    stylix = {
+    /*stylix = {
       # https://www.youtube.com/watch?v=ljHkWgBaQWU
       enable = true;
       base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-mirage.yaml"; #gruvbox-dark-medium #pop
@@ -61,7 +61,7 @@
         package = pkgs.apple-cursor;
         name = "Apple";
       };
-    };
+    };*/
 
     /*onedriver = {
       enable = true;
@@ -69,11 +69,11 @@
       serviceName = "mnt-hdd\\x2dbtrfs-Yeshey-OneDriver"; 
     };*/
 
-    agenix = {
+    /*agenix = {
       enable = false;
       sshKeys.enable = true;
       onedriver.enable = true;
-    };
+    };*/
   };
 
   home = {
