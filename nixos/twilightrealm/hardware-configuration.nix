@@ -14,8 +14,14 @@
 
 
   boot.kernelParams = [ "nouveau.modeset=0" ];
-  boot.loader = {
+  boot.loader.systemd-boot = {
+    enable = true;
+    configurationLimit = 10; # You can leave it null for no limit, but it is not recommended, as it can fill your boot partition.
+  };
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot";
 
+  /*boot.loader = {
     timeout = lib.mkDefault 2;
     efi = {
       canTouchEfiVariables = lib.mkDefault true;
@@ -47,7 +53,7 @@
 
       '';
     };
-  };
+  };*/
 
   boot.initrd.availableKernelModules = [
     "ahci"
