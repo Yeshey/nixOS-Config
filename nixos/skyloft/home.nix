@@ -16,6 +16,7 @@ in
   imports = [ ];
 
   myHome = {
+    enable = true;
     # All the options
     user = "yeshey";
     nonNixos.enable = false;

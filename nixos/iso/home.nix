@@ -3,6 +3,7 @@
 
 {
   myHome = {
+    enable = true;
     # All the options
     user = "yeshey";
     xdgPersonalFilesOrganization.enable = true;
