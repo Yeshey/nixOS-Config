@@ -12,10 +12,14 @@ in
 {
   imports = [ ./dconf.nix ];
   options.myHome.gnome = with lib; {
-    enable = mkEnableOption "gnome";
+    enable = mkOption {
+      type = types.bool;
+      default = osConfig.mySystem.gnome.enable || services.xserver.desktopManager.gnome.enable;
+      description = "personal gnome configuration"
+    };
   };
 
-  config = lib.mkIf (config.myHome.enable && (cfg.enable || osConfig.mySystem.gnome.enable == true)) {
+  config = lib.mkIf (config.myHome.enable && cfg.enable) {
     home.packages = with pkgs; [
       # For gnome
       gnomeExtensions.clipboard-indicator

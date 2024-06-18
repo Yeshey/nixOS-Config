@@ -20,7 +20,7 @@ in
       enable = true;
     };
 
-    # TODO can't make general firefox profiles, the desktop file would be made like this tho:
+    # can't make general firefox profiles, being done in hm. The desktop file would be made like this tho:
 
     # makeDesktopItem https://discourse.nixos.org/t/proper-icon-when-using-makedesktopitem/32026
     /*
