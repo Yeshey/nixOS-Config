@@ -26,6 +26,7 @@ in
     ./xdgPersonalFilesOrganization.nix
   ];
   options.myHome = with lib; {
+    enable = lib.mkEnableOption "myHome";
     user = mkOption {
       type = types.str;
       default = "yeshey";

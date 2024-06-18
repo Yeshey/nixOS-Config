@@ -48,7 +48,7 @@ let
   ];
 in
 {
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && config.myHome.homeApps.cli.enable && cfg.enable) {
     myHome.homeApps.cli.neovim.plugins = plugins ++ (lib.lists.optionals cfg.enableLSP lspPlugins);
   };
 }

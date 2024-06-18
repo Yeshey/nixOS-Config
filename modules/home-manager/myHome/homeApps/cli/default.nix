@@ -20,7 +20,7 @@ in
     enable = lib.mkEnableOption "cli";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && config.myHome.homeApps.cli.enable && cfg.enable) {
     myHome.homeApps.cli.git.enable = lib.mkOverride 1010 true;
     myHome.homeApps.cli.general.enable = lib.mkOverride 1010 true;
     myHome.homeApps.cli.tmux.enable = lib.mkOverride 1010 true;

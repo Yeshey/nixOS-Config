@@ -87,7 +87,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && config.myHome.homeApps.cli.enable && cfg.enable) {
     home.sessionVariables = {
       EDITOR = "${config.home.profileDirectory}/bin/nvim";
     };

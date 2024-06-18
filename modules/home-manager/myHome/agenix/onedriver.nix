@@ -14,7 +14,7 @@ in
     enable = mkEnableOption "onedriverAgenix";
   };
 
-  config = lib.mkIf (cfg.enable && config.myHome.agenix.enable) {
+  config = lib.mkIf (config.myHome.enable && config.myHome.agenix.enable && cfg.enable) {
     # Mount or unmount selected OneDriver account not turned on automatically
 
     systemd.user.services."onedriverAgenixYeshey" = let 

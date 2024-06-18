@@ -66,11 +66,6 @@ in
 
   options.mySystem = with lib; {
     enable = lib.mkEnableOption "mySystem";
-    #hardware = lib.types.submodule ./hardware;
-    #hardware = mkOption {
-    #  type = types.submodule ./hardware/default.nix;
-      # default = {};
-    #};
     nix.substituters = mkOption {
       type = types.listOf types.str;
       example = [

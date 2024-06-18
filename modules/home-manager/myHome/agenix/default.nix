@@ -25,7 +25,7 @@ in
     enable = mkEnableOption "agenix";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.myHome.enable && cfg.enable) {
     myHome.agenix.sshKeys.enable = lib.mkOverride 1010 true;  
     myHome.agenix.onedriver.enable = lib.mkOverride 1010 true;  
 

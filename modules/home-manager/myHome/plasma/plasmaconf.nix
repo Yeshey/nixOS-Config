@@ -3,6 +3,7 @@
   config,
   lib,
   pkgs,
+  osConfig,
   ...
 }:
 
@@ -14,7 +15,7 @@ in
     inputs.plasma-manager.homeManagerModules.plasma-manager
     # ./plasmaconf.nix 
   ];
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.myHome.enable && (cfg.enable || osConfig.mySystem.plasma.enable == true)) {
     programs.plasma = {
       enable = true;
       shortcuts = {

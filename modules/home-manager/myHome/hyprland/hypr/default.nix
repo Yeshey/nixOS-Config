@@ -20,7 +20,7 @@ in
 
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.myHome.enable && cfg.enable) {
 
     myHome.homeApps.kitty.enable = true; # activate the kitty terminal from config
 

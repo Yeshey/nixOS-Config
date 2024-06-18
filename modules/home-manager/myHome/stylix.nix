@@ -36,7 +36,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.myHome.enable && cfg.enable) {
 
     stylix = {
       enable = lib.mkOverride 1010 true;

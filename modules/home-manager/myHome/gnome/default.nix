@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  osConfig,
   ...
 }:
 
@@ -14,7 +15,7 @@ in
     enable = mkEnableOption "gnome";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.myHome.enable && (cfg.enable || osConfig.mySystem.gnome.enable == true)) {
     home.packages = with pkgs; [
       # For gnome
       gnomeExtensions.clipboard-indicator

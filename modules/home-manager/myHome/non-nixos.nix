@@ -44,7 +44,7 @@ in
       default = mapAttrsToList (name: value: name) substituters;
     };
   };
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.myHome.enable && cfg.enable) {
     home.sessionPath = [ "$HOME/.local/bin" ];
     home.packages = [
       pkgs.hostname

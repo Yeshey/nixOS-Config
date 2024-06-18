@@ -14,7 +14,7 @@ in
     enable = mkEnableOption "discord";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
 
     home.packages = with pkgs; [ vesktop ];
 

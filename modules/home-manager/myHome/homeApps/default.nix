@@ -27,7 +27,7 @@ in
     enable = lib.mkEnableOption "homeApps";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.myHome.enable && cfg.enable) {
     myHome.homeApps.general.enable = lib.mkOverride 1010 true;
     myHome.homeApps.vscodium.enable = lib.mkOverride 1010 true;
     myHome.homeApps.discord.enable = lib.mkOverride 1010 true;
