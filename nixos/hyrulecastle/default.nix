@@ -8,17 +8,7 @@
 }:
 
 let
-  # Define an overlay to override coreutils
-  myOverlay = final: prev: {
-    coreutils = prev.coreutils.overrideAttrs (oldAttrs: rec {
-      buildInputs = oldAttrs.buildInputs or [] ++ [pkgs.unstable.rmtrash];
-
-      postInstall = ''
-        mv $out/bin/rm $out/bin/rm.bak
-        ln -s ${pkgs.unstable.rmtrash}/bin/rmtrash $out/bin/rm
-      '';
-    });
-  };
+  # user = "yeshey";
 in
 {
   imports = [
@@ -37,8 +27,6 @@ in
       outputs.overlays.modifications
       outputs.overlays.unstable-packages
 
-      myOverlay
-
       # You can also add overlays exported from other flakes:
       # neovim-nightly-overlay.overlays.default
 
@@ -50,11 +38,6 @@ in
       # })
     ];
   };
-  
-  environment.systemPackages = with pkgs; [
-    coreutils
-    rmtrash
-  ];
 
   mySystem = rec {
     enable = true; # if false, disables all below config, (TODO if true, sets my minimal server config & imports hm)
