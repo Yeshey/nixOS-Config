@@ -9,6 +9,8 @@ rec {
 
   myOnedriver = pkgs.callPackage ./onedriver-his.nix { };  
 
+  customCoreutils = pkgs.callPackage ./custom-coreutils.nix {};
+
   # mybox86 = pkgs.callPackage ./box86.nix { };
   mybox86 =
     let
