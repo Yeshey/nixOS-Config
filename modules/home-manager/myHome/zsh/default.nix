@@ -19,7 +19,7 @@ in
 
   # TODO make everything lib.mkOverride 1010?
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.myHome.enable && cfg.enable) {
     # theme from https://gitlab.com/pinage404/dotfiles
     programs.starship = {
       enable = true;

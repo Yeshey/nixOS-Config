@@ -13,7 +13,7 @@ in
     enable = mkEnableOption "tmux";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && config.myHome.homeApps.cli.enable && cfg.enable) {
     programs.tmux = {
       enable = true;
       prefix = "C-a";

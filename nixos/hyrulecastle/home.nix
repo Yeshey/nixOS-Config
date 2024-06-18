@@ -12,6 +12,7 @@ in
   imports = [ ];
 
   myHome = {
+    enable = true;
     # All the options
     user = "yeshey";
     xdgPersonalFilesOrganization.enable = true;
@@ -27,7 +28,7 @@ in
     homeApps = {
       enable = true;
       cli = {
-        enable = true;
+        enable = false;
         general.enable = true;
         git = {
           enable = true;

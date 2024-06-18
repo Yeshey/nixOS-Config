@@ -11,7 +11,7 @@ let
   c = config.myHome.colorScheme.theme.palette;
 in
 {
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.myHome.enable && cfg.enable) {
 
     # https://github.com/fufexan/dotfiles
     wayland.windowManager.hyprland.settings =

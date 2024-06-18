@@ -19,7 +19,7 @@ in
       # You need to add this code here as well but you don't know how, so latex works with svgs
       vscUserSettings = builtins.fromJSON (builtins.readFile ./VSCsettings.json);
     in
-    lib.mkIf cfg.enable {
+    lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
 
       home.packages = with pkgs; [
         (vscode-with-extensions.override {

@@ -10,7 +10,7 @@ let
 in
 {
   options.myHome.homeApps.devops.enable = lib.mkEnableOption "devops";
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
     programs.zsh.shellAliases = {
       tf = "terraform";
     };

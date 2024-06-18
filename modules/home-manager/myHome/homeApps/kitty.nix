@@ -15,7 +15,7 @@ in
     enable = mkEnableOption "kitty";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
     programs.kitty = {
       enable = true;
       package = pkgs.kitty;

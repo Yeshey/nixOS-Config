@@ -15,7 +15,7 @@ in
     enable = mkEnableOption "webApps";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
 
     # makeDesktopItem https://discourse.nixos.org/t/proper-icon-when-using-makedesktopitem/32026
     # Syncthing desktop shortcut

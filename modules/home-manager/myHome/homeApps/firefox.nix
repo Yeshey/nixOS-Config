@@ -15,7 +15,7 @@ in
     i2pFirefoxProfile = mkEnableOption "i2pFirefoxProfile";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
 
     # TODO can you fix this?
     # https://discourse.nixos.org/t/help-setting-up-firefox-with-home-manager/23333

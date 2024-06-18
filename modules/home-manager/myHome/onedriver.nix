@@ -33,7 +33,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.myHome.enable && cfg.enable) {
 
     home.packages = [
       onedriverPackage

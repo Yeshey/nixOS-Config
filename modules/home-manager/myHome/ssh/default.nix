@@ -13,7 +13,7 @@ in
     enable = mkEnableOption "ssh";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (config.myHome.enable && cfg.enable) {
 
     programs.ssh = {
       enable = true;
