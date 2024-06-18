@@ -1,3 +1,4 @@
+# doesn't work that well, couldn't it be as easy as the build-vm command
 { pkgs, ... }:
 
 {
@@ -6,7 +7,7 @@
     user = "yeshey";
     xdgPersonalFilesOrganization.enable = true;
     nonNixos.enable = false;
-    plasma.enable = false;
+    plasma.enable = true;
     gnome.enable = false;
     hyprland = {
       enable = false;
@@ -15,6 +16,7 @@
     ssh.enable = true;
     homeApps = {
       enable = true;
+      general = false;
       cli = {
         enable = true;
         general.enable = true;
