@@ -19,7 +19,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = osConfig.mySystem.plasma.enable || services.desktopManager.plasma6.enable;
-      description = "personal KDE plasma configuration"
+      description = "personal KDE plasma configuration";
     };
   };
 

@@ -50,7 +50,7 @@ in
     ./hyprland.nix
     ./virt.nix
     ./zsh/default.nix
-    ./i2p.nix # TODO review and possibly clump together with the non-server Configuration below
+    ./i2p.nix
     ./flatpaks.nix
     ./autoUpgrades.nix
     ./autoUpgradesOnShutdown.nix
