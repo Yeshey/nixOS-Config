@@ -16,10 +16,14 @@ in
   ];
 
   options.myHome.plasma = with lib; {
-    enable = mkEnableOption "plasma";
+    enable = mkOption {
+      type = types.bool;
+      default = osConfig.mySystem.plasma.enable || services.desktopManager.plasma6.enable;
+      description = "personal KDE plasma configuration"
+    };
   };
 
-  config = lib.mkIf (config.myHome.enable && (cfg.enable || osConfig.mySystem.plasma.enable == true)) {
+  config = lib.mkIf (config.myHome.enable && cfg.enable) {
 
     # hope it doesn't conflict with stylix 🤞
     programs.plasma = {

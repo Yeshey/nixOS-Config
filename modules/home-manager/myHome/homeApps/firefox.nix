@@ -3,6 +3,7 @@
   config,
   lib,
   pkgs,
+  osConfig,
   ...
 }:
 let
@@ -12,7 +13,12 @@ in
 {
   options.myHome.homeApps.firefox = with lib; {
     enable = mkEnableOption "firefox";
-    i2pFirefoxProfile = mkEnableOption "i2pFirefoxProfile";
+    i2pFirefoxProfile = mkOption {
+      type = types.bool;
+      default = osConfig.services.i2p.enable || osConfig.mySystem.i2p.enable;
+      description = "weather to make a special firefox profile for i2p";
+    };
+    #mkEnableOption "i2pFirefoxProfile";
   };
 
   config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
@@ -171,7 +177,7 @@ in
           name = "i2p";
           desktopName = "i2p";
           genericName = "i2p";
-          exec = ''firefox -no-remote -P "i2p" %U'';
+          exec = ''firefox -no-remote -P "i2p" %U http://127.0.0.1:7657/welcome'';
           icon = "firefox";
           categories = [
             "Network"

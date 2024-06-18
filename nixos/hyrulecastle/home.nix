@@ -46,7 +46,7 @@ in
       };
       firefox = {
         enable = true;
-        i2pFirefoxProfile = true;
+        # i2pFirefoxProfile = true; # detects automatically now, can still be toggled
       };
       webApps.enable = true;
       vscodium.enable = true;

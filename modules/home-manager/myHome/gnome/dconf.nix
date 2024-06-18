@@ -15,7 +15,7 @@ let
 in
 with lib.hm.gvariant;
 {
-  config = lib.mkIf (config.myHome.enable && (cfg.enable || osConfig.mySystem.gnome.enable == true)) {
+  config = lib.mkIf (config.myHome.enable && cfg.enable) {
 
     dconf.settings = {
       "org/gnome/Characters" = {
