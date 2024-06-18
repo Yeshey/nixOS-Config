@@ -15,7 +15,7 @@ in
     enable = mkOption {
       type = types.bool;
       default = osConfig.mySystem.gnome.enable || services.xserver.desktopManager.gnome.enable;
-      description = "personal gnome configuration"
+      description = "personal gnome configuration";
     };
   };
 

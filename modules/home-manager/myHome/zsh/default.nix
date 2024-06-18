@@ -17,8 +17,6 @@ in
     };
   };
 
-  # TODO make everything lib.mkOverride 1010?
-
   config = lib.mkIf (config.myHome.enable && cfg.enable) {
     # theme from https://gitlab.com/pinage404/dotfiles
     programs.starship = {
@@ -28,6 +26,7 @@ in
     # Need these fonts for starship theme to work
     fonts.fontconfig.enable = true;
     home.packages = with pkgs; [
+      safe-rm
       eza
       (nerdfonts.override {
         fonts = [
@@ -48,6 +47,7 @@ in
       shellAliases = {
         ll = lib.mkOverride 1010 "eza -l --icons=auto";
         la = lib.mkOverride 1010 "eza -la --icons=auto";
+        rm = "safe-rm";
       };
       # bash
       initExtra = ''
