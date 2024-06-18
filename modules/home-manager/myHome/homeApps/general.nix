@@ -46,9 +46,6 @@ in
 
         qpwgraph
 
-        #Follow the ask for help you did: (https://discourse.nixos.org/t/compiling-and-adding-program-not-in-nixpkgs-to-pc-compiling-error/25239/3)
-        # (callPackage ./playit-cli.nix {}) # TODO the files have been moved to /pkgs, fix
-        # (callPackage ./ipfs-sync.nix {}) # TODO the files have been moved to /pkgs, fix
         vlc
         # anydesk
         pdfarranger

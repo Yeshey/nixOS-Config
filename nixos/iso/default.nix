@@ -36,19 +36,13 @@
       # })
     ];
   };
-/*
+
   mySystem = rec {
     enable = true;
     # all the options
     host = "live";
     user = "yeshey";
     dataStoragePath = "~/Documents";
-    gnome.enable = false;
-    plasma.enable = false;
-    ssh = {
-      enable = true;
-    };
-    browser.enable = true;
     cliTools.enable = true;
     zsh.enable = true;
     home-manager = {
@@ -56,6 +50,13 @@
       home = ./home.nix;
       #dataStoragePath = dataStoragePath;
     };
+    /*
+    gnome.enable = false;
+    plasma.enable = false;
+    ssh = {
+      enable = true;
+    };
+    browser.enable = true;
     hardware = {
       enable = false;
       bluetooth.enable = true;
@@ -76,8 +77,8 @@
       dates = "daily";
     };
     flatpaks.enable = false;
-    i2p.enable = false;
-  };*/
+    i2p.enable = false; */
+  };
 
   boot.loader.timeout = lib.mkForce 10;
 
