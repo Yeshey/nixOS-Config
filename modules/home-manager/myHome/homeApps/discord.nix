@@ -18,6 +18,24 @@ in
 
     home.packages = with pkgs; [ vesktop ];
 
+    # My home files 
+    home.file = {
+      # For discord to start correctly (from nixOS wiki discord page)
+      ".config/discord/settings.json".source = builtins.toFile "file.file" ''
+        {
+          "IS_MAXIMIZED": false,
+          "IS_MINIMIZED": true,
+          "SKIP_HOST_UPDATE": true,
+          "WINDOW_BOUNDS": {
+            "x": 173,
+            "y": 68,
+            "width": 1630,
+            "height": 799
+          }
+        }
+      '';
+    };
+
     # TODO check and install themes? https://github.com/s-k-y-l-i/discord-themes
 
     #home.persistence = {

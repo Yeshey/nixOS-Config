@@ -110,6 +110,24 @@ in
         value.source = value.flake;
       }) config.nix.registry;
 
+      # Notes:
+      # rmtrash doesnt save you from deleting things like /bin or /usr
+
+/*
+      system.activationScripts = {
+        safeRm.text = ''
+          rm ${pkgs.coreutils}/bin/rm
+          ln -s ${pkgs.rmtrash}/bin/safe-rm ${pkgs.coreutils}/bin/rm
+        '';
+        ####### pkgs.safe-rm
+      };*/
+
+      # environment.systemPackages = [ pkgs.uutils-coreutils-noprefix ];
+
+      #environment.shellAliases = { # works except for yeshey zsh (probably bc its overriden)
+      #  rm = "${pkgs.rmtrash}/bin/rmtrash";
+      #};
+
     }
     ( lib.mkIf cfg.enable {
       # Conditional config
