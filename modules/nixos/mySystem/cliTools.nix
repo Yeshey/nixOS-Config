@@ -15,11 +15,6 @@ in
   };
 
   config = {
-    programs = {
-      zsh.shellAliases = {
-        lg = "lazygit";
-      };
-    };
     environment.systemPackages = with pkgs; [
       git
       dnsutils

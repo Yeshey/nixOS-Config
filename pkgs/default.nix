@@ -9,7 +9,8 @@ rec {
 
   myOnedriver = pkgs.callPackage ./onedriver-his.nix { };  
 
-  # mybox86 = pkgs.callPackage ./box86.nix { };
+  coreutils-with-safe-rm = pkgs.callPackage ./coreutils-with-safe-rm.nix { };
+
   mybox86 =
     let
       args = {
