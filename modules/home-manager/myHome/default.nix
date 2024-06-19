@@ -3,6 +3,7 @@
   config,
   lib,
   pkgs,
+  osConfig,
   ...
 }:
 
@@ -28,7 +29,12 @@ in
     ./xdgPersonalFilesOrganization.nix
   ];
   options.myHome = with lib; {
-    enable = lib.mkEnableOption "myHome";
+    enable = mkEnableOption "myHome";
+    dataStoragePath = mkOption {
+      type = types.str;
+      description = "Storage drive or path to put everything. needs to be set if not set in mySystem module.";
+      default = "${osConfig.mySystem.dataStoragePath}";
+    };
     user = mkOption {
       type = types.str;
       default = "yeshey";
