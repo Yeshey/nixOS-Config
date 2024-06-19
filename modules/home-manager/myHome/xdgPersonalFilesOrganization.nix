@@ -23,9 +23,9 @@ in
         enable = lib.mkOverride 1010 true;
         createDirectories = lib.mkOverride 1010 true;
         # desktop = lib.mkOverride 1010 "${config.home.homeDirectory}/Pulpit";
-        documents = lib.mkOverride 1010 "${osConfig.mySystem.dataStoragePath}/PersonalFiles/";
-        download = lib.mkOverride 1010 "${osConfig.mySystem.dataStoragePath}/Downloads/";
-        music = lib.mkOverride 1010 "${osConfig.mySystem.dataStoragePath}/PersonalFiles/Timeless/Music/";
+        documents = lib.mkOverride 1010 "${config.myHome.dataStoragePath}/PersonalFiles/";
+        download = lib.mkOverride 1010 "${config.myHome.dataStoragePath}/Downloads/";
+        music = lib.mkOverride 1010 "${config.myHome.dataStoragePath}/PersonalFiles/Timeless/Music/";
         # pictures = lib.mkOverride 1010 "${config.home.homeDirectory}/Obrazy";
         # videos = lib.mkOverride 1010 "${config.home.homeDirectory}/Wideo";
         # templates = lib.mkOverride 1010 "${config.home.homeDirectory}/Szablony";
