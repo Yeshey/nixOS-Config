@@ -113,20 +113,26 @@ in
       # Notes:
       # rmtrash doesnt save you from deleting things like /bin or /usr
 
-/*
-      system.activationScripts = {
-        safeRm.text = ''
-          rm ${pkgs.coreutils}/bin/rm
-          ln -s ${pkgs.rmtrash}/bin/safe-rm ${pkgs.coreutils}/bin/rm
-        '';
-        ####### pkgs.safe-rm
-      };*/
+      nixpkgs = {
+        # You can add overlays here
+        overlays = [
+          (final: prev: {
+            myCoreutils = pkgs.symlinkJoin {
+                name = "coreutils-wrapped";
+                paths = [ pkgs.coreutils ];
+                nativeBuildInputs = [ ];
+                postBuild = ''
+                  rm $out/bin/rm
+                  ln -s ${pkgs.rmtrash}/bin/rmtrash $out/bin/rm
+                '';
+              };
+            })
+        ];
+      };
 
-      # environment.systemPackages = [ pkgs.uutils-coreutils-noprefix ];
-
-      #environment.shellAliases = { # works except for yeshey zsh (probably bc its overriden)
-      #  rm = "${pkgs.rmtrash}/bin/rmtrash";
-      #};
+      environment.systemPackages = with pkgs; [ 
+        myCoreutils
+      ];
 
     }
     ( lib.mkIf cfg.enable {
