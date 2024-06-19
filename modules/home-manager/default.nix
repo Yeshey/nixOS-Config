@@ -13,11 +13,15 @@
       # Nicely reload system units when changing configs
       systemd.user.startServices = lib.mkOverride 1010 "sd-switch";
 
-      #home.shellAliases = { # works except for yeshey zsh (probably bc its overriden)
-      #  rm = "${pkgs.rmtrash}/bin/rmtrash";
-      #};
-      #programs.bash.shellAliases = {
-      #  rm = "${pkgs.rmtrash}/bin/rmtrash";
-      #};
+      home.packages = with pkgs; [ 
+        coreutils-with-safe-rm
+      ];
+      programs.bash.enable = true; # makes work in bash
+      programs.zsh.enable = true;
+      home.shellAliases = {
+        sudo="sudo "; # makes aliases work even with sudo behind
+        rm = "${pkgs.rmtrash}/bin/rmtrash";
+      };
+      
     };
 }

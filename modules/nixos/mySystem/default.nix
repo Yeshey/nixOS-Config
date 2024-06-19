@@ -79,16 +79,12 @@ in
       type = types.str;
       description = "Storage drive to put everything";
       default = "/home/${config.mySystem.user}/Documents";
-      # default = builtins.attrValues substituters; # TODO, make it loop throught the list # by default use all
     };
     host = mkOption {
       type = types.str;
       description = "Name of the machine, usually what was used in --flake .#hostname. Used for setting the network host name";
       default = "nixOS";
-      # default = 
-      # default = builtins.attrValues substituters; # TODO, make it loop throught the list # by default use all
     };
-    # dedicatedServer = lib.mkEnableOption "dedicatedServer"; # TODO use this to say in the config if it is a dedicatedServer or not, with sub-options to enable each the bluetooth, printers, and sound, ponder adding the gnome and plasma desktops and gaming too
   };
 
   config = lib.mkMerge [
@@ -110,28 +106,13 @@ in
         value.source = value.flake;
       }) config.nix.registry;
 
-      # Notes:
-      # rmtrash doesnt save you from deleting things like /bin or /usr
-
-      nixpkgs = {
-        # You can add overlays here
-        overlays = [
-          (final: prev: {
-            myCoreutils = pkgs.symlinkJoin {
-                name = "coreutils-wrapped";
-                paths = [ pkgs.coreutils ];
-                nativeBuildInputs = [ ];
-                postBuild = ''
-                  rm $out/bin/rm
-                  ln -s ${pkgs.rmtrash}/bin/rmtrash $out/bin/rm
-                '';
-              };
-            })
-        ];
+      # changing rm to safe-rm to prevent your dumb ass from deleting your PC
+      environment.shellAliases = {
+        sudo="sudo "; # makes aliases work even with sudo behind
+        rm = "${pkgs.rmtrash}/bin/rmtrash";
       };
-
       environment.systemPackages = with pkgs; [ 
-        myCoreutils
+        coreutils-with-safe-rm
       ];
 
     }
