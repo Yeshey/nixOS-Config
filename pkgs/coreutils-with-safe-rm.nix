@@ -10,6 +10,6 @@ pkgs.symlinkJoin {
   nativeBuildInputs = [ ];
   postBuild = ''
     rm $out/bin/rm
-    ln -s ${pkgs.rmtrash}/bin/rmtrash $out/bin/rm
+    ln -s ${pkgs.safe-rm}/bin/safe-rm $out/bin/rm
   '';
 }

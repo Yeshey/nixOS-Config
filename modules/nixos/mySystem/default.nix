@@ -109,7 +109,7 @@ in
       # changing rm to safe-rm to prevent your dumb ass from deleting your PC
       environment.shellAliases = {
         sudo="sudo "; # makes aliases work even with sudo behind
-        rm = "${pkgs.rmtrash}/bin/rmtrash";
+        rm = "${pkgs.safe-rm}/bin/safe-rm";
       };
       environment.systemPackages = with pkgs; [ 
         coreutils-with-safe-rm
