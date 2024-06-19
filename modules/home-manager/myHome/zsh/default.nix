@@ -47,7 +47,6 @@ in
       shellAliases = {
         ll = lib.mkOverride 1010 "eza -l --icons=auto";
         la = lib.mkOverride 1010 "eza -la --icons=auto";
-        rm = "safe-rm";
       };
       # bash
       initExtra = ''
