@@ -42,6 +42,7 @@ in
   imports = [
     ./user.nix # always active
     ./cliTools.nix # always active
+    ./safe-rm.nix # always active
 
     ./androidDevelopment.nix
     ./gaming.nix
@@ -105,15 +106,6 @@ in
         name = "nix/path/${name}";
         value.source = value.flake;
       }) config.nix.registry;
-
-      # changing rm to safe-rm to prevent your dumb ass from deleting your PC
-      environment.shellAliases = {
-        sudo="sudo "; # makes aliases work even with sudo behind
-        rm = "${pkgs.safe-rm}/bin/safe-rm";
-      };
-      environment.systemPackages = with pkgs; [ 
-        coreutils-with-safe-rm
-      ];
 
     }
     ( lib.mkIf cfg.enable {

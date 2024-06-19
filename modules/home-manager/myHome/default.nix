@@ -11,6 +11,8 @@ let
 in
 {
   imports = [
+    ./safe-rm.nix # always active
+
     ./gnome/default.nix
     ./plasma/default.nix
     ./non-nixos.nix

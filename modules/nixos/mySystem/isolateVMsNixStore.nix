@@ -26,11 +26,6 @@ in
     # https://discourse.nixos.org/t/building-qemu-kvm-vms/33149/5
     
     # needs to be inside vmVariant? issue: https://github.com/NixOS/nixpkgs/issues/196755
-    /*virtualisation = {
-      useNixStoreImage = true;
-      mountHostNixStore = false;
-      useBootLoader = true;
-    };*/
     
     virtualisation.vmVariant.virtualisation = {
       useNixStoreImage = true;
