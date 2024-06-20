@@ -61,7 +61,7 @@ in
         #pkg-config
 
         #discord
-        #exodus # wasn't being able to grab, TODO should downgrade soon 
+        #exodus
       ];
     };
   };
