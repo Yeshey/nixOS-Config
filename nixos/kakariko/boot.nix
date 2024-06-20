@@ -60,7 +60,12 @@ in
     { #device = "/dev/disk/by-uuid/6e60cc35-882f-45bf-8402-719a14a74a74";
       device = "/dev/disk/by-label/nixos";
       fsType = "btrfs";
-      options = [ "compress=zstd" ];
+      options = [ 
+        "defaults"
+        "compress-force=zstd:3" # compression level 3, is the default
+        # "ssd" # optimize for an ssd
+        # security "nosuid" "nodev" (https://serverfault.com/questions/547237/explanation-of-nodev-and-nosuid-in-fstab)
+      ];
     };
   swapDevices =
     [ 
@@ -75,11 +80,26 @@ in
   # MY MOUNTS
   fileSystems."${config.mySystem.dataStoragePath}" = {
     device = "/dev/disk/by-label/btrfsMicroSD-DataDisk";
-    fsType = "auto";
-    options = [
-      "nodev"
-      "nofail"
-      "x-gvfs-show"
-    ]; # "uid=1000" "gid=1000" "dmask=007" "fmask=117"
+    fsType = "btrfs";
+    options = [ # check mount options of mounted btrfs fs: sudo findmnt -t btrfs
+      "defaults"
+      "nofail" # boots anyways if can't find the disk 
+      "users" # any user can mount
+      "x-gvfs-show" # show in gnome disks
+      "noatime" # doesn't write access time to files
+      "compress-force=zstd:5" # compression level 5, good for slow drives. forces compression of every file even if fails to compress first segment of the file
+      # "ssd" # optimize for an ssd
+      # security "nosuid" "nodev" (https://serverfault.com/questions/547237/explanation-of-nodev-and-nosuid-in-fstab)
+    ];
   };
+
+/*
+findmnt -t btrfs 
+TARGET                       SOURCE                           FSTYPE OPTIONS
+/                            /dev/dm-6                        btrfs  rw,relatime,compress=zstd:3,space_cache=v2,subvolid=5,subvol=/
+├─/mnt/btrfsMicroSD-DataDisk /dev/sda2                        btrfs  rw,nodev,relatime,space_cache,subvolid=5,subvol=/
+├─/nix/store                 /dev/dm-6[/nix/store]            btrfs  ro,relatime,compress=zstd:3,space_cache=v2,subvolid=5,subvol=/
+└─/var/lib/docker/btrfs      /dev/dm-6[/var/lib/docker/btrfs] btrfs  rw,relatime,compress=zstd:3,space_cache=v2,subvolid=5,subvol=/
+*/
+
 }
