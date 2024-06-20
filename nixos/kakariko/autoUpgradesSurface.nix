@@ -85,7 +85,8 @@ in
 
         preStart = ''
           until ${pkgs.busybox}/bin/ping -c1 192.168.1.109 ; do sleep 300 ; done
-          ssh yeshey@192.168.1.109 "nix-shell -p libnotify --run 'notify-send -u critical \"Upgrading Surface...\"'"
+          ssh yeshey@192.168.1.109 "${pkgs.libnotify}/bin/notify-send -u critical 'Upgrading Surface...'"
+          ${pkgs.libnotify}/bin/notify-send -u critical 'Upgrading Surface...'
         '';
 
         serviceConfig = {
