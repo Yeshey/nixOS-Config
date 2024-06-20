@@ -81,12 +81,32 @@ in
       in {
         path = with pkgs; [
           busybox
+          #libnotify
+          #dbus
         ];
 
         preStart = ''
           until ${pkgs.busybox}/bin/ping -c1 192.168.1.109 ; do sleep 300 ; done
-          ssh yeshey@192.168.1.109 "${pkgs.libnotify}/bin/notify-send -u critical 'Upgrading Surface...'"
-          ${pkgs.libnotify}/bin/notify-send -u critical 'Upgrading Surface...'
+          export DISPLAY=:0
+          ssh -Y yeshey@192.168.1.109 "export DISPLAY=:0 ; nix-shell -p libnotify --run \"notify-send -u critical 'Upgrading Surface...'\""
+
+          # how THE FUCK is it so hard to send a notification to myself!!!!??
+          #function notify-send() {
+          #    # Detect the name of the display in use
+          #    local display=":$(ls /tmp/.X11-unix/* | sed 's#/tmp/.X11-unix/X##' | head -n 1)"
+          #
+          #    # Detect the user using such display
+          #    local user=$(who | grep '('$display')' | awk '{print $1}' | head -n 1)
+          #
+          #    # Detect the id of the user
+          #    local uid=$(id -u $user)
+          #
+          #
+          #    runuser -u $user -- env DISPLAY=$display DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$uid/bus ${pkgs.libnotify}/bin/notify-send "$@"
+          #    #sudo -u $user DISPLAY=$display DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$uid/bus ${pkgs.libnotify}/bin/notify-send "$@"
+          #}
+          #notify-send -u critical 'Upgrading Surface...'
+          #${pkgs.libnotify}/bin/notify-send -u critical 'Upgrading Surface...' # THIS LINE
         '';
 
         serviceConfig = {
