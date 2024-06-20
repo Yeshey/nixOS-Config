@@ -60,7 +60,16 @@ in
     { #device = "/dev/disk/by-uuid/6e60cc35-882f-45bf-8402-719a14a74a74";
       device = "/dev/disk/by-label/nixos";
       fsType = "btrfs";
-      options = [ "compress=zstd" ];
+      options = [ 
+        "defaults"
+        "nofail" # boots anyways if can't find the disk 
+        "users" # any user can mount
+        "x-gvfs-show" # show in gnome disks
+        "noatime" # doesn't write access time to files
+        "compress-force=zstd:3" # compression level 3, is the default
+        # "ssd" # optimize for an ssd
+        # security "nosuid" "nodev" (https://serverfault.com/questions/547237/explanation-of-nodev-and-nosuid-in-fstab)
+      ];
     };
   swapDevices =
     [ 
