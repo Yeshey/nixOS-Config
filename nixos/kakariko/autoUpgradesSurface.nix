@@ -65,7 +65,7 @@ in
       enable = true;
       # dates = "23:01";
       dates = cfg.dates; #weekly
-      operation = "switch";
+      operation = "boot"; #switch
       flake = "${cfg.location}#${cfg.host}"; # my flake online uri is for example github:yeshey/nixos-config#laptop
       flags = [
         "--build-host root@192.168.1.109"
@@ -85,6 +85,8 @@ in
 
         preStart = ''
           until ${pkgs.busybox}/bin/ping -c1 192.168.1.109 ; do sleep 300 ; done
+          ssh yeshey@192.168.1.109 "${pkgs.libnotify}/bin/notify-send -u critical 'Upgrading Surface...'"
+          ${pkgs.libnotify}/bin/notify-send -u critical 'Upgrading Surface...'
         '';
 
         serviceConfig = {

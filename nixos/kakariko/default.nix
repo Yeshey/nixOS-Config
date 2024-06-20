@@ -137,7 +137,7 @@ in
       enable = true;
       sshKeys.enable = true;
     };
-    isolateVMsNixStore = true;
+    #isolateVMsNixStore = true;
   };
 
   virtualisation.docker.storageDriver = "btrfs"; # for docker
