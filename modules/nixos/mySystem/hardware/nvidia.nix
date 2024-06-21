@@ -26,9 +26,30 @@ in
       type = types.str;
       example = "PCI:1:0:0";
     };
+    GPUName = mkOption {
+      type = types.str;
+      default = "GeForce RTX 2060 Mobile";
+      example = "GeForce RTX 2060 Mobile";
+    };
   };
 
   config = lib.mkIf (config.mySystem.enable && config.mySystem.hardware.enable && cfg.enable) {
+
+    # do i need this shit for external monitors to work as well?
+    # https://askubuntu.com/questions/986394/problem-with-second-monitors-resolution
+    system.activationScripts = {
+      safe-rm.text = ''
+        echo "
+Section "Device"
+    Identifier     "Device0"
+    Driver         "nvidia"
+    VendorName     "NVIDIA Corporation"
+    BoardName      "${cfg.GPUName}"
+    Option "IgnoreEDIDChecksum" "DFP-1"
+EndSection
+        " > "/etc/X11/xorg.conf"
+      '';
+    };
 
     # NVIDIA
     # Allow unfree packages
