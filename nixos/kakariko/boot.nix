@@ -84,7 +84,7 @@ in
     options = [ # check mount options of mounted btrfs fs: sudo findmnt -t btrfs
       "defaults"
       "nofail" # boots anyways if can't find the disk 
-      "users" # any user can mount
+      # "users" # any user can mount
       "x-gvfs-show" # show in gnome disks
       "noatime" # doesn't write access time to files
       "compress-force=zstd:5" # compression level 5, good for slow drives. forces compression of every file even if fails to compress first segment of the file
