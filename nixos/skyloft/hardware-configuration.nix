@@ -25,7 +25,12 @@
   fileSystems."/" = {
     device = "/dev/disk/by-uuid/104ef1dc-6b75-4b3b-ae6a-33bdeec20cbb";
     fsType = "btrfs";
-    options = [ "compress=zstd" ];
+    options = [ 
+      "defaults"
+      "x-gvfs-show" # show in gnome disks
+      "compress-force=zstd:6" # compression level 6 to gain space
+      # security "nosuid" "nodev" (https://serverfault.com/questions/547237/explanation-of-nodev-and-nosuid-in-fstab)
+      ];
   };
 
   fileSystems."/boot" = {
