@@ -16,7 +16,10 @@ in
 
   config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
 
-    home.packages = with pkgs; [ vesktop ];
+    home.packages = with pkgs; [ 
+      #vesktop
+      discord 
+    ];
 
     # My home files 
     home.file = {
