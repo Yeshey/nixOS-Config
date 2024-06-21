@@ -109,14 +109,14 @@ in
           #${pkgs.libnotify}/bin/notify-send -u critical 'Upgrading Surface...' # THIS LINE
         '';
 
-        script = lib.mkBefore "
+#        script = lib.mkBefore "
 # Ignore SIGTERM and SIGINT
-trap -- '' SIGINT SIGTERM
-        ";
+#trap -- '' SIGINT SIGTERM
+#        ";
 
         serviceConfig = {
           TimeoutSec=28800;
-          TimeoutStopSec="infinity";
+          #TimeoutStopSec="infinity";
         };
 
 # echo -n "Waiting for host..." ; until ${pkgs.busybox}/bin/ping -c1 192.168.1.109 >/dev/null 2>&1; do sleep 60 && echo -n "." ; done
