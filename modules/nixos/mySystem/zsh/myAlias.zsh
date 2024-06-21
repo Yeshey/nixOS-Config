@@ -1,6 +1,18 @@
 # clean https://nixos.wiki/wiki/Cleaning_the_nix_store
 # also need to run as nix-collect-garbage -d non root: https://github.com/NixOS/nix/issues/8508
 alias clean="echo \"This will clean all generations, and optimise the store\" ; sudo sh -c 'nix-collect-garbage -d ; nix-store --optimise ; nix-store --gc ; echo \"Displaying stray roots:\" ; nix-store --gc --print-roots | egrep -v \"^(/nix/var|/run/current-system|/run/booted-system|/proc|{memory|{censored)\" ; flatpak uninstall --unused -y' ; nix-collect-garbage -d ; echo \"You should do a nixos-rebuild boot and a reboot to clean the boot generations now.\"";
+
+cleangit() {
+    find . -type d \( -name '.stversions' -prune \) -o \( -name '.git' -type d -execdir sh -c 'echo "Cleaning repository in $(pwd)"; git clean -fdx' \; \)
+}
+
+cleansyncthing(){
+    echo "Deleting sync conflict files in: $(pwd)"
+    find . -mount -mindepth 1 -type f \
+        -not \( -path "*/.Trash-1000/*" -or -path "*.local/share/Trash/*" \) \
+        -name "*.sync-conflict-*" -ls -delete
+}
+
 alias df="df -h";                                   # Human-readable sizes
 alias free="free -m";                               # Show sizes in MB
 alias zshreload="clear && zsh";
@@ -13,7 +25,7 @@ alias mount="mount|column -t";                      # Pretty mount
 alias speedtest="nix-shell -p python3 --command \"curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -\"";
 alias temperature="watch \"nix-shell -p lm_sensors --command sensors | grep temp1 | awk '{print $2}' | sed 's/+//'\"";
 alias ping="ping -c 5";                             # Control output of ping
-alias fastping="ping -c 100 -s 1";
+alias fastping="ping -c 100 -s 1";missu 
 alias ports="netstat -tulanp";                      # Show Open ports
 alias grep="grep --color=auto";
 alias egrep="egrep --color=auto";
@@ -89,7 +101,7 @@ upgrade-nixpkgs() {
     fi
 }
 space() {
-    watch "df -h $1 && df $1"
+    watch "df -h . && df ."
 }
 gacp() {
     local commitMsg="$1"
