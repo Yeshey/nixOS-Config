@@ -29,8 +29,12 @@
     fsType = "btrfs";
     options = [
       "subvol=@"
-      "compress=zstd"
-      "noatime"
+      "defaults"
+      "x-gvfs-show" # show in gnome disks
+      "noatime" # doesn't write access time to files
+      "compress-force=zstd:3" # compression level 5, good for slow drives. forces compression of every file even if fails to compress first segment of the file
+      # "ssd" # optimize for an ssd
+      # security "nosuid" "nodev" (https://serverfault.com/questions/547237/explanation-of-nodev-and-nosuid-in-fstab)
     ];
   };
 
@@ -80,39 +84,40 @@
     fsType = "auto";
     options = [
       "defaults"
-      "nosuid"
-      "nodev"
+      # "nosuid" "nodev" # security, probably should
       "nofail"
       "x-gvfs-show"
       "windows_names"
       "big_writes"
       "streams_interface=windows"
       "nls=utf8" 
-    ]; # x-systemd.device-timeout=3s
+    ];
   };
   fileSystems."/mnt/hdd-ntfs" = {
     device = "/dev/disk/by-label/hdd-ntfs";
     fsType = "auto";
     options = [
       "defaults"
-      "nosuid"
-      "nodev"
+      # "nosuid" "nodev" # security, probably should
       "nofail"
       "x-gvfs-show"
       "windows_names"
       "big_writes"
       "streams_interface=windows"
       "nls=utf8"
-    ]; # "uid=1000" "gid=1000" "dmask=027" "fmask=137" # defaults,nls=utf8,umask=000,dmask=027,fmask=137,uid=1000,gid=1000,windows_names [ "uid=1000" "gid=1000" "dmask=007" "fmask=117" "nofail"]; norecover,big_writes,streams_interface=windows,inherit
+    ];
   };
   fileSystems."/mnt/hdd-btrfs" = {
     device = "/dev/disk/by-label/hdd-btrfs";
     fsType = "btrfs";
     options = [
-      "nosuid"
-      "nodev"
-      "nofail"
-      "x-gvfs-show"
+      "defaults"
+      "nofail" # boots anyways if can't find the disk 
+      "x-gvfs-show" # show in gnome disks
+      "noatime" # doesn't write access time to files
+      "compress-force=zstd:3" # compression level 3, good for slow drives. forces compression of every file even if fails to compress first segment of the file
+      # "ssd" # optimize for an ssd
+      # security "nosuid" "nodev" (https://serverfault.com/questions/547237/explanation-of-nodev-and-nosuid-in-fstab)
     ];
   };
   fileSystems."/mnt/hdd-ext4" = {
