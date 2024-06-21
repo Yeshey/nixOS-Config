@@ -115,7 +115,7 @@
       "nofail" # boots anyways if can't find the disk 
       "x-gvfs-show" # show in gnome disks
       "noatime" # doesn't write access time to files
-      "compress-force=zstd:3" # compression level 3, good for slow drives. forces compression of every file even if fails to compress first segment of the file
+      "compress-force=zstd:5" # compression level 3, good for slow drives. forces compression of every file even if fails to compress first segment of the file
       # "ssd" # optimize for an ssd
       # security "nosuid" "nodev" (https://serverfault.com/questions/547237/explanation-of-nodev-and-nosuid-in-fstab)
     ];
