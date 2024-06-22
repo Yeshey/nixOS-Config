@@ -18,7 +18,7 @@ in
   options.myHome.plasma = with lib; {
     enable = mkOption {
       type = types.bool;
-      default = osConfig.mySystem.plasma.enable || services.desktopManager.plasma6.enable;
+      default = osConfig.mySystem.plasma.enable || osConfig.services.desktopManager.plasma6.enable;
       description = "personal KDE plasma configuration";
     };
   };
@@ -39,7 +39,7 @@ in
 
     # to fix emojis in notifications and windows-key + V, etc. https://groups.google.com/g/linux.debian.bugs.dist/c/YLgE4_-sCbQ/m/xjoPbdv2AAAJ
     # made an issue in nixpkgs (https://github.com/NixOS/nixpkgs/issues/321826)
-    home.file.".config/fontconfig/conf.d/56-kubuntu-noto.conf".source = ./56-kubuntu-noto.conf;
+    #home.file.".config/fontconfig/conf.d/56-kubuntu-noto.conf".source = ./56-kubuntu-noto.conf;
 
   };
 }
