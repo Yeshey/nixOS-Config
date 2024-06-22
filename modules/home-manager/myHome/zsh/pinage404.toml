@@ -48,11 +48,28 @@ disabled = false
 style = "#4169e1"
 format = "[](bg:$style fg:black)[🕙 $time](bg:$style fg:white)[](fg:$style)"
 
+#[time]
+#disabled = false
+#style = "#4169e1"
+#format = "[$time](bg:$style fg:white)"
+
+#[time]
+#disabled = false
+#style = "#939594"
+#format = "[$time]($style)"
+
 [status]
 disabled = false
 style = "#C00311"
+#symbol = "error"
 symbol = "\\(╯°□°）╯ ┻━┻ " # "\\(╯°□°）╯︵ ┻━┻ "
 format = "[](fg:black bg:$style)[$symbol$status](fg:black bg:$style)[ ](fg:$style)"
+
+#[status]
+#disabled = false
+#style = "red"
+#symbol = "\\(╯°□°）╯ ┻━┻ " # "\\(╯°□°）╯︵ ┻━┻ "
+#format = "\b[](bg:$style fg:#4169e1)[$symbol$status](bg:$style)[](fg:$style)"
 
 # VCS
 [git_branch]
