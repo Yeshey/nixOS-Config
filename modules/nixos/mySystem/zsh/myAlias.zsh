@@ -25,7 +25,7 @@ alias mount="mount|column -t";                      # Pretty mount
 alias speedtest="nix-shell -p python3 --command \"curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -\"";
 alias temperature="watch \"nix-shell -p lm_sensors --command sensors | grep temp1 | awk '{print $2}' | sed 's/+//'\"";
 alias ping="ping -c 5";                             # Control output of ping
-alias fastping="ping -c 100 -s 1";missu 
+alias fastping="ping -c 100 -s 1"; 
 alias ports="netstat -tulanp";                      # Show Open ports
 alias grep="grep --color=auto";
 alias egrep="egrep --color=auto";
