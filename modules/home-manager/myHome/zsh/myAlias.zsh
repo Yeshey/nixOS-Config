@@ -16,8 +16,8 @@ cleansyncthing(){
 alias df="df -h";                                   # Human-readable sizes
 alias free="free -m";                               # Show sizes in MB
 alias zshreload="clear && zsh";
-alias zshconfig="nano ~/.zshrc";nix-du -s=500MB > store.dot
-zgrviewer store.dot
+alias zshconfig="nano ~/.zshrc";
+
 #re-kde() { 
 #    nix-shell -p killall --command "kquitapp5 plasmashell || killall plasmashell ; kstart5 plasmashell"
 #};
