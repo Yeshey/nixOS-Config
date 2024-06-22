@@ -36,5 +36,10 @@ in
         #wallpaper = ... # conflicts with stylix
       };
     };
+
+    # to fix emojis in notifications and windows-key + V, etc. https://groups.google.com/g/linux.debian.bugs.dist/c/YLgE4_-sCbQ/m/xjoPbdv2AAAJ
+    # made an issue in nixpkgs (https://github.com/NixOS/nixpkgs/issues/321826)
+    home.file.".config/fontconfig/conf.d/56-kubuntu-noto.conf".source = ./56-kubuntu-noto.conf;
+
   };
 }
