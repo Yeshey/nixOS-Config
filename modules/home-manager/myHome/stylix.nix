@@ -38,6 +38,10 @@ in
 
   config = lib.mkIf (config.myHome.enable && cfg.enable) {
 
+    # to fix emojis in notifications and windows-key + V, etc. https://groups.google.com/g/linux.debian.bugs.dist/c/YLgE4_-sCbQ/m/xjoPbdv2AAAJ
+    # made an issue in stylix (https://github.com/danth/stylix/issues/448)
+    home.file.".config/fontconfig/conf.d/56-kubuntu-noto.conf".source = ./56-kubuntu-noto.conf;
+
     stylix = {
       enable = lib.mkOverride 1010 true;
       autoEnable = lib.mkOverride 1010 true;
