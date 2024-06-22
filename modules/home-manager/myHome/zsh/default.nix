@@ -22,6 +22,7 @@ in
     programs.starship = {
       enable = true;
       settings = pkgs.lib.importTOML ./${cfg.starshipTheme}.toml; # or ./starship2.toml
+      enableBashIntegration = lib.mkDefault false;
     };
     # Need these fonts for starship theme to work
     fonts.fontconfig.enable = true;
