@@ -1,0 +1,47 @@
+# starship configs: https://github.com/starship/starship/discussions/1107
+# https://starship.rs/config/
+# fredericrous
+# grabed symbols from https://starship.rs/presets/nerd-font
+
+# Comment out various sections
+#[character]
+#success_symbol = ""
+#vicmd_symbol = ""
+#error_symbol = ""
+
+# [cmd_duration]
+# min_time = 50
+# show_milliseconds = true
+# format = "[ $duration]($style)"
+
+# [jobs]
+# symbol = " "
+
+# [battery]
+# unknown_symbol = " "
+# empty_symbol = " "
+# discharging_symbol = " "
+# charging_symbol = " "
+# full_symbol = " "
+
+# [[battery.display]]
+# threshold = 10
+# style = "bold fg:red"
+
+# [[battery.display]]
+# threshold = 30
+# style = "fg:#ff8800"
+
+# [[battery.display]]
+# threshold = 50
+# style = "fg:yellow"
+
+# [memory_usage]
+# disabled = false
+# symbol = " "
+
+# [status]
+# disabled = true
+# style = "#C00311"
+# symbol = "\\(╯°□°）╯ ┻━┻ "
+# format = "[](fg:black bg:$style)[$symbol$status](fg:black bg:$style)[ ](fg:$style)"

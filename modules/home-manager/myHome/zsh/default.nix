@@ -13,10 +13,10 @@ in
     enable = mkEnableOption "zsh";
     starshipTheme = mkOption {
       type = types.str;
-      default = "pinage404";
+      default = "default";
     };
   };
-
+exi
   config = lib.mkIf (config.myHome.enable && cfg.enable) {
     # theme from https://gitlab.com/pinage404/dotfiles
     programs.starship = {
