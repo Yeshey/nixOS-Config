@@ -50,9 +50,9 @@ format = "[](bg:$style fg:black)[🕙 $time](bg:$style fg:white)[](fg:$sty
 
 [status]
 disabled = false
-style = "red"
+style = "#C00311"
 symbol = "\\(╯°□°）╯ ┻━┻ " # "\\(╯°□°）╯︵ ┻━┻ "
-format = "\b[](bg:$style fg:#4169e1)[$symbol$status](bg:$style)[](fg:$style)"
+format = "[](fg:black bg:$style)[$symbol$status](fg:black bg:$style)[ ](fg:$style)"
 
 # VCS
 [git_branch]
