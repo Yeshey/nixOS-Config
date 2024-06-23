@@ -174,37 +174,37 @@ in
           # 2026
           ${ignorePattern "2026" "
             //*
-            //Photos&Videos
+            //(?i)Photos&Videos
           "}
 
           # 2025
           ${ignorePattern "2025" "
             //*
-            //Photos&Videos
+            //(?i)Photos&Videos
           "}
 
           # 2024
           ${ignorePattern "2024" "
             //*
-            //Photos&Videos
+            //(?i)Photos&Videos
           "}
 
           # A70Camera
           ${ignorePattern "A70Camera" "
             //*
-            //Photos&Videos
+            //(?i)Photos&Videos
           "}
 
           # Allsync
           ${ignorePattern "Allsync" "
             //*
-            //watch
+            //(?i)watch
           "}
 
           # Music
           ${ignorePattern "Music" "
             //*
-            AllMusic
+            (?i)AllMusic
           "}
 
           # bash&zshHistory
@@ -230,8 +230,8 @@ in
 
           # Mindustry
           ${ignorePattern "Mindustry" "
-            settings.bin 
-            settings.log
+            (?i)settings.bin 
+            (?i)settings.log
 
             // Ignore everything else in Mindustry folder
             // *
@@ -240,32 +240,30 @@ in
       };
 
     # A systemd timer to delete all the sync-conflict files
-    /*
-    systemd.timers."delete-sync-conflicts" = {
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        Persistent = true; # If missed, run on boot (https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
-        OnCalendar = "*-*-1,4,7,10,13,16,19,22,25,28"; # Every three days approximatley
-        Unit = "delete-sync-conflicts.service";
-      };
-    };
-    systemd.services."delete-sync-conflicts" = {
-      script = ''
-        # Ignore What's inside Trash etc...
-          if [ -d "/mnt" ]; then
-              ${pkgs.findutils}/bin/find /mnt -mount -mindepth 1 -type f -not \( -path '*/.Trash-1000/*' -or -path '*.local/share/Trash/*' \) -name '*.sync-conflict-*' -ls -delete
-          fi
+    # systemd.timers."delete-sync-conflicts" = {
+    #   wantedBy = [ "timers.target" ];
+    #   timerConfig = {
+    #     Persistent = true; # If missed, run on boot (https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
+    #     OnCalendar = "*-*-1,4,7,10,13,16,19,22,25,28"; # Every three days approximatley
+    #     Unit = "delete-sync-conflicts.service";
+    #   };
+    # };
+    # systemd.services."delete-sync-conflicts" = {
+    #   script = ''
+    #     # Ignore What's inside Trash etc...
+    #       if [ -d "/mnt" ]; then
+    #           ${pkgs.findutils}/bin/find /mnt -mount -mindepth 1 -type f -not \( -path '*/.Trash-1000/*' -or -path '*.local/share/Trash/*' \) -name '*.sync-conflict-*' -ls -delete
+    #       fi
 
-          if [ -d "/home" ]; then
-              ${pkgs.findutils}/bin/find /home -mount -mindepth 1 -type f -not \( -path '*/.Trash-1000/*' -or -path '*.local/share/Trash/*' \) -name '*.sync-conflict-*' -ls -delete
-          fi
-      '';
-      serviceConfig = {
-        Type = "oneshot";
-        User = "${config.mySystem.user}";
-      };
-    };
-    */
+    #       if [ -d "/home" ]; then
+    #           ${pkgs.findutils}/bin/find /home -mount -mindepth 1 -type f -not \( -path '*/.Trash-1000/*' -or -path '*.local/share/Trash/*' \) -name '*.sync-conflict-*' -ls -delete
+    #       fi
+    #   '';
+    #   serviceConfig = {
+    #     Type = "oneshot";
+    #     User = "${config.mySystem.user}";
+    #   };
+    # };
 
     # makeDesktopItem https://discourse.nixos.org/t/proper-icon-when-using-makedesktopitem/32026
     # Syncthing desktop shortcut
