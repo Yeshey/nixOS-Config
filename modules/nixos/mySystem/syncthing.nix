@@ -240,6 +240,7 @@ in
       };
 
     # A systemd timer to delete all the sync-conflict files
+    /*
     systemd.timers."delete-sync-conflicts" = {
       wantedBy = [ "timers.target" ];
       timerConfig = {
@@ -264,6 +265,7 @@ in
         User = "${config.mySystem.user}";
       };
     };
+    */
 
     # makeDesktopItem https://discourse.nixos.org/t/proper-icon-when-using-makedesktopitem/32026
     # Syncthing desktop shortcut
