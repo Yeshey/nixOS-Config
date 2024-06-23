@@ -148,10 +148,8 @@ in
     #        mkdir -p ${path}
         #echo "${patterns}" > ${path}/.stignore
       ignorePattern = path: patterns: ''
-
-
-          ${pkgs.sudo}/bin/sudo -u yeshey ${pkgs.bash}/bin/bash -c 'mkdir -p "${folders.${folderName}.path}"'
-          ${pkgs.sudo}/bin/sudo -u yeshey ${pkgs.bash}/bin/bash -c "echo '${patterns}' > '${folders.${folderName}.path}/.stignore'"
+        mkdir -p ${path}
+        echo "${patterns}" > ${path}/.stignore
       '';
     in
     {
