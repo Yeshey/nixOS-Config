@@ -59,13 +59,12 @@ in
       starshipTheme = "fredericrous"; # fredericrous # pinage404
     };
     direnv.enable = true;
-    /*
     stylix = {
       # https://www.youtube.com/watch?v=ljHkWgBaQWU
       enable = true;
       base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-medium.yaml"; #pop.yaml
       wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; # johnKearneyCityscapePoster #nierAutomataWallpaper
-    }; */
+    };
     onedriver = {
       enable = true;
       onedriverFolder = "/home/yeshey/OneDriver";
