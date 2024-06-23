@@ -143,11 +143,15 @@ in
   virtualisation.docker.storageDriver = "btrfs"; # for docker
 
   # Ignore Patterns Syncthing # Ignore Patterns Syncthing # You need to check that this doesnt override every other activation script, make lib.append? - if it was lib.mkFOrce it would override, like this it appends
-  system.activationScripts =
+  system.userActivationScripts =
     let
+    #        mkdir -p ${path}
+        #echo "${patterns}" > ${path}/.stignore
       ignorePattern = path: patterns: ''
-        mkdir -p ${path}
-        echo "${patterns}" > ${path}/.stignore
+
+
+          ${pkgs.sudo}/bin/sudo -u yeshey ${pkgs.bash}/bin/bash -c 'mkdir -p "${folders.${folderName}.path}"'
+          ${pkgs.sudo}/bin/sudo -u yeshey ${pkgs.bash}/bin/bash -c "echo '${patterns}' > '${folders.${folderName}.path}/.stignore'"
       '';
     in
     {

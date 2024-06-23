@@ -106,6 +106,6 @@ in
       };
     };
 
-    environment.systemPackages = with pkgs; [ borgbackup pika-backup ];
+    environment.systemPackages = with pkgs; [ borgbackup pika-backup ]; # vorta
   };
 }
