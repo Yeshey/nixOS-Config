@@ -162,7 +162,7 @@ in
     };
 
     # Ignore Patterns
-    system.activationScripts =
+    system.userActivationScripts =
       let
         ignorePattern = folderName: patterns: ''
           mkdir -p ${folders.${folderName}.path}
