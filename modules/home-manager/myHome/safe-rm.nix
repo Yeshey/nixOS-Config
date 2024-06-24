@@ -49,6 +49,7 @@ in
 /usr/lib
 /var
 /mnt
+/persist
       '';
 
   };

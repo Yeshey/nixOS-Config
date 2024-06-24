@@ -49,7 +49,7 @@ in
 /usr/lib
 /var
 /mnt
-/mnt/DataDisk/Downloads/cheche/
+/persist
         " > "/etc/safe-rm.conf"
       '';
     };
