@@ -284,7 +284,8 @@ in
                           --update-input hyprland-contrib \
                           --update-input nixos-nvidia-vgpu \
                           --update-input deploy-rs \
-                          --update-input agenix
+                          --update-input agenix \
+                          /home/yeshey/.setup/
 
             ${nixos-rebuild} ${operation} --flake ${flake} || 
               (
