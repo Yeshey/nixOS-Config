@@ -253,10 +253,13 @@ in
         in 
 #         lib.mkForce # makes it override the script, instead of appending
         ''
+          FLAG_FILE="/etc/nixos-reboot-upgrade.flag"
+
           if ! systemctl list-jobs | egrep -q 'poweroff.target.*start'; then
 
             echo "will not poweroff, doing something else, not upgrading..."
             # but then I should activate the timer again right? otherwise, it will only get activated next week...
+            touch $FLAG_FILE
 
           else
             echo "Is powering off, upgrading..."
@@ -363,6 +366,26 @@ in
         in "${pkgs.sudo}/bin/sudo ${myScript}/bin/autoUpgradeScript.sh"; */
       };
       #wantedBy = [ "multi-user.target" ];
+    };
+    # if it rebooted isntead of powering off, it skipped the upgrade, should upgrade now. Check the /etc/nixos-reboot-upgrade.flag
+    systemd.services.nixos-reboot-upgrade-check = {
+      description = "Check for upgrade flag file on boot";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      script = ''
+        FLAG_FILE="/etc/nixos-reboot-upgrade.flag"
+
+        if [ -f "$FLAG_FILE" ]; then
+          echo "$FLAG_FILE present, activating my-nixos-upgrade.service for upgrade on shutdown..."
+          systemctl start my-nixos-upgrade.service
+          echo "Removing flag $FLAG_FILE"
+          rm "$FLAG_FILE"
+        fi
+      '';
+
+      serviceConfig = {
+        Type = "oneshot";
+      };
     };
 
   };
