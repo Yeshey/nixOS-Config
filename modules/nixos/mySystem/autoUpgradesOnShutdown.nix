@@ -9,6 +9,71 @@
 
 let
   cfg = config.mySystem.autoUpgradesOnShutdown;
+  notify-send-all = pkgs.writeShellScriptBin "notify-send-all" ''
+# https://github.com/tonywalker1/notify-send-all/tree/main
+# MIT License
+#
+# Copyright (c) 2022  Tony Walker
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
+#
+
+display_help() {
+    echo "Send a notification to all logged-in GUI users."
+    echo ""
+    echo "Usage: notify-send-all [options] <summary> [body]"
+    echo ""
+    echo "Options:"
+    echo "  -? | --help    This text."
+    echo ""
+    echo "All options from notify-send are supported, see below..."
+    echo
+    ${pkgs.libnotify}/bin/notify-send --help
+    exit 1
+}
+
+while [ $# -gt 0 ]; do
+    case $1 in
+        -h | --help)
+            display_help
+            exit 1
+            ;;
+        *)
+            break
+            ;;
+    esac
+done
+
+for SOME_USER in /run/user/*; do
+    SOME_USER=$(basename "$SOME_USER")
+    if [ "$SOME_USER" = 0 ]; then
+#        echo "* Skipping root user."
+        :
+    else
+        ${pkgs.sudo}/bin/sudo -u $(id -u -n "$SOME_USER") \
+            DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/"$SOME_USER"/bus ${pkgs.libnotify}/bin/notify-send "$@"
+    fi
+done
+
+exit 0
+  '';
 in
 {
   options.mySystem.autoUpgradesOnShutdown = {
@@ -41,6 +106,11 @@ in
   config = let 
 
   in lib.mkIf (config.mySystem.enable && cfg.enable) {
+
+    environment.systemPackages = with pkgs; [
+      libnotify
+      notify-send-all
+    ];
 
 /*
     systemd.timers."test" = {
@@ -242,6 +312,9 @@ in
         config.programs.ssh.package
       ];
 
+      script = ''
+        ${notify-send-all}/bin/notify-send-all -u critical "Will upgrade on shutdown..."
+      '';
       preStop = 
         let
           nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
@@ -356,18 +429,13 @@ in
         #User = "yeshey";
         Type = "oneshot";
         RemainAfterExit="yes"; # true?
-        ExecStart="${pkgs.coreutils}/bin/true";
+        #ExecStart="${pkgs.coreutils}/bin/true";
         TimeoutSec=72000; # 20 hours max, so systemd doesnt kill the process so early
         # run as a user with sudo https://stackoverflow.com/questions/36959877/using-sudo-with-execstart-systemd
-        /*ExecStop = let # https://stackoverflow.com/questions/36959877/using-sudo-with-execstart-systemd
-          jobScripts = makeJobScript "my-nixos-upgrade-pre-stop" preStop;
-        in lib.mkForce "${pkgs.sudo}/bin/sudo" + (toString jobScripts);*/
-        /*ExecStop = let
-          myScript = pkgs.writeShellScriptBin "autoUpgradeScript.sh" autoUpgradeScript;
-        in "${pkgs.sudo}/bin/sudo ${myScript}/bin/autoUpgradeScript.sh"; */
       };
       #wantedBy = [ "multi-user.target" ];
     };
+    
     # if it rebooted isntead of powering off, it skipped the upgrade, should upgrade now. Check the /etc/nixos-reboot-upgrade.flag
     systemd.services.nixos-reboot-upgrade-check = {
       description = "Check for upgrade flag file on boot";
