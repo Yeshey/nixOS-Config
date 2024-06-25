@@ -267,7 +267,7 @@ in
             
             echo "grabbing latest version of repo"   
             #${pkgs.git}/bin/git config --global --add safe.directory "${cfg.location}"        
-            ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" pull'
+            ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" pull origin main'
             #${pkgs.git}/bin/git -C "${cfg.location}" pull
             echo "Trying to upgrade all flake inputs"
             # nix flake update ${cfg.location}
@@ -357,7 +357,7 @@ in
         Type = "oneshot";
         RemainAfterExit="yes"; # true?
         ExecStart="${pkgs.coreutils}/bin/true";
-        TimeoutSec=28800; # 8 hours max, so systemd doesnt killthe process so early
+        TimeoutSec=72000; # 20 hours max, so systemd doesnt kill the process so early
         # run as a user with sudo https://stackoverflow.com/questions/36959877/using-sudo-with-execstart-systemd
         /*ExecStop = let # https://stackoverflow.com/questions/36959877/using-sudo-with-execstart-systemd
           jobScripts = makeJobScript "my-nixos-upgrade-pre-stop" preStop;
