@@ -257,8 +257,8 @@ in
 
           if ! systemctl list-jobs | egrep -q 'poweroff.target.*start'; then
 
-            echo "will not poweroff, doing something else, not upgrading..."
-            # but then I should activate the timer again right? otherwise, it will only get activated next week...
+            echo "will not poweroff, doing something else, making a flag to upgrade after reboot."
+            # will make a flag and the service nixos-reboot-upgrade-check will read it and activate me again
             touch $FLAG_FILE
 
           else
