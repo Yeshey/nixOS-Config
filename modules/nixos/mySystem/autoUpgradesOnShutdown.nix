@@ -340,7 +340,7 @@ in
             
             echo "grabbing latest version of repo"   
             #${pkgs.git}/bin/git config --global --add safe.directory "${cfg.location}"        
-            ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" pull'
+            ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" pull origin main' || ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" pull origin main' || echo "Upgrading without pulling latest version of repo..."
             #${pkgs.git}/bin/git -C "${cfg.location}" pull
             echo "Trying to upgrade all flake inputs"
             # nix flake update ${cfg.location}
