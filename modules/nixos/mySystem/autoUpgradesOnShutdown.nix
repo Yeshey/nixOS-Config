@@ -339,10 +339,8 @@ in
             # export HOME=/home/yeshey
             
             echo "grabbing latest version of repo"   
-            #${pkgs.git}/bin/git config --global --add safe.directory "${cfg.location}"        
             ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" pull origin main' || ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" pull origin main' || echo "Upgrading without pulling latest version of repo..."
-            #${pkgs.git}/bin/git -C "${cfg.location}" pull
-            echo "Trying to upgrade all flake inputs"
+            echo "Trying to upgrade (almost) all flake inputs"
             # nix flake update ${cfg.location}
             # I cant update --update-input nixos-hardware cuz it breaks a lot the surface
             nix flake lock --update-input nixpkgs \
@@ -391,10 +389,8 @@ in
               )
             ${pkgs.git}/bin/git -C "${cfg.location}" add flake.lock &&
               (
-                #${pkgs.git}/bin/git -C "${cfg.location}" commit -m "Auto Upgrade flake.lock"
                 ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" commit -m "Auto Upgrade flake.lock"' # changes to user yeshey to push, which is not good
                 ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" push' # changes to user yeshey to push, which is not good
-                #${pkgs.git}/bin/git -C "${cfg.location}" push
               ) || echo "no commit executed"
 
             chown -R yeshey:users "${cfg.location}"
