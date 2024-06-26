@@ -328,6 +328,14 @@ in
         ''
           FLAG_FILE="/etc/nixos-reboot-upgrade.flag"
 
+          # Check if swap is active and show the total and used swap space
+          if ${pkgs.util-linux}/bin/swapon --show | grep -q 'file\|partition'; then
+            echo "Swap is active."
+            ${pkgs.toybox}/bin/free -h | grep -i swap
+          else
+            echo "No swap is active."
+          fi
+
           if ! systemctl list-jobs | egrep -q 'poweroff.target.*start'; then
 
             echo "will not poweroff, doing something else, making a flag to upgrade after reboot."
@@ -421,21 +429,27 @@ in
 
       # https://www.reddit.com/r/systemd/comments/rbde3o/running_a_script_on_shutdown_that_needs_wifi/
       # With network manager, you will always need to set "let all users connect to this network", so you still have internet after logging out
-      wants = [ "network-online.target" "nss-lookup.target" ];
+      wants = [ "network-online.target" "nss-lookup.target" ]; # if one of these fails to start, my service will start anyways
       after = [ "network-online.target" "nss-lookup.target" ]; # will run before network turns of, bc in shutdown order is reversed
-      requires = [ "network-online.target" "nss-lookup.target" ];
+      requires = [ "network-online.target" "nss-lookup.target" ]; # if one of these fails to start, my service will not start
 
       serviceConfig = rec {
         #User = "yeshey";
         Type = "oneshot";
         RemainAfterExit="yes"; # true?
         #ExecStart="${pkgs.coreutils}/bin/true";
-        TimeoutSec=72000; # 20 hours max, so systemd doesnt kill the process so early
+        TimeoutStopSec="10h"; # 10 hours max, so systemd doesnt kill the process so early
         # run as a user with sudo https://stackoverflow.com/questions/36959877/using-sudo-with-execstart-systemd
       };
       #wantedBy = [ "multi-user.target" ];
     };
-    
+    # need to make sure poweroff.target doesn't kill it too.
+    systemd.targets."poweroff" = {
+      unitConfig = { 
+        "JobTimeoutSec" = 36000; #"10h";
+      };
+    };
+
     # if it rebooted isntead of powering off, it skipped the upgrade, should upgrade now. Check the /etc/nixos-reboot-upgrade.flag
     systemd.services.nixos-reboot-upgrade-check = {
       description = "Check for upgrade flag file on boot";
