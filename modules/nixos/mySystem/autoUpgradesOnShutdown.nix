@@ -328,14 +328,6 @@ in
         ''
           FLAG_FILE="/etc/nixos-reboot-upgrade.flag"
 
-          # Check if swap is active and show the total and used swap space
-          if ${pkgs.util-linux}/bin/swapon --show | grep -q 'file\|partition'; then
-            echo "Swap is active."
-            ${pkgs.toybox}/bin/free -h | grep -i swap
-          else
-            echo "No swap is active."
-          fi
-
           if ! systemctl list-jobs | egrep -q 'poweroff.target.*start'; then
 
             echo "will not poweroff, doing something else, making a flag to upgrade after reboot."
