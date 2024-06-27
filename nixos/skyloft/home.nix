@@ -11,7 +11,6 @@ let
   dataStoragePath = "/home/yeshey"; # TODO can u use ~?
   shortenedPath = lib.strings.removePrefix "~/" dataStoragePath; # TODO what???
 in
-# TODO how to inherit datastoragepath from default.nix? inherit dataStoragePath;?
 {
   imports = [ ];
 
@@ -25,6 +24,7 @@ in
     ssh.enable = true;
     homeApps = {
       enable = true;
+      general.enable = false;
       cli = {
         enable = true;
         general.enable = true;
