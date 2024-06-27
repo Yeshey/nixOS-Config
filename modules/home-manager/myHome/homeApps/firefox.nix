@@ -18,13 +18,10 @@ in
       default = osConfig.services.i2p.enable || osConfig.mySystem.i2p.enable;
       description = "weather to make a special firefox profile for i2p";
     };
-    #mkEnableOption "i2pFirefoxProfile";
   };
 
   config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
 
-    # TODO can you fix this?
-    # https://discourse.nixos.org/t/help-setting-up-firefox-with-home-manager/23333
     programs.firefox = {
       enable = true;
       package = pkgs.wrapFirefox pkgs.firefox-unwrapped {

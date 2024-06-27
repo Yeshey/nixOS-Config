@@ -85,7 +85,7 @@
     options = [
       "uid=1000" "gid=1000" "rw" "exec" "umask=000" # "user"
       # gaming options as per valve: https://github.com/ValveSoftware/Proton/wiki/Using-a-NTFS-disk-with-Linux-and-Windows
-      "ignore_case" # only lowntfs-3g 
+      # "ignore_case" # prevents you from making any file or directory with any upper case letter... only lowntfs-3g might help some games
       "x-gvfs-show"
       #"windows_names" # makes games not work
       "nofail"
@@ -106,7 +106,7 @@
     options = [
       "uid=1000" "gid=1000" "rw" "exec" "umask=000" # "user"
       # gaming options as per valve: https://github.com/ValveSoftware/Proton/wiki/Using-a-NTFS-disk-with-Linux-and-Windows
-      #"ignore_case" # only lowntfs-3g, breaks syncthing,might help some games
+      # "ignore_case" # prevents you from making any file or directory with any upper case letter... only lowntfs-3g might help some games
       "x-gvfs-show"
       #"windows_names" # makes games not work
       "nofail"

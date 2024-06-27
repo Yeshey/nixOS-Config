@@ -161,7 +161,7 @@ in
       };
     };
 
-    # Ignore Patterns
+    # Ignore Patterns, userActivationScripts isntead of activationScripts to have user premissions
     system.userActivationScripts =
       let
         ignorePattern = folderName: patterns: ''
