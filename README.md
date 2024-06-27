@@ -1,9 +1,9 @@
 # nix & nixOS Configuration / Linux Config
-The spiciest config on the market 😳🥵💦
+The spiciest config on the market [😳🥵💦](https://matias.me/nsfw/)
 
 My reproducible nix Configuration & other configuration files.  
-More Documentation for myself about nixOS in my [TechNotes Repo](https://github.com/Yeshey/TechNotes).  
-It has my personal configuration for two devices, my Lenovo Legion laptop and my MS Surface Pro 7.
+More Documentation (for myself) about nixOS in my [TechNotes Repo](https://github.com/Yeshey/TechNotes).  
+It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my MS Surface Pro 7(`kakariko`) and my Oracle `aarch64` server(`skyloft`).
 
 ## Installing on a new computer
 
@@ -13,64 +13,23 @@ It has my personal configuration for two devices, my Lenovo Legion laptop and my
 
 ## Credits
 
-- Initially Inspiered by [Matthias Benaets](https://github.com/MatthiasBenaets) [configuration](https://github.com/MatthiasBenaets/nixos-config) and his [video](https://www.youtube.com/watch?v=AGVXJ-TIv3Y);
+- Initially Inspiered by [Matthias Benaets'](https://github.com/MatthiasBenaets) [configuration](https://github.com/MatthiasBenaets/nixos-config) and his [video](https://www.youtube.com/watch?v=AGVXJ-TIv3Y);
 - Derived from [LongerHV's](https://github.com/LongerHV) [nixos-configuration](https://github.com/LongerHV/nixos-configuration/tree/master);
 - Based on [Misterio77's](https://github.com/Misterio77) [nix-starter-configs](https://github.com/Misterio77/nix-starter-configs);
 - Inspiered by [pinage404](https://gitlab.com/pinage404) [dotfiles](https://gitlab.com/pinage404/dotfiles)
 
-## Notes
+## Highlights:
 
-- Check the [languages-frameworks](https://github.com/NixOS/nixpkgs/tree/master/doc/languages-frameworks) if you ever want to do a project with nix in one of these programming languages
-
-## To-Do
-
-- change the files you create with home manager to create with this:
-  ```
-    systemd.tmpfiles.rules = [
-      "d /var/spool/samba 1777 root root -"
-    ];
-  ```
-  When appropriate. For example for syncthing. (seen this is possible in [this answer](https://discourse.nixos.org/t/nixos-configuration-for-samba/17079))
-
-- Adding support for one virtual screen, so you can use another computer as a second screen with `deskreen`
-
-- Make system.autoUpgrade not make PC unusable(right now it grabs /etc/nixos/ configuration):
-  - You made a comment [here](https://github.com/NixOS/nixpkgs/issues/77971) with your alterations to systemd service, once you know they work, give an update there
-  - Fix the fail case in the autoUpgrade service, so it remocves the last version of the flake.lock if it didn't finish.
-
-- Make it so the surface doesn't die when you suspend it, or find an alternative to suspending it.
-
-- figure out how to add functions aliases to zsh
-  - Make it so upgrade and update tries three times before giving up?
-
-## Notes
-
-[This answer:](https://discourse.nixos.org/t/nixos-configuration-for-samba/17079) 
-- For creating folders, there is [systemd.tmpfiles](https://search.nixos.org/options?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=systemd.tmpfiles). Despite the implications of its name, you can use it to automatically ensure folders exist, without setting up any clean up. Looks something like this in my config:
-
-  ```nix
-  systemd.tmpfiles.rules = [
-    "d /mnt/media/Movies 0770 media media - -"
-  ];
-  ```
-
-- If you want to have a systemd service that can change files in your system, here is an example, weites to /my-ip file your local IP:
-  ```nix
-    systemd.services.my-awesome-service = {
-      description = "writes a file to /my-ip";
-      serviceConfig.PassEnvironment = "DISPLAY";
-      script = ''
-        ${pkgs.busybox}/bin/ip a | grep "scope" | grep -Po '(?<=inet )[\d.]+' | head -n 2 | tail -n 1 > /my-ip;
-        echo "success!"
-      '';
-      wantedBy = [ "multi-user.target" ]; # starts after login
-    };
-  ```
-
-More generally, you can do imperative things when activating a new NixOS configuration using [system.activationScripts](https://search.nixos.org/options?channel=unstable&from=0&size=50&sort=relevance&type=packages&query=system.activationScripts). Of course, the script you run should be idempotent and such changes would not be able to be rolled-back by standard NixOS mechanisms - imperative is imperative.
-
-## Issues
-
-- nixOS LBRY not launching
-- When the command is not found, started getting this error message instead of helpful suggestions: `nixOS DBI connect unable to open database file` and don't know how that happened.
-  - refer to: https://discourse.nixos.org/t/command-not-found-unable-to-open-database/3807/5 to fix it. 
+- **Structure** 
+    - Separation of home manager and nixOS system configuration through a myHome and mySystem modules so it could also be deployed on a home-manager only system the same way [LongerHV's](https://github.com/LongerHV) [nixos-configuration](https://github.com/LongerHV/nixos-configuration/tree/master) is set up;
+    - Unstable packages available at `pkgs.unstable.<package>`, [NUR](https://github.com/nix-community/NUR) packages available at `pkgs.nur.<package>` using overlays. Check [Misterio77's](https://github.com/Misterio77) `standard` [nix-starter-configs](https://github.com/Misterio77/nix-starter-configs) for getting started with this structure.
+- **Auto Upgrades On Shutdown** - Setting auto upgrades on my desktop PC only on shutdown once every week: [autoUpgradesOnShutdown.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/autoUpgradesOnShutdown.nix);
+- **Syncthing** - Declaratively set syncthing, including ignore patterns with `userActivationScripts` (TODO: set syncthing as a home manager service): [syncthing.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/syncthing.nix);
+- **LUKS on LVM with LVM cache** - cache on an SSD for a partition on a microSD on `kakariko`: [boot.nix](https://github.com/Yeshey/nixOS-Config/blob/main/nixos/kakariko/boot.nix), my guide on doing this in [my TechNotes](https://github.com/Yeshey/TechNotes/blob/main/guides/LUKS%20on%20LVM%20with%20cache%20on%20nixOS.md);
+- **pci-passthrough** - for passing my `NVIDIA GeForce RTX 2060 Mobile` to a virt-manager VM and using my intel processor for the host: [pci-passthrough.nix](https://github.com/Yeshey/nixOS-Config/blob/main/nixos/hyrulecastle/pci-passthrough.nix), but better yet:
+- **VGPU** - Unlocked VGPU functionality on my consumer nvidia card: [vgpu.nix](https://github.com/Yeshey/nixOS-Config/blob/main/nixos/hyrulecastle/vgpu.nix). Using my module, more details there: [nixos-nvidia-vgpu](https://github.com/Yeshey/nixos-nvidia-vgpu);
+- **i2p firefox profile** - Home manager auto creates a firefox profile able to access the hidden i2p net when `services.i2p.enable` is enabled on the host, and makes a `.desktop` file for easy access, `i2pFirefoxProfile` option: [firefox.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/homeApps/firefox.nix);
+- **Safe-rm** - I nuked my PC once by running `sudo rm -r /*` isntead of `sudo -r rm ./*`, so i decided to change all my `rm` calls to `safe-rm` calls through changing the binary and adding aliases, both in `myHome`: [safe-rm.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/safe-rm.nix); and in `mySystem`: [safe-rm.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/safe-rm.nix);
+- **OneDriver** - home-manager module for [onedriver](https://github.com/jstaf/onedriver) that auto clears cache every 3 days, but Microsoft(🫠) [changed the user storage limits](https://blog.shi.com/next-generation-infrastructure/cloud/are-you-prepared-for-the-end-of-office-365-a1-plus-and-unlimited-cloud-storage/#:~:text=All%20school%20tenants,tenant%E2%80%99s%20100TB%20pool.), so now we only have 100GB per user instead of 1TB (for my uni account), so it's not as worth anymore 🥲, they were just reeling companies in before pulling the rug out, of course: [onedriver.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/onedriver.nix). Also has a agenix module that adds the json with the credentials to the right place, and takes into account the auto cleanups: [onedriver.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/agenix/onedriver.nix);
+- **Substituters** - Uses a bunch of substituters for extra caches to hopefully make rebuilds faster: [default.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/default.nix). Also in my module to activate when home manager is used standalone (untested): [non-nixos.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/non-nixos.nix);
+- **Agenix** - Using [agenix](https://github.com/ryantm/agenix) both at system (`mySystem` - [default.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/agenix/default.nix)):  and at user (`myHome` - [default.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/agenix/default.nix)) levels, they grab secrets from `/secrets`.
