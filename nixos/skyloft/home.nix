@@ -24,7 +24,7 @@ in
     gnome.enable = false;
     ssh.enable = true;
     homeApps = {
-      enable = false;
+      enable = true;
       cli = {
         enable = true;
         general.enable = true;
