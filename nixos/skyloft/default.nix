@@ -120,6 +120,10 @@
   services.xrdp.enable = true;
   services.xrdp.defaultWindowManager = "startplasma-x11";
   networking.firewall.allowedTCPPorts = [ 3389 ];
+  services.xrdp.extraConfDirCommands = ''
+    substituteInPlace $out/sesman.ini \
+      --replace param=.xorgxrdp.%s.log param=/tmp/xorgxrdp.%s.log
+  ''; # was taking 40GB in the server this file https://github.com/neutrinolabs/xrdp/issues/1845
 
   environment.systemPackages = with pkgs; [
 

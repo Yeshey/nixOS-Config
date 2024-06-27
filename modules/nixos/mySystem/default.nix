@@ -79,7 +79,7 @@ in
     dataStoragePath = mkOption {
       type = types.str;
       description = "Storage drive or pathosConfig.mySystem.dataStoragePath to put everything";
-      default = "/home/${config.mySystem.user}/Documents";
+      default = "/home/${config.mySystem.user}";
     };
     host = mkOption {
       type = types.str;
