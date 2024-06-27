@@ -106,7 +106,6 @@
   nixpkgs.config = {
     allowUnsupportedSystem = true;
     #    allowUnfree = true;
-    # TODO remove this below 
     #permittedInsecurePackages = [ # for package openvscode-server
     #  "nodejs-16.20.2"
     #];
@@ -132,16 +131,6 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-
-  #powerManagement = { # TODO ???
-  #  cpuFreqGovernor = "ondemand";
-  #  cpufreq.min = 800000;
-  #  cpufreq.max = 4700000;
-  #};
-
-  #networking = { # TODO remove?
-  #  hostName = "skyloft"; # TODO make into variable
-  #};
 
   system.stateVersion = "22.05";
 }
