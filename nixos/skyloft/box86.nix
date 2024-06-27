@@ -23,7 +23,7 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    boot.binfmt.emulatedSystems = [ "armv7l-linux" "x86_64-linux" ];
+    # boot.binfmt.emulatedSystems = [ "armv7l-linux" "x86_64-linux" ];
     # boot.binfmt.registrations.armv7l-linux.preserveArgvZero = true;
 
     #nix.settings.extra-platforms = "armv7l-linux";
