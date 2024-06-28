@@ -205,6 +205,7 @@ in
           ${ignorePattern "Music" "
             //*
             (?i)AllMusic
+            (?i)AllMusic-mp3
           "}
 
           # bash&zshHistory

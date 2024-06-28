@@ -31,6 +31,7 @@
       "subvol=@"
       "defaults"
       "x-gvfs-show" # show in gnome disks
+      "ssd" # optimize for ssd
       #"noatime" # doesn't write access time to files
       "compress-force=zstd:3" # compression level 5, good for slow drives. forces compression of every file even if fails to compress first segment of the file
       # "ssd" # optimize for an ssd
