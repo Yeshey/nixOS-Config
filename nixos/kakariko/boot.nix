@@ -55,7 +55,7 @@ in
   boot.initrd.luks.devices.cryptswap = {
     device = "/dev/VG/cryptswap";
   };
-
+/*
   fileSystems."/" =
     { #device = "/dev/disk/by-uuid/6e60cc35-882f-45bf-8402-719a14a74a74";
       device = "/dev/disk/by-label/nixos";
@@ -66,7 +66,29 @@ in
         # "ssd" # optimize for an ssd
         # security "nosuid" "nodev" (https://serverfault.com/questions/547237/explanation-of-nodev-and-nosuid-in-fstab)
       ];
+    }; */
+
+  fileSystems."/" =
+    { #device = "/dev/disk/by-uuid/6fcc0524-bd74-44b9-ac07-c91d2ffe6121";
+      device = "/dev/disk/by-label/nixos";
+      fsType = "btrfs";
+      options = [ "subvol=root" "compress-force=zstd:3" ];
     };
+
+  fileSystems."/nix" =
+    { #device = "/dev/disk/by-uuid/6fcc0524-bd74-44b9-ac07-c91d2ffe6121";
+      device = "/dev/disk/by-label/nixos";
+      fsType = "btrfs";
+      options = [ "subvol=nix" "compress-force=zstd:3" ];
+    };
+
+  fileSystems."/persist" =
+    { #device = "/dev/disk/by-uuid/6fcc0524-bd74-44b9-ac07-c91d2ffe6121";
+      device = "/dev/disk/by-label/nixos";
+      fsType = "btrfs";
+      options = [ "subvol=persist" "compress-force=zstd:3" ];
+    };
+
   swapDevices =
     [ 
       { #device = "/dev/disk/by-uuid/aea2ed46-641d-4fe5-8551-880c8a8a034f"; 
