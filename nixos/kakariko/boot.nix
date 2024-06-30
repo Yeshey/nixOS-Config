@@ -55,25 +55,63 @@ in
   boot.initrd.luks.devices.cryptswap = {
     device = "/dev/VG/cryptswap";
   };
-/*
+
   fileSystems."/" =
     { #device = "/dev/disk/by-uuid/6e60cc35-882f-45bf-8402-719a14a74a74";
       device = "/dev/disk/by-label/nixos";
       fsType = "btrfs";
       options = [ 
+        "subvol=root"
         "defaults"
         "compress-force=zstd:3" # compression level 3, is the default
         # "ssd" # optimize for an ssd
         # security "nosuid" "nodev" (https://serverfault.com/questions/547237/explanation-of-nodev-and-nosuid-in-fstab)
       ];
-    }; */
+    };
 
-  fileSystems."/" =
+  /*fileSystems."/" =
     { #device = "/dev/disk/by-uuid/6fcc0524-bd74-44b9-ac07-c91d2ffe6121";
       device = "/dev/disk/by-label/nixos";
       fsType = "btrfs";
       options = [ "subvol=root" "compress-force=zstd:3" ];
-    };
+    };*/
+
+  /*
+  # https://discourse.nixos.org/t/using-immutable-users-with-impermanence-on-luks/43459
+  # cleans older than 15 days
+  boot.initrd.systemd.services.wipe-my-fs = {
+    requires = ["dev-mapper-cryptroot.device"];
+    after = ["dev-mapper-cryptroot.device"];
+    before = [
+      "sysroot.mount"
+    ];
+    wantedBy = ["initrd.target"];
+    script = ''
+      mkdir /btrfs_tmp
+      mount /dev/disk/by-label/nixos /btrfs_tmp
+      if [[ -e /btrfs_tmp/root ]]; then
+          mkdir -p /btrfs_tmp/old_roots
+          timestamp=$(date --date="@$(stat -c %Y /btrfs_tmp/root)" "+%Y-%m-%-d_%H:%M:%S")
+          mv /btrfs_tmp/root "/btrfs_tmp/old_roots/$timestamp"
+      fi
+
+      delete_subvolume_recursively() {
+          IFS=$'\n'
+          for i in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
+              delete_subvolume_recursively "/btrfs_tmp/$i"
+          done
+          btrfs subvolume delete "$1"
+      }
+
+      for i in $(find /btrfs_tmp/old_roots/ -maxdepth 1 -mtime +15); do
+          delete_subvolume_recursively "$i"
+      done
+
+      btrfs subvolume create /btrfs_tmp/root
+      umount /btrfs_tmp
+    '';
+  };
+  */
 
   fileSystems."/nix" =
     { #device = "/dev/disk/by-uuid/6fcc0524-bd74-44b9-ac07-c91d2ffe6121";
@@ -95,9 +133,9 @@ in
         device = "/dev/disk/by-label/swap";
         priority = 1; # Higher numbers indicate higher priority.
       }
-      { device = "/var/swapfile"; size = 7*1024; 
-        priority = 0; # Higher numbers indicate higher priority.
-      }
+      #{ device = "/var/swapfile"; size = 7*1024; 
+      #  priority = 0; # Higher numbers indicate higher priority.
+      #}
     ];
   # MY MOUNTS
   fileSystems."${config.mySystem.dataStoragePath}" = {
