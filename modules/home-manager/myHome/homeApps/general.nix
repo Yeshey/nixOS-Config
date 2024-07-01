@@ -19,6 +19,7 @@ in
       directories = [
         ".config/vivaldi/"
       ];
+      allowOther = true;
     };
 
     home = {
