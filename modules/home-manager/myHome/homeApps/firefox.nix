@@ -26,6 +26,7 @@ in
       directories = [
         ".mozilla"
       ];
+      allowOther = true;
     };
 
     programs.firefox = {

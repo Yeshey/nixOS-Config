@@ -78,7 +78,7 @@ in
       sshKeys.enable = true;
       onedriver.enable = true;
     };
-    impermanence.enable = true;
+    impermanence.enable = false;
   };
 
   home = {
