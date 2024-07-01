@@ -14,6 +14,13 @@ in
   };
 
   config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
+
+    home.persistence."/persist/home/yeshey" = {
+      directories = [
+        ".config/vivaldi/"
+      ];
+    };
+
     home = {
       packages = with pkgs; let
         cus_vivaldi = pkgs.vivaldi.overrideAttrs (oldAttrs: {

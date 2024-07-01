@@ -40,6 +40,7 @@
       url = "github:Yeshey/nixos-nvidia-vgpu/535.129";
       #inputs.nixpkgs.follows = "nixpkgs";
     };
+    impermanence.url = "github:nix-community/impermanence";
     #nixos-nvidia-vgpu = { # sudo nixos-rebuild --flake ~/.setup#laptop switch --update-input nixos-nvidia-vgpu --impure
     #  type = "path";
       #path = "/mnt/DataDisk/Downloads/nixos-nvidia-vgpu/";
@@ -93,6 +94,7 @@
       hyprland-plugins,
       nixos-nvidia-vgpu,
       nixos-generators,
+      impermanence,
       # lanzaboote,
       ...
     }@inputs:
@@ -206,7 +208,6 @@
               #system = "x86_64-linux";
               modules = defaultModules ++ [ 
                 ./nixos/iso
-                (nixpkgs + "/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix")
               ];
             };
         };

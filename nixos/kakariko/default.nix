@@ -138,6 +138,7 @@ in
       sshKeys.enable = true;
     };
     #isolateVMsNixStore = true;
+    impermanence.enable = true;
   };
 
   virtualisation.docker.storageDriver = "btrfs"; # for docker

@@ -22,6 +22,12 @@ in
 
   config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
 
+    home.persistence."/persist/home/yeshey" = {
+      directories = [
+        ".mozilla"
+      ];
+    };
+
     programs.firefox = {
       enable = true;
       package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
