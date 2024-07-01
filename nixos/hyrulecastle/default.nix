@@ -127,6 +127,7 @@ in
 
     waydroid.enable = true;
     #isolateVMsNixStore = true;
+    impermanence.enable = true;
   };
 
   toHost = {

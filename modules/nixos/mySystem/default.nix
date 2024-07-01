@@ -63,6 +63,7 @@ in
     ./agenix/default.nix
     ./waydroid.nix
     ./isolateVMsNixStore.nix
+    ./impermanence.nix
   ];
 
   options.mySystem = with lib; {
