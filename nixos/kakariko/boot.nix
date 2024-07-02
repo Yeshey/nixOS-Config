@@ -79,6 +79,7 @@ in
   fileSystems."/persist" =
     { #device = "/dev/disk/by-uuid/6fcc0524-bd74-44b9-ac07-c91d2ffe6121";
       device = "/dev/disk/by-label/nixos";
+      neededForBoot = true;
       fsType = "btrfs";
       options = [ "subvol=persist" "compress-force=zstd:3" ];
     };
