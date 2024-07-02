@@ -86,7 +86,7 @@ in
       dates = "daily";
     };
     autoUpgradesOnShutdown = {
-      enable = true;
+      enable = false;
       location = "/home/yeshey/.setup";
       host = "hyrulecastle";
       dates = "*-*-1/3"; # "Fri *-*-* 20:00:00"; # Every Friday at 19:00 "*:0/5"; # Every 5 minutes
@@ -240,17 +240,59 @@ in
   system.stateVersion = "22.05";
 
 
-  systemd.services.my-test = let
-    location = "/mnt/DataDisk/Downloads/ooook";
+    systemd.services.my-test =   let
+    #location = "/mnt/DataDisk/Downloads/ooook";
+    location = "/home/yeshey/Downloads/ooook/";
+    gitScript = pkgs.writeShellScriptBin "update-git-repo" 
+    ''
+      #!/bin/sh
+      set -e
+
+      cd ${location}
+      git config --global --add safe.directory "${location}"
+      git pull origin main || git pull origin main || echo "Upgrading without pulling latest version of repo..."
+      git add . &&
+      (
+        git commit -m "Auto Upgrade flake.lock"
+        git push
+      ) || echo "no commit executed"
+      chown -R yeshey:users "${location}"
+    '';
+    /* ''
+set -e
+
+REPO_URL="git@github.com:Yeshey/nixOS-Config.git" # Replace with your repository URL
+TMP_DIR="/tmp/upgrade"
+
+# Clone the repository to the temporary directory
+git clone "$REPO_URL" "$TMP_DIR"
+
+# Generate a random number and create a test file
+RANDOM_NUMBER=$(shuf -i 1000-9999 -n 1)
+echo "This is a test file with random number $RANDOM_NUMBER" > "$TMP_DIR/test$\{RANDOM_NUMBER}.txt"
+
+# Navigate to the repository
+cd "$TMP_DIR"
+
+# Add the new file to the repository, commit, and push the change
+git add .
+git commit -m "Add test file test$\{RANDOM_NUMBER}.txt"
+git push
+
+# Delete the temporary directory
+cd /
+rm -rf "$TMP_DIR"
+    '';
+    */
   in rec {
-    description = "My NixOS Upgrade";
-    # before = [ "shutdown.target" "reboot.target" ];
+    description = "my nixOS test";
     restartIfChanged = false;
     unitConfig.X-StopOnRemoval = false;
+    after = ["multi-user.target"];
 
     environment = config.nix.envVars // {
       inherit (config.environment.sessionVariables) NIX_PATH;
-      HOME = "/root";
+      HOME = "/home/yeshey";
     } // config.networking.proxy.envVars;
 
     path = with pkgs; [
@@ -263,44 +305,29 @@ in
       config.programs.ssh.package
     ];
 
-    preStop = 
-#         lib.mkForce # makes it override the script, instead of appending
-      ''
-        FLAG_FILE="/etc/nixos-reboot-upgrade.flag"
-
-        ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${location}" pull origin main' || ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${location}" pull origin main' || echo "Upgrading without pulling latest version of repo..."
-
-        ${pkgs.git}/bin/git -C "${location}" add flake.lock &&
-          (
-            ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${location}" commit -m "Auto Upgrade flake.lock"' # changes to user yeshey to push, which is not good
-            ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${location}" push' # changes to user yeshey to push, which is not good
-          ) || echo "no commit executed"
-
-        chown -R yeshey:users "${location}"
-
-      '';
+    preStop = ''
+      FLAG_FILE="/etc/nixos-reboot-upgrade.flag"
+      # chmod +x ${gitScript}
+      ${pkgs.busybox}/bin/su yeshey -c '${gitScript}/bin/update-git-repo'
       
-    postStop = ''
-      ${pkgs.git}/bin/git -C "${location}" checkout -- flake.lock
     '';
+    
+    postStop = ''
+      git config --global --add safe.directory "${location}"
+      ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${location}" checkout -- flake.lock'
+    '';
+    
     unitConfig = {
-      Conflicts="reboot.target";
+      Conflicts = "reboot.target";
     };
-
-    # https://www.reddit.com/r/systemd/comments/rbde3o/running_a_script_on_shutdown_that_needs_wifi/
-    # With network manager, you will always need to set "let all users connect to this network", so you still have internet after logging out
-    #wants = [ "network-online.target" "nss-lookup.target" ]; # if one of these fails to start, my service will start anyways
-    #after = [ "network-online.target" "nss-lookup.target" ]; # will run before network turns of, bc in shutdown order is reversed
-    #requires = [ "network-online.target" "nss-lookup.target" ]; # if one of these fails to start, my service will not start
 
     serviceConfig = rec {
-      #User = "yeshey";
       Type = "oneshot";
-      RemainAfterExit="yes"; # true?
-      ExecStart="${pkgs.coreutils}/bin/true";
-      TimeoutStopSec="10h"; # 10 hours max, so systemd doesnt kill the process so early
-      # run as a user with sudo https://stackoverflow.com/questions/36959877/using-sudo-with-execstart-systemd
+      RemainAfterExit = "yes";
+      ExecStart = "${pkgs.coreutils}/bin/true";
+      TimeoutStopSec = "10h";
     };
-    #wantedBy = [ "multi-user.target" ];
   };
+
+
 }
