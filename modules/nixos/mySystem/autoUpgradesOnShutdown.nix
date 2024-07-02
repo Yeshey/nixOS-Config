@@ -67,7 +67,7 @@ for SOME_USER in /run/user/*; do
 #        echo "* Skipping root user."
         :
     else
-        ${pkgs.sudo}/bin/sudo -u $(id -u -n "$SOME_USER") \
+        /run/wrappers/bin/sudo -u $(id -u -n "$SOME_USER") \
             DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/"$SOME_USER"/bus ${pkgs.libnotify}/bin/notify-send "$@"
     fi
 done
@@ -134,15 +134,7 @@ in
     gitScript = pkgs.writeShellScriptBin "update-git-repo" ''
       echo "grabbing latest version of repo"
 
-wget -q --spider http://google.com
-
-if [ $? -eq 0 ]; then
-    echo "Online"
-else
-    echo "Offline"
-fi
-
-      git config --global --add safe.directory "${cfg.location}"
+      ${pkgs.git}/bin/git config --global --add safe.directory "${cfg.location}"
       ${pkgs.git}/bin/git -C "${cfg.location}" pull origin main || ${pkgs.git}/bin/git -C "${cfg.location}" pull origin main || echo "Upgrading without pulling latest version of repo..."
 
       echo "Trying to upgrade (almost) all flake inputs"
@@ -170,24 +162,24 @@ fi
           ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
 
           echo "Trying to upgrade only nixpkgs, home-manager"
-          ${nixos-rebuild} ${operation} --flake ${flake} --update-input nixpkgs --update-input home-manager || 
+          /run/wrappers/bin/sudo ${nixos-rebuild} ${operation} --flake ${flake} --update-input nixpkgs --update-input home-manager || 
             (
               echo "Upgrading nixpkgs, home-manager and nixos-hardware inputs failed, rolling back flake.lock..."
               ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
 
               echo "Trying to upgrade only nixpkgs and home-manager"
-              ${nixos-rebuild} ${operation} --flake ${flake} --update-input nixpkgs --update-input home-manager || 
+              /run/wrappers/bin/sudo ${nixos-rebuild} ${operation} --flake ${flake} --update-input nixpkgs --update-input home-manager || 
                 (
                   echo "Upgrading nixpkgs and home-manager inputs failed, rolling back flake.lock..."
                   ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
 
                   echo "Trying to upgrade only nixpkgs"
-                  ${nixos-rebuild} ${operation} --flake ${flake} --update-input nixpkgs || 
+                  /run/wrappers/bin/sudo ${nixos-rebuild} ${operation} --flake ${flake} --update-input nixpkgs || 
                     (
                       echo "Errors encountered, no upgrade possible, rolling back flake.lock..."
                       ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
                       echo "Activating previous config..."
-                      ${nixos-rebuild} ${operation} --flake ${flake}
+                      /run/wrappers/bin/sudo ${nixos-rebuild} ${operation} --flake ${flake}
                       exit
                     )
                 )
@@ -200,7 +192,7 @@ fi
         ) || echo "no commit executed"
     '';
     in rec {
-      description = "Updating NixOS Darling";
+      description = "Updating NixOS on Shutdown";
       # before = [ "shutdown.target" "reboot.target" ];
       restartIfChanged = false;
       unitConfig.X-StopOnRemoval = false;
