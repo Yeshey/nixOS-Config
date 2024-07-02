@@ -186,6 +186,7 @@ in
                           --update-input nixos-nvidia-vgpu \
                           --update-input deploy-rs \
                           --update-input agenix \
+                          --update-input impermanence \
                           /home/yeshey/.setup/
 
             ${nixos-rebuild} ${operation} --flake ${flake} || 

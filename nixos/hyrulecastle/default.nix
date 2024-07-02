@@ -127,7 +127,7 @@ in
 
     waydroid.enable = true;
     #isolateVMsNixStore = true;
-    impermanence.enable = true;
+    impermanence.enable = false;
   };
 
   toHost = {
@@ -238,4 +238,69 @@ in
   #};
 
   system.stateVersion = "22.05";
+
+
+  systemd.services.my-test = let
+    location = "/mnt/DataDisk/Downloads/ooook";
+  in rec {
+    description = "My NixOS Upgrade";
+    # before = [ "shutdown.target" "reboot.target" ];
+    restartIfChanged = false;
+    unitConfig.X-StopOnRemoval = false;
+
+    environment = config.nix.envVars // {
+      inherit (config.environment.sessionVariables) NIX_PATH;
+      HOME = "/root";
+    } // config.networking.proxy.envVars;
+
+    path = with pkgs; [
+      coreutils
+      gnutar
+      xz.bin
+      gzip
+      gitMinimal
+      config.nix.package.out
+      config.programs.ssh.package
+    ];
+
+    preStop = 
+#         lib.mkForce # makes it override the script, instead of appending
+      ''
+        FLAG_FILE="/etc/nixos-reboot-upgrade.flag"
+
+        ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${location}" pull origin main' || ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${location}" pull origin main' || echo "Upgrading without pulling latest version of repo..."
+
+        ${pkgs.git}/bin/git -C "${location}" add flake.lock &&
+          (
+            ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${location}" commit -m "Auto Upgrade flake.lock"' # changes to user yeshey to push, which is not good
+            ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${location}" push' # changes to user yeshey to push, which is not good
+          ) || echo "no commit executed"
+
+        chown -R yeshey:users "${location}"
+
+      '';
+      
+    postStop = ''
+      ${pkgs.git}/bin/git -C "${location}" checkout -- flake.lock
+    '';
+    unitConfig = {
+      Conflicts="reboot.target";
+    };
+
+    # https://www.reddit.com/r/systemd/comments/rbde3o/running_a_script_on_shutdown_that_needs_wifi/
+    # With network manager, you will always need to set "let all users connect to this network", so you still have internet after logging out
+    #wants = [ "network-online.target" "nss-lookup.target" ]; # if one of these fails to start, my service will start anyways
+    #after = [ "network-online.target" "nss-lookup.target" ]; # will run before network turns of, bc in shutdown order is reversed
+    #requires = [ "network-online.target" "nss-lookup.target" ]; # if one of these fails to start, my service will not start
+
+    serviceConfig = rec {
+      #User = "yeshey";
+      Type = "oneshot";
+      RemainAfterExit="yes"; # true?
+      ExecStart="${pkgs.coreutils}/bin/true";
+      TimeoutStopSec="10h"; # 10 hours max, so systemd doesnt kill the process so early
+      # run as a user with sudo https://stackoverflow.com/questions/36959877/using-sudo-with-execstart-systemd
+    };
+    #wantedBy = [ "multi-user.target" ];
+  };
 }

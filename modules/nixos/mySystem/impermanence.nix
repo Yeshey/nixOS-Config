@@ -17,13 +17,15 @@ in
   };
 
   config = lib.mkMerge [
-    # Requires btrfs with fileSystems."/nix" and fileSystems."/persist" and root subvolumes. 
+    # Requires btrfs with fileSystems."/nix" and fileSystems."/persist" (with neededForBoot = true) and root subvolumes. 
     # Using systemd for boot as well.
     # Should have fileSystems."/swap" in a seperate subvolume as well.
     {
       # For /etc/machie-id file already exists https://discourse.nixos.org/t/impermanence-a-file-already-exists-at-etc-machine-id/20267
       #environment.etc.machine-id.source = builtins.toFile "machine-id" "08adbbff76d1468db8c83f09834d622b";
       # I think I can ignore
+
+      programs.fuse.userAllowOther = true; # needed for nonchelant home manager impermanance stuff when impermanance is not used
 
       # https://discourse.nixos.org/t/using-immutable-users-with-impermanence-on-luks/43459
       # cleans older than 30 days
@@ -85,8 +87,6 @@ in
         "d /persist/home/ 1777 root root -"     # /persist/home created, owned by root
         "d /persist/home/yeshey 0770 yeshey users -" # /persist/home/<user> created, owned by that user
       ];
-      fileSystems."/persist".neededForBoot = true;
-      programs.fuse.userAllowOther = true;
       environment.persistence."/persist" = {
         enable = true;  # NB: Defaults to true, not needed
         hideMounts = true;
@@ -97,6 +97,7 @@ in
           "/var/lib/nixos"
           "/var/lib/systemd/coredump"
           "/etc/NetworkManager/system-connections"
+          "/etc/ssh" # keepfor agenix ye
           { directory = "/var/lib/colord"; user = "colord"; group = "colord"; mode = "u=rwx,g=rx,o="; }
         ];
         files = [
