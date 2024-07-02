@@ -79,9 +79,9 @@ in
   options.mySystem.autoUpgradesOnShutdown = {
     enable = lib.mkEnableOption "autoUpgradesOnShutdown";
     location = lib.mkOption {
-      default = "github:Yeshey/nixOS-Config";
+      default = "/home/yeshey/.setup";
       type = lib.types.str;
-      example = "/home/yeshey/.setup";
+      example = "github:Yeshey/nixOS-Config";
       description = ''
         path to your flake config
       '';
@@ -121,12 +121,86 @@ in
         Unit = "my-nixos-upgrade.service";
       };
     };
-    systemd.services.my-nixos-upgrade = let
-      gitScript = pkgs.writeShellScriptBin "update-git-repo" ''
-      
-      '';
+    systemd.services.my-nixos-upgrade = 
+    let
+      nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
+      date     = "${pkgs.coreutils}/bin/date";
+      readlink = "${pkgs.coreutils}/bin/readlink";
+      shutdown = "${config.systemd.package}/bin/shutdown";
+      flake = "${cfg.location}#${cfg.host}";
+      operation = "boot"; # switch doesnt work, gets stuck in `setting up tmpfiles`
+    in 
+    let
+    gitScript = pkgs.writeShellScriptBin "update-git-repo" ''
+      echo "grabbing latest version of repo"
+
+wget -q --spider http://google.com
+
+if [ $? -eq 0 ]; then
+    echo "Online"
+else
+    echo "Offline"
+fi
+
+      git config --global --add safe.directory "${cfg.location}"
+      ${pkgs.git}/bin/git -C "${cfg.location}" pull origin main || ${pkgs.git}/bin/git -C "${cfg.location}" pull origin main || echo "Upgrading without pulling latest version of repo..."
+
+      echo "Trying to upgrade (almost) all flake inputs"
+      # nix flake update ${cfg.location}
+      # I cant update --update-input nixos-hardware cuz it breaks a lot the surface
+      nix flake lock --update-input nixpkgs \
+                      --update-input nixpkgs-unstable \
+                      --update-input home-manager \
+                      --update-input neovim-plugins \
+                      --update-input stylix \
+                      --update-input plasma-manager \
+                      --update-input nurpkgs \
+                      --update-input hyprland \
+                      --update-input hyprland-plugins \
+                      --update-input hyprland-contrib \
+                      --update-input nixos-nvidia-vgpu \
+                      --update-input deploy-rs \
+                      --update-input agenix \
+                      --update-input impermanence \
+                      /home/yeshey/.setup/
+
+      ${nixos-rebuild} ${operation} --flake ${flake} || 
+        (
+          echo "Upgrading all flake inputs failed, rolling back flake.lock..."
+          ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
+
+          echo "Trying to upgrade only nixpkgs, home-manager"
+          ${nixos-rebuild} ${operation} --flake ${flake} --update-input nixpkgs --update-input home-manager || 
+            (
+              echo "Upgrading nixpkgs, home-manager and nixos-hardware inputs failed, rolling back flake.lock..."
+              ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
+
+              echo "Trying to upgrade only nixpkgs and home-manager"
+              ${nixos-rebuild} ${operation} --flake ${flake} --update-input nixpkgs --update-input home-manager || 
+                (
+                  echo "Upgrading nixpkgs and home-manager inputs failed, rolling back flake.lock..."
+                  ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
+
+                  echo "Trying to upgrade only nixpkgs"
+                  ${nixos-rebuild} ${operation} --flake ${flake} --update-input nixpkgs || 
+                    (
+                      echo "Errors encountered, no upgrade possible, rolling back flake.lock..."
+                      ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
+                      echo "Activating previous config..."
+                      ${nixos-rebuild} ${operation} --flake ${flake}
+                      exit
+                    )
+                )
+            ) 
+        )
+      ${pkgs.git}/bin/git -C "${cfg.location}" add flake.lock &&
+        (
+          ${pkgs.git}/bin/git -C "${cfg.location}" commit -m "Auto Upgrade flake.lock"
+          ${pkgs.git}/bin/git -C "${cfg.location}" push
+        ) || echo "no commit executed"
+    '';
     in rec {
-      description = "My NixOS Upgrade";
+      description = "Updating NixOS Darling";
       # before = [ "shutdown.target" "reboot.target" ];
       restartIfChanged = false;
       unitConfig.X-StopOnRemoval = false;
@@ -149,18 +223,12 @@ in
       script = ''
         ${notify-send-all}/bin/notify-send-all -u critical "Will upgrade on shutdown..."
       '';
-      preStop = 
-        let
-          nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
-          date     = "${pkgs.coreutils}/bin/date";
-          readlink = "${pkgs.coreutils}/bin/readlink";
-          shutdown = "${config.systemd.package}/bin/shutdown";
-          flake = "${cfg.location}#${cfg.host}";
-          operation = "boot"; # switch doesnt work, gets stuck in `setting up tmpfiles`
-        in 
-#         lib.mkForce # makes it override the script, instead of appending
-        ''
+      preStop = ''
           FLAG_FILE="/etc/nixos-reboot-upgrade.flag"
+
+          ${pkgs.busybox}/bin/su yeshey -c '${gitScript}/bin/update-git-repo'
+
+          chown -R yeshey:users "${cfg.location}"
 
           if ! systemctl list-jobs | egrep -q 'poweroff.target.*start'; then
 
@@ -171,61 +239,7 @@ in
           else
             echo "Is powering off, upgrading..."
             
-            echo "grabbing latest version of repo"   
-            ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" pull origin main' || ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" pull origin main' || echo "Upgrading without pulling latest version of repo..."
-            echo "Trying to upgrade (almost) all flake inputs"
-            # nix flake update ${cfg.location}
-            # I cant update --update-input nixos-hardware cuz it breaks a lot the surface
-            nix flake lock --update-input nixpkgs \
-                          --update-input nixpkgs-unstable \
-                          --update-input home-manager \
-                          --update-input neovim-plugins \
-                          --update-input stylix \
-                          --update-input plasma-manager \
-                          --update-input nurpkgs \
-                          --update-input hyprland \
-                          --update-input hyprland-plugins \
-                          --update-input hyprland-contrib \
-                          --update-input nixos-nvidia-vgpu \
-                          --update-input deploy-rs \
-                          --update-input agenix \
-                          --update-input impermanence \
-                          /home/yeshey/.setup/
-
-            ${nixos-rebuild} ${operation} --flake ${flake} || 
-              (
-                echo "Upgrading all flake inputs failed, rolling back flake.lock..."
-                ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
-
-                echo "Trying to upgrade only nixpkgs, home-manager"
-                ${nixos-rebuild} ${operation} --flake ${flake} --update-input nixpkgs --update-input home-manager || 
-                  (
-                    echo "Upgrading nixpkgs, home-manager and nixos-hardware inputs failed, rolling back flake.lock..."
-                    ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
-
-                    echo "Trying to upgrade only nixpkgs and home-manager"
-                    ${nixos-rebuild} ${operation} --flake ${flake} --update-input nixpkgs --update-input home-manager || 
-                      (
-                        echo "Upgrading nixpkgs and home-manager inputs failed, rolling back flake.lock..."
-                        ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
-
-                        echo "Trying to upgrade only nixpkgs"
-                        ${nixos-rebuild} ${operation} --flake ${flake} --update-input nixpkgs || 
-                          (
-                            echo "Errors encountered, no upgrade possible, rolling back flake.lock..."
-                            ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
-                            echo "Activating previous config..."
-                            ${nixos-rebuild} ${operation} --flake ${flake}
-                            exit
-                          )
-                      )
-                  ) 
-              )
-            ${pkgs.git}/bin/git -C "${cfg.location}" add flake.lock &&
-              (
-                ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" commit -m "Auto Upgrade flake.lock"' # changes to user yeshey to push, which is not good
-                ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" push' # changes to user yeshey to push, which is not good
-              ) || echo "no commit executed"
+            ${pkgs.busybox}/bin/su yeshey -c '${gitScript}/bin/update-git-repo'
 
             chown -R yeshey:users "${cfg.location}"
 
@@ -233,8 +247,8 @@ in
         '';
         
       postStop = ''
-        git config --global --add safe.directory "${location}"
-        ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${location}" checkout -- flake.lock'
+        git config --global --add safe.directory "${cfg.location}"
+        ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock'
       '';
       unitConfig = {
         Conflicts="reboot.target";
@@ -242,9 +256,14 @@ in
 
       # https://www.reddit.com/r/systemd/comments/rbde3o/running_a_script_on_shutdown_that_needs_wifi/
       # With network manager, you will always need to set "let all users connect to this network", so you still have internet after logging out
-      wants = [ "network-online.target" "nss-lookup.target" ]; # if one of these fails to start, my service will start anyways
-      after = [ "network-online.target" "nss-lookup.target" ]; # will run before network turns of, bc in shutdown order is reversed
-      requires = [ "network-online.target" "nss-lookup.target" ]; # if one of these fails to start, my service will not start
+      wants = [ "network-online.target" "nss-lookup.target" 
+        #"nix-daemon.service" 
+      ]; # if one of these fails to start, my service will start anyways #  "multi-user.target"
+      after = [ "network-online.target" "nss-lookup.target" 
+        # "nix-daemon.service"
+        "systemd-user-sessions.service" "plymouth-quit-wait.service"
+      ]; # will run before network turns of, bc in shutdown order is reversed
+      requires = [ "network-online.target" "nss-lookup.target" "nix-daemon.service" ]; # if one of these fails to start, my service will not start
 
       serviceConfig = rec {
         #User = "yeshey";

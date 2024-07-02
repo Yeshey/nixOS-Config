@@ -86,7 +86,7 @@ in
       dates = "daily";
     };
     autoUpgradesOnShutdown = {
-      enable = false;
+      enable = true;
       location = "/home/yeshey/.setup";
       host = "hyrulecastle";
       dates = "*-*-1/3"; # "Fri *-*-* 20:00:00"; # Every Friday at 19:00 "*:0/5"; # Every 5 minutes
@@ -258,32 +258,6 @@ in
       ) || echo "no commit executed"
       chown -R yeshey:users "${location}"
     '';
-    /* ''
-set -e
-
-REPO_URL="git@github.com:Yeshey/nixOS-Config.git" # Replace with your repository URL
-TMP_DIR="/tmp/upgrade"
-
-# Clone the repository to the temporary directory
-git clone "$REPO_URL" "$TMP_DIR"
-
-# Generate a random number and create a test file
-RANDOM_NUMBER=$(shuf -i 1000-9999 -n 1)
-echo "This is a test file with random number $RANDOM_NUMBER" > "$TMP_DIR/test$\{RANDOM_NUMBER}.txt"
-
-# Navigate to the repository
-cd "$TMP_DIR"
-
-# Add the new file to the repository, commit, and push the change
-git add .
-git commit -m "Add test file test$\{RANDOM_NUMBER}.txt"
-git push
-
-# Delete the temporary directory
-cd /
-rm -rf "$TMP_DIR"
-    '';
-    */
   in rec {
     description = "my nixOS test";
     restartIfChanged = false;
