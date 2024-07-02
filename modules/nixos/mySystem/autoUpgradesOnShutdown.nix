@@ -121,7 +121,11 @@ in
         Unit = "my-nixos-upgrade.service";
       };
     };
-    systemd.services.my-nixos-upgrade = rec {
+    systemd.services.my-nixos-upgrade = let
+      gitScript = pkgs.writeShellScriptBin "update-git-repo" ''
+      
+      '';
+    in rec {
       description = "My NixOS Upgrade";
       # before = [ "shutdown.target" "reboot.target" ];
       restartIfChanged = false;
@@ -166,7 +170,6 @@ in
 
           else
             echo "Is powering off, upgrading..."
-            # export HOME=/home/yeshey
             
             echo "grabbing latest version of repo"   
             ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" pull origin main' || ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${cfg.location}" pull origin main' || echo "Upgrading without pulling latest version of repo..."
@@ -226,17 +229,12 @@ in
 
             chown -R yeshey:users "${cfg.location}"
 
-            # Holy shit. awk doesnt work, sed doesnt as well
-
-            # this swaps last two commits: GIT_SEQUENCE_EDITOR="sed -i -n 'h;1n;2p;g;p'" git rebase -i HEAD~2
-
-            # awk attempt (works, but doesnt write file in place?: gawk -i inplace '{a[NR]=$0; if ($0 ~ /^pick/) {last_pick_line = $0; last_pick_position = NR}} END {print last_pick_line; for (i=1; i<NR; i++) {if (i != last_pick_position) {print a[i]}}}' /mnt/DataDisk/Downloads/test.txt
-
           fi
         '';
         
       postStop = ''
-        ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
+        git config --global --add safe.directory "${location}"
+        ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${location}" checkout -- flake.lock'
       '';
       unitConfig = {
         Conflicts="reboot.target";
