@@ -110,7 +110,6 @@ in
     environment.systemPackages = with pkgs; [
       libnotify
       notify-send-all
-      cmatrix
     ];
 
     # Use a timer to activate the service that will execute preStop on shutdown and not reboot
@@ -128,7 +127,7 @@ in
       date     = "${pkgs.coreutils}/bin/date";
       readlink = "${pkgs.coreutils}/bin/readlink";
       shutdown = "${config.systemd.package}/bin/shutdown";
-      flake = "${cfg.location}#${cfg.host}";
+      #flake = "${cfg.location}#${cfg.host}";
       operation = "boot"; # switch doesnt work, gets stuck in `setting up tmpfiles`
       ssh_key = "/home/yeshey/.ssh/my_identity";
       git_ssh_command = "ssh -i ${ssh_key} -o StrictHostKeyChecking=no";
@@ -159,30 +158,30 @@ in
                   --update-input impermanence \
                   /tmp/upgradeOnShutdown
 
-  ${nixos-rebuild} ${operation} --flake ${flake} || 
+  ${nixos-rebuild} ${operation} --flake /tmp/upgradeOnShutdown#${cfg.host} || 
     (
       echo "Upgrading all flake inputs failed, rolling back flake.lock..."
       ${pkgs.git}/bin/git -C /tmp/upgradeOnShutdown checkout -- flake.lock
 
       echo "Trying to upgrade only nixpkgs, home-manager"
-      ${nixos-rebuild} ${operation} --flake ${flake} --update-input nixpkgs --update-input home-manager || 
+      ${nixos-rebuild} ${operation} --flake /tmp/upgradeOnShutdown#${cfg.host} --update-input nixpkgs --update-input home-manager || 
         (
           echo "Upgrading nixpkgs, home-manager and nixos-hardware inputs failed, rolling back flake.lock..."
           ${pkgs.git}/bin/git -C /tmp/upgradeOnShutdown checkout -- flake.lock
 
           echo "Trying to upgrade only nixpkgs and home-manager"
-          ${nixos-rebuild} ${operation} --flake ${flake} --update-input nixpkgs --update-input home-manager || 
+          ${nixos-rebuild} ${operation} --flake /tmp/upgradeOnShutdown#${cfg.host} --update-input nixpkgs --update-input home-manager || 
             (
               echo "Upgrading nixpkgs and home-manager inputs failed, rolling back flake.lock..."
               ${pkgs.git}/bin/git -C /tmp/upgradeOnShutdown checkout -- flake.lock
 
               echo "Trying to upgrade only nixpkgs"
-              ${nixos-rebuild} ${operation} --flake ${flake} --update-input nixpkgs || 
+              ${nixos-rebuild} ${operation} --flake /tmp/upgradeOnShutdown#${cfg.host} --update-input nixpkgs || 
                 (
                   echo "Errors encountered, no upgrade possible, rolling back flake.lock..."
                   ${pkgs.git}/bin/git -C /tmp/upgradeOnShutdown checkout -- flake.lock
                   echo "Activating previous config..."
-                  ${nixos-rebuild} ${operation} --flake ${flake}
+                  ${nixos-rebuild} ${operation} --flake /tmp/upgradeOnShutdown#${cfg.host}
                   exit
                 )
             )
