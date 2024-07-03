@@ -78,12 +78,12 @@ in
 {
   options.mySystem.autoUpgradesOnShutdown = {
     enable = lib.mkEnableOption "autoUpgradesOnShutdown";
-    location = lib.mkOption {
-      default = "/home/yeshey/.setup";
+    gitRepo = lib.mkOption {
+      default = "git@github.com:Yeshey/nixOS-Config.git";
       type = lib.types.str;
-      example = "github:Yeshey/nixOS-Config";
+      example = "git@github.com:Yeshey/nixOS-Config.git";
       description = ''
-        path to your flake config
+        the ssh clone link of your configuration flake repo
       '';
     };
     host = lib.mkOption {
@@ -139,7 +139,7 @@ in
 
   echo "Cloning the latest version of the repo to /tmp/upgradeOnShutdown"
   rm -rf /tmp/upgradeOnShutdown
-  ${pkgs.git}/bin/git clone -v --depth 1 git@github.com:Yeshey/nixOS-Config.git /tmp/upgradeOnShutdown
+  ${pkgs.git}/bin/git clone -v --depth 1 ${cfg.gitRepo} /tmp/upgradeOnShutdown
 
   echo "Trying to upgrade (almost) all flake inputs"
   nix flake lock --update-input nixpkgs \
@@ -241,27 +241,6 @@ in
       unitConfig = {
         Conflicts="reboot.target";
       };
-
-      # https://www.reddit.com/r/systemd/comments/rbde3o/running_a_script_on_shutdown_that_needs_wifi/
-      # With network manager, you will always need to set "let all users connect to this network", so you still have internet after logging out
-      /*
-      wants = [ "network-online.target" "nss-lookup.target" 
-        "nix-daemon.service" 
-      ]; # if one of these fails to start, my service will start anyways #  "multi-user.target"
-      after = [ "network-online.target" "nss-lookup.target" 
-         "nix-daemon.service"
-        "systemd-user-sessions.service" "plymouth-quit-wait.service"
-      ]; # will run before network turns of, bc in shutdown order is reversed
-      requires = [ "network-online.target" "nss-lookup.target" "nix-daemon.service" ]; # if one of these fails to start, my service will not start
-      */
-
-/*
-      # Dependencies to ensure network and services are available
-      wants = [ "network-online.target" "nss-lookup.target" "nix-daemon.service" ];
-      after = [ "network-online.target" "nss-lookup.target" "nix-daemon.service" "systemd-user-sessions.service" "plymouth-quit-wait.service" ];
-      requires = [ "network-online.target" "nss-lookup.target" "nix-daemon.service" ];
-      before = [ "shutdown.target" "reboot.target" ];
-*/
 
       wants = [
         "network-online.target"
