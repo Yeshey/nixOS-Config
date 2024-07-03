@@ -110,6 +110,7 @@ in
     environment.systemPackages = with pkgs; [
       libnotify
       notify-send-all
+      cmatrix
     ];
 
     # Use a timer to activate the service that will execute preStop on shutdown and not reboot
