@@ -87,7 +87,7 @@ in
     };
     autoUpgradesOnShutdown = {
       enable = true;
-      location = "/home/yeshey/.setup";
+      gitRepo = "git@github.com:Yeshey/nixOS-Config.git";
       host = "hyrulecastle";
       dates = "*-*-1/3"; # "Fri *-*-* 20:00:00"; # Every Friday at 19:00 "*:0/5"; # Every 5 minutes
     };
@@ -238,70 +238,4 @@ in
   #};
 
   system.stateVersion = "22.05";
-
-/*
-    systemd.services.my-test =   let
-    #location = "/mnt/DataDisk/Downloads/ooook";
-    location = "/home/yeshey/Downloads/ooook/";
-    gitScript = pkgs.writeShellScriptBin "update-git-repo" 
-    ''
-      #!/bin/sh
-      set -e
-
-      cd ${location}
-      git config --global --add safe.directory "${location}"
-      git pull origin main || git pull origin main || echo "Upgrading without pulling latest version of repo..."
-      git add . &&
-      (
-        git commit -m "Auto Upgrade flake.lock"
-        git push
-      ) || echo "no commit executed"
-      chown -R yeshey:users "${location}"
-    '';
-  in rec {
-    description = "my nixOS test";
-    restartIfChanged = false;
-    unitConfig.X-StopOnRemoval = false;
-    after = ["multi-user.target"];
-
-    environment = config.nix.envVars // {
-      inherit (config.environment.sessionVariables) NIX_PATH;
-      HOME = "/home/yeshey";
-    } // config.networking.proxy.envVars;
-
-    path = with pkgs; [
-      coreutils
-      gnutar
-      xz.bin
-      gzip
-      gitMinimal
-      config.nix.package.out
-      config.programs.ssh.package
-    ];
-
-    preStop = ''
-      FLAG_FILE="/etc/nixos-reboot-upgrade.flag"
-      # chmod +x ${gitScript}
-      ${pkgs.busybox}/bin/su yeshey -c '${gitScript}/bin/update-git-repo'
-      
-    '';
-    
-    postStop = ''
-      git config --global --add safe.directory "${location}"
-      ${pkgs.busybox}/bin/su yeshey -c '${pkgs.git}/bin/git -C "${location}" checkout -- flake.lock'
-    '';
-    
-    unitConfig = {
-      Conflicts = "reboot.target";
-    };
-
-    serviceConfig = rec {
-      Type = "oneshot";
-      RemainAfterExit = "yes";
-      ExecStart = "${pkgs.coreutils}/bin/true";
-      TimeoutStopSec = "10h";
-    };
-  };*/
-
-
 }
