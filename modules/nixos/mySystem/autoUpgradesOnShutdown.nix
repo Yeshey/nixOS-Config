@@ -194,7 +194,7 @@ in
     ) || echo "no commit executed"
     '';
     in rec {
-      description = "Updating NixOS on Shutdown";
+      description = "NixOS Upgrade on Shutdown";
       # before = [ "shutdown.target" "reboot.target" ];
       restartIfChanged = false;
       unitConfig.X-StopOnRemoval = false;
