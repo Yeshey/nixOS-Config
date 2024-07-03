@@ -239,7 +239,7 @@ in
 
   system.stateVersion = "22.05";
 
-
+/*
     systemd.services.my-test =   let
     #location = "/mnt/DataDisk/Downloads/ooook";
     location = "/home/yeshey/Downloads/ooook/";
@@ -301,7 +301,7 @@ in
       ExecStart = "${pkgs.coreutils}/bin/true";
       TimeoutStopSec = "10h";
     };
-  };
+  };*/
 
 
 }
