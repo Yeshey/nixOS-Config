@@ -134,12 +134,12 @@ in
     in 
     let
     gitScript = pkgs.writeShellScriptBin "update-git-repo" ''
-  SSH_KEY="/home/yeshey/.ssh/my_identity"
-  GIT_SSH_COMMAND="ssh -i ${ssh_key} -o StrictHostKeyChecking=no"
+  export SSH_KEY="/home/yeshey/.ssh/my_identity"
+  export GIT_SSH_COMMAND="ssh -i ${ssh_key} -o StrictHostKeyChecking=no"
 
   echo "Cloning the latest version of the repo to /tmp/upgradeOnShutdown"
   rm -rf /tmp/upgradeOnShutdown
-  ${pkgs.git}/bin/git clone -v --depth 1 ${cfg.gitRepo} /tmp/upgradeOnShutdown
+  ${pkgs.git}/bin/git clone --depth 1 ${cfg.gitRepo} /tmp/upgradeOnShutdown
 
   echo "Trying to upgrade (almost) all flake inputs"
   nix flake lock --update-input nixpkgs \
