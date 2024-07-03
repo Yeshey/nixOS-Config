@@ -255,11 +255,35 @@ in
       requires = [ "network-online.target" "nss-lookup.target" "nix-daemon.service" ]; # if one of these fails to start, my service will not start
       */
 
+/*
       # Dependencies to ensure network and services are available
       wants = [ "network-online.target" "nss-lookup.target" "nix-daemon.service" ];
       after = [ "network-online.target" "nss-lookup.target" "nix-daemon.service" "systemd-user-sessions.service" "plymouth-quit-wait.service" ];
       requires = [ "network-online.target" "nss-lookup.target" "nix-daemon.service" ];
       before = [ "shutdown.target" "reboot.target" ];
+*/
+
+      wants = [
+        "network-online.target"
+        "nss-lookup.target"
+        "nix-daemon.service"
+        "systemd-user-sessions.service"
+      ];
+
+      after = [
+        "network-online.target"
+        "nss-lookup.target"
+        "nix-daemon.service"
+        "systemd-user-sessions.service"
+        "plymouth-quit-wait.service"
+      ];
+
+      requires = [
+        "network-online.target"
+        "nss-lookup.target"
+        "nix-daemon.service"
+        "systemd-user-sessions.service"
+      ];
 
       serviceConfig = rec {
         #User = "yeshey";
