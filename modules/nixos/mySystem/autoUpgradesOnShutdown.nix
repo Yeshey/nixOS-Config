@@ -247,6 +247,8 @@ in
         "nss-lookup.target"
         "nix-daemon.service"
         "systemd-user-sessions.service"
+        "sshd.service"
+        "systemd-oomd.service"
       ];
 
       after = [
@@ -255,6 +257,9 @@ in
         "nix-daemon.service"
         "systemd-user-sessions.service"
         "plymouth-quit-wait.service"
+        "sshd.service"
+        "thermald.service"
+        "systemd-oomd.service"
       ];
 
       requires = [
@@ -262,6 +267,8 @@ in
         "nss-lookup.target"
         "nix-daemon.service"
         "systemd-user-sessions.service"
+        #"sshd.service"
+        "systemd-oomd.service"
       ];
 
       serviceConfig = rec {
