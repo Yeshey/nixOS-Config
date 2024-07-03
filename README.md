@@ -51,6 +51,16 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
 - **Agenix** - Using [agenix](https://github.com/ryantm/agenix) both at system (`mySystem` - [default.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/agenix/default.nix)):  and at user (`myHome` - [default.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/agenix/default.nix)) levels, they grab secrets from `/secrets`.
 
+## Gallery
+
+### HyruleCastle
+
+![hyrulecastle](https://github.com/Yeshey/nixOS-Config/assets/41551785/93350f05-7a1c-4f19-adac-f3e912ec6641)
+
+### Kakariko
+
+![kakariko](https://github.com/Yeshey/nixOS-Config/assets/41551785/87c28630-9c44-4931-a4d2-573376999ff6)
+
 &nbsp;
 
 &nbsp;
