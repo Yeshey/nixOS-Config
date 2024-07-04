@@ -53,7 +53,10 @@ in
     };
     browser.enable = true;
     cliTools.enable = true;
-    zsh.enable = true;
+    zsh = {
+      enable = true;
+      falkeLocation = "/home/yeshey/.setup";
+    };
     gaming.enable = true;
     vmHost = true;
     dockerHost = true;

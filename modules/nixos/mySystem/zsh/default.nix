@@ -13,6 +13,14 @@ in
 {
   options.mySystem.zsh = {
     enable = lib.mkEnableOption "zsh";
+    falkeLocation = lib.mkOption {
+      default = "/home/yeshey/.setup";
+      type = lib.types.str;
+      example = "/home/yeshey/.setup";
+      description = ''
+        The location of your flake to make the update and upgrade command aliases work
+      '';
+    };
   };
 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
@@ -35,9 +43,6 @@ in
         la = "ls -a";
         lla = "ls -la";
         lt = "ls --tree";
-
-        #ll = lib.mkOverride 995 "eza -l --icons=auto";
-        #la = lib.mkOverride 1010 "eza -la --icons=auto";
       };
       shellInit = ''
         autoload -U promptinit; promptinit
@@ -45,7 +50,33 @@ in
       interactiveShellInit = ''
         source ${./kubectl.zsh}
         source ${./git.zsh}
-        source ${./myAlias.zsh}
+        source ${builtins.toFile "myAlias.zsh" (builtins.readFile ./myAlias.zsh + ''
+          # complex alias that need nix syntax
+          alias update="sudo nixos-rebuild --flake ${cfg.falkeLocation}#${config.mySystem.host} switch"
+          alias update-re="sudo nixos-rebuild --flake ${cfg.falkeLocation}#${config.mySystem.host} boot && reboot"
+          upgrade() {
+              trap "cd '${cfg.falkeLocation}' && git checkout -- flake.lock" INT # if interrupted
+
+              # Ask for password upfront
+              sudo -v
+
+              nix flake update "${cfg.falkeLocation}"
+
+              if sudo nixos-rebuild switch --flake "${cfg.falkeLocation}#${config.mySystem.host}"; then
+                  echo "NixOS upgrade successful."
+              else
+                  echo "Unable to update all flake inputs, trying to update just nixpkgs"
+                  if sudo nixos-rebuild switch --flake "${cfg.falkeLocation}#${config.mySystem.host}" \
+                      --update-input nixpkgs; then
+                      echo "NixOS upgrade with nixpkgs update successful."
+                  else
+                      echo "NixOS upgrade failed. Rolling back changes to flake.lock"
+                      cd "${cfg.falkeLocation}" && git checkout -- flake.lock
+                  fi
+              fi
+          }
+        '')}
+
 
         bindkey "^[[1;5C" forward-word
         bindkey "^[[1;5D" backward-word
