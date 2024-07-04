@@ -26,6 +26,7 @@ in
       wget
       tree
       unzip
+      hyfetch
     ];
   };
 }
