@@ -45,7 +45,7 @@ in
       interactiveShellInit = ''
         source ${./kubectl.zsh}
         source ${./git.zsh}
-        source ${builtins.toFile "myAlias.zsh" (builtins.readFile ./myAlias.zsh)}
+        source ${./myAlias.zsh}
 
         bindkey "^[[1;5C" forward-word
         bindkey "^[[1;5D" backward-word
