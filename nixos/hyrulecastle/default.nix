@@ -74,7 +74,7 @@ in
       printers.enable = true;
       sound.enable = true;
       thermald = {
-        enable = true;gi
+        enable = true;
         thermalConf = ./thermal-conf.xml;
       };
       lvm.enable = false;

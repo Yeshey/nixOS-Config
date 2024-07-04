@@ -59,6 +59,7 @@ in
       # FOR PLASMA DESKTOP
       sddm-kcm # for sddm configuration in settings
       unrar # also to extract .rar with ark in KDE # unrar x Lab5.rar
+      ocs-url # to install plasma widgets # do installed things not work?
     ];
   };
 }
