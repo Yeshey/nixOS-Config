@@ -45,61 +45,6 @@ alias chtp=" curl cht.sh/python/\"$1\" ";           # alias to use cht.sh for py
 alias chtc=" curl cht.sh/c/\"$1\" ";                # alias to use cht.sh for c help
 alias chtsharp=" curl cht.sh/csharp/\"$1\" ";           # alias to use cht.sh for c# help
 alias cht=" curl cht.sh/\"$1\" ";                   # alias to use cht.sh in general
-alias update="sudo nixos-rebuild switch --flake \"$1\"#\"$2\""; # --impure # old: "sudo nixos-rebuild switch";
-alias update-re="sudo nixos-rebuild boot --flake \"$1\"#\"$2\" && reboot"; # old: "sudo nixos-rebuild switch";
-upgrade() {
-    local location="$1"
-    local host="$2"
-    
-    # Check if both arguments are provided, if not, exit with an error message
-    if [ -z "$location" ] || [ -z "$host" ]; then
-        echo "Error: Both 'location' and 'host' arguments are required. Example: upgrade ~/.setup hyrulecastle"
-        return 1
-    fi
-
-    trap "cd $location && git checkout -- flake.lock" INT # if interrupted
-
-    # Ask for password upfront
-    sudo -v
-
-    nix flake update $location
-
-    if sudo nixos-rebuild switch --flake "${location}#${host}"; then
-        echo "NixOS upgrade successful."
-    else
-        echo "Unable to update all flake inputs, trying to update just nixpkgs"
-        if sudo nixos-rebuild switch --flake "${location}#${host}" \
-            --update-input nixpkgs; then
-            echo "NixOS upgrade with nixpkgs update successful."
-        else
-            echo "NixOS upgrade failed. Rolling back changes to flake.lock"
-            cd "$location" && git checkout -- flake.lock
-        fi
-    fi
-}
-upgrade-nixpkgs() {
-    local location="$1"
-    local host="$2"
-    
-    # Check if both arguments are provided, if not, exit with an error message
-    if [ -z "$location" ] || [ -z "$host" ]; then
-        echo "Error: Both 'location' and 'host' arguments are required. Example: upgrade ~/.setup hyrulecastle"
-        return 1
-    fi
-
-    trap "cd $location && git checkout -- flake.lock" INT # if interrupted
-
-    # Ask for password upfront
-    sudo -v
-
-    if sudo nixos-rebuild switch --flake "${location}#${host}" \
-        --update-input nixpkgs; then
-        echo "NixOS upgrade with nixpkgs update successful."
-    else
-        echo "NixOS upgrade failed. Rolling back changes to flake.lock"
-        cd "$location" && git checkout -- flake.lock
-    fi
-}
 space() {
     watch "df -h . && df ."
 }

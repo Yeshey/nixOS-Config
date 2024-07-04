@@ -43,6 +43,8 @@ in
     ];
     # networking.firewall.enable = false;
 
+    services.joycond.enable = true;
+
     programs = {
       steam = {
         enable = true;
