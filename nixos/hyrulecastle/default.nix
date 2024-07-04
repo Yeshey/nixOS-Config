@@ -74,7 +74,7 @@ in
       printers.enable = true;
       sound.enable = true;
       thermald = {
-        enable = true;
+        enable = true;gi
         thermalConf = ./thermal-conf.xml;
       };
       lvm.enable = false;
@@ -88,6 +88,7 @@ in
     autoUpgradesOnShutdown = {
       enable = true;
       gitRepo = "git@github.com:Yeshey/nixOS-Config.git";
+      ssh_key = "/home/yeshey/.ssh/my_identity";
       host = "hyrulecastle";
       dates = "*-*-1/3"; # "Fri *-*-* 20:00:00"; # Every Friday at 19:00 "*:0/5"; # Every 5 minutes
     };
