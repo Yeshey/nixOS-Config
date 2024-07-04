@@ -86,6 +86,14 @@ in
         the ssh clone link of your configuration flake repo
       '';
     };
+    ssh_key = lib.mkOption {
+      default = "/home/yeshey/.ssh/my_identity";
+      type = lib.types.str;
+      example = "/home/yeshey/.ssh/my_identity";
+      description = ''
+        The path to the ssh identity key to access the git repository
+      '';
+    };
     host = lib.mkOption {
       type = lib.types.str;
       example = "kakariko";
@@ -129,13 +137,11 @@ in
       shutdown = "${config.systemd.package}/bin/shutdown";
       #flake = "${cfg.location}#${cfg.host}";
       operation = "boot"; # switch doesnt work, gets stuck in `setting up tmpfiles`
-      ssh_key = "/home/yeshey/.ssh/my_identity";
-      git_ssh_command = "ssh -i ${ssh_key} -o StrictHostKeyChecking=no";
     in 
     let
     gitScript = pkgs.writeShellScriptBin "update-git-repo" ''
-  export SSH_KEY="/home/yeshey/.ssh/my_identity"
-  export GIT_SSH_COMMAND="ssh -i ${ssh_key} -o StrictHostKeyChecking=no"
+  export SSH_KEY="${cfg.ssh_key}"
+  export GIT_SSH_COMMAND="ssh -i ${cfg.ssh_key} -o StrictHostKeyChecking=no"
 
   echo "Cloning the latest version of the repo to /tmp/upgradeOnShutdown"
   rm -rf /tmp/upgradeOnShutdown
