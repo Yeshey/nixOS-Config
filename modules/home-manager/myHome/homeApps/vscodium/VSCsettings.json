@@ -27,6 +27,9 @@
     "ltex.java.path": "/run/current-system/sw/lib/openjdk/",
     "ltex.language": "pt-PT",
     "editor.wordWrap": "on",
+    
+    // the latex code: https://stackoverflow.com/questions/56743092/modifying-settings-json-in-vscode-to-add-shell-escape-flag-to-pdflatex-in-latex
+    // You need to add this code here as well but you don't know how, so latex works with svgs
     "latex-workshop.latex.tools": [
       {
           "name": "latexmk",
@@ -60,6 +63,8 @@
           ]
       }
     ],
+
+    // Nix IDE settings with nixd server and nixfmt-rfc-style formatter (https://marketplace.visualstudio.com/items?itemName=jnoortheen.nix-ide)
     "nix.enableLanguageServer": true,
     "nix.serverPath": "nixd",
     "nix.serverSettings": {

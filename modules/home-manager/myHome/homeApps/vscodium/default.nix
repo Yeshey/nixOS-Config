@@ -15,9 +15,8 @@ in
 
   config =
     let
-      # the latex code: https://stackoverflow.com/questions/56743092/modifying-settings-json-in-vscode-to-add-shell-escape-flag-to-pdflatex-in-latex
-      # You need to add this code here as well but you don't know how, so latex works with svgs
-      vscUserSettings = builtins.fromJSON (builtins.readFile ./VSCsettings.json);
+      # VSC accepts normal json with comments
+      vscUserSettings = builtins.readFile ./VSCsettings.json;
     in
     lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
 
@@ -106,39 +105,39 @@ in
           after = [ "writeBoundary" ];
           before = [ ];
           data = ''
-            	if [ -d ~/.config/VSCodium/User ]; then
-            		userDir=$HOME/.config/VSCodium/User
-            		mkdir -p "$userDir"
-            		rm -rf $userDir/settings.json
-            		cat \
-            			${(pkgs.formats.json { }).generate "blabla" userSettings} \
-            			> "$userDir/settings.json"
+      if [ -d ~/.config/VSCodium/User ]; then
+        userDir=$HOME/.config/VSCodium/User
+        mkdir -p "$userDir"
+        rm -rf $userDir/settings.json
+        cat <<EOF > "$userDir/settings.json"
+${userSettings}
+EOF
 
-            		# for Code
-            		userDir3="$HOME/.config/Code/User"
-            		mkdir -p "$userDir3"
-            		rm -rf $userDir3/settings.json
-            		cat \
-            			${(pkgs.formats.json { }).generate "blabla" userSettings} \
-            			> "$userDir3/settings.json"
+        # for Code
+        userDir3="$HOME/.config/Code/User"
+        mkdir -p "$userDir3"
+        rm -rf $userDir3/settings.json
+        cat <<EOF > "$userDir3/settings.json"
+${userSettings}
+EOF
 
-            		# as I changed the name to Visual Studio Code, I need to maintain VSC settings too
-            		userDir2="$HOME/.config/Visual Studio Code/User"
-            		mkdir -p "$userDir2"
-            		rm -rf $userDir2/settings.json
-            		cat \
-            			${(pkgs.formats.json { }).generate "blabla" userSettings} \
-            			> "$userDir2/settings.json"
+        # as I changed the name to Visual Studio Code, I need to maintain VSC settings too
+        userDir2="$HOME/.config/Visual Studio Code/User"
+        mkdir -p "$userDir2"
+        rm -rf $userDir2/settings.json
+        cat <<EOF > "$userDir2/settings.json"
+${userSettings}
+EOF
 
-            		# Also for .openvscode-server (I think you can put it here..?)
-            		userDir4="$HOME/.openvscode-server/data/Machine"
-            		mkdir -p "$userDir4"
-            		rm -rf $userDir4/settings.json
-            		cat \
-            			${(pkgs.formats.json { }).generate "blabla" userSettings} \
-            			> "$userDir4/settings.json"
-            	fi
-          '';
+        # Also for .openvscode-server (I think you can put it here..?)
+        userDir4="$HOME/.openvscode-server/data/Machine"
+        mkdir -p "$userDir4"
+        rm -rf $userDir4/settings.json
+        cat <<EOF > "$userDir4/settings.json"
+${userSettings}
+EOF
+      fi
+    '';
         };
       # ====== ============================ ======    
 
