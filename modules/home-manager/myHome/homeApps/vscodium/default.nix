@@ -22,12 +22,14 @@ in
     lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
 
       home.packages = with pkgs; [
+        nixd
+        nixfmt-rfc-style
+        #nixd # nix language server 
         (vscode-with-extensions.override {
           vscode = unstable.vscodium;
           vscodeExtensions = with vscode-extensions; [
             # vscodevim.vim # this is later when you're a chad
             ms-vsliveshare.vsliveshare
-            bbenoist.nix # nix language highlighting
             ms-azuretools.vscode-docker
             usernamehw.errorlens # Improve highlighting of errors, warnings and other language diagnostics.
             ritwickdey.liveserver # for html and css development
@@ -37,11 +39,12 @@ in
             james-yu.latex-workshop
             bungcip.better-toml # TOML language support
             matklad.rust-analyzer
-            arrterian.nix-env-selector # nix environment selector
             tamasfe.even-better-toml # Fully-featured TOML support
             eamodio.gitlens
             valentjn.vscode-ltex
-            vscode-extensions.jnoortheen.nix-ide # not work?
+            
+            # arrterian.nix-env-selector # nix environment selector
+            jnoortheen.nix-ide # not work?
             # you should try adding this one to have better nix code
             # b4dm4n.vscode-nixpkgs-fmt # for consistent nix code formatting (https://github.com/nix-community/nixpkgs-fmt)
 
