@@ -19,6 +19,11 @@ in
       enable = lib.mkOverride 1010 true;
       enableZshIntegration = lib.mkOverride 1010 true; # TODO check if zsh enabled?
       nix-direnv.enable = lib.mkOverride 1010 true;
+      config = {
+        global = {
+          hide_env_diff = true;
+        };
+      };
     };
   };
 }
