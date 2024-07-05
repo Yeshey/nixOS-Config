@@ -129,7 +129,7 @@
       # Formatter for your nix files, available through 'nix fmt'
       # Other options include 'alejandra' & 'nixpkgs-fmt'
       # Using the official nixpkgs formatter (article: https://drakerossman.com/blog/overview-of-nix-formatters-ecosystem)
-      formatter = forEachSystem (pkgs: pkgs.nixpkgs-fmt); # need to change to nixfmt-rfc-style when possible
+      formatter = forEachSystem (pkgs: pkgs.nixfmt-rfc-style); # need to change to nixfmt-rfc-style when possible
       # for now I can use this to format the repo: `nix-shell -p nixfmt-rfc-style -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/e89cf1c932006531f454de7d652163a9a5c86668.tar.gz --run "nixfmt ."`
       # formatter = forAllSystems (system: nixpkgs-unstable.legacyPackages.${system}.nixfmt-rfc-style);
       devShells = forEachSystem (pkgs: import ./shell.nix { inherit pkgs; });
