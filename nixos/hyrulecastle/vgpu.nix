@@ -14,7 +14,7 @@ let
   patchedPkgs = import (fetchTarball {
         url = "https://github.com/NixOS/nixpkgs/archive/468a37e6ba01c45c91460580f345d48ecdb5a4db.tar.gz";
         # sha256 = "sha256:057qsz43gy84myk4zc8806rd7nj4dkldfpn7wq6mflqa4bihvdka"; ??? BREAKS Mdevctl WHY OMFG!!
-        sha256 = "sha256:057qsz43gy84myk4zc8806rd7nj4dkldfpn7wq6mflqa4bihvdka";
+        sha256 = "sha256:11ri51840scvy9531rbz32241l7l81sa830s90wpzvv86v276aqs";
     }) {
     inherit system;
     config.allowUnfree = true;
@@ -40,13 +40,13 @@ in
     #   prefixLength = 24;
     # } ];
 
-    #boot.kernelPackages = patchedPkgs.linuxPackages_5_15; # needed for this linuxPackages_5_19
+    boot.kernelPackages = patchedPkgs.linuxPackages_5_15; # needed for this linuxPackages_5_19
 
     hardware.nvidia = {
       vgpu = {
         enable = true; # Install NVIDIA KVM vGPU + GRID driver
         #vgpu_driver_src.sha256 = "sha256-tFgDf7ZSIZRkvImO+9YglrLimGJMZ/fz25gjUT0TfDo="; # use if you're getting the `Unfortunately, we cannot download file...` error # find hash with `nix hash file foo.txt`        
-        /*
+        
         useMyDriver = {
           enable = true;
           name = "NVIDIA-Linux-x86_64-525.105.17-merged-vgpu-kvm-patched.run";
@@ -58,7 +58,7 @@ in
                 url = "https://drive.usercontent.google.com/download?id=17NN0zZcoj-uY2BELxY2YqGvf6KtZNXhG&export=download&authuser=0&confirm=t&uuid=b70e0e36-34df-4fde-a86b-4d41d21ce483&at=APZUnTUfGnSmFiqhIsCNKQjPLEk3%3A1714043345939";
                 sha256 = "sha256-g8BM1g/tYv3G9vTKs581tfSpjB6ynX2+FaIOyFcDfdI=";
               };
-        };*/
+        };
 
         fastapi-dls = {
           enable = true;
