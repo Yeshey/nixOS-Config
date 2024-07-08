@@ -6,7 +6,6 @@
   ...
 }:
 
-with lib;
 let
   cfg = config.mySystemHyruleCastle.vgpu;
 
@@ -27,7 +26,7 @@ in
   ];
   
   options.mySystemHyruleCastle.vgpu = {
-    enable = mkEnableOption "NvidiaVgpuSharing";
+    enable = lib.mkEnableOption "NvidiaVgpuSharing";
   };
 
   config = lib.mkIf cfg.enable {
@@ -41,13 +40,13 @@ in
     #   prefixLength = 24;
     # } ];
 
-    boot.kernelPackages = patchedPkgs.linuxPackages_5_15; # needed for this linuxPackages_5_19
+    #boot.kernelPackages = patchedPkgs.linuxPackages_5_15; # needed for this linuxPackages_5_19
 
     hardware.nvidia = {
       vgpu = {
         enable = true; # Install NVIDIA KVM vGPU + GRID driver
         #vgpu_driver_src.sha256 = "sha256-tFgDf7ZSIZRkvImO+9YglrLimGJMZ/fz25gjUT0TfDo="; # use if you're getting the `Unfortunately, we cannot download file...` error # find hash with `nix hash file foo.txt`        
-        
+        /*
         useMyDriver = {
           enable = true;
           name = "NVIDIA-Linux-x86_64-525.105.17-merged-vgpu-kvm-patched.run";
@@ -59,7 +58,7 @@ in
                 url = "https://drive.usercontent.google.com/download?id=17NN0zZcoj-uY2BELxY2YqGvf6KtZNXhG&export=download&authuser=0&confirm=t&uuid=b70e0e36-34df-4fde-a86b-4d41d21ce483&at=APZUnTUfGnSmFiqhIsCNKQjPLEk3%3A1714043345939";
                 sha256 = "sha256-g8BM1g/tYv3G9vTKs581tfSpjB6ynX2+FaIOyFcDfdI=";
               };
-        };
+        };*/
 
         fastapi-dls = {
           enable = true;

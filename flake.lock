@@ -789,18 +789,14 @@
         "nixpkgs-nixos2311": "nixpkgs-nixos2311"
       },
       "locked": {
-        "lastModified": 1718223752,
-        "narHash": "sha256-CEhaEogcx/B/u+ZyMHZFCPk98pI16078cDozNGDvb3k=",
-        "owner": "Yeshey",
-        "repo": "nixos-nvidia-vgpu",
-        "rev": "76d3e1fa86c2640b4e23064bd82f84bd0d4dc405",
-        "type": "github"
+        "lastModified": 1720443154,
+        "narHash": "sha256-zTOaC2zBzTL1I39wopemY3f7UG8M21JLnw4vmna5/Yo=",
+        "path": "/mnt/DataDisk/PersonalFiles/2023/Projects/Programming/nixos-nvidia-vgpu_nixOS/",
+        "type": "path"
       },
       "original": {
-        "owner": "Yeshey",
-        "ref": "535.129",
-        "repo": "nixos-nvidia-vgpu",
-        "type": "github"
+        "path": "/mnt/DataDisk/PersonalFiles/2023/Projects/Programming/nixos-nvidia-vgpu_nixOS/",
+        "type": "path"
       }
     },
     "nixpkgs": {
