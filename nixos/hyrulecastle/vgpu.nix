@@ -30,8 +30,16 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      looking-glass-client
+    environment.systemPackages = with pkgs; let
+      # Looking glass B6 version in nixpkgs: 
+      myLookingGlassPkgs = import (builtins.fetchTarball {
+          url = "https://github.com/NixOS/nixpkgs/archive/c0d0be00d4ecc4b51d2d6948e37466194c1e6c51.tar.gz";
+          sha256 = "sha256:1yrqrpmrdzbzcwb7kv9m6gbzjk68ljs098fv246brq6mc3s4v5qk";
+      }) {};
+      looking-glass-client-B7-rc1 = myLookingGlassPkgs.looking-glass-client;
+    in [
+      looking-glass-client-B7-rc1
+      #looking-glass-client
     ];
 
     # static IP, This doesnt work, the network is being managed by networkmanager, you can make changes in the gui or figure out how to manage that declaritivley
@@ -40,13 +48,17 @@ in
     #   prefixLength = 24;
     # } ];
 
-    boot.kernelPackages = patchedPkgs.linuxPackages_5_15; # needed for this linuxPackages_5_19
+    # boot.kernelPackages = pkgs.linuxPackages_6_1; # needed, 6.1 is LTS
+    # boot.kernelPackages = patchedPkgs.linuxPackages_5_15; # needed for this linuxPackages_5_19
 
     hardware.nvidia = {
       vgpu = {
         enable = true; # Install NVIDIA KVM vGPU + GRID driver
+        pinKernel = true;
         #vgpu_driver_src.sha256 = "sha256-tFgDf7ZSIZRkvImO+9YglrLimGJMZ/fz25gjUT0TfDo="; # use if you're getting the `Unfortunately, we cannot download file...` error # find hash with `nix hash file foo.txt`        
         
+        /*
+        # older driver, needs boot.kernelPackages = patchedPkgs.linuxPackages_5_15;
         useMyDriver = {
           enable = true;
           name = "NVIDIA-Linux-x86_64-525.105.17-merged-vgpu-kvm-patched.run";
@@ -57,6 +69,20 @@ in
                 name = "NVIDIA-Linux-x86_64-525.105.17-merged-vgpu-kvm-patched.run"; # So there can be special characters in the link below: https://github.com/NixOS/nixpkgs/issues/6165#issuecomment-141536009
                 url = "https://drive.usercontent.google.com/download?id=17NN0zZcoj-uY2BELxY2YqGvf6KtZNXhG&export=download&authuser=0&confirm=t&uuid=b70e0e36-34df-4fde-a86b-4d41d21ce483&at=APZUnTUfGnSmFiqhIsCNKQjPLEk3%3A1714043345939";
                 sha256 = "sha256-g8BM1g/tYv3G9vTKs581tfSpjB6ynX2+FaIOyFcDfdI=";
+              };
+        }; */
+
+        # newer driver for kernel 6.1, so I prevent it asking me to add the files manually
+        useMyDriver = {
+          enable = true;
+          name = "NVIDIA-Linux-x86_64-535.129.03-merged-vgpu-kvm-patched.run";
+          sha256 = "sha256-d+p3bKjMOGfKbyS2+kZ5pbADHZuarZcDisgPFFbS2p8=";
+          driver-version = "535.129.03";
+          vgpu-driver-version = "535.129.03";
+          getFromRemote = pkgs.fetchurl {
+                name = "NVIDIA-Linux-x86_64-535.129.03-merged-vgpu-kvm-patched.run"; # So there can be special characters in the link below: https://github.com/NixOS/nixpkgs/issues/6165#issuecomment-141536009
+                url = "https://drive.usercontent.google.com/download?id=1A7lxmCpHOkiYsUBEwSP35Rk_eFD7b1Wc&export=download&authuser=0&confirm=t&uuid=adc55f65-e1f2-49e7-8885-c875c082da64&at=APZUnTXb6XM5IdYAXGjtG6-xpiic%3A1720535130144";
+                sha256 = "sha256-d+p3bKjMOGfKbyS2+kZ5pbADHZuarZcDisgPFFbS2p8=";
               };
         };
 
