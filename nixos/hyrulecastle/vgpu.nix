@@ -72,7 +72,6 @@ in
               };
         }; */
 
-/*
         # newer driver for kernel 6.1, so I prevent it asking me to add the files manually
         useMyDriver = {
           enable = true;
@@ -86,7 +85,7 @@ in
                 sha256 = "sha256-d+p3bKjMOGfKbyS2+kZ5pbADHZuarZcDisgPFFbS2p8=";
               };
         };
-*/
+
         fastapi-dls = {
           enable = true;
           #local_ipv4 = "192.168.1.109"; # "localhost"; #"192.168.1.109";

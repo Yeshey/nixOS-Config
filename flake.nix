@@ -40,6 +40,12 @@
       url = "github:Yeshey/nixos-nvidia-vgpu/535.129";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    
+    #nixos-nvidia-vgpu = { # sudo nixos-rebuild --flake ~/.setup#laptop switch --update-input nixos-nvidia-vgpu --impure
+    #  type = "path";
+    #  path = "/mnt/DataDisk/PersonalFiles/2023/Projects/Programming/nixos-nvidia-vgpu_nixOS/";
+    #  # inputs.nixpkgs.follows = "nixpkgs";
+    #};
     impermanence.url = "github:nix-community/impermanence";
     deploy-rs = {
       url = "github:serokell/deploy-rs";
