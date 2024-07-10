@@ -35,7 +35,7 @@ in
       myLookingGlassPkgs = import (builtins.fetchTarball {
           url = "https://github.com/NixOS/nixpkgs/archive/c0d0be00d4ecc4b51d2d6948e37466194c1e6c51.tar.gz";
           sha256 = "sha256:1yrqrpmrdzbzcwb7kv9m6gbzjk68ljs098fv246brq6mc3s4v5qk";
-      }) {};
+      }) { inherit system; };
       looking-glass-client-B7-rc1 = myLookingGlassPkgs.looking-glass-client;
     in [
       looking-glass-client-B7-rc1
@@ -72,6 +72,7 @@ in
               };
         }; */
 
+/*
         # newer driver for kernel 6.1, so I prevent it asking me to add the files manually
         useMyDriver = {
           enable = true;
@@ -85,7 +86,7 @@ in
                 sha256 = "sha256-d+p3bKjMOGfKbyS2+kZ5pbADHZuarZcDisgPFFbS2p8=";
               };
         };
-
+*/
         fastapi-dls = {
           enable = true;
           #local_ipv4 = "192.168.1.109"; # "localhost"; #"192.168.1.109";
