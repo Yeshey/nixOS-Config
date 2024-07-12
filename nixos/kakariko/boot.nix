@@ -27,7 +27,7 @@ in
   security.tpm2.pkcs11.enable = true;  # expose /run/current-system/sw/lib/libtpm2_pkcs11.so
   security.tpm2.tctiEnvironment.enable = true;  # TPM2TOOLS_TCTI and TPM2_PKCS11_TCTI env variables
 
-  fileSystems."/boot" =
+  fileSystems."/boot/efi" =
     { device = "/dev/disk/by-uuid/84A9-3C95";
       fsType = "vfat";
       #options = [ "fmask=0022" "dmask=0022" ]; 
@@ -43,7 +43,7 @@ in
     configurationLimit = 10; # You can leave it null for no limit, but it is not recommended, as it can fill your boot partition.
   };
   boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot";
+  boot.loader.efi.efiSysMountPoint = "/boot/efi";
 
   boot.initrd.systemd.enable = true;
   boot.initrd.systemd.enableTpm2 = true;
