@@ -100,7 +100,7 @@ in
                     ssh -o StrictHostKeyChecking=no root@"''${REMOTE_IP}" "sudo poweroff" && echo "Remote machine powered off."
 
                     # Power off the local machine
-                    sudo poweroff && echo "Local machine powered off."
+                    poweroff && echo "Local machine powered off."
                 else
                     echo "Unable to update all flake inputs, trying to update just nixpkgs"
                     cd "${cfg.falkeLocation}" && git checkout -- flake.lock
@@ -111,7 +111,7 @@ in
                         ssh  -o StrictHostKeyChecking=noroot@"''${REMOTE_IP}" "sudo poweroff" && echo "Remote machine powered off."
 
                         # Power off the local machine
-                        sudo poweroff && echo "Local machine powered off."
+                        poweroff && echo "Local machine powered off."
                     else
                         echo "NixOS upgrade failed. Rolling back changes to flake.lock"
                         cd "${cfg.falkeLocation}" && git checkout -- flake.lock

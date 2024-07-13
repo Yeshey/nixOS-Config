@@ -85,6 +85,7 @@ in
     # Specific packages
     packages = with pkgs; [
       psensor
+      xournal
 
       # Surface and Desktop apps
       qbittorrent
