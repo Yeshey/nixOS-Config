@@ -31,6 +31,7 @@ in
       enable = true;
       configFile = cfg.thermalConf; # (https://github.com/linux-surface/linux-surface/blob/master/contrib/thermald/thermal-conf.xml)
     };
+    /*
     systemd.services.thermald.serviceConfig.ExecStart =
       let # running with --adaptive ignores the config file. Issue raised: https://github.com/NixOS/nixpkgs/issues/201402
         cfgt = config.services.thermald;
@@ -39,6 +40,6 @@ in
         ${cfgt.package}/sbin/thermald \
           --no-daemon \
           ${if cfgt.configFile != null then "--config-file ${cfgt.configFile}" else "--adaptive"} \
-      '';
+      ''; */
   };
 }
