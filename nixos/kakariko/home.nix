@@ -86,6 +86,7 @@ in
     packages = with pkgs; [
       psensor
       xournal
+      microsoft-edge
 
       # Surface and Desktop apps
       qbittorrent
