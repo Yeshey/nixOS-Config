@@ -41,6 +41,7 @@ in
             tamasfe.even-better-toml # Fully-featured TOML support
             eamodio.gitlens
             valentjn.vscode-ltex
+            streetsidesoftware.code-spell-checker # spell checker
             
             # arrterian.nix-env-selector # nix environment selector
             jnoortheen.nix-ide # not work?
