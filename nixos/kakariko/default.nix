@@ -184,5 +184,17 @@ in
   #  hostName = "kakariko"; # TODO make into variable
   #};
 
+  # Fix for:
+  # jul 15 18:03:07 nixos-kakariko kernel: i915 0000:00:02.0: [drm] Resetting rcs0 for preemption time out
+  # jul 15 18:03:07 nixos-kakariko kernel: i915 0000:00:02.0: [drm] WorldOfTanks.ex[6444] context reset due to GPU hang
+
+  # Trying https://devopsx.com/intel-gpu-hang/
+  # it was this (I made a comment) https://gitlab.freedesktop.org/mesa/mesa/-/issues/3641
+
+  environment.variables = {
+    #MESA_LOADER_DRIVER_OVERRIDE = "i965";
+    INTEL_DEBUG = "reemit";
+  };
+
   system.stateVersion = "22.05";
 }
