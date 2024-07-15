@@ -23,8 +23,9 @@
     },
     "code-runner.runInTerminal": true,
     "files.autoSave": "afterDelay",
-    "java.jdt.ls.java.home": "/run/current-system/sw/lib/openjdk/",
-    "ltex.java.path": "/run/current-system/sw/lib/openjdk/",
+    // "java.jdt.ls.java.home": "/run/current-system/sw/lib/openjdk/",
+    // "ltex.java.path": "/run/current-system/sw/lib/openjdk/",
+    // /etc/profiles/per-user/yeshey/lib/openjdk
     "ltex.language": "pt-PT",
     "editor.wordWrap": "on",
     
