@@ -41,5 +41,20 @@ in
           --no-daemon \
           ${if cfgt.configFile != null then "--config-file ${cfgt.configFile}" else "--adaptive"} \
       ''; */
+
+    systemd.services.restart-thermald = {
+      description = "Restart thermald after 10 seconds";
+      after = [ "network.target" "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
+      script = ''
+        echo "restarting thermald to make sure it works..."
+        ${pkgs.systemd}/bin/systemctl restart thermald
+      '';
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStartPre = "${pkgs.coreutils}/bin/sleep 40";
+      };
+    };
+
   };
 }
