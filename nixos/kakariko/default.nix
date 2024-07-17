@@ -131,7 +131,7 @@ in
       enable = true;
     };
 
-    androidDevelopment.enable = false;
+    androidDevelopment.enable = true;
 
     agenix = {
       enable = true;
