@@ -84,6 +84,7 @@ in
   home = {
     # Specific packages
     packages = with pkgs; [
+      nethack
       psensor
       xournal
       microsoft-edge
