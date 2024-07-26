@@ -120,7 +120,7 @@ in
       dates = "weekly";
     };
     autoUpgradesSurface = {
-      enable = true;
+      enable = false;
       location = "github:yeshey/nixOS-Config";
       host = "kakariko";
       dates = "daily";
