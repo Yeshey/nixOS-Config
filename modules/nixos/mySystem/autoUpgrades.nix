@@ -78,6 +78,7 @@ in
       persistent = lib.mkOverride 1010 true; # upgrades even if PC was off when it would upgrade
     };
     
+    /*
     # taking from https://github.com/NixOS/nixpkgs/blob/nixos-23.11/nixos/modules/tasks/auto-upgrade.nix
     systemd.services.nixos-upgrade = 
       let
@@ -149,6 +150,7 @@ in
           ${pkgs.git}/bin/git -C "${cfg.location}" checkout -- flake.lock
         '';
       };
+      */
   };
 
 
