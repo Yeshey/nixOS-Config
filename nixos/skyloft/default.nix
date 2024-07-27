@@ -66,7 +66,7 @@
     };
     autoUpgrades = {
       enable = true;
-      location = "/home/yeshey/.setup";
+      location = "github:Yeshey/nixOS-Config"; # "github:Yeshey/nixOS-Config"
       host = "skyloft";
       dates = "weekly";
     };
@@ -101,7 +101,7 @@
 
   time.timeZone = "Europe/Madrid";
 
-  system.autoUpgrade.allowReboot = true;
+  system.autoUpgrade.allowReboot = false;
 
   nixpkgs.config = {
     allowUnsupportedSystem = true;
