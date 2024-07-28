@@ -32,6 +32,9 @@ in
       in [
         wineWow64Packages.full
 
+        vital
+        helm
+
         github-desktop
         obs-studio
         stremio
@@ -52,7 +55,7 @@ in
         # firefox
         # librewolf
 
-        qpwgraph
+        qpwgraph # change sound inputs and outputs
 
         vlc
         # anydesk
