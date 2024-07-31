@@ -30,6 +30,7 @@
   environment.packages = with pkgs; [
     nano
     git
+    nur.repos.ataraxiasjel.waydroid-script # https://www.reddit.com/r/NixOS/comments/15k2jxc/need_help_with_activating_libhoudini_for_waydroid/
   ];
 
   home-manager.config = ./home.nix;
