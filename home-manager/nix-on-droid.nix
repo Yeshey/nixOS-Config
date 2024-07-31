@@ -22,8 +22,26 @@
     # ./nvim.nix
   ];
 
-  environment.packages = [pkgs.nano];
+  android-integration.am.enable = true;
+  android-integration.termux-open-url.enable = true;
+  android-integration.xdg-open.enable = true;
+
+  # Simply install just the packages
+  environment.packages = with pkgs; [
+    nano
+    git
+  ];
+
+  home-manager.config = ./../modules/home-manager;
+
+  # Set up nix for flakes
+  nix.extraOptions = ''
+    experimental-features = nix-command flakes
+  '';
+
+  # Read the changelog before changing this value
   system.stateVersion = "24.05";
+
 
 /*
   myHome = {
