@@ -12,10 +12,10 @@
     # All the options
     user = "nix-on-droid";
     dataStoragePath = "~/";
-    xdgPersonalFilesOrganization.enable = true;
+    xdgPersonalFilesOrganization.enable = false;
     nonNixos.enable = false;
     plasma.enable = false;
-    gnome.enable = true;
+    gnome.enable = false;
     ssh.enable = true;
     hyprland = {
       enable = false;
@@ -61,10 +61,10 @@
       onedriverFolder = "/home/yeshey/OneDriver";
       serviceName = "home-yeshey-OneDriver";
     };
-    direnv.enable = true;
+    direnv.enable = false;
     stylix = {
       # https://www.youtube.com/watch?v=ljHkWgBaQWU
-      enable = true;
+      enable = false;
       #base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-medium.yaml"; #pop.yaml
       wallpaper = pkgs.wallpapers.nierAutomataWallpaper; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement
       cursor = {
