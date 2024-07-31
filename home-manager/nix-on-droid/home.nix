@@ -4,7 +4,7 @@
 
 {
   imports = [
-    ./../../modules/home-manager
+    ./../../modules/home-manager/myHome
   ];
 
   nix.package = pkgs.nix;
