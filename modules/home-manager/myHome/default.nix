@@ -16,9 +16,7 @@ in
 
 
     ./ssh/default.nix
-    ./stylix.nix
-    ./xdgPersonalFilesOrganization.nix
-    ./impermanence.nix
+
   ];
   options.myHome = with lib; {
     enable = mkEnableOption "myHome";
