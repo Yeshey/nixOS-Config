@@ -43,6 +43,21 @@
   system.stateVersion = "24.05";
 
 /*
+  myHome = {
+    user = "yeshey";
+    nonNixos.enable = true;
+    gnome.enable = false;
+    devops.enable = false;
+    cli.personalGitEnable = true;
+    tmux.enable = true;
+    zsh.enable = true;
+    neovim = {
+      enable = true;
+      enableLSP = true;
+    };
+  };
+*/
+/*
   nixpkgs = {
     # You can add overlays here
     overlays = [
