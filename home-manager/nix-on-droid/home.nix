@@ -51,33 +51,7 @@
       libreoffice.enable = true;
       devops.enable = false;
     };
-    # autoStartApps = [ pkgs.vesktop ]; # only works with gnome??
-    zsh = {
-      enable = true;
-      starshipTheme = "pinage404"; # fredericrous # pinage404
-    };
-    onedriver = {
-      enable = false;
-      onedriverFolder = "/home/yeshey/OneDriver";
-      serviceName = "home-yeshey-OneDriver";
-    };
-    direnv.enable = false;
-    stylix = {
-      # https://www.youtube.com/watch?v=ljHkWgBaQWU
-      enable = false;
-      #base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-medium.yaml"; #pop.yaml
-      wallpaper = pkgs.wallpapers.nierAutomataWallpaper; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement
-      cursor = {
-        package = pkgs.banana-cursor;
-        name = "Banana";
-      };
-    };
-    agenix = { # TODO allow to easily turn of agenix?
-      enable = false;
-      sshKeys.enable = true;
-      onedriver.enable = true;
-    };
-    impermanence.enable = false;
+  
   };
 
 /*
