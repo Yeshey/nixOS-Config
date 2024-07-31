@@ -16,7 +16,7 @@
     nonNixos.enable = false;
     plasma.enable = false;
     gnome.enable = false;
-    ssh.enable = true;
+    ssh.enable = false;
     hyprland = {
       enable = false;
     };
