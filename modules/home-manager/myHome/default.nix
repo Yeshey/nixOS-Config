@@ -12,7 +12,6 @@ let
 in
 {
   imports = [
-    ./safe-rm.nix # always active
 
 
     ./homeApps/default.nix
