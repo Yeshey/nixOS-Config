@@ -172,7 +172,7 @@ in
 
     environment = {
       shells = [ pkgs.zsh ];
-      pathsToLink = [ "/share/zsh" ];
+      #pathsToLink = [ "/share/zsh" ];
     };
     users.defaultUserShell = lib.mkOverride 995 pkgs.zsh;
   };
