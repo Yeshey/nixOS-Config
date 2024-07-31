@@ -17,6 +17,7 @@ in
 
     ./ssh/default.nix
 
+    ./impermanence.nix
   ];
   options.myHome = with lib; {
     enable = mkEnableOption "myHome";
