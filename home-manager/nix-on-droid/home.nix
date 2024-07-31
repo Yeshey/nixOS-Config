@@ -9,16 +9,16 @@
 
 {
   imports = [
-    ./../../modules/home-manager/myHome
+    #./../../modules/home-manager/myHome
   ];
 
-  myHome = {
-    enable = true;
+  # cant pass the inputs variable inside?
+  #myHome = {
+  #  enable = true;
     # All the options
-    user = "nix-on-droid";
-    dataStoragePath = "~/";
-
-  };
+  #  user = "nix-on-droid";
+  #  dataStoragePath = "~/";
+  #};
 
 /*
   myHome = {
