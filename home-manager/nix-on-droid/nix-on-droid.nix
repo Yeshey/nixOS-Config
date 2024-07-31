@@ -32,7 +32,7 @@
     git
   ];
 
-  home-manager.config = ./../modules/home-manager;
+  home-manager.config = ./home.nix;
 
   # Set up nix for flakes
   nix.extraOptions = ''
@@ -41,7 +41,6 @@
 
   # Read the changelog before changing this value
   system.stateVersion = "24.05";
-
 
 /*
   myHome = {
