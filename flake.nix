@@ -189,7 +189,6 @@
 
     # Define nixOnDroidConfigurations for Nix-on-Droid
     nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
-      overlays = import ./overlays { inherit inputs outputs; };
       pkgs = import nixpkgs { system = "aarch64-linux"; };
       modules = [ ./home-manager/nix-on-droid/nix-on-droid.nix ];
     };
