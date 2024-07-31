@@ -195,17 +195,7 @@
 
           # overlays = import ./overlays { inherit inputs outputs; };
         };
-        modules =
-          [
-            {
-              _module.args = {
-                inherit inputs;
-
-                system = "aarch64-linux";
-              };
-            }
-            ./home-manager/nix-on-droid.nix
-          ];
+        modules = (builtins.attrValues homeManagerModules) ++ [ ./home-manager/home.nix ];
       };
 
     deploy.nodes = {
