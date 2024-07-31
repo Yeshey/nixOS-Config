@@ -12,8 +12,13 @@ let
 in
 {
   imports = [
+    ./safe-rm.nix # always active
 
-
+    ./gnome/default.nix
+    ./plasma/default.nix
+    ./non-nixos.nix
+    ./zsh/default.nix
+    ./direnv.nix
     ./homeApps/default.nix
     ./hyprland/default.nix
     ./autoStartApps.nix
@@ -29,7 +34,7 @@ in
     dataStoragePath = mkOption {
       type = types.str;
       description = "Storage drive or path to put everything. needs to be set if not set in mySystem module.";
-      #default = "${osConfig.mySystem.dataStoragePath}";
+      default = "${osConfig.mySystem.dataStoragePath}";
     };
     user = mkOption {
       type = types.str;
