@@ -192,9 +192,8 @@
       pkgs = import nixpkgs { system = "aarch64-linux"; };
       modules = [
         ./home-manager/nix-on-droid/nix-on-droid.nix
-        ./modules/home-manager/myHome/default.nix # Import your custom module
+        ./modules/home-manager/myHome/default.nix { inherit inputs outputs; }
       ];
-      specialArgs = { inherit inputs outputs; };
     };
 /*
     nixOnDroidConfigurations = {
