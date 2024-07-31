@@ -190,7 +190,11 @@
     # Define nixOnDroidConfigurations for Nix-on-Droid
     nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
       pkgs = import nixpkgs { system = "aarch64-linux"; };
-      modules = [ ./home-manager/nix-on-droid/nix-on-droid.nix ];
+      modules = [
+        ./home-manager/nix-on-droid/nix-on-droid.nix
+        ./modules/home-manager/myHome/default.nix # Import your custom module
+      ];
+      specialArgs = { inherit inputs outputs; };
     };
 /*
     nixOnDroidConfigurations = {
