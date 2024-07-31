@@ -90,7 +90,7 @@
     nixpkgs-unstable,
     nixos-hardware,
     home-manager,
-    nix-on-droid, # Add nix-on-droid to the outputs
+    nix-on-droid,
     agenix,
     neovim-plugins,
     deploy-rs,
@@ -190,7 +190,7 @@
     # Define nixOnDroidConfigurations for Nix-on-Droid
     nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
       pkgs = import nixpkgs { system = "aarch64-linux"; };
-      modules = [ ./home-manager/nix-on-droid.nix ];
+      #modules = [ ./home-manager/nix-on-droid.nix ];
     };
 /*
     nixOnDroidConfigurations = {
