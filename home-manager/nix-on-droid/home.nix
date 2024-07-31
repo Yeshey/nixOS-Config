@@ -12,11 +12,7 @@
     # All the options
     user = "nix-on-droid";
     dataStoragePath = "~/";
-    xdgPersonalFilesOrganization.enable = false;
-    nonNixos.enable = false;
-    plasma.enable = false;
-    gnome.enable = false;
- 
+
   };
 
 /*
