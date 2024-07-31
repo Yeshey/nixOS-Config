@@ -2,11 +2,19 @@
 , ...
 }:
 
-{/*
+{
   imports = [
     ./../../modules/home-manager/myHome
   ];
 
+  myHome = {
+    enable = true;
+    # All the options
+    user = "nix-on-droid";
+    dataStoragePath = "~/";
+  };
+
+/*
   myHome = {
     enable = true;
     # All the options
