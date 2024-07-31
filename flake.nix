@@ -193,7 +193,7 @@
         pkgs = import inputs.nixpkgs {
           system = "aarch64-linux";
 
-          overlays = import ./overlays { inherit inputs outputs; };
+          # overlays = import ./overlays { inherit inputs outputs; };
         };
         modules =
           [
