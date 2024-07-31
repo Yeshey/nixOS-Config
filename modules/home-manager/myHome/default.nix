@@ -12,13 +12,7 @@ let
 in
 {
   imports = [
-    ./safe-rm.nix # always active
 
-    ./gnome/default.nix
-    ./plasma/default.nix
-    ./non-nixos.nix
-    ./zsh/default.nix
-    ./direnv.nix
 
   ];
   options.myHome = with lib; {
