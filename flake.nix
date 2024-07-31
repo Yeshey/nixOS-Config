@@ -189,7 +189,7 @@
 
     # Define nixOnDroidConfigurations for Nix-on-Droid
     nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
-      specialArgs = { inherit inputs outputs; };
+      #specialArgs = { inherit inputs outputs; };
       modules = (builtins.attrValues nixosModules) ++ [
         home-manager.nixosModules.default
         ./home-manager/nix-on-droid.nix
