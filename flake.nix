@@ -62,6 +62,13 @@
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Add the nix-on-droid input here
+    nix-on-droid = {
+      url = "github:nix-community/nix-on-droid/release-24.05";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
     /*
       nixgl = { # Might be needed for non-nixOS setups
         url = "github:guibou/nixGL";
@@ -77,188 +84,157 @@
     }; */
   };
 
-  outputs =
-    {
-      self,
-      nixpkgs,
-      nixpkgs-unstable,
-      nixos-hardware,
-      home-manager,
-      agenix,
-      neovim-plugins,
-      #    , nixgl
-      deploy-rs,
-      stylix,
-      plasma-manager,
-      nurpkgs,
-      hyprland-plugins,
-      nixos-nvidia-vgpu,
-      nixos-generators,
-      impermanence,
-      # lanzaboote,
-      ...
-    }@inputs:
-    let
-      inherit (self) outputs;
-      lib = nixpkgs.lib // home-manager.lib;
-      # Supported systems for your flake packages, shell, etc.
-      systems = [
-        "aarch64-linux"
-        "i686-linux"
-        "x86_64-linux"
-        "aarch64-darwin"
-        "x86_64-darwin"
-      ];
-      # This is a function that generates an attribute by calling a function you
-      # pass to it, with each system as an argument
-      forEachSystem = f: lib.genAttrs systems (system: f pkgsFor.${system});
-      pkgsFor = lib.genAttrs systems (
-        system:
-        import nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-        }
-      );
-    in
-    rec {
-      # rec makes it pass several times, makes for example nixosModules be visible inside nixosConfigurations
-      # Your custom packages
-      # Accessible through 'nix build', 'nix shell', etc
-      #packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
-      packages = forEachSystem (pkgs: import ./pkgs { inherit pkgs; });
-      # Formatter for your nix files, available through 'nix fmt'
-      # Other options include 'alejandra' & 'nixpkgs-fmt'
-      # Using the official nixpkgs formatter (article: https://drakerossman.com/blog/overview-of-nix-formatters-ecosystem)
-      formatter = forEachSystem (pkgs: pkgs.nixfmt-rfc-style); # need to change to nixfmt-rfc-style when possible
-      # for now I can use this to format the repo: `nix-shell -p nixfmt-rfc-style -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/e89cf1c932006531f454de7d652163a9a5c86668.tar.gz --run "nixfmt ."`
-      # formatter = forAllSystems (system: nixpkgs-unstable.legacyPackages.${system}.nixfmt-rfc-style);
-      devShells = forEachSystem (pkgs: import ./shell.nix { inherit pkgs; });
+  outputs = {
+    self,
+    nixpkgs,
+    nixpkgs-unstable,
+    nixos-hardware,
+    home-manager,
+    nix-on-droid, # Add nix-on-droid to the outputs
+    agenix,
+    neovim-plugins,
+    deploy-rs,
+    stylix,
+    plasma-manager,
+    nurpkgs,
+    hyprland-plugins,
+    nixos-nvidia-vgpu,
+    nixos-generators,
+    impermanence,
+    # lanzaboote,
+    ...
+  }@inputs:
+  let
+    inherit (self) outputs;
+    lib = nixpkgs.lib // home-manager.lib;
+    # Supported systems for your flake packages, shell, etc.
+    systems = [
+      "aarch64-linux"
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
+    # This is a function that generates an attribute by calling a function you
+    # pass to it, with each system as an argument
+    forEachSystem = f: lib.genAttrs systems (system: f pkgsFor.${system});
+    pkgsFor = lib.genAttrs systems (
+      system:
+      import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      }
+    );
+  in
+  rec {
+    packages = forEachSystem (pkgs: import ./pkgs { inherit pkgs; });
+    formatter = forEachSystem (pkgs: pkgs.nixfmt-rfc-style);
+    devShells = forEachSystem (pkgs: import ./shell.nix { inherit pkgs; });
 
-      # TODO not importing overlays like this anymore? review how to do overlays
-      # Your custom packages and modifications, exported as overlays
-      overlays = import ./overlays { inherit inputs outputs; };
-      # Overlays
-      /*
-        overlays = {
-          default = import ./overlays/default.nix;
-          unstable = final: prev: {
-            unstable = nixpkgs-unstable.legacyPackages.${prev.system};
-            inherit (nixpkgs-unstable.legacyPackages.${prev.system}) neovim-unwrapped;
-          };
-          # call the overlays
-          neovimPlugins = neovim-plugins.overlays.default;
-          # agenix = agenix.overlays.default; # TODO ? remove
-          # nixgl = nixgl.overlays.default;
-        };
-      */
+    overlays = import ./overlays { inherit inputs outputs; };
 
-      /*
-          legacyPackages = forAllSystems (system:
-            import inputs.nixpkgs {
-              inherit system;
-              overlays = builtins.attrValues overlays;
-              config.allowUnfree = true;
-            }
-          );
-      */
+    nixosModules = import ./modules/nixos;
+    homeManagerModules = import ./modules/home-manager;
 
-      nixosModules = import ./modules/nixos;
-      homeManagerModules = import ./modules/home-manager;
-
-      # NixOS configuration entrypoint
-      # Available through 'nixos-rebuild --flake .#your-hostname'
-      nixosConfigurations =
-        let
-          defaultModules = (builtins.attrValues nixosModules) ++ [
-            nixos-generators.nixosModules.all-formats # try nix build ~/.setup#nixosConfigurations.twilightrealm.config.formats.isa
-            home-manager.nixosModules.default
-          ];
-          specialArgs = {
-            inherit inputs outputs;
-          };
-        in
-        {
-          hyrulecastle = # Lenovo Laptop - Main Machine
-            nixpkgs.lib.nixosSystem {
-              inherit specialArgs;
-              modules = defaultModules ++ [ ./nixos/hyrulecastle ];
-            };
-
-          kakariko = # Surface Pro 7 - Portable Machine
-            nixpkgs.lib.nixosSystem {
-              inherit specialArgs;
-              modules = defaultModules ++ [ ./nixos/kakariko ];
-            };
-
-          skyloft = # Oracle Arm Ampere - Server
-            nixpkgs.lib.nixosSystem {
-              inherit specialArgs;
-              modules = defaultModules ++ [ ./nixos/skyloft ];
-            };
-
-          twilightrealm = # Virtual Machines
-            nixpkgs.lib.nixosSystem {
-              inherit specialArgs;
-              modules = defaultModules ++ [ ./nixos/twilightrealm ];
-            };
-
-          iso = # to create ISO and bootable usbs
-            nixpkgs.lib.nixosSystem {
-              inherit specialArgs;
-              #system = "x86_64-linux";
-              modules = defaultModules ++ [ 
-                ./nixos/iso
-              ];
-            };
-        };
-
-      # Standalone home-manager configuration entrypoint
-      # Available through 'home-manager --flake .#your-username@your-hostname'
-      homeConfigurations = {
-        # For Non-NixOS
-        "yeshey@zoras" = home-manager.lib.homeManagerConfiguration {
-          pkgs = pkgsFor.x86_64-linux; # Home-manager requires 'pkgs' instance
-          extraSpecialArgs = {
-            inherit inputs outputs;
-          };
-          modules = (builtins.attrValues homeManagerModules) ++ [ ./home-manager/home.nix ];
-        };
-
-        #"yeshey@nix-on-droid" = home-manager.lib.homeManagerConfiguration {
-        #  pkgs = legacyPackages.x86_64-linux;
-        #  extraSpecialArgs = { inherit inputs outputs; };
-        #  modules = (builtins.attrValues homeManagerModules) ++ [
-        #    ./home-manager/nix-on-droid.nix
-        #  ];
-        #};
+    nixosConfigurations = {
+      hyrulecastle = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs outputs; };
+        modules = (builtins.attrValues nixosModules) ++ [
+          nixos-generators.nixosModules.all-formats
+          home-manager.nixosModules.default
+          ./nixos/hyrulecastle
+        ];
       };
-
-      # For remote deployment, use with Ex: `deploy '.#hyrulecastle' --debug-logs --skip-checks`
-      # the deploy-rs package is added globally in modules/nixos/mySystem/default.nix
-      deploy.nodes =
-        let
-          mkDeployConfig = hostname: configuration: {
-            inherit hostname;
-            profiles.system =
-              let
-                inherit (configuration.config.nixpkgs.hostPlatform) system;
-              in
-              {
-                path = deploy-rs.lib."${system}".activate.nixos configuration;
-                sshUser = "yeshey";
-                user = "root";
-                sshOpts = [ "-t" ];
-                magicRollback = true; # Disable because it breaks remote sudo :<
-                interactiveSudo = true;
-              };
-          };
-        in
-        {
-          hyrulecastle = mkDeployConfig "192.168.1.109" self.nixosConfigurations.hyrulecastle;
-          kakariko = mkDeployConfig "kakariko.lan" self.nixosConfigurations.kakariko;
-          skyloft = mkDeployConfig "143.47.53.175" self.nixosConfigurations.skyloft;
-        };
-
-      checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+      kakariko = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs outputs; };
+        modules = (builtins.attrValues nixosModules) ++ [
+          nixos-generators.nixosModules.all-formats
+          home-manager.nixosModules.default
+          ./nixos/kakariko
+        ];
+      };
+      skyloft = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs outputs; };
+        modules = (builtins.attrValues nixosModules) ++ [
+          nixos-generators.nixosModules.all-formats
+          home-manager.nixosModules.default
+          ./nixos/skyloft
+        ];
+      };
+      twilightrealm = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs outputs; };
+        modules = (builtins.attrValues nixosModules) ++ [
+          nixos-generators.nixosModules.all-formats
+          home-manager.nixosModules.default
+          ./nixos/twilightrealm
+        ];
+      };
+      iso = nixpkgs.lib.nixosSystem {
+        specialArgs = { inherit inputs outputs; };
+        modules = (builtins.attrValues nixosModules) ++ [
+          nixos-generators.nixosModules.all-formats
+          home-manager.nixosModules.default
+          ./nixos/iso
+        ];
+      };
     };
+
+    homeConfigurations = {
+      "yeshey@zoras" = home-manager.lib.homeManagerConfiguration {
+        pkgs = pkgsFor.x86_64-linux;
+        extraSpecialArgs = { inherit inputs outputs; };
+        modules = (builtins.attrValues homeManagerModules) ++ [ ./home-manager/home.nix ];
+      };
+    };
+
+    # Define nixOnDroidConfigurations for Nix-on-Droid
+    nixOnDroidConfigurations = {
+      "yeshey@nix-on-droid" = nix-on-droid.lib.mkNixOnDroid {
+        system = "aarch64-linux-android"; # Specify the Android system architecture
+        home-manager = {
+          modules = [ ./home-manager/nix-on-droid.nix ];
+        };
+        extraSpecialArgs = { inherit inputs outputs; };
+      };
+    };
+
+    deploy.nodes = {
+      hyrulecastle = {
+        hostname = "192.168.1.109";
+        profiles.system = {
+          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.hyrulecastle;
+          sshUser = "yeshey";
+          user = "root";
+          sshOpts = [ "-t" ];
+          magicRollback = true;
+          interactiveSudo = true;
+        };
+      };
+      kakariko = {
+        hostname = "kakariko.lan";
+        profiles.system = {
+          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.kakariko;
+          sshUser = "yeshey";
+          user = "root";
+          sshOpts = [ "-t" ];
+          magicRollback = true;
+          interactiveSudo = true;
+        };
+      };
+      skyloft = {
+        hostname = "143.47.53.175";
+        profiles.system = {
+          path = deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.skyloft;
+          sshUser = "yeshey";
+          user = "root";
+          sshOpts = [ "-t" ];
+          magicRollback = true;
+          interactiveSudo = true;
+        };
+      };
+    };
+
+    checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+  };
 }
+
