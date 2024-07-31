@@ -16,42 +16,7 @@
     nonNixos.enable = false;
     plasma.enable = false;
     gnome.enable = false;
-    ssh.enable = false;
-    hyprland = {
-      enable = false;
-    };
-    homeApps = {
-      enable = false;
-      cli = {
-        enable = true;
-        general.enable = true;
-        git = {
-          enable = true;
-          personalGit = {
-            enable = true;
-            userName = "Yeshey";
-            userEmail = "yesheysangpo@hotmail.com";
-          };
-        };
-        tmux.enable = true;
-        neovim = {
-          enable = true;
-          enableLSP = true;
-        };
-      };
-      firefox = {
-        enable = true;
-        i2pFirefoxProfile = true;
-      };
-      vscodium.enable = true;
-      discord.enable = true;
-      gaming.enable = true;
-      kitty.enable = false;
-      alacritty.enable = false;
-      libreoffice.enable = true;
-      devops.enable = false;
-    };
-  
+ 
   };
 
 /*
