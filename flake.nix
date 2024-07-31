@@ -189,14 +189,24 @@
 
     # Define nixOnDroidConfigurations for Nix-on-Droid
     nixOnDroidConfigurations = {
-      "yeshey@nix-on-droid" = nix-on-droid.lib.mkNixOnDroid {
-        system = "aarch64-linux-android"; # Specify the Android system architecture
-        home-manager = {
-          modules = [ ./home-manager/nix-on-droid.nix ];
+      "yeshey@nix-on-droid" = nix-on-droid.lib.nixOnDroidConfiguration {
+        pkgs = import inputs.nixpkgs {
+          system = "aarch64-linux";
+
+          overlays = import ./overlays { inherit inputs outputs; };
         };
-        extraSpecialArgs = { inherit inputs outputs; };
+        modules =
+          [
+            {
+              _module.args = {
+                inherit inputs;
+
+                system = "aarch64-linux";
+              };
+            }
+            ./home-manager/nix-on-droid.nix
+          ];
       };
-    };
 
     deploy.nodes = {
       hyrulecastle = {
