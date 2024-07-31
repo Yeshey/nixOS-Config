@@ -2,7 +2,7 @@
 , ...
 }:
 
-{
+{/*
   imports = [
     ./../../modules/home-manager/myHome
   ];
@@ -77,7 +77,7 @@
       onedriver.enable = true;
     };
     impermanence.enable = false;
-  };
+  };*/
 
   nix.package = pkgs.nix;
 
