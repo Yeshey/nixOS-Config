@@ -192,7 +192,7 @@
       pkgs = import nixpkgs { system = "aarch64-linux"; };
       modules = [ ./home-manager/nix-on-droid/nix-on-droid.nix ];
       extraSpecialArgs = {
-        inherit (inputs) nur catppuccin nix-doom-emacs-unstraightened;
+        inherit inputs;
       };
 
       
