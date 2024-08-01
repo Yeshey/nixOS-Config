@@ -187,16 +187,18 @@
       };
     };
 
-    # Define nixOnDroidConfigurations for Nix-on-Droid
-    nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
-      pkgs = import nixpkgs { system = "aarch64-linux"; };
-      modules = [ ./home-manager/nix-on-droid/nix-on-droid.nix ];
-      extraSpecialArgs = {
+    myCustomModule = inputs: {
+      _module.args = {
         inherit inputs;
       };
+    };
 
-      
-      
+    nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
+      pkgs = import nixpkgs { system = "aarch64-linux"; };
+      modules = [
+        myCustomModule inputs
+      ./home-manager/nix-on-droid/nix-on-droid.nix
+      ];
     };
 /*
     nixOnDroidConfigurations = {
