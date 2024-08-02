@@ -70,11 +70,6 @@
       serviceName = "mnt-hdd\\x2dbtrfs-Yeshey-OneDriver"; 
     };*/
 
-    agenix = {
-      enable = false;
-      sshKeys.enable = true;
-      onedriver.enable = true;
-    };
   };
 
   home = {
