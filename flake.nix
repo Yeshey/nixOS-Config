@@ -187,41 +187,20 @@
       };
     };
 
-    myCustomModule = inputs: {
+    myCustomModule = inputs: outputs: {
       _module.args = {
         inherit inputs outputs;
       };
+      imports = [ 
+        ./nixos/nix-on-droid/default.nix
+      ];
     };
-
     nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
       pkgs = import nixpkgs { system = "aarch64-linux"; };
       modules = [
-        myCustomModule inputs outputs
-        ./home-manager/nix-on-droid/nix-on-droid.nix
-        ./modules/nixos
-        home-manager.nixosModules.default
+        (myCustomModule inputs outputs)
       ];
     };
-/*
-    nixOnDroidConfigurations = {
-      "yeshey@nix-on-droid" = nix-on-droid.lib.nixOnDroidConfiguration {
-        pkgs = import inputs.nixpkgs {
-          system = "aarch64-linux";
-
-          # overlays = import ./overlays { inherit inputs outputs; };
-        };
-        modules =
-          [
-            {
-              _module.args = {
-                inherit inputs;
-
-                system = "aarch64-linux";
-              };
-            }
-            ./home-manager/nix-on-droid.nix
-          ];
-      };*/
 
     deploy.nodes = {
       hyrulecastle = {
