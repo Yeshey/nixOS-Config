@@ -1,6 +1,6 @@
-# TODO what is this
-# This is your home-manager configuration file
-# Use this to configure your home environment (it replaces ~/.config/nixpkgs/home.nix)
+# use this to pass the repo to the phone from the PC
+# nix-shell -p android-tools --run "sudo adb push /home/yeshey/.setup/. /data/data/com.termux.nix/files/home/setup/"
+
 {
   inputs,
   outputs,
@@ -30,7 +30,9 @@
   environment.packages = with pkgs; [
     nano
     git
-    proot
+    openssh
+    #proot
+    #su
   ];
 
   home-manager.config = ./home.nix;
