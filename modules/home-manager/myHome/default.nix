@@ -12,7 +12,22 @@ let
 in
 {
   imports = [
+    ./safe-rm.nix # always active
 
+    ./gnome/default.nix
+    ./plasma/default.nix
+    ./non-nixos.nix
+    ./zsh/default.nix
+    ./direnv.nix
+    ./homeApps/default.nix
+    ./hyprland/default.nix
+    ./autoStartApps.nix
+    ./onedriver.nix
+    #./agenix/default.nix
+    ./ssh/default.nix
+    ./stylix.nix
+    ./xdgPersonalFilesOrganization.nix
+    ./impermanence.nix
   ];
   options.myHome = with lib; {
     enable = mkEnableOption "myHome";
