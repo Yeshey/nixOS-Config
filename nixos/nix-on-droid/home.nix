@@ -9,7 +9,7 @@
 
 {
   imports = [
-    #./myHome-droid.nix # can't have the inputs working
+    ./myHome-droid.nix # can't have the inputs working
   ];
 /*
   # cant pass the inputs variable inside?
@@ -18,26 +18,25 @@
     # All the options
     user = "nix-on-droid";
     dataStoragePath = "/data/data/com.termux.nix/files/home";
-  };*/
+  };
+*/
 
-/*
   myHome = {
     enable = true;
     # All the options
-    user = "yeshey";
-    xdgPersonalFilesOrganization.enable = true;
+    user = "nix-on-droid";
+    dataStoragePath = "/data/data/com.termux.nix/files/home";
+    xdgPersonalFilesOrganization.enable = false;
     nonNixos.enable = false;
-    plasma.enable = false;
     gnome.enable = true;
     ssh.enable = true;
-    hyprland = {
-      enable = false;
-    };
+
+
     homeApps = {
-      enable = false;
+      enable = true;
       cli = {
         enable = true;
-        general.enable = true;
+        general.enable = false;
         git = {
           enable = true;
           personalGit = {
@@ -46,24 +45,21 @@
             userEmail = "yesheysangpo@hotmail.com";
           };
         };
-        tmux.enable = true;
-        neovim = {
-          enable = true;
-          enableLSP = true;
-        };
+        tmux.enable = false; # broken
       };
       firefox = {
-        enable = true;
+        enable = false;
         i2pFirefoxProfile = true;
       };
-      vscodium.enable = true;
-      discord.enable = true;
-      gaming.enable = true;
+      vscodium.enable = false;
+      discord.enable = false;
+      gaming.enable = false;
       kitty.enable = false;
       alacritty.enable = false;
-      libreoffice.enable = true;
+      libreoffice.enable = false;
       devops.enable = false;
     };
+    
     # autoStartApps = [ pkgs.vesktop ]; # only works with gnome??
     zsh = {
       enable = true;
@@ -75,23 +71,13 @@
       serviceName = "home-yeshey-OneDriver";
     };
     direnv.enable = true;
-    stylix = {
-      # https://www.youtube.com/watch?v=ljHkWgBaQWU
-      enable = true;
-      #base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-medium.yaml"; #pop.yaml
-      wallpaper = pkgs.wallpapers.nierAutomataWallpaper; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement
-      cursor = {
-        package = pkgs.banana-cursor;
-        name = "Banana";
-      };
-    };
-    agenix = { # TODO allow to easily turn of agenix?
-      enable = false;
-      sshKeys.enable = true;
-      onedriver.enable = true;
-    };
-    impermanence.enable = false;
-  };*/
+    #agenix = { # TODO allow to easily turn of agenix?
+    #  enable = false;
+    #  sshKeys.enable = true;
+    #  onedriver.enable = true;
+    #};
+    #impermanence.enable = false;
+  };
 
   nix.package = pkgs.nix;
 

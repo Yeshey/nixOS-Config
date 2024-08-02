@@ -3,6 +3,7 @@
   config,
   lib,
   pkgs,
+  #osConfig,
   ...
 }:
 
@@ -11,7 +12,22 @@ let
 in
 {
   imports = [
+    #./../../modules/home-manager/myHome/safe-rm.nix # always active
 
+    ./../../modules/home-manager/myHome/gnome/default.nix
+#    ./../../modules/home-manager/myHome/plasma/default.nix
+    ./../../modules/home-manager/myHome/non-nixos.nix
+    ./../../modules/home-manager/myHome/zsh/default.nix
+    ./../../modules/home-manager/myHome/direnv.nix
+    ./homeApps/default.nix
+    #./../../modules/home-manager/myHome/hyprland/default.nix
+    ./../../modules/home-manager/myHome/autoStartApps.nix
+    ./../../modules/home-manager/myHome/onedriver.nix
+    #./../../modules/home-manager/myHome/agenix/default.nix
+    ./../../modules/home-manager/myHome/ssh/default.nix
+    #./../../modules/home-manager/myHome/stylix.nix
+    ./../../modules/home-manager/myHome/xdgPersonalFilesOrganization.nix
+    # ./../../modules/home-manager/myHome/impermanence.nix
   ];
   options.myHome = with lib; {
     enable = mkEnableOption "myHome";
