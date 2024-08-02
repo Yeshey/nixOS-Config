@@ -23,7 +23,7 @@ in
     ./hyprland/default.nix
     ./autoStartApps.nix
     ./onedriver.nix
-    #./agenix/default.nix
+    ./agenix/default.nix
     ./ssh/default.nix
     ./stylix.nix
     ./xdgPersonalFilesOrganization.nix
