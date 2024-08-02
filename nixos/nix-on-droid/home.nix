@@ -9,16 +9,16 @@
 
 {
   imports = [
-    #./../../modules/home-manager/myHome
+    #./myHome-droid.nix # can't have the inputs working
   ];
-
+/*
   # cant pass the inputs variable inside?
   myHome = {
     enable = true;
     # All the options
     user = "nix-on-droid";
-    dataStoragePath = "~/";
-  };
+    dataStoragePath = "/data/data/com.termux.nix/files/home";
+  };*/
 
 /*
   myHome = {
@@ -92,27 +92,6 @@
     };
     impermanence.enable = false;
   };*/
-
-
-  # Configure home-manager
-  home-manager = {
-    backupFileExtension = "hm-bak";
-    useGlobalPkgs = true;
-
-    config =
-      { config, lib, pkgs, ... }:
-      {
-        # Read the changelog before changing this value
-        home.stateVersion = "24.05";
-
-        # insert home-manager config
-      };
-
-    extraSpecialArgs = {
-      inherit inputs;
-    };
-    sharedModules = builtins.attrValues outputs.homeManagerModules;
-  };
 
   nix.package = pkgs.nix;
 
