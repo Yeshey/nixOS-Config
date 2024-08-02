@@ -13,12 +13,12 @@
   ];
 
   # cant pass the inputs variable inside?
-  #myHome = {
-  #  enable = true;
+  myHome = {
+    enable = true;
     # All the options
-  #  user = "nix-on-droid";
-  #  dataStoragePath = "~/";
-  #};
+    user = "nix-on-droid";
+    dataStoragePath = "~/";
+  };
 
 /*
   myHome = {

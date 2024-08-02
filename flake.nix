@@ -189,14 +189,14 @@
 
     myCustomModule = inputs: {
       _module.args = {
-        inherit inputs;
+        inherit inputs outputs;
       };
     };
 
     nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
       pkgs = import nixpkgs { system = "aarch64-linux"; };
       modules = [
-        myCustomModule inputs
+        myCustomModule inputs outputs
       ./home-manager/nix-on-droid/nix-on-droid.nix
       ];
     };

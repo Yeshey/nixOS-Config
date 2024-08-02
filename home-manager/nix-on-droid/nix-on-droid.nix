@@ -32,7 +32,7 @@
     git
   ];
 
-  # home-manager.config = ./home.nix;
+  home-manager.config = ./home.nix;
 
   # Set up nix for flakes
   nix.extraOptions = ''
