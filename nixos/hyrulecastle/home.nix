@@ -87,6 +87,11 @@ in
       #serviceName = "home-yeshey-OneDriver";
     };
 
+    agenix = {
+      enable = true;
+      sshKeys.enable = true;
+      onedriver.enable = true;
+    };
     impermanence.enable = false;
   };
 

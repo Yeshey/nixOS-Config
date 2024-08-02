@@ -133,6 +133,10 @@ in
 
     androidDevelopment.enable = true;
 
+    agenix = {
+      enable = true;
+      sshKeys.enable = true;
+    };
     #isolateVMsNixStore = true;
     impermanence.enable = false;
   };
