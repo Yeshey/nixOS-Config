@@ -29,7 +29,7 @@
     xdgPersonalFilesOrganization.enable = false;
     nonNixos.enable = false;
     gnome.enable = true;
-    ssh.enable = true;
+    #ssh.enable = true;
 
 
     homeApps = {
