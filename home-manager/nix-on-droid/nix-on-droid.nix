@@ -22,6 +22,27 @@
     # ./nvim.nix
   ];
 
+  mySystem = rec {
+    enable = true;
+    host = "skyloft";
+    user = "yeshey"; # TODO make this into an option where you can do user."yeshey".home-manager.enable ) true etc.
+    home-manager = {
+      enable = true;
+      home = ./home.nix;
+    };
+    hardware = {
+      enable = false;
+      #bluetooth.enable = true;
+      #printers.enable = true;
+      #sound.enable = true;
+      #thermald = {
+      #  enable = true;
+      #  thermalConf = ./thermal-conf.xml;
+      #};
+      #nvidia.enable = false;
+    };
+  };
+
   android-integration.am.enable = true;
   android-integration.termux-open-url.enable = true;
   android-integration.xdg-open.enable = true;

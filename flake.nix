@@ -197,7 +197,9 @@
       pkgs = import nixpkgs { system = "aarch64-linux"; };
       modules = [
         myCustomModule inputs outputs
-      ./home-manager/nix-on-droid/nix-on-droid.nix
+        ./home-manager/nix-on-droid/nix-on-droid.nix
+        ./modules/nixos
+        home-manager.nixosModules.default
       ];
     };
 /*
