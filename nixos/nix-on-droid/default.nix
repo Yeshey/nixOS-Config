@@ -30,14 +30,26 @@
   environment.packages = with pkgs; [
     nano
     git
+    proot
   ];
 
-  # home-manager.config = ./home.nix;
+  home-manager.config = ./home.nix;
 
   # Set up nix for flakes
   nix.extraOptions = ''
     experimental-features = nix-command flakes
+    allowUnsupportedSystem = true
   '';
+
+  # Set the default user shell to Zsh
+  user = {
+    # userName = "yeshey";
+    shell = "${pkgs.zsh}/bin/zsh";
+  };
+
+  #nixpkgs.config = {
+  #  allowUnsupportedSystem = true;
+  #};
 
   # Read the changelog before changing this value
   system.stateVersion = "24.05";

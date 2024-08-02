@@ -195,10 +195,14 @@
         ./nixos/nix-on-droid/default.nix
       ];
     };
-    nixOnDroidConfigurations.default = nix-on-droid.lib.nixOnDroidConfiguration {
-      pkgs = import nixpkgs { system = "aarch64-linux"; };
+    nixOnDroidConfigurations.nix-on-droid = nix-on-droid.lib.nixOnDroidConfiguration {
+      pkgs = import nixpkgs { 
+        system = "aarch64-linux"; 
+        allowUnsupportedSystem = true;
+      };
       modules = [
-        (myCustomModule inputs outputs)
+        #(myCustomModule inputs outputs)
+        ./nixos/nix-on-droid/default.nix
       ];
     };
 
