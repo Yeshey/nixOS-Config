@@ -70,11 +70,6 @@ in
       onedriverFolder = "/home/yeshey/OneDriver";
       serviceName = "home-yeshey-OneDriver";
     };
-    agenix = {
-      enable = true;
-      sshKeys.enable = true;
-      onedriver.enable = true;
-    };
   };
 
   home = {
