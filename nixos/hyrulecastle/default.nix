@@ -124,6 +124,10 @@ in
 
     androidDevelopment.enable = false;
 
+    agenix = {
+      enable = true;
+      sshKeys.enable = true;
+    };
 
     waydroid.enable = true;
     #isolateVMsNixStore = true;
