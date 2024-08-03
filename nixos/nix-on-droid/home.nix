@@ -84,7 +84,7 @@
 
   programs.zsh = {
     shellAliases = {
-      update = "nix-on-droid --flake github:Yeshey/nixOS-Config switch";
+      update = "nix-on-droid --flake github:Yeshey/nixOS-Config#nix-on-droid switch";
     };
 
   nix.package = pkgs.nix;
