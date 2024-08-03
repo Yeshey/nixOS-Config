@@ -82,6 +82,11 @@
     #impermanence.enable = false;
   };
 
+  programs.zsh = {
+    shellAliases = {
+      update = "nix-on-droid --flake github:Yeshey/nixOS-Config switch";
+    };
+
   nix.package = pkgs.nix;
 
   home.packages = [
