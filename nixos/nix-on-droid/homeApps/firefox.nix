@@ -3,7 +3,6 @@
   config,
   lib,
   pkgs,
-  osConfig,
   ...
 }:
 let
@@ -15,7 +14,7 @@ in
     enable = mkEnableOption "firefox";
     i2pFirefoxProfile = mkOption {
       type = types.bool;
-      default = osConfig.services.i2p.enable || osConfig.mySystem.i2p.enable;
+      default = true;
       description = "weather to make a special firefox profile for i2p";
     };
   };
