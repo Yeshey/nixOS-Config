@@ -86,6 +86,7 @@
     shellAliases = {
       update = "nix-on-droid --flake github:Yeshey/nixOS-Config#nix-on-droid switch";
     };
+  };
 
   nix.package = pkgs.nix;
 
