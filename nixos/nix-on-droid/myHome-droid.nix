@@ -14,7 +14,7 @@ in
   imports = [
     #./../../modules/home-manager/myHome/safe-rm.nix # always active
 
-    ./../../modules/home-manager/myHome/gnome/default.nix
+    # ./../../modules/home-manager/myHome/gnome/default.nix
 #    ./../../modules/home-manager/myHome/plasma/default.nix
     ./../../modules/home-manager/myHome/non-nixos.nix
     ./../../modules/home-manager/myHome/zsh/default.nix

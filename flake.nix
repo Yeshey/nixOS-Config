@@ -198,7 +198,6 @@
     nixOnDroidConfigurations.nix-on-droid = nix-on-droid.lib.nixOnDroidConfiguration {
       pkgs = import nixpkgs { 
         system = "aarch64-linux"; 
-        allowUnsupportedSystem = true;
       };
       modules = [
         #(myCustomModule inputs outputs)

@@ -16,14 +16,14 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
 - Right click on wastebin and configure to delete trash after 7 days, still don't know how to declare this.
 
-- nix-on-droid: install in app with `nix-on-droid --flake github:Yeshey/nixOS-Config#nix-on-droid switch`  
+- nix-on-droid: install my flake in app by adding [the normal packages](https://nix-on-droid.unboiled.info/upgrade.txt) and running `nix-shell -p git --run "nix-on-droid --flake github:Yeshey/nixOS-Config#nix-on-droid switch"`  
   Then send the ssh keys through adb, connect adb and on your nixOS PC send the keys with:
   ```sh
-    nix-shell -p android-tools --run "adb push /home/yeshey/.ssh/my_identity /data/data/com.termux.nix/files/home/.ssh/my_identity"
+    nix-shell -p android-tools --run "sudo adb root; sudo adb push /home/yeshey/.ssh/my_identity /data/data/com.termux.nix/files/home/.ssh/my_identity"
 
-    nix-shell -p android-tools --run "adb push /home/yeshey/.ssh/my_identity.pub /data/data/com.termux.nix/files/home/.ssh/my_identity.pub"
+    nix-shell -p android-tools --run "sudo adb root; sudo adb push /home/yeshey/.ssh/my_identity.pub /data/data/com.termux.nix/files/home/.ssh/my_identity.pub"
 
-    nix-shell -p android-tools --run "adb push /home/yeshey/.ssh/config /data/data/com.termux.nix/files/home/.ssh/config"
+    nix-shell -p android-tools --run "sudo adb root; sudo adb push /home/yeshey/.ssh/config /data/data/com.termux.nix/files/home/.ssh/config"
   ```
 
 ## Credits

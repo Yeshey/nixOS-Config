@@ -21,14 +21,15 @@
   };
 */
 
+
   myHome = {
     enable = true;
     # All the options
     user = "nix-on-droid";
     dataStoragePath = "/data/data/com.termux.nix/files/home";
+
     xdgPersonalFilesOrganization.enable = false;
     nonNixos.enable = false;
-    gnome.enable = true;
     #ssh.enable = true;
 
 
@@ -60,11 +61,13 @@
       devops.enable = false;
     };
     
+    
     # autoStartApps = [ pkgs.vesktop ]; # only works with gnome??
     zsh = {
       enable = true;
-      starshipTheme = "pinage404"; # fredericrous # pinage404
+      starshipTheme = "fredericrous"; # fredericrous # pinage404
     };
+
     onedriver = {
       enable = false;
       onedriverFolder = "/home/yeshey/OneDriver";
