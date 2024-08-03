@@ -32,6 +32,7 @@
     git
     openssh
     htop
+    tmux
   
     procps
     killall
