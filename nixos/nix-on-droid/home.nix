@@ -86,6 +86,16 @@
     shellAliases = {
       update = "nix-on-droid --flake github:Yeshey/nixOS-Config#nix-on-droid switch";
     };
+
+    # For starting the ssh server
+    initExtra = ''
+      sshd-start
+    '';
+  };
+  programs.bash = {
+    initExtra = ''
+      sshd-start
+    '';
   };
 
   nix.package = pkgs.nix;
