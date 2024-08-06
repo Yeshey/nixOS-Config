@@ -20,6 +20,9 @@
 
     # You can also split up your configuration and import pieces of it here:
     # ./nvim.nix
+
+    ./options/sshd.nix
+    ./sshd.nix
   ];
 
   android-integration.am.enable = true;
@@ -30,7 +33,7 @@
   environment.packages = with pkgs; [
     nano
     git
-    openssh
+    #openssh
     htop
     tmux
   
