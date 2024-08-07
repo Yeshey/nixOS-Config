@@ -16,6 +16,7 @@ in
 
   config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
     home.packages = with pkgs; [
+      /*
       # Games
       unstable.osu-lazer
       lutris
@@ -24,6 +25,7 @@ in
       heroic
       minetest
       the-powder-toy
+      */
     ];
 
   };

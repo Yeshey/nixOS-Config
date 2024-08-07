@@ -24,7 +24,7 @@ in
     ./../../modules/home-manager/myHome/autoStartApps.nix
     ./../../modules/home-manager/myHome/onedriver.nix
     #./../../modules/home-manager/myHome/agenix/default.nix
-    ./../../modules/home-manager/myHome/ssh/default.nix
+    #  ./../../modules/home-manager/myHome/ssh/default.nix
     #./../../modules/home-manager/myHome/stylix.nix
     ./../../modules/home-manager/myHome/xdgPersonalFilesOrganization.nix
     # ./../../modules/home-manager/myHome/impermanence.nix
