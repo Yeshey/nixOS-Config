@@ -48,13 +48,13 @@ in
     #   prefixLength = 24;
     # } ];
 
-    # boot.kernelPackages = pkgs.linuxPackages_6_1; # needed, 6.1 is LTS
+    boot.kernelPackages = pkgs.linuxPackages_6_1; # needed, 6.1 is LTS
     # boot.kernelPackages = patchedPkgs.linuxPackages_5_15; # needed for this linuxPackages_5_19
 
     hardware.nvidia = {
       vgpu = {
         enable = true; # Install NVIDIA KVM vGPU + GRID driver
-        pinKernel = true;
+        # pinKernel = true;
         #vgpu_driver_src.sha256 = "sha256-tFgDf7ZSIZRkvImO+9YglrLimGJMZ/fz25gjUT0TfDo="; # use if you're getting the `Unfortunately, we cannot download file...` error # find hash with `nix hash file foo.txt`        
         
         /*
