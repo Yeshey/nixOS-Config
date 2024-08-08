@@ -60,6 +60,16 @@ in
         };
       };
 
+      kwin.nightLight = {
+        enable = true;
+        mode = "location";
+        location = {
+          latitude = "39,37"; # lisbon
+          longitude = "-8,93";
+        };
+        temperature.night = 2300;
+      };
+
     };
 
   };
