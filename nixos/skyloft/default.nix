@@ -16,6 +16,7 @@
 
   nixpkgs = {
     # You can add overlays here
+    config.allowBroken = true;
     overlays = [
       # Add overlays your own flake exports (from overlays and pkgs dir):
       outputs.overlays.additions
@@ -123,7 +124,7 @@
     substituteInPlace $out/sesman.ini \
       --replace param=.xorgxrdp.%s.log param=/tmp/xorgxrdp.%s.log
   ''; # was taking 40GB in the server this file https://github.com/neutrinolabs/xrdp/issues/1845
-
+  
   environment.systemPackages = with pkgs; [
 
   ];
