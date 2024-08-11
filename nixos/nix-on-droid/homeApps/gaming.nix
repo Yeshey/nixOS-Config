@@ -16,15 +16,16 @@ in
 
   config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
     home.packages = with pkgs; [
+      /*
       # Games
       unstable.osu-lazer
       lutris
-      bottles
       # tetrio-desktop # runs horribly, better on the web
       prismlauncher # polymc # prismlauncher # for Minecraft
       heroic
       minetest
       the-powder-toy
+      */
     ];
 
   };

@@ -26,7 +26,7 @@
     // "java.jdt.ls.java.home": "/run/current-system/sw/lib/openjdk/",
     // "ltex.java.path": "/run/current-system/sw/lib/openjdk/",
     // /etc/profiles/per-user/yeshey/lib/openjdk
-    "ltex.language": "auto", // pt-PT
+    "ltex.language": "pt-PT",
     "editor.wordWrap": "on",
     
     // the latex code: https://stackoverflow.com/questions/56743092/modifying-settings-json-in-vscode-to-add-shell-escape-flag-to-pdflatex-in-latex

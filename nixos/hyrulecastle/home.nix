@@ -29,7 +29,7 @@ in
     homeApps = {
       enable = true;
       cli = {
-        enable = false;
+        enable = true;
         general.enable = true;
         git = {
           enable = true;

@@ -26,6 +26,7 @@ in
   config = lib.mkIf (config.myHome.enable && cfg.enable) {
 
     # hope it doesn't conflict with stylix 🤞
+    # options: https://nix-community.github.io/plasma-manager/options.xhtml
     programs.plasma = {
       enable = true;
       workspace = {
@@ -35,6 +36,40 @@ in
         #iconTheme = "Papir";
         #wallpaper = ... # conflicts with stylix
       };
+      
+      powerdevil = {
+        AC = {
+          autoSuspend = {
+            action = "nothing";
+            #idleTimeout = 1000;
+          };
+          turnOffDisplay = {
+            idleTimeout = 600; # 10min
+            idleTimeoutWhenLocked = "immediately";
+          };
+          whenLaptopLidClosed = "doNothing";
+        };
+        battery = {
+          #powerButtonAction = "showLogoutScreen";
+          whenSleepingEnter = "standbyThenHibernate";
+          whenLaptopLidClosed = "sleep";
+        };
+        lowBattery = {
+          whenSleepingEnter = "standbyThenHibernate";
+          whenLaptopLidClosed = "sleep";
+        };
+      };
+
+      kwin.nightLight = {
+        enable = true;
+        mode = "location";
+        location = {
+          latitude = "39,37"; # lisbon
+          longitude = "-8,93";
+        };
+        temperature.night = 2300;
+      };
+
     };
 
   };

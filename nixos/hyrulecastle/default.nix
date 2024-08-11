@@ -151,6 +151,8 @@ in
     # for d in /sys/kernel/iommu_groups/*/devices/*; do n="${d#*/iommu_groups/*}"; n="${n%%/*}"; printf 'IOMMU Group %s \t' "$n"; lspci -nns "${d##*/}"; done | sort -h -k 3 | grep --color -e ".*NVIDIA.*" -e "^"
     # nix-shell -p pciutils --command "sudo lspci -nnk" | grep --color -e ".*NVIDIA.*" -e "^"
     pciPassthrough = {
+      # see https://youtu.be/KVDUs019IB8?t=795 (you need to add all 4 of the GPU PCI devices)
+      # in depth guide? https://astrid.tech/2022/09/22/0/nixos-gpu-vfio/
       # you will also need to set hardware.nvidia.prime.offload.enable = true for this GPU passthrough to work  (or the sync method?)
       enable = false;
       pciIDs = "";

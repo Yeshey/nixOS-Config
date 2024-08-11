@@ -35,10 +35,10 @@ in
 
   config = lib.mkIf (config.mySystem.enable && config.mySystem.hardware.enable && cfg.enable) {
 
+    system.activationScripts = {
     # do i need this shit for external monitors to work as well?
     # https://askubuntu.com/questions/986394/problem-with-second-monitors-resolution
-    system.activationScripts = {
-      safe-rm.text = ''
+      monitors.text = ''
         echo "
 Section "Device"
     Identifier     "Device0"
