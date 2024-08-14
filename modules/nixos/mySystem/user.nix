@@ -51,6 +51,7 @@ in
           "surface-control"
           "audio"
           "tss" # For TPM access
+          "input" # For https://github.com/kokoko3k/ssh-rdp
         ]; # TODO if you ever extend the module to be able to have several users, you need to see how to handle this
         openssh.authorizedKeys.keys = [
           # ssh public key of my_identity key
