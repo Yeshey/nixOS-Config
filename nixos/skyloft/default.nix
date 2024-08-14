@@ -7,6 +7,10 @@
   ...
 }:
 
+# To recover in case of loosing access through SSH do the following:
+# Go to Oracle Cloud > Dashboard > Console Connection > Launch Console Connection >
+# Reboot the machine, and during boot select in the console a different generation
+
 {
   imports = [
     ./hardware-configuration.nix
