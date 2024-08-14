@@ -61,7 +61,7 @@ in
     direnv.enable = true;
     stylix = {
       # https://www.youtube.com/watch?v=ljHkWgBaQWU
-      enable = true;
+      enable = false;
       base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-medium.yaml"; #pop.yaml
       wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; # johnKearneyCityscapePoster #nierAutomataWallpaper
     };
