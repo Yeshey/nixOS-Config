@@ -87,6 +87,7 @@
   };
 
   toHost = {
+    remoteWorkstation.enable = true;
     dontStarveTogetherServer = {
       enable = false;
       path = "/home/yeshey/PersonalFiles/Servers/dontstarvetogether/SurvivalServerMadeiraSummer2/DoNotStarveTogetherServer";
@@ -111,23 +112,6 @@
     #  "nodejs-16.20.2"
     #];
   };
-
-  # Remote Desktop with XRDP
-  # xfreerdp /v:143.47.53.175 /u:yeshey /dynamic-resolution /audio-mode:1 /clipboard
-  services.xserver.enable = true;
-  services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
-  services.xrdp.enable = true;
-  services.xrdp.defaultWindowManager = "startplasma-x11";
-  networking.firewall.allowedTCPPorts = [ 3389 ];
-  services.xrdp.extraConfDirCommands = ''
-    substituteInPlace $out/sesman.ini \
-      --replace param=.xorgxrdp.%s.log param=/tmp/xorgxrdp.%s.log
-  ''; # was taking 40GB in the server this file https://github.com/neutrinolabs/xrdp/issues/1845
-  
-  environment.systemPackages = with pkgs; [
-
-  ];
 
   # Bootloader.
   boot.loader.systemd-boot.enable = true;

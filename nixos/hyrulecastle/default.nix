@@ -135,6 +135,7 @@ in
   };
 
   toHost = {
+    remoteWorkstation.enable = false;
     dontStarveTogetherServer.enable = false;
     #nextcloud.enable = true;
     #minecraft.enable = false;
