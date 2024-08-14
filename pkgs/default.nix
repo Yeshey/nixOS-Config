@@ -3,29 +3,32 @@
 {
   pkgs,
 }:
+
+with pkgs;
+
 rec {
   # example = pkgs.callPackage ./example { };
-  wallpapers = pkgs.callPackage ./wallpapers { };
+  wallpapers = callPackage ./wallpapers { };
 
-  myOnedriver = pkgs.callPackage ./onedriver-his.nix { };  
+  myOnedriver = callPackage ./onedriver-his.nix { };  
 
-  coreutils-with-safe-rm = pkgs.callPackage ./coreutils-with-safe-rm.nix { };
+  coreutils-with-safe-rm = callPackage ./coreutils-with-safe-rm.nix { };
 
   mybox86 =
     let
       args = {
-        hello-x86_32 = if pkgs.stdenv.hostPlatform.isx86_32 then
-          pkgs.hello
+        hello-x86_32 = if stdenv.hostPlatform.isx86_32 then
+          hello
         else
-          pkgs.pkgsCross.gnu32.hello;
+          pkgsCross.gnu32.hello;
       };
     in
-    if pkgs.stdenv.hostPlatform.is32bit then
-      pkgs.callPackage ./box86.nix args
-    else if pkgs.stdenv.hostPlatform.isx86_64 then
-      pkgs.pkgsCross.gnu32.callPackage ./box86.nix args
-    else if pkgs.stdenv.hostPlatform.isAarch64 then
-      pkgs.pkgsCross.armv7l-hf-multiplatform.callPackage ./box86.nix args
+    if stdenv.hostPlatform.is32bit then
+      callPackage ./box86.nix args
+    else if stdenv.hostPlatform.isx86_64 then
+      pkgsCross.gnu32.callPackage ./box86.nix args
+    else if stdenv.hostPlatform.isAarch64 then
+      pkgsCross.armv7l-hf-multiplatform.callPackage ./box86.nix args
     else
-      throw "Don't know 32-bit platform for cross from: ${pkgs.stdenv.hostPlatform.stdenv}";
+      throw "Don't know 32-bit platform for cross from: ${stdenv.hostPlatform.stdenv}";
 }

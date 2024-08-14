@@ -22,6 +22,7 @@ in
     ./kubo.nix
     ./mindustry-server.nix
     ./freeGames.nix
+    ./remoteWorkstation.nix
   ];
 
   options.toHost = with lib; {

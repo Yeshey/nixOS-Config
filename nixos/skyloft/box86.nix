@@ -137,6 +137,7 @@ in
         mask = ''\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
       };
     };
+    #nix.settings.extra-platforms = ["armv7l-linux"];
     # Add box86-fhs and box64-fhs to system packages so they are available in the shell
     environment.systemPackages = with pkgs; [
       box86FHS # box86-fhs
