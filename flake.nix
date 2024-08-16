@@ -70,6 +70,15 @@
       inputs.home-manager.follows = "home-manager";
     };
     /*
+    wolf = {
+      #url = "github:games-on-whales/wolf/dev-nix";
+      type = "path";
+      path = "/mnt/DataDisk/PersonalFiles/2023/Projects/Programming/nixos-nvidia-vgpu_nixOS/";
+      #inputs.nixpkgs.follows = "nixpkgs";
+      #inputs.home-manager.follows = "home-manager";
+    };
+    */
+    /*
       nixgl = { # Might be needed for non-nixOS setups
         url = "github:guibou/nixGL";
         inputs.nixpkgs.follows = "nixpkgs";
@@ -101,6 +110,7 @@
     nixos-nvidia-vgpu,
     nixos-generators,
     impermanence,
+    #wolf,
     # lanzaboote,
     ...
   }@inputs:

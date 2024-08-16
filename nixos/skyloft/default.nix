@@ -8,7 +8,7 @@
 }:
 
 # To recover in case of loosing access through SSH do the following:
-# Go to Oracle Cloud > Dashboard > Console Connection > Launch Console Connection >
+# Go to Oracle Cloud > Dashboard > Console Connection > Launch Cloud Shell Connection (You might have to delete the cuirrent connection and create a new one in "Create local connection" with you public key)
 # Reboot the machine, and during boot select in the console a different generation
 
 {
@@ -46,7 +46,7 @@
     plasma.enable = false;
     gnome.enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
     ssh.enable = true;
-    browser.enable = false;
+    browser.enable = true;
     cliTools.enable = true;
     zsh.enable = true;
     gaming.enable = false;

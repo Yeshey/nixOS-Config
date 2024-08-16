@@ -38,6 +38,7 @@ in
     system.activationScripts = {
     # do i need this shit for external monitors to work as well?
     # https://askubuntu.com/questions/986394/problem-with-second-monitors-resolution
+    # maybe use services.xserver.deviceSection?
       monitors.text = ''
         echo "
 Section "Device"
