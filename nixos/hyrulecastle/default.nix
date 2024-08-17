@@ -135,7 +135,10 @@ in
   };
 
   toHost = {
-    remoteWorkstation.enable = false;
+    remoteWorkstation = {
+      sunshine.enable = false;
+      xrdp.enable = false;
+    };
     dontStarveTogetherServer.enable = false;
     #nextcloud.enable = true;
     #minecraft.enable = false;

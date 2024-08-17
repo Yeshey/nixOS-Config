@@ -8,6 +8,8 @@
 
 # Connect with nix-shell -p freerdp --run "xfreerdp /v:143.47.53.175 /u:yeshey /dynamic-resolution /audio-mode:1 /clipboard /network:modem /compression"
 # open port 3389
+# set keyboard with `setxkbmap -layout br`, see what keyboard is set with `setxkbmap -print`
+# see https://sourceforge.net/p/rdesktop/code/1704/tree/rdesktop/trunk/doc/keymap-names.txt#l78, idk, check chatGPT
 
 let
   cfg = config.toHost.remoteWorkstation.xrdp;
@@ -18,7 +20,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-
 
     # Remote Desktop with XRDP
     # xfreerdp /v:143.47.53.175 /u:yeshey /dynamic-resolution /audio-mode:1 /clipboard

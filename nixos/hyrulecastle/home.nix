@@ -101,6 +101,7 @@ in
       # Surface and Desktop apps
       # github-desktop
       # grapejuice # roblox
+      freerdp
       gnome.gnome-clocks
       qbittorrent
       gnome.cheese
