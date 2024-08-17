@@ -59,14 +59,13 @@
       home = ./home.nix;
     };
     hardware = {
-      enable = false;
-      #bluetooth.enable = true;
-      #printers.enable = true;
-      #sound.enable = true;
-      #thermald = {
-      #  enable = true;
-      #  thermalConf = ./thermal-conf.xml;
-      #};
+      enable = true;
+      bluetooth.enable = false;
+      printers.enable = false;
+      sound.enable = true;
+      thermald = {
+        enable = false;
+      };
       #nvidia.enable = false;
     };
     autoUpgrades = {

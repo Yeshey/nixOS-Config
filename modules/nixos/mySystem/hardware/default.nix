@@ -26,7 +26,7 @@ in
     mySystem.hardware.bluetooth.enable = lib.mkOverride 1010 true;
     mySystem.hardware.printers.enable = lib.mkOverride 1010 true;
     mySystem.hardware.sound.enable = lib.mkOverride 1010 true;
-    mySystem.hardware.thermald.enable = lib.mkOverride 1010 true;
+    mySystem.hardware.thermald.enable = lib.mkOverride 1010 false;
     mySystem.hardware.nvidia.enable = lib.mkOverride 1010 false;
     mySystem.hardware.lvm.enable = lib.mkOverride 1010 false;
   };
