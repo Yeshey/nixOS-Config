@@ -92,7 +92,7 @@
 
   toHost = {
     remoteWorkstation = {
-      sunshine.enable = false;
+      sunshine.enable = true;
       xrdp.enable = true;
     };
     dontStarveTogetherServer = {

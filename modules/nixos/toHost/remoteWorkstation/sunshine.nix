@@ -40,7 +40,6 @@ in
     environment.sessionVariables = rec {
       #KWIN_FORCE_SW_CURSOR="1";
     };
-    /*
     services = {
       xserver = {
         displayManager.startx.enable = true;
@@ -48,13 +47,14 @@ in
       };
       desktopManager.plasma6.enable = true;
       displayManager = {
-        autoLogin.enable = true;
-        autoLogin.user = config.mySystem.user;
+        #autoLogin.enable = true;
+        #autoLogin.user = config.mySystem.user;
         sddm.enable = true;
-        defaultSession = "plasmax11";
+        defaultSession = lib.mkForce "plasma";
       };
-    };*/
+    };
 
+/*
     # wayland KDE (also works)
     services = {
       xserver.enable = lib.mkOverride 1010 true; # Enable the X11 windowing system.
@@ -73,7 +73,7 @@ in
         # supportDDC = true; # doesnt work with nvidia # to support changing brightness for external monitors (https://discourse.nixos.org/t/how-to-enable-ddc-brightness-control-i2c-permissions/20800)
       };
       # windowManager.bspwm.enable = true; # but doesn't work
-    };
+    };*/
 
     services.xserver.xkb.layout = "br,pt";
     #console.keyMap = lib.mkOverride 1009 "pt";
