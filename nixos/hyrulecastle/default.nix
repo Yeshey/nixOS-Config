@@ -178,7 +178,8 @@ in
   # nix.package = lib.mkForce pkgs.nixVersions.latest; # needed for clean to work without illigal character error?
 
   # roblox with sober (to not get the VK_ERROR_DEVICE_LOST error)
-  # hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
+  #nixpkgs.config.nvidia.acceptLicense = true;
+  #hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
 
   virtualisation.docker.storageDriver = "btrfs"; # for docker
 
