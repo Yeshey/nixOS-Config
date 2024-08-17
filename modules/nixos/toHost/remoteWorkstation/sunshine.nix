@@ -11,6 +11,7 @@
   # you need to start `sudo sunshine` manually on the server rn
   # The client is moonlight
   # Uses a lot of CPU
+  # client: `nix-shell -p moonlight-qt --run moonlight`
 
   # Use this to force KDE to draw the cursor (slow)
   # you should instead tell moonlight (client) to use 
