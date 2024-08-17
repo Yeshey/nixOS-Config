@@ -91,7 +91,10 @@
   };
 
   toHost = {
-    remoteWorkstation.enable = true;
+    remoteWorkstation = {
+      sunshine.enable = false;
+      xrdp.enable = true;
+    };
     dontStarveTogetherServer = {
       enable = false;
       path = "/home/yeshey/PersonalFiles/Servers/dontstarvetogether/SurvivalServerMadeiraSummer2/DoNotStarveTogetherServer";
