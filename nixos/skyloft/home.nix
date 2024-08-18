@@ -3,6 +3,7 @@
   pkgs,
   lib,
   dataStoragePath,
+  config,
   ...
 }:
 
@@ -67,13 +68,25 @@ in
     };
     onedriver = {
       enable = true;
-      onedriverFolder = "/home/yeshey/OneDriver";
-      serviceCoreName = "home-yeshey-OneDriver";
+      onedriverFolder = "/home/yeshey/OneDriverISEC";
+      serviceCoreName = "home-yeshey-OneDriverISEC"; # real name: onedriver@home-yeshey-OneDriverISEC.service
+    };
+    onedriver2 = {
+      enable = true;
+      onedriverFolder = "/home/yeshey/OneDriverISCTE";
+      serviceCoreName = "home-yeshey-OneDriverISCTE"; # real name: onedriver@home-yeshey-OneDriverISEC.service
     };
     agenix = {
       enable = true;
       sshKeys.enable = true;
-      onedriver.enable = true;
+      onedriver = {
+        enable = true;
+        ageOneDriverAuthFile = config.age.secrets.onedriver_auth_isec_yeshey.path;
+      };
+      onedriver2 = {
+        enable = true;
+        ageOneDriverAuthFile = config.age.secrets.onedriver_auth_iscte_yeshey.path;
+      };
     };
   };
 

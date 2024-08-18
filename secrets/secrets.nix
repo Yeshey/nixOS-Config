@@ -1,8 +1,8 @@
 let
   # Usually the public key of your user can be found in ~/.ssh/id_rsa.pub and the system one in /etc/ssh/ssh_host_rsa_key.pub
   # If you change the public keys in secrets.nix, you should rekey your secrets:
-  # agenix --rekey
-  # agenix -e <filename>.age # to create new secrets
+  # agenix --rekey -i ~/.ssh/my_identity
+  # agenix -e <filename>.age -i ~/.ssh/my_identity # to create new secrets
 
   # User key
   # ~/.ssh/my_identity.pub
@@ -25,6 +25,7 @@ in
 {
   # You need at least one to decrypt. These are the users and systems that will be able to decrypt the .age files later with their corresponding private keys.
   "my_identity.age".publicKeys = systems ++ users; # [hyrulecastle2];
-  "onedriver_auth.age".publicKeys = systems ++ users;
+  "onedriver_auth_isec.age".publicKeys = systems ++ users;
+  "onedriver_auth_iscte.age".publicKeys = systems ++ users;
   "free_games.age".publicKeys = systems ++ users;
 }
