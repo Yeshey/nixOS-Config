@@ -19,8 +19,8 @@ in
 
     systemd.user.services."onedriverAgenixYeshey" = let 
       mystuff = pkgs.writeShellScriptBin "echo-secret" ''
-            mkdir -p "/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceName}"
-            ${pkgs.coreutils}/bin/cat ${config.age.secrets.onedriver_auth_yeshey.path} > "/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceName}/auth_tokens.json" 
+            mkdir -p "/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceCoreName}"
+            ${pkgs.coreutils}/bin/cat ${config.age.secrets.onedriver_auth_yeshey.path} > "/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceCoreName}/auth_tokens.json" 
           '';
     in {
       Unit = {
@@ -30,7 +30,7 @@ in
         Require = [ "agenix.service" ];
 
         # Afters work, but not Before, the inverse 🤡
-        #Before = [ "onedriver@${config.myHome.onedriver.serviceName}.service" ];         
+        #Before = [ "onedriver@${config.myHome.onedriver.serviceCoreName}.service" ];         
         # Wants and Requires make the service start the other services
       };
       Service = {
@@ -45,8 +45,8 @@ in
             ${pkgs.myOnedriver}/bin/onedriver --wipe-cache
 
             # if setting agenix keys, set'em afterwards
-            ${lib.strings.optionalString config.myHome.agenix.onedriver.enable "mkdir -p '/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceName}'"}
-            ${lib.strings.optionalString config.myHome.agenix.onedriver.enable "${pkgs.coreutils}/bin/cat ${config.age.secrets.onedriver_auth_yeshey.path} > '/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceName}/auth_tokens.json'"}
+            ${lib.strings.optionalString config.myHome.agenix.onedriver.enable "mkdir -p '/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceCoreName}'"}
+            ${lib.strings.optionalString config.myHome.agenix.onedriver.enable "${pkgs.coreutils}/bin/cat ${config.age.secrets.onedriver_auth_yeshey.path} > '/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceCoreName}/auth_tokens.json'"}
           '';
     in {
       Service = { 
