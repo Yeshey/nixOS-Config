@@ -46,7 +46,7 @@ in
 
     systemd.user.services."delete-onedriver-cache2" = let
       script = pkgs.writeShellScriptBin "delete-onedriver-cache-script" ''
-            ${pkgs.myOnedriver}/bin/onedriver --wipe-cache
+            ${pkgs.onedriver}/bin/onedriver --wipe-cache
 
             # if setting agenix keys, set'em afterwards
             ${lib.strings.optionalString config.myHome.agenix.onedriver2.enable "mkdir -p '/home/yeshey/.cache/onedriver/${config.myHome.onedriver2.serviceCoreName}'"}
