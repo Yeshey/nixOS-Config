@@ -19,6 +19,7 @@ in
     inputs.agenix.homeManagerModules.default
     ./sshKeys.nix
     ./onedriver.nix
+    ./onedriver2.nix
   ];
 
   options.myHome.agenix = with lib; {
@@ -28,6 +29,7 @@ in
   config = lib.mkIf (config.myHome.enable && cfg.enable) {
     myHome.agenix.sshKeys.enable = lib.mkOverride 1010 true;  
     myHome.agenix.onedriver.enable = lib.mkOverride 1010 true;  
+    myHome.agenix.onedriver2.enable = lib.mkOverride 1010 true;  
 
     home.packages = [
       inputs.agenix.packages.${system}.agenix
@@ -63,8 +65,15 @@ in
           #group = config.users.groups.keys.name;
         };
 
-        onedriver_auth_yeshey = {
-          file = ../../../../secrets/onedriver_auth.age;
+        onedriver_auth_isec_yeshey = {
+          file = ../../../../secrets/onedriver_auth_isec.age;
+          # path = "$HOME/Downloads/mymymymy.txt";
+          #mode = "0440";
+          #group = config.users.groups.keys.name;
+        };
+
+        onedriver_auth_iscte_yeshey = {
+          file = ../../../../secrets/onedriver_auth_iscte.age;
           # path = "$HOME/Downloads/mymymymy.txt";
           #mode = "0440";
           #group = config.users.groups.keys.name;

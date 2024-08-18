@@ -10,8 +10,8 @@ let
   onedriverPackage = pkgs.myOnedriver; 
 in
 {
-  options.myHome.onedriver = with lib; {
-    enable = mkEnableOption "onedriver";
+  options.myHome.onedriver2 = with lib; {
+    enable = mkEnableOption "onedriver2";
     onedriverFolder = mkOption {
       type = types.str;
       example = "/mnt/hdd-btrfs/Yeshey/OneDriver";
