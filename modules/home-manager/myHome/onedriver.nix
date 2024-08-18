@@ -26,14 +26,16 @@ in
       type = types.str;
       example = "/mnt/hdd-btrfs/Yeshey/OneDriver";
     };
-    serviceName = mkOption {
+    serviceCoreName = mkOption {
       type = types.str;
       example = "home-yeshey-OneDriver";
       description = "use `systemd-escape --template onedriver@.service --path /path/to/mountpoint` to figure out";
     };
   };
 
-  config = lib.mkIf (config.myHome.enable && cfg.enable) {
+  config = let
+    serviceName = "onedriver@" + config.myHome.onedriver.serviceCoreName + ".service";
+  in lib.mkIf (config.myHome.enable && cfg.enable) {
 
     home.packages = [
       onedriverPackage
@@ -58,7 +60,7 @@ in
 
     # Automount Onedriver
     # doesnt work without a DE, for the server if you run xfreerdp and restart the service it will work
-    systemd.user.services."onedriver@${cfg.serviceName}" = let
+    systemd.user.services."onedriver@${serviceName}" = let
       wrapperDir = "/run/wrappers"; 
       # I hate it so much that I-m waiting for network like this bc there in no fucking way to make it work with After in a systemd user service
       waitForNetwork = pkgs.writeShellScriptBin "wait_for_network" ''

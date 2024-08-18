@@ -68,7 +68,7 @@ in
     onedriver = {
       enable = true;
       onedriverFolder = "/home/yeshey/OneDriver";
-      serviceName = "home-yeshey-OneDriver";
+      serviceCoreName = "home-yeshey-OneDriver";
     };
     agenix = {
       enable = true;

@@ -71,7 +71,7 @@
     onedriver = {
       enable = false;
       onedriverFolder = "/home/yeshey/OneDriver";
-      serviceName = "home-yeshey-OneDriver";
+      serviceCoreName = "home-yeshey-OneDriver";
     };
     direnv.enable = true;
     #agenix = { # TODO allow to easily turn of agenix?
