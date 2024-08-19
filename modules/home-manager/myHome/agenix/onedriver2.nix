@@ -22,8 +22,8 @@ in
     # Mount or unmount selected OneDriver account not turned on automatically
 
     systemd.user.services."onedriverAgenixYeshey2" = let 
-      mystuff = pkgs.writeShellScriptBin "echo-secret" ''
-            mkdir -p "/home/yeshey/.cache/onedriver/${config.myHome.onedriver2.serviceCoreName}"
+      mystuff2 = pkgs.writeShellScriptBin "echo-secret2" ''
+            ${pkgs.coreutils}/bin/mkdir -p "/home/yeshey/.cache/onedriver/${config.myHome.onedriver2.serviceCoreName}"
             ${pkgs.coreutils}/bin/cat ${cfg.ageOneDriverAuthFile} > "/home/yeshey/.cache/onedriver/${config.myHome.onedriver2.serviceCoreName}/auth_tokens.json" 
           '';
     in {
@@ -31,7 +31,6 @@ in
         Description = "onedriverAgenixYeshey2";
 
         After = [ "agenix.service" "delete-onedriver-cache2.service" ]; 
-        Require = [ "agenix.service" ];
 
         # Afters work, but not Before, the inverse 🤡
         #Before = [ "onedriver@${config.myHome.onedriver.serviceCoreName}.service" ];         
@@ -39,7 +38,7 @@ in
       };
       Service = {
         Type = "oneshot";
-        ExecStart = "${mystuff}/bin/echo-secret";
+        ExecStart = "${mystuff2}/bin/echo-secret2";
       };
       Install.WantedBy = [ "default.target" ]; # "graphical-session.target"  ]; # "default.target"
     };

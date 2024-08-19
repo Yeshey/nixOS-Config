@@ -23,7 +23,7 @@ in
 
     systemd.user.services."onedriverAgenixYeshey" = let 
       mystuff = pkgs.writeShellScriptBin "echo-secret" ''
-            mkdir -p "/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceCoreName}"
+            ${pkgs.coreutils}/bin/mkdir -p "/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceCoreName}"
             ${pkgs.coreutils}/bin/cat ${cfg.ageOneDriverAuthFile} > "/home/yeshey/.cache/onedriver/${config.myHome.onedriver.serviceCoreName}/auth_tokens.json" 
           '';
     in {
@@ -31,7 +31,6 @@ in
         Description = "onedriverAgenixYeshey";
 
         After = [ "agenix.service" "delete-onedriver-cache.service" ]; 
-        Require = [ "agenix.service" ];
 
         # Afters work, but not Before, the inverse 🤡
         #Before = [ "onedriver@${config.myHome.onedriver.serviceCoreName}.service" ];         
