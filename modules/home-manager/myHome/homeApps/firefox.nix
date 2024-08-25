@@ -31,7 +31,8 @@ in
 
     programs.firefox = {
       enable = true;
-      package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
+      # Floorp doesn't compile in home manager if I have this here:
+      /* package = pkgs.wrapFirefox pkgs.firefox-unwrapped {
         extraPolicies = {
           CaptivePortal = false;
           DisableFirefoxStudies = true;
@@ -54,7 +55,7 @@ in
             SkipOnboarding = true;
           };
         };
-      };
+      };*/
       profiles =
         let
           common-conf = {
