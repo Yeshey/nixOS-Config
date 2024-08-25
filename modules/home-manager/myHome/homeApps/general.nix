@@ -48,8 +48,8 @@ in
 
         # Browsers
         cus_vivaldi
-        floorp # in about:config set browser.tabs.tabMinWidth to 50 and browser.ctrlTab.sortByRecentlyUsed to true
         #vivaldi
+        floorp # in about:config set browser.tabs.tabMinWidth to 50 and browser.ctrlTab.sortByRecentlyUsed to true
         brave
         tor-browser-bundle-bin
         qutebrowser
