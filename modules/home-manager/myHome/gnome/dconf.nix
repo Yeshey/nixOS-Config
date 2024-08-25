@@ -1,5 +1,5 @@
 # Generated via dconf2nix: https://github.com/gvolpe/dconf2nix
-# Generated with: nix-shell -p dconf2nix --command "dconf dump / | dconf2nix -e --timeout 15 --verbose > dconf.nix"
+# Generated with: nix-shell -p dconf2nix --command "dconf dump / | dconf2nix -e --verbose > dconf.nix"
 
 # Generated via dconf2nix: https://github.com/gvolpe/dconf2nix
 {
@@ -483,12 +483,7 @@ with lib.hm.gvariant;
           "hibernate-status@dromi"
           "trayIconsReloaded@selfmade.pl"
         ];
-        favorite-apps = [
-          "org.gnome.Epiphany.desktop"
-          "vivaldi-stable.desktop"
-          "org.gnome.Nautilus.desktop"
-          "org.gnome.Console.desktop"
-        ];
+        favorite-apps = [ "org.gnome.Nautilus.desktop" "org.gnome.Console.desktop" "floorp.desktop" ];
         last-selected-power-profile = "power-saver";
         welcome-dialog-last-shown-version = "42.4";
       };
