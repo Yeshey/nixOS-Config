@@ -48,6 +48,7 @@ in
 
         # Browsers
         cus_vivaldi
+        floorp
         #vivaldi
         brave
         tor-browser-bundle-bin
