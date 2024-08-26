@@ -32,8 +32,10 @@ in
       in [
         wineWow64Packages.full
 
-        vital
+        vital # run with Vital
         helm
+
+        joplin-desktop # note taking
 
         github-desktop
         obs-studio

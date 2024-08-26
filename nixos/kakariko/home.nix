@@ -99,7 +99,11 @@ in
     packages = with pkgs; [
       nethack
       psensor
+
+      # draw
       xournal
+      joplin-desktop
+      rnote
 
       # Surface and Desktop apps
       qbittorrent
