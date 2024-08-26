@@ -35,7 +35,7 @@ in
         vital # run with Vital
         helm
 
-        joplin-desktop # note taking
+        unstable.joplin-desktop # note taking
 
         github-desktop
         obs-studio
