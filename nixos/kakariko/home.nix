@@ -100,7 +100,6 @@ in
       nethack
       psensor
       xournal
-      microsoft-edge
 
       # Surface and Desktop apps
       qbittorrent
