@@ -6,7 +6,7 @@
   ...
 }:
 let
-  cfg = config.myHome.onedriver;
+  cfg = config.myHome.onedriver2;
   onedriverPackage = pkgs.onedriver; 
 in
 {
@@ -32,13 +32,13 @@ in
     ];
 
     # Make sure mountpoint folder exists
-    systemd.user.services."mountpoint-folder-onedriver" = let
+    systemd.user.services."mountpoint-folder-onedriver2" = let
       script = pkgs.writeShellScriptBin "mountpoint-folder-onedriver-script" ''
-          mkdir -p '${cfg.onedriverFolder}' 
+          ${pkgs.coreutils}/bin/mkdir -p '${cfg.onedriverFolder}' 
         '';
     in {
       Unit = {
-        Description = "mountpoint-folder-onedriver";
+        Description = "mountpoint-folder-onedriver2";
       };
       Service = { 
         Type = "oneshot";
