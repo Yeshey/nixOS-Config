@@ -24,7 +24,7 @@ in
   };
 
   config = let
-    serviceName = "onedriver@" + config.myHome.onedriver.serviceCoreName + ".service";
+    serviceName = "onedriver@" + cfg.serviceCoreName + ".service";
   in lib.mkIf (config.myHome.enable && cfg.enable) {
 
     home.packages = [
