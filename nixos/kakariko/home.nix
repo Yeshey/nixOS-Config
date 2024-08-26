@@ -102,7 +102,7 @@ in
 
       # draw
       xournal
-      joplin-desktop
+      unstable.joplin-desktop
       rnote
 
       # Surface and Desktop apps
