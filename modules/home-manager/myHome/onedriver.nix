@@ -34,7 +34,7 @@ in
     # Make sure mountpoint folder exists
     systemd.user.services."mountpoint-folder-onedriver" = let
       script = pkgs.writeShellScriptBin "mountpoint-folder-onedriver-script" ''
-          mkdir -p '${cfg.onedriverFolder}' 
+          ${pkgs.coreutils}/bin/mkdir -p '${cfg.onedriverFolder}' 
         '';
     in {
       Unit = {
