@@ -157,7 +157,6 @@ with lib.hm.gvariant;
           "org-gnome-epiphany"
           "github-desktop"
           "org-gnome-baobab"
-          "com-uploadedlobster-peek"
           "steam"
         ];
       };
@@ -176,10 +175,6 @@ with lib.hm.gvariant;
 
       "org/gnome/desktop/notifications/application/com-google-androidstudio" = {
         application-id = "com.google.AndroidStudio.desktop";
-      };
-
-      "org/gnome/desktop/notifications/application/com-uploadedlobster-peek" = {
-        application-id = "com.uploadedlobster.peek.desktop";
       };
 
       "org/gnome/desktop/notifications/application/discord" = {
