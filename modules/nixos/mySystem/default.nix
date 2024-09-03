@@ -65,6 +65,7 @@ in
     ./waydroid.nix
     ./isolateVMsNixStore.nix
     ./impermanence.nix
+    ./speedtest-tracker.nix
   ];
 
   options.mySystem = with lib; {
