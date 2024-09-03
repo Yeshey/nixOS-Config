@@ -43,6 +43,7 @@ in
     ./user.nix # always active
     ./cliTools.nix # always active
     ./safe-rm.nix # always active
+    ./myScripts.nix # always active
 
     ./androidDevelopment.nix
     ./gaming.nix
@@ -188,6 +189,8 @@ in
 
       #networking.useNetworkd = true;
       #networking.firewall.enable = false;
+
+
 
     })
   ];
