@@ -53,5 +53,16 @@ in
       options = lib.mkOverride 1010 "--delete-older-than 14d";
       frequency = lib.mkOverride 1010 "weekly";
     };
+
+    ### MY SCRIPTS ###
+    home.packages = let 
+      upgarde-new = pkgs.writeShellScriptBin "upgarde-new" (builtins.readFile ./myScripts/upgrade.sh);
+      upgrade-with-remote-off-new = pkgs.writeShellScriptBin "upgrade-with-remote-off-new" (builtins.readFile ./myScripts/upgrade-with-remote-off.sh);
+      update-with-remote-off-new = pkgs.writeShellScriptBin "update-with-remote-off-new" (builtins.readFile ./myScripts/update-with-remote-off.sh);
+    in with pkgs; [
+      upgarde-new
+      upgrade-with-remote-off-new
+      update-with-remote-off-new
+    ];
   };
 }

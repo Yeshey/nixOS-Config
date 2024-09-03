@@ -79,7 +79,7 @@ in
           upgrade-with-remote-off() {
             export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no"
 
-            echo "This will upgrade the local system with the remote computer with the given IP and then power off both the remote and local machines. \n Run with Example: 'upgrade-remote-off 192.168.1.109'"
+            echo "This will upgrade the local system with the remote computer with the given IP and then power off both the remote and local machines. \n Run with Example: 'upgrade-with-remote-off 192.168.1.109'"
 
             if [ -z "$1" ]; then
                 echo "No IP given! Please provide an IP address."
@@ -122,7 +122,7 @@ in
           update-with-remote-off() {
               export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no"
 
-              echo "This will update the local system with the remote computer with the given IP and then power off both the remote and local machines. \n Run with Example: 'update-remote-off 192.168.1.109'"
+              echo "This will update the local system with the remote computer with the given IP and then power off both the remote and local machines. \n Run with Example: 'update-with-remote-off 192.168.1.109'"
 
               if [ -z "$1" ]; then
                   echo "No IP given! Please provide an IP address."
