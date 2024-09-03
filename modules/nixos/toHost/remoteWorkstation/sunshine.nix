@@ -75,7 +75,7 @@ in
       # windowManager.bspwm.enable = true; # but doesn't work
     };*/
 
-    services.xserver.xkb.layout = "br,pt";
+    services.xserver.xkb.layout = "pt,br";
     #console.keyMap = lib.mkOverride 1009 "pt";
     services.xserver.xkb.options = "eurosign:e,caps:escape";
 

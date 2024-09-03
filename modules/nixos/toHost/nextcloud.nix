@@ -24,7 +24,7 @@ in
       # Takes care of somewhat complicated setup
       # See here: https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/web-apps/nextcloud.nix#L529
 
-      # enableBrokenCiphersForSSE = false; #TODO remove?
+      # enableBrokenCiphersForSSE = false; # TODO remove?
 
       # Use HTTPS for links
       # https = true;

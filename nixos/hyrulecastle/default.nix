@@ -132,6 +132,8 @@ in
     waydroid.enable = true;
     #isolateVMsNixStore = true;
     impermanence.enable = false;
+
+    speedtest-tracker.enable = true;
   };
 
   toHost = {
