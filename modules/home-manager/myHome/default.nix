@@ -13,6 +13,7 @@ in
 {
   imports = [
     ./safe-rm.nix # always active
+    ./myScripts.nix
 
     ./gnome/default.nix
     ./plasma/default.nix
