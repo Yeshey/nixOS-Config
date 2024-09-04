@@ -4,22 +4,11 @@
   pkgs,
   ...
 }:
-
-let
+let 
   cfg = config.mySystem;
-in
-{
-  options.mySystem.safe-rm = with lib; {
-    # enable = mkEnableOption "safe-rm";
-  };
-
-  # always active lib.mkIf (config.mySystem.enable && cfg.enable) 
-  config = { 
-
-
-    ### MY SCRIPTS ###
-    environment.systemPackages = let 
-      upgarde-new = pkgs.writeShellScriptBin "upgarde-new" (builtins.toFile "upgrade.sh"
+in 
+let
+      upgarde = pkgs.writeShellScriptBin "upgarde"
 ''
 trap "cd '${cfg.zsh.falkeLocation}' && git checkout -- flake.lock" INT # if interrupted
 
@@ -41,9 +30,8 @@ else
         cd "${cfg.zsh.falkeLocation}" && git checkout -- flake.lock
     fi
 fi
-''
-      );
-      upgrade-with-remote-off-new = pkgs.writeShellScriptBin "upgrade-with-remote-off-new" (builtins.toFile "upgrade-with-remote-off.sh"
+'';
+      upgrade-with-remote-off = pkgs.writeShellScriptBin "upgrade-with-remote-off"
 ''
 export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no"
 
@@ -86,9 +74,8 @@ else
         fi
     fi
 fi
-''
-      );
-      update-with-remote-off-new = pkgs.writeShellScriptBin "update-with-remote-off-new" (builtins.toFile "update-with-remote-off.sh"
+'';
+      update-with-remote-off = pkgs.writeShellScriptBin "update-with-remote-off"
 ''
 export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no"
 
@@ -114,12 +101,66 @@ else
         echo "NixOS update failed."
     fi
 fi
+'';
+  clean = pkgs.writeShellScriptBin "clean"
 ''
-      );
-    in with pkgs; [
-      upgarde-new
-      upgrade-with-remote-off-new
-      update-with-remote-off-new
+# Script to clean all generations and optimize the Nix store
+
+echo "This will clean all generations and optimise the store"
+
+# Run the Nix garbage collection and store optimization commands as root
+sudo sh -c '
+    # Remove old Nix generations
+    nix-collect-garbage -d
+    
+    # Optimize the Nix store
+    nix-store --optimise
+    
+    # Run garbage collection again to remove unused items
+    nix-store --gc
+    
+    # Display any stray roots, filtering out specific directories
+    echo "Displaying stray roots:"
+    nix-store --gc --print-roots | egrep -v "^(/nix/var|/run/current-system|/run/booted-system|/proc|\{memory|\{censored)"
+    
+    # Uninstall unused Flatpak packages
+    flatpak uninstall --unused -y
+'
+
+# Collect garbage again for cleanup
+nix-collect-garbage -d
+
+# Provide user guidance on the next steps
+echo "You should do a nixos-rebuild boot and a reboot to clean the boot generations now."
+'';
+  cleangit = pkgs.writeShellScriptBin "cleangit"
+''
+    find . -type d \( -name '.stversions' -prune \) -o \( -name '.git' -type d -execdir sh -c 'echo "Cleaning repository in $(pwd)"; git clean -fdx' \; \)
+'';
+  cleansyncthing = pkgs.writeShellScriptBin "cleansyncthing"
+''
+    echo "Deleting sync conflict files in: $(pwd)"
+    find . -mount -mindepth 1 -type f \
+        -not \( -path "*/.Trash-1000/*" -or -path "*.local/share/Trash/*" \) \
+        -name "*.sync-conflict-*" -ls -delete
+'';
+in
+{
+  options.mySystem.myScripts = with lib; {
+    # enable = mkEnableOption "myScripts";
+  };
+
+  # always active lib.mkIf (config.mySystem.enable && cfg.enable) 
+  config = { 
+
+    ### MY SCRIPTS ###
+    environment.systemPackages = with pkgs; [
+      upgarde
+      upgrade-with-remote-off
+      update-with-remote-off
+      clean
+      cleangit
+      cleansyncthing
     ];
 
   };
