@@ -41,6 +41,8 @@ in
           DB_CONNECTION = "sqlite";
           SPEEDTEST_SCHEDULE = "*/10 * * * *"; # Runs every 10 minutes
           AUTH = "false";
+          DISPLAY_TIMEZONE = "Europe/Lisbon";
+          APP_TIMEZONE = "Europe/Lisbon";
         };
         #restartPolicy = "unless-stopped";
       };
