@@ -25,6 +25,8 @@ in
       #environment.etc.machine-id.source = builtins.toFile "machine-id" "08adbbff76d1468db8c83f09834d622b";
       # I think I can ignore
 
+
+      /*
       programs.fuse.userAllowOther = true; # needed for nonchelant home manager impermanance stuff when impermanance is not used
 
       # https://discourse.nixos.org/t/using-immutable-users-with-impermanence-on-luks/43459
@@ -56,6 +58,8 @@ in
           umount /btrfs_tmp
         '';
       };
+      */
+
     }
     ( lib.mkIf (config.mySystem.enable && cfg.enable) {
 
