@@ -26,8 +26,8 @@ in
       # I think I can ignore
 
 
-      /*
       programs.fuse.userAllowOther = true; # needed for nonchelant home manager impermanance stuff when impermanance is not used
+      /*
 
       # https://discourse.nixos.org/t/using-immutable-users-with-impermanence-on-luks/43459
       # cleans older than 30 days
