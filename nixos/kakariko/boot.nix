@@ -61,7 +61,7 @@ in
       device = "/dev/disk/by-label/nixos";
       fsType = "btrfs";
       options = [ 
-        "subvol=root"
+        "subvol=@"
         "defaults"
         "compress-force=zstd:3" # compression level 3, is the default
         # "ssd" # optimize for an ssd
@@ -73,7 +73,7 @@ in
     { #device = "/dev/disk/by-uuid/6fcc0524-bd74-44b9-ac07-c91d2ffe6121";
       device = "/dev/disk/by-label/nixos";
       fsType = "btrfs";
-      options = [ "subvol=nix" "compress-force=zstd:3" ];
+      options = [ "subvol=@nix" "compress-force=zstd:3" ];
     };
 
   fileSystems."/persist" =
@@ -81,7 +81,7 @@ in
       device = "/dev/disk/by-label/nixos";
       neededForBoot = true;
       fsType = "btrfs";
-      options = [ "subvol=persist" "compress-force=zstd:3" ];
+      options = [ "subvol=@persistent" "compress-force=zstd:3" ];
     };
 
   fileSystems."/swap" =
@@ -93,10 +93,10 @@ in
 
   swapDevices =
     [ 
-      { #device = "/dev/disk/by-uuid/aea2ed46-641d-4fe5-8551-880c8a8a034f"; 
-        device = "/dev/disk/by-label/swap";
-        priority = 1; # Higher numbers indicate higher priority.
-      }
+#      { #device = "/dev/disk/by-uuid/aea2ed46-641d-4fe5-8551-880c8a8a034f"; 
+#        device = "/dev/disk/by-label/swap";
+#        priority = 1; # Higher numbers indicate higher priority.
+#      }
       { device = "/swap/swapfile"; size = 7*1024; 
         priority = 0; # Higher numbers indicate higher priority.
       }
