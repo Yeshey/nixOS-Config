@@ -64,7 +64,7 @@ in
         # anydesk
         pdfarranger
         linux-wifi-hotspot # hotspot
-        texlive.combined.scheme-full # LaTeX
+        # texlive.combined.scheme-full # LaTeX
 
         # for amov, flutter need this
         #flutter # Dart, for amov # Make it detect android studio: https://github.com/flutter/flutter/issues/18970#issuecomment-762399686
