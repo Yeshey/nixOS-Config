@@ -93,10 +93,10 @@ in
 
   swapDevices =
     [ 
-#      { #device = "/dev/disk/by-uuid/aea2ed46-641d-4fe5-8551-880c8a8a034f"; 
-#        device = "/dev/disk/by-label/swap";
-#        priority = 1; # Higher numbers indicate higher priority.
-#      }
+      { #device = "/dev/disk/by-uuid/aea2ed46-641d-4fe5-8551-880c8a8a034f"; 
+        device = "/dev/disk/by-label/swap";
+        priority = 1; # Higher numbers indicate higher priority.
+      }
       { device = "/swap/swapfile"; size = 7*1024; 
         priority = 0; # Higher numbers indicate higher priority.
       }
