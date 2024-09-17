@@ -194,7 +194,10 @@ in
     ];
   };
 
-  # services.onedrive.enable = true;
+  # onedrive --reauth
+  # systemctl restart --user onedrive@onedrive.service
+  # journalctl --user -f -u onedrive@onedrive.service
+  services.onedrive.enable = true;
 
   #programs.zsh.enable = true;
   #users.users.yeshey.shell = pkgs.zsh;
