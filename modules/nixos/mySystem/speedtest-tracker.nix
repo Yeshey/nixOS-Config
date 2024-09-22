@@ -48,5 +48,32 @@ in
       };
     };
 
+    # makeDesktopItem https://discourse.nixos.org/t/proper-icon-when-using-makedesktopitem/32026
+    # Syncthing desktop shortcut
+    environment.systemPackages =
+      with pkgs;
+      let
+        syncthingWeb = makeDesktopItem {
+          name = "Speedtest Tracker";
+          desktopName = "Speedtest Tracker";
+          genericName = "Speedtest Tracker";
+          exec = ''xdg-open "http://localhost:8081/admin#"'';
+          icon = "firefox";
+          categories = [
+            "GTK"
+            "X-WebApps"
+          ];
+          mimeTypes = [
+            "text/html"
+            "text/xml"
+            "application/xhtml_xml"
+          ];
+        };
+      in
+      [
+        xdg-utils
+        syncthingWeb
+      ];
+
   };
 }
