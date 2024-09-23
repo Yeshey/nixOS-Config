@@ -140,7 +140,9 @@ in
       console.keyMap = lib.mkOverride 1010 "pt-latin1";
 
       nix = {
-        package = pkgs.nix;
+        #package = pkgs.nix;
+        # remove when nix starts using version 3.10 by default
+        package = lib.mkForce pkgs.nixVersions.latest; # needed for clean to work without illigal character error?
         extraOptions =
           # for compression to work with btrfs (https://github.com/NixOS/nix/issues/3550) ...?
           ''
