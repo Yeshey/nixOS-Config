@@ -139,6 +139,8 @@ in
     };
     #isolateVMsNixStore = true;
     impermanence.enable = false;
+
+    speedtest-tracker.enable = false;
   };
 
   virtualisation.docker.storageDriver = "btrfs"; # for docker
