@@ -140,7 +140,7 @@ in
     #isolateVMsNixStore = true;
     impermanence.enable = false;
 
-    speedtest-tracker.enable = false;
+    speedtest-tracker.enable = true;
   };
 
   virtualisation.docker.storageDriver = "btrfs"; # for docker
