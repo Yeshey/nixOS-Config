@@ -47,6 +47,35 @@ in
         #restartPolicy = "unless-stopped";
       };
     };
+  systemd.services.speedtest-tracker-mgr = {
+    wantedBy = [ "multi-user.target" "podman-speedtest_tracker.service" ];
+    script = ''
+      WORKING_DIR="/opt/docker/speedtest"
+      SSL_DIR="$WORKING_DIR/ssl-keys"
+
+      echo "Ensuring working directory exists..."
+      if [ ! -d $WORKING_DIR ]; then
+        echo "Directory does not exist, creating..."
+        mkdir -p $WORKING_DIR
+      else
+        echo "Directory already exists."
+      fi
+
+      echo "Ensuring SSL keys directory exists..."
+      if [ ! -d $SSL_DIR ]; then
+        echo "SSL keys directory does not exist, creating..."
+        mkdir -p $SSL_DIR
+      else
+        echo "SSL keys directory already exists."
+      fi
+    '';
+    serviceConfig = {
+      Type = "oneshot";
+      User = "root";
+    };
+  };
+
+
 
     # makeDesktopItem https://discourse.nixos.org/t/proper-icon-when-using-makedesktopitem/32026
     # Syncthing desktop shortcut
