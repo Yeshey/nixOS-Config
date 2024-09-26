@@ -35,6 +35,11 @@ fi
 ''
 export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no"
 
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run with sudo. Please run it again as: sudo $0"
+   exit 1
+fi
+
 echo "This will upgrade the local system with the remote computer with the given IP and then power off both the remote and local machines. \n Run with Example: 'upgrade-with-remote-off 192.168.1.109'"
 
 if [ -z "$1" ]; then
@@ -80,6 +85,11 @@ fi
 export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no"
 
 echo "This will update the local system with the remote computer with the given IP and then power off both the remote and local machines. \n Run with Example: 'update-with-remote-off 192.168.1.109'"
+
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run with sudo. Please run it again as: sudo $0"
+   exit 1
+fi
 
 if [ -z "$1" ]; then
     echo "No IP given! Please provide an IP address."
