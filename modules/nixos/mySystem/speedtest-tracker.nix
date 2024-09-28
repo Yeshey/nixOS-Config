@@ -11,6 +11,12 @@ in
 {
   options.mySystem.speedtest-tracker = {
     enable = lib.mkEnableOption "speedtest-tracker";
+    scheduele = lib.mkOption {
+      type = lib.types.str;
+      description = "Frequency of tests. Runs at the start of every hour by default";
+      example = "*/10 * * * *"; # Runs every 10 minutes
+      default = "0 * * * *";
+    };
   };
 
   config = lib.mkIf (config.mySystem.enable && cfg.enable)  {
@@ -39,7 +45,7 @@ in
           APP_KEY = "base64:tdRUioeLWq3KJup4Hr8dBwiYrb/4ICm60TbnAez61aY=";
           APP_URL = "http://localhost";
           DB_CONNECTION = "sqlite";
-          SPEEDTEST_SCHEDULE = "*/10 * * * *"; # Runs every 10 minutes
+          SPEEDTEST_SCHEDULE = cfg.scheduele;
           AUTH = "false";
           DISPLAY_TIMEZONE = "Europe/Lisbon";
           APP_TIMEZONE = "Europe/Lisbon";
