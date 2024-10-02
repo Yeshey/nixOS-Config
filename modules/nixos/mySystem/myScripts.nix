@@ -33,7 +33,7 @@ fi
 '';
       upgrade-with-remote-off = pkgs.writeShellScriptBin "upgrade-with-remote-off"
 ''
-export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no"
+export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run with sudo. Please run it again as: sudo $0"
@@ -82,7 +82,7 @@ fi
 '';
       update-with-remote-off = pkgs.writeShellScriptBin "update-with-remote-off"
 ''
-export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no"
+export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 echo "This will update the local system with the remote computer with the given IP and then power off both the remote and local machines. \n Run with Example: 'update-with-remote-off 192.168.1.109'"
 
