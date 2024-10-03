@@ -8,7 +8,7 @@ let
   cfg = config.mySystem;
 in 
 let
-      upgarde = pkgs.writeShellScriptBin "upgarde"
+      upgrade = pkgs.writeShellScriptBin "upgrade"
 ''
 trap "cd '${cfg.zsh.falkeLocation}' && git checkout -- flake.lock" INT # if interrupted
 
@@ -165,7 +165,7 @@ in
 
     ### MY SCRIPTS ###
     environment.systemPackages = with pkgs; [
-      upgarde
+      upgrade
       upgrade-with-remote-off
       update-with-remote-off
       clean
