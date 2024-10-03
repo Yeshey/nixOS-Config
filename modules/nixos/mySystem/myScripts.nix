@@ -15,7 +15,12 @@ trap "cd '${cfg.zsh.falkeLocation}' && git checkout -- flake.lock" INT # if inte
 # Ask for password upfront
 # sudo -v
 
-nix flake update "${cfg.zsh.falkeLocation}"
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run with sudo. Please run it again as: sudo $0"
+   exit 1
+fi
+
+nix flake update --flake "${cfg.zsh.falkeLocation}"
 
 if nixos-rebuild switch --flake "${cfg.zsh.falkeLocation}#${config.mySystem.host}"; then
     echo "NixOS upgrade successful."
