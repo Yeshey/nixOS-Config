@@ -55,6 +55,7 @@ let
     fi
 
     echo "Starting sshd on port ${lib.concatMapStrings toString cfg.ports} in the background"
+    echo "connect with ssh nix-on-droid@<ip> -p 8022"
     ${pkgs.openssh}/bin/sshd \
       -f "/etc/${configPath}"
   '';
