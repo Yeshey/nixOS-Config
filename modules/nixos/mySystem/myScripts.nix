@@ -45,7 +45,7 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-echo "This will upgrade the local system with the remote computer with the given IP and then power off both the remote and local machines. \n Run with Example: 'upgrade-with-remote-off 192.168.1.109'"
+echo "This will upgrade the local system with the remote computer with the given IP and then power off both the remote and local machines. \n Run with Example: 'sudo upgrade-with-remote-off 192.168.1.109'"
 
 if [ -z "$1" ]; then
     echo "No IP given! Please provide an IP address."
@@ -57,7 +57,7 @@ else
     # Ask for password upfront
     # sudo -v
 
-    nix flake update "${cfg.zsh.falkeLocation}"
+    nix flake update --flake "${cfg.zsh.falkeLocation}"
 
     if nixos-rebuild boot --flake "${cfg.zsh.falkeLocation}#${config.mySystem.host}" --build-host root@"''${REMOTE_IP}" --verbose --option eval-cache false; then
         echo "NixOS upgrade successful."
@@ -89,7 +89,7 @@ fi
 ''
 export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
-echo "This will update the local system with the remote computer with the given IP and then power off both the remote and local machines. \n Run with Example: 'update-with-remote-off 192.168.1.109'"
+echo "This will update the local system with the remote computer with the given IP and then power off both the remote and local machines. \n Run with Example: 'sudo update-with-remote-off 192.168.1.109'"
 
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run with sudo. Please run it again as: sudo $0"
