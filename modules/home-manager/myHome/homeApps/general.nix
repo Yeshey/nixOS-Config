@@ -36,6 +36,7 @@ in
         helm
 
         unstable.joplin-desktop # note taking
+        rnote
 
         github-desktop
         obs-studio
