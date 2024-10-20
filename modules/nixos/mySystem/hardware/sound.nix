@@ -23,6 +23,7 @@ in
     sound.enable = lib.mkOverride 1010 true;
     # hardware.pulseaudio.enable = lib.mkOverride 990 false; # a bit more important than mkDefault to be able to build a VM smoothly
     security.rtkit.enable = lib.mkOverride 1010 true;
+    hardware.pulseaudio.enable = false;
     services.pipewire = {
       audio.enable = lib.mkOverride 1010 true;
       enable = lib.mkOverride 1010 true;
