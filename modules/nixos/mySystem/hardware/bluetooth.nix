@@ -18,8 +18,13 @@ in
     hardware.bluetooth = {
       powerOnBoot = true;
       enable = true;
+      settings.General = {
+        Enable = "Source,Sink,Media,Socket";
+        Experimental = true;
+      };
       # package = pkgs.bluezFull;
     };
+
     /*
     # https://github.com/NixOS/nixpkgs/issues/63703 (issue that helped me override it)
     # https://discourse.nixos.org/t/how-to-override-nixpkg-services-execstart/17699 (general systemd service override)
