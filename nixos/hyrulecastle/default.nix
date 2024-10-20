@@ -189,7 +189,7 @@ in
   virtualisation.docker.storageDriver = "btrfs"; # for docker
 
   # hardware accelaration
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
     extraPackages = [
       pkgs.vaapiVdpau
