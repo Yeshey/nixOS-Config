@@ -37,7 +37,7 @@ in
             formulahendry.code-runner
             james-yu.latex-workshop
             bungcip.better-toml # TOML language support
-            matklad.rust-analyzer
+            rust-lang.rust-analyzer
             tamasfe.even-better-toml # Fully-featured TOML support
             eamodio.gitlens
             valentjn.vscode-ltex
