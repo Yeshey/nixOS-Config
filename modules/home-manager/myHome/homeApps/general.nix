@@ -41,7 +41,8 @@ in
         github-desktop
         obs-studio
         stremio
-        barrier
+        #barrier
+        input-leap
         bitwarden
         gparted
         baobab
