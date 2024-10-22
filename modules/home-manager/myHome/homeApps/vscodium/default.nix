@@ -42,6 +42,7 @@ in
             eamodio.gitlens
             valentjn.vscode-ltex
             streetsidesoftware.code-spell-checker # spell checker
+            ms-toolsai.jupyter
             
             # arrterian.nix-env-selector # nix environment selector
             vscode-extensions.mkhl.direnv # direnv (the good one!)
