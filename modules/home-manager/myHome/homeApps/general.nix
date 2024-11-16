@@ -36,6 +36,7 @@ in
         helm
 
         unstable.joplin-desktop # note taking
+        unstable.zed-editor
         rnote
 
         github-desktop
