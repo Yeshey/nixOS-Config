@@ -44,7 +44,7 @@ in
             streetsidesoftware.code-spell-checker # spell checker
             
             # arrterian.nix-env-selector # nix environment selector
-            vscode-extensions.mkhl.direnv # direnv (the good one!)
+            mkhl.direnv # direnv (the good one!)
             jnoortheen.nix-ide # not work?
             # you should try adding this one to have better nix code
             # b4dm4n.vscode-nixpkgs-fmt # for consistent nix code formatting (https://github.com/nix-community/nixpkgs-fmt)
