@@ -177,19 +177,20 @@ in
       environment.systemPackages = [ pkgs.deploy-rs ];
 
       networking.networkmanager.enable = lib.mkOverride 1010 true;
-      /*
+      #networking.resolvconf.dnsExtensionMechanism = lib.mkOverride 1010 false; # fixes 
+      
       networking.resolvconf.dnsExtensionMechanism = lib.mkOverride 1010 false; # fixes internet connectivity problems with some sites (https://discourse.nixos.org/t/domain-name-resolve-problem/885/2)
       
-      networking.nameservers = [
-        "1.1.1.1"
-        "8.8.8.8"
-        "9.9.9.9"
-      ]; # (https://unix.stackexchange.com/questions/510940/how-can-i-set-a-custom-dns-server-within-nixos)
-      */
+      #networking.nameservers = [ # (might need this for public WIFIs?)
+      #  "1.1.1.1"
+      #  "8.8.8.8"
+      #  "9.9.9.9"
+      #]; # (https://unix.stackexchange.com/questions/510940/how-can-i-set-a-custom-dns-server-within-nixos)
+      
 
       # needed to access coimbra-dev raspberrypi from localnetwork
-      systemd.network.wait-online.enable = lib.mkOverride 1010 false;
-      networking.useNetworkd = lib.mkOverride 1010 true;
+      #systemd.network.wait-online.enable = lib.mkOverride 1010 false;
+      #networking.useNetworkd = lib.mkOverride 1010 true;
 
       
       networking = {
