@@ -137,6 +137,11 @@ in
       enable = true;
       # scheduele = "*/10 * * * *"; # Runs every 10 minutes, default is every hour
     };
+
+    ollama = {
+      enable = true; 
+      acceleration = "cuda"; #or 'rocm' # this issue https://github.com/NixOS/nixpkgs/issues/321920
+    };
   };
 
   toHost = {

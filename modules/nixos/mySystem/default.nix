@@ -66,6 +66,7 @@ in
     ./isolateVMsNixStore.nix
     ./impermanence.nix
     ./speedtest-tracker.nix
+    ./ollama.nix
   ];
 
   options.mySystem = with lib; {
