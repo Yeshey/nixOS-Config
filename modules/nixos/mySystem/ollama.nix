@@ -29,6 +29,7 @@ in
           "/mnt/DataDisk"
         ];
     };
+    # systemctl status open-webui
     services.open-webui = {
       package = pkgs.unstable.open-webui;
       enable = true;
