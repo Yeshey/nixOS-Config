@@ -8,6 +8,8 @@
 let
   cfg = config.mySystem.piperTextToSpeech;
 
+  user = "yeshey";
+
   piperVoices = {
     en_US_amy = {
       onnx = builtins.fetchurl {
@@ -19,40 +21,63 @@ let
         sha256 = "sha256:0xvxjxk59byydx9gj6rdvvydp5zm8mzsrf9vyy6x6299sjs3x8lm"; # Replace with the actual sha256 hash after running `nix-build`.
       };
     };
+    en_US_libritts_r = {
+      onnx = builtins.fetchurl {
+        url = "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/libritts_r/medium/en_US-libritts_r-medium.onnx?download=true";
+        sha256 = "sha256:159iq7x4idczq4p5ap9wmf918jfhk4brydhz0zsgq5nnf7h8bfqh"; # Replace with the actual sha256 hash after running `nix-build`.
+      };
+      json = builtins.fetchurl {
+        url = "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/en/en_US/libritts_r/medium/en_US-libritts_r-medium.onnx.json";
+        sha256 = "sha256:1cxgr5dm0y4q4rxjal80yhbjhydzdxnijg9rkj0mwcyqs9hdqwdl"; # Replace with the actual sha256 hash after running `nix-build`.
+      };
+    };
   };
+
+  createFile = { name, content }: ''
+    mkdir -p "$(dirname /home/yeshey/.config/${name})"
+    echo '${content}' > /home/yeshey/.config/${name}
+  '';
 
 in
 {
   options.mySystem.piperTextToSpeech = {
     enable = lib.mkEnableOption "Enable Piper Text-to-Speech.";
-    #model = lib.mkOption {
-    #  type = lib.types.nullOr lib.types.str;
-    #  default = null; # Default is null
-    #  description = "Acceleration type (e.g., 'cuda' or 'rocm'), or null to use the default.";
-    #};
   };
 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
 
-    environment.etc."speech-dispatcher/modules/piper.conf".text = ''
-      GenericExecuteSynth "echo '$DATA' | piper --model /etc/piper-voices/en_US-amy-medium.onnx --output_raw | pw-play --rate 22050 --channel-map LE - "
-      AddVoice "en-US" "amy" "en/en_US/amy/medium/en_US-amy-medium.onnx"
-    '';
+    # Use userActivationScripts to configure Piper and Speech Dispatcher
+    system.userActivationScripts.piperSpeechDispatcher = ''
+      # Create Piper configuration in user-specific locations
+      ${createFile {
+        name = "speech-dispatcher/modules/piper.conf";
+        content = ''
+          GenericExecuteSynth "echo '\$DATA' | ${pkgs.piper-tts}/bin/piper --model /etc/piper-voices/en_US-libritts_r-medium.onnx --output_raw | ${pkgs.pipewire}/bin/pw-play --rate 22050 --channel-map LE - "
 
-    environment.etc."speech-dispatcher/speechd.conf".text = ''
-      AddModule "piper" "sd_generic" "piper.conf"
-      DefaultVoiceType  "amy"
-      DefaultLanguage   en-US
-      DefaultModule   piper
+        '';
+      }}
+
+      ${createFile {
+        name = "speech-dispatcher/speechd.conf";
+        content = ''
+          AddModule "piper" "sd_generic" "piper.conf"
+          DefaultVoiceType  "male1"
+          DefaultLanguage   en-US
+          DefaultModule   piper
+        '';
+      }}
     '';
 
     environment.etc."piper-voices/en_US-amy-medium.onnx".source = piperVoices.en_US_amy.onnx;
     environment.etc."piper-voices/en_US-amy-medium.onnx.json".source = piperVoices.en_US_amy.json;
+    environment.etc."piper-voices/en_US-libritts_r-medium.onnx".source = piperVoices.en_US_libritts_r.onnx;
+    environment.etc."piper-voices/en_US-libritts_r-medium.onnx.json".source = piperVoices.en_US_libritts_r.json;
 
-    # Ensure Piper and Speech Dispatcher are installed.
+    # Ensure Piper and Speech Dispatcher are installed
     environment.systemPackages = with pkgs; [
       speechd
       piper-tts
+      pipewire
     ];
   };
 }
