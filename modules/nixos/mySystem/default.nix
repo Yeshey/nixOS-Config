@@ -67,6 +67,7 @@ in
     ./impermanence.nix
     ./speedtest-tracker.nix
     ./ollama.nix
+    ./piperTextToSpeech.nix
   ];
 
   options.mySystem = with lib; {
