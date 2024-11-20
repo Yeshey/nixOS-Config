@@ -34,6 +34,7 @@ in
 
         vital # run with Vital
         helm
+        okular
 
         unstable.joplin-desktop # note taking
         unstable.zed-editor
