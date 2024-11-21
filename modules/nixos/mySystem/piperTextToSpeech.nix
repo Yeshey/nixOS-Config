@@ -34,8 +34,8 @@ let
   };
 
   createFile = { name, content }: ''
-    mkdir -p "$(dirname /home/yeshey/.config/${name})"
-    echo '${content}' > /home/yeshey/.config/${name}
+    mkdir -p "$(dirname /home/${user}/.config/${name})"
+    echo '${content}' > /home/${user}/.config/${name}
   '';
 
 in
