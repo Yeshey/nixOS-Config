@@ -63,6 +63,8 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
 - **VSCodium** - Visual Studio Codium, the open source version of VSC, configuration settings propagated to appropriate locations for VScodium, VSCode and openvscode-server, has a bunch of extensions and configuration for latex nix language server, settings for special characters to work with starship theme in terminal, java, etc: [vscodium/default.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/homeApps/vscodium/default.nix)
 
+- **piper-tts as Text to Speach** - A single english voice, instead of the robotic default voice: [piperTextToSpeech.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/piperTextToSpeech.nix)
+
 ## Gallery
 
 ### HyruleCastle
