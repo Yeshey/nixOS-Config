@@ -53,6 +53,7 @@ in
         name = "speech-dispatcher/modules/piper.conf";
         content = ''
           GenericExecuteSynth "echo '\$DATA' | ${pkgs.piper-tts}/bin/piper --model /etc/piper-voices/en_US-libritts_r-medium.onnx --output_raw | ${pkgs.pipewire}/bin/pw-play --rate 22050 --channel-map LE - "
+          AddVoice "en-US" "male1" "en/en_US/libritts_r/medium/en_US-libritts_r-medium.onnx"
         '';
       }}
 
