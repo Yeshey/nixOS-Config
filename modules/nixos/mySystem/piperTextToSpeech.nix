@@ -52,7 +52,7 @@ in
       ${createFile {
         name = "speech-dispatcher/modules/piper.conf";
         content = ''
-          GenericExecuteSynth "echo "$DATA" | ${pkgs.piper-tts}/bin/piper --model /etc/piper-voices/en_US-libritts_r-medium.onnx --output_raw | ${pkgs.pipewire}/bin/pw-play --rate 22050 --channel-map LE - "
+          GenericExecuteSynth  '\''''''echo "$DATA" | ${pkgs.piper-tts}/bin/piper --model /etc/piper-voices/en_US-libritts_r-medium.onnx --output_raw | ${pkgs.pipewire}/bin/pw-play --rate 22050 --channel-map LE - '\''''''
           AddVoice "en-US" "male1" "en/en_US/libritts_r/medium/en_US-libritts_r-medium.onnx"
         '';
       }}
@@ -68,8 +68,8 @@ in
       }}
     '';
 
-    environment.etc."piper-voices/en_US-amy-medium.onnx".source = piperVoices.en_US_amy.onnx;
-    environment.etc."piper-voices/en_US-amy-medium.onnx.json".source = piperVoices.en_US_amy.json;
+    #environment.etc."piper-voices/en_US-amy-medium.onnx".source = piperVoices.en_US_amy.onnx;
+    #environment.etc."piper-voices/en_US-amy-medium.onnx.json".source = piperVoices.en_US_amy.json;
     environment.etc."piper-voices/en_US-libritts_r-medium.onnx".source = piperVoices.en_US_libritts_r.onnx;
     environment.etc."piper-voices/en_US-libritts_r-medium.onnx.json".source = piperVoices.en_US_libritts_r.json;
 
