@@ -8,6 +8,8 @@
 let
   cfg = config.mySystem.piperTextToSpeech;
 
+  user = "yeshey";
+
   piperVoices = {
     en_US_amy = {
       onnx = builtins.fetchurl {
@@ -31,14 +33,12 @@ let
     };
     pt_PT_tugao = {
       onnx = builtins.fetchurl {
-        url = "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/pt/pt_PT/tugão/medium/pt_PT-tugão-medium.onnx?download=true";
-        sha256 = "sha256:1m1714mkwwzd5yfbnbf72rp31g0k7dydm2kyi5hmq5cslsn7lfi2";
-        name = "tuga.onnx";
+        url = "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/pt/pt_PT/tug%C3%A3o/medium/pt_PT-tug%C3%A3o-medium.onnx?download=true";
+        sha256 = "";
       };
       json = builtins.fetchurl {
-        url = "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/pt/pt_PT/tugão/medium/pt_PT-tugão-medium.onnx.json";
-        sha256 = "sha256:083k1jsv5z475xf1pj667knrz3jxx7laz97flrj95a7iq3gih2gy";
-        name = "tuga.onnx.json";
+        url = "https://huggingface.co/rhasspy/piper-voices/resolve/v1.0.0/pt/pt_PT/tug%C3%A3o/medium/pt_PT-tug%C3%A3o-medium.onnx.json";
+        sha256 = "";
       };
     };
   };
@@ -61,9 +61,10 @@ in
       home.file.".config/speech-dispatcher/modules/piper.conf".text = ''
         GenericExecuteSynth 'echo "$(${rmNewLines}/bin/rmNewLines "$DATA")" | ${pkgs.piper-tts}/bin/piper --model /etc/piper-voices/en_US-libritts_r-medium.onnx --output_raw | ${pkgs.pipewire}/bin/pw-play --rate 22050 --channel-map LE - '
         AddVoice "en-US" "male1" "en/en_US/libritts_r/medium/en_US-libritts_r-medium.onnx"
-        AddVoice "en-US" "female1" "en/en_US/amy/medium/en_US-amy-medium.onnx"
-        AddVoice "pt-PT" "male1" "pt/pt_PT/tugão/medium/pt_PT-tugão-medium.onnx"
       '';
+        #AddVoice "en-US" "female1" "en/en_US/amy/medium/en_US-amy-medium.onnx"
+        #AddVoice "pt-PT" "male1" "pt/pt_PT/tugão/medium/pt_PT-tugão-medium.onnx"
+        # '\''''''
 
       home.file.".config/speech-dispatcher/speechd.conf".text = ''
         AddModule "piper" "sd_generic" "piper.conf"
@@ -75,10 +76,10 @@ in
 
     environment.etc."piper-voices/en_US-libritts_r-medium.onnx".source = piperVoices.en_US_libritts_r.onnx;
     environment.etc."piper-voices/en_US-libritts_r-medium.onnx.json".source = piperVoices.en_US_libritts_r.json;
-    environment.etc."piper-voices/en_US-amy-medium.onnx".source = piperVoices.en_US_amy.onnx;
-    environment.etc."piper-voices/en_US-amy-medium.onnx.json".source = piperVoices.en_US_amy.json;
-    environment.etc."piper-voices/pt_PT-tugão-medium.onnx".source = piperVoices.pt_PT_tugao.onnx;
-    environment.etc."piper-voices/pt_PT-tugão-medium.onnx.json".source = piperVoices.pt_PT_tugao.json;
+    #environment.etc."piper-voices/en_US-amy-medium.onnx".source = piperVoices.en_US_amy.onnx;
+    #environment.etc."piper-voices/en_US-amy-medium.onnx.json".source = piperVoices.en_US_amy.json;
+    #environment.etc."piper-voices/pt_PT-tugão-medium.onnx".source = piperVoices.pt_PT_tugao.onnx;
+    #environment.etc."piper-voices/pt_PT-tugão-medium.onnx.json".source = piperVoices.pt_PT_tugao.json;
 
     # Ensure Piper and Speech Dispatcher are installed
     environment.systemPackages = with pkgs; [
