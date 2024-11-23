@@ -59,7 +59,8 @@ in
       
       # Define the files under home-manager's writeFile mechanism
       home.file.".config/speech-dispatcher/modules/piper.conf".text = ''
-        GenericExecuteSynth 'echo "$(${rmNewLines}/bin/rmNewLines "$DATA")" | ${pkgs.piper-tts}/bin/piper --model /etc/piper-voices/en_US-libritts_r-medium.onnx --output_raw | ${pkgs.pipewire}/bin/pw-play --rate 22050 --channel-map LE - '
+        GenericExecuteSynth 'echo "$(${rmNewLines}/bin/rmNewLines "$DATA")" | ${pkgs.piper-tts}/bin/piper --model /etc/piper-voices/en_US-libritts_r-medium.onnx --output_raw --sentence_silence 0.1 | ${pkgs.sox}/bin/play -t raw -r 22050 -e signed-integer -b 16 -c 1 - tempo -q $(echo "1 + ($RATE / 100) * (2.5 - 1)" | ${pkgs.bc}/bin/bc -l)'
+        
         AddVoice "en-US" "male1" "en/en_US/libritts_r/medium/en_US-libritts_r-medium.onnx"
       '';
         #AddVoice "en-US" "female1" "en/en_US/amy/medium/en_US-amy-medium.onnx"
@@ -86,6 +87,8 @@ in
       speechd
       piper-tts
       pipewire
+      sox
+      bc
     ];
   };
 }
