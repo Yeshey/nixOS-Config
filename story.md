@@ -15,7 +15,7 @@
 &nbsp;
 
 Sometime before 2020, I decided to try to make a Minecraft server, young and naive, I followed a tutorial that used Linux and installed it on the spare computer I was setting up, thus kickstarting my Linux journey with Debian.
-The good old days when I would use the as my main graphical account, making a mess of a system in every sense of the word.
+The good old days when I would use the root account as my main graphical account, making a mess of a system in every sense of the word.
 
 I have tried many Linux distributions: Debian, Ubuntu, Kubuntu, PopOS, Linux Mint, Peppermint OS, Manjaro, Garuda Linux, Raspberry Pi OS... many systems have been messed up, misconfigured, or even destroyed at a whim... before NixOS.
 
