@@ -1,5 +1,18 @@
 # Story
 
+<details>
+  <summary>🌊 Play Sea Shanty</summary>
+  <div>
+    <audio id="shantyAudio" controls loop>
+      <source src="secrets/assets/seaShantyAlanBecker.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+    <br>
+    <small>🎥 <a href="https://www.youtube.com/watch?v=SeyBYD0B2BY">Original Short by Alan Becker</a></small>
+  </div>
+</details>
+
+&nbsp;
 
 Sometime before 2020, I decided to try to make a Minecraft server, young and naive, I followed a tutorial that used Linux and installed it on the spare computer I was setting up, thus kickstarting my Linux journey with Debian.
 The good old days when I would use the as my main graphical account, making a mess of a system in every sense of the word.
