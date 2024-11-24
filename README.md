@@ -69,11 +69,11 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
 ### HyruleCastle
 
-![hyrulecastle](https://github.com/Yeshey/nixOS-Config/assets/41551785/93350f05-7a1c-4f19-adac-f3e912ec6641)
+![hyrulecastle](secrets/assets/hyruleCastle.jpg)
 
 ### Kakariko
 
-![kakariko](https://github.com/Yeshey/nixOS-Config/assets/41551785/87c28630-9c44-4931-a4d2-573376999ff6)
+![kakariko](secrets/assets/kakariko.jpg)
 
 &nbsp;
 
