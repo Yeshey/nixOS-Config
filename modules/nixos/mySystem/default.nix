@@ -176,6 +176,7 @@ in
         defaultEditor = lib.mkOverride 1010 true;
       };
       programs.command-not-found.enable = true;
+      programs.gphoto2.enable = true; # to be able to access cameras
       environment.systemPackages = [ pkgs.deploy-rs ];
 
       networking.networkmanager.enable = lib.mkOverride 1010 true;
