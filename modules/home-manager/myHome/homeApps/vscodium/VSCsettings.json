@@ -34,7 +34,7 @@
     "latex-workshop.latex.tools": [
       {
           "name": "latexmk",
-          "command": "latexmk",
+          "command": "lualatex", // latexmk
           "args": [
               "--shell-escape",
               "-f",
