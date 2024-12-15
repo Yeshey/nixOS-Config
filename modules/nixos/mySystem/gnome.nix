@@ -15,19 +15,19 @@ in
 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
     environment = {
-      systemPackages = with pkgs; [ firefox gnome.gnome-tweaks ];
+      systemPackages = with pkgs; [ firefox gnome-tweaks ];
       gnome.excludePackages = with pkgs; [
-        gnome.cheese # webcam tool
+        cheese # webcam tool
         gedit # text editor
         epiphany # web browser
-        gnome.geary # email reader
+        geary # email reader
         #evince # document viewer
-        gnome.totem # video player
+        totem # video player
         gnome-connections
-        gnome.gnome-contacts
+        gnome-contacts
         # gnome-maps
-        gnome.gnome-music
-        gnome.gnome-weather
+        gnome-music
+        gnome-weather
       ];
     };
 
@@ -44,7 +44,7 @@ in
         };
         desktopManager.gnome.enable = true;
       };
-      udev.packages = [ pkgs.gnome.gnome-settings-daemon ];
+      udev.packages = [ pkgs.gnome-settings-daemon ];
     };
 
     security.rtkit.enable = true;
