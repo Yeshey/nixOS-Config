@@ -98,7 +98,7 @@ in
     # Specific packages
     packages = with pkgs; [
       nethack
-      psensor
+      resources # (better system monitor) (or missioncenter), bc psensor is unmaintained
 
       # draw
       xournal

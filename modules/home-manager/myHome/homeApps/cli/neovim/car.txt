@@ -1,0 +1,691 @@
+
+./init.lua
+vim.g.mapleader = " "
+
+-- Line numbering
+vim.api.nvim_win_set_option(0, "number", true)
+vim.api.nvim_win_set_option(0, "relativenumber", true)
+vim.api.nvim_win_set_option(0, "wrap", false)
+
+-- Better Markdown
+vim.api.nvim_set_option("conceallevel", 0)
+
+-- Search case
+vim.api.nvim_set_option("ignorecase", true)
+vim.api.nvim_set_option("smartcase", true)
+
+-- Hide command line
+vim.api.nvim_set_option("cmdheight", 0)
+
+-- Minimal number of lines to scroll when the cursor gets off the screen
+vim.api.nvim_set_option("scrolloff", 8)
+vim.api.nvim_set_option("sidescrolloff", 8)
+
+-- Highlight on yank
+local highlight_group = vim.api.nvim_create_augroup("YankHighlight", { clear = true })
+vim.api.nvim_create_autocmd("TextYankPost", {
+	callback = function()
+		vim.highlight.on_yank()
+	end,
+	group = highlight_group,
+	pattern = "*",
+})
+
+-- Add missing commentstring for nix files
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = { "nix", "terraform" },
+	group = vim.api.nvim_create_augroup("SetHashCommentstring", { clear = true }),
+	callback = function()
+		vim.bo.commentstring = "# %s"
+	end,
+})
+
+-- Indents
+vim.api.nvim_set_option("tabstop", 4)
+vim.api.nvim_set_option("shiftwidth", 4)
+vim.api.nvim_set_option("smartindent", true)
+vim.cmd("filetype indent plugin on")
+
+./keymaps.lua
+-- Remove annoying mapping
+vim.keymap.set("n", "Q", "<nop>")
+
+-- Navigation
+vim.keymap.set("n", "ga", "<CMD>e #<CR>")
+
+-- Copy and paste
+vim.keymap.set("v", "<leader>y", '"+y', { desc = "Yank to system register" })
+vim.keymap.set("n", "<leader>y", '"+yy', { desc = "Yank to system register" })
+vim.keymap.set("v", "<leader>p", '"+p', { desc = "Paste from system register" })
+vim.keymap.set("v", "<leader>P", '"+P', { desc = "Paste from system register" })
+vim.keymap.set("n", "<leader>p", '"+p', { desc = "Paste from system register" })
+vim.keymap.set("n", "<leader>P", '"+P', { desc = "Paste from system register" })
+vim.keymap.set("n", "Y", "y$")
+
+-- Visual mode
+vim.keymap.set("n", "vv", "V")
+vim.keymap.set("n", "V", "v$")
+
+./plugins/cmp.lua
+local cmp = require("cmp")
+local lspkind = require("lspkind")
+local copilot = require("copilot")
+local copilot_cmp = require("copilot_cmp")
+
+copilot.setup({
+	suggestion = { enabled = false },
+	panel = { enabled = false },
+})
+
+copilot_cmp.setup()
+
+cmp.setup({
+	mapping = cmp.mapping.preset.insert({
+		["<C-u>"] = cmp.mapping.scroll_docs(-4),
+		["<C-d>"] = cmp.mapping.scroll_docs(4),
+		["<C-e>"] = cmp.mapping.close(),
+		["<CR>"] = cmp.mapping.confirm({
+			behavior = cmp.ConfirmBehavior.Insert,
+			select = false,
+		}),
+	}),
+	sources = cmp.config.sources({
+		{ name = "copilot" },
+		{ name = "nvim_lsp" },
+		{ name = "buffer" },
+		{ name = "path" },
+	}),
+	formatting = {
+		format = lspkind.cmp_format({
+			mode = "symbol",
+			maxwidth = 50,
+			ellipsis_char = "...",
+			symbol_map = { Copilot = "" },
+		}),
+	},
+})
+
+./plugins/cmp.nix
+{ pkgs, ... }:
+
+{
+  plugin = pkgs.nvimPlugins.nvim-cmp;
+  configFile = ./cmp.lua;
+  dependencies = with pkgs.nvimPlugins; [
+    cmp-nvim-lsp
+    cmp-path
+    cmp-buffer
+    copilot-cmp
+    copilot-lua
+    lspkind-nvim
+  ];
+}
+
+./plugins/lspconfig.lua
+local M = {}
+local lspconfig = require("lspconfig")
+local configs = require("lspconfig.configs")
+local util = require("lspconfig.util")
+local efmconfig = require("lspconfig.server_configurations.efm")
+local telescope = require("telescope.builtin")
+local schemastore = require("schemastore")
+
+vim.keymap.set("n", "<space>e", vim.diagnostic.open_float, { desc = "Open diagnostics" })
+vim.keymap.set("n", "<C-f>", "<nop>") -- Disable default binding
+vim.cmd([[silent! autocmd! filetypedetect BufRead,BufNewFile *.tf]])
+vim.cmd([[autocmd BufRead,BufNewFile *.hcl set filetype=hcl]])
+vim.cmd([[autocmd BufRead,BufNewFile .terraformrc,terraform.rc set filetype=hcl]])
+vim.cmd([[autocmd BufRead,BufNewFile *.tf,*.tfvars set filetype=terraform]])
+vim.cmd([[autocmd BufRead,BufNewFile *.tfstate,*.tfstate.backup set filetype=json]])
+
+vim.api.nvim_create_autocmd("LspAttach", {
+	group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+	callback = function(ev)
+		local function opts(desc)
+			return { buffer = ev.buf, desc = desc }
+		end
+		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts("Goto declaration"))
+		vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts("Goto definition"))
+		vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts("Goto implementation"))
+		vim.keymap.set("n", "<leader>k", vim.lsp.buf.hover, opts("Hover"))
+		vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, opts("Show signature"))
+		vim.keymap.set("n", "<space>R", vim.lsp.buf.rename, opts("Rename symbol"))
+		vim.keymap.set({ "n", "v" }, "<space>a", vim.lsp.buf.code_action, opts("Code actions"))
+		vim.keymap.set("n", "<leader>r", telescope.lsp_references, opts("Open references picker"))
+		vim.keymap.set("n", "<C-f>", function()
+			vim.lsp.buf.format({ async = true })
+		end, opts("Format buffer"))
+	end,
+})
+
+local extra_server_options = {
+	lua_ls = {
+		settings = {
+			Lua = {
+				workspace = {
+					library = vim.api.nvim_get_runtime_file("", true),
+				},
+			},
+		},
+	},
+	jsonls = {
+		settings = {
+			json = {
+				schemas = schemastore.json.schemas(),
+				validate = { enable = true },
+			},
+		},
+	},
+	yamlls = {
+		settings = {
+			yaml = {
+				schemas = schemastore.yaml.schemas(),
+				schemaStore = {
+					enable = false,
+					url = "",
+				},
+			},
+		},
+	},
+	tsserver = {
+		on_attach = function(client, _bufnr)
+			client.server_capabilities.documentFormattingProvider = false
+			client.server_capabilities.documentRangeFormattingProvider = false
+		end,
+	},
+}
+
+function M.setup_servers(lsp_servers)
+	for server, config in pairs(vim.tbl_deep_extend("error", lsp_servers, extra_server_options)) do
+		if vim.startswith(server, "efm_") then
+			if config.root_dir then
+				config.root_dir = util.root_pattern(config.root_dir)
+			end
+			configs[server] = efmconfig
+		end
+		lspconfig[server].setup(config)
+	end
+end
+
+return M
+
+./plugins/lspconfig.nix
+{ pkgs, lib, ... }:
+
+let
+  lsp_servers = {
+    nil_ls = {
+      settings.nil = {
+        nix = {
+          maxMemoryMB = 4096;
+          flake.autoEvalInputs = true;
+        };
+        formatting.command = [ "nixpkgs-fmt" ];
+      };
+    };
+    pyright = { };
+    dockerls = { };
+    bashls = { };
+    terraformls = { };
+    tflint = { };
+    gopls = { };
+    templ = { };
+    marksman = { };
+    tsserver = {
+      init_options.tsserver.path = "${pkgs.nodePackages.typescript}/bin/tsserver";
+    };
+    taplo = { };
+    tailwindcss = {
+      init_options = {
+        userLanguages = {
+          heex = "html";
+        };
+      };
+    };
+    cssls = { };
+    eslint = {
+      settings.format = false;
+    };
+    jsonls = {
+      init_options.provideFormatter = false;
+    };
+    yamlls = { };
+    html = {
+      init_options.provideFormatter = false;
+    };
+    volar.init_options.typescript.tsdk = "${pkgs.nodePackages.typescript}/lib/node_modules/typescript/lib";
+    elixirls.cmd = [ "elixir-ls" ];
+    lua_ls = {
+      settings.Lua = {
+        runtime.version = "LuaJIT";
+        diagnostics.globals = [ "vim" ];
+        telemetry.enable = false;
+      };
+    };
+    efm =
+      let
+        prettier = {
+          formatCommand = "prettier --stdin-filepath \${INPUT}";
+          formatStdin = true;
+        };
+        languages = {
+          go = [
+            {
+              lintCommand = "golangci-lint run --fix=false --out-format=line-number \${INPUT}";
+              lintStdin = false;
+              lintFormats = [ "%f:%l: %m" ];
+            }
+          ];
+          json = [ prettier ];
+          javascript = [ prettier ];
+          html = [ prettier ];
+          css = [ prettier ];
+          vue = [ prettier ];
+          markdown = [
+            {
+              lintCommand = "markdownlint --stdin";
+              lintStdin = true;
+              lintFormats = [
+                "%f:%l %m"
+                "%f:%l:%c %m"
+                "%f: %l: %m"
+              ];
+            }
+            prettier
+          ];
+        };
+      in
+      {
+        init_options.documentFormatting = true;
+        settings = {
+          inherit languages;
+        };
+        filetypes = builtins.attrNames languages;
+      };
+    efm_python = {
+      init_options.documentFormatting = true;
+      settings = {
+        languages.python = [
+          {
+            formatCommand = "black --quiet -";
+            formatStdin = true;
+          }
+          {
+            formatCommand = "isort --quiet -";
+            formatStdin = true;
+          }
+          {
+            lintCommand = "pylama --from-stdin \${INPUT}";
+            lintStdin = true;
+            lintFormats = [ "%f:%l:%c %m" ];
+          }
+        ];
+      };
+      filetypes = [ "python" ];
+      root_dir = [
+        "pyproject.toml"
+        "setup.cfg"
+        "seput.py"
+        ".git"
+      ];
+    };
+  };
+in
+{
+  plugin = pkgs.nvimPlugins.nvim-lspconfig;
+  preConfig = # lua
+    ''
+      dofile("${./lspconfig.lua}").setup_servers(vim.fn.json_decode([[${builtins.toJSON lsp_servers}]]))
+    '';
+  dependencies = [ pkgs.nvimPlugins.schemastore ];
+  extraPackages = with pkgs; [
+    (python3.withPackages (
+      ps: with ps; [
+        setuptools # Required by pylama for some reason
+        pylama
+        black
+        isort
+        yamllint
+      ]
+    ))
+    (nodePackages.pyright.override { inherit (unstable.nodePackages.pyright) src version name; })
+    unstable.elixir-ls
+    unstable.lua-language-server
+    unstable.nil
+    unstable.gopls
+    nixpkgs-fmt
+    templ
+    nodePackages.bash-language-server
+    nodePackages.yaml-language-server
+    nodePackages.dockerfile-language-server-nodejs
+    nodePackages.vscode-langservers-extracted
+    nodePackages.typescript-language-server
+    nodePackages.prettier
+    yaml-language-server
+    terraform-ls
+    tflint
+    efm-langserver
+    taplo
+    tailwindcss-language-server
+    marksman
+  ];
+}
+
+./plugins/mini.lua
+require("mini.pairs").setup()
+require("mini.trailspace").setup()
+require("mini.surround").setup()
+
+require("mini.notify").setup()
+vim.api.nvim_set_hl(0, "MiniNotifyBorder", { link = "NormalFloat" })
+vim.api.nvim_set_hl(0, "MiniNotifyNormal", { link = "NormalFloat" })
+vim.api.nvim_set_hl(0, "MiniNotifyTitle", { link = "NormalFloat" })
+
+require("mini.statusline").setup()
+vim.api.nvim_set_hl(0, "MiniStatuslineModeNormal", { bg = "#6699cc" })
+vim.api.nvim_set_hl(0, "MiniStatuslineModeInsert", { bg = "#99c794" })
+vim.api.nvim_set_hl(0, "MiniStatuslineModeVisual", { bg = "#f99157" })
+vim.api.nvim_set_hl(0, "MiniStatuslineModeReplace", { bg = "#ec5f67" })
+vim.api.nvim_set_hl(0, "MiniStatuslineModeCommand", { bg = "#65737e" })
+
+require("mini.comment").setup({
+	mappings = {
+		comment = "<C-c>",
+		comment_line = "<C-c>",
+		comment_visual = "<C-c>",
+	},
+})
+local miniclue = require("mini.clue")
+miniclue.setup({
+	triggers = {
+		-- Leader triggers
+		{ mode = "n", keys = "<Leader>" },
+		{ mode = "x", keys = "<Leader>" },
+
+		-- Built-in completion
+		{ mode = "i", keys = "<C-x>" },
+
+		-- `g` key
+		{ mode = "n", keys = "g" },
+		{ mode = "x", keys = "g" },
+
+		-- Marks
+		{ mode = "n", keys = "'" },
+		{ mode = "n", keys = "`" },
+		{ mode = "x", keys = "'" },
+		{ mode = "x", keys = "`" },
+
+		-- Registers
+		{ mode = "n", keys = '"' },
+		{ mode = "x", keys = '"' },
+		{ mode = "i", keys = "<C-r>" },
+		{ mode = "c", keys = "<C-r>" },
+
+		-- Window commands
+		{ mode = "n", keys = "<C-w>" },
+
+		-- `z` key
+		{ mode = "n", keys = "z" },
+		{ mode = "x", keys = "z" },
+	},
+
+	clues = {
+		miniclue.gen_clues.builtin_completion(),
+		miniclue.gen_clues.g(),
+		miniclue.gen_clues.marks(),
+		miniclue.gen_clues.registers(),
+		miniclue.gen_clues.windows(),
+		miniclue.gen_clues.z(),
+	},
+
+	window = {
+		delay = 200,
+		config = {
+			width = 50,
+		},
+	},
+})
+
+./plugins/telescope.lua
+local builtin = require("telescope.builtin")
+
+vim.keymap.set("n", "<leader>f", builtin.find_files, { desc = "Open file picker" })
+vim.keymap.set("n", "<leader>b", builtin.buffers, { desc = "Open buffer picker" })
+vim.keymap.set("n", "<leader>h", builtin.help_tags, { desc = "Open help tags picker" })
+vim.keymap.set("n", "<leader>c", builtin.commands, { desc = "Open help tags picker" })
+vim.keymap.set("n", "<leader>/", builtin.live_grep, { desc = "Open live grep" })
+
+vim.keymap.set("n", "<leader>gc", builtin.git_commits, { desc = "Git commits" })
+vim.keymap.set("n", "<leader>gb", builtin.git_branches, { desc = "Git branches" })
+vim.keymap.set("n", "<leader>gs", builtin.git_status, { desc = "Git status" })
+
+./plugins/telescope.nix
+{ pkgs, ... }:
+
+{
+  plugin = pkgs.nvimPlugins.telescope;
+  configFile = ./telescope.lua;
+  opts.defaults.layout_config.horizontal.width = 0.9;
+  extraPackages = with pkgs; [
+    ripgrep
+    fd
+  ];
+  dependencies = [ pkgs.nvimPlugins.plenary ];
+}
+
+./plugins/treesitter.nix
+{ pkgs, ... }:
+
+{
+  plugin = pkgs.unstable.vimPlugins.nvim-treesitter.withAllGrammars;
+  main = "nvim-treesitter.configs";
+  opts = {
+    auto_install = false; # Parsers are managed by Nix
+    indent = {
+      enable = true;
+      disable = [
+        "python"
+        "yaml"
+      ]; # Yaml and Python indents are unusable
+    };
+    highlight = {
+      enable = true;
+      disable = [ "yaml" ]; # Disable yaml highlighting because Helm sucks :<
+      additional_vim_regex_highlighting = false;
+    };
+  };
+}
+
+./plugins/default.nix
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}@args:
+
+let
+  cfg = config.myHome.homeApps.cli.neovim;
+  importPlugins = plugins: (map (path: import path args) plugins);
+  plugins =
+    (importPlugins [
+      ./telescope.nix
+      ./treesitter.nix
+    ])
+    ++ [
+      {
+        plugin = pkgs.nvimPlugins.mini;
+        configFile = ./mini.lua;
+      }
+      {
+        plugin = pkgs.nvimPlugins.indent-blankline;
+        main = "ibl";
+        opts.scope.enabled = false;
+      }
+      { plugin = pkgs.nvimPlugins.oceanic-next; }
+      { plugin = pkgs.nvimPlugins.devicons; }
+      {
+        plugin = pkgs.nvimPlugins.gitsigns;
+        opts = { };
+      }
+      {
+        plugin = pkgs.nvimPlugins.dressing;
+        opts = { };
+      }
+      {
+        plugin = pkgs.nvimPlugins.oil;
+        opts.view_options.show_hidden = true;
+        postConfig = ''
+          vim.keymap.set("n", "-", "<CMD>Oil<CR>", { desc = "Open parent directory" })
+        '';
+      }
+      { plugin = pkgs.vimPlugins.vim-sleuth; }
+    ];
+  lspPlugins = importPlugins [
+    # ./lspconfig.nix
+    ./cmp.nix
+  ];
+in
+{
+  config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && config.myHome.homeApps.cli.enable && cfg.enable) {
+    myHome.homeApps.cli.neovim.plugins = plugins ++ (lib.lists.optionals cfg.enableLSP lspPlugins);
+  };
+}
+
+./theme.lua
+-- Color theme
+vim.cmd("colorscheme OceanicNext")
+vim.o.termguicolors = true
+vim.o.cursorline = true
+vim.o.colorcolumn = "80"
+
+-- Fix transparent background
+vim.cmd("hi Normal guibg=NONE ctermbg=NONE")
+vim.cmd("hi LineNr guibg=NONE ctermbg=NONE")
+vim.cmd("hi SignColumn guibg=NONE ctermbg=NONE")
+vim.cmd("hi EndOfBuffer guibg=NONE ctermbg=NONE")
+vim.cmd("hi WinSeparator guibg=NONE")
+
+./default.nix
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+
+let
+  cfg = config.myHome.homeApps.cli.neovim;
+  pluginOptions =
+    _: with lib; {
+      options = {
+        plugin = mkOption { type = types.package; };
+        main = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+        };
+        opts = mkOption {
+          type = types.nullOr types.attrs;
+          default = null;
+        };
+        configFile = mkOption {
+          type = types.nullOr types.path;
+          default = null;
+        };
+        preConfig = mkOption {
+          type = types.nullOr types.lines;
+          default = null;
+        };
+        postConfig = mkOption {
+          type = types.nullOr types.lines;
+          default = null;
+        };
+        dependencies = mkOption {
+          type = types.listOf types.package;
+          default = [ ];
+        };
+        extraPackages = mkOption {
+          type = types.listOf types.package;
+          default = [ ];
+        };
+      };
+    };
+  mkPlugin =
+    p:
+    let
+      inherit (lib.strings) concatStrings;
+      optional = cond: element: if cond then element else null;
+      main = if p.main != null then p.main else p.plugin.pname;
+      setupCommand =
+        optional (p.opts != null) # lua
+          ''
+            require("${main}").setup(vim.fn.json_decode([[${builtins.toJSON p.opts}]]))
+          '';
+      doConfigFileCommand =
+        optional (p.configFile != null) # lua
+          ''
+            dofile("${p.configFile}")
+          '';
+      config = concatStrings (
+        builtins.filter (x: x != null) [
+          p.preConfig
+          setupCommand
+          doConfigFileCommand
+          p.postConfig
+        ]
+      );
+    in
+    {
+      inherit (p) plugin;
+      type = "lua";
+      config = optional (config != "") (concatStrings [
+        "-- Plugin ${p.plugin.pname}\n"
+        config
+        "-- end\n"
+      ]);
+    };
+in
+{
+  imports = [ ./plugins ];
+  options.myHome.homeApps.cli.neovim = with lib; {
+    enable = mkEnableOption "neovim";
+    enableLSP = mkEnableOption "enableLSP";
+    plugins = mkOption {
+      type = types.listOf (types.submodule pluginOptions);
+      default = [ ];
+    };
+  };
+
+  config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && config.myHome.homeApps.cli.enable && cfg.enable) {
+    home.sessionVariables = {
+      EDITOR = "${config.home.profileDirectory}/bin/nvim";
+    };
+    programs.neovim = {
+      enable = true;
+      vimAlias = true;
+      viAlias = true;
+      withNodeJs = false;
+      withPython3 = true;
+      withRuby = false;
+      extraLuaConfig = # lua
+        ''
+          dofile("${./init.lua}")
+          dofile("${./theme.lua}")
+          dofile("${./keymaps.lua}")
+        ''
+        + "\n";
+      plugins =
+        (builtins.map mkPlugin cfg.plugins)
+        ++ (builtins.foldl' (acc: p: acc ++ p.dependencies) [ ] cfg.plugins);
+      extraPackages =
+        with pkgs;
+        [
+          nodePackages.npm
+          nodePackages.neovim
+        ]
+        ++ (builtins.foldl' (acc: p: acc ++ p.extraPackages) [ ] cfg.plugins);
+    };
+  };
+}
+
+./car.txt

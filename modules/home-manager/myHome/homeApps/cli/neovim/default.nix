@@ -95,7 +95,7 @@ in
       enable = true;
       vimAlias = true;
       viAlias = true;
-      withNodeJs = true;
+      withNodeJs = false;
       withPython3 = true;
       withRuby = false;
       extraLuaConfig = # lua
@@ -112,7 +112,7 @@ in
         with pkgs;
         [
           nodePackages.npm
-          nodePackages.neovim
+          pkgs.neovim
         ]
         ++ (builtins.foldl' (acc: p: acc ++ p.extraPackages) [ ] cfg.plugins);
     };
