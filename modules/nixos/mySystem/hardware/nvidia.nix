@@ -71,7 +71,7 @@ EndSection
     ];
     # NVIDIA drivers 
     services.xserver.videoDrivers = [ "nvidia" ];
-    hardware.opengl.enable = lib.mkOverride 1010 true;
+    hardware.graphics.enable = lib.mkOverride 1010 true;
 
     # Comment this to use only the nvidia Grpahics card (discrete graphics option in BIOS instead of switchable graphics)
     hardware.nvidia = {

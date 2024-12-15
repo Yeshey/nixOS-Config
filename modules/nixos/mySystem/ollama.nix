@@ -24,10 +24,6 @@ in
       package = pkgs.unstable.ollama;
       enable = true;
       acceleration = if cfg.acceleration == null then null else cfg.acceleration;
-      writablePaths = [
-          "/home/yeshey"
-          "/mnt/DataDisk"
-        ];
     };
     # systemctl status open-webui
     services.open-webui = {
