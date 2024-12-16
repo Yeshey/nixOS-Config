@@ -2,7 +2,7 @@
 {
   # call the overlays
   nvimPlugins = inputs.neovim-plugins.overlays.default;
-  nur = inputs.nurpkgs.overlay; # nur packages available at pkgs.nur
+  nur = inputs.nurpkgs.overlays.default; # nur packages available at pkgs.nur
 
   # This one brings our custom packages from the 'pkgs' directory
   additions = final: _prev: import ../pkgs { pkgs = final; };
