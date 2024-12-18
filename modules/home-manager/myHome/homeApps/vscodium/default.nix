@@ -43,7 +43,7 @@ in
             valentjn.vscode-ltex
             streetsidesoftware.code-spell-checker # spell checker
             
-            redhat.vscode-xml
+            redhat.vscode-xml # not installed??
             # arrterian.nix-env-selector # nix environment selector
             mkhl.direnv # direnv (the good one!)
             jnoortheen.nix-ide # not work?
