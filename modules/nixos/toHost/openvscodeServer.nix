@@ -25,11 +25,10 @@ in
     # journalctl -fu openvscode-server.service
     # connect to the VScodium server with `ssh -L 9090:localhost:3000 yeshey@143.47.53.175`, and go to http://localhost:9090 in your browser
     # This seems to work:
-    # c
+    # (ssh -L 9090:localhost:3000 -t yeshey@143.47.53.175 "sleep 90" &) && xdg-open http://localhost:9090
     services.openvscode-server = {
       enable = true;
       host = "localhost";
-      #host = "0.0.0.0"; # Allow connections from all network interfaces
       port = 3000;
       user = "yeshey"; # TODO user variable?
       extensionsDir = "/home/yeshey/.vscode-oss/extensions"; # TODO user variable?
@@ -39,7 +38,6 @@ in
     networking.firewall.allowedTCPPorts = [
       80
       443
-      3000 # question mark
     ];
   };
 }
