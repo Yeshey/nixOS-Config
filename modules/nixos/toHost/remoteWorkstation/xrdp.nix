@@ -44,7 +44,7 @@ in
       displayManager = {
         #autoLogin.enable = true;
         #autoLogin.user = config.mySystem.user;
-        sddm.enable = true;
+        sddm.enable = lib.mkOverride 1010 true;
         defaultSession = "plasmax11";
       };
     };
