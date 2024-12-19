@@ -36,7 +36,7 @@ in
         enable = true;
         # layout = "pt";
         displayManager.gdm = {
-          enable = lib.mkForce true;
+          enable = lib.mkOverride 1010 true;
           # autoSuspend = false;
           settings = {
             greeter.IncludeAll = true;
