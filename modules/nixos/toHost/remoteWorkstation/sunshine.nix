@@ -29,7 +29,7 @@ in
   config = lib.mkIf cfg.enable {
 
     hardware.graphics.enable = true;
-    hardware.graphics.enable32Bit = true; # idk if i need this?
+    # hardware.graphics.enable32Bit = true; # idk if i need this?
     # hardware.opengl.driSupport = true;
 
     nixpkgs.config.pulseaudio = true; # (need to fix audio)
