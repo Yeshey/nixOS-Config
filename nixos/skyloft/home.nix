@@ -95,6 +95,7 @@ in
     packages = with pkgs; [
       # texlive.combined.scheme-full
       inkscape
+      unstable.zed-editor
 
       # osu-lazer
       openvscode-server
