@@ -11,6 +11,11 @@ in
 {
   options.mySystem.gnome = {
     enable = lib.mkEnableOption "gnome";
+    defaultSession = lib.mkOption {
+      type = lib.types.str;
+      default = "gnome";
+      example = "gnome-xorg";
+    };
   };
 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
@@ -35,11 +40,14 @@ in
       xserver = {
         enable = true;
         # layout = "pt";
-        displayManager.gdm = {
-          enable = lib.mkOverride 1010 true;
-          # autoSuspend = false;
-          settings = {
-            greeter.IncludeAll = true;
+        displayManager = {
+          defaultSession = lib.mkOverride 1010 cfg.defaultSession;
+          gdm = {
+            enable = lib.mkOverride 1010 true;
+            # autoSuspend = false;
+            settings = {
+              greeter.IncludeAll = true;
+            };
           };
         };
         desktopManager.gnome.enable = true;

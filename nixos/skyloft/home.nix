@@ -99,6 +99,7 @@ in
       # osu-lazer
       openvscode-server
       gcc
+      zed-editor
     ];
   };
 }

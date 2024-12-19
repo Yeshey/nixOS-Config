@@ -29,7 +29,7 @@ in
   config = lib.mkIf cfg.enable {
 
     hardware.graphics.enable = true;
-    hardware.graphics.enable32Bit = true; # idk if i need this?
+    # hardware.graphics.enable32Bit = true; # idk if i need this?
     # hardware.opengl.driSupport = true;
 
     nixpkgs.config.pulseaudio = true; # (need to fix audio)
@@ -43,15 +43,15 @@ in
     };
     services = {
       xserver = {
-        displayManager.startx.enable = true;
-        enable = true;    # X11 because setting up Wayland is more complicated than it is worth for me.
+        displayManager.startx.enable = lib.mkOverride 1020 true;
+        enable = lib.mkOverride 1020 true;    # X11 because setting up Wayland is more complicated than it is worth for me.
       };
-      desktopManager.plasma6.enable = true;
+      # desktopManager.plasma6.enable = lib.mkOverride 1020 true; # maybe uncomment this as well idk
       displayManager = {
         #autoLogin.enable = true;
         #autoLogin.user = config.mySystem.user;
-        sddm.enable = true;
-        defaultSession = lib.mkForce "plasma";
+        #sddm.enable = lib.mkOverride 1020 true; # needed?
+        # defaultSession = lib.mkOverride 1020  "plasma"; # needed?
       };
     };
 
