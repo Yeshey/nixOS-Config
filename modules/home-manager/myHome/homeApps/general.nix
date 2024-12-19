@@ -7,6 +7,12 @@
 
 let
   cfg = config.myHome.homeApps.general;
+
+  # :(
+  #zedpkgs = import (builtins.fetchTarball {
+  #  url = "https://github.com/NixOS/nixpkgs/archive/83aaf6183611b2816a35d3d437eb99177d43378f.tar.gz";
+  #  sha256 = "sha256:1pc8b45s6gg2b40q90n4kmzbnbgp67yp7vhslv292v6gzim9vsgl";
+  #}) { inherit (pkgs) system; };
 in
 {
   options.myHome.homeApps.general = with lib; {
@@ -29,6 +35,7 @@ in
           dontPatchELF = true;
           nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ pkgs.kdePackages.wrapQtAppsHook ];
         });
+
       in [
         wineWow64Packages.full
 
