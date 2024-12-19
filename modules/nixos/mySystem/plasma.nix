@@ -11,6 +11,11 @@ in
 {
   options.mySystem.plasma = {
     enable = lib.mkEnableOption "plasma";
+    defaultSession = lib.mkOption {
+      type = lib.types.str;
+      default = "plasma";
+      example = "plasmax11";
+    };
   };
 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
@@ -46,7 +51,7 @@ in
 	        wayland.enable = true;
           enable = lib.mkOverride 1010 true;
         };
-        defaultSession = lib.mkOverride 1010 "plasma"; # "none+bspwm" or "plasma"
+        defaultSession = lib.mkOverride 1010 cfg.defaultSession; # "none+bspwm" or "plasma"
       };
       desktopManager.plasma6 = {
         enable = lib.mkOverride 1010 true;

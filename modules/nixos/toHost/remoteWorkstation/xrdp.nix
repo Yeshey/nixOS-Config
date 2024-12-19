@@ -23,6 +23,7 @@ in
 
     # Remote Desktop with XRDP
     # xfreerdp /v:143.47.53.175 /u:yeshey /dynamic-resolution /audio-mode:1 /clipboard
+    # run `setxkbmap -layout pt` to get the pt layout
     #services.xserver.enable = true;
     #services.displayManager.sddm.enable = true;
     #services.desktopManager.plasma6.enable = true;

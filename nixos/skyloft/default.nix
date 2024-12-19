@@ -43,7 +43,10 @@
 
   mySystem = rec {
     enable = true;
-    plasma.enable = false;
+    plasma = {
+      enable = true;
+      defaultSession = "plasmax11";
+    };
     gnome.enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
     ssh.enable = true;
     browser.enable = true;
