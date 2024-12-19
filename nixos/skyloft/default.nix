@@ -43,11 +43,14 @@
 
   mySystem = rec {
     enable = true;
-    #plasma = {
-    #  enable = false;
-    #  defaultSession = "plasmax11";
-    #};
-    gnome.enable = true; # TODO activate both plasma and gnome same time, maybe expose display manager
+    plasma = {
+      enable = false;
+      # defaultSession = "plasmax11";
+    };
+    gnome = {
+      enable = true; # TODO activate both plasma and gnome same time, maybe expose display manager
+      defaultSession = "gnome-xorg";
+    };
     ssh.enable = true;
     browser.enable = true;
     cliTools.enable = true;
@@ -109,6 +112,20 @@
     kubo.enable = true;
     mindustry-server.enable = true;
   };
+
+  # dont suspend ? (https://discourse.nixos.org/t/why-is-my-new-nixos-install-suspending/19500)
+  services.xserver.displayManager.gdm.autoSuspend = false;
+  security.polkit.extraConfig = ''
+    polkit.addRule(function(action, subject) {
+        if (action.id == "org.freedesktop.login1.suspend" ||
+            action.id == "org.freedesktop.login1.suspend-multiple-sessions" ||
+            action.id == "org.freedesktop.login1.hibernate" ||
+            action.id == "org.freedesktop.login1.hibernate-multiple-sessions")
+        {
+            return polkit.Result.NO;
+        }
+    });
+  '';
 
   time.timeZone = "Europe/Madrid";
 
