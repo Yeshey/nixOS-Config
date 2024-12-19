@@ -9,10 +9,10 @@ let
   cfg = config.myHome.homeApps.general;
 
   # :(
-  #zedpkgs = import (builtins.fetchTarball {
-  #  url = "https://github.com/NixOS/nixpkgs/archive/83aaf6183611b2816a35d3d437eb99177d43378f.tar.gz";
-  #  sha256 = "sha256:1pc8b45s6gg2b40q90n4kmzbnbgp67yp7vhslv292v6gzim9vsgl";
-  #}) { inherit (pkgs) system; };
+  zedpkgs = import (builtins.fetchTarball {
+    url = "https://github.com/NixOS/nixpkgs/archive/83aaf6183611b2816a35d3d437eb99177d43378f.tar.gz";
+    sha256 = "sha256:1pc8b45s6gg2b40q90n4kmzbnbgp67yp7vhslv292v6gzim9vsgl";
+  }) { inherit (pkgs) system; };
 in
 {
   options.myHome.homeApps.general = with lib; {
@@ -36,6 +36,15 @@ in
           nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ pkgs.kdePackages.wrapQtAppsHook ];
         });
 
+      zed-fhs = pkgs.buildFHSUserEnv {
+        name = "zed";
+        targetPkgs = zedpkgs:
+          with zedpkgs; [
+            zed-editor
+          ];
+        runScript = "zed";
+      };
+
       in [
         wineWow64Packages.full
 
@@ -44,7 +53,8 @@ in
         okular
 
         unstable.joplin-desktop # note taking
-        unstable.zed-editor
+        #unstable.zed-editor
+        zed-fhs
         rnote
 
         github-desktop
