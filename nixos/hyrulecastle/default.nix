@@ -208,6 +208,7 @@ in
   # systemctl restart --user onedrive@onedrive.service
   # journalctl --user -f -u onedrive@onedrive.service
   services.onedrive.enable = true;
+  # onedrivegui for the gui?
 
   #programs.zsh.enable = true;
   #users.users.yeshey.shell = pkgs.zsh;
