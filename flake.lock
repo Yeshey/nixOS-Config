@@ -967,16 +967,13 @@
       "locked": {
         "lastModified": 1734565391,
         "narHash": "sha256-rWOIEN7zmtXJU7IxsMae3HMW7QAcbTShI8FfHlAD/lU=",
-        "owner": "Yeshey",
-        "repo": "nixos-nvidia-vgpu",
+        "path": "/nix/store/x6n2kzcidy4cxf05rr4j6l6bnpi1imyc-source",
         "rev": "c41b5e7ef3269a78170eecbf97b9e9af3c854196",
-        "type": "github"
+        "type": "path"
       },
       "original": {
-        "owner": "Yeshey",
-        "ref": "535.129",
-        "repo": "nixos-nvidia-vgpu",
-        "type": "github"
+        "id": "nixos-nvidia-vgpu",
+        "type": "indirect"
       }
     },
     "nixpkgs": {
@@ -1087,6 +1084,22 @@
         "type": "github"
       }
     },
+    "nixpkgs_4": {
+      "locked": {
+        "lastModified": 1733808091,
+        "narHash": "sha256-KWwINTQelKOoQgrXftxoqxmKFZb9pLVfnRvK270nkVk=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "a0f3e10d94359665dba45b71b4227b0aeb851f8e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-24.11",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nmd": {
       "flake": false,
       "locked": {
@@ -1158,6 +1171,24 @@
       "original": {
         "owner": "nix-community",
         "repo": "NUR",
+        "type": "github"
+      }
+    },
+    "nvidia-vgpu-nixos": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_4"
+      },
+      "locked": {
+        "lastModified": 1734538559,
+        "narHash": "sha256-Kevtc/Q3vN6IRRgpnHwxEXOYD6FrqYS2ivmSEjcPzGE=",
+        "owner": "mrzenc",
+        "repo": "nvidia-vgpu-nixos",
+        "rev": "228f06a29e4ae4bc1387a4903de0060a65f33dd2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mrzenc",
+        "repo": "nvidia-vgpu-nixos",
         "type": "github"
       }
     },
@@ -1305,6 +1336,7 @@
         "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nurpkgs": "nurpkgs",
+        "nvidia-vgpu-nixos": "nvidia-vgpu-nixos",
         "plasma-manager": "plasma-manager",
         "stylix": "stylix"
       }
