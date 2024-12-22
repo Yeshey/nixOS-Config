@@ -75,7 +75,7 @@ EndSection
 
     # Comment this to use only the nvidia Grpahics card (discrete graphics option in BIOS instead of switchable graphics)
     hardware.nvidia = {
-      open = true;
+      #open = true;
       #package = config.boot.kernelPackages.nvidiaPackages.stable;
       modesetting.enable = lib.mkOverride 1010 true;
       # nvidiaPersistenced = true; # It ensures all GPUs stay awake even during headless mode.

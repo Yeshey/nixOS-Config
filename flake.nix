@@ -36,12 +36,12 @@
       url = "github:hyprwm/contrib";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    nixos-nvidia-vgpu = {
-      url = "github:Yeshey/nixos-nvidia-vgpu/535.129";
+    #nixos-nvidia-vgpu = {
+    #  url = "github:Yeshey/nixos-nvidia-vgpu/535.129";
       # inputs.nixpkgs.follows = "nixpkgs";
-    };
+    #};
 
-    #nvidia-vgpu-nixos.url = "github:mrzenc/nvidia-vgpu-nixos";
+    nvidia-vgpu-nixos.url = "github:mrzenc/nvidia-vgpu-nixos";
     
     #nixos-nvidia-vgpu = { # sudo nixos-rebuild --flake ~/.setup#laptop switch --update-input nixos-nvidia-vgpu --impure
     #  type = "path";

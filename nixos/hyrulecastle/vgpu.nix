@@ -22,7 +22,8 @@ let
 in
 {
   imports = [
-    inputs.nixos-nvidia-vgpu.nixosModules.nvidia-vgpu
+    #inputs.nixos-nvidia-vgpu.nixosModules.nvidia-vgpu
+    inputs.nvidia-vgpu-nixos.nixosModules.host
   ];
   
   options.mySystemHyruleCastle.vgpu = {
@@ -51,49 +52,23 @@ in
     # boot.kernelPackages = pkgs.linuxPackages_6_1; # needed, 6.1 is LTS
     # boot.kernelPackages = patchedPkgs.linuxPackages_5_15; # needed for this linuxPackages_5_19
 
-    hardware.nvidia = {
-      vgpu = {
-        enable = true; # Install NVIDIA KVM vGPU + GRID driver
-        pinKernel = true;
-        #vgpu_driver_src.sha256 = "sha256-tFgDf7ZSIZRkvImO+9YglrLimGJMZ/fz25gjUT0TfDo="; # use if you're getting the `Unfortunately, we cannot download file...` error # find hash with `nix hash file foo.txt`        
-        
-        /*
-        # older driver, needs boot.kernelPackages = patchedPkgs.linuxPackages_5_15;
-        useMyDriver = {
-          enable = true;
-          name = "NVIDIA-Linux-x86_64-525.105.17-merged-vgpu-kvm-patched.run";
-          sha256 = "sha256-g8BM1g/tYv3G9vTKs581tfSpjB6ynX2+FaIOyFcDfdI=";
-          driver-version = "525.105.14";
-          vgpu-driver-version = "525.105.14";
-          getFromRemote = pkgs.fetchurl {
-                name = "NVIDIA-Linux-x86_64-525.105.17-merged-vgpu-kvm-patched.run"; # So there can be special characters in the link below: https://github.com/NixOS/nixpkgs/issues/6165#issuecomment-141536009
-                url = "https://drive.usercontent.google.com/download?id=17NN0zZcoj-uY2BELxY2YqGvf6KtZNXhG&export=download&authuser=0&confirm=t&uuid=b70e0e36-34df-4fde-a86b-4d41d21ce483&at=APZUnTUfGnSmFiqhIsCNKQjPLEk3%3A1714043345939";
-                sha256 = "sha256-g8BM1g/tYv3G9vTKs581tfSpjB6ynX2+FaIOyFcDfdI=";
-              };
-        }; */
 
-        # newer driver for kernel 6.1, so I prevent it asking me to add the files manually
-        useMyDriver = {
-          enable = true;
-          name = "NVIDIA-Linux-x86_64-535.129.03-merged-vgpu-kvm-patched.run";
-          sha256 = "sha256-d+p3bKjMOGfKbyS2+kZ5pbADHZuarZcDisgPFFbS2p8=";
-          driver-version = "535.129.03";
-          vgpu-driver-version = "535.129.03";
-          getFromRemote = pkgs.fetchurl {
-                name = "NVIDIA-Linux-x86_64-535.129.03-merged-vgpu-kvm-patched.run"; # So there can be special characters in the link below: https://github.com/NixOS/nixpkgs/issues/6165#issuecomment-141536009
-                url = "https://drive.usercontent.google.com/download?id=1A7lxmCpHOkiYsUBEwSP35Rk_eFD7b1Wc&export=download&authuser=0&confirm=t&uuid=adc55f65-e1f2-49e7-8885-c875c082da64&at=APZUnTXb6XM5IdYAXGjtG6-xpiic%3A1720535130144";
-                sha256 = "sha256-d+p3bKjMOGfKbyS2+kZ5pbADHZuarZcDisgPFFbS2p8=";
-              };
-        };
+    hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.vgpu_16_2;
+    #hardware.nvidia.vgpu.driverSource.name = "NVIDIA-GRID-Linux-KVM-535.129.03-537.70.zip";
+    hardware.nvidia.vgpu.patcher.enable = true;
+    hardware.nvidia.vgpu.driverSource.name = "NVIDIA-GRID-Linux-KVM-535.129.03-537.70.zip";
+    #hardware.nvidia.vgpu.driverSource.sha256 = "sha256-tFgDf7ZSIZRkvImO+9YglrLimGJMZ/fz25gjUT0TfDo=";
+    #hardware.nvidia.vgpu.driverSource.url = "https://drive.usercontent.google.com/download?id=17NN0zZcoj-uY2BELxY2YqGvf6KtZNXhG&export=download&authuser=0&confirm=t&uuid=b70e0e36-34df-4fde-a86b-4d41d21ce483&at=APZUnTUfGnSmFiqhIsCNKQjPLEk3%3A1714043345939";
+    #hardware.nvidia.vgpu.patcher.profileOverrides = {
+    #  "333" = {
+    #    vramAllocation = 3584; # 3.5GiB
+    #    heads = 1;
+    #    display.width = 1920;
+    #    display.height = 1080;
+    #    framerateLimit = 144;
+    #  };
+    #};
 
-        fastapi-dls = {
-          enable = true;
-          #local_ipv4 = "192.168.1.109"; # "localhost"; #"192.168.1.109";
-          #timezone = "Europe/Lisbon";
-          #docker-directory = "/mnt/dockers";
-        };
-      };
-    };
 
     services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
     networking.firewall.allowedTCPPorts = [
