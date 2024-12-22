@@ -112,6 +112,7 @@ in
       signal-desktop
       blender # for blender
       gimp
+      darktable
       krita
       inkscape
     ];
