@@ -43,22 +43,11 @@ in
     in [
       # looking-glass-client-B7-rc1
       pkgs.looking-glass-client # for my windows 10 machine I want B7-rc1
+      # for mdevctl you might need to create these folders if it gives error when running:
+      # /usr/lib/mdevctl/scripts.d/callouts
+      # /usr/lib/mdevctl/scripts.d/notifiers
       pkgs.mdevctl
     ];
-    # for mdevctl you might need to create these folders if it gives error when running:
-    # /usr/lib/mdevctl/scripts.d/callouts
-    # /usr/lib/mdevctl/scripts.d/notifiers
-
-    # services.udev.packages = [ pkgs.mdevctl ];
-
-    # static IP, This doesnt work, the network is being managed by networkmanager, you can make changes in the gui or figure out how to manage that declaritivley
-    # networking.interfaces.eth0.ipv4.addresses = [ {
-    #   address = "192.168.1.2";
-    #   prefixLength = 24;
-    # } ];
-
-    # boot.kernelPackages = pkgs.linuxPackages_6_1; # needed, 6.1 is LTS
-    # boot.kernelPackages = patchedPkgs.linuxPackages_5_15; # needed for this linuxPackages_5_19
 
     services.fastapi-dls = {
       enable = true;
@@ -68,6 +57,7 @@ in
       listen.ip = "0.0.0.0";      # DLS_URL localhost didn't work for me
     };
 
+    # needed!
     boot.extraModprobeConfig = 
       ''
       options nvidia vup_sunlock=1 vup_swrlwar=1 vup_qmode=1
@@ -75,23 +65,27 @@ in
     # environment.etc."nvidia-vgpu-xxxxx/vgpuConfig.xml".source = config.hardware.nvidia.package + /vgpuConfig.xml;
     boot.kernelModules = [ "nvidia-vgpu-vfio" ];
 
-    hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.vgpu_16_5; # vgpu_17_3
-    #hardware.nvidia.vgpu.driverSource.name = "NVIDIA-GRID-Linux-KVM-535.129.03-537.70.zip";
+
+    boot.kernelPackages = pkgs.linuxPackages_6_1; # needed, 6.1 is LTS
+
+    hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.vgpu_16_5; # vgpu_17_3 vgpu_16_5
+
     hardware.nvidia.vgpu.patcher.enable = true;
-    #hardware.nvidia.vgpu.driverSource.name = "NVIDIA-GRID-Linux-KVM-535.161.05-535.161.08-538.46.zip";
-    #hardware.nvidia.vgpu.driverSource.sha256 = "sha256-5K1hmS+Oax6pGdS8pBthVQferAbVXAHfaLbd0fzytCA=";
-    hardware.nvidia.vgpu.driverSource.url = "https://drive.usercontent.google.com/download?id=1iVXS0uzQFzjbJSIM_XV2FKRMBIGnssJ6&export=download&authuser=4&confirm=t&uuid=67ad176d-e677-4618-934b-de1b90616aa3&at=APvzH3q9nHBnMXfB2Nm4Z_prQ6ao:1734920140781";
-    #hardware.nvidia.vgpu.patcher.profileOverrides = {
-    #  "333" = {
-    #    vramAllocation = 3584; # 3.5GiB
-    #    heads = 1;
-    #    display.width = 1920;
-    #    display.height = 1080;
-    #    framerateLimit = 144;
-    #  };
-    #};
+    # hardware.nvidia.vgpu.patcher.options.remapP40ProfilesToV100D = true; # for 17_x
+    # hardware.nvidia.vgpu.patcher.options.doNotForceGPLLicense = true; # This breaks :'D
+    
+    #hardware.nvidia.vgpu.driverSource.name = "NVIDIA-GRID-Linux-KVM-550.90.05-550.90.07-552.74.zip"; # 17_3
+    #hardware.nvidia.vgpu.driverSource.url = "https://drive.usercontent.google.com/download?id=12m0G2_8osDbouJtFnCAKKBzbxaMURDD5&confirm=xxx"; # 17_3 zip
+    
+    hardware.nvidia.vgpu.driverSource.name = "NVIDIA-GRID-Linux-KVM-535.161.05-535.161.08-538.46.zip"; # 16_5
+    hardware.nvidia.vgpu.driverSource.url = "https://drive.usercontent.google.com/download?id=1iVXS0uzQFzjbJSIM_XV2FKRMBIGnssJ6&confirm=xxx"; # 16_5 zip
 
 
+    # static IP, This doesnt work, the network is being managed by networkmanager, you can make changes in the gui or figure out how to manage that declaritivley
+    # networking.interfaces.eth0.ipv4.addresses = [ {
+    #   address = "192.168.1.2";
+    #   prefixLength = 24;
+    # } ];
     services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
     networking.firewall.allowedTCPPorts = [
       5357 # wsdd
