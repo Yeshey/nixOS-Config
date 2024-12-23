@@ -19,11 +19,14 @@ let
     inherit system;
     config.allowUnfree = true;
   };
+
+  myMdevctl = pkgs.callPackage ./mdevctl {};
 in
 {
   imports = [
     #inputs.nixos-nvidia-vgpu.nixosModules.nvidia-vgpu
     inputs.nvidia-vgpu-nixos.nixosModules.host
+    inputs.fastapi-dls-nixos.nixosModules.default
   ];
   
   options.mySystemHyruleCastle.vgpu = {
@@ -31,17 +34,37 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; let
+
+    environment.systemPackages = let
       # Looking glass B6 version in nixpkgs: 
       myLookingGlassPkgs = import (builtins.fetchTarball {
           url = "https://github.com/NixOS/nixpkgs/archive/c0d0be00d4ecc4b51d2d6948e37466194c1e6c51.tar.gz";
           sha256 = "sha256:1yrqrpmrdzbzcwb7kv9m6gbzjk68ljs098fv246brq6mc3s4v5qk";
       }) { inherit system; };
       looking-glass-client-B7-rc1 = myLookingGlassPkgs.looking-glass-client;
+
+      customMdevctl = pkgs.mdevctl.overrideAttrs (oldAttrs: {
+        doCheck = false;
+        postPatch = ''
+          substituteInPlace 60-mdevctl.rules \
+            --replace /usr/sbin/ $out/ \
+            --replace /bin/sh ${pkgs.bash}/bin/sh
+        '';
+      });
     in [
-      looking-glass-client-B7-rc1
+      # looking-glass-client-B7-rc1
+      pkgs.looking-glass-client
+      #customMdevctl
+      # myMdevctl
+      pkgs.mdevctl
       #looking-glass-client
     ];
+    # for mdevctl you might need to create these folders:
+    # /usr/lib/mdevctl/scripts.d/callouts
+    # /usr/lib/mdevctl/scripts.d/notifiers
+
+    # services.udev.packages = [ pkgs.mdevctl ];
+    #
 
     # static IP, This doesnt work, the network is being managed by networkmanager, you can make changes in the gui or figure out how to manage that declaritivley
     # networking.interfaces.eth0.ipv4.addresses = [ {
@@ -52,12 +75,42 @@ in
     # boot.kernelPackages = pkgs.linuxPackages_6_1; # needed, 6.1 is LTS
     # boot.kernelPackages = patchedPkgs.linuxPackages_5_15; # needed for this linuxPackages_5_19
 
+    services.fastapi-dls = {
+      enable = true;
 
-    hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.vgpu_16_2;
+      # Options.
+      # The comments to the right of the options are the environment variable that they set.
+      # The values set in this example are the defaults. All possible options are listed here:
+      # https://git.collinwebdesigns.de/oscar.krause/fastapi-dls#configuration
+      debug = false;                # DEBUG
+      listen.ip = "localhost";      # DLS_URL
+      listen.port = 443;            # DLS_PORT
+      authTokenExpire = 1;          # TOKEN_EXPIRE_DAYS
+      lease.expire = 90;            # LEASE_EXPIRE_DAYS
+      lease.renewalPeriod = 0.15;   # LEASE_RENEWAL_PERIOD
+      supportMalformedJSON = false; # SUPPORT_MALFORMED_JSON
+      # Additional options (for example { INSTANCE_KEY_RSA = "..."; })
+      extraOptions = {};
+      # Custom timezone in format "America/Montreal", null will default to system timezone
+      # See https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List for possible values
+      timezone = null;
+    };
+
+    
+    #boot.extraModprobeConfig = 
+    #  ''
+    #  options nvidia vup_sunlock=1 vup_swrlwar=1 vup_qmode=1
+    #  ''; # (for driver 535) bypasses `error: vmiop_log: NVOS status 0x1` in nvidia-vgpu-mgr.service when starting VM
+
+    #environment.etc."nvidia-vgpu-xxxxx/vgpuConfig.xml".source = config.hardware.nvidia.package + /vgpuConfig.xml;
+
+    #boot.kernelModules = [ "nvidia-vgpu-vfio" ];
+
+    hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.vgpu_16_5;
     #hardware.nvidia.vgpu.driverSource.name = "NVIDIA-GRID-Linux-KVM-535.129.03-537.70.zip";
     hardware.nvidia.vgpu.patcher.enable = true;
-    hardware.nvidia.vgpu.driverSource.name = "NVIDIA-GRID-Linux-KVM-535.129.03-537.70.zip";
-    #hardware.nvidia.vgpu.driverSource.sha256 = "sha256-tFgDf7ZSIZRkvImO+9YglrLimGJMZ/fz25gjUT0TfDo=";
+    hardware.nvidia.vgpu.driverSource.name = "NVIDIA-GRID-Linux-KVM-535.161.05-535.161.08-538.46.zip";
+    #hardware.nvidia.vgpu.driverSource.sha256 = "sha256-5K1hmS+Oax6pGdS8pBthVQferAbVXAHfaLbd0fzytCA=";
     #hardware.nvidia.vgpu.driverSource.url = "https://drive.usercontent.google.com/download?id=17NN0zZcoj-uY2BELxY2YqGvf6KtZNXhG&export=download&authuser=0&confirm=t&uuid=b70e0e36-34df-4fde-a86b-4d41d21ce483&at=APZUnTUfGnSmFiqhIsCNKQjPLEk3%3A1714043345939";
     #hardware.nvidia.vgpu.patcher.profileOverrides = {
     #  "333" = {
@@ -79,7 +132,6 @@ in
     ];
     services.samba = {
       enable = true;
-      securityType = "user";
       settings = {
         global = {
           "workgroup" = "WORKGROUP";
