@@ -75,7 +75,7 @@ in
     # hardware.nvidia.vgpu.patcher.options.doNotForceGPLLicense = true; # This breaks :'D
     
     #hardware.nvidia.vgpu.driverSource.name = "NVIDIA-GRID-Linux-KVM-550.90.05-550.90.07-552.74.zip"; # 17_3
-    #hardware.nvidia.vgpu.driverSource.url = "https://drive.usercontent.google.com/download?id=12m0G2_8osDbouJtFnCAKKBzbxaMURDD5&confirm=xxx"; # 17_3 zip
+    #hardware.nvidia.vgpu.driverSource.url = "https://drive.usercontent.google.com/download?id=12m0G2_8osDbouJtFnCAKKBzbxaMURDD5&confirm=xxx"; # 17_3 zip # looking glass wasnt working?
     
     hardware.nvidia.vgpu.driverSource.name = "NVIDIA-GRID-Linux-KVM-535.161.05-535.161.08-538.46.zip"; # 16_5
     hardware.nvidia.vgpu.driverSource.url = "https://drive.usercontent.google.com/download?id=1iVXS0uzQFzjbJSIM_XV2FKRMBIGnssJ6&confirm=xxx"; # 16_5 zip
