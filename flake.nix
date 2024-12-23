@@ -42,7 +42,13 @@
     #};
 
     nvidia-vgpu-nixos.url = "github:mrzenc/nvidia-vgpu-nixos";
-    
+    fastapi-dls-nixos = {
+      url = "github:mrzenc/fastapi-dls-nixos";
+      # use nixpkgs provided by system to save some space
+      # do not use this in case of problems
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     #nixos-nvidia-vgpu = { # sudo nixos-rebuild --flake ~/.setup#laptop switch --update-input nixos-nvidia-vgpu --impure
     #  type = "path";
     #  path = "/mnt/DataDisk/PersonalFiles/2023/Projects/Programming/nixos-nvidia-vgpu_nixOS/";
@@ -109,7 +115,8 @@
     plasma-manager,
     nurpkgs,
     hyprland-plugins,
-    nixos-nvidia-vgpu,
+    nvidia-vgpu-nixos,
+    fastapi-dls-nixos,
     nixos-generators,
     impermanence,
     #wolf,
