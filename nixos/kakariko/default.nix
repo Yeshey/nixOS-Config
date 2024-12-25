@@ -134,8 +134,8 @@ in
     androidDevelopment.enable = true;
 
     agenix = {
-      enable = false;
-      sshKeys.enable = false;
+      enable = true;
+      sshKeys.enable = true;
     };
     #isolateVMsNixStore = true;
     impermanence.enable = false;
