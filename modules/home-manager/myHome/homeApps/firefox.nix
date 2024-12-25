@@ -22,12 +22,12 @@ in
 
   config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
 
-    home.persistence."/persist/home/yeshey" = {
-      directories = [
-        ".mozilla"
-      ];
-      allowOther = true;
-    };
+    # home.persistence."/persist/home/yeshey" = {
+    #   directories = [
+    #     ".mozilla"
+    #   ];
+    #   allowOther = true;
+    # };
 
     programs.firefox = {
       enable = true;

@@ -15,12 +15,12 @@ in
 
   config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
 
-    home.persistence."/persist/home/yeshey" = {
-      directories = [
-        ".config/vivaldi/"
-      ];
-      allowOther = true;
-    };
+    # home.persistence."/persist/home/yeshey" = {
+    #   directories = [
+    #     ".config/vivaldi/"
+    #   ];
+    #   allowOther = true;
+    # };
 
     home = {
       packages = with pkgs; let

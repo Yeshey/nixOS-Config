@@ -23,6 +23,33 @@ in
     pkiBundle = "/etc/secureboot";
   };*/
 
+  # https://discourse.nixos.org/t/how-do-i-mount-multiple-bcachefs-devices-on-boot/37463
+  systemd.services.mount-root = {
+    description = "Mount root bcachefs filesystem";
+    # Bind to the specific device units
+    bindsTo = [ "dev-nvme0n1p5.device" "dev-sdb3.device" ];
+    # Specify ordering dependencies
+    after = [ "dev-nvme0n1p5.device" "dev-sdb3.device" "local-fs-pre.target" ];
+    requires = [ "dev-nvme0n1p5.device" "dev-sdb3.device" ];
+    before = [ "umount.target" "local-fs.target" ];
+    # Unit configuration to manage dependencies and disable default dependencies
+    unitConfig = {
+      RequiresMountsFor = "/";
+      DefaultDependencies = false;
+    };
+    # Service configuration
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      # Mount the root filesystem
+      ExecStart = "${pkgs.util-linux}/bin/mount -o noatime,nodev,nosuid,noexec -t bcachefs /dev/nvme0n1p5:/dev/sdb3 /";
+      # Unmount the filesystem on service stop
+      ExecStop = "${pkgs.util-linux}/bin/umount /";
+    };
+    # Ensure the service is started during the multi-user runlevel
+    wantedBy = [ "multi-user.target" ];
+  };
+
   security.tpm2.enable = true;
   security.tpm2.pkcs11.enable = true;  # expose /run/current-system/sw/lib/libtpm2_pkcs11.so
   security.tpm2.tctiEnvironment.enable = true;  # TPM2TOOLS_TCTI and TPM2_PKCS11_TCTI env variables
@@ -45,7 +72,7 @@ in
   boot.loader.efi.efiSysMountPoint = "/boot";
 
   boot.initrd.systemd.enable = true;
-  boot.initrd.systemd.enableTpm2 = true;
+  boot.initrd.systemd.tpm2.enable = true;
   boot.initrd.systemd.emergencyAccess = true;
 
   boot.supportedFilesystems = [ "bcachefs" ];
