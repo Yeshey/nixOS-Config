@@ -116,6 +116,8 @@ in
     ( lib.mkIf cfg.enable {
       # Conditional config
 
+      boot.supportedFilesystems = [ "bcachefs" ];
+
       # defaults (enough for a minimal server)
       mySystem.ssh.enable = lib.mkOverride 1010 true;
       mySystem.zsh.enable = lib.mkOverride 1010 true;

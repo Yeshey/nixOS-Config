@@ -37,7 +37,6 @@ in
     };
 
   # Bootloader.
-  # Using secure boot now
   boot.loader.systemd-boot = {
     enable = true;
     configurationLimit = 10; # You can leave it null for no limit, but it is not recommended, as it can fill your boot partition.
@@ -48,57 +47,32 @@ in
   boot.initrd.systemd.enable = true;
   boot.initrd.systemd.enableTpm2 = true;
   boot.initrd.systemd.emergencyAccess = true;
-  #security.tpm2.enable = true;
-  boot.initrd.luks.devices.cryptroot = {
-    device = "/dev/VG/cryptroot";
+
+  boot.supportedFilesystems = [ "bcachefs" ];
+
+  # Root filesystem with bcachefs
+  fileSystems."/" = {
+    device = "/dev/nvme0n1p5:/dev/sdb3";
+    fsType = "bcachefs";
+    options = [
+      "replicas=1"
+      "foreground_target=/dev/nvme0n1p5"
+      "background_target=/dev/sdb3"
+      "promote_target=/dev/nvme0n1p5"
+      "compression=zstd:1"
+      "background_compression=zstd:6"
+    ];
   };
-  boot.initrd.luks.devices.cryptswap = {
-    device = "/dev/VG/cryptswap";
-  };
-
-  fileSystems."/" =
-    { #device = "/dev/disk/by-uuid/6e60cc35-882f-45bf-8402-719a14a74a74";
-      device = "/dev/disk/by-label/nixos";
-      fsType = "btrfs";
-      options = [ 
-        "subvol=@"
-        "defaults"
-        "compress-force=zstd:3" # compression level 3, is the default
-        # "ssd" # optimize for an ssd
-        # security "nosuid" "nodev" (https://serverfault.com/questions/547237/explanation-of-nodev-and-nosuid-in-fstab)
-      ];
-    };
-
-  fileSystems."/nix" =
-    { #device = "/dev/disk/by-uuid/6fcc0524-bd74-44b9-ac07-c91d2ffe6121";
-      device = "/dev/disk/by-label/nixos";
-      fsType = "btrfs";
-      options = [ "subvol=@nix" "compress-force=zstd:3" ];
-    };
-
-  fileSystems."/persist" =
-    { #device = "/dev/disk/by-uuid/6fcc0524-bd74-44b9-ac07-c91d2ffe6121";
-      device = "/dev/disk/by-label/nixos";
-      neededForBoot = true;
-      fsType = "btrfs";
-      options = [ "subvol=@persistent" "compress-force=zstd:3" ];
-    };
-
-  fileSystems."/swap" =
-    { #device = "/dev/disk/by-uuid/6fcc0524-bd74-44b9-ac07-c91d2ffe6121";
-      device = "/dev/disk/by-label/nixos";
-      fsType = "btrfs";
-      options = [ "subvol=@swap" ];
-    };
 
   swapDevices =
     [ 
-      { #device = "/dev/disk/by-uuid/aea2ed46-641d-4fe5-8551-880c8a8a034f"; 
-        device = "/dev/disk/by-label/swap";
-        priority = 1; # Higher numbers indicate higher priority.
-      }
-      { device = "/swap/swapfile"; size = 7*1024; 
+      {
+        device = "/dev/disk/by-label/swap-microsd";
         priority = 0; # Higher numbers indicate higher priority.
+      }
+      { 
+        device = "/dev/disk/by-label/swap-nvme";
+        priority = 1; # Higher numbers indicate higher priority.
       }
     ];
   # MY MOUNTS
