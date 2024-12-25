@@ -134,8 +134,8 @@ in
     androidDevelopment.enable = true;
 
     agenix = {
-      enable = true;
-      sshKeys.enable = true;
+      enable = false;
+      sshKeys.enable = false;
     };
     #isolateVMsNixStore = true;
     impermanence.enable = false;
@@ -148,7 +148,7 @@ in
     piperTextToSpeech.enable = true;
   };
 
-  virtualisation.docker.storageDriver = "btrfs"; # for docker
+  # virtualisation.docker.storageDriver = "bcachefs"; # for docker
 
   # Ignore Patterns Syncthing # Ignore Patterns Syncthing # You need to check that this doesnt override every other activation script, make lib.append? - if it was lib.mkFOrce it would override, like this it appends
   system.userActivationScripts =
