@@ -125,47 +125,47 @@ WantedBy=multi-user.target
     };
 
   # Bootloader.
-  boot.loader.systemd-boot = {
-    enable = true;
-    configurationLimit = 10; # You can leave it null for no limit, but it is not recommended, as it can fill your boot partition.
-  };
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.loader.efi.efiSysMountPoint = "/boot";
+  #boot.loader.systemd-boot = {
+  #  enable = true;
+  #  configurationLimit = 10; # You can leave it null for no limit, but it is not recommended, as it can fill your boot partition.
+  #};
+  #boot.loader.efi.canTouchEfiVariables = true;
+  #boot.loader.efi.efiSysMountPoint = "/boot";
 
   
-  # boot.loader = {
-  #   timeout = 5;
-  #   efi = {
-  #     canTouchEfiVariables = true;
-  #     efiSysMountPoint = "/boot";
-  #   };
-  #   grub = {
-  #     enable = true;
-  #     # version = 2;
-  #     efiSupport = true;
-  #     devices = [ "nodev" ];
-  #     device = "nodev";
-  #     useOSProber = true;
-  #     # default = "saved"; # doesn't work with btrfs :(
-  #     extraEntries = ''
-  #       menuentry "Reboot" {
-  #           reboot
-  #       }
+  boot.loader = {
+    timeout = 5;
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/boot";
+    };
+    grub = {
+      enable = true;
+      # version = 2;
+      efiSupport = true;
+      devices = [ "nodev" ];
+      device = "nodev";
+      useOSProber = true;
+      # default = "saved"; # doesn't work with btrfs :(
+      extraEntries = ''
+        menuentry "Reboot" {
+            reboot
+        }
 
-  #       menuentry "Shut Down" {
-  #           halt
-  #       }
+        menuentry "Shut Down" {
+            halt
+        }
 
-  #       # Option info from /boot/grub/grub.cfg, technotes "Grub" section for more details
-  #       menuentry "NixOS - Console" --class nixos --unrestricted {
-  #       search --set=drive1 --fs-uuid 69e9ba80-fb1f-4c2d-981d-d44e59ff9e21
-  #       search --set=drive2 --fs-uuid 69e9ba80-fb1f-4c2d-981d-d44e59ff9e21
-  #         linux ($drive2)/@/nix/store/ll70jpkp1wgh6qdp3spxl684m0rj9ws4-linux-5.15.68/bzImage init=/nix/store/c2mg9sck85ydls81xrn8phh3i1rn8bph-nixos-system-nixos-22.11pre410602.ae1dc133ea5/init loglevel=4 3
-  #         initrd ($drive2)/@/nix/store/s38fgk7axcjryrp5abkvzqmyhc3m4pd1-initrd-linux-5.15.68/initrd
-  #       }
-  #     '';
-  #   };
-  # };
+        # Option info from /boot/grub/grub.cfg, technotes "Grub" section for more details
+        menuentry "NixOS - Console" --class nixos --unrestricted {
+        search --set=drive1 --fs-uuid 69e9ba80-fb1f-4c2d-981d-d44e59ff9e21
+        search --set=drive2 --fs-uuid 69e9ba80-fb1f-4c2d-981d-d44e59ff9e21
+          linux ($drive2)/@/nix/store/ll70jpkp1wgh6qdp3spxl684m0rj9ws4-linux-5.15.68/bzImage init=/nix/store/c2mg9sck85ydls81xrn8phh3i1rn8bph-nixos-system-nixos-22.11pre410602.ae1dc133ea5/init loglevel=4 3
+          initrd ($drive2)/@/nix/store/s38fgk7axcjryrp5abkvzqmyhc3m4pd1-initrd-linux-5.15.68/initrd
+        }
+      '';
+    };
+  };
   
 
   # boot.initrd.systemd.enable = true;
@@ -174,7 +174,7 @@ WantedBy=multi-user.target
 
   boot.supportedFilesystems = [ "bcachefs" ];
 
-  boot.initrd.preLVMCommands = lib.mkOrder 400 "sleep 5"; # in my case I had to wait a bit to let my hardware pick up on my microSD
+  boot.initrd.preLVMCommands = lib.mkOrder 400 "sleep 7"; # in my case I had to wait a bit to let my hardware pick up on my microSD
   # Root filesystem with bcachefs
   fileSystems."/" =
     { #device = "/dev/nvme0n1p5:/dev/sdb3";
