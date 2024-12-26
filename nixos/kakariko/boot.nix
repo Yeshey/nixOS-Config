@@ -190,18 +190,51 @@ WantedBy=multi-user.target
   # Root filesystem with bcachefs
   fileSystems."/" =
     { #device = "/dev/nvme0n1p5:/dev/sdb3";
-      device = "UUID=29164f68-4557-481f-a0e0-21bf4b095153";
+      device = "/dev/disk/by-uuid/29164f68-4557-481f-a0e0-21bf4b095153";
       fsType = "bcachefs";
       options = [
-        "errors=ro" "noatime" "nodiratime"
+#        "errors=ro" "noatime" "nodiratime"
         "replicas=1"
-        "foreground_target=/dev/nvme0n1p5"
-        "background_target=/dev/sdb3"
-        "promote_target=/dev/nvme0n1p5"
+#        "foreground_target=/dev/nvme0n1p5"
+#        "background_target=/dev/sdb3"
+#        "promote_target=/dev/nvme0n1p5"
         "compression=zstd:1"
         "background_compression=zstd:6"
       ];
     };
+
+# ----- I dont know which one of these made it work T-T -----
+  boot.initrd.systemd.services.sleep-before-root = {
+    # Specify the dependencies to ensure this service blocks mounting of sysroot
+    requiredBy = ["sysroot.mount" "unlock-bcachefs-sysroot.service" ];
+    before = ["sysroot.mount" "unlock-bcachefs-sysroot.service"];
+    wantedBy = ["sysroot.mount" "initrd.target" "unlock-bcachefs-sysroot.service"];
+
+    serviceConfig = {
+      Type = "oneshot";
+      #ExecStart = "sleep 7";
+      RequiredBy = ["sysroot.mount" "unlock-bcachefs-sysroot.service"];
+      Before = ["sysroot.mount" "unlock-bcachefs-sysroot.service"];
+      WantedBy = ["sysroot.mount" "initrd.target" "unlock-bcachefs-sysroot.service"];
+    };
+
+    script = ''
+      echo "Sleeping for 7 seconds to ensure hardware readiness..."
+      sleep 7
+      echo "Ive waited enough"
+    '';
+  };
+  systemd.services."unlock-bcachefs-sysroot.service".serviceConfig.ExecStartPre = [
+    "sleep 7"
+  ];
+  systemd.services."unlock-bcachefs-sysroot.mount".serviceConfig.ExecStartPre = [
+    "sleep 7"
+  ];
+  systemd.services."unlock-bcachefs-sysroot.target".serviceConfig.ExecStartPre = [
+    "sleep 7"
+  ];
+  # ----- I dont know which one of these made it work T-T -----
+
 
   swapDevices =
     [ 
