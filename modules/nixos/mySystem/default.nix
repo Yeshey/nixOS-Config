@@ -204,6 +204,11 @@ in
       #networking.useNetworkd = true;
       #networking.firewall.enable = false;
 
+      # For hotspot to connect
+      # https://github.com/NixOS/nixpkgs/issues/263359
+      networking.firewall.allowedUDPPorts = [ 67 68 53 ];
+      networking.firewall.allowedTCPPorts = [ 67 68 53 ];
+
     })
   ];
 }
