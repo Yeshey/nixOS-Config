@@ -124,7 +124,7 @@ in
 
       zramSwap.enable = lib.mkOverride 1010 true;
       boot.tmp.cleanOnBoot = lib.mkOverride 1010 true; # delete all files in /tmp during boot.
-      boot.supportedFilesystems = [ "ntfs" "btrfs" "bcachefs" ]; # lib.mkOverride 1010? Doesn't work with [] and {}?
+      boot.supportedFilesystems = [ "ntfs" "btrfs" ]; # lib.mkOverride 1010? Doesn't work with [] and {}?
 
       time.timeZone = lib.mkOverride 1010 "Europe/Lisbon";
       i18n.defaultLocale = lib.mkOverride 1010 "en_GB.utf8";
@@ -201,11 +201,8 @@ in
         hostName = lib.mkOverride 1010 "nixos-${cfg.host}";
       };
       
-
       #networking.useNetworkd = true;
       #networking.firewall.enable = false;
-
-
 
     })
   ];
