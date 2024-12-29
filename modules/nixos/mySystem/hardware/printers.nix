@@ -24,5 +24,14 @@ in
     environment = {
       systemPackages = with pkgs; [ xsane ];
     };
+
+    # Madeira printer doesnt work:
+    # services.printing.drivers = [ pkgs.dcp165c ];
+    # extraGroups = [ "lp" ]; ?
+    services.avahi = {
+      enable = true;
+      nssmdns4 = true;
+      openFirewall = true;
+    };
   };
 }
