@@ -45,7 +45,7 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
 - **Syncthing** - Declaratively set syncthing, including ignore patterns with `userActivationScripts` (TODO: set syncthing as a home manager service): [syncthing.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/syncthing.nix);
 
-- ~~**LUKS on LVM with LVM cache**~~ **bcacheFS as root ( ͡° ͜ʖ ͡°)** - across microSD and NVME (foreground device) on `kakariko`: [boot.nix](https://github.com/Yeshey/nixOS-Config/blob/main/nixos/kakariko/boot.nix;
+- ~~**LUKS on LVM with LVM cache**~~ **bcacheFS as root ( ͡° ͜ʖ ͡°)** - across microSD (background_target) and NVME (foreground_target and promote_target) on `kakariko`: [boot.nix](https://github.com/Yeshey/nixOS-Config/blob/main/nixos/kakariko/boot.nix);
 
 - **pci-passthrough** - for passing my `NVIDIA GeForce RTX 2060 Mobile` to a virt-manager VM and using my intel processor for the host: [pci-passthrough.nix](https://github.com/Yeshey/nixOS-Config/blob/main/nixos/hyrulecastle/pci-passthrough.nix), but better yet:
 
