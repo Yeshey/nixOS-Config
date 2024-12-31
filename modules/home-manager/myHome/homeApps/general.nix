@@ -51,6 +51,7 @@ in
         anki
         xclip # for vim clipboard support :)
         # etcher #insecure?
+        audacity
 
         # Browsers
         cus_vivaldi
