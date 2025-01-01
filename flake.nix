@@ -57,7 +57,7 @@
 
     learnWithT = {
       type = "path";
-      path = "/mnt/btrfsMicroSD-DataDisk/PersonalFiles/2024/Projects/Programming/SiteDaMae";
+      path = "/mnt/DataDisk/PersonalFiles/2024/Projects/Programming/learnWithT/";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
