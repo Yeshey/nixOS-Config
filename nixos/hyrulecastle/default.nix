@@ -159,6 +159,7 @@ in
     #mineclone.enable = true;
     kubo.enable = true;
     freeGames.enable = false;
+    # learnWithT.enable = true;
   };
 
   mySystemHyruleCastle = {

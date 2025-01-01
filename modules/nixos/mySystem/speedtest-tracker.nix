@@ -17,6 +17,12 @@ in
       example = "*/10 * * * *"; # Runs every 10 minutes
       default = "0 * * * *";
     };
+    unencryptedPort = lib.mkOption {
+      type = lib.types.str;
+      description = "Unencrypted Port";
+      example = "8081"; # Runs every 10 minutes
+      default = "8881";
+    };
   };
 
   config = lib.mkIf (config.mySystem.enable && cfg.enable)  {
@@ -34,7 +40,7 @@ in
           "/opt/docker/speedtest//ssl-keys:/config/keys"
         ];
         ports = [
-          "8081:80"
+          "${cfg.unencryptedPort}:80"
           "8443:443"
         ];
         autoStart = true;
@@ -92,7 +98,7 @@ in
           name = "Speedtest Tracker";
           desktopName = "Speedtest Tracker";
           genericName = "Speedtest Tracker";
-          exec = ''xdg-open "http://localhost:8081/admin#"'';
+          exec = ''xdg-open "http://localhost:${cfg.unencryptedPort}/admin#"'';
           icon = "firefox";
           categories = [
             "GTK"
