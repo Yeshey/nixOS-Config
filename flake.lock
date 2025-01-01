@@ -894,12 +894,12 @@
       },
       "locked": {
         "lastModified": 0,
-        "narHash": "sha256-vtbqycAOSWw6JfgeCtMuGhGLRTMLpasMsVvy5IdEv6E=",
-        "path": "/mnt/btrfsMicroSD-DataDisk/PersonalFiles/2024/Projects/Programming/SiteDaMae",
+        "narHash": "sha256-ko3HCdNnf1BLVtQrSY88j4N2OTcmByU8mI/9GEBq7cg=",
+        "path": "/mnt/DataDisk/PersonalFiles/2024/Projects/Programming/learnWithT/",
         "type": "path"
       },
       "original": {
-        "path": "/mnt/btrfsMicroSD-DataDisk/PersonalFiles/2024/Projects/Programming/SiteDaMae",
+        "path": "/mnt/DataDisk/PersonalFiles/2024/Projects/Programming/learnWithT/",
         "type": "path"
       }
     },
