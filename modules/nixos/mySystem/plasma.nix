@@ -42,6 +42,13 @@ in
       };
     };*/
 
+    # For hotspot to connect (in KDE plasma)
+    # https://github.com/NixOS/nixpkgs/issues/263359
+    networking.firewall.allowedUDPPorts = [ 67 68 53 
+    ];
+    networking.firewall.allowedTCPPorts = [ 67 68 53 
+    ];
+
     services = {
       xserver.enable = lib.mkOverride 1010 true; # Enable the X11 windowing system.
       displayManager = {

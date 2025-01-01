@@ -148,6 +148,22 @@ in
     piperTextToSpeech.enable = true;
   };
 
+  toHost = {
+    #remoteWorkstation = {
+    #  sunshine.enable = false;
+    #  xrdp.enable = false;
+    #};
+    #dontStarveTogetherServer.enable = false;
+    #nextcloud.enable = true;
+    #minecraft.enable = false;
+    #openvscodeServer.enable = true;
+    #ngixServer.enable = true;
+    #mineclone.enable = true;
+    #kubo.enable = true;
+    #freeGames.enable = false;
+    learnWithT.enable = true;
+  };
+
   # virtualisation.docker.storageDriver = "bcachefs"; # for docker
 
   # Ignore Patterns Syncthing # Ignore Patterns Syncthing # You need to check that this doesnt override every other activation script, make lib.append? - if it was lib.mkFOrce it would override, like this it appends

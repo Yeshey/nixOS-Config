@@ -54,6 +54,13 @@
     #  path = "/mnt/DataDisk/PersonalFiles/2023/Projects/Programming/nixos-nvidia-vgpu_nixOS/";
       # inputs.nixpkgs.follows = "nixpkgs";
     #};
+
+    learnWithT = {
+      type = "path";
+      path = "/mnt/btrfsMicroSD-DataDisk/PersonalFiles/2024/Projects/Programming/SiteDaMae";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
     impermanence.url = "github:nix-community/impermanence";
     deploy-rs = {
       url = "github:serokell/deploy-rs";
@@ -116,6 +123,7 @@
     nurpkgs,
     hyprland-plugins,
     nvidia-vgpu-nixos,
+    learnWithT,
     fastapi-dls-nixos,
     nixos-generators,
     impermanence,
