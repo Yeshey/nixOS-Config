@@ -25,7 +25,7 @@ in
         nixfmt-rfc-style
         #nixd # nix language server 
         (vscode-with-extensions.override {
-          vscode = unstable.vscodium;
+          vscode = unstable.vscodium; #.fhs;
           vscodeExtensions = with vscode-extensions; [
             # vscodevim.vim # this is later when you're a chad
             ms-vsliveshare.vsliveshare
@@ -43,6 +43,7 @@ in
             valentjn.vscode-ltex
             streetsidesoftware.code-spell-checker # spell checker
             
+            bradlc.vscode-tailwindcss # tailwindcss
             redhat.vscode-xml # not installed??
             # arrterian.nix-env-selector # nix environment selector
             mkhl.direnv # direnv (the good one!)

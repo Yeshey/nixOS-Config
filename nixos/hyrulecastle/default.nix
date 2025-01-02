@@ -188,6 +188,8 @@ in
     #];
   };
 
+  # boot.loader.systemd-boot.memtest86.enable = true; # to see if there is corruption: https://discourse.nixos.org/t/an-easier-way-to-repair-corrupted-nix-db/35915/13?u=yeshey
+
   # nix.package = lib.mkForce pkgs.nixVersions.latest; # needed for clean to work without illigal character error?
 
   # roblox with sober (to not get the VK_ERROR_DEVICE_LOST error)
