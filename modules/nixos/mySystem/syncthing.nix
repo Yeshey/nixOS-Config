@@ -190,7 +190,7 @@ in
             //*
             //(?i)Photos&Videos
             .git
-            learnWithT
+            learnWithT*
           "}
 
           # A70Camera
