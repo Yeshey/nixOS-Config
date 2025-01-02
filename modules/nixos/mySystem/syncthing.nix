@@ -175,18 +175,21 @@ in
           ${ignorePattern "2026" "
             //*
             //(?i)Photos&Videos
+            .git
           "}
 
           # 2025
           ${ignorePattern "2025" "
             //*
             //(?i)Photos&Videos
+            .git
           "}
 
           # 2024
           ${ignorePattern "2024" "
             //*
             //(?i)Photos&Videos
+            .git
           "}
 
           # A70Camera
