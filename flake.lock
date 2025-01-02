@@ -893,13 +893,13 @@
         ]
       },
       "locked": {
-        "lastModified": 0,
-        "narHash": "sha256-ko3HCdNnf1BLVtQrSY88j4N2OTcmByU8mI/9GEBq7cg=",
-        "path": "/mnt/DataDisk/PersonalFiles/2024/Projects/Programming/learnWithT/",
+        "lastModified": 1735780544,
+        "narHash": "sha256-oL9Rz2YrvG6Gx3XT4uk+dZKq7sU+jPcWEdht1eC+DDQ=",
+        "path": "/mnt/btrfsMicroSD-DataDisk/PersonalFiles/2024/Projects/Programming/learnWithT/",
         "type": "path"
       },
       "original": {
-        "path": "/mnt/DataDisk/PersonalFiles/2024/Projects/Programming/learnWithT/",
+        "path": "/mnt/btrfsMicroSD-DataDisk/PersonalFiles/2024/Projects/Programming/learnWithT/",
         "type": "path"
       }
     },
