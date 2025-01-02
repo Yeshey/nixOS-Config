@@ -168,21 +168,9 @@ WantedBy=multi-user.target
   #   };
   # };
   
+  boot.initrd.preLVMCommands = lib.mkOrder 400 "sleep 7"; # in my case I had to wait a bit to let my hardware pick up on my microSD
 
-  #boot.initrd.preLVMCommands = lib.mkOrder 400 "sleep 7"; # in my case I had to wait a bit to let my hardware pick up on my microSD
-  boot.initrd.systemd.services.sleep-service = {
-    requires = [];
-    after = [];
-    before = ["sysroot.mount"];
-    wantedBy = ["initrd.target"];
-    script = ''
-      echo "Sleeping for 7 seconds to allow hardware initialization..."
-      sleep 7
-    '';
-  };
-
-
-  boot.initrd.systemd.enable = true;
+  # boot.initrd.systemd.enable = true;
   boot.initrd.systemd.tpm2.enable = true;
   boot.initrd.systemd.emergencyAccess = true;
 
@@ -204,6 +192,7 @@ WantedBy=multi-user.target
       ];
     };
 
+/*
 # ----- I dont know which one of these made it work T-T -----
   boot.initrd.systemd.services.sleep-before-root = {
     # Specify the dependencies to ensure this service blocks mounting of sysroot
@@ -235,7 +224,7 @@ WantedBy=multi-user.target
     "sleep 7"
   ];
   # ----- I dont know which one of these made it work T-T -----
-
+*/
 
   swapDevices =
     [ 
