@@ -893,14 +893,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1735781130,
-        "narHash": "sha256-paIDPts06PMNGKuQXhT+p8j6h+3Wa00Hr3rwUNBYuwg=",
-        "path": "/mnt/btrfsMicroSD-DataDisk/PersonalFiles/2024/Projects/Programming/learnWithT/",
-        "type": "path"
+        "lastModified": 1735779547,
+        "narHash": "sha256-cTm+XHzMtb5Jkl77hU3hiTFgBCvStePDRtiP2fcGu4Y=",
+        "ref": "refs/heads/main",
+        "rev": "be1046623ce725f33c33a1d240b69e7d49f61e3f",
+        "revCount": 3,
+        "type": "git",
+        "url": "ssh://git@github.com/Yeshey/learnWithT.git"
       },
       "original": {
-        "path": "/mnt/btrfsMicroSD-DataDisk/PersonalFiles/2024/Projects/Programming/learnWithT/",
-        "type": "path"
+        "type": "git",
+        "url": "ssh://git@github.com/Yeshey/learnWithT.git"
       }
     },
     "lspkind-nvim": {

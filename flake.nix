@@ -56,9 +56,7 @@
     #};
 
     learnWithT = {
-      type = "path";
-      #path = "/mnt/DataDisk/PersonalFiles/2024/Projects/Programming/learnWithT/";
-      path = "/mnt/btrfsMicroSD-DataDisk/PersonalFiles/2024/Projects/Programming/learnWithT/";
+      url = "git+ssh://git@github.com/Yeshey/learnWithT.git"; # fr my private repo
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
