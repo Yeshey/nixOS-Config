@@ -236,6 +236,7 @@ in
     grub = {
       enable = true;
       memtest86.enable = true; # to see if there is corruption: https://discourse.nixos.org/t/an-easier-way-to-repair-corrupted-nix-db/35915/13?u=yeshey
+      memtest86.params = ["console=ttyS0,115200"];
       efiSupport = true;
       devices = [ "nodev" ];
       device = "nodev";
