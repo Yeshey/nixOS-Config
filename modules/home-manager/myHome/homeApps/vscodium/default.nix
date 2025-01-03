@@ -9,6 +9,23 @@ let
   cfg = config.myHome.homeApps.vscodium;
 in
 {
+  imports = [
+    # from https://github.com/nix-community/home-manager/issues/1800, to make vscode settings writable
+    # Source: https://gist.github.com/piousdeer/b29c272eaeba398b864da6abf6cb5daa
+    # Make vscode settings writable
+
+    (import (builtins.fetchurl {
+      url = "https://gist.githubusercontent.com/piousdeer/b29c272eaeba398b864da6abf6cb5daa/raw/41e569ba110eb6ebbb463a6b1f5d9fe4f9e82375/mutability.nix";
+      sha256 = "4b5ca670c1ac865927e98ac5bf5c131eca46cc20abf0bd0612db955bfc979de8";
+    }) { inherit config lib; })
+
+    (import (builtins.fetchurl {
+      url = "https://gist.githubusercontent.com/piousdeer/b29c272eaeba398b864da6abf6cb5daa/raw/41e569ba110eb6ebbb463a6b1f5d9fe4f9e82375/vscode.nix";
+      sha256 = "fed877fa1eefd94bc4806641cea87138df78a47af89c7818ac5e76ebacbd025f";
+    }) { inherit config lib pkgs; })
+  
+  ];
+
   options.myHome.homeApps.vscodium = with lib; {
     enable = mkEnableOption "vscodium";
   };
@@ -20,13 +37,21 @@ in
     in
     lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
 
-      home.packages = with pkgs; [
-        nixd
-        nixfmt-rfc-style
-        #nixd # nix language server 
-        (vscode-with-extensions.override {
-          vscode = unstable.vscodium; #.fhs;
-          vscodeExtensions = with vscode-extensions; [
+      #home.file."/home/${config.myHome.user}/.config/VSCodium/User/settings.json".source = ./VSCsettings.json;
+      #home.file."/home/${config.myHome.user}/.config/Code/User/settings.json".source = ./VSCsettings.json;
+      #home.file."/home/${config.myHome.user}/.config/Visual Studio Code/User/settings.json".source = ./VSCsettings.json;
+      home.file."/home/${config.myHome.user}/.openvscode-server/data/Machine/settings.json" = {
+        text = builtins.readFile ./VSCsettings.json;
+        force = true;
+        mutable = true;
+      };
+      
+      programs.vscode = {
+        enable = true;
+        mutableExtensionsDir = true;
+        package = pkgs.vscodium;
+        userSettings = builtins.fromJSON (builtins.readFile ./VSCsettings.json);
+        extensions = with pkgs.vscode-extensions; [
             # vscodevim.vim # this is later when you're a chad
             ms-vsliveshare.vsliveshare
             ms-azuretools.vscode-docker
@@ -36,7 +61,7 @@ in
             yzhang.markdown-all-in-one # markdown
             formulahendry.code-runner
             james-yu.latex-workshop
-            bungcip.better-toml # TOML language support
+            tamasfe.even-better-toml # TOML language support
             rust-lang.rust-analyzer
             tamasfe.even-better-toml # Fully-featured TOML support
             eamodio.gitlens
@@ -75,17 +100,15 @@ in
             llvm-vs-code-extensions.vscode-clangd
 
             ms-vscode-remote.remote-ssh
-          ]; # ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-          #{
-          #  name = "remote-ssh-edit";
-          #  publisher = "ms-vscode-remote";
-          #  version = "0.47.2";
-          #  sha256 = "1hp6gjh4xp2m1xlm1jsdzxw9d8frkiidhph6nvl24d0h8z34w49g";
-          #}
-          #];
-        })
-      ];
+        ];
+      };
 
+      home.packages = with pkgs; [
+        nixd
+        nixfmt-rfc-style
+        #nixd # nix language server 
+      ];
+/*
       # ====== Making VScodium settings writable ======
       # Allowing VScode to change settings on run time, see last response: https://github.com/nix-community/home-manager/issues/1800
       # VScodium is now free to write to its settings, but they will be overwritten when I run nixos rebuild
@@ -145,6 +168,7 @@ EOF
       fi
     '';
         };
+        */
       # ====== ============================ ======    
 
       # for Code
@@ -155,7 +179,7 @@ EOF
       #   ${(pkgs.formats.json {}).generate "blabla"
       #     userSettings} \
       #   > "$userDir3/settings.json"
-
+/*
       home.file = {
         # Change VSCodium to be able to use pylance (https://github.com/VSCodium/vscodium/pull/674#issuecomment-1137920704)
         ".config/VSCodium/product.json".source = builtins.toFile "product.json" ''
@@ -171,5 +195,7 @@ EOF
         #   "itemUrl": "https://marketplace.visualstudio.com/items"
         # }
       };
+*/
+
     };
 }
