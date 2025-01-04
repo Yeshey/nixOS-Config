@@ -58,8 +58,6 @@ in
         popups = lib.mkOverride 1010 0.88;
       };
 
-      targets.vscode.enable = false;
-
       /*
       fonts = {
         sizes = {
