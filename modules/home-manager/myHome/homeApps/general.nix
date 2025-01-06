@@ -29,7 +29,18 @@ in
           dontPatchELF = true;
           nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ pkgs.kdePackages.wrapQtAppsHook ];
         });
+        my-input-leap = pkgs.input-leap.overrideAttrs (oldAttrs: {
+          src = fetchFromGitHub {
+            owner = "input-leap";
+            repo = "input-leap";
+            rev = "2641bc502e16b1fb7372b43e94d4b894cbc71279";
+            hash = "sha256-lB+7go7nza43x3fccXYQKPRos5CFH/CYw8ivuLOEpkw=";
+            fetchSubmodules = true;
+          };
+        });
       in [
+        #input-leap
+        my-input-leap
         wineWow64Packages.full
 
         vital # run with Vital

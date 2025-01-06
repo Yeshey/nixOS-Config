@@ -17,8 +17,6 @@ in
 
   config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && config.myHome.homeApps.cli.enable && cfg.enable) {
     home.packages = with pkgs; [
-      input-leap
-      neofetch
       yt-dlp # download youtube videos
       scrcpy # screen cast android phone
       ocrmypdf
