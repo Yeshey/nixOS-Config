@@ -33,8 +33,8 @@ in
           src = fetchFromGitHub {
             owner = "input-leap";
             repo = "input-leap";
-            rev = "2641bc502e16b1fb7372b43e94d4b894cbc71279";
-            hash = "sha256-lB+7go7nza43x3fccXYQKPRos5CFH/CYw8ivuLOEpkw=";
+            rev = "0a72fdcfcf9d2cc0e03789fd74e48694132a003c";
+            hash = "sha256-T/v4JMHAbJKO7ZTIt+Ru1J1T726Z1VoId45egTGxDfs=";
             fetchSubmodules = true;
           };
         });
