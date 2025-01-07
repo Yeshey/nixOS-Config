@@ -17,8 +17,10 @@ in
 
   config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && config.myHome.homeApps.cli.enable && cfg.enable) {
     home.packages = with pkgs; [
+      busybox
+      hyfetch
       speedtest-cli
-      yt-dlp # download youtube videos
+      # yt-dlp # download youtube videos
       scrcpy # screen cast android phone
       ocrmypdf
       libnotify # so you can use notify-send
