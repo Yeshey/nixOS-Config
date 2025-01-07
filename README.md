@@ -16,7 +16,8 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
 - Right click on wastebin and configure to delete trash after 7 days, still don't know how to declare this.
 
-- nix-on-droid: install my flake in app by adding [the normal packages](https://nix-on-droid.unboiled.info/upgrade.txt) (confirm that your nixOS-Config flake is pulling the latest released version of nix-on-droid) and running `nix-shell -p git --run "nix-on-droid --flake github:Yeshey/nixOS-Config#nix-on-droid switch"`  
+- nix-on-droid: install my flake in app by adding [the normal packages](https://nix-on-droid.unboiled.info/upgrade.txt) (confirm that your nixOS-Config flake is pulling the latest released version of nix-on-droid) and running `nix-shell -p git --run "nix-on-droid --flake github:Yeshey/nixOS-Config#nix-on-droid switch"`.  
+  Some stuff seems to be broken, might need to run `zsh` and `sshd-start` manually.  
   You'll have to find a way to send the ssh keys `/home/yeshey/.ssh/my_identity` `/home/yeshey/.ssh/my_identity.pub` `/home/yeshey/.ssh/config`
 
 ## Credits

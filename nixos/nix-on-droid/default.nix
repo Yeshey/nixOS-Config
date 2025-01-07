@@ -31,6 +31,18 @@
 
   # Simply install just the packages
   environment.packages = with pkgs; [
+    nettools
+    curl
+    vim # The Nano editor is installed by default.
+    neovim
+    htop
+    tmux
+    wget
+    tree
+    btop
+    #file
+    unzip
+
     nano
     git
     #openssh
