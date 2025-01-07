@@ -31,6 +31,7 @@
 
   # Simply install just the packages
   environment.packages = with pkgs; [
+    speedtest-cli
     nettools
     curl
     vim # The Nano editor is installed by default.
