@@ -23,17 +23,17 @@ in
       libnotify # so you can use notify-send
       xdotool
 
-      # nettools
-      # curl
-      # vim # The Nano editor is installed by default.
-      # neovim
-      # htop
-      # tmux
-      # wget
-      # tree
-      # btop
-      # #file
-      # unzip
+      nettools
+      curl
+      vim # The Nano editor is installed by default.
+      neovim
+      htop
+      tmux
+      wget
+      tree
+      btop
+      #file
+      unzip
     ];
   };
 }
