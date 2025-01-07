@@ -31,7 +31,7 @@
 
   # Simply install just the packages
   environment.packages = with pkgs; [
-    busybox
+    busybox #:(
     speedtest-cli
     nettools
     curl
