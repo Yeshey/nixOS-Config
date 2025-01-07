@@ -19,7 +19,7 @@
     "files.autoSave": "afterDelay",
     "ltex.language": "auto",
     "editor.wordWrap": "on",
-    
+    "git.autofetch": true,
 
 
     "latex-workshop.latex.tools": [
