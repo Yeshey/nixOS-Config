@@ -28,6 +28,7 @@
     // /etc/profiles/per-user/yeshey/lib/openjdk
     "ltex.language": "auto", // pt-PT
     "editor.wordWrap": "on",
+    "git.autofetch": true,
     
     // the latex code: https://stackoverflow.com/questions/56743092/modifying-settings-json-in-vscode-to-add-shell-escape-flag-to-pdflatex-in-latex
     // You need to add this code here as well but you don't know how, so latex works with svgs
