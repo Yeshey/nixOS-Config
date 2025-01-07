@@ -85,6 +85,7 @@
   programs.zsh = {
     shellAliases = {
       update = "nix-on-droid --flake github:Yeshey/nixOS-Config#nix-on-droid switch";
+      speedtest = "speedtest-cli";
     };
 
     # For starting the ssh server
