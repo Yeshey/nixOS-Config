@@ -40,7 +40,7 @@ in
         });
       in [
         #input-leap
-        my-input-leap
+        my-input-leap # :(
         wineWow64Packages.full
 
         vital # run with Vital
