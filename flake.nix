@@ -59,6 +59,10 @@
       url = "git+ssh://git@github.com/Yeshey/learnWithT.git"; # fr my private repo
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    # learnWithT = {
+    #   type = "path";
+    #   path = "/mnt/DataDisk/PersonalFiles/2024/Projects/Programming/learnWithT/";
+    # };
 
     impermanence.url = "github:nix-community/impermanence";
     deploy-rs = {

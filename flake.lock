@@ -962,11 +962,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1735779547,
-        "narHash": "sha256-cTm+XHzMtb5Jkl77hU3hiTFgBCvStePDRtiP2fcGu4Y=",
+        "lastModified": 1736546437,
+        "narHash": "sha256-SOvEMA5DEDUZT0XB6F0doqxtV6ANNHgXL6a3rn1iSKA=",
         "ref": "refs/heads/main",
-        "rev": "be1046623ce725f33c33a1d240b69e7d49f61e3f",
-        "revCount": 3,
+        "rev": "09e881771e9dca9576bce45a27d974c8c77c68a8",
+        "revCount": 16,
         "type": "git",
         "url": "ssh://git@github.com/Yeshey/learnWithT.git"
       },
