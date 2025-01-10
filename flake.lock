@@ -1287,11 +1287,11 @@
         "nixpkgs": "nixpkgs_4"
       },
       "locked": {
-        "lastModified": 1734538559,
-        "narHash": "sha256-Kevtc/Q3vN6IRRgpnHwxEXOYD6FrqYS2ivmSEjcPzGE=",
+        "lastModified": 1735765841,
+        "narHash": "sha256-oA2oWsxWH7BilFY4to4TfC7qgebTaoVcg3XDZev+mB0=",
         "owner": "mrzenc",
         "repo": "nvidia-vgpu-nixos",
-        "rev": "228f06a29e4ae4bc1387a4903de0060a65f33dd2",
+        "rev": "6c43ebd765ddad9656c29aba470d60b89bdb1eb6",
         "type": "github"
       },
       "original": {
