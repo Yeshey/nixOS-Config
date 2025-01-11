@@ -40,6 +40,7 @@ in
         });
       in [
         #input-leap
+        # nexusmods-app-unfree # for game mods?
         my-input-leap # :(
         wineWow64Packages.full
 
