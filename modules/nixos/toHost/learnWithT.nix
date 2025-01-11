@@ -21,8 +21,10 @@ in
   config = lib.mkIf cfg.enable {
 
     learnWithT = {
-      enable = true;
       development.openPorts.enable = true;
+      appwrite = {
+        enable = true;
+      };
     };
 
   };
