@@ -121,7 +121,7 @@ fi
 ''
 # Script to clean all generations and optimize the Nix store
 
-echo "This will clean all generations and optimise the store"
+echo "This will clean all generations and optimise the store, uninstall unused Flatpak packages and remove dangling docker images, volumes and networks"
 
 # Run the Nix garbage collection and store optimization commands as root
 sudo sh -c '
@@ -140,10 +140,18 @@ sudo sh -c '
     
     # Uninstall unused Flatpak packages
     flatpak uninstall --unused -y
+
+    echo "sudo Removing dangling docker and podman images, volumes and networks"
+    ${pkgs.docker}/bin/docker system prune --volumes --force
+    ${pkgs.podman}/bin/podman system prune -a -f
 '
 
 # Collect garbage again for cleanup
 nix-collect-garbage -d
+
+echo "Removing dangling docker and podman images, volumes and networks"
+${pkgs.docker}/bin/docker system prune --volumes --force
+${pkgs.podman}/bin/podman system prune -a -f
 
 # Provide user guidance on the next steps
 echo "You should do a nixos-rebuild boot and a reboot to clean the boot generations now."
