@@ -205,6 +205,8 @@ in
     ];
   };
 
+  hardware.nvidia-container-toolkit.enable = true;
+
   # onedrive --reauth
   # systemctl restart --user onedrive@onedrive.service
   # journalctl --user -f -u onedrive@onedrive.service
