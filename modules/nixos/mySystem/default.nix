@@ -202,7 +202,7 @@ in
       };
       
       #networking.useNetworkd = true;
-      networking.firewall.enable = false;
+      #networking.firewall.enable = false;
 
     })
   ];
