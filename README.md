@@ -16,7 +16,7 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
 - Right click on wastebin and configure to delete trash after 7 days, still don't know how to declare this.
 
-- nix-on-droid: install my flake in app by adding [the normal packages](https://nix-on-droid.unboiled.info/upgrade.txt) (restart `nix-on-droid` after that) and running `nix-shell -p git --run "nix-on-droid --flake github:Yeshey/nixOS-Config#nix-on-droid switch"`.  
+- nix-on-droid: install my flake in app by adding [the normal packages](https://nix-on-droid.unboiled.info/upgrade.txt) (restart `nix-on-droid` after that) and running `nix-shell -p git --run "nix-on-droid --flake github:Yeshey/nixOS-Config#nix-on-droid switch"`. (or use the `/nix-on-droid` branch if it isn't working)
   You'll have to find a way to send the ssh keys, `scp` isn't working, if you have root you can do this:
   - You can run a server on the localnetwork to serve the files: `nix-shell --pure -p python310 --run "cd /home/yeshey/.ssh && python3 -m http.server 8000"`, you might nee to turn off the firewall (`networking.firewall.enable = false;`). And From `termux`, not `nix-on-droid`, run:
     - `su`, to get into the root user, to change files in other apps. Change the ip as needed:
@@ -31,6 +31,7 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
       ```sh
       ls /data/data/com.termux/files/home/.ssh
       ```
+  - To use `nix-on-droid` with root, you can try taking a look [here](https://github.com/nix-community/nix-on-droid/issues/3)
 
 ## Credits
 
