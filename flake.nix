@@ -56,7 +56,7 @@
     #};
 
     learnWithT = {
-      url = "git+ssh://git@github.com/Yeshey/learnWithT.git"; # fr my private repo
+      url = "git+ssh://git@github.com/Yeshey/learnWithT.git?ref=main"; # fr my private repo
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     # learnWithT = {
