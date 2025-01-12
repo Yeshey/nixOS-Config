@@ -55,10 +55,10 @@
       # inputs.nixpkgs.follows = "nixpkgs";
     #};
 
-    # learnWithT = {
-    #   url = "git+ssh://git@github.com/Yeshey/learnWithT.git"; # fr my private repo
-    #   inputs.nixpkgs.follows = "nixpkgs-unstable";
-    # };
+    learnWithT = {
+      url = "git+ssh://git@github.com/Yeshey/learnWithT.git"; # fr my private repo
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     # learnWithT = {
     #   type = "path";
     #   path = "/mnt/DataDisk/PersonalFiles/2024/Projects/Programming/learnWithT/";
@@ -126,7 +126,7 @@
     nurpkgs,
     hyprland-plugins,
     nvidia-vgpu-nixos,
-    # learnWithT,
+    learnWithT,
     fastapi-dls-nixos,
     nixos-generators,
     impermanence,
