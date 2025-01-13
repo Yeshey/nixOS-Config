@@ -148,21 +148,24 @@ in
   ${pkgs.git}/bin/git clone --depth 1 ${cfg.gitRepo} /tmp/upgradeOnShutdown
 
   echo "Trying to upgrade (almost) all flake inputs"
-  nix flake lock --update-input nixpkgs \
-                  --update-input nixpkgs-unstable \
-                  --update-input home-manager \
-                  --update-input neovim-plugins \
-                  --update-input stylix \
-                  --update-input plasma-manager \
-                  --update-input nurpkgs \
-                  --update-input hyprland \
-                  --update-input hyprland-plugins \
-                  --update-input hyprland-contrib \
-                  --update-input nixos-nvidia-vgpu \
-                  --update-input deploy-rs \
-                  --update-input agenix \
-                  --update-input impermanence \
-                  /tmp/upgradeOnShutdown
+  nix flake update --flake /tmp/upgradeOnShutdown \
+                  nixpkgs \
+                  nixpkgs-unstable \
+                  home-manager \
+                  neovim-plugins \
+                  stylix \
+                  plasma-manager \
+                  nurpkgs \
+                  hyprland \
+                  hyprland-plugins \
+                  hyprland-contrib \
+                  nixos-nvidia-vgpu \
+                  deploy-rs \
+                  agenix \
+                  nix-on-droid \
+                  nixos-generators \
+                  learnWithT \
+                  impermanence
 
   ${nixos-rebuild} ${operation} --flake /tmp/upgradeOnShutdown#${cfg.host} || 
     (
