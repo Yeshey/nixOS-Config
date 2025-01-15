@@ -191,6 +191,7 @@ in
             //(?i)Photos&Videos
             .git
             learnWithT*
+            AI-Master-Repo-IAA*
           "}
 
           # A70Camera
