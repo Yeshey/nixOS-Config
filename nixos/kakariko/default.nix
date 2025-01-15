@@ -161,7 +161,7 @@ in
     #mineclone.enable = true;
     #kubo.enable = true;
     #freeGames.enable = false;
-    learnWithT.enable = true;
+    # learnWithT.enable = true;
   };
 
   # virtualisation.docker.storageDriver = "bcachefs"; # for docker
