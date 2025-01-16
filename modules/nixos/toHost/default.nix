@@ -23,7 +23,7 @@ in
     ./mindustry-server.nix
     ./freeGames.nix
     ./remoteWorkstation/default.nix
-    # ./learnWithT.nix
+    ./learnWithT.nix
   ];
 
   options.toHost = with lib; {
