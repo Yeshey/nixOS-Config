@@ -957,17 +957,23 @@
       "inputs": {
         "android-nixpkgs": "android-nixpkgs",
         "flake-utils": "flake-utils_2",
-        "nixpkgs": "nixpkgs_2"
+        "nixpkgs": [
+          "nixpkgs-unstable"
+        ]
       },
       "locked": {
-        "lastModified": 0,
-        "narHash": "sha256-sQdmnDBSWEa/LnRK25vsKnO3R0zxYfE/i67rTk4veLk=",
-        "path": "/mnt/DataDisk/PersonalFiles/2024/Projects/Programming/learnWithT/",
-        "type": "path"
+        "lastModified": 1737052841,
+        "narHash": "sha256-Vs8/iJ+nPrVfQW/9dr5izkycAQN/guxK8pBLK1Mn3P8=",
+        "ref": "main",
+        "rev": "d7fedf32c00dd499a169b7734a3fd4cc29054f34",
+        "revCount": 23,
+        "type": "git",
+        "url": "ssh://git@github.com/Yeshey/learnWithT.git"
       },
       "original": {
-        "path": "/mnt/DataDisk/PersonalFiles/2024/Projects/Programming/learnWithT/",
-        "type": "path"
+        "ref": "main",
+        "type": "git",
+        "url": "ssh://git@github.com/Yeshey/learnWithT.git"
       }
     },
     "lspkind-nvim": {
@@ -1210,22 +1216,6 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1735554305,
-        "narHash": "sha256-zExSA1i/b+1NMRhGGLtNfFGXgLtgo+dcuzHzaWA6w3Q=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "0e82ab234249d8eee3e8c91437802b32c74bb3fd",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_3": {
-      "locked": {
         "lastModified": 1736684107,
         "narHash": "sha256-vH5mXxEvZeoGNkqKoCluhTGfoeXCZ1seYhC2pbMN0sg=",
         "owner": "NixOS",
@@ -1240,7 +1230,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_4": {
+    "nixpkgs_3": {
       "locked": {
         "lastModified": 1736701207,
         "narHash": "sha256-jG/+MvjVY7SlTakzZ2fJ5dC3V1PrKKrUEOEE30jrOKA=",
@@ -1256,7 +1246,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_5": {
+    "nixpkgs_4": {
       "locked": {
         "lastModified": 1733808091,
         "narHash": "sha256-KWwINTQelKOoQgrXftxoqxmKFZb9pLVfnRvK270nkVk=",
@@ -1329,7 +1319,7 @@
     "nurpkgs": {
       "inputs": {
         "flake-parts": "flake-parts",
-        "nixpkgs": "nixpkgs_4",
+        "nixpkgs": "nixpkgs_3",
         "treefmt-nix": "treefmt-nix"
       },
       "locked": {
@@ -1348,7 +1338,7 @@
     },
     "nvidia-vgpu-nixos": {
       "inputs": {
-        "nixpkgs": "nixpkgs_5"
+        "nixpkgs": "nixpkgs_4"
       },
       "locked": {
         "lastModified": 1735765841,
@@ -1505,7 +1495,7 @@
         "nix-on-droid": "nix-on-droid",
         "nixos-generators": "nixos-generators",
         "nixos-hardware": "nixos-hardware",
-        "nixpkgs": "nixpkgs_3",
+        "nixpkgs": "nixpkgs_2",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nurpkgs": "nurpkgs",
         "nvidia-vgpu-nixos": "nvidia-vgpu-nixos",
