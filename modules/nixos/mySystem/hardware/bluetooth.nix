@@ -25,6 +25,8 @@ in
       # package = pkgs.bluezFull;
     };
 
+    # TODO If trying to send bluetoothaudio to another linux PC and it dissapeared, try `sudo systemctl restart display-manager.service`, you should look at this.
+
     /*
     # https://github.com/NixOS/nixpkgs/issues/63703 (issue that helped me override it)
     # https://discourse.nixos.org/t/how-to-override-nixpkg-services-execstart/17699 (general systemd service override)
