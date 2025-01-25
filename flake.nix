@@ -87,6 +87,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+
+    nixpkgs-gnome-mobile = {
+      url = "github:chuangzhu/nixpkgs-gnome-mobile";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     /*
     wolf = {
       #url = "github:games-on-whales/wolf/dev-nix";
@@ -130,6 +135,7 @@
     fastapi-dls-nixos,
     nixos-generators,
     impermanence,
+    nixpkgs-gnome-mobile,
     #wolf,
     # lanzaboote,
     ...

@@ -1,6 +1,7 @@
 { inputs, outputs, ... }:
 {
   # call the overlays
+  gnome-mobile = inputs.nixpkgs-gnome-mobile.overlays.default;
   nvimPlugins = inputs.neovim-plugins.overlays.default;
   nur = inputs.nurpkgs.overlays.default; # nur packages available at pkgs.nur
 

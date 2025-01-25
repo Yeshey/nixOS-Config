@@ -88,6 +88,7 @@ in
     plasma.enable = false;
     gnome = {
       enable = true; # TODO activate both plasma and gnome same time, maybe expose display manager
+      mobile.enable = false;
     };
     hyprland.enable = false;
     ssh = {
