@@ -1198,6 +1198,21 @@
         "type": "github"
       }
     },
+    "nixpkgs-gnome-mobile": {
+      "locked": {
+        "lastModified": 1736730480,
+        "narHash": "sha256-LgqkJSqDorJNFrm5S0GoKIfhYwm4LCkhzS9lZ4Cctpo=",
+        "owner": "chuangzhu",
+        "repo": "nixpkgs-gnome-mobile",
+        "rev": "a3741a847f14bb5bfa4a17526cc9af62864af8c6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "chuangzhu",
+        "repo": "nixpkgs-gnome-mobile",
+        "type": "github"
+      }
+    },
     "nixpkgs-unstable": {
       "locked": {
         "lastModified": 1736701207,
@@ -1496,6 +1511,7 @@
         "nixos-generators": "nixos-generators",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_2",
+        "nixpkgs-gnome-mobile": "nixpkgs-gnome-mobile",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nurpkgs": "nurpkgs",
         "nvidia-vgpu-nixos": "nvidia-vgpu-nixos",
