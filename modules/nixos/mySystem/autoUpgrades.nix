@@ -74,7 +74,7 @@ in
         # "--commit-lock-file" # commit the new lock file with git
         # || cd ${location} && git checkout -- flake.lock '' # reverts the changes to flake.lock if things went south (doesn't work because the commands in this list they aren't placed in this order in the end)
       ];
-      allowReboot = lib.mkOverride 1010 false; # set to false
+      # allowReboot = lib.mkOverride 1010 false; # set to false
       persistent = lib.mkOverride 1010 true; # upgrades even if PC was off when it would upgrade
     };
     
