@@ -22,6 +22,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = with pkgs; [
+      gawk
+      gnugrep
+    ];
+
     # In this way, you need to copy the world to the right place while setting the USER and GROUP to minetest, like so:
     # sudo rsync -a /home/yeshey/PersonalFiles/Servers/minetest/MineCloneServerFirst/worlds/world/ /var/lib/minetest/.minetest/worlds/MineCloneFirstServerAnarchy/ && sudo chown -R minetest:minetest /var/lib/minetest/.minetest/worlds/MineCloneFirstServerAnarchy/
     services.minetest-server = {
@@ -71,27 +76,47 @@ in
 
         cd "$target_directory" || { echo "Failed to change into directory"; exit 1; }
 
-        # If the directory is empty, clone the repo. Otherwise, update it.
         if [ -z "$(ls -A "$target_directory")" ]; then
             ${git}/bin/git clone ${mod} . || { echo "Failed to clone repository"; exit 1; }
         else
+            # Record the current commit
+            current_commit="$(${git}/bin/git rev-parse HEAD)"
+            # Pull updates (which might fast-forward the branch)
             ${git}/bin/git pull || { echo "Failed to pull latest changes"; exit 1; }
+            # Reset back to the commit that was current before pulling
+            ${git}/bin/git reset --hard "$current_commit" || { echo "Failed to reset back to current commit"; exit 1; }
         fi
 
-        # Fetch tags to ensure we have the latest.
+
+        # Fetch all tags.
         ${git}/bin/git fetch --tags || { echo "Failed to fetch tags"; exit 1; }
 
-        # Determine the version: if provided, use that; otherwise, determine the latest tag.
-        if [ -z "$provided_version" ]; then
-            version="$(${git}/bin/git describe --tags "$(${git}/bin/git rev-list --tags --max-count=1)")"
-            echo "No version provided. Using latest tag: $version"
-        else
+        if [ -n "$provided_version" ]; then
             version="$provided_version"
             echo "Using provided version: $version"
+        else
+            # No version provided. Try to get the current tag (if HEAD exactly matches one).
+            current_tag="$(${git}/bin/git describe --tags 2>/dev/null | cut -d '-' -f1 || true)"
+            echo "Detected nearest tag (current version): [$current_tag]"
+            if [ -n "$current_tag" ]; then
+                echo "Current VoxeLibre/Mineclone2 mod version is: $current_tag"
+                # List all tags in version order and find the tag immediately after the current one.
+                next_tag="$(${git}/bin/git tag --sort=v:refname | ${pkgs.gnugrep}/bin/grep '^[0-9]' | ${pkgs.gawk}/bin/awk -v cur="$current_tag" 'BEGIN {found=0} { if(found){ print; exit } } $0==cur {found=1}')" # to only get version tags, filter for tags that start with a number
+                if [ -n "$next_tag" ]; then
+                    version="$next_tag"
+                    echo "Incrementing to next available version: $version"
+                else
+                    version="$current_tag"
+                    echo "No higher version found. Staying at current version: $version"
+                fi
+            else
+                # No current tag found, so choose the latest tag.
+                version="$(${git}/bin/git describe --tags "$(${git}/bin/git rev-list --tags --max-count=1)")"
+                echo "No current version detected. Using latest tag: $version"
+            fi
         fi
 
         ${git}/bin/git reset --hard "$version" || { echo "Failed to reset to tag $version"; exit 1; }
-
 
         exit 0
       '';
