@@ -166,6 +166,22 @@ in
     learnWithT.enable = false;
   };
 
+  # tests for games and stuff
+  # hardware.opengl = {
+  #   enable = true;
+  #   driSupport32Bit = true;  # Essential for Proton
+  #   extraPackages = with pkgs; [
+  #     intel-media-driver     # Vulkan/VA-API for Intel GPUs (Broadwell+)
+  #     intel-compute-runtime  # OpenCL support
+  #     mesa.drivers           # OpenGL/Vulkan
+  #     vulkan-loader          # Vulkan API
+  #   ];
+  #   extraPackages32 = with pkgs.pkgsi686Linux; [
+  #     mesa.drivers           # 32-bit OpenGL/Vulkan
+  #     vulkan-loader
+  #   ];
+  # };
+
   # virtualisation.docker.storageDriver = "bcachefs"; # for docker
 
   # Ignore Patterns Syncthing # Ignore Patterns Syncthing # You need to check that this doesnt override every other activation script, make lib.append? - if it was lib.mkFOrce it would override, like this it appends
