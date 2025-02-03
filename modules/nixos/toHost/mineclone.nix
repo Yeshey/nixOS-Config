@@ -60,7 +60,7 @@ in
         # Use the new repository URL for VoxeLibre.
         mod = "https://git.minetest.land/VoxeLibre/VoxeLibre.git";
         # Set the target directory based on the new gameId.
-        targetDirectory = "/var/lib/minetest/.minetest/games/voxelibre";
+        targetDirectory = "/var/lib/minetest/.minetest/games/mineclone2"; # i want to keep my old world
       in
       lib.mkForce ''
         #!/usr/bin/env bash
