@@ -112,7 +112,7 @@
 
   time.timeZone = "Europe/Madrid";
 
-  system.autoUpgrade.allowReboot = false;
+  system.autoUpgrade.allowReboot = true;
 
   nixpkgs.config = {
     allowUnsupportedSystem = true;
