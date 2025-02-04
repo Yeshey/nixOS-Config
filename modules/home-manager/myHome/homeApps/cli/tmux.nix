@@ -16,7 +16,7 @@ in
   config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && config.myHome.homeApps.cli.enable && cfg.enable) {
     programs.tmux = {
       enable = true;
-      prefix = "C-a";
+      prefix = "C-b";
       terminal = "tmux-256color";
       keyMode = "vi";
       escapeTime = 10;
