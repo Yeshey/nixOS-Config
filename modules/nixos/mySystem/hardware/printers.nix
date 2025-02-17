@@ -17,9 +17,12 @@ in
     # Enable CUPS to print documents.
     services.printing = {
       enable = true; # TODO check if it works with your printer
-      #drivers = with pkgs; [
-      #  xerox-generic-driver
-      #];
+      drivers = with pkgs; [
+        #xerox-generic-driver
+
+        utsushi # XP-3100
+        utsushi-networkscan # XP-3100?
+      ];
     };
     environment = {
       systemPackages = with pkgs; [ xsane ];
