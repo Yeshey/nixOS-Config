@@ -207,6 +207,8 @@ in
 
   hardware.nvidia-container-toolkit.enable = true;
 
+  # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
+
   # onedrive --reauth
   # systemctl restart --user onedrive@onedrive.service
   # journalctl --user -f -u onedrive@onedrive.service
