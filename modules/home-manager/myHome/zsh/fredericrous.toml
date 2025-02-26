@@ -3,7 +3,7 @@
 # fredericrous
 # grabed symbols from https://starship.rs/presets/nerd-font
 
-command_timeout = 1000
+# command_timeout = 1000
 right_format = """$time"""
 
 [time]
