@@ -105,8 +105,8 @@ let
 
     buildPhase = ''
       # Create Python virtual environment
-      virtualenv venv
-      source venv/bin/activate
+      #virtualenv venv
+      #source venv/bin/activate
 
       # Build with FHS paths
       make -j$NIX_BUILD_CORES release
