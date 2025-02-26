@@ -166,6 +166,13 @@ in
     learnWithT.enable = false;
   };
 
+  learnWithT = {
+    development.openPorts.enable = true;
+    appwrite = {
+      enable = false;
+    };
+  };
+
   # tests for games and stuff
   # hardware.opengl = {
   #   enable = true;
