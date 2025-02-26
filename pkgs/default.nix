@@ -14,6 +14,8 @@ rec {
 
   coreutils-with-safe-rm = callPackage ./coreutils-with-safe-rm.nix { };
 
+  my-webots = callPackage ./webots.nix { };
+
   mybox86 =
     let
       args = {
