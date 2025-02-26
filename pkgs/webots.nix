@@ -1,103 +1,122 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook, dpkg, makeWrapper, qt6
-, xorg, alsa-lib, openssl, gtk3, libdrm, mesa, nss, nspr, libxkbcommon
-, libappindicator-gtk3, libnotify, libuuid, at-spi2-core, cups, pango
-, atk, cairo, gdk-pixbuf, glib, freetype, fontconfig, dbus, expat, udev
-, libXdamage, libX11, libXcomposite, libXext, libXfixes, libXrandr
-, libxshmfence, wayland, libGLU, zlib, libssh, libzip, zziplib, gd
-, freeimage, sndio, ffmpeg, libxslt, libpulseaudio, openal }:
+{ lib, stdenv, fetchFromGitHub, cmake, swig, pkg-config, autoPatchelfHook, makeWrapper
+, xorg, libGLU, glib, freeimage, freetype, libxml2, boost, libssh, libzip, readline
+, openal, python3, qt5, xvfb-run, unzip, git, pbzip2, wget, zip, libxcrypt
+, vulkan-loader, libXcursor, libXrandr, libXi, libX11, libXext, libXxf86vm }:
 
-stdenv.mkDerivation rec {
-  pname = "webots-bin";
+let
   version = "R2025a";
-  
-  src = fetchurl {
-    url = "https://github.com/cyberbotics/webots/releases/download/${version}/webots_2025a_amd64.deb";
-    sha256 = "sha256-YlPVjJtiWoPte2LNhaZA/QVC1EHEjWM6YJMiCLQLBlc="; # Replace with actual hash
+in stdenv.mkDerivation {
+  pname = "webots";
+  inherit version;
+
+  src = fetchFromGitHub {
+    owner = "cyberbotics";
+    repo = "webots";
+    rev = version;
+    hash = "sha256-QVXaBzF1IkkpN67TulE/0ITqYS5d7vts6eWnUiCqDDM="; # Replace with actual hash
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
+    qt5.wrapQtAppsHook
+    cmake
+    swig
+    pkg-config
     autoPatchelfHook
-    dpkg
     makeWrapper
-    qt6.wrapQtAppsHook
+    git
+    python3
+    unzip
+    pbzip2
+    wget
+    zip
   ];
 
   buildInputs = [
-    qt6.qtbase
-    qt6.qtwayland
-    xorg.libX11
-    xorg.libXext
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXi
-    xorg.libXcursor
-    xorg.libxcb
-    alsa-lib
-    openssl
-    gtk3
-    libdrm
-    mesa
-    nss
-    nspr
-    libxkbcommon
-    libappindicator-gtk3
-    libnotify
-    libuuid
-    at-spi2-core
-    cups
-    pango
-    atk
-    cairo
-    gdk-pixbuf
-    glib
-    freetype
-    fontconfig
-    dbus
-    expat
-    udev
-    libXdamage
-    libXcomposite
-    libXfixes
-    libxshmfence
-    wayland
+    qt5.qtbase
     libGLU
-    zlib
+    glib
+    freeimage
+    freetype
+    libxml2
+    boost
     libssh
     libzip
-    zziplib
-    gd
-    freeimage
-    sndio
-    ffmpeg
-    libxslt
-    libpulseaudio
+    readline
     openal
+    qt5.qtbase
+    qt5.qtwebengine
+    xorg.libX11
+    xorg.libXext
+    xorg.libXxf86vm
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libXcursor
+    vulkan-loader
+    libxcrypt
   ];
 
-  unpackPhase = ''
-    dpkg-deb -x $src .
+  WEBOTS_HOME = "$(pwd)";
+
+  dontUseCmakeConfigure = true;
+
+  preBuild = ''
+    # Patch git-related scripts to work in Nix build environment
+    substituteInPlace scripts/get_git_info/get_git_info.sh \
+      --replace "git branch" "echo \"* main\"" \
+      --replace "git config --get remote.origin.url" "echo https://github.com/cyberbotics/webots"
+
+    echo "main" > resources/branch.txt
+    echo "cyberbotics/webots" > resources/repo.txt
+    echo "0000000000000000000000000000000000000000" > resources/commit.txt
+
+    # Set up fake home directory for build
+    export HOME=$(mktemp -d)
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+    
+    # Build with multiple cores
+    make -j$NIX_BUILD_CORES release WEBOTS_HOME="$WEBOTS_HOME"
   '';
 
   installPhase = ''
-    # Create directory structure
-    mkdir -p $out/share/webots
-    cp -r usr/local/* $out/share/webots
-    
-    # Create bin directory and symlink executable
-    mkdir -p $out/bin
-    ln -s $out/share/webots/bin/webots $out/bin/webots
+    runHook preInstall
 
-    # Use qtWrapperArgs from wrapQtAppsHook
-    wrapQtApp $out/bin/webots \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs} \
-      --set WEBOTS_HOME $out/share/webots
+    # Install main binaries and resources
+    mkdir -p $out
+    cp -r . $out/webots
+
+    # Create wrapper script
+    mkdir -p $out/bin
+    makeWrapper $out/webots/webots $out/bin/webots \
+      --set QTWEBENGINE_DISABLE_SANDBOX 1 \
+      --set WEBOTS_HOME $out/webots \
+      --set QT_QPA_PLATFORM_PLUGIN_PATH "${qt5.qtbase.bin}/lib/qt-${qt5.qtbase.version}/plugins" \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGLU openal vulkan-loader ]} \
+      --prefix PATH : ${lib.makeBinPath [ xvfb-run ]}
+
+    # Create desktop entry
+    mkdir -p $out/share/applications
+    cat > $out/share/applications/webots.desktop <<EOF
+    [Desktop Entry]
+    Name=Webots
+    Exec=$out/bin/webots
+    Icon=$out/webots/resources/icons/core/webots.png
+    Type=Application
+    Categories=Development;Simulation;
+    EOF
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    description = "Mobile robot simulation software";
+    description = "Open-source robot simulator";
     homepage = "https://cyberbotics.com";
     license = licenses.asl20;
+    maintainers = [ "Yeshey" ];
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.yourName ];
+    mainProgram = "webots";
   };
 }
