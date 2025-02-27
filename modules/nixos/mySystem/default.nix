@@ -68,6 +68,7 @@ in
     ./speedtest-tracker.nix
     ./ollama.nix
     ./piperTextToSpeech.nix
+    ./snap.nix
   ];
 
   options.mySystem = with lib; {
@@ -209,7 +210,7 @@ in
         #    allowUnfree = true;
         # TODO remove this below 
         permittedInsecurePackages = [ # for package openvscode-server
-          "freeimage-unstable-2021-11-01"
+          
         ];
       };
 
