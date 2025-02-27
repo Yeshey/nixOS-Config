@@ -144,6 +144,7 @@ in
     };
 
     piperTextToSpeech.enable = true;
+    snap.enable = true;
   };
 
   toHost = {

@@ -109,6 +109,8 @@
       # Optional but recommended to limit the size of your system closure.
       inputs.nixpkgs.follows = "nixpkgs";
     }; */
+    nix-snapd.url = "github:nix-community/nix-snapd";
+    nix-snapd.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = {
@@ -132,6 +134,7 @@
     impermanence,
     #wolf,
     # lanzaboote,
+    nix-snapd,
     ...
   }@inputs:
   let
