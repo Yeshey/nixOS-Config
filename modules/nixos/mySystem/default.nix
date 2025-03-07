@@ -197,6 +197,7 @@ in
       #systemd.network.wait-online.enable = lib.mkOverride 1010 false;
       #networking.useNetworkd = lib.mkOverride 1010 true;
 
+      #programs.nix-ld.enable = true;
       
       networking = {
         hostName = lib.mkOverride 1010 "nixos-${cfg.host}";
