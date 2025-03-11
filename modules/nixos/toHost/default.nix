@@ -24,6 +24,7 @@ in
     ./freeGames.nix
     ./remoteWorkstation/default.nix
     ./learnWithT.nix
+    ./searx.nix
   ];
 
   options.toHost = with lib; {
