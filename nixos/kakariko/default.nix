@@ -149,6 +149,7 @@ in
 
     piperTextToSpeech.enable = true;
     snap.enable = true;
+    warnElections.enable = true;
   };
 
   toHost = {

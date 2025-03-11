@@ -178,6 +178,7 @@ in
       #libvirtUsers = [ "yeshey" ];
     };
     vgpu.enable = false;
+    warnElections.enable = true;
   };
 
   nixpkgs.config = {
