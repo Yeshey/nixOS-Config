@@ -21,8 +21,11 @@ in
       settings = {
         server = {
           port = port;
-          bind_address = "127.0.0.1";
+          bind_address = "0.0.0.0";
           secret_key = "secret key";
+        };
+        search = {
+          formats = [ "html" "json" ]; # to be able to be used in ollama 
         };
       };
     };
