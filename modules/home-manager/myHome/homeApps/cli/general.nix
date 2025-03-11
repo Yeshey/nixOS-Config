@@ -32,6 +32,16 @@ in
       btop
       #file
       unzip
+      #(pkgs.python311.withPackages (python-pkgs: with python-pkgs; [
+      #  tensorflow
+      #  pandas
+      #  numpy
+      #  jupyter
+      #  matplotlib
+      #  sympy
+        #torch
+      #]))
+
     ];
   };
 }
