@@ -23,7 +23,10 @@ in
     services.ollama = {
       package = pkgs.unstable.ollama;
       enable = true;
+      openFirewall = true;
       acceleration = if cfg.acceleration == null then null else cfg.acceleration;
+      #host = "localhost";
+      host = "0.0.0.0";
     };
     # systemctl status open-webui
     services.open-webui = {
@@ -32,7 +35,19 @@ in
       openFirewall = true;
       port = 11111;
       environment = {
-        OLLAMA_API_BASE_URL = "http://127.0.0.1:11434";
+        # https://docs.openwebui.com/getting-started/env-configuration#web-search
+        ENABLE_RAG_WEB_SEARCH = "True";
+        
+        #RAG_WEB_SEARCH_RESULT_COUNT = "3";
+        #RAG_WEB_SEARCH_ENGINE = "searxng"; #"google_pse";
+        #SEARXNG_QUERY_URL = "http://localhost:8888/search?q=<query>";
+
+        RAG_WEB_SEARCH_RESULT_COUNT = "3";
+        RAG_WEB_SEARCH_ENGINE = "google_pse";
+        GOOGLE_PSE_ENGINE_ID = "c4874b70a443d49c0";
+        GOOGLE_PSE_API_KEY = "AIzaSyBLMo0e3mpJdna7BPfrsUk7YCz5sQeo2ok";
+
+        OLLAMA_API_BASE_URL = "http://localhost:11434";
         # Disable authentication
         WEBUI_AUTH = "False";
       };
@@ -48,7 +63,7 @@ in
           name = "Ollama open WebUI";
           desktopName = "Ollama open WebUI";
           genericName = "Ollama open WebUI";
-          exec = ''xdg-open "http://127.0.0.1:11111/"'';
+          exec = ''xdg-open "http://localhost:11111/?web-search=true"'';
           icon = "firefox";
           categories = [
             "GTK"

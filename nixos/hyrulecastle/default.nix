@@ -161,6 +161,7 @@ in
     kubo.enable = true;
     freeGames.enable = false;
     learnWithT.enable = true;
+    searx.enable = true;
   };
 
   mySystemHyruleCastle = {
