@@ -38,14 +38,14 @@ in
         # https://docs.openwebui.com/getting-started/env-configuration#web-search
         ENABLE_RAG_WEB_SEARCH = "True";
         
-        #RAG_WEB_SEARCH_RESULT_COUNT = "3";
-        #RAG_WEB_SEARCH_ENGINE = "searxng"; #"google_pse";
-        #SEARXNG_QUERY_URL = "http://localhost:8888/search?q=<query>";
+        RAG_WEB_SEARCH_RESULT_COUNT = "1";
+        RAG_WEB_SEARCH_ENGINE = "searxng"; #"google_pse";
+        SEARXNG_QUERY_URL = "http://localhost:8888/search?q=<query>";
 
-        RAG_WEB_SEARCH_RESULT_COUNT = "3";
-        RAG_WEB_SEARCH_ENGINE = "google_pse";
-        GOOGLE_PSE_ENGINE_ID = "c4874b70a443d49c0";
-        GOOGLE_PSE_API_KEY = "AIzaSyBLMo0e3mpJdna7BPfrsUk7YCz5sQeo2ok";
+        #RAG_WEB_SEARCH_RESULT_COUNT = "3";
+        #RAG_WEB_SEARCH_ENGINE = "google_pse";
+        #GOOGLE_PSE_ENGINE_ID = "c4874b70a443d49c0";
+        #GOOGLE_PSE_API_KEY = "AIzaSyBLMo0e3mpJdna7BPfrsUk7YCz5sQeo2ok";
 
         OLLAMA_API_BASE_URL = "http://localhost:11434";
         # Disable authentication
@@ -63,7 +63,7 @@ in
           name = "Ollama open WebUI";
           desktopName = "Ollama open WebUI";
           genericName = "Ollama open WebUI";
-          exec = ''xdg-open "http://localhost:11111/?web-search=true"'';
+          exec = ''brave "http://localhost:11111/?web-search=true"'';
           icon = "firefox";
           categories = [
             "GTK"
