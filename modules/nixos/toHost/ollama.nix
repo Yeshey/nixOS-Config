@@ -39,7 +39,7 @@ in
         # https://docs.openwebui.com/getting-started/env-configuration#web-search
         ENABLE_RAG_WEB_SEARCH = "True";
         
-        RAG_WEB_SEARCH_RESULT_COUNT = "1";
+        RAG_WEB_SEARCH_RESULT_COUNT = "3";
         RAG_WEB_SEARCH_ENGINE = "searxng"; #"google_pse";
         SEARXNG_QUERY_URL = "http://localhost:8888/search?q=<query>";
 
