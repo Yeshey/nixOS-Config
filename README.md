@@ -44,7 +44,7 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 ## Highlights:
 
 - **Structure** 
-    - Separation of home manager and nixOS system configuration through a myHome and mySystem modules so it could also be deployed on a home-manager only system the same way [LongerHV's](https://github.com/LongerHV) [nixos-configuration](https://github.com/LongerHV/nixos-configuration/tree/master) is set up;
+    - Separation of home manager, nixOS system configuration and Host services through a myHome and mySystem and toHost modules, this way it could also be deployed on a home-manager only system the same way [LongerHV's](https://github.com/LongerHV) [nixos-configuration](https://github.com/LongerHV/nixos-configuration/tree/master) is set up;
 
     - Unstable packages available at `pkgs.unstable.<package>`, [NUR](https://github.com/nix-community/NUR) packages available at `pkgs.nur.<package>` using overlays. Check [Misterio77's](https://github.com/Misterio77) `standard` [nix-starter-configs](https://github.com/Misterio77/nix-starter-configs) for getting started with this structure.
 
@@ -59,6 +59,8 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 - **pci-passthrough** - for passing my `NVIDIA GeForce RTX 2060 Mobile` to a virt-manager VM and using my intel processor for the host: [pci-passthrough.nix](https://github.com/Yeshey/nixOS-Config/blob/main/nixos/hyrulecastle/pci-passthrough.nix), but better yet:
 
 - **VGPU** - Unlocked VGPU functionality on my consumer nvidia card: [vgpu.nix](https://github.com/Yeshey/nixOS-Config/blob/main/nixos/hyrulecastle/vgpu.nix). Using my module, more details there: [nixos-nvidia-vgpu](https://github.com/Yeshey/nixos-nvidia-vgpu);
+
+- **Ollama with open-webui and searx** - Ollama and Open-WebUI can be activated with a single module: [ollama](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/toHost/ollama.nix). If searx, to use your own search engine, is also activated, models on openweb-ui are able to search the internet through it: [searx](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/toHost/searx.nix)
 
 - **i2p firefox profile** - Home manager auto creates a firefox profile able to access the hidden i2p net when `services.i2p.enable` is enabled on the host, and makes a `.desktop` file for easy access, `i2pFirefoxProfile` option: [firefox.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/homeApps/firefox.nix);
 

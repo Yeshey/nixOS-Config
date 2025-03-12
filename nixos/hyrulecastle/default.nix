@@ -138,11 +138,6 @@ in
       # scheduele = "*/10 * * * *"; # Runs every 10 minutes, default is every hour
     };
 
-    ollama = {
-      enable = true; 
-      acceleration = "cuda"; #or 'rocm' # this issue https://github.com/NixOS/nixpkgs/issues/321920
-    };
-
     piperTextToSpeech.enable = true;
     snap.enable = true;
     warnElections.enable = true;
@@ -163,6 +158,10 @@ in
     freeGames.enable = false;
     learnWithT.enable = true;
     searx.enable = true;
+    ollama = {
+      enable = true; 
+      acceleration = "cuda"; #or 'rocm' # this issue https://github.com/NixOS/nixpkgs/issues/321920
+    };
   };
 
   mySystemHyruleCastle = {
