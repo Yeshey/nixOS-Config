@@ -66,7 +66,6 @@ in
     ./isolateVMsNixStore.nix
     ./impermanence.nix
     ./speedtest-tracker.nix
-    ./ollama.nix
     ./piperTextToSpeech.nix
     ./snap.nix
     ./warnElections/default.nix
