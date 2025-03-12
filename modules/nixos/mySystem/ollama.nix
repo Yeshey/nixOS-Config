@@ -35,6 +35,7 @@ in
       openFirewall = true;
       port = 11111;
       environment = {
+        GLOBAL_LOG_LEVEL="DEBUG";
         # https://docs.openwebui.com/getting-started/env-configuration#web-search
         ENABLE_RAG_WEB_SEARCH = "True";
         
