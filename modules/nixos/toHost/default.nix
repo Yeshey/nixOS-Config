@@ -25,6 +25,7 @@ in
     ./remoteWorkstation/default.nix
     ./learnWithT.nix
     ./searx.nix
+    ./ollama.nix
   ];
 
   options.toHost = with lib; {
