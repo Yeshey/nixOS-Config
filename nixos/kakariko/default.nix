@@ -166,6 +166,9 @@ in
     #kubo.enable = true;
     #freeGames.enable = false;
     learnWithT.enable = false;
+
+    ollama.enable = true; 
+    searx.enable = true;
   };
 
   learnWithT = {
