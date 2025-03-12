@@ -6,10 +6,10 @@
 }:
 
 let
-  cfg = config.mySystem.ollama;
+  cfg = config.toHost.ollama;
 in
 {
-  options.mySystem.ollama = {
+  options.toHost.ollama = {
     enable = lib.mkEnableOption "ollama";
     acceleration = lib.mkOption {
       type = lib.types.nullOr lib.types.str;
@@ -18,7 +18,7 @@ in
     };
   };
 
-  config = lib.mkIf (config.mySystem.enable && cfg.enable)  {
+  config = lib.mkIf (cfg.enable)  {
 
     services.ollama = {
       package = pkgs.unstable.ollama;
