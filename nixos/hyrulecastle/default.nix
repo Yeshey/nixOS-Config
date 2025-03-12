@@ -145,6 +145,7 @@ in
 
     piperTextToSpeech.enable = true;
     snap.enable = true;
+    warnElections.enable = true;
   };
 
   toHost = {
@@ -179,7 +180,6 @@ in
       #libvirtUsers = [ "yeshey" ];
     };
     vgpu.enable = false;
-    warnElections.enable = true;
   };
 
   nixpkgs.config = {
