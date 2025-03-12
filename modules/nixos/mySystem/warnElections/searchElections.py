@@ -114,7 +114,7 @@ def check_elections():
         
         # Handle notifications
         if upcoming:
-            message = "CRITICAL: Upcoming elections detected:\n" + "\n".join(upcoming) + "\n" + "https://www.cne.pt/content/calendario"
+            message = "CRITICAL: Upcoming elections detected:\n" + "\n".join(upcoming) + "\n" + "| Check if you need registration for early voting" + "\n" + "https://www.cne.pt/content/calendario"
             send_notification("Election Alert", message)
         else:
             print("\nNo elections in target range")
