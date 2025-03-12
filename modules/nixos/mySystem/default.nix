@@ -69,6 +69,7 @@ in
     ./ollama.nix
     ./piperTextToSpeech.nix
     ./snap.nix
+    ./warnElections/default.nix
   ];
 
   options.mySystem = with lib; {
