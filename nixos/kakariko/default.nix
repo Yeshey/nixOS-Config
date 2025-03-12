@@ -167,7 +167,7 @@ in
     #freeGames.enable = false;
     learnWithT.enable = false;
 
-    ollama.enable = true; 
+    ollama.enable = false; 
     searx.enable = true;
   };
 
