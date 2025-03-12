@@ -114,13 +114,13 @@ def check_elections():
         
         # Handle notifications
         if upcoming:
-            message = "CRITICAL: Upcoming elections detected:\n" + "\n".join(upcoming)
+            message = "CRITICAL: Upcoming elections detected:\n" + "\n".join(upcoming) + "\n" + "https://www.cne.pt/content/calendario"
             send_notification("Election Alert", message)
         else:
             print("\nNo elections in target range")
             
         if parsing_errors:
-            error_msg = f"Failed to parse {len(parsing_errors)} dates:\n" + "\n".join(parsing_errors)
+            error_msg = f"Failed to parse {len(parsing_errors)} dates:\n" + "\n".join(parsing_errors) + "\n" + "https://www.cne.pt/content/calendario"
             send_notification("Parsing Errors", error_msg)
 
     except requests.RequestException as e:
