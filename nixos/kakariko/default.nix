@@ -168,7 +168,7 @@ in
     learnWithT.enable = false;
 
     ollama.enable = false; 
-    searx.enable = true;
+    searx.enable = false;
   };
 
   learnWithT = {
