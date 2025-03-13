@@ -59,7 +59,7 @@ def parse_date(date_str, year):
 def check_elections():
     try:
         today = datetime.today()
-        start_date = today + timedelta(weeks=1)
+        start_date = today + timedelta(weeks=2)
         end_date = today + timedelta(days=60)
         print(f"Today: {today.strftime('%Y-%m-%d')}")
         print(f"Checking range: {start_date.strftime('%d/%m/%Y')} - {end_date.strftime('%d/%m/%Y')}\n")
