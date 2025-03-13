@@ -7,6 +7,7 @@
 
 let
   cfg = config.toHost.ollama;
+  port = 11111;
 in
 {
   options.toHost.ollama = {
@@ -29,19 +30,22 @@ in
       host = "0.0.0.0";
     };
     # systemctl status open-webui
+    networking.firewall.interfaces.ap0.allowedTCPPorts = [port];
     services.open-webui = {
       package = pkgs.unstable.open-webui;
       enable = true;
       openFirewall = true;
-      port = 11111;
+      port = port;
+      host = "0.0.0.0";
       environment = {
         GLOBAL_LOG_LEVEL="DEBUG";
         # https://docs.openwebui.com/getting-started/env-configuration#web-search
         ENABLE_RAG_WEB_SEARCH = "True";
         
-        RAG_WEB_SEARCH_RESULT_COUNT = "3";
+        RAG_WEB_SEARCH_RESULT_COUNT = "1";
         RAG_WEB_SEARCH_ENGINE = "searxng"; #"google_pse";
         SEARXNG_QUERY_URL = "http://localhost:8888/search?q=<query>";
+        # OLLAMA_HOST="0.0.0.0:11434";
 
         #RAG_WEB_SEARCH_RESULT_COUNT = "3";
         #RAG_WEB_SEARCH_ENGINE = "google_pse";
@@ -64,7 +68,7 @@ in
           name = "Ollama open WebUI";
           desktopName = "Ollama open WebUI";
           genericName = "Ollama open WebUI";
-          exec = ''brave "http://localhost:11111/?web-search=true"'';
+          exec = ''brave "http://localhost:${toString port}/?web-search=true"'';
           icon = "firefox";
           categories = [
             "GTK"
