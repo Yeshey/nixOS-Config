@@ -15,7 +15,7 @@
   imports = [
     ./hardware-configuration.nix
     ./backups.nix
-    ./box86.nix
+    ./box64.nix
   ];
 
   nixpkgs = {
@@ -89,7 +89,7 @@
       sshKeys.enable = true;
     };
 
-    box86.enable = true;
+    box64.enable = false;
   };
 
   toHost = {
