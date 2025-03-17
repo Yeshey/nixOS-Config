@@ -42,7 +42,7 @@ in
         # my-webots
         #input-leap
         # nexusmods-app-unfree # for game mods?
-        my-input-leap # :(
+        input-leap # :(
         wineWow64Packages.full
       
         jetbrains.idea-ultimate
