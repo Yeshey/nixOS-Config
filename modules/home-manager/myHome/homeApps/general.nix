@@ -46,6 +46,7 @@ in
         wineWow64Packages.full
       
         jetbrains.idea-ultimate
+        jetbrains.gateway
 
         vital # run with Vital
         helm
