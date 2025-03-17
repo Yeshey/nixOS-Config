@@ -266,6 +266,12 @@ in
     };
   };
 
+  environment.systemPackages = with pkgs; [ 
+    #jetbrains.idea-community-bin
+    #jetbrains.pycharm-community-bin
+    #jetbrains-toolbox
+  ];
+
   #powerManagement = { # TODO ???
   #  cpuFreqGovernor = "ondemand";
   #  cpufreq.min = 800000;
