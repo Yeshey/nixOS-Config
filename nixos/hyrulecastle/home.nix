@@ -112,6 +112,7 @@ in
       # Surface and Desktop apps
       # github-desktop
       # grapejuice # roblox
+      jetbrains.idea-ultimate
       freerdp
       gnome-clocks
       qbittorrent

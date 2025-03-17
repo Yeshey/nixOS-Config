@@ -96,7 +96,7 @@ in
       # texlive.combined.scheme-full
       inkscape
       unstable.zed-editor
-
+      
       # osu-lazer
       openvscode-server
       gcc
