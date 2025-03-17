@@ -229,6 +229,7 @@ in
 
   environment.systemPackages = with pkgs; [
     stremio-scalled
+    # jetbrains-toolbox
     # Games
     # steam-scalled
   ];

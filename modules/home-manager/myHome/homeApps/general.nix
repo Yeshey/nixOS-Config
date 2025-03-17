@@ -44,6 +44,8 @@ in
         # nexusmods-app-unfree # for game mods?
         my-input-leap # :(
         wineWow64Packages.full
+      
+        jetbrains.idea-ultimate
 
         vital # run with Vital
         helm
