@@ -15,12 +15,11 @@
   imports = [
     ./hardware-configuration.nix
     ./backups.nix
-    ./box86.nix
+    ./box64.nix
   ];
 
   nixpkgs = {
     # You can add overlays here
-    config.allowBroken = true;
     overlays = [
       # Add overlays your own flake exports (from overlays and pkgs dir):
       outputs.overlays.additions
@@ -89,8 +88,10 @@
       sshKeys.enable = true;
     };
 
-    box86.enable = true;
+    box64.enable = false;
   };
+
+  environment.systemPackages = [ pkgs.mybox64 ];
 
   toHost = {
     remoteWorkstation = {
@@ -107,7 +108,12 @@
     ngixServer.enable = true;
     mineclone.enable = true;
     kubo.enable = true;
-    mindustry-server.enable = true;
+    mindustry-server.enable = false;
+    searx.enable = true;
+    ollama = {
+      enable = true; 
+      # acceleration = "cuda"; #or 'rocm' # this issue https://github.com/NixOS/nixpkgs/issues/321920
+    };
   };
 
   time.timeZone = "Europe/Madrid";
@@ -116,10 +122,11 @@
 
   nixpkgs.config = {
     allowUnsupportedSystem = true;
+    allowBroken = true;
     #    allowUnfree = true;
-    #permittedInsecurePackages = [ # for package openvscode-server
-    #  "nodejs-16.20.2"
-    #];
+    permittedInsecurePackages = [
+      #"python3.12-chromadb-0.5.20" # ollama
+    ];
   };
 
   # Bootloader.
