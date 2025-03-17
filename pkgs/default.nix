@@ -16,6 +16,7 @@ rec {
 
   my-webots = callPackage ./webots.nix { };
 
+  # https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/all-packages.nix
   mybox86 =
     let
       args = {
@@ -33,4 +34,11 @@ rec {
       pkgsCross.armv7l-hf-multiplatform.callPackage ./box86.nix args
     else
       throw "Don't know 32-bit platform for cross from: ${stdenv.hostPlatform.stdenv}";
+
+  mybox64 = callPackage ./box64.nix {
+    hello-x86_64 = if stdenv.hostPlatform.isx86_64 then
+      hello
+    else
+      pkgsCross.gnu64.hello;
+  };
 }

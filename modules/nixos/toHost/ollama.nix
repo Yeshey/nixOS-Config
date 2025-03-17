@@ -32,7 +32,7 @@ in
     # systemctl status open-webui
     networking.firewall.interfaces.ap0.allowedTCPPorts = [port];
     services.open-webui = {
-      package = pkgs.unstable.open-webui;
+      package = pkgs.open-webui;
       enable = true;
       openFirewall = true;
       port = port;
@@ -87,6 +87,52 @@ in
 
         oterm # a text-based terminal client for Ollama 
       ];
+
+    # Needed to work on aarch64 for now: https://github.com/NixOS/nixpkgs/issues/312068
+    nixpkgs.overlays = [
+      (self: prev: {
+        pythonPackagesExtensions = 
+          prev.pythonPackagesExtensions
+          ++ [
+            (python-final: python-prev: {
+              rapidocr-onnxruntime = python-prev.rapidocr-onnxruntime.overridePythonAttrs (attrs: {
+                pythonImportsCheck =
+                  if python-prev.stdenv.isLinux && python-prev.stdenv.isAarch64
+                  then []
+                  else ["rapidocr_onnxruntime"];
+                doCheck = !(python-prev.stdenv.isLinux && python-prev.stdenv.isAarch64);
+                meta = attrs.meta // { broken = false; };
+              });
+
+              chromadb = python-prev.chromadb.overridePythonAttrs (attrs: {
+                pythonImportsCheck =
+                  if python-prev.stdenv.isLinux && python-prev.stdenv.isAarch64
+                  then []
+                  else ["chromadb"];
+                doCheck = !(python-prev.stdenv.isLinux && python-prev.stdenv.isAarch64);
+                meta = attrs.meta // { broken = false; };
+              });
+
+              langchain-chroma = python-prev.langchain-chroma.overridePythonAttrs (attrs: {
+                pythonImportsCheck =
+                  if python-prev.stdenv.isLinux && python-prev.stdenv.isAarch64
+                  then []
+                  else ["langchain_chroma"];
+                doCheck = !(python-prev.stdenv.isLinux && python-prev.stdenv.isAarch64);
+              });
+            })
+          ];
+      })
+    ];
+
+    nixpkgs.config = {
+      #allowUnsupportedSystem = true;
+      #allowBroken = true;
+      #    allowUnfree = true;
+      #permittedInsecurePackages = [ # for package openvscode-server
+      #  "python3.12-chromadb-0.5.20"
+      #];
+    };
 
   };
 }
