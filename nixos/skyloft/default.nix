@@ -91,6 +91,8 @@
     box64.enable = false;
   };
 
+  environment.systemPackages = [ pkgs.mybox64 ];
+
   toHost = {
     remoteWorkstation = {
       sunshine.enable = true;
