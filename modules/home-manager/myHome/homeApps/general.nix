@@ -45,7 +45,7 @@ in
         input-leap # :(
         wineWow64Packages.full
       
-        jetbrains-toolbox
+        jetbrains-toolbox # for code with me you need the toolbox
         jetbrains.gateway
 
         vital # run with Vital
