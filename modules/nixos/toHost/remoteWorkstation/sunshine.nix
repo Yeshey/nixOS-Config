@@ -90,7 +90,7 @@ in
       openFirewall = true;
     };
     networking.firewall = {
-      enable = true;
+      # enable = true;
       allowedTCPPorts = [ 47984 47989 47990 48010 
         3389 # FOR XRDP
       ];
