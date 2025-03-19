@@ -175,21 +175,21 @@ in
           ${ignorePattern "2026" "
             //*
             //(?i)Photos&Videos
-            .git
+            // .git
           "}
 
           # 2025
           ${ignorePattern "2025" "
             //*
             //(?i)Photos&Videos
-            .git
+            // .git
           "}
 
           # 2024
           ${ignorePattern "2024" "
             //*
             //(?i)Photos&Videos
-            .git
+            // .git
             learnWithT*
             AI-Master-Repo-IAA*
           "}
