@@ -69,7 +69,6 @@ in
     ./piperTextToSpeech.nix
     ./snap.nix
     ./warnElections/default.nix
-    ./vscode-server.nix
   ];
 
   options.mySystem = with lib; {

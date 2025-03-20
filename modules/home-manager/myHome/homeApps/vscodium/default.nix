@@ -42,7 +42,8 @@ in
     lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
 
       services.vscode-server = {
-        enable = true; # for remote-ssh
+        # I don't know if this is needed anymore (for vscodium couldnt make remote-ssh work, see https://github.com/jeanp413/open-remote-ssh/issues/120, and for vscode, I think it always worked)
+        enable = true; 
         # enableFHS = true;
       };
       home.file.".vscode-server".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.vscodium-server";
