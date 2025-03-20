@@ -21,6 +21,15 @@ in
 
     services.vscode-server.enable = true;
 
+    # Override the auto-fix-vscode-server service to add an [Install] section.
+    systemd.user.services.auto-fix-vscode-server = {
+      enable = true;
+      extraConfig = ''
+        [Install]
+        WantedBy=default.target
+      '';
+    };
+
     environment.systemPackages = with pkgs; [
       
     ];
