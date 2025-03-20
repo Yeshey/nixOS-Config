@@ -150,7 +150,7 @@ in
     piperTextToSpeech.enable = true;
     snap.enable = true;
     warnElections.enable = true;
-    vscode-server.enable = true;
+    # vscode-server.enable = true;
   };
 
   toHost = {

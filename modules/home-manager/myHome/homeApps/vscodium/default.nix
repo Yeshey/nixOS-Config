@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  inputs,
   ...
 }:
 
@@ -10,6 +11,9 @@ let
 in
 {
   imports = [
+    # https://github.com/nix-community/nixos-vscode-server/tree/master/modules/vscode-server
+    inputs.vscode-server.nixosModules.home
+
     # from https://github.com/nix-community/home-manager/issues/1800, to make vscode settings writable
     # Source: https://gist.github.com/piousdeer/b29c272eaeba398b864da6abf6cb5daa
     # Make vscode settings writable
@@ -36,6 +40,20 @@ in
       vscUserSettings = builtins.readFile ./VSCsettings.json;
     in
     lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
+
+      services.vscode-server = {
+        enable = true; # for remote-ssh
+        # enableFHS = true;
+      };
+      home.file.".vscode-server".source = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.vscodium-server";
+      # Override the auto-fix-vscode-server service to add an [Install] section.
+      #systemd.user.services.auto-fix-vscode-server = {
+      #  enable = true;
+      #  extraConfig = ''
+      #    [Install]
+      #    WantedBy=default.target
+      #  '';
+      #};
 
       #home.file."/home/${config.myHome.user}/.config/VSCodium/User/settings.json".source = ./VSCsettings.json;
       #home.file."/home/${config.myHome.user}/.config/Code/User/settings.json".source = ./VSCsettings.json;
