@@ -68,7 +68,7 @@ in
       programs.vscode = {
         enable = true;
         mutableExtensionsDir = true;
-        package = pkgs.vscodium;
+        # package = pkgs.vscodium;
         userSettings = builtins.fromJSON (builtins.readFile ./VSCsettings.json);
         extensions = with pkgs.vscode-extensions; [
             # vscodevim.vim # this is later when you're a chad
