@@ -79,16 +79,17 @@ in
     };
     direnv.enable = true;
     
- #   stylix = {
-      # https://www.youtube.com/watch?v=ljHkWgBaQWU
- #     enable = true;
- #     base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-mirage.yaml"; #gruvbox-dark-medium #pop
- #     wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement
- #     cursor = {
- #       package = pkgs.banana-cursor;
- #       name = "Banana";
- #     };
- #   };
+    # Making gnome not start with unexpected error (Should make an issue about this...)
+    # stylix = {
+    #   # https://www.youtube.com/watch?v=ljHkWgBaQWU
+    #   enable = true;
+    #   base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-mirage.yaml"; #gruvbox-dark-medium #pop
+    #   wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement
+    #   cursor = {
+    #     package = pkgs.banana-cursor;
+    #     name = "Banana";
+    #   };
+    # };
 /*
     onedriver = {
       enable = true;
