@@ -23,7 +23,6 @@ in
     ./mindustry-server.nix
     ./freeGames.nix
     ./remoteWorkstation/default.nix
-    ./learnWithT.nix
     ./searx.nix
     ./ollama.nix
   ];

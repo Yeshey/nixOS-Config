@@ -54,6 +54,7 @@ in
     ./hardware-configuration.nix
     ./autoUpgradesSurface.nix
     ./boot.nix
+    inputs.learnWithT.nixosModules.default
   ];
 
   nixpkgs = {
@@ -165,7 +166,6 @@ in
     #mineclone.enable = true;
     #kubo.enable = true;
     #freeGames.enable = false;
-    learnWithT.enable = false;
 
     ollama.enable = false; 
     searx.enable = false;

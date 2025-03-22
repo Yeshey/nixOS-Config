@@ -17,6 +17,7 @@ in
     ./hardware-configuration.nix
     ./pci-passthrough.nix
     ./vgpu.nix
+    inputs.learnWithT.nixosModules.default
   ];
 
   nixpkgs = {
@@ -45,8 +46,8 @@ in
     host = "hyrulecastle";
     user = "yeshey";
     dataStoragePath = "/mnt/DataDisk";
-    plasma.enable = true;
-    gnome.enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
+    plasma.enable = false;
+    gnome.enable = true; # TODO activate both plasma and gnome same time, maybe expose display manager
     hyprland.enable = false;
     ssh = {
       enable = true;
@@ -156,11 +157,17 @@ in
     #mineclone.enable = true;
     kubo.enable = true;
     freeGames.enable = false;
-    learnWithT.enable = true;
     searx.enable = true;
     ollama = {
       enable = true; 
       acceleration = "cuda"; #or 'rocm' # this issue https://github.com/NixOS/nixpkgs/issues/321920
+    };
+  };
+
+  learnWithT = {
+    development.openPorts.enable = true;
+    appwrite = {
+      enable = false;
     };
   };
 
