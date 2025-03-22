@@ -9,10 +9,13 @@
   pkgs,
   ...
 }:
-{
 
-  home = rec {
-    username = "yeshey";
+let 
+  username = "yeshey";
+in 
+{
+  home = {
+    username = username;
     homeDirectory = "/home/${username}";
     stateVersion = "22.05";
   };
@@ -21,7 +24,7 @@
     enable = true;
     # All the options
     user = "yeshey";
-    # dataStoragePath = "/mnt/DataDisk"; # Needs to be set if not set in mySystem module
+    dataStoragePath = "/mnt/DataDisk"; # Needs to be set if not set in mySystem module
     xdgPersonalFilesOrganization.enable = true;
     nonNixos.enable = true;
     plasma.enable = false;

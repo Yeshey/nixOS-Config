@@ -15,7 +15,7 @@ in
   };
 
   config = lib.mkIf (config.myHome.enable && cfg.enable) {
-/*
+
     xdg = {
       # for favourits in nautilus
       enable = lib.mkOverride 1010 true;
@@ -32,6 +32,6 @@ in
         # publicShare = lib.mkOverride 1010 "${config.home.homeDirectory}/Publiczny";
       };
     };
-*/
+
   };
 }

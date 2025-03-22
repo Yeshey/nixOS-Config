@@ -10,7 +10,7 @@ let
   cfg = config.myHome.gnome;
 in
 {
-  # imports = [ ./dconf.nix ];
+  imports = [ ./dconf.nix ];
   options.myHome.gnome = with lib; {
     enable = mkOption {
       type = types.bool;
