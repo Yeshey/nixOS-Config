@@ -87,10 +87,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
-    vscode-server = {
-      url = "github:nix-community/nixos-vscode-server";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     /*
     wolf = {
       #url = "github:games-on-whales/wolf/dev-nix";
@@ -139,7 +135,6 @@
     #wolf,
     # lanzaboote,
     nix-snapd,
-    vscode-server,
     ...
   }@inputs:
   let
