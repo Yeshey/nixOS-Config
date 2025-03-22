@@ -32,6 +32,19 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
       ls /data/data/com.termux/files/home/.ssh
       ```
   - To use `nix-on-droid` with root, you can try taking a look [here](https://github.com/nix-community/nix-on-droid/issues/3)
+  - If you want to add a [termux:widget](https://github.com/termux/termux-widget) to connect to your computers with their reverse proxy to the server (can be enabled with [autosshReverseProxy](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/autosshReverseProxy.nix)) you can add to `~/.shortcuts/` these files:
+    - `connectHyruleCastle`:
+      ```sh
+      ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@143.47.53.175 "ssh -t -p 2222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null localhost"
+      ```
+    - `connectKakariko`:
+      ```sh
+      ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@143.47.53.175 "ssh -t -p 2223 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null localhost"
+      ```
+    - `connectSkyloft`:
+      ```sh
+      ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@143.47.53.175
+      ```
 
 ### Non-NixOS Home-manager standalone with flakes
 
