@@ -33,6 +33,13 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
       ```
   - To use `nix-on-droid` with root, you can try taking a look [here](https://github.com/nix-community/nix-on-droid/issues/3)
 
+### Non-NixOS Home-manager standalone with flakes
+
+1. Install nix, follow [hm standalone](https://nix-community.github.io/home-manager/index.xhtml#sec-install-standalone). (These instructions assume system wide installation)
+2. `mkdir ~/.setup ; git clone git@github.com:Yeshey/nixOS-Config.git ~/.setup/ --depth 1`
+3. Follow [flakes Standalone setup](https://nix-community.github.io/home-manager/index.xhtml#sec-flakes-standalone), and use `nix run home-manager/master -- init --switch /home/yeshey/.setup` to set up the hm in the right place.
+4. `home-manager switch --flake ~/.setup#yeshey` to activate the configuration
+
 ## Credits
 
 - Initially introduced to nix and nixOS by [Kylix](https://github.com/kylixafonso) 👀
