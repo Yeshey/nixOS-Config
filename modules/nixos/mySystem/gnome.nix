@@ -15,7 +15,7 @@ in
 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
     environment = {
-      systemPackages = with pkgs; [ firefox gnome-tweaks ];
+      systemPackages = with pkgs; [ firefox ];
       gnome.excludePackages = with pkgs; [
         cheese # webcam tool
         gedit # text editor

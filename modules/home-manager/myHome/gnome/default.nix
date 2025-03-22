@@ -21,6 +21,7 @@ in
 
   config = lib.mkIf (config.myHome.enable && cfg.enable) {
     home.packages = with pkgs; [
+      gnome-tweaks
       # For gnome
       gnomeExtensions.clipboard-indicator
       gnomeExtensions.burn-my-windows
