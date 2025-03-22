@@ -25,10 +25,10 @@ in
     # All the options
     user = "yeshey";
     dataStoragePath = "/mnt/DataDisk"; # Needs to be set if not set in mySystem module
-    xdgPersonalFilesOrganization.enable = true;
+#    xdgPersonalFilesOrganization.enable = true;
     nonNixos.enable = true;
     plasma.enable = false;
-    gnome.enable = true;
+#    gnome.enable = true;
     ssh.enable = true;
     hyprland = {
       enable = false;
@@ -79,16 +79,16 @@ in
     };
     direnv.enable = true;
     
-    stylix = {
+ #   stylix = {
       # https://www.youtube.com/watch?v=ljHkWgBaQWU
-      enable = true;
-      base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-mirage.yaml"; #gruvbox-dark-medium #pop
-      wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement
-      cursor = {
-        package = pkgs.banana-cursor;
-        name = "Banana";
-      };
-    };
+ #     enable = true;
+ #     base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-mirage.yaml"; #gruvbox-dark-medium #pop
+ #     wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement
+ #     cursor = {
+ #       package = pkgs.banana-cursor;
+ #       name = "Banana";
+ #     };
+ #   };
 /*
     onedriver = {
       enable = true;
