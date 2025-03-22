@@ -75,5 +75,12 @@ in
       ];
     };
     programs.home-manager.enable = true;
+
+    programs.zsh = {
+      shellAliases = {
+        update = "home-manager switch --flake ~/.setup#yeshey";
+      };
+    };
+
   };
 }
