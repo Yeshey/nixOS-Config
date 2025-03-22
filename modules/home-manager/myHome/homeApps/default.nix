@@ -36,7 +36,7 @@ in
     myHome.homeApps.gaming.enable = lib.mkOverride 1010 true;
     myHome.homeApps.firefox.enable = lib.mkOverride 1010 true;
     myHome.homeApps.libreoffice.enable = lib.mkOverride 1010 true;
-    myHome.homeApps.devops.enable = lib.mkOverride 1010 true;
+    myHome.homeApps.devops.enable = lib.mkOverride 1010 false;
     myHome.homeApps.cli.enable = lib.mkOverride 1010 true;
     myHome.homeApps.webApps.enable = lib.mkOverride 1010 true;
   };

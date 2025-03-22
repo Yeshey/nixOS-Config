@@ -218,7 +218,7 @@
     };
 
     homeConfigurations = {
-      "yeshey@zoras" = home-manager.lib.homeManagerConfiguration {
+      "yeshey" = home-manager.lib.homeManagerConfiguration {
         pkgs = pkgsFor.x86_64-linux;
         extraSpecialArgs = { inherit inputs outputs; };
         modules = (builtins.attrValues homeManagerModules) ++ [ ./home-manager/home.nix ];
