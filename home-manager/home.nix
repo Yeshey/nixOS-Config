@@ -25,10 +25,10 @@ in
     # All the options
     user = "yeshey";
     dataStoragePath = "/mnt/DataDisk"; # Needs to be set if not set in mySystem module
-#    xdgPersonalFilesOrganization.enable = true;
+    xdgPersonalFilesOrganization.enable = true;
     nonNixos.enable = true;
     plasma.enable = false;
-#    gnome.enable = true;
+    gnome.enable = true;
     ssh.enable = true;
     hyprland = {
       enable = false;
