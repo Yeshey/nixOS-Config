@@ -478,7 +478,7 @@ with lib.hm.gvariant;
           "hibernate-status@dromi"
           "trayIconsReloaded@selfmade.pl"
         ];
-        favorite-apps = [ "org.gnome.Nautilus.desktop" "org.gnome.Console.desktop" "floorp.desktop" ];
+        # favorite-apps = [ "org.gnome.Nautilus.desktop" "org.gnome.Console.desktop" "floorp.desktop" ];
         last-selected-power-profile = "power-saver";
         welcome-dialog-last-shown-version = "42.4";
       };
