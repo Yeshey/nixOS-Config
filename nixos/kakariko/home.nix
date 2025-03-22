@@ -73,12 +73,12 @@ in
       };
     };
     onedriver = {
-      enable = true;
+      enable = false;
       onedriverFolder = "/home/yeshey/OneDriverISEC";
       serviceCoreName = "home-yeshey-OneDriverISEC"; # real name: onedriver@home-yeshey-OneDriverISEC.service
     };
     onedriver2 = {
-      enable = true;
+      enable = false;
       onedriverFolder = "/home/yeshey/OneDriverISCTE";
       serviceCoreName = "home-yeshey-OneDriverISCTE"; # real name: onedriver@home-yeshey-OneDriverISEC.service
     };
@@ -95,6 +95,12 @@ in
       };
     };
     impermanence.enable = false;
+    autosshReverseProxy = {
+      enable = true;
+      remoteIP = "143.47.53.175";
+      remoteUser = "yeshey";
+      port = 2223;
+    };
   };
 
   home = {

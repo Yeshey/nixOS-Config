@@ -19,8 +19,8 @@ in
     # dataStoragePath = "/mnt/DataDisk"; # Needs to be set if not set in mySystem module
     xdgPersonalFilesOrganization.enable = true;
     nonNixos.enable = false;
-    plasma.enable = true;
-    gnome.enable = false;
+    plasma.enable = false;
+    gnome.enable = true;
     ssh.enable = true;
     hyprland = {
       enable = false;
@@ -104,6 +104,12 @@ in
       };
     };
     impermanence.enable = false;
+    autosshReverseProxy = {
+      enable = true;
+      remoteIP = "143.47.53.175";
+      remoteUser = "yeshey";
+      port = 2222;
+    };
   };
 
   home = {
