@@ -1,4 +1,4 @@
-{
+  {
   config,
   lib,
   pkgs,
@@ -21,6 +21,8 @@ in
 
   config = lib.mkIf (cfg.enable)  {
 
+    #networking.firewall.enable = false;
+
     services.ollama = {
       package = pkgs.unstable.ollama;
       enable = true;
@@ -28,6 +30,9 @@ in
       acceleration = if cfg.acceleration == null then null else cfg.acceleration;
       #host = "localhost";
       host = "0.0.0.0";
+      environmentVariables = {
+        OLLAMA_ORIGINES="*";
+      };
     };
     # systemctl status open-webui
     networking.firewall.interfaces.ap0.allowedTCPPorts = [port];
