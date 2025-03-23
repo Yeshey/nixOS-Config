@@ -106,8 +106,43 @@ def check_elections():
                 parsing_errors.append(raw_date)
                 print(f"Invalid year: {year_str}\n")
 
+        # UNIT TESTS
+
+        # Generic Notification: Election exactly 32 days away
+        # elections.append((datetime.today() + timedelta(days=32), "Generic Election Test"))
+
+        # Generic Notification: Election exactly 27 days away
+        #elections.append((datetime.today() + timedelta(days=27), "Generic Election Test"))
+
+        # Generic Notification: Election exactly 22 days away
+        # elections.append((datetime.today() + timedelta(days=22), "Generic Election Test"))
+
+        # Early Voting (EM MOBILIDADE): "TOMORROW" trigger – election 15 days away (since 14+1)
+        # elections.append((datetime.today() + timedelta(days=15), "EM MOBILIDADE Test"))
+
+        # Early Voting (EM MOBILIDADE): "TODAY" trigger – election 14 days away
+        # elections.append((datetime.today() + timedelta(days=14), "EM MOBILIDADE Test"))
+
+        # Early Voting (ELEITORES DOENTES INTERNADOS): "TOMORROW" trigger – election 21 days away (20+1)
+        # elections.append((datetime.today() + timedelta(days=21), "ELEITORES DOENTES INTERNADOS Test"))
+
+        # Early Voting (ELEITORES DOENTES INTERNADOS): "TODAY" trigger – election 20 days away
+        # elections.append((datetime.today() + timedelta(days=20), "ELEITORES DOENTES INTERNADOS Test"))
+
+        # Early Voting (ELEITORES DESLOCADOS NO ESTRANGEIRO): "TOMORROW" trigger – election 13 days away (12+1)
+        # elections.append((datetime.today() + timedelta(days=13), "ELEITORES DESLOCADOS NO ESTRANGEIRO Test"))
+
+        # Early Voting (ELEITORES DESLOCADOS NO ESTRANGEIRO): "TODAY" trigger – election 12 days away
+        #elections.append((datetime.today() + timedelta(days=12), "ELEITORES DESLOCADOS NO ESTRANGEIRO Test"))
+
+        # Election Day Notification for today (diff == 0)
+        # elections.append((datetime.today(), "Election Day Test"))
+
+        # Election Day Notification for tomorrow (diff == 1)
+        # elections.append((datetime.today() + timedelta(days=1), "Election Day Test"))
+
         # Check for elections in target range
-        the_notification(elections, start_date, end_date)
+        the_notification(elections)
 
         if parsing_errors:
             error_msg = f"Failed to parse {len(parsing_errors)} dates:\n" + "\n".join(parsing_errors) + "\n" + "https://www.cne.pt/content/calendario"
@@ -119,18 +154,85 @@ def check_elections():
     except Exception as e:
         send_notification("System Error", f"Unexpected error: {str(e)}")
 
-def the_notification(elections, start_date, end_date):
-    upcoming = []
-    for date, etype in elections:
-        if start_date <= date <= end_date:
-            upcoming.append(f"{date.strftime('%d/%m/%Y')} - {etype}")
+def the_notification(elections):
+    today = datetime.today().date()
     
-    # Handle notifications
-    if upcoming:
-        message = "CRITICAL: Upcoming elections detected:\n" + "\n".join(upcoming) + "\n" + "| Check if you need registration for early voting" + "\n" + "https://www.cne.pt/content/calendario"
-        send_notification("Election Alert", message)
-    else:
-        print("\nNo elections in target range")
+    # --- Generic Notification Setup ---
+    generic_offsets = [32, 27, 22]  # days before election to send generic notification
+    generic_notifications = {}  # key: offset, value: list of elections
+    for election_date, etype in elections:
+        diff = (election_date.date() - today).days
+        if diff in generic_offsets:
+            generic_notifications.setdefault(diff, []).append((election_date, etype))
+    
+    # CHANGED: Print in terminal all scheduled generic notification dates
+    for offset, elems in generic_notifications.items():
+        for elec_date, _ in elems:
+            notif_date = elec_date - timedelta(days=offset)
+            print(f"Generic notification for election on {elec_date.strftime('%d/%m/%Y')} scheduled on {notif_date.strftime('%d/%m/%Y')}")
+    
+    # CHANGED: If today is one of the generic notification days, send the notification
+    for offset, elems in generic_notifications.items():
+        # Since diff==offset means today is exactly election_date - offset
+        if elems:
+            message_lines = [f"{ed.strftime('%d/%m/%Y')} - {etype}" for ed, etype in elems]
+            message = (
+                "CRITICAL: Upcoming elections detected:\n" +
+                "\n".join(message_lines) +
+                "\n| Check if you need registration for early voting\n" +
+                "https://www.cne.pt/content/calendario"
+            )
+            send_notification("Election Alert", message)
+    
+    # --- Early Voting Notifications ---
+    # CHANGED: Define early voting notification schedules for each category
+    early_voting_categories = {
+        "EM MOBILIDADE": {"start": 14, "end": 10},
+        "ELEITORES DOENTES INTERNADOS": {"start": 20, "end": 20},
+        "ELEITORES DESLOCADOS NO ESTRANGEIRO": {"start": 12, "end": 10}
+    }
+    
+    for election_date, _ in elections:
+        diff = (election_date.date() - today).days
+        for category, period in early_voting_categories.items():
+            start = period["start"]
+            end = period["end"]
+            # CHANGED: If diff equals start+1, then early voting starts TOMORROW
+            if diff == start + 1:
+                message = (
+                    f"CRITICAL: Sign up for early voting TOMORROW if {category}:\n" +
+                    f"Election on {election_date.strftime('%d/%m/%Y')}\n" +
+                    "| https://www.cne.pt/content/calendario | early voting dates: "
+                    "https://www.portaldoeleitor.pt/pt/Eleitor/VotarAntecipadamente/Pages/default.aspx"
+                )
+                send_notification("Early Voting Alert", message)
+            # CHANGED: If today is within the early voting period, notify for TODAY
+            elif start >= diff >= end:
+                message = (
+                    f"CRITICAL: Sign up for early voting TODAY if {category}:\n" +
+                    f"Election on {election_date.strftime('%d/%m/%Y')}\n" +
+                    "| https://www.cne.pt/content/calendario | early voting dates: "
+                    "https://www.portaldoeleitor.pt/pt/Eleitor/VotarAntecipadamente/Pages/default.aspx"
+                )
+                send_notification("Early Voting Alert", message)
+
+    # --- Election Day Notifications ---  ### ADDED SECTION
+    for election_date, etype in elections:
+        diff = (election_date.date() - today).days
+        if diff == 0:
+            # If the election is today
+            message = (
+                f"Election day TODAY for: {election_date.strftime('%d/%m/%Y')} - {etype}\n" +
+                "| https://www.cne.pt/content/calendario"
+            )
+            send_notification("Election Day Alert", message)
+        elif diff == 1:
+            # If the election is tomorrow (notify TOMORROW)
+            message = (
+                f"Election day TOMORROW for: {election_date.strftime('%d/%m/%Y')} - {etype}\n" +
+                "| https://www.cne.pt/content/calendario"
+            )
+            send_notification("Election Day Alert", message)
 
 if __name__ == "__main__":
     check_elections()

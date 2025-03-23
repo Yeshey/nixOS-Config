@@ -64,17 +64,16 @@ in
         #RandomizedDelaySec = "5s";        # Small random delay to prevent clustering
         #AccuracySec = "1s";               # Highest possible accuracy
 
-        OnCalendar = "00/1:00:00";          # Every 1 days at midnight
-        #RandomizedDelaySec = "6h";          # Spread over 6 hour windo
-        #Persistent = true;                # Run if missed last execution
+        OnCalendar = "21:00:00";          # Every day at 21:00
+        #RandomizedDelaySec = "6h";        # Spread over 6 hour window
+        #Persistent = true;               # Run if missed last execution
         #FixedRandomDelay = true;
 
         # High accuracy
-        #OnCalendar = "*-*-* *:0/5:00";  # Every 5 minutes at :00 seconds
-        RandomizedDelaySec = "30s";      # Max 30-second random delay
-        AccuracySec = "1s";              # High precision
+        #OnCalendar = "*-*-* *:0/5:00";     # Every 5 minutes at :00 seconds
+        RandomizedDelaySec = "30s";       # Max 30-second random delay
+        AccuracySec = "1s";               # High precision
         Persistent = true;
-
       };
       wantedBy = [ "timers.target" ];
     };
