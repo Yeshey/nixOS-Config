@@ -53,6 +53,11 @@ in
         ];
       };
     };
+    # WORKSPACE_DIR="./workspace"
+    # LLM_API_KEY="ollama"
+    # LLM_BASE_URL="http://localhost:11434"
+    # LLM_EMBEDDING_MODEL="local"
+    # LLM_MODEL ='ollama/llama2'
 
     # need my own fucking service for this
     systemd.services.my-network-online = {
