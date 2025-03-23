@@ -104,12 +104,12 @@ in
       };
     };
     impermanence.enable = false;
-    autosshReverseProxy = {
-      enable = true;
-      remoteIP = "143.47.53.175";
-      remoteUser = "yeshey";
-      port = 2232;
-    };
+    #autosshReverseProxy = {
+    #  enable = true;
+    #  remoteIP = "143.47.53.175";
+    #  remoteUser = "yeshey";
+    #  port = 2232;
+    #};
   };
 
   home = {

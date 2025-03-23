@@ -69,6 +69,7 @@ in
     ./piperTextToSpeech.nix
     ./snap.nix
     ./warnElections/default.nix
+    ./autossh.nix
   ];
 
   options.mySystem = with lib; {
