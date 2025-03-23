@@ -54,6 +54,24 @@ in
       };
     };
 
+    # need my own fucking service for this
+    systemd.services.my-network-online = {
+      wantedBy = [ "multi-user.target"];
+      path = [ pkgs.iputils ];
+      script = ''
+        until ${pkgs.iputils}/bin/ping -c1 google.com ; do ${pkgs.coreutils}/bin/sleep 5 ; done
+      '';
+      serviceConfig = {
+        Type = "oneshot";
+        User = "root";
+      };
+    };
+    systemd.services.podman-openhands = {
+      # This adds to the settings that were already there
+      wants = [ "nss-lookup.target" "my-network-online.service"];
+      after = [ "nss-lookup.target" "my-network-online.service"];
+    };
+
     # Service to ensure the OpenHands state directory exists
     systemd.services.openhands-mgr = {
       wantedBy = [ "multi-user.target" "podman-openhands.service" ];

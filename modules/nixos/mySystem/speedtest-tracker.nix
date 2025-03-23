@@ -59,33 +59,50 @@ in
         #restartPolicy = "unless-stopped";
       };
     };
-  systemd.services.speedtest-tracker-mgr = {
-    wantedBy = [ "multi-user.target" "podman-speedtest_tracker.service" ];
-    script = ''
-      WORKING_DIR="/opt/docker/speedtest"
-      SSL_DIR="$WORKING_DIR/ssl-keys"
-
-      echo "Ensuring working directory exists..."
-      if [ ! -d $WORKING_DIR ]; then
-        echo "Directory does not exist, creating..."
-        mkdir -p $WORKING_DIR
-      else
-        echo "Directory already exists."
-      fi
-
-      echo "Ensuring SSL keys directory exists..."
-      if [ ! -d $SSL_DIR ]; then
-        echo "SSL keys directory does not exist, creating..."
-        mkdir -p $SSL_DIR
-      else
-        echo "SSL keys directory already exists."
-      fi
-    '';
-    serviceConfig = {
-      Type = "oneshot";
-      User = "root";
+    # need my own fucking service for this
+    systemd.services.my-network-online = {
+      wantedBy = [ "multi-user.target"];
+      path = [ pkgs.iputils ];
+      script = ''
+        until ${pkgs.iputils}/bin/ping -c1 google.com ; do ${pkgs.coreutils}/bin/sleep 5 ; done
+      '';
+      serviceConfig = {
+        Type = "oneshot";
+        User = "root";
+      };
     };
-  };
+    systemd.services.podman-speedtest_tracker = {
+      # This adds to the settings that were already there
+      wants = [ "nss-lookup.target" "my-network-online.service"];
+      after = [ "nss-lookup.target" "my-network-online.service"];
+    };
+    systemd.services.speedtest-tracker-mgr = {
+      wantedBy = [ "multi-user.target" "podman-speedtest_tracker.service" ];
+      script = ''
+        WORKING_DIR="/opt/docker/speedtest"
+        SSL_DIR="$WORKING_DIR/ssl-keys"
+
+        echo "Ensuring working directory exists..."
+        if [ ! -d $WORKING_DIR ]; then
+          echo "Directory does not exist, creating..."
+          mkdir -p $WORKING_DIR
+        else
+          echo "Directory already exists."
+        fi
+
+        echo "Ensuring SSL keys directory exists..."
+        if [ ! -d $SSL_DIR ]; then
+          echo "SSL keys directory does not exist, creating..."
+          mkdir -p $SSL_DIR
+        else
+          echo "SSL keys directory already exists."
+        fi
+      '';
+      serviceConfig = {
+        Type = "oneshot";
+        User = "root";
+      };
+    };
 
 
 
