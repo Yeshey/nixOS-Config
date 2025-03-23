@@ -30,7 +30,7 @@ in
     ./stylix.nix
     ./xdgPersonalFilesOrganization.nix
     ./impermanence.nix
-    ./autosshReverseProxy.nix
+    ./autosshReverseProxyHome.nix
   ];
   options.myHome = with lib; {
     enable = mkEnableOption "myHome";

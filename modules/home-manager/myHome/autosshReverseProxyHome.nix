@@ -4,6 +4,8 @@ let
 in
 {
 
+  # Wasn't reliably working
+
   options.myHome.autosshReverseProxy = with lib; {
     enable = mkEnableOption "autosshReverseProxy";
 
