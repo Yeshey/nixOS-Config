@@ -25,6 +25,7 @@ in
     ./remoteWorkstation/default.nix
     ./searx.nix
     ./ollama.nix
+    ./openhands.nix
   ];
 
   options.toHost = with lib; {
