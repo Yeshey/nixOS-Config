@@ -108,7 +108,7 @@ in
       enable = true;
       remoteIP = "143.47.53.175";
       remoteUser = "yeshey";
-      port = 2222;
+      port = 2232;
     };
   };
 
