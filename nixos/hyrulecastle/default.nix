@@ -162,6 +162,7 @@ in
       enable = true; 
       acceleration = "cuda"; #or 'rocm' # this issue https://github.com/NixOS/nixpkgs/issues/321920
     };
+    openhands.enable = true;
   };
 
   learnWithT = {
