@@ -45,6 +45,7 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
       ```sh
       ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@143.47.53.175
       ```
+    - From your phone, you can redirect port 3000 of your PC to http://localhost:3000 on your phone with `ssh -L 3000:localhost:3000 -J yeshey@143.47.53.175 yeshey@localhost -p 2232`
 
 ### Non-NixOS Home-manager standalone with flakes
 
