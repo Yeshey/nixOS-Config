@@ -30,7 +30,22 @@ in
       myPython
     ];
 
+    # need my own fucking service for this to start after internet is up
+    systemd.services.my-network-online = {
+      wantedBy = [ "multi-user.target"];
+      path = [ pkgs.iputils ];
+      script = ''
+        until ${pkgs.iputils}/bin/ping -c1 google.com ; do ${pkgs.coreutils}/bin/sleep 5 ; done
+      '';
+      serviceConfig = {
+        Type = "oneshot";
+        User = "root";
+      };
+    };
     systemd.user.services.warn-elections = {
+      wants = [ "nss-lookup.target" "my-network-online.service"];
+      after = [ "nss-lookup.target" "my-network-online.service"];
+
       path = [ pkgs.libnotify ];
       description = "Check for upcoming elections";
       serviceConfig = {
@@ -49,7 +64,7 @@ in
         #RandomizedDelaySec = "5s";        # Small random delay to prevent clustering
         #AccuracySec = "1s";               # Highest possible accuracy
 
-        OnCalendar = "00/5:00:00";          # Every 5 days at midnight
+        OnCalendar = "00/1:00:00";          # Every 1 days at midnight
         #RandomizedDelaySec = "6h";          # Spread over 6 hour windo
         #Persistent = true;                # Run if missed last execution
         #FixedRandomDelay = true;

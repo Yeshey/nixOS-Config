@@ -107,26 +107,30 @@ def check_elections():
                 print(f"Invalid year: {year_str}\n")
 
         # Check for elections in target range
-        upcoming = []
-        for date, etype in elections:
-            if start_date <= date <= end_date:
-                upcoming.append(f"{date.strftime('%d/%m/%Y')} - {etype}")
-        
-        # Handle notifications
-        if upcoming:
-            message = "CRITICAL: Upcoming elections detected:\n" + "\n".join(upcoming) + "\n" + "| Check if you need registration for early voting" + "\n" + "https://www.cne.pt/content/calendario"
-            send_notification("Election Alert", message)
-        else:
-            print("\nNo elections in target range")
-            
+        the_notification(elections, start_date, end_date)
+
         if parsing_errors:
             error_msg = f"Failed to parse {len(parsing_errors)} dates:\n" + "\n".join(parsing_errors) + "\n" + "https://www.cne.pt/content/calendario"
             send_notification("Parsing Errors", error_msg)
+
 
     except requests.RequestException as e:
         send_notification("Connection Error", f"Failed to access CNE website: {str(e)}")
     except Exception as e:
         send_notification("System Error", f"Unexpected error: {str(e)}")
+
+def the_notification(elections, start_date, end_date):
+    upcoming = []
+    for date, etype in elections:
+        if start_date <= date <= end_date:
+            upcoming.append(f"{date.strftime('%d/%m/%Y')} - {etype}")
+    
+    # Handle notifications
+    if upcoming:
+        message = "CRITICAL: Upcoming elections detected:\n" + "\n".join(upcoming) + "\n" + "| Check if you need registration for early voting" + "\n" + "https://www.cne.pt/content/calendario"
+        send_notification("Election Alert", message)
+    else:
+        print("\nNo elections in target range")
 
 if __name__ == "__main__":
     check_elections()
