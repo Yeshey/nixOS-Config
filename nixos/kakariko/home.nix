@@ -101,6 +101,7 @@ in
     #  remoteUser = "yeshey";
     #  port = 2233;
     #};
+    warnElections.enable = true;
   };
 
   home = {
