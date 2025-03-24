@@ -150,7 +150,6 @@ in
 
     piperTextToSpeech.enable = true;
     snap.enable = true;
-    warnElections.enable = true;
     autossh = {
      enable = true;
      remoteIP = "143.47.53.175";

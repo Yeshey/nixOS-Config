@@ -68,7 +68,6 @@ in
     ./speedtest-tracker.nix
     ./piperTextToSpeech.nix
     ./snap.nix
-    ./warnElections/default.nix
     ./autossh.nix
   ];
 

@@ -31,6 +31,7 @@ in
     ./xdgPersonalFilesOrganization.nix
     ./impermanence.nix
     ./autosshReverseProxyHome.nix
+    ./warnElections/default.nix
   ];
   options.myHome = with lib; {
     enable = mkEnableOption "myHome";
