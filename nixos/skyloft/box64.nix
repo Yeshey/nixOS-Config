@@ -87,8 +87,9 @@ in {
 
   config = mkIf cfg.enable {
 
-    boot.binfmt.emulatedSystems = ["i686-linux" "x86_64-linux"];
-    nix.settings.extra-platforms = config.boot.binfmt.emulatedSystems;
+    # boot.binfmt.emulatedSystems = ["i686-linux" "x86_64-linux"];
+    #nix.settings.extra-platforms = config.boot.binfmt.emulatedSystems;
+    #nix.settings.extra-platforms = ["i686-linux" "x86_64-linux"];
 
     nixpkgs.overlays = [(self: super: let
       x86pkgs = import pkgs.path { system = "x86_64-linux";
@@ -106,6 +107,57 @@ in {
       #steam 
       steam-run steam-tui steamcmd steam-unwrapped
     ];
+
+/*
+You have these bashes rn:
+> file /nix/store/iihnyypprr0ygpdcs5wsawks9mznpd88-bash-interactive-5.2p37/bin/bash                                                                                                 18:15:40
+/nix/store/iihnyypprr0ygpdcs5wsawks9mznpd88-bash-interactive-5.2p37/bin/bash: ELF 64-bit LSB executable, ARM aarch64, version 1 (SYSV), dynamically linked, interpreter /nix/store/8d9rkvllf04pyz790vk6wd4k8mnc5c64-glibc-2.40-36/lib/ld-linux-aarch64.so.1, BuildID[sha1]=5c9d8b11851246b7766f0a7b3042a8988faad435, for GNU/Linux 3.10.0, not stripped
+
+> file /nix/store/x9d49vaqlrkw97p9ichdwrnbh013kq7z-bash-interactive-5.2p37/bin/bash                                                                                                 18:15:46
+/nix/store/x9d49vaqlrkw97p9ichdwrnbh013kq7z-bash-interactive-5.2p37/bin/bash: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /nix/store/nqb2ns2d1lahnd5ncwmn6k84qfd7vx2k-glibc-2.40-36/lib/ld-linux-x86-64.so.2, BuildID[sha1]=34fa0f38a1693296290bec33a571faae527b8535, for GNU/Linux 3.10.0, not stripped
+
+
+And try and run steam with:
+> /nix/store/x9d49vaqlrkw97p9ichdwrnbh013kq7z-bash-interactive-5.2p37/bin/bash -c "box64 /nix/store/2r90fn1idrk09ghra2zg799pff249hmj-steam-unwrapped-1.0.0.81/lib/steam/bin_steam.sh"
+ */
+
+
+    # Export libraries to current path:
+    /*
+export LD_LIBRARY_PATH="$(for lib in \                                                                                                                                            18:13:30
+  glibc \
+  gcc-unwrapped.lib \
+  libgccjit \
+  libpng \
+  libpulseaudio \
+  libjpeg \
+  libvorbis \
+  stdenv.cc.cc.lib \
+  xorg.libX11 \
+  xorg.libXext \
+  xorg.libXrandr \
+  xorg.libXrender \
+  xorg.libXfixes \
+  xorg.libXcursor \
+  xorg.libXi \
+  xorg.libXcomposite \
+  xorg.libXtst \
+  xorg.libSM \
+  xorg.libICE \
+  libGL \
+  libglvnd \
+  vulkan-loader \
+  freetype \
+  openssl \
+  curl \
+  zlib \
+  dbus \
+  ncurses \
+  SDL2 \
+  ; do nix-build '<nixpkgs>' -A ${lib} --no-out-link; done | xargs -I {} echo -n {}/lib: | sed 's/:$//')"
+
+  # echo $LD_LIBRARY_PATH
+     */
 
 /*
     # Binfmt configuration for Box64
