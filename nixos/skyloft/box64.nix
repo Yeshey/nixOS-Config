@@ -86,12 +86,28 @@ in {
   options.mySystem.box64.enable = mkEnableOption "box64";
 
   config = mkIf cfg.enable {
-    # Required for OpenGL/Vulkan
-    #hardware.opengl = {
-    #  enable = true;
-    #  driSupport32Bit = true;
-    #};
 
+    boot.binfmt.emulatedSystems = ["i686-linux" "x86_64-linux"];
+    nix.settings.extra-platforms = config.boot.binfmt.emulatedSystems;
+
+    nixpkgs.overlays = [(self: super: let
+      x86pkgs = import pkgs.path { system = "x86_64-linux";
+        config.allowUnfree = true;
+      };
+    in {
+      inherit (x86pkgs) steam steam-run;
+    })];
+
+    # programs.steam.enable = true;
+    # hardware.graphics.enable32Bit = lib.mkForce false;
+    # hardware.graphics.enable = lib.mkForce false;
+
+    environment.systemPackages = with pkgs; [
+      #steam 
+      steam-run steam-tui steamcmd steam-unwrapped
+    ];
+
+/*
     # Binfmt configuration for Box64
     boot.binfmt.registrations.box64 = {
       interpreter = "${steamFHS}/bin/steam-fhs";
@@ -111,5 +127,6 @@ in {
     systemd.extraConfig = ''
       DefaultLimitNOFILE=1048576
     '';
+    */
   };
 }
