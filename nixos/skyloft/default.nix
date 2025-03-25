@@ -88,7 +88,7 @@
       sshKeys.enable = true;
     };
 
-    box64.enable = false;
+    box64.enable = true;
   };
 
   environment.systemPackages = [ pkgs.mybox64 ];
