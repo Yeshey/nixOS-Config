@@ -66,7 +66,7 @@ let
   steamFHS = pkgs.buildFHSUserEnv {
     name = "steam-fhs";
     targetPkgs = pkgs: (with pkgsx86; [
-      box64
+      #box64
       steamPackages.steam
       # steamPackages.steam-runtime
     ]) ++ steamLibs;
@@ -105,6 +105,8 @@ in {
 
     environment.systemPackages = with pkgs; [
       #steam 
+      mybox64
+      box86
       steam-run steam-tui steamcmd steam-unwrapped
     ];
 
@@ -157,6 +159,10 @@ export LD_LIBRARY_PATH="$(for lib in \                                          
   ; do nix-build '<nixpkgs>' -A ${lib} --no-out-link; done | xargs -I {} echo -n {}/lib: | sed 's/:$//')"
 
   # echo $LD_LIBRARY_PATH
+
+
+
+  binfmt definition ni nixpkgs: https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/system/boot/binfmt.nix
      */
 
 /*
