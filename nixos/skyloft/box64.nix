@@ -110,6 +110,23 @@ in {
       steam-run steam-tui steamcmd steam-unwrapped
     ];
 
+    boot.binfmt.registrations = {
+      first_box64 =
+      {
+        interpreter = "${pkgs.mybox64}/bin/mybox64";
+        # x86_64 binaries: magic from nixpkgs “x86_64-linux”
+        magicOrExtension = ''\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00'';
+        mask = ''\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
+      };
+      second_box64 = {
+        interpreter = "${pkgs.mybox64}/bin/mybox64";
+        # i686 binaries: magic from nixpkgs “i686-linux”
+        magicOrExtension = ''\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x06\x00'';
+        mask = ''\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
+      };
+    };
+
+
 /*
 You have these bashes rn:
 > file /nix/store/iihnyypprr0ygpdcs5wsawks9mznpd88-bash-interactive-5.2p37/bin/bash                                                                                                 18:15:40
