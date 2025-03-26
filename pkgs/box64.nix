@@ -15,6 +15,7 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "mybox64";
   version = "0.3.4";
+  binaryName = "mybox64";
   doCheck = false;
 
   src = fetchFromGitHub {
@@ -28,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     python3
   ];
+You are missing the following 32-bit libraries, and Steam may not run:
+libc.so.6
 
   cmakeFlags =
     [
@@ -59,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm 0755 box64 "$out/bin/box64"
+    install -Dm 0755 box64 "$out/bin/${finalAttrs.binaryName}"
 
     runHook postInstall
   '';
@@ -72,10 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstallCheck
 
     echo Checking if it works
-    $out/bin/box64 -v
+    $out/bin/${finalAttrs.binaryName} -v 
 
     echo Checking if Dynarec option was respected
-    $out/bin/box64 -v | grep ${lib.optionalString (!withDynarec) "-v"} Dynarec
+    $out/bin/${finalAttrs.binaryName} -v | grep ${lib.optionalString (!withDynarec) "-v"} Dynarec 
 
     runHook postInstallCheck
   '';
@@ -87,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
         # There is no actual "Hello, world!" with any of the logging enabled, and with all logging disabled it's hard to
         # tell what problems the emulator has run into.
         ''
-          BOX64_NOBANNER=0 BOX64_LOG=1 box64 ${lib.getExe hello-x86_64} --version | tee $out
+          BOX64_NOBANNER=0 BOX64_LOG=1 ${finalAttrs.binaryName} ${lib.getExe hello-x86_64} --version | tee $out
         '';
   };
 
@@ -100,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
       gador
       OPNA2608
     ];
-    mainProgram = "box64";
+    mainProgram = finalAttrs.binaryName;
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
