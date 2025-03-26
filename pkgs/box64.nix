@@ -29,8 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     python3
   ];
-You are missing the following 32-bit libraries, and Steam may not run:
-libc.so.6
 
   cmakeFlags =
     [
