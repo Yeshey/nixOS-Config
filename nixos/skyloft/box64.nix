@@ -3,6 +3,15 @@
 with lib;
 let
   cfg = config.mySystem.box64;
+  BOX64_LOG = "1";
+  BOX64_DYNAREC_LOG = "0";
+  STEAMOS = "1";
+  BOX64_VARS= ''
+    export STEAMOS=${STEAMOS} # https://github.com/ptitSeb/box64/issues/91#issuecomment-898858125
+    export BOX64_LOG=${BOX64_LOG}
+    export BOX64_DYNAREC_LOG=${BOX64_DYNAREC_LOG}
+    export DBUS_FATAL_WARNINGS=0
+  '';
 
   # Grouped common libraries needed for the FHS environment (64-bit ARM versions)
   steamLibs = with pkgs; [
@@ -24,6 +33,12 @@ let
     sbclPackages.cl-cairo2-xlib        # X11-specific Cairo components
     pango         # X11-specific Pango components
     gtk3-x11          # Explicitly include GTK2 X11 libraries
+
+    libmpg123
+    ibus-engines.libpinyin
+    libnma
+    nss
+    nspr
   ];
 
   # FHS environment that spawns a bash shell by default, or runs a given command if arguments are provided
@@ -42,8 +57,8 @@ let
       ln -sfn ${pkgs.curl.out}/lib/libcurl.so.4 $out/lib/libcurl.so.4
 
       # Create critical symlinks Steam expects (disabled to avoid errors)
-      # ln -sfn ${pkgs.glibc}/lib/ld-linux-aarch64.so.1 $out/lib/ld-linux-x86-64.so.2
-      # ln -sfn ${pkgs.glibc}/lib/ld-linux-aarch64.so.1 $out/lib/ld-linux.so.2
+      ln -sfn ${pkgs.glibc}/lib/ld-linux-aarch64.so.1 $out/lib/ld-linux-x86-64.so.2
+      ln -sfn ${pkgs.glibc}/lib/ld-linux-aarch64.so.1 $out/lib/ld-linux.so.2
       
       # Steam runtime library workarounds: create necessary directories
       mkdir -p $out/lib32 $out/lib64
@@ -67,12 +82,18 @@ let
       export BOX64_LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
       
       # Enable box64/box86 logging if needed
-      export BOX64_LOG=0
-      export BOX86_LOG=0
+      ${BOX64_VARS}
       
       export GTK_MODULES="xapp-gtk3-module"
       export GDK_BACKEND=x11
       export VK_ICD_FILENAMES="/etc/vulkan/icd.d/radeon_icd.x86_64.json"
+
+      export BOX64_EMULATED_LIBS="libmpg123.so.0"
+      export BOX64_TRACE_FILE="stderr"
+      export BOX86_TRACE_FILE="stderr"
+      export STEAM_RUNTIME_PREFER_HOST_LIBRARIES="0"
+      # Add sniper runtime path
+      export STEAM_RUNTIME_SCOUT="/home/yeshey/.local/share/Steam/ubuntu12_32/steam-runtime/sniper"
 
       # Force use of FHS environment's libraries
       export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$out/lib:$out/lib32"
@@ -88,6 +109,13 @@ let
   };
 
 
+in 
+let 
+box64BashWrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
+  #!${pkgs.bash}/bin/sh
+  ${BOX64_VARS}
+  exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.bashx86}/bin/bash "$@"
+'';
 in {
   options.mySystem.box64.enable = mkEnableOption "box64";
 
@@ -114,20 +142,19 @@ in {
     ];
 
     environment.systemPackages = with pkgs; let 
-      box64BashWrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
-        #!${pkgs.bash}/bin/sh
-        export STEAMOS=1 # https://github.com/ptitSeb/box64/issues/91#issuecomment-898858125
-        export BOX64_LOG=0
-        export BOX64_DYNAREC_LOG=0
-        exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.bashx86}/bin/bash "$@"
-      '';
+
       steamx86Wrapper = pkgs.writeScriptBin "box64-bashx86-steamx86-wrapper" ''
         #!${pkgs.bash}/bin/sh
-        export STEAMOS=1
-        export BOX64_LOG=0
-        export BOX64_DYNAREC_LOG=0
-        exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.bashx86}/bin/bash ${steamx86}/lib/steam/bin_steam.sh -cef-disable-gpu -cef-disable-gpu-compositor
+        ${BOX64_VARS}
+        exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 \
+          ${pkgs.bashx86}/bin/bash ${steamx86}/lib/steam/bin_steam.sh \
+          -no-cef-sandbox \
+          -cef-disable-gpu \
+          -cef-disable-gpu-compositor \
+          -system-composer \
+          steam://open/minigameslist "$@"
       '';
+
     in [
       # steam-related packages
       box64BashWrapper
@@ -143,17 +170,7 @@ in {
 
     boot.binfmt.registrations = 
     let 
-  # Create a wrapper that:
-  # 1. Enters the FHS environment via steamFHS’s run script,
-  # 2. Invokes Box64 from mybox64,
-  # 3. Launches the x86 bash (bashx86) which then runs the intended program.
-  box64BashWrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
-    #!${pkgs.bash}/bin/sh
-    export STEAMOS=1
-    export BOX64_LOG=0
-    export BOX64_DYNAREC_LOG=0
-    exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 "$@"
-  '';
+
     in {
       first_box64 =
       {
