@@ -4,67 +4,136 @@ with lib;
 let
   cfg = config.mySystem.box64;
 
-  # Common libraries needed for Steam
+  # Grouped common libraries needed for the FHS environment (64-bit ARM versions)
   steamLibs = with pkgs; [
-    # libraries
+    glibc glib.out gtk2 gdk-pixbuf pango.out cairo.out fontconfig libdrm libvdpau expat util-linux at-spi2-core libnotify
+    gnutls openalSoft udev xorg.libXinerama xorg.libXdamage xorg.libXScrnSaver xorg.libxcb libva gcc-unwrapped.lib libgccjit
+    libpng libpulseaudio libjpeg libvorbis stdenv.cc.cc.lib xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXfixes
+    xorg.libXcursor xorg.libXi xorg.libXcomposite xorg.libXtst xorg.libSM xorg.libICE libGL libglvnd vulkan-loader freetype
+    openssl curl zlib dbus ncurses SDL2
   ];
 
-  # FHS environment for Steam
+  # FHS environment that spawns a bash shell by default, or runs a given command if arguments are provided
   steamFHS = pkgs.buildFHSUserEnv {
     name = "steam-fhs";
     targetPkgs = pkgs: (with pkgs; [
-
+      mybox64 box86 steam-run zenity xdg-utils
     ]) ++ steamLibs;
 
     multiPkgs = pkgs: steamLibs;
 
     extraInstallCommands = ''
-      #...
+      # Create critical symlinks Steam expects (disabled to avoid errors)
+      # ln -sfn ${pkgs.glibc}/lib/ld-linux-aarch64.so.1 $out/lib/ld-linux-x86-64.so.2
+      # ln -sfn ${pkgs.glibc}/lib/ld-linux-aarch64.so.1 $out/lib/ld-linux.so.2
+      
+      # Steam runtime library workarounds: create necessary directories
+      mkdir -p $out/lib32 $out/lib64
+      # ln -sfn ${pkgs.libva}/lib/libva.so.2 $out/lib/libva.so.1
     '';
 
-    runScript = "steam";
+    runScript = ''
+      # Set up environment variables for box64 and libraries
+      export STEAM_EXTRA_COMPAT_TOOLS_PATHS="${pkgs.mybox64}/bin"
+      export BOX64_PATH="${pkgs.mybox64}/bin"
+      export BOX64_LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+      
+      # Enable box64/box86 logging if needed
+      export BOX64_LOG=0
+      export BOX86_LOG=0
+      
+      # Force use of FHS environment's libraries
+      export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$out/lib:$out/lib32"
+      
+      # If no arguments are provided, spawn an interactive bash shell.
+      # Otherwise, run the provided command.
+      if [ "$#" -eq 0 ]; then
+        exec ${pkgs.bashInteractive}/bin/bash
+      else
+        exec "$@"
+      fi
+    '';
   };
+
 
 in {
   options.mySystem.box64.enable = mkEnableOption "box64";
 
   config = mkIf cfg.enable {
-
+    
+    # Uncomment these lines if you need to set extra platforms for binfmt:
     # boot.binfmt.emulatedSystems = ["i686-linux" "x86_64-linux"];
-    #nix.settings.extra-platforms = config.boot.binfmt.emulatedSystems;
-    #nix.settings.extra-platforms = ["i686-linux" "x86_64-linux"];
+    # nix.settings.extra-platforms = config.boot.binfmt.emulatedSystems;
+    # nix.settings.extra-platforms = ["i686-linux" "x86_64-linux"];
 
-    nixpkgs.overlays = [(self: super: let
-      x86pkgs = import pkgs.path { system = "x86_64-linux";
-        config.allowUnfree = true;
-      };
-    in {
-      inherit (x86pkgs) steam steam-run;
-    })];
-
-    environment.systemPackages = with pkgs; [
-      #steam 
-      mybox64
-      box86
-      steam-run steam-tui steamcmd steam-unwrapped
+    nixpkgs.overlays = [
+      (self: super: let
+        x86pkgs = import pkgs.path {
+          system = "x86_64-linux";
+          config.allowUnfree = true;
+        };
+      in {
+        inherit (x86pkgs) steam steam-run;
+        bashx86 = x86pkgs.bashInteractive;
+        steamx86 = x86pkgs.steam-unwrapped;
+      })
     ];
 
-    boot.binfmt.registrations = {
+    environment.systemPackages = with pkgs; let 
+      box64BashWrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
+        #!${pkgs.bash}/bin/sh
+        export STEAMOS=1
+        exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.bashx86}/bin/bash "$@"
+      '';
+      steamx86Wrapper = pkgs.writeScriptBin "box64-bashx86-steamx86-wrapper" ''
+        #!${pkgs.bash}/bin/sh
+        exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.bashx86}/bin/bash ${steamx86}/lib/steam/bin_steam.sh
+      '';
+    in [
+      # steam-related packages
+      box64BashWrapper
+      steamx86
+      steamx86Wrapper
+      steamFHS
+      mybox64
+      box86
+      bashx86 #(now this one appears with whereis bash)
+      # additional steam-run tools
+      # steam-tui steamcmd steam-unwrapped
+    ];
+
+    boot.binfmt.registrations = 
+    let 
+  # Create a wrapper that:
+  # 1. Enters the FHS environment via steamFHS’s run script,
+  # 2. Invokes Box64 from mybox64,
+  # 3. Launches the x86 bash (bashx86) which then runs the intended program.
+  box64BashWrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
+    #!${pkgs.bash}/bin/sh
+    export STEAMOS=1
+    export BOX64_LOG=1
+    exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.bashx86}/bin/bash "$@"
+  '';
+    in {
       first_box64 =
       {
-        interpreter = "${pkgs.mybox64}/bin/mybox64";
+        #interpreter = "${pkgs.mybox64}/bin/mybox64";
+        interpreter = "${box64BashWrapper}/bin/box64-bashx86-wrapper";
         # x86_64 binaries: magic from nixpkgs “x86_64-linux”
         magicOrExtension = ''\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00'';
         mask = ''\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
       };
       second_box64 = {
-        interpreter = "${pkgs.mybox64}/bin/mybox64";
+        #interpreter = "${pkgs.mybox64}/bin/mybox64";
+        interpreter = "${box64BashWrapper}/bin/box64-bashx86-wrapper";
         # i686 binaries: magic from nixpkgs “i686-linux”
         magicOrExtension = ''\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x06\x00'';
         mask = ''\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
       };
     };
 
+  # with this you can run steam-fhs, and the following command:
+  # TEAMOS=1 BOX64_LOG=0 mybox64 /nix/store/x9d49vaqlrkw97p9ichdwrnbh013kq7z-bash-interactive-5.2p37/bin/bash /nix/store/2r90fn1idrk09ghra2zg799pff249hmj-steam-unwrapped-1.0.0.81/lib/steam/bin_steam.sh
 
 /*
 # Using this command to start steam
