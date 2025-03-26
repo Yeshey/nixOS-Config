@@ -60,6 +60,8 @@ in {
   options.mySystem.box64.enable = mkEnableOption "box64";
 
   config = mkIf cfg.enable {
+
+    # you made this comment in nixos discourse: https://discourse.nixos.org/t/how-to-install-steam-x86-64-on-a-pinephone-aarch64/19297/7?u=yeshey
     
     # Uncomment these lines if you need to set extra platforms for binfmt:
     # boot.binfmt.emulatedSystems = ["i686-linux" "x86_64-linux"];
