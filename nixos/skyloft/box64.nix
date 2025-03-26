@@ -11,6 +11,10 @@ let
     libpng libpulseaudio libjpeg libvorbis stdenv.cc.cc.lib xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXfixes
     xorg.libXcursor xorg.libXi xorg.libXcomposite xorg.libXtst xorg.libSM xorg.libICE libGL libglvnd vulkan-loader freetype
     openssl curl zlib dbus ncurses SDL2
+    vulkan-headers vulkan-loader vulkan-tools
+    libva mesa.drivers
+    ncurses5 ncurses6 ncurses
+    pkgs.curl.out
   ];
 
   # FHS environment that spawns a bash shell by default, or runs a given command if arguments are provided
@@ -23,6 +27,11 @@ let
     multiPkgs = pkgs: steamLibs;
 
     extraInstallCommands = ''
+      mkdir -p $out/lib
+      ln -sfn ${pkgs.glibc}/lib/ld-linux-aarch64.so.1 $out/lib/ld-linux-x86-64.so.2
+      ln -sfn ${pkgs.zlib}/lib/libz.so.1 $out/lib/libz.so.1.2.13
+      ln -sfn ${pkgs.curl.out}/lib/libcurl.so.4 $out/lib/libcurl.so.4
+
       # Create critical symlinks Steam expects (disabled to avoid errors)
       # ln -sfn ${pkgs.glibc}/lib/ld-linux-aarch64.so.1 $out/lib/ld-linux-x86-64.so.2
       # ln -sfn ${pkgs.glibc}/lib/ld-linux-aarch64.so.1 $out/lib/ld-linux.so.2
@@ -30,6 +39,16 @@ let
       # Steam runtime library workarounds: create necessary directories
       mkdir -p $out/lib32 $out/lib64
       # ln -sfn ${pkgs.libva}/lib/libva.so.2 $out/lib/libva.so.1
+
+      mkdir -p $out/lib $out/lib32 $out/lib64
+      
+      # Force use of Steam Runtime's libcurl
+      ln -sfn "$STEAM_RUNTIME/lib/i386-linux-gnu/libcurl.so.4" "$out/lib/libcurl.so.4"
+      ln -sfn "$STEAM_RUNTIME/lib/x86_64-linux-gnu/libcurl.so.4" "$out/lib64/libcurl.so.4"
+      
+      # Workaround for libtinfo
+      ln -sfn ${pkgs.ncurses5}/lib/libncursesw.so.6 $out/lib/libtinfo.so.6
+      ln -sfn ${pkgs.ncurses5}/lib/libncursesw.so.6 $out/lib32/libtinfo.so.6
     '';
 
     runScript = ''
@@ -42,6 +61,10 @@ let
       export BOX64_LOG=0
       export BOX86_LOG=0
       
+      export GTK_MODULES="xapp-gtk3-module"
+      export GDK_BACKEND=x11
+      export VK_ICD_FILENAMES="/etc/vulkan/icd.d/radeon_icd.x86_64.json"
+
       # Force use of FHS environment's libraries
       export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$out/lib:$out/lib32"
       
@@ -84,14 +107,16 @@ in {
     environment.systemPackages = with pkgs; let 
       box64BashWrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
         #!${pkgs.bash}/bin/sh
-        export STEAMOS=1
-        BOX64_LOG=1 
+        export STEAMOS=1 # https://github.com/ptitSeb/box64/issues/91#issuecomment-898858125
+        export BOX64_LOG=1
+        export BOX64_DYNAREC_LOG=1
         exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.bashx86}/bin/bash "$@"
       '';
       steamx86Wrapper = pkgs.writeScriptBin "box64-bashx86-steamx86-wrapper" ''
         #!${pkgs.bash}/bin/sh
         export STEAMOS=1
-        BOX64_LOG=1 
+        export BOX64_LOG=1
+        export BOX64_DYNAREC_LOG=1
         exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.bashx86}/bin/bash ${steamx86}/lib/steam/bin_steam.sh
       '';
     in [
@@ -117,7 +142,8 @@ in {
     #!${pkgs.bash}/bin/sh
     export STEAMOS=1
     export BOX64_LOG=1
-    exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.bashx86}/bin/bash "$@"
+    export BOX64_DYNAREC_LOG=1
+    exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 "$@"
   '';
     in {
       first_box64 =
