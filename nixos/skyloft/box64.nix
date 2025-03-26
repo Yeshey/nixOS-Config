@@ -126,8 +126,8 @@ let
       export STEAM_RUNTIME_PREFER_HOST_LIBRARIES="0"
       export STEAM_RUNTIME=${STEAM_RUNTIME}
       # Add sniper runtime path
-      export STEAM_RUNTIME_SCOUT="/home/yeshey/.local/share/Steam/ubuntu12_32/steam-runtime/sniper"
-      #export STEAM_RUNTIME_SCOUT="/home/yeshey/.local/share/Steam/ubuntu12_32/steam-runtime"
+      # export STEAM_RUNTIME_SCOUT="/home/yeshey/.local/share/Steam/ubuntu12_32/steam-runtime/sniper"
+      export STEAM_RUNTIME_SCOUT="/home/yeshey/.local/share/Steam/ubuntu12_32/steam-runtime"
 
       # Force use of FHS environment's libraries
       export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$out/lib:$out/lib32"
