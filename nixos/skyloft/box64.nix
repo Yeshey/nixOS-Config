@@ -6,6 +6,7 @@ let
   BOX64_LOG = "1";
   BOX64_DYNAREC_LOG = "0";
   STEAMOS = "1";
+  STEAM_RUNTIME = "1";
   BOX64_VARS= ''
     export BOX64_DLSYM_ERROR=1
     export BOX64_TRANSLATE_NOWAIT=1
@@ -14,7 +15,7 @@ let
     export BOX64_LOG=${BOX64_LOG}
     export BOX64_DYNAREC_LOG=${BOX64_DYNAREC_LOG}
     export DBUS_FATAL_WARNINGS=0
-    export STEAM_RUNTIME=1
+    export STEAM_RUNTIME=${STEAM_RUNTIME}
   '';
 
   # Grouped common libraries needed for the FHS environment (64-bit ARM versions)
@@ -66,6 +67,14 @@ let
       ln -sfn ${pkgs.zlib}/lib/libz.so.1 $out/lib/libz.so.1.2.13
       ln -sfn ${pkgs.curl.out}/lib/libcurl.so.4 $out/lib/libcurl.so.4
 
+      # Create Steam Runtime directory structure
+      mkdir -p $out/steam-runtime/sniper
+      ln -sfn ${pkgs.steamx86}/share/steam/steam-runtime $out/steam-runtime
+
+      # Fix ncurses symlinks
+      ln -sfn ${pkgs.ncurses5}/lib/libncursesw.so.6 $out/lib/libtinfo.so.6
+      # ln -sfn ${pkgs.ncurses5}/lib/libncursesw.so.6 $out/lib32/libtinfo.so.6
+
       # Add missing Vulkan library links
       ln -sfn ${pkgs.vulkan-loader}/lib/libvulkan.so.1 $out/lib/libvulkan.so.1
       ln -sfn ${pkgs.vulkan-loader}/lib/libvulkan.so $out/lib/libvulkan.so
@@ -115,7 +124,7 @@ let
       export BOX64_TRACE_FILE="stderr"
       export BOX86_TRACE_FILE="stderr"
       export STEAM_RUNTIME_PREFER_HOST_LIBRARIES="0"
-      export STEAM_RUNTIME=1
+      export STEAM_RUNTIME=${STEAM_RUNTIME}
       # Add sniper runtime path
       export STEAM_RUNTIME_SCOUT="/home/yeshey/.local/share/Steam/ubuntu12_32/steam-runtime/sniper"
       #export STEAM_RUNTIME_SCOUT="/home/yeshey/.local/share/Steam/ubuntu12_32/steam-runtime"
@@ -148,6 +157,12 @@ in {
 
   config = mkIf cfg.enable {
 
+
+    # Add these env variables to /home/yeshey/.local/share/Steam/steam.sh to get more logs when it downloaads the stuffs
+    #export STEAM_DEBUG=1  # Enables set -x in steam.sh
+    #export STEAM_LOG=1    # Additional Steam logging
+
+
     # you made this comment in nixos discourse: https://discourse.nixos.org/t/how-to-install-steam-x86-64-on-a-pinephone-aarch64/19297/7?u=yeshey
     
     # Uncomment these lines if you need to set extra platforms for binfmt:
@@ -173,9 +188,16 @@ in {
       steamx86Wrapper = pkgs.writeScriptBin "box64-bashx86-steamx86-wrapper" ''
         #!${pkgs.bash}/bin/sh
         ${BOX64_VARS}
+        # Fix Steam Runtime paths
+        export STEAM_RUNTIME="$HOME/.local/share/Steam/ubuntu12_32/steam-runtime"
+        export STEAM_RUNTIME_SCOUT="$STEAM_RUNTIME"
+        export STEAM_RUNTIME_SNIER="$STEAM_RUNTIME/sniper"
+        
+        # Create required runtime directory
+        mkdir -p "$STEAM_RUNTIME_SNIER"
         export STEAM_RUNTIME_SCOUT="$HOME/.local/share/Steam/ubuntu12_32/steam-runtime"
         exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 \
-          ${pkgs.bashx86}/bin/bash ${steamx86}/lib/steam/bin_steam.sh \
+          ${pkgs.bashx86}/bin/bash ${pkgs.steamx86}/lib/steam/bin_steam.sh \
           -no-cef-sandbox \
           -cef-disable-gpu \
           -cef-disable-gpu-compositor \
