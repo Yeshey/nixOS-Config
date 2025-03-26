@@ -7,10 +7,14 @@ let
   BOX64_DYNAREC_LOG = "0";
   STEAMOS = "1";
   BOX64_VARS= ''
+    export BOX64_DLSYM_ERROR=1
+    export BOX64_TRANSLATE_NOWAIT=1
+    export BOX64_NOBANNER=1
     export STEAMOS=${STEAMOS} # https://github.com/ptitSeb/box64/issues/91#issuecomment-898858125
     export BOX64_LOG=${BOX64_LOG}
     export BOX64_DYNAREC_LOG=${BOX64_DYNAREC_LOG}
     export DBUS_FATAL_WARNINGS=0
+    export STEAM_RUNTIME=1
   '';
 
   # Grouped common libraries needed for the FHS environment (64-bit ARM versions)
@@ -39,6 +43,10 @@ let
     libnma
     nss
     nspr
+
+    # Keep existing libraries and add:
+    libudev-zero
+    libusb1 ibus-engines.kkc gtk3
   ];
 
   # FHS environment that spawns a bash shell by default, or runs a given command if arguments are provided
@@ -46,6 +54,8 @@ let
     name = "steam-fhs";
     targetPkgs = pkgs: (with pkgs; [
       mybox64 box86 steam-run zenity xdg-utils
+      vulkan-validation-layers vulkan-headers
+      libva-utils
     ]) ++ steamLibs;
 
     multiPkgs = pkgs: steamLibs;
@@ -55,6 +65,14 @@ let
       ln -sfn ${pkgs.glibc}/lib/ld-linux-aarch64.so.1 $out/lib/ld-linux-x86-64.so.2
       ln -sfn ${pkgs.zlib}/lib/libz.so.1 $out/lib/libz.so.1.2.13
       ln -sfn ${pkgs.curl.out}/lib/libcurl.so.4 $out/lib/libcurl.so.4
+
+      # Add missing Vulkan library links
+      ln -sfn ${pkgs.vulkan-loader}/lib/libvulkan.so.1 $out/lib/libvulkan.so.1
+      ln -sfn ${pkgs.vulkan-loader}/lib/libvulkan.so $out/lib/libvulkan.so
+      
+      # Fix DRI3 authentication
+      ln -sfn ${pkgs.libdrm}/lib/libdrm.so.2 $out/lib/libdrm.so.2
+      ln -sfn ${pkgs.libglvnd}/lib/libGLX.so.0 $out/lib/libGLX.so.0
 
       # Create critical symlinks Steam expects (disabled to avoid errors)
       ln -sfn ${pkgs.glibc}/lib/ld-linux-aarch64.so.1 $out/lib/ld-linux-x86-64.so.2
@@ -81,6 +99,11 @@ let
       export BOX64_PATH="${pkgs.mybox64}/bin"
       export BOX64_LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
       
+      export VK_ICD_FILENAMES="/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json"
+      export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d"
+      export __GLX_VENDOR_LIBRARY_NAME="mesa"
+      export MESA_LOADER_DRIVER_OVERRIDE="zink"
+
       # Enable box64/box86 logging if needed
       ${BOX64_VARS}
       
@@ -92,8 +115,10 @@ let
       export BOX64_TRACE_FILE="stderr"
       export BOX86_TRACE_FILE="stderr"
       export STEAM_RUNTIME_PREFER_HOST_LIBRARIES="0"
+      export STEAM_RUNTIME=1
       # Add sniper runtime path
       export STEAM_RUNTIME_SCOUT="/home/yeshey/.local/share/Steam/ubuntu12_32/steam-runtime/sniper"
+      #export STEAM_RUNTIME_SCOUT="/home/yeshey/.local/share/Steam/ubuntu12_32/steam-runtime"
 
       # Force use of FHS environment's libraries
       export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$out/lib:$out/lib32"
@@ -114,6 +139,8 @@ let
 box64BashWrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
   #!${pkgs.bash}/bin/sh
   ${BOX64_VARS}
+  export BOX64_TRACE_FILE="stderr"
+  export BOX86_TRACE_FILE="stderr"
   exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.bashx86}/bin/bash "$@"
 '';
 in {
@@ -146,6 +173,7 @@ in {
       steamx86Wrapper = pkgs.writeScriptBin "box64-bashx86-steamx86-wrapper" ''
         #!${pkgs.bash}/bin/sh
         ${BOX64_VARS}
+        export STEAM_RUNTIME_SCOUT="$HOME/.local/share/Steam/ubuntu12_32/steam-runtime"
         exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 \
           ${pkgs.bashx86}/bin/bash ${steamx86}/lib/steam/bin_steam.sh \
           -no-cef-sandbox \
