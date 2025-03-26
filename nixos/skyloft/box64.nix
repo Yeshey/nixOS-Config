@@ -108,15 +108,15 @@ in {
       box64BashWrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
         #!${pkgs.bash}/bin/sh
         export STEAMOS=1 # https://github.com/ptitSeb/box64/issues/91#issuecomment-898858125
-        export BOX64_LOG=1
-        export BOX64_DYNAREC_LOG=1
+        export BOX64_LOG=0
+        export BOX64_DYNAREC_LOG=0
         exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.bashx86}/bin/bash "$@"
       '';
       steamx86Wrapper = pkgs.writeScriptBin "box64-bashx86-steamx86-wrapper" ''
         #!${pkgs.bash}/bin/sh
         export STEAMOS=1
-        export BOX64_LOG=1
-        export BOX64_DYNAREC_LOG=1
+        export BOX64_LOG=0
+        export BOX64_DYNAREC_LOG=0
         exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.bashx86}/bin/bash ${steamx86}/lib/steam/bin_steam.sh
       '';
     in [
@@ -141,8 +141,8 @@ in {
   box64BashWrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
     #!${pkgs.bash}/bin/sh
     export STEAMOS=1
-    export BOX64_LOG=1
-    export BOX64_DYNAREC_LOG=1
+    export BOX64_LOG=0
+    export BOX64_DYNAREC_LOG=0
     exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 "$@"
   '';
     in {
