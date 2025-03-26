@@ -15,6 +15,7 @@ let
     libva mesa.drivers
     ncurses5 ncurses6 ncurses
     pkgs.curl.out
+    libcef
   ];
 
   # FHS environment that spawns a bash shell by default, or runs a given command if arguments are provided
@@ -117,7 +118,7 @@ in {
         export STEAMOS=1
         export BOX64_LOG=0
         export BOX64_DYNAREC_LOG=0
-        exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.bashx86}/bin/bash ${steamx86}/lib/steam/bin_steam.sh
+        exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.bashx86}/bin/bash ${steamx86}/lib/steam/bin_steam.sh -cef-disable-gpu -cef-disable-gpu-compositor
       '';
     in [
       # steam-related packages
