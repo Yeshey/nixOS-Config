@@ -15,7 +15,15 @@ let
     libva mesa.drivers
     ncurses5 ncurses6 ncurses
     pkgs.curl.out
-    libcef
+    libcef # (https://github.com/ptitSeb/box64/issues/1383)?
+
+    libdbusmenu       # For libdbusmenu-glib.so.4 and libdbusmenu-gtk.so.4
+    xcbutilxrm       # XCB utilities
+    xorg.libxcb
+    xorg.xcbutilkeysyms
+    sbclPackages.cl-cairo2-xlib        # X11-specific Cairo components
+    pango         # X11-specific Pango components
+    gtk3-x11          # Explicitly include GTK2 X11 libraries
   ];
 
   # FHS environment that spawns a bash shell by default, or runs a given command if arguments are provided
