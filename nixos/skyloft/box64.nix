@@ -54,6 +54,25 @@ let
 
     # https://github.com/ptitSeb/box64/issues/1780#issuecomment-2627480114
     zenity dbus libnsl libunity pciutils openal
+    passt
+
+    # For Heroic
+    cups                  # For libcups
+    alsa-lib              # For libasound
+    libxslt               # For libxslt
+    zstd                  # For libzstd
+    xorg.libxshmfence          # For libxshmfence
+    avahi                 # For libavahi
+    xorg.libpciaccess          # For libpciaccess
+    elfutils              # For libelf
+    lm_sensors            # For libsensors
+    libffi                # For libffi
+    flac                  # For libFLAC
+    libogg                # For libogg
+    libbsd                # For libbsd
+    libxml2               # For xml symbols
+    llvmPackages.libllvm  # For libLLVM
+    libllvm
   ];
 
   # FHS environment that spawns a bash shell by default, or runs a given command if arguments are provided
@@ -74,8 +93,8 @@ let
       ln -sfn ${pkgs.curl.out}/lib/libcurl.so.4 $out/lib/libcurl.so.4
 
       # Create Steam Runtime directory structure
-      mkdir -p $out/steam-runtime/sniper
-      ln -sfn ${pkgs.x86.steam-unwrapped}/share/steam/steam-runtime $out/steam-runtime
+      #mkdir -p $out/steam-runtime/sniper
+      #ln -sfn ${pkgs.x86.steam-unwrapped}/share/steam/steam-runtime $out/steam-runtime
 
       # Fix ncurses symlinks
       ln -sfn ${pkgs.ncurses5}/lib/libncursesw.so.6 $out/lib/libtinfo.so.6
@@ -99,6 +118,12 @@ let
 
       mkdir -p $out/lib $out/lib32 $out/lib64
       
+      # Create a dummy passt script so that child process "passt" is found
+      mkdir -p $out/bin
+      echo '#!/bin/sh
+      exit 0' > $out/bin/passt
+      chmod +x $out/bin/passt
+
       # Force use of Steam Runtime's libcurl
       ln -sfn "$STEAM_RUNTIME/lib/i386-linux-gnu/libcurl.so.4" "$out/lib/libcurl.so.4"
       ln -sfn "$STEAM_RUNTIME/lib/x86_64-linux-gnu/libcurl.so.4" "$out/lib64/libcurl.so.4"
@@ -117,7 +142,7 @@ let
       export VK_ICD_FILENAMES="/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json"
       export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d"
       export __GLX_VENDOR_LIBRARY_NAME="mesa"
-      export MESA_LOADER_DRIVER_OVERRIDE="zink"
+      # export MESA_LOADER_DRIVER_OVERRIDE="zink"
 
       # Enable box64/box86 logging if needed
       ${BOX64_VARS}
@@ -162,7 +187,7 @@ box64BashWrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
   export BOX64_TRACE_FILE="stderr"
   export BOX86_TRACE_FILE="stderr"
 
-  exec ${pkgs.muvm}/bin/muvm ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.x86.bash}/bin/bash "$@"
+  exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.x86.bash}/bin/bash "$@"
 '';
 box64Wrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
   #!${pkgs.bash}/bin/sh
@@ -175,7 +200,7 @@ box64Wrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
   BOX64_SHOWSEGV=1
   BOX64_DLSYM_ERROR=1
 
-  exec ${pkgs.muvm}/bin/muvm ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 "$@"
+  exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 "$@"
 '';
 in {
   options.mySystem.box64.enable = mkEnableOption "box64";
@@ -219,7 +244,7 @@ in {
         # Fix Steam Runtime paths
         export STEAM_RUNTIME=1
         export STEAM_RUNTIME_SCOUT="$STEAM_RUNTIME"
-        export STEAM_RUNTIME_SNIER="$STEAM_RUNTIME/sniper"
+        # export STEAM_RUNTIME_SNIER="$STEAM_RUNTIME/sniper"
         
         # Create required runtime directory
         mkdir -p "$STEAM_RUNTIME_SNIER"
@@ -233,12 +258,22 @@ in {
           steam://open/minigameslist "$@"
       '';
 
+      heroicx86Wrapper = pkgs.writeScriptBin "box64-bashx86-heroicx86-wrapper" ''
+        #!${pkgs.bash}/bin/sh
+        ${BOX64_VARS}
+
+        exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 \
+          ${pkgs.x86.bash}/bin/bash ${pkgs.x86.heroic-unwrapped}/bin/heroic
+      '';
+
     in [
       # steam-related packages
       box64Wrapper
       box64BashWrapper
       #steamx86
       x86.steam-unwrapped
+      x86.heroic-unwrapped
+      heroicx86Wrapper
       steamx86Wrapper
       steamFHS
       mybox64
