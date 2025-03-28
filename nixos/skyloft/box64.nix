@@ -16,6 +16,7 @@ let
     export BOX64_DYNAREC_LOG=${BOX64_DYNAREC_LOG}
     export DBUS_FATAL_WARNINGS=1
     export STEAM_RUNTIME=${STEAM_RUNTIME}
+    BOX64_AVX=0 # didnt help https://github.com/ptitSeb/box64/issues/1691
   '';
 
   # Grouped common libraries needed for the FHS environment (64-bit ARM versions)
