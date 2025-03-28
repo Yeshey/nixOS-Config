@@ -3,7 +3,7 @@
 with lib;
 let
   cfg = config.mySystem.box64;
-  BOX64_LOG = "1";
+  BOX64_LOG = "0";
   BOX64_DYNAREC_LOG = "0";
   STEAMOS = "1";
   STEAM_RUNTIME = "1";
@@ -24,7 +24,7 @@ let
     gnutls openalSoft udev xorg.libXinerama xorg.libXdamage xorg.libXScrnSaver xorg.libxcb libva gcc-unwrapped.lib libgccjit
     libpng libpulseaudio libjpeg libvorbis stdenv.cc.cc.lib xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXfixes
     xorg.libXcursor xorg.libXi xorg.libXcomposite xorg.libXtst xorg.libSM xorg.libICE libGL libglvnd vulkan-loader freetype
-    openssl curl zlib dbus ncurses SDL2
+    openssl curl zlib dbus-glib ncurses SDL2
     vulkan-headers vulkan-loader vulkan-tools
     libva mesa.drivers
     ncurses5 ncurses6 ncurses
@@ -48,6 +48,12 @@ let
     # Keep existing libraries and add:
     libudev-zero
     libusb1 ibus-engines.kkc gtk3
+
+    xdg-utils
+    vulkan-validation-layers vulkan-headers
+
+    # https://github.com/ptitSeb/box64/issues/1780#issuecomment-2627480114
+    zenity dbus libnsl libunity pciutils openal
   ];
 
   # FHS environment that spawns a bash shell by default, or runs a given command if arguments are provided
@@ -122,7 +128,13 @@ let
 
       export BOX64_EMULATED_LIBS="libmpg123.so.0"
       export BOX64_TRACE_FILE="stderr"
-      export BOX86_TRACE_FILE="stderr"
+      #export BOX86_TRACE_FILE="stderr"
+
+      BOX64_LOG=1
+      #BOX64_TRACE_FILE=/tmp/steamwebhelper-%pid.txt
+      BOX64_SHOWSEGV=1
+      BOX64_DLSYM_ERROR=1
+
       export STEAM_RUNTIME=${STEAM_RUNTIME}
       # Add sniper runtime path
       # export STEAM_RUNTIME_SCOUT="/home/yeshey/.local/share/Steam/ubuntu12_32/steam-runtime/sniper"
@@ -149,14 +161,21 @@ box64BashWrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
   ${BOX64_VARS}
   export BOX64_TRACE_FILE="stderr"
   export BOX86_TRACE_FILE="stderr"
-  exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.x86.bash}/bin/bash "$@"
+
+  exec ${pkgs.muvm}/bin/muvm ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.x86.bash}/bin/bash "$@"
 '';
 box64Wrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
   #!${pkgs.bash}/bin/sh
   ${BOX64_VARS}
   export BOX64_TRACE_FILE="stderr"
-  export BOX86_TRACE_FILE="stderr"
-  exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 "$@"
+  #export BOX86_TRACE_FILE="stderr"
+
+  BOX64_LOG=1
+  #BOX64_TRACE_FILE=/tmp/steamwebhelper-%pid.txt
+  BOX64_SHOWSEGV=1
+  BOX64_DLSYM_ERROR=1
+
+  exec ${pkgs.muvm}/bin/muvm ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 "$@"
 '';
 in {
   options.mySystem.box64.enable = mkEnableOption "box64";
@@ -224,6 +243,7 @@ in {
       steamFHS
       mybox64
       x86.bash #(now this one appears with whereis bash)
+      muvm
       # additional steam-run tools
       # steam-tui steamcmd steam-unwrapped
     ];
