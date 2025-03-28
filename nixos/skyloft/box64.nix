@@ -157,7 +157,7 @@ box64Wrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
   ${BOX64_VARS}
   export BOX64_TRACE_FILE="stderr"
   export BOX86_TRACE_FILE="stderr"
-  exec ${steamFHS}/bin/steam-fhs ${pkgs.x86.bash}/bin/bash "$@"
+  exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 "$@"
 '';
 in {
   options.mySystem.box64.enable = mkEnableOption "box64";
