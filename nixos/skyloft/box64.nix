@@ -14,7 +14,7 @@ let
     export STEAMOS=${STEAMOS} # https://github.com/ptitSeb/box64/issues/91#issuecomment-898858125
     export BOX64_LOG=${BOX64_LOG}
     export BOX64_DYNAREC_LOG=${BOX64_DYNAREC_LOG}
-    export DBUS_FATAL_WARNINGS=0
+    export DBUS_FATAL_WARNINGS=1
     export STEAM_RUNTIME=${STEAM_RUNTIME}
   '';
 
@@ -123,7 +123,6 @@ let
       export BOX64_EMULATED_LIBS="libmpg123.so.0"
       export BOX64_TRACE_FILE="stderr"
       export BOX86_TRACE_FILE="stderr"
-      export STEAM_RUNTIME_PREFER_HOST_LIBRARIES="0"
       export STEAM_RUNTIME=${STEAM_RUNTIME}
       # Add sniper runtime path
       # export STEAM_RUNTIME_SCOUT="/home/yeshey/.local/share/Steam/ubuntu12_32/steam-runtime/sniper"
@@ -199,7 +198,7 @@ in {
         #!${pkgs.bash}/bin/sh
         ${BOX64_VARS}
         # Fix Steam Runtime paths
-        export STEAM_RUNTIME="$HOME/.local/share/Steam/ubuntu12_32/steam-runtime"
+        export STEAM_RUNTIME=1
         export STEAM_RUNTIME_SCOUT="$STEAM_RUNTIME"
         export STEAM_RUNTIME_SNIER="$STEAM_RUNTIME/sniper"
         
