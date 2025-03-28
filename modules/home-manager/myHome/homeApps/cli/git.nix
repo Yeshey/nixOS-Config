@@ -35,6 +35,11 @@ in
         enable = true;
         userName = lib.mkIf cfg.personalGit.enable "${cfg.personalGit.userName}";
         userEmail = lib.mkIf cfg.personalGit.enable "${cfg.personalGit.userEmail}";
+        extraConfig = {
+          core = {
+            filemode = false; # syncthing made file changes in git with no content
+          };
+        };
         # fix github desktop error
         lfs.enable = true; 
       };

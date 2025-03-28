@@ -35,8 +35,7 @@ in
         enable = true;
         userName = lib.mkIf cfg.personalGit.enable "${cfg.personalGit.userName}";
         userEmail = lib.mkIf cfg.personalGit.enable "${cfg.personalGit.userEmail}";
-        # fix github desktop error
-        lfs.enable = true; 
+        lfs.enable = true; # fix github desktop error
       };
     };
   };

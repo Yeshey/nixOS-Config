@@ -28,5 +28,18 @@ in
       unzip
       hyfetch
     ];
+
+    programs = {
+      git = {
+        enable = true;
+        lfs.enable = true; # makes github desktop work?
+        config = {
+          core = {
+            "filemode" = "false"; # syncthing made file changes in git with no content
+          };
+        };
+      };
+    };
+    
   };
 }
