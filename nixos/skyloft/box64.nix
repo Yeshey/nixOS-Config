@@ -14,7 +14,7 @@ let
     export STEAMOS=${STEAMOS} # https://github.com/ptitSeb/box64/issues/91#issuecomment-898858125
     export BOX64_LOG=${BOX64_LOG}
     export BOX64_DYNAREC_LOG=${BOX64_DYNAREC_LOG}
-    export DBUS_FATAL_WARNINGS=0
+    export DBUS_FATAL_WARNINGS=1
     export STEAM_RUNTIME=${STEAM_RUNTIME}
   '';
 
@@ -69,7 +69,7 @@ let
 
       # Create Steam Runtime directory structure
       mkdir -p $out/steam-runtime/sniper
-      ln -sfn ${pkgs.steamx86}/share/steam/steam-runtime $out/steam-runtime
+      ln -sfn ${pkgs.x86.steam-unwrapped}/share/steam/steam-runtime $out/steam-runtime
 
       # Fix ncurses symlinks
       ln -sfn ${pkgs.ncurses5}/lib/libncursesw.so.6 $out/lib/libtinfo.so.6
@@ -123,7 +123,6 @@ let
       export BOX64_EMULATED_LIBS="libmpg123.so.0"
       export BOX64_TRACE_FILE="stderr"
       export BOX86_TRACE_FILE="stderr"
-      export STEAM_RUNTIME_PREFER_HOST_LIBRARIES="0"
       export STEAM_RUNTIME=${STEAM_RUNTIME}
       # Add sniper runtime path
       # export STEAM_RUNTIME_SCOUT="/home/yeshey/.local/share/Steam/ubuntu12_32/steam-runtime/sniper"
@@ -150,33 +149,21 @@ box64BashWrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
   ${BOX64_VARS}
   export BOX64_TRACE_FILE="stderr"
   export BOX86_TRACE_FILE="stderr"
-  exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.bashx86}/bin/bash "$@"
+  exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.x86.bash}/bin/bash "$@"
 '';
 box64Wrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
   #!${pkgs.bash}/bin/sh
   ${BOX64_VARS}
   export BOX64_TRACE_FILE="stderr"
   export BOX86_TRACE_FILE="stderr"
-  exec ${steamFHS}/bin/steam-fhs ${pkgs.bashx86}/bin/bash "$@"
+  exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 "$@"
 '';
 in {
   options.mySystem.box64.enable = mkEnableOption "box64";
 
   config = mkIf cfg.enable {
 
-
-    # Add these env variables to /home/yeshey/.local/share/Steam/steam.sh to get more logs when it downloaads the stuffs
-    #export STEAM_DEBUG=1  # Enables set -x in steam.sh
-    #export STEAM_LOG=1    # Additional Steam logging
-
-
-    # you made this comment in nixos discourse: https://discourse.nixos.org/t/how-to-install-steam-x86-64-on-a-pinephone-aarch64/19297/7?u=yeshey
-    
-    # Uncomment these lines if you need to set extra platforms for binfmt:
-    # boot.binfmt.emulatedSystems = ["i686-linux" "x86_64-linux"];
-    # nix.settings.extra-platforms = config.boot.binfmt.emulatedSystems;
-    # nix.settings.extra-platforms = ["i686-linux" "x86_64-linux"];
-
+    # Needed to allow installing x86 packages, otherwise: error: i686 Linux package set can only be used with the x86 family
     nixpkgs.overlays = [
       (self: super: let
         x86pkgs = import pkgs.path {
@@ -184,11 +171,26 @@ in {
           config.allowUnfree = true;
         };
       in {
-        inherit (x86pkgs) steam steam-run;
-        bashx86 = x86pkgs.bashInteractive;
-        steamx86 = x86pkgs.steam-unwrapped;
+        inherit (x86pkgs) steam-run;
+        # steam steam-run
+        #steam steam-run;
+        #bashx86 = x86pkgs.bashInteractive;
+        #steamx86 = x86pkgs.steam-unwrapped;
       })
     ];
+
+    # Add these env variables to /home/yeshey/.local/share/Steam/steam.sh to get more logs when it downloaads the stuffs
+    #export STEAM_DEBUG=1  # Enables set -x in steam.sh
+    #export STEAM_LOG=1    # Additional Steam logging
+
+    # you made this comment in nixos discourse: https://discourse.nixos.org/t/how-to-install-steam-x86-64-on-a-pinephone-aarch64/19297/7?u=yeshey
+    
+    # Uncomment these lines if you need to set extra platforms for binfmt:
+    # boot.binfmt.emulatedSystems = ["i686-linux" "x86_64-linux"];
+    # nix.settings.extra-platforms = config.boot.binfmt.emulatedSystems;
+    nix.settings.extra-platforms = ["i686-linux" "x86_64-linux"];
+    nixpkgs.config.allowUnsupportedSystem = true;
+
 
     environment.systemPackages = with pkgs; let 
 
@@ -196,7 +198,7 @@ in {
         #!${pkgs.bash}/bin/sh
         ${BOX64_VARS}
         # Fix Steam Runtime paths
-        export STEAM_RUNTIME="$HOME/.local/share/Steam/ubuntu12_32/steam-runtime"
+        export STEAM_RUNTIME=1
         export STEAM_RUNTIME_SCOUT="$STEAM_RUNTIME"
         export STEAM_RUNTIME_SNIER="$STEAM_RUNTIME/sniper"
         
@@ -204,7 +206,7 @@ in {
         mkdir -p "$STEAM_RUNTIME_SNIER"
         export STEAM_RUNTIME_SCOUT="$HOME/.local/share/Steam/ubuntu12_32/steam-runtime"
         exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 \
-          ${pkgs.bashx86}/bin/bash ${pkgs.steamx86}/lib/steam/bin_steam.sh \
+          ${pkgs.x86.bash}/bin/bash ${pkgs.x86.steam-unwrapped}/lib/steam/bin_steam.sh \
           -no-cef-sandbox \
           -cef-disable-gpu \
           -cef-disable-gpu-compositor \
@@ -216,12 +218,12 @@ in {
       # steam-related packages
       box64Wrapper
       box64BashWrapper
-      steamx86
+      #steamx86
+      x86.steam-unwrapped
       steamx86Wrapper
       steamFHS
       mybox64
-      box86
-      bashx86 #(now this one appears with whereis bash)
+      x86.bash #(now this one appears with whereis bash)
       # additional steam-run tools
       # steam-tui steamcmd steam-unwrapped
     ];
