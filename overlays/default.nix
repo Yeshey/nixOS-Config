@@ -24,4 +24,21 @@
       config.allowUnfree = true;
     };
   };
+
+
+  x86-packages = final: prev: {
+    x86 = let
+    in import prev.path {
+      system = "x86_64-linux";
+      config.allowUnfree = true;
+      overlays = [
+        (final: super: {
+          # Add any x86-specific overrides here
+        })
+      ];
+    };
+  };
+
+
+
 }
