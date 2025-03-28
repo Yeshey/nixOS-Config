@@ -1,3 +1,4 @@
+# made a box64 issue https://github.com/ptitSeb/box64/issues/2478
 { inputs, config, pkgs, lib, ... }:
 
 with lib;
