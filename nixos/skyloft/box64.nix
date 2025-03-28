@@ -152,6 +152,13 @@ box64BashWrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
   export BOX86_TRACE_FILE="stderr"
   exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.bashx86}/bin/bash "$@"
 '';
+box64Wrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
+  #!${pkgs.bash}/bin/sh
+  ${BOX64_VARS}
+  export BOX64_TRACE_FILE="stderr"
+  export BOX86_TRACE_FILE="stderr"
+  exec ${steamFHS}/bin/steam-fhs ${pkgs.bashx86}/bin/bash "$@"
+'';
 in {
   options.mySystem.box64.enable = mkEnableOption "box64";
 
@@ -207,6 +214,7 @@ in {
 
     in [
       # steam-related packages
+      box64Wrapper
       box64BashWrapper
       steamx86
       steamx86Wrapper
@@ -225,14 +233,14 @@ in {
       first_box64 =
       {
         #interpreter = "${pkgs.mybox64}/bin/mybox64";
-        interpreter = "${box64BashWrapper}/bin/box64-bashx86-wrapper";
+        interpreter = "${box64Wrapper}/bin/box64-bashx86-wrapper";
         # x86_64 binaries: magic from nixpkgs “x86_64-linux”
         magicOrExtension = ''\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00'';
         mask = ''\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
       };
       second_box64 = {
         #interpreter = "${pkgs.mybox64}/bin/mybox64";
-        interpreter = "${box64BashWrapper}/bin/box64-bashx86-wrapper";
+        interpreter = "${box64Wrapper}/bin/box64-bashx86-wrapper";
         # i686 binaries: magic from nixpkgs “i686-linux”
         magicOrExtension = ''\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x06\x00'';
         mask = ''\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
