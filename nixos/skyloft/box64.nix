@@ -73,7 +73,7 @@ let
 in
 let
   cfg = config.mySystem.box64;
-  BOX64_LOG = "1";
+  BOX64_LOG = "0";
   BOX64_DYNAREC_LOG = "0";
   STEAMOS = "1";
   STEAM_RUNTIME = "1";
@@ -268,6 +268,7 @@ in {
           -cef-disable-gpu \
           -cef-disable-gpu-compositor \
           -system-composer \
+          -srt-logger-opened \ 
           steam://open/minigameslist "$@"
       '';
 
