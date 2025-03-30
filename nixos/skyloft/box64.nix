@@ -2,24 +2,7 @@
 { inputs, config, pkgs, lib, ... }:
 
 with lib;
-let
-  cfg = config.mySystem.box64;
-  BOX64_LOG = "1";
-  BOX64_DYNAREC_LOG = "0";
-  STEAMOS = "1";
-  STEAM_RUNTIME = "1";
-  BOX64_VARS= ''
-    export BOX64_DLSYM_ERROR=1
-    export BOX64_TRANSLATE_NOWAIT=1
-    export BOX64_NOBANNER=1
-    export STEAMOS=${STEAMOS} # https://github.com/ptitSeb/box64/issues/91#issuecomment-898858125
-    export BOX64_LOG=${BOX64_LOG}
-    export BOX64_DYNAREC_LOG=${BOX64_DYNAREC_LOG}
-    export DBUS_FATAL_WARNINGS=1
-    export STEAM_RUNTIME=${STEAM_RUNTIME}
-    BOX64_AVX=0 # didnt help https://github.com/ptitSeb/box64/issues/1691
-  '';
-
+let 
   # Grouped common libraries needed for the FHS environment (64-bit ARM versions)
   steamLibs = with pkgs; [
     glibc glib.out gtk2 gdk-pixbuf pango.out cairo.out fontconfig libdrm libvdpau expat util-linux at-spi2-core libnotify
@@ -78,7 +61,27 @@ let
 
     libdrm.out
     unstable.libgbm
+    unstable.libgbm.out
   ];
+in
+let
+  cfg = config.mySystem.box64;
+  BOX64_LOG = "1";
+  BOX64_DYNAREC_LOG = "0";
+  STEAMOS = "1";
+  STEAM_RUNTIME = "1";
+  BOX64_VARS= ''
+    export BOX64_DLSYM_ERROR=1
+    export BOX64_TRANSLATE_NOWAIT=1
+    export BOX64_NOBANNER=1
+    export STEAMOS=${STEAMOS} # https://github.com/ptitSeb/box64/issues/91#issuecomment-898858125
+    export BOX64_LOG=${BOX64_LOG}
+    export BOX64_DYNAREC_LOG=${BOX64_DYNAREC_LOG}
+    export DBUS_FATAL_WARNINGS=1
+    export STEAM_RUNTIME=${STEAM_RUNTIME}
+    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") steamLibs}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu" # didn't help
+    BOX64_AVX=0 # didnt help https://github.com/ptitSeb/box64/issues/1691
+  '';
 
   # FHS environment that spawns a bash shell by default, or runs a given command if arguments are provided
   steamFHS = pkgs.buildFHSUserEnv {
@@ -142,7 +145,7 @@ let
       # Set up environment variables for box64 and libraries
       export STEAM_EXTRA_COMPAT_TOOLS_PATHS="${pkgs.mybox64}/bin"
       export BOX64_PATH="${pkgs.mybox64}/bin"
-      export BOX64_LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+      # export BOX64_LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
       
       export VK_ICD_FILENAMES="/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json"
       export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d"
@@ -193,7 +196,7 @@ box64BashWrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
 
   exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.x86.bash}/bin/bash "$@"
 '';
-box64Wrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
+box64Wrapper = pkgs.writeScriptBin "box64-wrapper" ''
   #!${pkgs.bash}/bin/sh
   ${BOX64_VARS}
   export BOX64_TRACE_FILE="stderr"
@@ -269,13 +272,24 @@ in {
           ${pkgs.x86.bash}/bin/bash ${pkgs.x86.heroic-unwrapped}/bin/heroic
       '';
 
+      steamcmdx86Wrapper = pkgs.writeScriptBin "box64-bashx86-steamcmdx86-wrapper" ''
+        #!${pkgs.bash}/bin/sh
+        ${BOX64_VARS}
+
+        exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 \
+          ${pkgs.x86.bash}/bin/bash ${pkgs.x86.steamcmd}/bin/steamcmd
+      # '';
+
     in [
       # steam-related packages
       box64Wrapper
       box64BashWrapper
+      unstable.fex # idfk man
       #steamx86
       x86.steam-unwrapped
       x86.heroic-unwrapped
+      # steamcmdx86Wrapper
+      # pkgs.x86.steamcmd
       heroicx86Wrapper
       steamx86Wrapper
       steamFHS
@@ -293,14 +307,14 @@ in {
       first_box64 =
       {
         #interpreter = "${pkgs.mybox64}/bin/mybox64";
-        interpreter = "${box64Wrapper}/bin/box64-bashx86-wrapper";
+        interpreter = "${box64Wrapper}/bin/box64-wrapper";
         # x86_64 binaries: magic from nixpkgs “x86_64-linux”
         magicOrExtension = ''\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00'';
         mask = ''\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
       };
       second_box64 = {
         #interpreter = "${pkgs.mybox64}/bin/mybox64";
-        interpreter = "${box64Wrapper}/bin/box64-bashx86-wrapper";
+        interpreter = "${box64Wrapper}/bin/box64-wrapper";
         # i686 binaries: magic from nixpkgs “i686-linux”
         magicOrExtension = ''\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x06\x00'';
         mask = ''\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
