@@ -4,7 +4,7 @@
 with lib;
 let
   cfg = config.mySystem.box64;
-  BOX64_LOG = "0";
+  BOX64_LOG = "1";
   BOX64_DYNAREC_LOG = "0";
   STEAMOS = "1";
   STEAM_RUNTIME = "1";
@@ -75,6 +75,9 @@ let
     libxml2               # For xml symbols
     llvmPackages.libllvm  # For libLLVM
     libllvm
+
+    libdrm.out
+    unstable.libgbm
   ];
 
   # FHS environment that spawns a bash shell by default, or runs a given command if arguments are provided
@@ -157,7 +160,6 @@ let
       export BOX64_TRACE_FILE="stderr"
       #export BOX86_TRACE_FILE="stderr"
 
-      BOX64_LOG=1
       #BOX64_TRACE_FILE=/tmp/steamwebhelper-%pid.txt
       BOX64_SHOWSEGV=1
       BOX64_DLSYM_ERROR=1
@@ -197,7 +199,6 @@ box64Wrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
   export BOX64_TRACE_FILE="stderr"
   #export BOX86_TRACE_FILE="stderr"
 
-  BOX64_LOG=1
   #BOX64_TRACE_FILE=/tmp/steamwebhelper-%pid.txt
   BOX64_SHOWSEGV=1
   BOX64_DLSYM_ERROR=1
@@ -246,7 +247,7 @@ in {
         # Fix Steam Runtime paths
         export STEAM_RUNTIME=1
         export STEAM_RUNTIME_SCOUT="$STEAM_RUNTIME"
-        # export STEAM_RUNTIME_SNIER="$STEAM_RUNTIME/sniper"
+        export STEAM_RUNTIME_SNIER="$STEAM_RUNTIME/sniper"
         
         # Create required runtime directory
         mkdir -p "$STEAM_RUNTIME_SNIER"

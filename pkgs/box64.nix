@@ -1,4 +1,5 @@
-{
+#{
+  {
   lib,
   stdenv,
   fetchFromGitHub,
@@ -14,7 +15,8 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mybox64";
-  version = "0.3.4";
+  #version = "0.3.4";
+  version = "c40f9651bc51c0f3446484233d6ce63d05ec4b7b";
   binaryName = "mybox64";
   doCheck = false;
 
