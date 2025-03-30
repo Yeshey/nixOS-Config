@@ -87,6 +87,7 @@ let
     export DBUS_FATAL_WARNINGS=1
     export STEAM_RUNTIME=${STEAM_RUNTIME}
     export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") steamLibs}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu" # didn't help
+    export DBUS_FATAL_WARNINGS=0
     BOX64_AVX=0 # didnt help https://github.com/ptitSeb/box64/issues/1691
   '';
 
@@ -308,26 +309,46 @@ in {
       # steam-tui steamcmd steam-unwrapped
     ];
 
-    boot.binfmt.registrations = 
-    let 
-
-    in {
-      first_box64 =
-      {
-        #interpreter = "${pkgs.mybox64}/bin/mybox64";
+    boot.binfmt.registrations = {
+      i386-linux = {
         interpreter = "${box64Wrapper}/bin/box64-wrapper";
-        # x86_64 binaries: magic from nixpkgs “x86_64-linux”
-        magicOrExtension = ''\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00'';
-        mask = ''\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
+        magicOrExtension = ''\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x03\x00'';
+        mask             = ''\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
       };
-      second_box64 = {
-        #interpreter = "${pkgs.mybox64}/bin/mybox64";
+
+      x86_64-linux = {
         interpreter = "${box64Wrapper}/bin/box64-wrapper";
-        # i686 binaries: magic from nixpkgs “i686-linux”
-        magicOrExtension = ''\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x06\x00'';
-        mask = ''\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
+        magicOrExtension = ''\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00'';
+        mask             = ''\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
       };
     };
+
+
+    # boot.binfmt.registrations = # https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/system/boot/binfmt.nix
+    # let 
+
+    # in {
+    #   first_box64 =
+    #   {
+    #     #interpreter = "${pkgs.mybox64}/bin/mybox64";
+    #     interpreter = "${box64Wrapper}/bin/box64-wrapper";
+    #     # x86_64 binaries: magic from nixpkgs “x86_64-linux”
+    #     magicOrExtension = ''\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00'';
+    #     mask = ''\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
+    #   };
+    #   i686 = {
+    #     interpreter = "${box64Wrapper}/bin/box64-wrapper";
+    #     magicOrExtension = ''\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x03\x00'';
+    #     mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff\xff'';
+    #   };
+    #   # second_box64 = {
+    #   #   #interpreter = "${pkgs.mybox64}/bin/mybox64";
+    #   #   interpreter = "${box64Wrapper}/bin/box64-wrapper";
+    #   #   # i686 binaries: magic from nixpkgs “i686-linux”
+    #   #   magicOrExtension = ''\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x06\x00'';
+    #   #   mask = ''\xff\xff\xff\xff\xff\xfe\xfe\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
+    #   # };
+    # };
 
   # with this you can run steam-fhs, and the following command:
   # TEAMOS=1 BOX64_LOG=0 mybox64 /nix/store/x9d49vaqlrkw97p9ichdwrnbh013kq7z-bash-interactive-5.2p37/bin/bash /nix/store/2r90fn1idrk09ghra2zg799pff249hmj-steam-unwrapped-1.0.0.81/lib/steam/bin_steam.sh
