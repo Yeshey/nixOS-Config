@@ -62,6 +62,13 @@ let
     libdrm.out
     unstable.libgbm
     unstable.libgbm.out
+
+    libselinux
+    libcap libcap_ng libcaption
+
+    gmp
+    gmpxx 
+    libgmpris
   ];
 in
 let
