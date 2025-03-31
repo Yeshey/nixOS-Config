@@ -174,14 +174,14 @@ in
           # 2026
           ${ignorePattern "2026" "
             //*
-            //(?i)Photos&Videos
+            //(?i)PhotosAndVideos
             //.git
           "}
 
           # 2025
           ${ignorePattern "2025" "
             //*
-            //(?i)Photos&Videos
+            //(?i)Photos&PhotosAndVideos
             //.git
             ProjetoIAA
           "}
@@ -189,7 +189,7 @@ in
           # 2024
           ${ignorePattern "2024" "
             //*
-            //(?i)Photos&Videos
+            PhotosAndVideos
             //.git
             learnWithT*
             AI-Master-Repo-IAA*
