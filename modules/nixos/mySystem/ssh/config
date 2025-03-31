@@ -69,4 +69,4 @@ Host kakariko
   UserKnownHostsFile /dev/null
   ProxyJump oracle
 # You can bind a port from the target PC to the local PC with for example:
-# ssh -L 8891:localhost:8891 personal-pc
+# ssh -L 8891:localhost:8891 hyrulecastle
