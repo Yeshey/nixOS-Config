@@ -35,11 +35,11 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
   - If you want to add a [termux:widget](https://github.com/termux/termux-widget) to connect to your computers with their reverse proxy to the server (can be enabled with [autosshReverseProxy](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/autosshReverseProxy.nix)) you can add to `~/.shortcuts/` these files:
     - `connectHyruleCastle`:
       ```sh
-      ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@143.47.53.175 "ssh -t -p 2232 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null localhost"
+      ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@143.47.53.175 "ssh -t -p 2232 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@localhost"
       ```
     - `connectKakariko`:
       ```sh
-      ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@143.47.53.175 "ssh -t -p 2233 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null localhost"
+      ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@143.47.53.175 "ssh -t -p 2233 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@localhost"
       ```
     - `connectSkyloft`:
       ```sh
