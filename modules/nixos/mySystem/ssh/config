@@ -1,4 +1,4 @@
-# also makes it so you can use my_identity for guthub instead of their keys with weird names
+# also makes it so you can use my_identity for github instead of their keys with weird names
 IdentityFile ~/.ssh/my_identity
 
 # Read more about SSH config files: https://linux.die.net/man/5/ssh_config
@@ -38,3 +38,35 @@ HOST raspberrypi-nogs
 #    ForwardX11    yes
 #    ForwardX11Trusted    yes
 #    IdentityFile  ~/.ssh/raspberry_rsa
+
+
+# These are for connecting to my PCs with double hops through the server.
+# First hop: Connect to the remote server
+Host oracle
+  HostName 143.47.53.175
+  User yeshey
+  IdentityFile ~/.ssh/temp
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+
+# Second hop: Connect from remote server to your personal PC
+Host hyrulecastle
+  HostName localhost
+  Port 2232
+  User yeshey
+  IdentityFile ~/.ssh/temp
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+  ProxyJump oracle
+
+# Second hop: Connect from remote server to your personal PC
+Host kakariko
+  HostName localhost
+  Port 2233
+  User yeshey
+  IdentityFile ~/.ssh/temp
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+  ProxyJump oracle
+# You can bind a port from the target PC to the local PC with for example:
+# ssh -L 8891:localhost:8891 personal-pc
