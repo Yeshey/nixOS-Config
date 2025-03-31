@@ -6,9 +6,10 @@
   ...
 }:
 
-# Connect with nix-shell -p freerdp --run "xfreerdp /v:143.47.53.175 /u:yeshey /dynamic-resolution /scale-desktop:200 /kbd:0x0816 /audio-mode:1 /clipboard /network:modem /compression"
+# Connect with nix-shell -p freerdp --run "xfreerdp /v:143.47.53.175 /u:yeshey /dynamic-resolution /kbd:0x0816 /audio-mode:1 /clipboard /network:modem /compression"
 # /kbd:0x0816 is portuguese keyboard
 # /kbd:0x0416 for brazilian keyboard
+# maybe run `setxkbmap -layout pt` to get the pt layout, idt this worked
 # /scale-desktop:200 isn't doing anything
 # open port 3389
 # set keyboard with `setxkbmap -layout br`, see what keyboard is set with `setxkbmap -print`
@@ -24,9 +25,6 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    # Remote Desktop with XRDP
-    # xfreerdp /v:143.47.53.175 /u:yeshey /dynamic-resolution /audio-mode:1 /clipboard
-    # run `setxkbmap -layout pt` to get the pt layout
     #services.xserver.enable = true;
     #services.displayManager.sddm.enable = true;
     #services.desktopManager.plasma6.enable = true;
