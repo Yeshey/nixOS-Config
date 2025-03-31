@@ -49,7 +49,7 @@ Host oracle
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
 
-# Second hop: Connect from remote server to your personal PC
+# Second hop: Connect from remote server to the Lenovo PC
 Host hyrulecastle
   HostName localhost
   Port 2232
@@ -59,7 +59,7 @@ Host hyrulecastle
   UserKnownHostsFile /dev/null
   ProxyJump oracle
 
-# Second hop: Connect from remote server to your personal PC
+# Second hop: Connect from remote server to the surface Pro
 Host kakariko
   HostName localhost
   Port 2233
