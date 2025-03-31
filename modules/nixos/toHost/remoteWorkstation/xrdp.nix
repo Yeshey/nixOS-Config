@@ -6,7 +6,10 @@
   ...
 }:
 
-# Connect with nix-shell -p freerdp --run "xfreerdp /v:143.47.53.175 /u:yeshey /dynamic-resolution /audio-mode:1 /clipboard /network:modem /compression"
+# Connect with nix-shell -p freerdp --run "xfreerdp /v:143.47.53.175 /u:yeshey /dynamic-resolution /scale-desktop:200 /kbd:0x0816 /audio-mode:1 /clipboard /network:modem /compression"
+# /kbd:0x0816 is portuguese keyboard
+# /kbd:0x0416 for brazilian keyboard
+# /scale-desktop:200 isn't doing anything
 # open port 3389
 # set keyboard with `setxkbmap -layout br`, see what keyboard is set with `setxkbmap -print`
 # see https://sourceforge.net/p/rdesktop/code/1704/tree/rdesktop/trunk/doc/keymap-names.txt#l78, idk, check chatGPT
