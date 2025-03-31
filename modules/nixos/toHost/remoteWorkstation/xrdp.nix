@@ -6,7 +6,10 @@
   ...
 }:
 
-# Connect with nix-shell -p freerdp --run "xfreerdp /v:143.47.53.175 /u:yeshey /dynamic-resolution /kbd:0x0816 /audio-mode:1 /clipboard /network:modem /compression"
+# Connect with 
+# nix-shell -p freerdp --run "xfreerdp /v:143.47.53.175 /u:yeshey /dynamic-resolution /kbd:0x0816 /audio-mode:1 /clipboard /network:modem /compression"
+# Or something like
+# nix-shell -p freerdp --run "xfreerdp /v:143.47.53.175 /u:yeshey /w:1920 /h:1080 /smart-sizing /kbd:0x0816 /audio-mode:1 /clipboard /network:modem /compression" For a high dpi display (like surface pro 7)
 # /kbd:0x0816 is portuguese keyboard
 # /kbd:0x0416 for brazilian keyboard
 # maybe run `setxkbmap -layout pt` to get the pt layout, idt this worked
