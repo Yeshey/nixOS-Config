@@ -69,7 +69,71 @@ let
     gmp
     gmpxx 
     libgmpris
+
+    SDL2_image
+    SDL2_mixer
+    SDL2_ttf
+    bzip2
   ];
+
+  # Get 32-bit counterparts using armv7l cross-compilation
+  steamLibsAarch32 = let
+    crossPkgs = pkgs.pkgsCross.armv7l-hf-multiplatform;
+    getCrossLib = lib:
+      let
+        # Map problematic package names to their cross-compilation equivalents
+        crossName = 
+          if lib.pname or null == "gtk+" then "gtk2"
+          else if lib.pname or null == "openal-soft" then "openalSoft"
+          else if lib.pname or null == "systemd-minimal-libs" then "systemd"
+          else if lib.pname or null == "ibus-engines.libpinyin" then "ibus-engines"
+          else if lib ? pname then lib.pname
+          else lib.name;
+        
+        # Handle special cases where attributes need different access
+        finalPkg = crossPkgs.${crossName} or (throw "Missing cross package: ${crossName}");
+      in
+      builtins.tryEval finalPkg;
+  in
+    map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
+
+  steamLibsX86_64 = let
+    crossPkgs = pkgs.pkgsCross.gnu64;
+    getCrossLib = lib:
+      let
+        # Map problematic package names to their cross-compilation equivalents
+        crossName = 
+          if lib.pname or null == "gtk+-2.24.33" then "gtk2"
+          else if lib.pname or null == "openal-soft" then "openalSoft"
+          else if lib.pname or null == "systemd-minimal-libs" then "systemd"
+          else if lib.pname or null == "ibus-engines.libpinyin" then "ibus-engines"
+          else if lib ? pname then lib.pname
+          else lib.name;
+        
+        # Handle special cases where attributes need different access
+        finalPkg = crossPkgs.${crossName} or (throw "Missing cross package: ${crossName}");
+      in
+      builtins.tryEval finalPkg;
+  in map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
+
+  steamLibsI686 = let
+    crossPkgs = pkgs.pkgsCross.gnu32;
+    getCrossLib = lib:
+      let
+        # Map problematic package names to their cross-compilation equivalents
+        crossName = 
+          if lib.pname or null == "gtk+-2.24.33" then "gtk2"
+          else if lib.pname or null == "openal-soft" then "openalSoft"
+          else if lib.pname or null == "systemd-minimal-libs" then "systemd"
+          else if lib.pname or null == "ibus-engines.libpinyin" then "ibus-engines"
+          else if lib ? pname then lib.pname
+          else lib.name;
+        
+        # Handle special cases where attributes need different access
+        finalPkg = crossPkgs.${crossName} or (throw "Missing cross package: ${crossName}");
+      in
+      builtins.tryEval finalPkg;
+  in map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
 in
 let
   cfg = config.mySystem.box64;
@@ -86,8 +150,23 @@ let
     export BOX64_DYNAREC_LOG=${BOX64_DYNAREC_LOG}
     export DBUS_FATAL_WARNINGS=1
     export STEAM_RUNTIME=${STEAM_RUNTIME}
-    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") steamLibs}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu" # didn't help
-    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") steamLibs}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu" # didn't help
+
+    #export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") steamLibs}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu" # didn't help
+    #export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") steamLibs}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu" # didn't help
+
+    #export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsAarch32)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+    #export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsAarch32)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+
+    export BOX64_LD_LIBRARY_PATH="${
+      lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") 
+      (steamLibs ++ steamLibsX86_64 ++ steamLibsI686)
+    }:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+    
+    export LD_LIBRARY_PATH="${
+      lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") 
+      (steamLibs ++ steamLibsX86_64 ++ steamLibsI686)
+    }:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+
     export DBUS_FATAL_WARNINGS=0
     BOX64_AVX=0 # didnt help https://github.com/ptitSeb/box64/issues/1691
   '';
@@ -301,6 +380,7 @@ in {
       # pkgs.x86.steamcmd
       heroicx86Wrapper
       steamx86Wrapper
+      #pkgs.pkgsCross.gnu32.steam # :o
       steamFHS
       mybox64
       x86.bash #(now this one appears with whereis bash)
