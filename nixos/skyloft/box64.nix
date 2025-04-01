@@ -191,26 +191,26 @@ let
       builtins.tryEval finalPkg;
   in map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
 
-  # steamLibsMinei686 = let
-  #   crossPkgs = pkgs.i686;
-  #   getCrossLib = lib:
-  #     let
-  #       # Map problematic package names to their cross-compilation equivalents
-  #       crossName = 
-  #         if lib.pname or null == "xapp-gtk3" then "xapp-gtk3-module"
-  #         else if lib.pname or null == "unity" then "libunity"
-  #         else if lib.pname or null == "gtk+-2.24.33" then "gtk2"
-  #         else if lib.pname or null == "openal-soft" then "openalSoft"
-  #         else if lib.pname or null == "systemd-minimal-libs" then "systemd"
-  #         else if lib.pname or null == "ibus-engines.libpinyin" then "ibus-engines"
-  #         else if lib ? pname then lib.pname
-  #         else lib.name;
+  steamLibsMinei686 = let
+    crossPkgs = pkgs.i686;
+    getCrossLib = lib:
+      let
+        # Map problematic package names to their cross-compilation equivalents
+        crossName = 
+          if lib.pname or null == "xapp-gtk3" then "xapp-gtk3-module"
+          else if lib.pname or null == "unity" then "libunity"
+          else if lib.pname or null == "gtk+-2.24.33" then "gtk2"
+          else if lib.pname or null == "openal-soft" then "openalSoft"
+          else if lib.pname or null == "systemd-minimal-libs" then "systemd"
+          else if lib.pname or null == "ibus-engines.libpinyin" then "ibus-engines"
+          else if lib ? pname then lib.pname
+          else lib.name;
         
-  #       # Handle special cases where attributes need different access
-  #       finalPkg = crossPkgs.${crossName} or (throw "Missing cross package: ${crossName}");
-  #     in
-  #     builtins.tryEval finalPkg;
-  # in map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
+        # Handle special cases where attributes need different access
+        finalPkg = crossPkgs.${crossName} or (throw "Missing cross package: ${crossName}");
+      in
+      builtins.tryEval finalPkg;
+  in map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
 
 in
 
@@ -282,6 +282,7 @@ let
     #++ steamLibsX86_64 
     #++ steamLibsI686 # getting the feeling that I only need these: https://github.com/ptitSeb/box64/issues/2142
     #++ steamLibsMineX86_64
+    #++ steamLibsMinei686
     ;
 
     extraInstallCommands = ''
@@ -420,7 +421,8 @@ in {
           config.allowUnfree = true;
         };
       in {
-        inherit (i686pkgs) steam-run;
+        inherit (i686pkgs) ;
+        #steam-run;
         # steam steam-run
         #steam steam-run;
         #bashx86 = x86pkgs.bashInteractive;
