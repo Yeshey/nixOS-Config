@@ -16,7 +16,7 @@ let
     pkgs.curl.out
     libcef # (https://github.com/ptitSeb/box64/issues/1383)?
 
-    libdbusmenu       # For libdbusmenu-glib.so.4 and libdbusmenu-gtk.so.4
+    libdbusmenu       # For libdbusmenu-glib.so.4 and libdbusmenu-gtk.so.4 # causing Error: detected mismatched Qt dependencies: when compiled for steamLibsI686
     xcbutilxrm       # XCB utilities
     xorg.libxcb
     xorg.xcbutilkeysyms
@@ -129,7 +129,9 @@ let
       let
         # Map problematic package names to their cross-compilation equivalents
         crossName = 
-          if lib.pname or null == "gtk+-2.24.33" then "gtk2"
+          if lib.pname or null == "libdbusmenu" then "glibc"  # Skip libdbusmenu
+          else if lib.pname or null == "qt5" then "glibc"     # Skip qt5 packages
+          else if lib.pname or null == "gtk+-2.24.33" then "gtk2"
           else if lib.pname or null == "openal-soft" then "openalSoft"
           else if lib.pname or null == "systemd-minimal-libs" then "systemd"
           else if lib.pname or null == "ibus-engines.libpinyin" then "ibus-engines"
@@ -148,10 +150,17 @@ let
       let
         # Map problematic package names to their cross-compilation equivalents
         crossName = 
-          if lib.pname or null == "gtk+-2.24.33" then "gtk2"
+          if lib.pname or null == "libdbusmenu" then "glibc"  # Skip libdbusmenu
+          else if lib.pname or null == "swiftshader" then "glibc"     # Skip swiftshader packages 
+          else if lib.pname or null == "libgccjit" then "glibc"     # Skip swiftshader packages 
+          else if lib.pname or null == "qt5" then null     # Skip qt5 packages
+          else if lib.pname or null == "xapp-gtk3" then "xapp-gtk3-module"
+          else if lib.pname or null == "unity" then "libunity"
+          else if lib.pname or null == "gtk+-2.24.33" then "gtk2"
           else if lib.pname or null == "openal-soft" then "openalSoft"
           else if lib.pname or null == "systemd-minimal-libs" then "systemd"
           else if lib.pname or null == "ibus-engines.libpinyin" then "ibus-engines"
+          else if lib ? pname then lib.pname
           else if lib ? pname then lib.pname
           else lib.name;
         
@@ -167,7 +176,9 @@ let
       let
         # Map problematic package names to their cross-compilation equivalents
         crossName = 
-          if lib.pname or null == "gtk+-2.24.33" then "gtk2"
+          if lib.pname or null == "xapp-gtk3" then "xapp-gtk3-module"
+          else if lib.pname or null == "unity" then "libunity"
+          else if lib.pname or null == "gtk+-2.24.33" then "gtk2"
           else if lib.pname or null == "openal-soft" then "openalSoft"
           else if lib.pname or null == "systemd-minimal-libs" then "systemd"
           else if lib.pname or null == "ibus-engines.libpinyin" then "ibus-engines"
@@ -179,6 +190,28 @@ let
       in
       builtins.tryEval finalPkg;
   in map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
+
+  # steamLibsMinei686 = let
+  #   crossPkgs = pkgs.i686;
+  #   getCrossLib = lib:
+  #     let
+  #       # Map problematic package names to their cross-compilation equivalents
+  #       crossName = 
+  #         if lib.pname or null == "xapp-gtk3" then "xapp-gtk3-module"
+  #         else if lib.pname or null == "unity" then "libunity"
+  #         else if lib.pname or null == "gtk+-2.24.33" then "gtk2"
+  #         else if lib.pname or null == "openal-soft" then "openalSoft"
+  #         else if lib.pname or null == "systemd-minimal-libs" then "systemd"
+  #         else if lib.pname or null == "ibus-engines.libpinyin" then "ibus-engines"
+  #         else if lib ? pname then lib.pname
+  #         else lib.name;
+        
+  #       # Handle special cases where attributes need different access
+  #       finalPkg = crossPkgs.${crossName} or (throw "Missing cross package: ${crossName}");
+  #     in
+  #     builtins.tryEval finalPkg;
+  # in map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
+
 in
 
 /*
@@ -211,6 +244,9 @@ let
     export DBUS_FATAL_WARNINGS=1
     export STEAM_RUNTIME=${STEAM_RUNTIME}
     export SDL_VIDEODRIVER=x11  # wayland
+
+    # Set SwiftShader as primary
+    export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d"
     export VK_ICD_FILENAMES=${pkgs.swiftshader}/share/vulkan/icd.d/vk_swiftshader_icd.json # vulkaninfo should work with CPU now, probably should remove if I MAKE THIS WORK
 
     export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
@@ -228,6 +264,17 @@ let
       vulkan-validation-layers vulkan-headers
       libva-utils swiftshader
     ]) ++ steamLibs;
+
+  # Add these to profile setup
+  profile = ''
+    export LD_LIBRARY_PATH="${
+      lib.makeLibraryPath [
+        pkgs.libglvnd
+        pkgs.vulkan-loader
+        pkgs.libunity
+      ]
+    }:$LD_LIBRARY_PATH"
+  '';
 
   multiPkgs = pkgs: 
     steamLibs 
@@ -362,6 +409,18 @@ in {
         };
       in {
         inherit (x86pkgs) steam-run;
+        # steam steam-run
+        #steam steam-run;
+        #bashx86 = x86pkgs.bashInteractive;
+        #steamx86 = x86pkgs.steam-unwrapped;
+      })
+      (self: super: let
+        i686pkgs = import pkgs.path {
+          system = "i686-linux";
+          config.allowUnfree = true;
+        };
+      in {
+        inherit (i686pkgs) steam-run;
         # steam steam-run
         #steam steam-run;
         #bashx86 = x86pkgs.bashInteractive;
