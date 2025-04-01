@@ -249,8 +249,8 @@ let
     export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d"
     export VK_ICD_FILENAMES=${pkgs.swiftshader}/share/vulkan/icd.d/vk_swiftshader_icd.json # vulkaninfo should work with CPU now, probably should remove if I MAKE THIS WORK
 
-    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
-    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsI686)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsI686)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
 
     export DBUS_FATAL_WARNINGS=0
     BOX64_AVX=0 # didnt help https://github.com/ptitSeb/box64/issues/1691
@@ -280,7 +280,7 @@ let
     steamLibs 
     #++ steamLibsAarch32 
     #++ steamLibsX86_64 
-    #++ steamLibsI686 # getting the feeling that I only need these: https://github.com/ptitSeb/box64/issues/2142
+    ++ steamLibsI686 # getting the feeling that I only need these: https://github.com/ptitSeb/box64/issues/2142
     #++ steamLibsMineX86_64
     #++ steamLibsMinei686
     ;
@@ -491,7 +491,7 @@ in {
       x86.steam-unwrapped
       x86.heroic-unwrapped
       # steamcmdx86Wrapper
-      # pkgs.x86.steamcmd
+      pkgs.x86.steamcmd
       heroicx86Wrapper
       steamx86Wrapper
       #pkgs.pkgsCross.gnu32.steam
