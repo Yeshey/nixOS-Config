@@ -80,8 +80,11 @@ let
     SDL_mixer SDL_image SDL_Pango sdl-jstest SDL_compat SDL2_sound SDL2_mixer SDL2_image SDL2_Pango SDL_stretch 
     SDL_audiolib SDL2_mixer_2_0 SDL2_image_2_6 SDL2_image_2_0
 
-    libstdcxx5 libcdada libgcc
+    #libstdcxx5
+    libcdada
+    libgcc
 
+    swiftshader # CPU implementation of vulkan
   ];
 
   # Get 32-bit counterparts using armv7l cross-compilation
@@ -193,9 +196,10 @@ let
     export DBUS_FATAL_WARNINGS=1
     export STEAM_RUNTIME=${STEAM_RUNTIME}
     export SDL_VIDEODRIVER=x11  # wayland
+    export VK_ICD_FILENAMES=${pkgs.swiftshader}/share/vulkan/icd.d/vk_swiftshader_icd.json # vulkaninfo should work with CPU now, probably should remove if I MAKE THIS WORK
 
-    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsX86_64 ++ steamLibsI686)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
-    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsX86_64 ++ steamLibsI686)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
 
     export DBUS_FATAL_WARNINGS=0
     BOX64_AVX=0 # didnt help https://github.com/ptitSeb/box64/issues/1691
@@ -207,14 +211,14 @@ let
     targetPkgs = pkgs: (with pkgs; [
       mybox64 box86 steam-run zenity xdg-utils
       vulkan-validation-layers vulkan-headers
-      libva-utils
+      libva-utils swiftshader
     ]) ++ steamLibs;
 
   multiPkgs = pkgs: 
     steamLibs 
     #++ steamLibsAarch32 
     #++ steamLibsX86_64 
-    ++ steamLibsI686 # getting the feeling that I only need these: https://github.com/ptitSeb/box64/issues/2142
+    #++ steamLibsI686 # getting the feeling that I only need these: https://github.com/ptitSeb/box64/issues/2142
     #++ steamLibsMineX86_64
     ;
 
@@ -270,7 +274,6 @@ let
       export STEAM_EXTRA_COMPAT_TOOLS_PATHS="${pkgs.mybox64}/bin"
       export BOX64_PATH="${pkgs.mybox64}/bin"
       
-      export VK_ICD_FILENAMES="/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json"
       export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d"
       export __GLX_VENDOR_LIBRARY_NAME="mesa"
       # export MESA_LOADER_DRIVER_OVERRIDE="zink"
@@ -280,7 +283,6 @@ let
       
       export GTK_MODULES="xapp-gtk3-module"
       export GDK_BACKEND=x11
-      export VK_ICD_FILENAMES="/etc/vulkan/icd.d/radeon_icd.x86_64.json"
 
       export BOX64_EMULATED_LIBS="libmpg123.so.0"
       export BOX64_TRACE_FILE="stderr"
