@@ -63,7 +63,6 @@ let
     unstable.libgbm
     unstable.libgbm.out
 
-    libselinux
     libcap libcap_ng libcaption
 
     gmp
@@ -85,7 +84,23 @@ let
     libgcc
 
     swiftshader # CPU implementation of vulkan
+
+    libGL
+    xapp
+    libunity
+    libselinux            # libselinux
   ];
+
+# still missing libs:
+# cat tests.txt | grep "Error loading"                                                                                                                                             15:28:19
+# Error loading needed lib libGLX.so
+# Error loading needed lib libxapp-gtk3-module.so
+# Error loading needed lib libvulkan.so.1
+# Error loading needed lib libvulkan.so
+# Error loading needed lib libunity.so.9
+# Error loading needed lib libvulkan.so.1
+# Error loading needed lib libvulkan.so
+
 
   # Get 32-bit counterparts using armv7l cross-compilation
   steamLibsAarch32 = let
