@@ -26,6 +26,8 @@ let
     libmpg123
     ibus-engines.libpinyin
     libnma
+    libnma-gtk4
+    libappindicator libappindicator-gtk3 libappindicator-gtk2
     nss
     nspr
 
@@ -92,6 +94,100 @@ let
     python3 wayland wayland-protocols patchelf libGLU
   ];
 
+  steamLibsI686 = with pkgs.pkgsCross.gnu32; [ # pkgsCross.gnu32
+    glibc glib.out gtk2 gdk-pixbuf cairo.out fontconfig libdrm libvdpau expat util-linux at-spi2-core libnotify
+    gnutls openalSoft udev xorg.libXinerama xorg.libXdamage xorg.libXScrnSaver xorg.libxcb libva gcc-unwrapped.lib libgccjit
+    libpng libpulseaudio libjpeg libvorbis stdenv.cc.cc.lib xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXfixes
+    xorg.libXcursor xorg.libXi xorg.libXcomposite xorg.libXtst xorg.libSM xorg.libICE libGL libglvnd freetype
+    openssl curl zlib dbus-glib ncurses
+    vulkan-headers vulkan-loader vulkan-tools
+    libva mesa.drivers
+    ncurses5 ncurses6 ncurses
+    pkgs.curl.out
+    # libcef # (https://github.com/ptitSeb/box64/issues/1383) # error: unsupported system i686-linux
+
+    # libdbusmenu       # For libdbusmenu-glib.so.4 and libdbusmenu-gtk.so.4 # causing Error: detected mismatched Qt dependencies: when compiled for steamLibsI686
+    xorg.xcbutilkeysyms
+
+    libmpg123
+    ibus-engines.libpinyin
+    libnma
+    libnma-gtk4
+    nss
+    nspr
+# ERRO DEVE TAR AQUI
+    # Keep existing libraries and add:
+    libudev-zero
+    libusb1 ibus-engines.kkc gtk3
+
+    xdg-utils
+    vulkan-validation-layers vulkan-headers
+
+    # https://github.com/ptitSeb/box64/issues/1780#issuecomment-2627480114
+    zenity dbus libnsl libunity pciutils openal
+    passt
+
+    # For Heroic
+    cups                  # For libcups
+    alsa-lib              # For libasound
+    libxslt               # For libxslt
+    zstd                  # For libzstd
+    xorg.libxshmfence          # For libxshmfence
+    avahi                 # For libavahi
+    xorg.libpciaccess          # For libpciaccess
+    elfutils              # For libelf
+    lm_sensors            # For libsensors
+    libffi                # For libffi
+    flac                  # For libFLAC
+    libogg                # For libogg
+    libbsd                # For libbsd
+    libxml2               # For xml symbols
+    llvmPackages.libllvm  # For libLLVM
+    libllvm
+
+    libdrm.out
+    unstable.libgbm
+    unstable.libgbm.out
+
+    libcap libcap_ng libcaption
+
+    gmp
+    gmpxx 
+    libgmpris
+
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_ttf
+    bzip2
+    # ERRO DEVE ESTAR AQUI
+
+    SDL sdl3 SDL2 sdlpop SDL_ttf SDL_net SDL_gpu SDL_gfx sdlookup SDL2_ttf SDL2_net SDL2_gfx SDL_sound SDL_sixel 
+    SDL_mixer SDL_image SDL_Pango sdl-jstest SDL_compat SDL2_sound SDL2_mixer SDL2_image SDL2_Pango SDL_stretch 
+    SDL_audiolib SDL2_mixer_2_0 SDL2_image_2_6 SDL2_image_2_0
+
+    #libstdcxx5
+    libcdada
+    libgcc
+
+    swiftshader # CPU implementation of vulkan
+
+    libGL
+    xapp
+    libunity
+    libselinux            # libselinux
+
+    python3 wayland wayland-protocols patchelf libGLU
+
+    # might cause qt conflict errors
+    # libappindicator libappindicator-gtk3 libappindicator-gtk2
+    # Also comment out any other Qt-dependent packages:
+    # xcbutilxrm
+    # sbclPackages.cl-cairo2-xlib
+    # pango
+    # gtk3-x11
+  ];
+
 # still missing libs:
 # cat tests.txt | grep "Error loading"                                                                                                                                             15:28:19
 # Error loading needed lib libGLX.so
@@ -145,31 +241,38 @@ let
       builtins.tryEval finalPkg;
   in map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
 
-  steamLibsI686 = let
-    crossPkgs = pkgs.pkgsCross.gnu32;
-    getCrossLib = lib:
-      let
-        # Map problematic package names to their cross-compilation equivalents
-        crossName = 
-          if lib.pname or null == "libdbusmenu" then "glibc"  # Skip libdbusmenu
-          else if lib.pname or null == "swiftshader" then "glibc"     # Skip swiftshader packages 
-          else if lib.pname or null == "libgccjit" then "glibc"     # Skip swiftshader packages 
-          else if lib.pname or null == "qt5" then null     # Skip qt5 packages
-          else if lib.pname or null == "xapp-gtk3" then "xapp-gtk3-module"
-          else if lib.pname or null == "unity" then "libunity"
-          else if lib.pname or null == "gtk+-2.24.33" then "gtk2"
-          else if lib.pname or null == "openal-soft" then "openalSoft"
-          else if lib.pname or null == "systemd-minimal-libs" then "systemd"
-          else if lib.pname or null == "ibus-engines.libpinyin" then "ibus-engines"
-          else if lib ? pname then lib.pname
-          else if lib ? pname then lib.pname
-          else lib.name;
+  # steamLibsI686 = let
+  #   crossPkgs = pkgs.pkgsCross.gnu32;
+  #   getCrossLib = lib:
+  #     let
+  #       # Expand Qt-related blocklist
+  #       qtBlocklist = [
+  #         "pango" "xcbutilxrm" "libappindicator" "qtsvg" "qtbase"
+  #         "qtdeclarative" "qtwayland" "qt5compat" "qtgraphicaleffects"
+  #       ];
+  #       # Map problematic package names to their cross-compilation equivalents
+  #       crossName = 
+  #         if lib.pname or null == "libdbusmenu" then "glibc"  # Skip libdbusmenu
+  #         else if lib.pname or null == "swiftshader" then "glibc"     # Skip swiftshader packages 
+  #         else if lib.pname or null == "libgccjit" then "glibc"     # Skip swiftshader packages 
+  #         else if lib.pname or null == "qt5" then null     # Skip qt5 packages
+  #         else if lib ? pname && lib.pname != "" && builtins.elem lib.pname qtBlocklist then "glibc"
+  #         else if lib.pname or null == "xapp-gtk3" then "xapp-gtk3-module"
+  #         else if lib.pname or null == "unity" then "libunity"
+  #         else if lib.pname or null == "gtk+-2.24.33" then "gtk2"
+  #         else if lib.pname or null == "openal-soft" then "openalSoft"
+  #         else if lib.pname or null == "systemd-minimal-libs" then "systemd"
+  #         else if lib.pname or null == "ibus-engines.libpinyin" then "ibus-engines"
+  #         else if lib ? pname then lib.pname
+  #         else if lib ? pname then lib.pname
+  #         else lib.name;
         
-        # Handle special cases where attributes need different access
-        finalPkg = crossPkgs.${crossName} or (throw "Missing cross package: ${crossName}");
-      in
-      builtins.tryEval finalPkg;
-  in map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
+  #       # Handle special cases where attributes need different access
+  #       finalPkg = crossPkgs.${crossName} or (throw "Missing cross package: ${crossName}");
+  #     in
+  #     builtins.tryEval finalPkg;
+  # in map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
+
 
   steamLibsMineX86_64 = let
     crossPkgs = pkgs.x86;
@@ -250,8 +353,8 @@ let
     export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d"
     export VK_ICD_FILENAMES=${pkgs.swiftshader}/share/vulkan/icd.d/vk_swiftshader_icd.json # vulkaninfo should work with CPU now, probably should remove if I MAKE THIS WORK
 
-    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs )}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
-    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs )}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsI686)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsI686)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
 
     export DBUS_FATAL_WARNINGS=0
     BOX64_AVX=0 # didnt help https://github.com/ptitSeb/box64/issues/1691
@@ -281,7 +384,7 @@ let
     steamLibs 
     #++ steamLibsAarch32 
     #++ steamLibsX86_64 
-    #++ steamLibsI686 # getting the feeling that I only need these: https://github.com/ptitSeb/box64/issues/2142
+    ++ steamLibsI686 # getting the feeling that I only need these: https://github.com/ptitSeb/box64/issues/2142
     #++ steamLibsMineX86_64
     #++ steamLibsMinei686
     ;
