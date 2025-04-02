@@ -45,6 +45,18 @@
     };
   };
 
+  i686-packages = final: prev: {
+    i686 = import prev.path {
+      system = "i686-linux";
+      config.allowUnfree = true;
+      overlays = [
+        (final: super: {
+          # Add any i686-specific overrides here
+        })
+      ];
+    };
+  };
+
 
 
 }
