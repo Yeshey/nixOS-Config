@@ -104,15 +104,6 @@ let
     SDL_mixer SDL_image SDL_Pango sdl-jstest SDL_compat SDL2_sound SDL2_mixer SDL2_image SDL2_Pango SDL_stretch 
     SDL_audiolib SDL2_mixer_2_0 SDL2_image_2_6 SDL2_image_2_0
 
-    #libstdcxx5
-    libcdada
-    libgcc
-
-    libGL
-    xapp
-    libunity
-    libselinux            # libselinux
-
     python3 wayland wayland-protocols patchelf libGLU
 
     # swiftshader # CPU implementation of vulkan
