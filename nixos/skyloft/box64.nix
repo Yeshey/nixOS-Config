@@ -8,17 +8,16 @@ let
     glibc glib.out gtk2 gdk-pixbuf pango.out cairo.out fontconfig libdrm libvdpau expat util-linux at-spi2-core libnotify
     gnutls openalSoft udev xorg.libXinerama xorg.libXdamage xorg.libXScrnSaver xorg.libxcb libva gcc-unwrapped.lib libgccjit
     libpng libpulseaudio libjpeg libvorbis stdenv.cc.cc.lib xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXfixes
-    xorg.libXcursor xorg.libXi xorg.libXcomposite xorg.libXtst xorg.libSM xorg.libICE libGL libglvnd vulkan-loader freetype
-    openssl curl zlib dbus-glib ncurses SDL2
+    xorg.libXcursor xorg.libXi xorg.libXcomposite xorg.libXtst xorg.libSM xorg.libICE libGL libglvnd freetype
+    openssl curl zlib dbus-glib ncurses
     vulkan-headers vulkan-loader vulkan-tools
     libva mesa.drivers
     ncurses5 ncurses6 ncurses
     pkgs.curl.out
     libcef # (https://github.com/ptitSeb/box64/issues/1383)?
 
-    libdbusmenu       # For libdbusmenu-glib.so.4 and libdbusmenu-gtk.so.4
+    libdbusmenu       # For libdbusmenu-glib.so.4 and libdbusmenu-gtk.so.4 # causing Error: detected mismatched Qt dependencies: when compiled for steamLibsI686
     xcbutilxrm       # XCB utilities
-    xorg.libxcb
     xorg.xcbutilkeysyms
     sbclPackages.cl-cairo2-xlib        # X11-specific Cairo components
     pango         # X11-specific Pango components
@@ -27,6 +26,8 @@ let
     libmpg123
     ibus-engines.libpinyin
     libnma
+    libnma-gtk4
+    libappindicator libappindicator-gtk3 libappindicator-gtk2
     nss
     nspr
 
@@ -63,18 +64,71 @@ let
     unstable.libgbm
     unstable.libgbm.out
 
-    libselinux
     libcap libcap_ng libcaption
 
     gmp
     gmpxx 
     libgmpris
 
+    SDL2
     SDL2_image
     SDL2_mixer
     SDL2_ttf
     bzip2
+
+    SDL sdl3 SDL2 sdlpop SDL_ttf SDL_net SDL_gpu SDL_gfx sdlookup SDL2_ttf SDL2_net SDL2_gfx SDL_sound SDL_sixel 
+    SDL_mixer SDL_image SDL_Pango sdl-jstest SDL_compat SDL2_sound SDL2_mixer SDL2_image SDL2_Pango SDL_stretch 
+    SDL_audiolib SDL2_mixer_2_0 SDL2_image_2_6 SDL2_image_2_0
+
+    #libstdcxx5
+    libcdada
+    libgcc
+
+    swiftshader # CPU implementation of vulkan
+
+    libGL
+    xapp
+    libunity
+    libselinux            # libselinux
+
+    python3 wayland wayland-protocols patchelf libGLU
   ];
+
+  steamLibsI686 = with pkgs.pkgsCross.gnu32; [ # pkgsCross.gnu32
+
+
+    # error is here
+    bzip2
+
+    SDL sdl3 SDL2 sdlpop SDL_ttf SDL_net SDL_gpu SDL_gfx sdlookup SDL2_ttf SDL2_net SDL2_gfx SDL_sound SDL_sixel 
+    SDL_mixer SDL_image SDL_Pango sdl-jstest SDL_compat SDL2_sound SDL2_mixer SDL2_image SDL2_Pango SDL_stretch 
+    SDL_audiolib SDL2_mixer_2_0 SDL2_image_2_6 SDL2_image_2_0
+
+    #libstdcxx5
+    libcdada
+    libgcc
+
+    libGL
+    xapp
+    libunity
+    libselinux            # libselinux
+
+    python3 wayland wayland-protocols patchelf libGLU
+
+    # swiftshader # CPU implementation of vulkan
+    # libcef # (https://github.com/ptitSeb/box64/issues/1383) # error: unsupported system i686-linux
+  ];
+
+# still missing libs:
+# cat tests.txt | grep "Error loading"                                                                                                                                             15:28:19
+# Error loading needed lib libGLX.so
+# Error loading needed lib libxapp-gtk3-module.so
+# Error loading needed lib libvulkan.so.1
+# Error loading needed lib libvulkan.so
+# Error loading needed lib libunity.so.9
+# Error loading needed lib libvulkan.so.1
+# Error loading needed lib libvulkan.so
+
 
   # Get 32-bit counterparts using armv7l cross-compilation
   steamLibsAarch32 = let
@@ -103,7 +157,9 @@ let
       let
         # Map problematic package names to their cross-compilation equivalents
         crossName = 
-          if lib.pname or null == "gtk+-2.24.33" then "gtk2"
+          if lib.pname or null == "libdbusmenu" then "glibc"  # Skip libdbusmenu
+          else if lib.pname or null == "qt5" then "glibc"     # Skip qt5 packages
+          else if lib.pname or null == "gtk+-2.24.33" then "gtk2"
           else if lib.pname or null == "openal-soft" then "openalSoft"
           else if lib.pname or null == "systemd-minimal-libs" then "systemd"
           else if lib.pname or null == "ibus-engines.libpinyin" then "ibus-engines"
@@ -116,13 +172,48 @@ let
       builtins.tryEval finalPkg;
   in map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
 
-  steamLibsI686 = let
-    crossPkgs = pkgs.pkgsCross.gnu32;
+  # steamLibsI686 = let
+  #   crossPkgs = pkgs.pkgsCross.gnu32;
+  #   getCrossLib = lib:
+  #     let
+  #       # Expand Qt-related blocklist
+  #       qtBlocklist = [
+  #         "pango" "xcbutilxrm" "libappindicator" "qtsvg" "qtbase"
+  #         "qtdeclarative" "qtwayland" "qt5compat" "qtgraphicaleffects"
+  #       ];
+  #       # Map problematic package names to their cross-compilation equivalents
+  #       crossName = 
+  #         if lib.pname or null == "libdbusmenu" then "glibc"  # Skip libdbusmenu
+  #         else if lib.pname or null == "swiftshader" then "glibc"     # Skip swiftshader packages 
+  #         else if lib.pname or null == "libgccjit" then "glibc"     # Skip swiftshader packages 
+  #         else if lib.pname or null == "qt5" then null     # Skip qt5 packages
+  #         else if lib ? pname && lib.pname != "" && builtins.elem lib.pname qtBlocklist then "glibc"
+  #         else if lib.pname or null == "xapp-gtk3" then "xapp-gtk3-module"
+  #         else if lib.pname or null == "unity" then "libunity"
+  #         else if lib.pname or null == "gtk+-2.24.33" then "gtk2"
+  #         else if lib.pname or null == "openal-soft" then "openalSoft"
+  #         else if lib.pname or null == "systemd-minimal-libs" then "systemd"
+  #         else if lib.pname or null == "ibus-engines.libpinyin" then "ibus-engines"
+  #         else if lib ? pname then lib.pname
+  #         else if lib ? pname then lib.pname
+  #         else lib.name;
+        
+  #       # Handle special cases where attributes need different access
+  #       finalPkg = crossPkgs.${crossName} or (throw "Missing cross package: ${crossName}");
+  #     in
+  #     builtins.tryEval finalPkg;
+  # in map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
+
+
+  steamLibsMineX86_64 = let
+    crossPkgs = pkgs.x86;
     getCrossLib = lib:
       let
         # Map problematic package names to their cross-compilation equivalents
         crossName = 
-          if lib.pname or null == "gtk+-2.24.33" then "gtk2"
+          if lib.pname or null == "xapp-gtk3" then "xapp-gtk3-module"
+          else if lib.pname or null == "unity" then "libunity"
+          else if lib.pname or null == "gtk+-2.24.33" then "gtk2"
           else if lib.pname or null == "openal-soft" then "openalSoft"
           else if lib.pname or null == "systemd-minimal-libs" then "systemd"
           else if lib.pname or null == "ibus-engines.libpinyin" then "ibus-engines"
@@ -134,7 +225,44 @@ let
       in
       builtins.tryEval finalPkg;
   in map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
+
+  steamLibsMinei686 = let
+    crossPkgs = pkgs.i686;
+    getCrossLib = lib:
+      let
+        # Map problematic package names to their cross-compilation equivalents
+        crossName = 
+          if lib.pname or null == "xapp-gtk3" then "xapp-gtk3-module"
+          else if lib.pname or null == "unity" then "libunity"
+          else if lib.pname or null == "gtk+-2.24.33" then "gtk2"
+          else if lib.pname or null == "openal-soft" then "openalSoft"
+          else if lib.pname or null == "systemd-minimal-libs" then "systemd"
+          else if lib.pname or null == "ibus-engines.libpinyin" then "ibus-engines"
+          else if lib ? pname then lib.pname
+          else lib.name;
+        
+        # Handle special cases where attributes need different access
+        finalPkg = crossPkgs.${crossName} or (throw "Missing cross package: ${crossName}");
+      in
+      builtins.tryEval finalPkg;
+  in map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
+
 in
+
+/*
+    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") steamLibs}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu" # didn't help
+    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") steamLibs}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu" # didn't help
+
+    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsAarch32)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsAarch32)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+
+    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsX86_64 ++ steamLibsI686)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsX86_64 ++ steamLibsI686)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+
+    export BOX64_LD_LIBRARY_PATH="${ lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsMineX86_64)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsMineX86_64)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+*/
+
 let
   cfg = config.mySystem.box64;
   BOX64_LOG = "1";
@@ -150,22 +278,14 @@ let
     export BOX64_DYNAREC_LOG=${BOX64_DYNAREC_LOG}
     export DBUS_FATAL_WARNINGS=1
     export STEAM_RUNTIME=${STEAM_RUNTIME}
+    export SDL_VIDEODRIVER=x11  # wayland
 
-    #export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") steamLibs}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu" # didn't help
-    #export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") steamLibs}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu" # didn't help
+    # Set SwiftShader as primary
+    export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d"
+    export VK_ICD_FILENAMES=${pkgs.swiftshader}/share/vulkan/icd.d/vk_swiftshader_icd.json # vulkaninfo should work with CPU now, probably should remove if I MAKE THIS WORK
 
-    #export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsAarch32)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
-    #export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsAarch32)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
-
-    export BOX64_LD_LIBRARY_PATH="${
-      lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") 
-      (steamLibs ++ steamLibsX86_64 ++ steamLibsI686)
-    }:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
-    
-    export LD_LIBRARY_PATH="${
-      lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") 
-      (steamLibs ++ steamLibsX86_64 ++ steamLibsI686)
-    }:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsI686)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsI686)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
 
     export DBUS_FATAL_WARNINGS=0
     BOX64_AVX=0 # didnt help https://github.com/ptitSeb/box64/issues/1691
@@ -177,10 +297,28 @@ let
     targetPkgs = pkgs: (with pkgs; [
       mybox64 box86 steam-run zenity xdg-utils
       vulkan-validation-layers vulkan-headers
-      libva-utils
+      libva-utils swiftshader
     ]) ++ steamLibs;
 
-    multiPkgs = pkgs: steamLibs;
+  # Add these to profile setup
+  profile = ''
+    export LD_LIBRARY_PATH="${
+      lib.makeLibraryPath [
+        pkgs.libglvnd
+        pkgs.vulkan-loader
+        pkgs.libunity
+      ]
+    }:$LD_LIBRARY_PATH"
+  '';
+
+  multiPkgs = pkgs: 
+    steamLibs 
+    #++ steamLibsAarch32 
+    #++ steamLibsX86_64 
+    ++ steamLibsI686 # getting the feeling that I only need these: https://github.com/ptitSeb/box64/issues/2142
+    #++ steamLibsMineX86_64
+    #++ steamLibsMinei686
+    ;
 
     extraInstallCommands = ''
       mkdir -p $out/lib
@@ -234,7 +372,6 @@ let
       export STEAM_EXTRA_COMPAT_TOOLS_PATHS="${pkgs.mybox64}/bin"
       export BOX64_PATH="${pkgs.mybox64}/bin"
       
-      export VK_ICD_FILENAMES="/run/opengl-driver/share/vulkan/icd.d/radeon_icd.x86_64.json"
       export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d"
       export __GLX_VENDOR_LIBRARY_NAME="mesa"
       # export MESA_LOADER_DRIVER_OVERRIDE="zink"
@@ -244,7 +381,6 @@ let
       
       export GTK_MODULES="xapp-gtk3-module"
       export GDK_BACKEND=x11
-      export VK_ICD_FILENAMES="/etc/vulkan/icd.d/radeon_icd.x86_64.json"
 
       export BOX64_EMULATED_LIBS="libmpg123.so.0"
       export BOX64_TRACE_FILE="stderr"
@@ -314,6 +450,19 @@ in {
         #bashx86 = x86pkgs.bashInteractive;
         #steamx86 = x86pkgs.steam-unwrapped;
       })
+      (self: super: let
+        i686pkgs = import pkgs.path {
+          system = "i686-linux";
+          config.allowUnfree = true;
+        };
+      in {
+        inherit (i686pkgs) ;
+        #steam-run;
+        # steam steam-run
+        #steam steam-run;
+        #bashx86 = x86pkgs.bashInteractive;
+        #steamx86 = x86pkgs.steam-unwrapped;
+      })
     ];
 
     # Add these env variables to /home/yeshey/.local/share/Steam/steam.sh to get more logs when it downloaads the stuffs
@@ -377,10 +526,10 @@ in {
       x86.steam-unwrapped
       x86.heroic-unwrapped
       # steamcmdx86Wrapper
-      # pkgs.x86.steamcmd
+      #pkgs.x86.steamcmd
       heroicx86Wrapper
       steamx86Wrapper
-      #pkgs.pkgsCross.gnu32.steam # :o
+      #pkgs.pkgsCross.gnu32.steam
       steamFHS
       mybox64
       x86.bash #(now this one appears with whereis bash)
