@@ -21,7 +21,13 @@
   unstable-packages = final: _prev: {
     unstable = import inputs.nixpkgs-unstable {
       system = final.system;
-      config.allowUnfree = true;
+      config = {
+        allowUnfree = true;
+        permittedInsecurePackages = [
+          #"python3.12-chromadb-0.5.20" # ollama
+          #"python3.12-vllm-0.6.2"
+        ];
+      };
     };
   };
 
