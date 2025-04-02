@@ -95,30 +95,7 @@ let
   ];
 
   steamLibsI686 = with pkgs.pkgsCross.gnu32; [ # pkgsCross.gnu32
-    glibc glib.out gtk2 gdk-pixbuf pango.out cairo.out fontconfig libdrm libvdpau expat util-linux at-spi2-core libnotify
-    gnutls openalSoft udev xorg.libXinerama xorg.libXdamage xorg.libXScrnSaver xorg.libxcb libva gcc-unwrapped.lib libgccjit
-    libpng libpulseaudio libjpeg libvorbis stdenv.cc.cc.lib xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXfixes
-    xorg.libXcursor xorg.libXi xorg.libXcomposite xorg.libXtst xorg.libSM xorg.libICE libGL libglvnd freetype
-    openssl curl zlib dbus-glib ncurses
-    vulkan-headers vulkan-loader vulkan-tools
-    libva mesa.drivers
-    ncurses5 ncurses6 ncurses
-    pkgs.curl.out
 
-    libdbusmenu       # For libdbusmenu-glib.so.4 and libdbusmenu-gtk.so.4 # causing Error: detected mismatched Qt dependencies: when compiled for steamLibsI686
-    xcbutilxrm       # XCB utilities
-    xorg.xcbutilkeysyms
-    sbclPackages.cl-cairo2-xlib        # X11-specific Cairo components
-    pango         # X11-specific Pango components
-    gtk3-x11          # Explicitly include GTK2 X11 libraries
-
-    libmpg123
-    ibus-engines.libpinyin
-    libnma
-    libnma-gtk4
-    libappindicator libappindicator-gtk3 libappindicator-gtk2
-    nss
-    nspr
 
     # Keep existing libraries and add:
     libudev-zero
