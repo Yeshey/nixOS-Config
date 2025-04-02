@@ -121,5 +121,25 @@ in
         xdg-utils
         openhandsWeb
       ];
+
+
+    # This should be to serve the model that seems to be the best one rn for openHands: https://www.all-hands.dev/blog/introducing-openhands-lm-32b----a-strong-open-coding-agent-model
+    systemd.services.vllm-openhands = {
+      description = "vLLM server for all-hands/openhands-lm-32b-v0.1 model";
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "nss-lookup.target" "my-network-online.service" ];
+      after = [ "nss-lookup.target" "my-network-online.service" ];
+      script = ''
+        exec ${pkgs.python312Packages.vllm}/bin/python -m vllm.serve.serve --model=all-hands/openhands-lm-32b-v0.1 --port=11112
+      '';
+      serviceConfig = {
+        Restart = "always";
+        RestartSec = "5";
+        User = "root";
+        #WorkingDirectory = "${home}";
+      };
+    };
+
+
   };
 }
