@@ -95,7 +95,7 @@ let
   ];
 
   steamLibsI686 = with pkgs.pkgsCross.gnu32; [ # pkgsCross.gnu32
-    glibc glib.out gtk2 gdk-pixbuf cairo.out fontconfig libdrm libvdpau expat util-linux at-spi2-core libnotify
+    glibc glib.out gtk2 gdk-pixbuf pango.out cairo.out fontconfig libdrm libvdpau expat util-linux at-spi2-core libnotify
     gnutls openalSoft udev xorg.libXinerama xorg.libXdamage xorg.libXScrnSaver xorg.libxcb libva gcc-unwrapped.lib libgccjit
     libpng libpulseaudio libjpeg libvorbis stdenv.cc.cc.lib xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXfixes
     xorg.libXcursor xorg.libXi xorg.libXcomposite xorg.libXtst xorg.libSM xorg.libICE libGL libglvnd freetype
@@ -104,18 +104,22 @@ let
     libva mesa.drivers
     ncurses5 ncurses6 ncurses
     pkgs.curl.out
-    # libcef # (https://github.com/ptitSeb/box64/issues/1383) # error: unsupported system i686-linux
 
-    # libdbusmenu       # For libdbusmenu-glib.so.4 and libdbusmenu-gtk.so.4 # causing Error: detected mismatched Qt dependencies: when compiled for steamLibsI686
+    libdbusmenu       # For libdbusmenu-glib.so.4 and libdbusmenu-gtk.so.4 # causing Error: detected mismatched Qt dependencies: when compiled for steamLibsI686
+    xcbutilxrm       # XCB utilities
     xorg.xcbutilkeysyms
+    sbclPackages.cl-cairo2-xlib        # X11-specific Cairo components
+    pango         # X11-specific Pango components
+    gtk3-x11          # Explicitly include GTK2 X11 libraries
 
     libmpg123
     ibus-engines.libpinyin
     libnma
     libnma-gtk4
+    libappindicator libappindicator-gtk3 libappindicator-gtk2
     nss
     nspr
-# ERRO DEVE TAR AQUI
+
     # Keep existing libraries and add:
     libudev-zero
     libusb1 ibus-engines.kkc gtk3
@@ -160,7 +164,6 @@ let
     SDL2_mixer
     SDL2_ttf
     bzip2
-    # ERRO DEVE ESTAR AQUI
 
     SDL sdl3 SDL2 sdlpop SDL_ttf SDL_net SDL_gpu SDL_gfx sdlookup SDL2_ttf SDL2_net SDL2_gfx SDL_sound SDL_sixel 
     SDL_mixer SDL_image SDL_Pango sdl-jstest SDL_compat SDL2_sound SDL2_mixer SDL2_image SDL2_Pango SDL_stretch 
@@ -179,13 +182,7 @@ let
 
     python3 wayland wayland-protocols patchelf libGLU
 
-    # might cause qt conflict errors
-    # libappindicator libappindicator-gtk3 libappindicator-gtk2
-    # Also comment out any other Qt-dependent packages:
-    # xcbutilxrm
-    # sbclPackages.cl-cairo2-xlib
-    # pango
-    # gtk3-x11
+    # libcef # (https://github.com/ptitSeb/box64/issues/1383) # error: unsupported system i686-linux
   ];
 
 # still missing libs:
