@@ -98,10 +98,6 @@ let
 
 
     # error is here
-    SDL2
-    SDL2_image
-    SDL2_mixer
-    SDL2_ttf
     bzip2
 
     SDL sdl3 SDL2 sdlpop SDL_ttf SDL_net SDL_gpu SDL_gfx sdlookup SDL2_ttf SDL2_net SDL2_gfx SDL_sound SDL_sixel 
