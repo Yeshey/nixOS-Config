@@ -205,11 +205,10 @@ let
     sdlookup
     SDL2_net
     SDL2_gfx
-    SDL_sound
+    # SDL_sound SDL2_sound # SLD_SOUND 
     SDL_sixel
     sdl-jstest
     SDL_compat
-    SDL2_sound
     
     # SDL_stretch SDL STREACH ERROR
     SDL_audiolib
