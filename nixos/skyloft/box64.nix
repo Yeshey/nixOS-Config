@@ -93,98 +93,149 @@ let
 
     python3 wayland wayland-protocols patchelf libGLU
   ];
-
-  steamLibsI686 = with pkgs.pkgsCross.gnu32; [ # pkgsCross.gnu32
-    glibc glib.out gtk2 gdk-pixbuf pango.out cairo.out fontconfig libdrm libvdpau expat util-linux at-spi2-core libnotify
-    gnutls openalSoft udev xorg.libXinerama xorg.libXdamage xorg.libXScrnSaver xorg.libxcb libva 
-    # gcc-unwrapped.lib libgccjitga # gcc jit error
-    libpng libpulseaudio libjpeg libvorbis stdenv.cc.cc.lib xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXfixes
-    xorg.libXcursor xorg.libXi xorg.libXcomposite xorg.libXtst xorg.libSM xorg.libICE libGL libglvnd freetype
-    openssl curl zlib dbus-glib ncurses
-    vulkan-headers vulkan-loader vulkan-tools
-    libva mesa.drivers
-    ncurses5 ncurses6 ncurses
+  steamLibsI686 = with pkgs.pkgsCross.gnu32; [
+    glibc
+    glib.out
+    gtk2
+    gdk-pixbuf
+    pango.out
+    cairo.out
+    fontconfig
+    libdrm
+    libvdpau
+    expat
+    util-linux
+    at-spi2-core
+    libnotify
+    gnutls
+    openalSoft
+    udev
+    xorg.libXinerama
+    xorg.libXdamage
+    xorg.libXScrnSaver
+    xorg.libxcb
+    libva
+    libpng
+    libpulseaudio
+    libjpeg
+    libvorbis
+    stdenv.cc.cc.lib
+    xorg.libX11
+    xorg.libXext
+    xorg.libXrandr
+    xorg.libXrender
+    xorg.libXfixes
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXcomposite
+    xorg.libXtst
+    xorg.libSM
+    xorg.libICE
+    libGL
+    libglvnd
+    freetype
+    openssl
+    curl
+    zlib
+    dbus-glib
+    ncurses
+    vulkan-headers
+    vulkan-loader
+    vulkan-tools
+    mesa.drivers
+    ncurses5
+    ncurses6
     pkgs.curl.out
-
-    libdbusmenu       # For libdbusmenu-glib.so.4 and libdbusmenu-gtk.so.4 # causing Error: detected mismatched Qt dependencies: when compiled for steamLibsI686
-    xcbutilxrm       # XCB utilities
+    libdbusmenu
+    xcbutilxrm
     xorg.xcbutilkeysyms
-    # sbclPackages.cl-cairo2-xlib        # sbcl error?
-    pango         # X11-specific Pango components
-    gtk3-x11          # Explicitly include GTK2 X11 libraries
-
+    pango
+    gtk3-x11
     libmpg123
     ibus-engines.libpinyin
     libnma
     libnma-gtk4
-    libappindicator libappindicator-gtk3 libappindicator-gtk2
+    libappindicator
+    libappindicator-gtk3
+    libappindicator-gtk2
     nss
     nspr
-
-    # Keep existing libraries and add:
     libudev-zero
-    libusb1 ibus-engines.kkc gtk3
-
+    libusb1
+    ibus-engines.kkc
+    gtk3
     xdg-utils
-    vulkan-validation-layers vulkan-headers
-
-    # https://github.com/ptitSeb/box64/issues/1780#issuecomment-2627480114
-    zenity dbus libnsl libunity pciutils openal
+    vulkan-validation-layers
+    zenity
+    dbus
+    libnsl
+    libunity
+    pciutils
+    openal
     passt
-
-    # For Heroic
-    cups                  # For libcups
-    alsa-lib              # For libasound
-    libxslt               # For libxslt
-    zstd                  # For libzstd
-    xorg.libxshmfence          # For libxshmfence
-    avahi                 # For libavahi
-    xorg.libpciaccess          # For libpciaccess
-    elfutils              # For libelf
-    lm_sensors            # For libsensors
-    libffi                # For libffi
-    flac                  # For libFLAC
-    libogg                # For libogg
-    libbsd                # For libbsd
-    libxml2               # For xml symbols
-    llvmPackages.libllvm  # For libLLVM
-    libllvm
-
+    cups
+    alsa-lib
+    libxslt
+    zstd
+    xorg.libxshmfence
+    avahi
+    xorg.libpciaccess
+    elfutils
+    lm_sensors
+    libffi
+    flac
+    libogg
+    libbsd
+    libxml2
+    llvmPackages.libllvm
     libdrm.out
     unstable.libgbm
     unstable.libgbm.out
-
-    libcap libcap_ng libcaption
-
+    libcap
+    libcap_ng
+    libcaption
     gmp
-    gmpxx 
+    gmpxx
     libgmpris
-
     SDL2
     SDL2_image
-    SDL2_mixer
     SDL2_ttf
     bzip2
-
-    sdlookup SDL2_ttf SDL2_net SDL2_gfx SDL_sound SDL_sixel 
-    SDL_mixer SDL_image SDL_Pango sdl-jstest SDL_compat SDL2_sound SDL2_mixer SDL2_image SDL2_Pango SDL_stretch 
-    SDL_audiolib SDL2_mixer_2_0 SDL2_image_2_6 SDL2_image_2_0
-
-    # SDL sdl3 SDL2 sdlpop SDL_ttf SDL_net SDL_gpu SDL_gfx  # -baseqt conflict error
-
-    #libstdcxx5
+    sdlookup
+    SDL2_net
+    SDL2_gfx
+    SDL_sound
+    SDL_sixel
+    SDL_Pango
+    sdl-jstest
+    SDL_compat
+    SDL2_sound
+    SDL2_Pango
+    SDL_stretch
+    SDL_audiolib
+    SDL2_image_2_6
+    SDL2_image_2_0
+    SDL2_mixer 
+    SDL_mixer 
+    SDL2_mixer_2_0
     libcdada
     libgcc
-
-    libGL
     xapp
-    libunity
-    libselinux            # libselinux
+    libselinux
+    python3
+    wayland
+    wayland-protocols
+    patchelf
+    libGLU
 
-    python3 wayland wayland-protocols patchelf libGLU
-
-    # swiftshader # CPU implementation of vulkan
-    # libcef # (https://github.com/ptitSeb/box64/issues/1383) # error: unsupported system i686-linux
+    # Comments moved below:
+    # libstdcxx5 ?
+    # gcc-unwrapped.lib libgccjitga (gcc jit error)
+    # libdbusmenu: causing Error: detected mismatched Qt dependencies when compiled for steamLibsI686 (maybe not)
+    # sbclPackages.cl-cairo2-xlib sbcl error?
+    # SDL sdl3 SDL2 sdlpop SDL_ttf SDL_net SDL_gpu SDL_gfx (-baseqt conflict error)
+    # swiftshader (CPU implementation of vulkan)
+    # libcef (https://github.com/ptitSeb/box64/issues/1383) error: unsupported system i686-linux
   ];
 
 # still missing libs:
