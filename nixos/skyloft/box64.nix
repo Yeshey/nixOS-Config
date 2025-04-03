@@ -98,8 +98,7 @@ let
 
 
     # error is here
-    SDL sdl3 SDL2 sdlpop SDL_ttf SDL_net SDL_gpu SDL_gfx sdlookup SDL2_ttf SDL2_net SDL2_gfx SDL_sound SDL_sixel 
-    SDL_mixer SDL_image SDL_Pango sdl-jstest SDL_compat
+    SDL sdl3 SDL2 sdlpop SDL_ttf SDL_net SDL_gpu SDL_gfx 
 
     # swiftshader # CPU implementation of vulkan
     # libcef # (https://github.com/ptitSeb/box64/issues/1383) # error: unsupported system i686-linux
