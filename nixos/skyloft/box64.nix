@@ -153,7 +153,7 @@ let
     # pango pango.out SDL2_Pango SDL_Pango # pango compile error
     gtk3-x11
     libmpg123
-    ibus-engines.libpinyin
+    # ibus-engines.libpinyin Error libpiny
     libnma
     libnma-gtk4
     libappindicator
@@ -163,7 +163,7 @@ let
     nspr
     libudev-zero
     libusb1
-    ibus-engines.kkc
+    # ibus-engines.kkc libkkc error
     gtk3
     xdg-utils
     vulkan-validation-layers
@@ -205,7 +205,7 @@ let
     sdlookup
     SDL2_net
     SDL2_gfx
-    # SDL_sound SDL2_sound # SLD_SOUND 
+    # SDL_sound SDL2_sound # SLD_SOUND error
     SDL_sixel
     sdl-jstest
     SDL_compat
@@ -214,9 +214,7 @@ let
     SDL_audiolib
     SDL2_image_2_6
     SDL2_image_2_0
-    SDL2_mixer 
-    SDL_mixer 
-    SDL2_mixer_2_0
+    # SDL2_mixer SDL_mixer SDL2_mixer_2_0 # timidity error
     libcdada
     libgcc
     xapp
