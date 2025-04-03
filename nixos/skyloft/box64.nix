@@ -98,7 +98,6 @@ let
     glib.out
     gtk2
     gdk-pixbuf
-    pango.out
     cairo.out
     fontconfig
     libdrm
@@ -148,8 +147,10 @@ let
     pkgs.curl.out
     libdbusmenu
     xcbutilxrm
+
+    # ASSEGUIR APAGA AS DE CIMA PARA VER SE DÁ O ERRO, TINHAS APAGADO AS DE BAIXO
     xorg.xcbutilkeysyms
-    pango
+    # pango pango.out SDL2_Pango SDL_Pango # pango compile error
     gtk3-x11
     libmpg123
     ibus-engines.libpinyin
@@ -206,12 +207,11 @@ let
     SDL2_gfx
     SDL_sound
     SDL_sixel
-    SDL_Pango
     sdl-jstest
     SDL_compat
     SDL2_sound
-    SDL2_Pango
-    SDL_stretch
+    
+    # SDL_stretch SDL STREACH ERROR
     SDL_audiolib
     SDL2_image_2_6
     SDL2_image_2_0

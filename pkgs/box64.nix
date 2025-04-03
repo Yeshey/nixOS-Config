@@ -16,15 +16,17 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "mybox64";
   #version = "0.3.4";
-  version = "c40f9651bc51c0f3446484233d6ce63d05ec4b7b";
+  #version = "c40f9651bc51c0f3446484233d6ce63d05ec4b7b"; 
+  version = "b472459a22169c1bf1932f5e69577ac149c1b2d7"; 
   binaryName = "mybox64";
   doCheck = false;
 
   src = fetchFromGitHub {
     owner = "ptitSeb";
     repo = "box64";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-CY5Emg5TsMVs++2EukhVzqn9440kF/BO8HZGQgCpGu4=";
+    #rev = "v${finalAttrs.version}";
+    rev = "${finalAttrs.version}";
+    hash = "sha256-hInhl9Zmj4SwCUt4OFbN7yvN9MyBW2ImyhLnDgUqL5Q=";
   };
 
   nativeBuildInputs = [
