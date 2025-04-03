@@ -97,7 +97,7 @@ let
   steamLibsI686 = with pkgs.pkgsCross.gnu32; [ # pkgsCross.gnu32
     glibc glib.out gtk2 gdk-pixbuf pango.out cairo.out fontconfig libdrm libvdpau expat util-linux at-spi2-core libnotify
     gnutls openalSoft udev xorg.libXinerama xorg.libXdamage xorg.libXScrnSaver xorg.libxcb libva 
-    # gcc-unwrapped.lib libgccjitga
+    # gcc-unwrapped.lib libgccjitga # gcc jit error
     libpng libpulseaudio libjpeg libvorbis stdenv.cc.cc.lib xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXfixes
     xorg.libXcursor xorg.libXi xorg.libXcomposite xorg.libXtst xorg.libSM xorg.libICE libGL libglvnd freetype
     openssl curl zlib dbus-glib ncurses
@@ -109,7 +109,7 @@ let
     libdbusmenu       # For libdbusmenu-glib.so.4 and libdbusmenu-gtk.so.4 # causing Error: detected mismatched Qt dependencies: when compiled for steamLibsI686
     xcbutilxrm       # XCB utilities
     xorg.xcbutilkeysyms
-    sbclPackages.cl-cairo2-xlib        # X11-specific Cairo components
+    # sbclPackages.cl-cairo2-xlib        # sbcl error?
     pango         # X11-specific Pango components
     gtk3-x11          # Explicitly include GTK2 X11 libraries
 
@@ -170,7 +170,7 @@ let
     SDL_mixer SDL_image SDL_Pango sdl-jstest SDL_compat SDL2_sound SDL2_mixer SDL2_image SDL2_Pango SDL_stretch 
     SDL_audiolib SDL2_mixer_2_0 SDL2_image_2_6 SDL2_image_2_0
 
-    # SDL sdl3 SDL2 sdlpop SDL_ttf SDL_net SDL_gpu SDL_gfx  # maybe without this it will run?
+    # SDL sdl3 SDL2 sdlpop SDL_ttf SDL_net SDL_gpu SDL_gfx  # -baseqt conflict error
 
     #libstdcxx5
     libcdada
