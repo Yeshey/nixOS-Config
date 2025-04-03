@@ -170,7 +170,7 @@ let
     zenity
     dbus
     libnsl
-    libunity
+    # libunity # dee package error caused by this
     pciutils
     openal
     passt
