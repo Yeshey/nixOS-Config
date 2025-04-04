@@ -467,10 +467,6 @@ box64Wrapper = pkgs.writeScriptBin "box64-wrapper" ''
   ${BOX64_VARS}
   export BOX64_TRACE_FILE="stderr"
 
-  #BOX64_TRACE_FILE=/tmp/steamwebhelper-%pid.txt
-  BOX64_SHOWSEGV=1
-  BOX64_DLSYM_ERROR=1
-
   exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 "$@"
 '';
 in {
