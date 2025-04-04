@@ -393,6 +393,8 @@ let
     export DBUS_FATAL_WARNINGS=1
     export STEAM_RUNTIME=${STEAM_RUNTIME}
     export SDL_VIDEODRIVER=x11  # wayland
+    export BOX64_TRACE_FILE="stderr" # apparantly prevents steam sniper not found error https://github.com/Botspot/pi-apps/issues/2614#issuecomment-2209629910
+    export BOX86_TRACE_FILE=stderr
 
     # Set SwiftShader as primary
     export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d"
@@ -458,14 +460,12 @@ let
 box64BashWrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
   #!${pkgs.bash}/bin/sh
   ${BOX64_VARS}
-  export BOX64_TRACE_FILE="stderr"
 
   exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.x86.bash}/bin/bash "$@"
 '';
 box64Wrapper = pkgs.writeScriptBin "box64-wrapper" ''
   #!${pkgs.bash}/bin/sh
   ${BOX64_VARS}
-  export BOX64_TRACE_FILE="stderr"
 
   exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 "$@"
 '';
