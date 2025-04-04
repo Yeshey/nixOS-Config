@@ -410,10 +410,9 @@ let
     export BOX86_TRACE_FILE=stderr;
 
     # Set SwiftShader as primary
-    export VULKAN_SDK="${pkgs.vulkan-headers}"
-    export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d"
-    #export VK_ICD_FILENAMES=${pkgs.swiftshader}/share/vulkan/icd.d/vk_swiftshader_icd.json
-    export VK_ICD_FILENAMES="$out/share/vulkan/icd.d/vk_swiftshader_icd.json"
+    export VULKAN_SDK="${pkgs.vulkan-headers}";
+    export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d";
+    export VK_ICD_FILENAMES=${pkgs.swiftshader}/share/vulkan/icd.d/vk_swiftshader_icd.json; # vulkaninfo should work with CPU now, probably should remove if I MAKE THIS WORK
 
     export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu";
     export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu";
@@ -431,7 +430,6 @@ let
       mybox64 box86 steam-run zenity xdg-utils
       vulkan-validation-layers vulkan-headers
       libva-utils swiftshader
-      vulkan-loader  # Add this line
     ]) ++ steamLibs;
 
   multiPkgs = pkgs: 
@@ -444,21 +442,6 @@ let
     ;
 
     extraInstallCommands = ''
-      # Create necessary directory structure first
-      mkdir -p $out/lib
-
-      # Correct order: SwiftShader links AFTER vulkan-loader
-      # Vulkan loader symlinks
-      ln -sfn ${pkgs.vulkan-loader}/lib/libvulkan.so.1 $out/lib/libvulkan.so.1
-      ln -sfn ${pkgs.vulkan-loader}/lib/libvulkan.so $out/lib/libvulkan.so
-      
-      # SwiftShader vulkan libraries (override)
-      ln -sfn ${pkgs.swiftshader}/lib/libvk_swiftshader.so $out/lib/libvulkan.so.1
-      ln -sfn ${pkgs.swiftshader}/lib/libvk_swiftshader.so $out/lib/libvulkan.so
-
-      # ICD file
-      mkdir -p $out/share/vulkan/icd.d
-      cp ${pkgs.swiftshader}/share/vulkan/icd.d/vk_swiftshader_icd.json $out/share/vulkan/icd.d/
     '';
 
     runScript = ''
