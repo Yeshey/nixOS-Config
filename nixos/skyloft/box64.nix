@@ -134,7 +134,6 @@ let
     stdenv.cc.cc.lib
     xorg.libX11
     xorg.libXext
-    xorg.libXrandr
     xorg.libXrender
     xorg.libXfixes
     xorg.libXcursor
@@ -178,7 +177,8 @@ let
     gtk3
     xdg-utils
     vulkan-validation-layers
-    zenity
+    zenity 
+    xorg.libXrandr
     dbus
     libnsl
     # libunity # dee package error caused by this
@@ -228,7 +228,7 @@ let
     # SDL2_mixer SDL_mixer SDL2_mixer_2_0 # timidity error
     libcdada
     libgcc
-    xapp
+    # xapp mate components? GIVES ERROR, ALSO, WHY would i need
     libselinux
     python3
     wayland
@@ -414,8 +414,8 @@ let
     export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d";
     export VK_ICD_FILENAMES=${pkgs.swiftshader}/share/vulkan/icd.d/vk_swiftshader_icd.json; # vulkaninfo should work with CPU now, probably should remove if I MAKE THIS WORK
 
-    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu";
-    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu";
+    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsI686)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu";
+    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsI686)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu";
 
     export DBUS_FATAL_WARNINGS=0;
     BOX64_AVX=0;
@@ -427,7 +427,7 @@ let
   steamFHS = pkgs.buildFHSUserEnv {
     name = "steam-fhs";
     targetPkgs = pkgs: (with pkgs; [
-      mybox64 box86 steam-run zenity xdg-utils
+      mybox64 box86 steam-run xdg-utils
       vulkan-validation-layers vulkan-headers
       libva-utils swiftshader
     ]) ++ steamLibs;
@@ -436,7 +436,7 @@ let
     steamLibs 
     #++ steamLibsAarch32 
     #++ steamLibsX86_64 
-    # ++ steamLibsI686 # getting the feeling that I only need these: https://github.com/ptitSeb/box64/issues/2142
+     ++ steamLibsI686 # getting the feeling that I only need these: https://github.com/ptitSeb/box64/issues/2142
     #++ steamLibsMineX86_64
     #++ steamLibsMinei686
     ;
