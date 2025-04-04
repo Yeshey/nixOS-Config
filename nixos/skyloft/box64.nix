@@ -397,28 +397,28 @@ let
   STEAMOS = "1";
   STEAM_RUNTIME = "1";
   BOX64_VARS= ''
-    export BOX64_DLSYM_ERROR=1
-    export BOX64_TRANSLATE_NOWAIT=1
-    export BOX64_NOBANNER=1
-    export STEAMOS=${STEAMOS} # https://github.com/ptitSeb/box64/issues/91#issuecomment-898858125
-    export BOX64_LOG=${BOX64_LOG}
-    export BOX64_DYNAREC_LOG=${BOX64_DYNAREC_LOG}
-    export DBUS_FATAL_WARNINGS=1
-    export STEAM_RUNTIME=${STEAM_RUNTIME}
-    export SDL_VIDEODRIVER=x11  # wayland
-    export BOX64_TRACE_FILE="stderr" # apparantly prevents steam sniper not found error https://github.com/Botspot/pi-apps/issues/2614#issuecomment-2209629910
-    export BOX86_TRACE_FILE=stderr
+    export BOX64_DLSYM_ERROR=1;
+    export BOX64_TRANSLATE_NOWAIT=1;
+    export BOX64_NOBANNER=1;
+    export STEAMOS=${STEAMOS}; # https://github.com/ptitSeb/box64/issues/91#issuecomment-898858125
+    export BOX64_LOG=${BOX64_LOG};
+    export BOX64_DYNAREC_LOG=${BOX64_DYNAREC_LOG};
+    export DBUS_FATAL_WARNINGS=1;
+    export STEAM_RUNTIME=${STEAM_RUNTIME};
+    export SDL_VIDEODRIVER=x11;  # wayland
+    export BOX64_TRACE_FILE="stderr"; # apparantly prevents steam sniper not found error https://github.com/Botspot/pi-apps/issues/2614#issuecomment-2209629910
+    export BOX86_TRACE_FILE=stderr;
 
     # Set SwiftShader as primary
-    export VULKAN_SDK = "${pkgs.vulkan-headers}"
-    export VK_LAYER_PATH = "${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d"
-    export VK_ICD_FILENAMES=${pkgs.swiftshader}/share/vulkan/icd.d/vk_swiftshader_icd.json # vulkaninfo should work with CPU now, probably should remove if I MAKE THIS WORK
+    export VULKAN_SDK="${pkgs.vulkan-headers}";
+    export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d";
+    export VK_ICD_FILENAMES=${pkgs.swiftshader}/share/vulkan/icd.d/vk_swiftshader_icd.json; # vulkaninfo should work with CPU now, probably should remove if I MAKE THIS WORK
 
-    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
-    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu";
+    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu";
 
-    export DBUS_FATAL_WARNINGS=0
-    BOX64_AVX=0
+    export DBUS_FATAL_WARNINGS=0;
+    BOX64_AVX=0;
     
 
   '';
@@ -468,6 +468,7 @@ box64BashWrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
 '';
 box64Wrapper = pkgs.writeScriptBin "box64-wrapper" ''
   #!${pkgs.bash}/bin/sh
+
   ${BOX64_VARS}
 
   exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 "$@"
