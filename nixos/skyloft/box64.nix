@@ -437,50 +437,6 @@ let
     ;
 
     extraInstallCommands = ''
-      mkdir -p $out/lib
-      ln -sfn ${pkgs.glibc}/lib/ld-linux-aarch64.so.1 $out/lib/ld-linux-x86-64.so.2
-      ln -sfn ${pkgs.zlib}/lib/libz.so.1 $out/lib/libz.so.1.2.13
-      ln -sfn ${pkgs.curl.out}/lib/libcurl.so.4 $out/lib/libcurl.so.4
-
-      # Create Steam Runtime directory structure
-      #mkdir -p $out/steam-runtime/sniper
-      #ln -sfn ${pkgs.x86.steam-unwrapped}/share/steam/steam-runtime $out/steam-runtime
-
-      # Fix ncurses symlinks
-      ln -sfn ${pkgs.ncurses5}/lib/libncursesw.so.6 $out/lib/libtinfo.so.6
-      # ln -sfn ${pkgs.ncurses5}/lib/libncursesw.so.6 $out/lib32/libtinfo.so.6
-
-      # Add missing Vulkan library links
-      ln -sfn ${pkgs.vulkan-loader}/lib/libvulkan.so.1 $out/lib/libvulkan.so.1
-      ln -sfn ${pkgs.vulkan-loader}/lib/libvulkan.so $out/lib/libvulkan.so
-      
-      # Fix DRI3 authentication
-      ln -sfn ${pkgs.libdrm}/lib/libdrm.so.2 $out/lib/libdrm.so.2
-      ln -sfn ${pkgs.libglvnd}/lib/libGLX.so.0 $out/lib/libGLX.so.0
-
-      # Create critical symlinks Steam expects (disabled to avoid errors)
-      ln -sfn ${pkgs.glibc}/lib/ld-linux-aarch64.so.1 $out/lib/ld-linux-x86-64.so.2
-      ln -sfn ${pkgs.glibc}/lib/ld-linux-aarch64.so.1 $out/lib/ld-linux.so.2
-      
-      # Steam runtime library workarounds: create necessary directories
-      mkdir -p $out/lib32 $out/lib64
-      # ln -sfn ${pkgs.libva}/lib/libva.so.2 $out/lib/libva.so.1
-
-      mkdir -p $out/lib $out/lib32 $out/lib64
-      
-      # Create a dummy passt script so that child process "passt" is found
-      mkdir -p $out/bin
-      echo '#!/bin/sh
-      exit 0' > $out/bin/passt
-      chmod +x $out/bin/passt
-
-      # Force use of Steam Runtime's libcurl
-      ln -sfn "$STEAM_RUNTIME/lib/i386-linux-gnu/libcurl.so.4" "$out/lib/libcurl.so.4"
-      ln -sfn "$STEAM_RUNTIME/lib/x86_64-linux-gnu/libcurl.so.4" "$out/lib64/libcurl.so.4"
-      
-      # Workaround for libtinfo
-      ln -sfn ${pkgs.ncurses5}/lib/libncursesw.so.6 $out/lib/libtinfo.so.6
-      ln -sfn ${pkgs.ncurses5}/lib/libncursesw.so.6 $out/lib32/libtinfo.so.6
     '';
 
     runScript = ''
