@@ -440,10 +440,6 @@ let
     '';
 
     runScript = ''
-      # Set up environment variables for box64 and libraries
-      export STEAM_EXTRA_COMPAT_TOOLS_PATHS="${pkgs.mybox64}/bin"
-      export BOX64_PATH="${pkgs.mybox64}/bin"
-
       # Enable box64/box86 logging if needed
       ${BOX64_VARS}
 
