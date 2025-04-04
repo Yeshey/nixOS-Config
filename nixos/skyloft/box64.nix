@@ -402,7 +402,9 @@ let
     export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
 
     export DBUS_FATAL_WARNINGS=0
-    BOX64_AVX=0 # didnt help https://github.com/ptitSeb/box64/issues/1691
+    BOX64_AVX=0
+    
+
   '';
 
   # FHS environment that spawns a bash shell by default, or runs a given command if arguments are provided
@@ -485,10 +487,6 @@ let
       # Set up environment variables for box64 and libraries
       export STEAM_EXTRA_COMPAT_TOOLS_PATHS="${pkgs.mybox64}/bin"
       export BOX64_PATH="${pkgs.mybox64}/bin"
-      
-      export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d"
-      export __GLX_VENDOR_LIBRARY_NAME="mesa"
-      # export MESA_LOADER_DRIVER_OVERRIDE="zink"
 
       # Enable box64/box86 logging if needed
       ${BOX64_VARS}
@@ -496,7 +494,8 @@ let
       if [ "$#" -eq 0 ]; then
         exec ${pkgs.bashInteractive}/bin/bash
       else
-        ${pkgs.bashInteractive}/bin/bash -c "$@"
+        exec "$@"
+        
       fi
     '';
   };
@@ -508,7 +507,6 @@ box64BashWrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
   #!${pkgs.bash}/bin/sh
   ${BOX64_VARS}
   export BOX64_TRACE_FILE="stderr"
-  export BOX86_TRACE_FILE="stderr"
 
   exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.x86.bash}/bin/bash "$@"
 '';
@@ -516,7 +514,6 @@ box64Wrapper = pkgs.writeScriptBin "box64-wrapper" ''
   #!${pkgs.bash}/bin/sh
   ${BOX64_VARS}
   export BOX64_TRACE_FILE="stderr"
-  #export BOX86_TRACE_FILE="stderr"
 
   #BOX64_TRACE_FILE=/tmp/steamwebhelper-%pid.txt
   BOX64_SHOWSEGV=1
@@ -576,14 +573,7 @@ in {
       steamx86Wrapper = pkgs.writeScriptBin "box64-bashx86-steamx86-wrapper" ''
         #!${pkgs.bash}/bin/sh
         ${BOX64_VARS}
-        # Fix Steam Runtime paths
-        export STEAM_RUNTIME=1
-        export STEAM_RUNTIME_SCOUT="$STEAM_RUNTIME"
-        export STEAM_RUNTIME_SNIER="$STEAM_RUNTIME/sniper"
-        
-        # Create required runtime directory
-        mkdir -p "$STEAM_RUNTIME_SNIER"
-        export STEAM_RUNTIME_SCOUT="$HOME/.local/share/Steam/ubuntu12_32/steam-runtime"
+
         exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 \
           ${pkgs.x86.bash}/bin/bash ${pkgs.x86.steam-unwrapped}/lib/steam/bin_steam.sh \
           -no-cef-sandbox \
