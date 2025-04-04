@@ -147,8 +147,6 @@ let
     pkgs.curl.out
     libdbusmenu
     xcbutilxrm
-
-    # ASSEGUIR APAGA AS DE CIMA PARA VER SE DÁ O ERRO, TINHAS APAGADO AS DE BAIXO
     xorg.xcbutilkeysyms
     # pango pango.out SDL2_Pango SDL_Pango # pango compile error
     gtk3-x11
@@ -400,8 +398,8 @@ let
     export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d"
     export VK_ICD_FILENAMES=${pkgs.swiftshader}/share/vulkan/icd.d/vk_swiftshader_icd.json # vulkaninfo should work with CPU now, probably should remove if I MAKE THIS WORK
 
-    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsI686)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
-    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsI686)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
 
     export DBUS_FATAL_WARNINGS=0
     BOX64_AVX=0 # didnt help https://github.com/ptitSeb/box64/issues/1691
@@ -431,7 +429,7 @@ let
     steamLibs 
     #++ steamLibsAarch32 
     #++ steamLibsX86_64 
-    ++ steamLibsI686 # getting the feeling that I only need these: https://github.com/ptitSeb/box64/issues/2142
+    # ++ steamLibsI686 # getting the feeling that I only need these: https://github.com/ptitSeb/box64/issues/2142
     #++ steamLibsMineX86_64
     #++ steamLibsMinei686
     ;
@@ -494,32 +492,11 @@ let
 
       # Enable box64/box86 logging if needed
       ${BOX64_VARS}
-      
-      export GTK_MODULES="xapp-gtk3-module"
-      export GDK_BACKEND=x11
 
-      export BOX64_EMULATED_LIBS="libmpg123.so.0"
-      export BOX64_TRACE_FILE="stderr"
-      #export BOX86_TRACE_FILE="stderr"
-
-      #BOX64_TRACE_FILE=/tmp/steamwebhelper-%pid.txt
-      BOX64_SHOWSEGV=1
-      BOX64_DLSYM_ERROR=1
-
-      export STEAM_RUNTIME=${STEAM_RUNTIME}
-      # Add sniper runtime path
-      # export STEAM_RUNTIME_SCOUT="/home/yeshey/.local/share/Steam/ubuntu12_32/steam-runtime/sniper"
-      export STEAM_RUNTIME_SCOUT="/home/yeshey/.local/share/Steam/ubuntu12_32/steam-runtime"
-
-      # Force use of FHS environment's libraries
-      export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$out/lib:$out/lib32"
-      
-      # If no arguments are provided, spawn an interactive bash shell.
-      # Otherwise, run the provided command.
       if [ "$#" -eq 0 ]; then
         exec ${pkgs.bashInteractive}/bin/bash
       else
-        exec "$@"
+        ${pkgs.bashInteractive}/bin/bash -c "$@"
       fi
     '';
   };
