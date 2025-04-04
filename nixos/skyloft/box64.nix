@@ -10,7 +10,7 @@ let
     libpng libpulseaudio libjpeg libvorbis stdenv.cc.cc.lib xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXfixes
     xorg.libXcursor xorg.libXi xorg.libXcomposite xorg.libXtst xorg.libSM xorg.libICE libGL libglvnd freetype
     openssl curl zlib dbus-glib ncurses
-    vulkan-headers vulkan-loader vulkan-tools
+    
     libva mesa.drivers
     ncurses5 ncurses6 ncurses
     pkgs.curl.out
@@ -36,7 +36,20 @@ let
     libusb1 ibus-engines.kkc gtk3
 
     xdg-utils
-    vulkan-validation-layers vulkan-headers
+    
+    # for vulkan? https://discourse.nixos.org/t/setting-up-vulkan-for-development/11715/3
+    # old: vulkan-validation-layers vulkan-headers
+    dotnet-sdk_8
+    glfw
+    freetype
+    vulkan-headers
+    vulkan-loader
+    vulkan-validation-layers
+    vulkan-tools        # vulkaninfo
+    shaderc             # GLSL to SPIRV compiler - glslc
+    renderdoc           # Graphics debugger
+    tracy               # Graphics profiler
+    vulkan-tools-lunarg # vkconfig
 
     # https://github.com/ptitSeb/box64/issues/1780#issuecomment-2627480114
     zenity dbus libnsl libunity pciutils openal
@@ -397,7 +410,8 @@ let
     export BOX86_TRACE_FILE=stderr
 
     # Set SwiftShader as primary
-    export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d"
+    export VULKAN_SDK = "${pkgs.vulkan-headers}"
+    export VK_LAYER_PATH = "${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d"
     export VK_ICD_FILENAMES=${pkgs.swiftshader}/share/vulkan/icd.d/vk_swiftshader_icd.json # vulkaninfo should work with CPU now, probably should remove if I MAKE THIS WORK
 
     export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
@@ -417,17 +431,6 @@ let
       vulkan-validation-layers vulkan-headers
       libva-utils swiftshader
     ]) ++ steamLibs;
-
-  # Add these to profile setup
-  profile = ''
-    export LD_LIBRARY_PATH="${
-      lib.makeLibraryPath [
-        pkgs.libglvnd
-        pkgs.vulkan-loader
-        pkgs.libunity
-      ]
-    }:$LD_LIBRARY_PATH"
-  '';
 
   multiPkgs = pkgs: 
     steamLibs 
