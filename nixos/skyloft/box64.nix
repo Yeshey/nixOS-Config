@@ -216,7 +216,7 @@ let
     sdlookup
     SDL2_net
     SDL2_gfx
-    # SDL_sound SDL2_sound # SLD_SOUND error
+    #  SDL_sound SDL2_sound # SLD_SOUND error
     SDL_sixel
     sdl-jstest
     SDL_compat
