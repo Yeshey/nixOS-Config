@@ -250,6 +250,149 @@ let
     # libcef (https://github.com/ptitSeb/box64/issues/1383) error: unsupported system i686-linux
   ];
 
+
+  steamLibsX86_64 = with pkgs.pkgsCross.gnu64; [
+    glibc
+    glib.out
+    gtk2
+    gdk-pixbuf
+    cairo.out
+    fontconfig
+    libdrm
+    libvdpau
+    expat
+    util-linux
+    at-spi2-core
+    libnotify
+    gnutls
+    openalSoft
+    udev
+    xorg.libXinerama
+    xorg.libXdamage
+    xorg.libXScrnSaver
+    xorg.libxcb
+    libva
+    libpng
+    libpulseaudio
+    libjpeg
+    libvorbis
+    stdenv.cc.cc.lib
+    xorg.libX11
+    xorg.libXext
+    xorg.libXrender
+    xorg.libXfixes
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXcomposite
+    xorg.libXtst
+    xorg.libSM
+    xorg.libICE
+    libGL
+    libglvnd
+    freetype
+    openssl
+    curl
+    zlib
+    dbus-glib
+    ncurses
+    vulkan-headers
+    vulkan-loader
+    vulkan-tools
+    mesa.drivers
+    ncurses5
+    ncurses6
+    pkgs.curl.out
+    libdbusmenu
+    xcbutilxrm
+    xorg.xcbutilkeysyms
+    # pango pango.out SDL2_Pango SDL_Pango # pango compile error
+    gtk3-x11
+    libmpg123
+    # ibus-engines.libpinyin Error libpiny
+    libnma
+    libnma-gtk4
+    libappindicator
+    libappindicator-gtk3
+    libappindicator-gtk2
+    nss
+    nspr
+    libudev-zero
+    libusb1
+    # ibus-engines.kkc libkkc error
+    gtk3
+    xdg-utils
+    vulkan-validation-layers
+    zenity 
+    xorg.libXrandr
+    dbus
+    libnsl
+    # libunity # dee package error caused by this
+    pciutils
+    openal
+    passt
+    cups
+    alsa-lib
+    libxslt
+    zstd
+    xorg.libxshmfence
+    avahi
+    xorg.libpciaccess
+    elfutils
+    lm_sensors
+    libffi
+    flac
+    libogg
+    libbsd
+    libxml2
+    llvmPackages.libllvm
+    libdrm.out
+    unstable.libgbm
+    unstable.libgbm.out
+    libcap
+    libcap_ng
+    libcaption
+    gmp
+    gmpxx
+    libgmpris
+    SDL2
+    SDL2_image
+    SDL2_ttf
+    bzip2
+    sdlookup
+    SDL2_net
+    SDL2_gfx
+    #  SDL_sound SDL2_sound # SLD_SOUND error
+    SDL_sixel
+    sdl-jstest
+    SDL_compat
+    
+    # SDL_stretch SDL STREACH ERROR
+    SDL_audiolib
+    SDL2_image_2_6
+    SDL2_image_2_0
+    # SDL2_mixer SDL_mixer SDL2_mixer_2_0 # timidity error
+    libcdada
+    libgcc
+    # xapp mate components? GIVES ERROR, ALSO, WHY would i need
+    libselinux
+    python3
+    wayland
+    wayland-protocols
+    patchelf
+    libGLU
+    fribidi brotli
+    fribidi.out brotli.out
+
+    # Comments moved below:
+    # libstdcxx5 ?
+    # gcc-unwrapped.lib libgccjitga (gcc jit error)
+    # libdbusmenu: causing Error: detected mismatched Qt dependencies when compiled for steamLibsI686 (maybe not)
+    # sbclPackages.cl-cairo2-xlib sbcl error?
+    # SDL sdl3 SDL2 sdlpop SDL_ttf SDL_net SDL_gpu SDL_gfx (-baseqt conflict error)
+    # swiftshader (CPU implementation of vulkan)
+    # libcef (https://github.com/ptitSeb/box64/issues/1383) error: unsupported system i686-linux
+  ];
+
 # still missing libs:
 # cat tests.txt | grep "Error loading"                                                                                                                                             15:28:19
 # Error loading needed lib libGLX.so
@@ -282,26 +425,26 @@ let
   in
     map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
 
-  steamLibsX86_64 = let
-    crossPkgs = pkgs.pkgsCross.gnu64;
-    getCrossLib = lib:
-      let
-        # Map problematic package names to their cross-compilation equivalents
-        crossName = 
-          if lib.pname or null == "libdbusmenu" then "glibc"  # Skip libdbusmenu
-          else if lib.pname or null == "qt5" then "glibc"     # Skip qt5 packages
-          else if lib.pname or null == "gtk+-2.24.33" then "gtk2"
-          else if lib.pname or null == "openal-soft" then "openalSoft"
-          else if lib.pname or null == "systemd-minimal-libs" then "systemd"
-          else if lib.pname or null == "ibus-engines.libpinyin" then "ibus-engines"
-          else if lib ? pname then lib.pname
-          else lib.name;
+  # steamLibsX86_64 = let
+  #   crossPkgs = pkgs.pkgsCross.gnu64;
+  #   getCrossLib = lib:
+  #     let
+  #       # Map problematic package names to their cross-compilation equivalents
+  #       crossName = 
+  #         if lib.pname or null == "libdbusmenu" then "glibc"  # Skip libdbusmenu
+  #         else if lib.pname or null == "qt5" then "glibc"     # Skip qt5 packages
+  #         else if lib.pname or null == "gtk+-2.24.33" then "gtk2"
+  #         else if lib.pname or null == "openal-soft" then "openalSoft"
+  #         else if lib.pname or null == "systemd-minimal-libs" then "systemd"
+  #         else if lib.pname or null == "ibus-engines.libpinyin" then "ibus-engines"
+  #         else if lib ? pname then lib.pname
+  #         else lib.name;
         
-        # Handle special cases where attributes need different access
-        finalPkg = crossPkgs.${crossName} or (throw "Missing cross package: ${crossName}");
-      in
-      builtins.tryEval finalPkg;
-  in map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
+  #       # Handle special cases where attributes need different access
+  #       finalPkg = crossPkgs.${crossName} or (throw "Missing cross package: ${crossName}");
+  #     in
+  #     builtins.tryEval finalPkg;
+  # in map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
 
   # steamLibsI686 = let
   #   crossPkgs = pkgs.pkgsCross.gnu32;
@@ -418,13 +561,11 @@ let
     export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d";
     export VK_ICD_FILENAMES=${pkgs.swiftshader}/share/vulkan/icd.d/vk_swiftshader_icd.json; # vulkaninfo should work with CPU now, probably should remove if I MAKE THIS WORK
 
-    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsI686)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu";
-    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsI686)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu";
+    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsI686 ++ steamLibsX86_64)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu";
+    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsI686 ++ steamLibsX86_64)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu";
 
     export DBUS_FATAL_WARNINGS=0;
     BOX64_AVX=0;
-    
-
   '';
 
   # FHS environment that spawns a bash shell by default, or runs a given command if arguments are provided
@@ -439,7 +580,7 @@ let
   multiPkgs = pkgs: 
     steamLibs 
     #++ steamLibsAarch32 
-    #++ steamLibsX86_64 # might be good as well: cc
+    ++ steamLibsX86_64 # might be good as well: https://github.com/ptitSeb/box64/issues/476#issuecomment-2667068838
      ++ steamLibsI686 # getting the feeling that I only need these: https://github.com/ptitSeb/box64/issues/2142
     #++ steamLibsMineX86_64
     #++ steamLibsMinei686
