@@ -10,7 +10,7 @@ let
     libpng libpulseaudio libjpeg libvorbis stdenv.cc.cc.lib xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXfixes
     xorg.libXcursor xorg.libXi xorg.libXcomposite xorg.libXtst xorg.libSM xorg.libICE libGL libglvnd freetype
     openssl curl zlib dbus-glib ncurses
-    vulkan-headers vulkan-loader vulkan-tools
+    
     libva mesa.drivers
     ncurses5 ncurses6 ncurses
     pkgs.curl.out
@@ -36,7 +36,20 @@ let
     libusb1 ibus-engines.kkc gtk3
 
     xdg-utils
-    vulkan-validation-layers vulkan-headers
+    
+    # for vulkan? https://discourse.nixos.org/t/setting-up-vulkan-for-development/11715/3
+    # old: vulkan-validation-layers vulkan-headers
+    dotnet-sdk_8
+    glfw
+    freetype
+    vulkan-headers
+    vulkan-loader
+    vulkan-validation-layers
+    vulkan-tools        # vulkaninfo
+    shaderc             # GLSL to SPIRV compiler - glslc
+    renderdoc           # Graphics debugger
+    tracy               # Graphics profiler
+    vulkan-tools-lunarg # vkconfig
 
     # https://github.com/ptitSeb/box64/issues/1780#issuecomment-2627480114
     zenity dbus libnsl libunity pciutils openal
@@ -92,6 +105,8 @@ let
     libselinux            # libselinux
 
     python3 wayland wayland-protocols patchelf libGLU
+    fribidi brotli
+    fribidi.out brotli.out
   ];
   steamLibsI686 = with pkgs.pkgsCross.gnu32; [
     glibc
@@ -121,7 +136,6 @@ let
     stdenv.cc.cc.lib
     xorg.libX11
     xorg.libXext
-    xorg.libXrandr
     xorg.libXrender
     xorg.libXfixes
     xorg.libXcursor
@@ -165,7 +179,8 @@ let
     gtk3
     xdg-utils
     vulkan-validation-layers
-    zenity
+    zenity 
+    xorg.libXrandr
     dbus
     libnsl
     # libunity # dee package error caused by this
@@ -203,7 +218,7 @@ let
     sdlookup
     SDL2_net
     SDL2_gfx
-    # SDL_sound SDL2_sound # SLD_SOUND error
+    #  SDL_sound SDL2_sound # SLD_SOUND error
     SDL_sixel
     sdl-jstest
     SDL_compat
@@ -215,13 +230,158 @@ let
     # SDL2_mixer SDL_mixer SDL2_mixer_2_0 # timidity error
     libcdada
     libgcc
-    xapp
+    # xapp mate components? GIVES ERROR, ALSO, WHY would i need
     libselinux
     python3
     wayland
     wayland-protocols
     patchelf
     libGLU
+    fribidi brotli
+    fribidi.out brotli.out
+
+    # Comments moved below:
+    # libstdcxx5 ?
+    # gcc-unwrapped.lib libgccjitga (gcc jit error)
+    # libdbusmenu: causing Error: detected mismatched Qt dependencies when compiled for steamLibsI686 (maybe not)
+    # sbclPackages.cl-cairo2-xlib sbcl error?
+    # SDL sdl3 SDL2 sdlpop SDL_ttf SDL_net SDL_gpu SDL_gfx (-baseqt conflict error)
+    # swiftshader (CPU implementation of vulkan)
+    # libcef (https://github.com/ptitSeb/box64/issues/1383) error: unsupported system i686-linux
+  ];
+
+
+  steamLibsX86_64 = with pkgs.pkgsCross.gnu64; [
+    glibc
+    glib.out
+    gtk2
+    gdk-pixbuf
+    cairo.out
+    fontconfig
+    libdrm
+    libvdpau
+    expat
+    util-linux
+    at-spi2-core
+    libnotify
+    gnutls
+    openalSoft
+    udev
+    xorg.libXinerama
+    xorg.libXdamage
+    xorg.libXScrnSaver
+    xorg.libxcb
+    libva
+    libpng
+    libpulseaudio
+    libjpeg
+    libvorbis
+    stdenv.cc.cc.lib
+    xorg.libX11
+    xorg.libXext
+    xorg.libXrender
+    xorg.libXfixes
+    xorg.libXcursor
+    xorg.libXi
+    xorg.libXcomposite
+    xorg.libXtst
+    xorg.libSM
+    xorg.libICE
+    libGL
+    libglvnd
+    freetype
+    openssl
+    curl
+    zlib
+    dbus-glib
+    ncurses
+    vulkan-headers
+    vulkan-loader
+    vulkan-tools
+    mesa.drivers
+    ncurses5
+    ncurses6
+    pkgs.curl.out
+    libdbusmenu
+    xcbutilxrm
+    xorg.xcbutilkeysyms
+    # pango pango.out SDL2_Pango SDL_Pango # pango compile error
+    gtk3-x11
+    libmpg123
+    # ibus-engines.libpinyin Error libpiny
+    libnma
+    libnma-gtk4
+    libappindicator
+    libappindicator-gtk3
+    libappindicator-gtk2
+    nss
+    nspr
+    libudev-zero
+    libusb1
+    # ibus-engines.kkc libkkc error
+    gtk3
+    xdg-utils
+    vulkan-validation-layers
+    zenity 
+    xorg.libXrandr
+    dbus
+    libnsl
+    # libunity # dee package error caused by this
+    pciutils
+    openal
+    passt
+    cups
+    alsa-lib
+    libxslt
+    zstd
+    xorg.libxshmfence
+    avahi
+    xorg.libpciaccess
+    elfutils
+    lm_sensors
+    libffi
+    flac
+    libogg
+    libbsd
+    libxml2
+    llvmPackages.libllvm
+    libdrm.out
+    unstable.libgbm
+    unstable.libgbm.out
+    libcap
+    libcap_ng
+    libcaption
+    gmp
+    gmpxx
+    libgmpris
+    SDL2
+    SDL2_image
+    SDL2_ttf
+    bzip2
+    sdlookup
+    SDL2_net
+    SDL2_gfx
+    #  SDL_sound SDL2_sound # SLD_SOUND error
+    SDL_sixel
+    sdl-jstest
+    SDL_compat
+    
+    # SDL_stretch SDL STREACH ERROR
+    SDL_audiolib
+    SDL2_image_2_6
+    SDL2_image_2_0
+    # SDL2_mixer SDL_mixer SDL2_mixer_2_0 # timidity error
+    libcdada
+    libgcc
+    # xapp mate components? GIVES ERROR, ALSO, WHY would i need
+    libselinux
+    python3
+    wayland
+    wayland-protocols
+    patchelf
+    libGLU
+    fribidi brotli
+    fribidi.out brotli.out
 
     # Comments moved below:
     # libstdcxx5 ?
@@ -265,26 +425,26 @@ let
   in
     map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
 
-  steamLibsX86_64 = let
-    crossPkgs = pkgs.pkgsCross.gnu64;
-    getCrossLib = lib:
-      let
-        # Map problematic package names to their cross-compilation equivalents
-        crossName = 
-          if lib.pname or null == "libdbusmenu" then "glibc"  # Skip libdbusmenu
-          else if lib.pname or null == "qt5" then "glibc"     # Skip qt5 packages
-          else if lib.pname or null == "gtk+-2.24.33" then "gtk2"
-          else if lib.pname or null == "openal-soft" then "openalSoft"
-          else if lib.pname or null == "systemd-minimal-libs" then "systemd"
-          else if lib.pname or null == "ibus-engines.libpinyin" then "ibus-engines"
-          else if lib ? pname then lib.pname
-          else lib.name;
+  # steamLibsX86_64 = let
+  #   crossPkgs = pkgs.pkgsCross.gnu64;
+  #   getCrossLib = lib:
+  #     let
+  #       # Map problematic package names to their cross-compilation equivalents
+  #       crossName = 
+  #         if lib.pname or null == "libdbusmenu" then "glibc"  # Skip libdbusmenu
+  #         else if lib.pname or null == "qt5" then "glibc"     # Skip qt5 packages
+  #         else if lib.pname or null == "gtk+-2.24.33" then "gtk2"
+  #         else if lib.pname or null == "openal-soft" then "openalSoft"
+  #         else if lib.pname or null == "systemd-minimal-libs" then "systemd"
+  #         else if lib.pname or null == "ibus-engines.libpinyin" then "ibus-engines"
+  #         else if lib ? pname then lib.pname
+  #         else lib.name;
         
-        # Handle special cases where attributes need different access
-        finalPkg = crossPkgs.${crossName} or (throw "Missing cross package: ${crossName}");
-      in
-      builtins.tryEval finalPkg;
-  in map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
+  #       # Handle special cases where attributes need different access
+  #       finalPkg = crossPkgs.${crossName} or (throw "Missing cross package: ${crossName}");
+  #     in
+  #     builtins.tryEval finalPkg;
+  # in map (x: x.value) (filter (x: x.success) (map getCrossLib steamLibs));
 
   # steamLibsI686 = let
   #   crossPkgs = pkgs.pkgsCross.gnu32;
@@ -384,119 +544,60 @@ let
   STEAMOS = "1";
   STEAM_RUNTIME = "1";
   BOX64_VARS= ''
-    export BOX64_DLSYM_ERROR=1
-    export BOX64_TRANSLATE_NOWAIT=1
-    export BOX64_NOBANNER=1
-    export STEAMOS=${STEAMOS} # https://github.com/ptitSeb/box64/issues/91#issuecomment-898858125
-    export BOX64_LOG=${BOX64_LOG}
-    export BOX64_DYNAREC_LOG=${BOX64_DYNAREC_LOG}
-    export DBUS_FATAL_WARNINGS=1
-    export STEAM_RUNTIME=${STEAM_RUNTIME}
-    export SDL_VIDEODRIVER=x11  # wayland
+    export BOX64_DLSYM_ERROR=1;
+    export BOX64_TRANSLATE_NOWAIT=1;
+    export BOX64_NOBANNER=1;
+    export STEAMOS=${STEAMOS}; # https://github.com/ptitSeb/box64/issues/91#issuecomment-898858125
+    export BOX64_LOG=${BOX64_LOG};
+    export BOX64_DYNAREC_LOG=${BOX64_DYNAREC_LOG};
+    export DBUS_FATAL_WARNINGS=1;
+    export STEAM_RUNTIME=${STEAM_RUNTIME};
+    export SDL_VIDEODRIVER=x11;  # wayland
+    export BOX64_TRACE_FILE="stderr"; # apparantly prevents steam sniper not found error https://github.com/Botspot/pi-apps/issues/2614#issuecomment-2209629910
+    export BOX86_TRACE_FILE=stderr;
 
     # Set SwiftShader as primary
-    export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d"
-    export VK_ICD_FILENAMES=${pkgs.swiftshader}/share/vulkan/icd.d/vk_swiftshader_icd.json # vulkaninfo should work with CPU now, probably should remove if I MAKE THIS WORK
+    export VULKAN_SDK="${pkgs.vulkan-headers}";
+    export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d";
+    export VK_ICD_FILENAMES=${pkgs.swiftshader}/share/vulkan/icd.d/vk_swiftshader_icd.json; # vulkaninfo should work with CPU now, probably should remove if I MAKE THIS WORK
 
-    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
-    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
+    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsI686 ++ steamLibsX86_64)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu";
+    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsI686 ++ steamLibsX86_64)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu";
 
-    export DBUS_FATAL_WARNINGS=0
-    BOX64_AVX=0 # didnt help https://github.com/ptitSeb/box64/issues/1691
+    export DBUS_FATAL_WARNINGS=0;
+    BOX64_AVX=0;
   '';
 
   # FHS environment that spawns a bash shell by default, or runs a given command if arguments are provided
   steamFHS = pkgs.buildFHSUserEnv {
     name = "steam-fhs";
     targetPkgs = pkgs: (with pkgs; [
-      mybox64 box86 steam-run zenity xdg-utils
+      mybox64 box86 steam-run xdg-utils
       vulkan-validation-layers vulkan-headers
       libva-utils swiftshader
     ]) ++ steamLibs;
 
-  # Add these to profile setup
-  profile = ''
-    export LD_LIBRARY_PATH="${
-      lib.makeLibraryPath [
-        pkgs.libglvnd
-        pkgs.vulkan-loader
-        pkgs.libunity
-      ]
-    }:$LD_LIBRARY_PATH"
-  '';
-
   multiPkgs = pkgs: 
     steamLibs 
     #++ steamLibsAarch32 
-    #++ steamLibsX86_64 
-    # ++ steamLibsI686 # getting the feeling that I only need these: https://github.com/ptitSeb/box64/issues/2142
+    ++ steamLibsX86_64 # might be good as well: https://github.com/ptitSeb/box64/issues/476#issuecomment-2667068838
+     ++ steamLibsI686 # getting the feeling that I only need these: https://github.com/ptitSeb/box64/issues/2142
     #++ steamLibsMineX86_64
     #++ steamLibsMinei686
     ;
 
     extraInstallCommands = ''
-      mkdir -p $out/lib
-      ln -sfn ${pkgs.glibc}/lib/ld-linux-aarch64.so.1 $out/lib/ld-linux-x86-64.so.2
-      ln -sfn ${pkgs.zlib}/lib/libz.so.1 $out/lib/libz.so.1.2.13
-      ln -sfn ${pkgs.curl.out}/lib/libcurl.so.4 $out/lib/libcurl.so.4
-
-      # Create Steam Runtime directory structure
-      #mkdir -p $out/steam-runtime/sniper
-      #ln -sfn ${pkgs.x86.steam-unwrapped}/share/steam/steam-runtime $out/steam-runtime
-
-      # Fix ncurses symlinks
-      ln -sfn ${pkgs.ncurses5}/lib/libncursesw.so.6 $out/lib/libtinfo.so.6
-      # ln -sfn ${pkgs.ncurses5}/lib/libncursesw.so.6 $out/lib32/libtinfo.so.6
-
-      # Add missing Vulkan library links
-      ln -sfn ${pkgs.vulkan-loader}/lib/libvulkan.so.1 $out/lib/libvulkan.so.1
-      ln -sfn ${pkgs.vulkan-loader}/lib/libvulkan.so $out/lib/libvulkan.so
-      
-      # Fix DRI3 authentication
-      ln -sfn ${pkgs.libdrm}/lib/libdrm.so.2 $out/lib/libdrm.so.2
-      ln -sfn ${pkgs.libglvnd}/lib/libGLX.so.0 $out/lib/libGLX.so.0
-
-      # Create critical symlinks Steam expects (disabled to avoid errors)
-      ln -sfn ${pkgs.glibc}/lib/ld-linux-aarch64.so.1 $out/lib/ld-linux-x86-64.so.2
-      ln -sfn ${pkgs.glibc}/lib/ld-linux-aarch64.so.1 $out/lib/ld-linux.so.2
-      
-      # Steam runtime library workarounds: create necessary directories
-      mkdir -p $out/lib32 $out/lib64
-      # ln -sfn ${pkgs.libva}/lib/libva.so.2 $out/lib/libva.so.1
-
-      mkdir -p $out/lib $out/lib32 $out/lib64
-      
-      # Create a dummy passt script so that child process "passt" is found
-      mkdir -p $out/bin
-      echo '#!/bin/sh
-      exit 0' > $out/bin/passt
-      chmod +x $out/bin/passt
-
-      # Force use of Steam Runtime's libcurl
-      ln -sfn "$STEAM_RUNTIME/lib/i386-linux-gnu/libcurl.so.4" "$out/lib/libcurl.so.4"
-      ln -sfn "$STEAM_RUNTIME/lib/x86_64-linux-gnu/libcurl.so.4" "$out/lib64/libcurl.so.4"
-      
-      # Workaround for libtinfo
-      ln -sfn ${pkgs.ncurses5}/lib/libncursesw.so.6 $out/lib/libtinfo.so.6
-      ln -sfn ${pkgs.ncurses5}/lib/libncursesw.so.6 $out/lib32/libtinfo.so.6
     '';
 
     runScript = ''
-      # Set up environment variables for box64 and libraries
-      export STEAM_EXTRA_COMPAT_TOOLS_PATHS="${pkgs.mybox64}/bin"
-      export BOX64_PATH="${pkgs.mybox64}/bin"
-      
-      export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d"
-      export __GLX_VENDOR_LIBRARY_NAME="mesa"
-      # export MESA_LOADER_DRIVER_OVERRIDE="zink"
-
       # Enable box64/box86 logging if needed
       ${BOX64_VARS}
 
       if [ "$#" -eq 0 ]; then
         exec ${pkgs.bashInteractive}/bin/bash
       else
-        ${pkgs.bashInteractive}/bin/bash -c "$@"
+        exec "$@"
+        
       fi
     '';
   };
@@ -507,20 +608,13 @@ let
 box64BashWrapper = pkgs.writeScriptBin "box64-bashx86-wrapper" ''
   #!${pkgs.bash}/bin/sh
   ${BOX64_VARS}
-  export BOX64_TRACE_FILE="stderr"
-  export BOX86_TRACE_FILE="stderr"
 
   exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 ${pkgs.x86.bash}/bin/bash "$@"
 '';
 box64Wrapper = pkgs.writeScriptBin "box64-wrapper" ''
   #!${pkgs.bash}/bin/sh
-  ${BOX64_VARS}
-  export BOX64_TRACE_FILE="stderr"
-  #export BOX86_TRACE_FILE="stderr"
 
-  #BOX64_TRACE_FILE=/tmp/steamwebhelper-%pid.txt
-  BOX64_SHOWSEGV=1
-  BOX64_DLSYM_ERROR=1
+  ${BOX64_VARS}
 
   exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 "$@"
 '';
@@ -576,14 +670,7 @@ in {
       steamx86Wrapper = pkgs.writeScriptBin "box64-bashx86-steamx86-wrapper" ''
         #!${pkgs.bash}/bin/sh
         ${BOX64_VARS}
-        # Fix Steam Runtime paths
-        export STEAM_RUNTIME=1
-        export STEAM_RUNTIME_SCOUT="$STEAM_RUNTIME"
-        export STEAM_RUNTIME_SNIER="$STEAM_RUNTIME/sniper"
-        
-        # Create required runtime directory
-        mkdir -p "$STEAM_RUNTIME_SNIER"
-        export STEAM_RUNTIME_SCOUT="$HOME/.local/share/Steam/ubuntu12_32/steam-runtime"
+
         exec ${steamFHS}/bin/steam-fhs ${pkgs.mybox64}/bin/mybox64 \
           ${pkgs.x86.bash}/bin/bash ${pkgs.x86.steam-unwrapped}/lib/steam/bin_steam.sh \
           -no-cef-sandbox \
