@@ -105,6 +105,8 @@ let
     libselinux            # libselinux
 
     python3 wayland wayland-protocols patchelf libGLU
+    fribidi brotli
+    fribidi.out brotli.out
   ];
   steamLibsI686 = with pkgs.pkgsCross.gnu32; [
     glibc
@@ -235,6 +237,8 @@ let
     wayland-protocols
     patchelf
     libGLU
+    fribidi brotli
+    fribidi.out brotli.out
 
     # Comments moved below:
     # libstdcxx5 ?
@@ -435,7 +439,7 @@ let
   multiPkgs = pkgs: 
     steamLibs 
     #++ steamLibsAarch32 
-    #++ steamLibsX86_64 
+    #++ steamLibsX86_64 # might be good as well: https://github.com/ptitSeb/box64/issues/476
      ++ steamLibsI686 # getting the feeling that I only need these: https://github.com/ptitSeb/box64/issues/2142
     #++ steamLibsMineX86_64
     #++ steamLibsMinei686
