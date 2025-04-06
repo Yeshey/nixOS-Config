@@ -185,6 +185,7 @@ in
             //(?i)Photos&PhotosAndVideos
             //.git
             ProjetoIAA
+            PCLRepo
             *.ipynb
           "}
 
