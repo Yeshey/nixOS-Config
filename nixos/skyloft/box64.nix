@@ -5,6 +5,7 @@ with lib;
 let 
   # Grouped common libraries needed for the FHS environment (64-bit ARM versions)
   steamLibs = with pkgs; [
+    harfbuzzFull
     glibc glib.out gtk2 gdk-pixbuf pango.out cairo.out fontconfig libdrm libvdpau expat util-linux at-spi2-core libnotify
     gnutls openalSoft udev xorg.libXinerama xorg.libXdamage xorg.libXScrnSaver xorg.libxcb libva gcc-unwrapped.lib libgccjit
     libpng libpulseaudio libjpeg libvorbis stdenv.cc.cc.lib xorg.libX11 xorg.libXext xorg.libXrandr xorg.libXrender xorg.libXfixes
@@ -523,20 +524,6 @@ let
 
 in
 
-/*
-    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") steamLibs}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu" # didn't help
-    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") steamLibs}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu" # didn't help
-
-    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsAarch32)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
-    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsAarch32)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
-
-    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsX86_64 ++ steamLibsI686)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
-    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsX86_64 ++ steamLibsI686)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
-
-    export BOX64_LD_LIBRARY_PATH="${ lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsMineX86_64)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
-    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsMineX86_64)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu"
-*/
-
 let
   cfg = config.mySystem.box64;
   BOX64_LOG = "1";
@@ -575,16 +562,31 @@ let
       mybox64 box86 steam-run xdg-utils
       vulkan-validation-layers vulkan-headers
       libva-utils swiftshader
-    ]) ++ steamLibs;
+    ]) ++ steamLibs ++ steamLibsI686 ++ steamLibsX86_64;
 
   multiPkgs = pkgs: 
     steamLibs 
-    #++ steamLibsAarch32 
+    # ++ steamLibsAarch32 
     ++ steamLibsX86_64 # might be good as well: https://github.com/ptitSeb/box64/issues/476#issuecomment-2667068838
-     ++ steamLibsI686 # getting the feeling that I only need these: https://github.com/ptitSeb/box64/issues/2142
-    #++ steamLibsMineX86_64
-    #++ steamLibsMinei686
+    ++ steamLibsI686 # getting the feeling that I only need these: https://github.com/ptitSeb/box64/issues/2142
+    # ++ steamLibsMineX86_64
+    # ++ steamLibsMinei686
     ;
+
+    # to know where to put the x86_64 and i368 libs:
+    # I saw this comment online: (https://github.com/ptitSeb/box64/issues/476#issuecomment-2667068838)
+    # ```
+    # > [@michele-perrone](https://github.com/michele-perrone) You can copy x86_64 libraries to `/usr/lib/box64-x86_64-linux-gnu/` and x86 libraries to `/usr/lib/box64-i386-linux-gnu/`. Alternatively, you can use the `BOX64_LD_LIBRARY_PATH` environment variable to specify custom paths.
+    # ```
+
+    # and another comment on another issue: (https://github.com/ptitSeb/box86/issues/947#issuecomment-2022258062)
+    # ```
+    # > box86/box64 have a different approach compare to fex/qemu: you don't need an x86 chroot to run as it will use armhf/arm64 version of most libs directly.
+    # > 
+    # > I suspect you are missing some arhf library, like harfbuzz.
+    # > 
+    # > You can use `BOX86_LOG=1` for more details on missing libs when launching steam. Also, notes that gtk libs will be emulated when running steam (by design), and so will appear as missing. It's not conveniant because it makes understanding the missing what lib is missing more difficult, as some missing lib are ok, and some are not. Start by installing harfbuzz, and run with log=1 and paste the log here if it still doesn't work.
+    # ```
 
     extraInstallCommands = ''
     '';
