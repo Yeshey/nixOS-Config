@@ -92,7 +92,7 @@
       #inputs.nixpkgs.follows = "nixpkgs";
       #url = "github:Yeshey/box64-binfmt/main";
       type = "path";
-      path = "/mnt/DataDisk/PersonalFiles/2025/Projects/box64-binfmt/";
+      path = "/home/yeshey/PersonalFiles/2025/Projects/box64-binfmt/";
     };
     /*
     wolf = {
