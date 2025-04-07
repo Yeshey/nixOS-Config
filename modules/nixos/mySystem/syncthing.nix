@@ -176,6 +176,7 @@ in
             //*
             //(?i)PhotosAndVideos
             //.git
+            *.ipynb
           "}
 
           # 2025
@@ -184,6 +185,8 @@ in
             //(?i)Photos&PhotosAndVideos
             //.git
             ProjetoIAA
+            PCLRepo
+            *.ipynb
           "}
 
           # 2024
@@ -193,6 +196,7 @@ in
             //.git
             learnWithT*
             AI-Master-Repo-IAA*
+            *.ipynb
           "}
 
           # A70Camera
