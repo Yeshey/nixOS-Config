@@ -123,6 +123,10 @@
 
   system.autoUpgrade.allowReboot = true;
 
+  networking.firewall.allowedTCPPorts = [
+    8891 # for jupyternotebook servers (on this port) (`jupyter notebook --ip=0.0.0.0 --port=8891 --no-browser`)
+  ];
+
   nixpkgs.config = {
     allowUnsupportedSystem = true;
     allowBroken = true;
