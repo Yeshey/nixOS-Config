@@ -87,6 +87,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.home-manager.follows = "home-manager";
     };
+
+    box64-binfmt = {
+      #inputs.nixpkgs.follows = "nixpkgs";
+      #url = "github:Yeshey/box64-binfmt/main";
+      type = "path";
+      path = "/mnt/DataDisk/PersonalFiles/2025/Projects/box64-binfmt/";
+    };
     /*
     wolf = {
       #url = "github:games-on-whales/wolf/dev-nix";
@@ -132,6 +139,7 @@
     fastapi-dls-nixos,
     nixos-generators,
     impermanence,
+    box64-binfmt,
     #wolf,
     # lanzaboote,
     nix-snapd,
