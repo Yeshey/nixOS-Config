@@ -16,6 +16,7 @@
     ./hardware-configuration.nix
     ./backups.nix
     ./box64.nix
+    inputs.box64-binfmt.nixosModules.box64-binfmt
   ];
 
   nixpkgs = {
@@ -88,8 +89,10 @@
       sshKeys.enable = true;
     };
 
-    box64.enable = true;
+    #box64.enable = true;
   };
+
+  box64-binfmt.enable = true;
 
   environment.systemPackages = [ pkgs.mybox64 ];
 
