@@ -5,6 +5,7 @@ with lib;
 let 
   # Grouped common libraries needed for the FHS environment (64-bit ARM versions)
   steamLibs = with pkgs; [
+    unityhub
     harfbuzzFull
     glibc glib.out gtk2 gdk-pixbuf pango.out cairo.out fontconfig libdrm libvdpau expat util-linux at-spi2-core libnotify
     gnutls openalSoft udev xorg.libXinerama xorg.libXdamage xorg.libXScrnSaver xorg.libxcb libva gcc-unwrapped.lib libgccjit
@@ -110,6 +111,7 @@ let
     fribidi.out brotli.out
   ];
   steamLibsI686 = with pkgs.pkgsCross.gnu32; [
+    unityhub
     glibc
     glib.out
     gtk2
@@ -251,8 +253,8 @@ let
     # libcef (https://github.com/ptitSeb/box64/issues/1383) error: unsupported system i686-linux
   ];
 
-
   steamLibsX86_64 = with pkgs.pkgsCross.gnu64; [
+    unityhub
     glibc
     glib.out
     gtk2
@@ -548,8 +550,8 @@ let
     export VK_LAYER_PATH="${pkgs.vulkan-validation-layers}/share/vulkan/explicit_layer.d";
     export VK_ICD_FILENAMES=${pkgs.swiftshader}/share/vulkan/icd.d/vk_swiftshader_icd.json; # vulkaninfo should work with CPU now, probably should remove if I MAKE THIS WORK
 
-    export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsI686 ++ steamLibsX86_64)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu";
-    export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs ++ steamLibsI686 ++ steamLibsX86_64)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu";
+    #export BOX64_LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu";
+    #export LD_LIBRARY_PATH="${lib.concatMapStringsSep ":" (pkg: "${pkg}/lib") (steamLibs)}:$HOME/.local/share/Steam/ubuntu12_32/steam-runtime/lib/i386-linux-gnu";
 
     export DBUS_FATAL_WARNINGS=0;
     BOX64_AVX=0;
@@ -562,16 +564,16 @@ let
       mybox64 box86 steam-run xdg-utils
       vulkan-validation-layers vulkan-headers
       libva-utils swiftshader
-    ]) ++ steamLibs ++ steamLibsI686 ++ steamLibsX86_64;
+    ]) ++ steamLibs;
 
-  multiPkgs = pkgs: 
-    steamLibs 
-    # ++ steamLibsAarch32 
-    ++ steamLibsX86_64 # might be good as well: https://github.com/ptitSeb/box64/issues/476#issuecomment-2667068838
-    ++ steamLibsI686 # getting the feeling that I only need these: https://github.com/ptitSeb/box64/issues/2142
-    # ++ steamLibsMineX86_64
-    # ++ steamLibsMinei686
-    ;
+    multiPkgs = pkgs: 
+      steamLibs 
+      # ++ steamLibsAarch32 
+      # ++ steamLibsX86_64 # might be good as well: https://github.com/ptitSeb/box64/issues/476#issuecomment-2667068838
+      # ++ steamLibsI686 # getting the feeling that I only need these: https://github.com/ptitSeb/box64/issues/2142
+      # ++ steamLibsMineX86_64
+      # ++ steamLibsMinei686
+      ;
 
     # to know where to put the x86_64 and i368 libs:
     # I saw this comment online: (https://github.com/ptitSeb/box64/issues/476#issuecomment-2667068838)
