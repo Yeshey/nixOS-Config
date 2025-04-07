@@ -150,13 +150,13 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1743996126,
-        "narHash": "sha256-ZMmIHnDrfiyERMt9/eTcYugNSsvAyG0qZwxy+ah+CYs=",
-        "path": "/mnt/DataDisk/PersonalFiles/2025/Projects/box64-binfmt/",
+        "lastModified": 1743997062,
+        "narHash": "sha256-b76XkU3wa6pGYSuU70/bLefldu+ZuHml6PlO80VnUe4=",
+        "path": "/home/yeshey/PersonalFiles/2025/Projects/box64-binfmt/",
         "type": "path"
       },
       "original": {
-        "path": "/mnt/DataDisk/PersonalFiles/2025/Projects/box64-binfmt/",
+        "path": "/home/yeshey/PersonalFiles/2025/Projects/box64-binfmt/",
         "type": "path"
       }
     },
