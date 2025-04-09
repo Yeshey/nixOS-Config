@@ -28,5 +28,18 @@ in
       gnomeExtensions.hibernate-status-button
       gnomeExtensions.tray-icons-reloaded
     ];
+
+    # fixed Icons missing in gnome in hyrule castle when using stylix (https://discourse.nixos.org/t/icons-missing-in-gnome-applications/49835/6)
+    gtk = {
+      enable = true;
+      #Icon Theme
+      iconTheme = {
+        package = pkgs.adwaita-icon-theme;
+        name = "Adwaita";
+        # package = pkgs.kdePackages.breeze-icons;
+        # name = "Breeze-Dark";
+      };
+    };
+
   };
 }
