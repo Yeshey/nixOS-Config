@@ -30,33 +30,4 @@
       };
     };
   };
-
-
-  x86-packages = final: prev: {
-    x86 = let
-    in import prev.path {
-      system = "x86_64-linux";
-      config.allowUnfree = true;
-      overlays = [
-        (final: super: {
-          # Add any x86-specific overrides here
-        })
-      ];
-    };
-  };
-
-  i686-packages = final: prev: {
-    i686 = import prev.path {
-      system = "i686-linux";
-      config.allowUnfree = true;
-      overlays = [
-        (final: super: {
-          # Add any i686-specific overrides here
-        })
-      ];
-    };
-  };
-
-
-
 }
