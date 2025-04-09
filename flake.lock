@@ -150,14 +150,18 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1744049787,
-        "narHash": "sha256-jOzUEC8J87zPZKDVr3xXEz0BT52cE7j6Do2MU9TY5kE=",
-        "path": "/home/yeshey/PersonalFiles/2025/Projects/box64-binfmt/",
-        "type": "path"
+        "lastModified": 1744221769,
+        "narHash": "sha256-zCZ5tExo78V7bpvudgXbAMobX90pPB4IAr0LcmTkSCY=",
+        "owner": "Yeshey",
+        "repo": "box64-binfmt",
+        "rev": "d873e061915017108e6e8c39190374217f172714",
+        "type": "github"
       },
       "original": {
-        "path": "/home/yeshey/PersonalFiles/2025/Projects/box64-binfmt/",
-        "type": "path"
+        "owner": "Yeshey",
+        "ref": "main",
+        "repo": "box64-binfmt",
+        "type": "github"
       }
     },
     "cmp-buffer": {
