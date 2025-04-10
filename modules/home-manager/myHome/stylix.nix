@@ -40,7 +40,9 @@ in
 
     # to fix emojis in notifications and windows-key + V, etc. https://groups.google.com/g/linux.debian.bugs.dist/c/YLgE4_-sCbQ/m/xjoPbdv2AAAJ
     # made an issue in stylix (https://github.com/danth/stylix/issues/448)
-    home.file.".config/fontconfig/conf.d/56-kubuntu-noto.conf".source = ./56-kubuntu-noto.conf;
+    # home.file.".config/fontconfig/conf.d/56-kubuntu-noto.conf".source = ./56-kubuntu-noto.conf;
+    # The above line fixed it but having it also broke numbers in firefox specifically in vscode-server causing this issue: https://powerusers.codidact.com/posts/286378
+    # SO I'm just gonna wait it out.
 
     stylix = {
       enable = lib.mkOverride 1010 true;
