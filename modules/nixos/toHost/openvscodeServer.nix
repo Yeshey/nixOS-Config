@@ -11,6 +11,21 @@ in
 {
   options.toHost.openvscodeServer = {
     enable = (lib.mkEnableOption "openvscodeServer");
+    port = lib.mkOption {
+      type = lib.types.port;
+      default = 3000;
+      example = 3001;
+      description = "port to run vscode-server on";
+    };
+    desktopItem = {
+      enable = lib.mkEnableOption "desktopItem";
+      remote = lib.mkOption {
+        type = lib.types.str;
+        default = "oracle";
+        example = "oracle";
+        description = "Makes a desktop entry to the openvscode-server";
+      };
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -29,7 +44,7 @@ in
     services.openvscode-server = {
       enable = true;
       host = "localhost";
-      port = 3000;
+      port = cfg.port;
       user = "yeshey"; # TODO user variable?
       extensionsDir = "/home/yeshey/.vscode-oss/extensions"; # TODO user variable?
       withoutConnectionToken = true; # So you don't need to grab the token that it generates here
@@ -38,6 +53,32 @@ in
     networking.firewall.allowedTCPPorts = [
       80
       443
+    ];
+  } // lib.mkIf cfg.desktopItem.enable {
+    # makeDesktopItem https://discourse.nixos.org/t/proper-icon-when-using-makedesktopitem/32026
+    environment.systemPackages = with pkgs;     let 
+        govscodeserver = pkgs.writeShellScriptBin "govscodeserver" ''
+          (ssh -L ${toString cfg.port}:localhost:${toString cfg.port} -t ${cfg.desktopItem.remote} "sleep 90" &) && xdg-open "http://localhost:${toString cfg.port}/"
+        '';
+    in [
+      xdg-utils
+      (makeDesktopItem {
+        name = "Openvscode Server Oracle";
+        desktopName = "Openvscode Server Oracle";
+        genericName = "Openvscode Server Oracle";
+        # Build a command that forwards the port and then opens the browser against the correct URL.
+        exec = "${govscodeserver}/bin/govscodeserver";
+        icon = "vscode"; # Change this to a suitable icon if you prefer
+        categories = [
+          "GTK"
+          "X-WebApps"
+        ];
+        mimeTypes = [
+          "text/html"
+          "text/xml"
+          "application/xhtml_xml"
+        ];
+      })
     ];
   };
 }

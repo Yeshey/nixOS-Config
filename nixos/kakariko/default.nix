@@ -166,7 +166,13 @@ in
     #dontStarveTogetherServer.enable = false;
     #nextcloud.enable = true;
     #minecraft.enable = false;
-    #openvscodeServer.enable = true;
+    openvscodeServer = {
+      enable = false;
+      desktopItem = {
+        enable = true;
+        remote = "oracle";
+      };
+    };
     #ngixServer.enable = true;
     #mineclone.enable = true;
     #kubo.enable = true;
