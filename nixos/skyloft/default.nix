@@ -92,7 +92,30 @@
 
   box64-binfmt.enable = true;
 
-  environment.systemPackages = [ pkgs.mybox64 ];
+  environment.systemPackages = [ 
+    #pkgs.mybox64 
+    pkgs.x86.steamcmd
+    pkgs.x86.katawa-shoujo
+    pkgs.x86.cmatrix
+  ];
+
+    nix = {
+      distributedBuilds = true;
+      buildMachines = [{
+        hostName = "localhost:2232";
+        system = "x86_64-linux";
+        sshUser = "yeshey";
+        # Replace with the path to your SSH private key or use SSH agent
+        sshKey = "/home/yeshey/.ssh/id_rsa";
+        maxJobs = 1;
+          supportedFeatures = [ # saw with nix show-config --json | jq -r '.["system-features"].value'
+            "benchmark"
+            "big-parallel"
+            "kvm"
+            "nixos-test"
+           ];
+      }];
+    };
 
   toHost = {
     remoteWorkstation = {
