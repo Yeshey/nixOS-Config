@@ -3,6 +3,8 @@ import re
 from datetime import datetime, timedelta
 import subprocess
 from bs4 import BeautifulSoup
+import urllib3  # <--- Added
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)  # <--- Added
 
 MONTHS = {
     'janeiro': 1, 'fevereiro': 2, 'março': 3, 'abril': 4,
@@ -66,7 +68,7 @@ def check_elections():
 
         # Scrape election data
         url = 'https://www.cne.pt/content/calendario'
-        response = requests.get(url, timeout=10)
+        response = requests.get(url, timeout=10, verify=False)
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')
         table = soup.find('table')
