@@ -120,7 +120,6 @@ in
       # github-desktop
       # grapejuice # roblox
       
-      freerdp
       gnome-clocks
       qbittorrent
       cheese # todo does it still work?

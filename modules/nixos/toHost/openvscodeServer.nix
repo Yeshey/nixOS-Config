@@ -58,14 +58,14 @@ in
     # makeDesktopItem https://discourse.nixos.org/t/proper-icon-when-using-makedesktopitem/32026
     environment.systemPackages = with pkgs;     let 
         govscodeserver = pkgs.writeShellScriptBin "govscodeserver" ''
-          (ssh -L ${toString cfg.port}:localhost:${toString cfg.port} -t ${cfg.desktopItem.remote} "sleep 90" &) && xdg-open "http://localhost:${toString cfg.port}/"
+          (ssh -L ${toString cfg.port}:localhost:${toString cfg.port} -t ${cfg.desktopItem.remote} "sleep 90" &) && xdg-open "http://localhost:${toString cfg.port}/?folder=/home/yeshey/.setup"
         '';
     in [
       xdg-utils
       (makeDesktopItem {
-        name = "Openvscode Server Oracle";
-        desktopName = "Openvscode Server Oracle";
-        genericName = "Openvscode Server Oracle";
+        name = "Oracle vscode-server";
+        desktopName = "Oracle vscode-server";
+        genericName = "Oracle vscode-server";
         # Build a command that forwards the port and then opens the browser against the correct URL.
         exec = "${govscodeserver}/bin/govscodeserver";
         icon = "vscode"; # Change this to a suitable icon if you prefer

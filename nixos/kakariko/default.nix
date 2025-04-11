@@ -159,10 +159,18 @@ in
   };
 
   toHost = {
-    #remoteWorkstation = {
-    #  sunshine.enable = false;
-    #  xrdp.enable = false;
-    #};
+    remoteWorkstation = {
+      sunshine.enable = false;
+      xrdp = {
+        enable = false;
+        desktopItem = {
+          enable = true;
+          remote.ip = "143.47.53.175";
+          remote.user = "yeshey";
+          extraclioptions = "/w:1920 /h:1080 /smart-sizing /kbd:0x0816 /audio-mode:1 /clipboard /network:modem /compression";
+        };
+      };
+    };
     #dontStarveTogetherServer.enable = false;
     #nextcloud.enable = true;
     #minecraft.enable = false;
