@@ -94,9 +94,15 @@
 
   environment.systemPackages = [ 
     #pkgs.mybox64 
+    pkgs.file
     pkgs.x86.steamcmd
     pkgs.x86.katawa-shoujo
     pkgs.x86.cmatrix
+    pkgs.mangohud
+    pkgs.x86.xonotic
+    pkgs.x86.heroic
+    pkgs.x86.superTuxKart
+    pkgs.x86.glmark2
   ];
 
     nix = {
