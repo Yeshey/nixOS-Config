@@ -58,7 +58,7 @@ in
     # makeDesktopItem https://discourse.nixos.org/t/proper-icon-when-using-makedesktopitem/32026
     environment.systemPackages = with pkgs;     let 
         govscodeserver = pkgs.writeShellScriptBin "govscodeserver" ''
-          (ssh -L ${toString cfg.port}:localhost:${toString cfg.port} -t ${cfg.desktopItem.remote} "sleep 90" &) && xdg-open "http://localhost:${toString cfg.port}/?folder=/home/yeshey/.setup"
+          (ssh -L ${toString cfg.port}:localhost:${toString cfg.port} -t ${cfg.desktopItem.remote} "sleep 90" &) && sleep 1.5 && xdg-open "http://localhost:${toString cfg.port}/?folder=/home/yeshey/.setup"
         '';
     in [
       xdg-utils
