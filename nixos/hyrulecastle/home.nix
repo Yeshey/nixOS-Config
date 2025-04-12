@@ -111,6 +111,18 @@ in
     #  port = 2232;
     #};
     warnElections.enable = true;
+    desktopItems = {
+      xrdp = {
+        enable = true;
+        remote.ip = "143.47.53.175";
+        remote.user = "yeshey";
+        # extraclioptions = "/w:1920 /h:1080 /smart-sizing /kbd:0x0816 /audio-mode:1 /clipboard /network:modem /compression";
+      };
+      openvscodeServer = {
+        enable = true;
+        remote = "oracle";
+        };
+    };
   };
 
   home = {
@@ -120,7 +132,6 @@ in
       # github-desktop
       # grapejuice # roblox
       
-      freerdp
       gnome-clocks
       qbittorrent
       cheese # todo does it still work?
