@@ -94,8 +94,8 @@ in
     # Specific packages # TODO check if you need these
     packages = with pkgs; [
       # texlive.combined.scheme-full
-      inkscape
-      unstable.zed-editor
+      github-desktop
+
       
       # osu-lazer
       openvscode-server
