@@ -32,6 +32,7 @@ in
     ./impermanence.nix
     ./autosshReverseProxyHome.nix
     ./warnElections/default.nix
+    ./desktopItems.nix
   ];
   options.myHome = with lib; {
     enable = mkEnableOption "myHome";
