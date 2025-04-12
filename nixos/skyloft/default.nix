@@ -103,6 +103,8 @@
     pkgs.x86.heroic
     pkgs.x86.superTuxKart
     pkgs.x86.glmark2
+    pkgs.x86.vulkan-tools
+    pkgs.x86.glxinfo 
   ];
 
     nix = {
@@ -112,7 +114,7 @@
         system = "x86_64-linux";
         sshUser = "yeshey";
         # Replace with the path to your SSH private key or use SSH agent
-        sshKey = "/home/yeshey/.ssh/id_rsa";
+        sshKey = "/home/yeshey/.ssh/my_identity";
         maxJobs = 1;
           supportedFeatures = [ # saw with nix show-config --json | jq -r '.["system-features"].value'
             "benchmark"
