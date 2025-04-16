@@ -34,8 +34,15 @@ in
       # Set what time makes sense for you
       autoUpdateApps.startAt = "05:00:00";
 
+      config.objectstore.s3.port = 85;
+
       config.adminpassFile = "${pkgs.writeText "adminpass" "test123"}"; # user: root, pass: test123
     };
+
+    services.nginx.virtualHosts."${config.services.nextcloud.hostName}".listen = [ {
+      addr = "143.47.53.175";
+      port = 85; # NOT an exposed port
+    } ];
 
     # networking.firewall.enable = false;
     networking.firewall.allowedTCPPorts = [
