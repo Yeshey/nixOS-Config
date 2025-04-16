@@ -131,6 +131,14 @@ with lib.hm.gvariant;
             "xkb"
             "pt"
           ])
+          (mkTuple [
+            "xkb"
+            "br"
+          ])
+          (mkTuple [
+            "xkb"
+            "us"
+          ])
         ];
         xkb-options = [ "terminate:ctrl_alt_bksp" ];
       };
