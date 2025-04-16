@@ -1,3 +1,9 @@
+# helpful links
+# https://caddy.community/t/reverse-proxy-without-domain-name/7951/24
+# https://nodeployfriday.com/posts/self-signed-cert/
+
+# also only connects with firefox 
+
 {
   config,
   lib,
@@ -12,55 +18,71 @@ in
 {
   options.toHost.openvscodeServer = {
     enable = (lib.mkEnableOption "openvscodeServer");
-    port = lib.mkOption {
+    internalPort = lib.mkOption {
       type = lib.types.port;
       default = 3000;
       description = "Internal port for openvscode-server";
     };
     externalPort = lib.mkOption {
       type = lib.types.port;
-      default = 8443;
+      default = 8443; # seems to need to be this port
       description = "External HTTPS port";
+    };
+    hostname = lib.mkOption {
+      type = lib.types.str;
+      #default = "143.47.53.175";
+      default = "143.47.53.175";
+      description = "Domain name for HTTPS certificate";
     };
   };
 
   config = lib.mkIf cfg.enable {
 
-    # Why does this not work here???
-    #nixpkgs.config = {
-    #   permittedInsecurePackages = [ # for package openvscode-server
-    #                  "nodejs-16.20.0"
-    #                ];
-    #};
+    systemd.services."caddy".preStart =  let
+        confFile = pkgs.writeText "openssl.conf" ''
+          [req]
+          distinguished_name = req_distinguished_name
+          x509_extensions = v3_req
+          prompt = no
+          req_extensions = v3_req
 
-    # Generate self-signed certificate (run once manually or use a service)
-    environment.systemPackages = [ pkgs.openssl ];
-    systemd.services.generate-certs = {
-      description = "Generate self-signed certificates";
-      wantedBy = [ "multi-user.target" ];
-      before = [ "caddy.service" ];
-      script = ''
+          [req_distinguished_name]
+          CN = ${cfg.hostname}
+
+          [v3_req]
+          keyUsage = keyEncipherment, dataEncipherment
+          extendedKeyUsage = serverAuth
+          subjectAltName = @alt_names
+
+          [alt_names]
+          IP.1 = ${cfg.hostname}
+        '';
+      in ''
         mkdir -p ${certDir}
+        chown caddy:caddy ${certDir}
+        chmod 0755 ${certDir}
+
         ${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:4096 \
+          -config ${confFile} \
           -keyout ${certDir}/key.pem \
           -out ${certDir}/cert.pem \
           -days 365 -nodes \
-          -subj '/CN=${cfg.hostname}'
+          -extensions v3_req
+
+        chown caddy:caddy ${certDir}/{cert,key}.pem
+        chmod 0640 ${certDir}/{cert,key}.pem
       '';
-      serviceConfig.Type = "oneshot";
-    };
 
     services.caddy = {
       enable = true;
-      virtualHosts."https://${cfg.hostname}" = {
+      globalConfig = ''
+          default_sni ${cfg.hostname}
+      '';
+      # Listen on all interfaces on the external port
+      virtualHosts.":${toString cfg.externalPort}" = {
         extraConfig = ''
           tls ${certDir}/cert.pem ${certDir}/key.pem
-          reverse_proxy http://127.0.0.1:${toString cfg.port} {
-            header_up Host {host}
-            header_up X-Real-IP {remote}
-            header_up X-Forwarded-For {remote}
-            header_up X-Forwarded-Proto {scheme}
-          }
+          reverse_proxy http://127.0.0.1:${toString cfg.internalPort}
         '';
       };
     };
@@ -74,10 +96,10 @@ in
       # package = pkgs.code-server;
       # host = "localhost";
       host = "0.0.0.0"; # Bind to all network interfaces
-      port = cfg.port;
+      port = cfg.internalPort;
       user = "yeshey"; # TODO user variable?
       extensionsDir = "/home/yeshey/.vscode-oss/extensions"; # TODO user variable?
-      withoutConnectionToken = true; # So you don't need to grab the token that it generates here
+      withoutConnectionToken = false; # So you don't need to grab the token that it generates here
       # extraArguments = [ "--cert" ]; # Generates self-signed certificate
     };
 
