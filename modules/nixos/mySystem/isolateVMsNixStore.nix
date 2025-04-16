@@ -27,16 +27,16 @@ in
     
     # needs to be inside vmVariant? issue: https://github.com/NixOS/nixpkgs/issues/196755
     
-    virtualisation.vmVariant.virtualisation = {
-      useNixStoreImage = true;
-      mountHostNixStore = false;
-      useBootLoader = true;
-    };
-    virtualisation.vmVariantWithBootLoader.virtualisation = {
-      useNixStoreImage = true;
-      mountHostNixStore = false;
-      useBootLoader = true;
-    };
+    # virtualisation.vmVariant.virtualisation = {
+    #   useNixStoreImage = true;
+    #   mountHostNixStore = false;
+    #   useBootLoader = true;
+    # };
+    # virtualisation.vmVariantWithBootLoader.virtualisation = {
+    #   useNixStoreImage = true;
+    #   mountHostNixStore = false;
+    #   useBootLoader = true;
+    # };
     
   };
 }
