@@ -33,7 +33,7 @@ in
       };
       port = mkOption {
         type = types.port;
-        default = 3000;
+        default = 8443;
         description = "Port to run openvscode-server on";
       };
     };

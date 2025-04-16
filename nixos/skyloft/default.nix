@@ -93,7 +93,6 @@
   box64-binfmt.enable = true;
 
   environment.systemPackages = [ 
-    #pkgs.mybox64 
     pkgs.file
     pkgs.x86.steamcmd
     pkgs.x86.katawa-shoujo
@@ -110,7 +109,7 @@
     nix = {
       distributedBuilds = true;
       buildMachines = [{
-        hostName = "localhost:2232";
+        hostName = "hyrulecastle";
         system = "x86_64-linux";
         sshUser = "yeshey";
         # Replace with the path to your SSH private key or use SSH agent
