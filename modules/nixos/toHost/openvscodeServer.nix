@@ -38,54 +38,54 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    systemd.services."caddy".preStart =  let
-        confFile = pkgs.writeText "openssl.conf" ''
-          [req]
-          distinguished_name = req_distinguished_name
-          x509_extensions = v3_req
-          prompt = no
-          req_extensions = v3_req
+    # systemd.services."caddy".preStart =  let
+    #     confFile = pkgs.writeText "openssl.conf" ''
+    #       [req]
+    #       distinguished_name = req_distinguished_name
+    #       x509_extensions = v3_req
+    #       prompt = no
+    #       req_extensions = v3_req
 
-          [req_distinguished_name]
-          CN = ${cfg.hostname}
+    #       [req_distinguished_name]
+    #       CN = ${cfg.hostname}
 
-          [v3_req]
-          keyUsage = keyEncipherment, dataEncipherment
-          extendedKeyUsage = serverAuth
-          subjectAltName = @alt_names
+    #       [v3_req]
+    #       keyUsage = keyEncipherment, dataEncipherment
+    #       extendedKeyUsage = serverAuth
+    #       subjectAltName = @alt_names
 
-          [alt_names]
-          IP.1 = ${cfg.hostname}
-        '';
-      in ''
-        mkdir -p ${certDir}
-        chown caddy:caddy ${certDir}
-        chmod 0755 ${certDir}
+    #       [alt_names]
+    #       IP.1 = ${cfg.hostname}
+    #     '';
+    #   in ''
+    #     mkdir -p ${certDir}
+    #     chown caddy:caddy ${certDir}
+    #     chmod 0755 ${certDir}
 
-        ${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:4096 \
-          -config ${confFile} \
-          -keyout ${certDir}/key.pem \
-          -out ${certDir}/cert.pem \
-          -days 365 -nodes \
-          -extensions v3_req
+    #     ${pkgs.openssl}/bin/openssl req -x509 -newkey rsa:4096 \
+    #       -config ${confFile} \
+    #       -keyout ${certDir}/key.pem \
+    #       -out ${certDir}/cert.pem \
+    #       -days 365 -nodes \
+    #       -extensions v3_req
 
-        chown caddy:caddy ${certDir}/{cert,key}.pem
-        chmod 0640 ${certDir}/{cert,key}.pem
-      '';
+    #     chown caddy:caddy ${certDir}/{cert,key}.pem
+    #     chmod 0640 ${certDir}/{cert,key}.pem
+    #   '';
 
-    services.caddy = {
-      enable = true;
-      globalConfig = ''
-          default_sni ${cfg.hostname}
-      '';
-      # Listen on all interfaces on the external port
-      virtualHosts.":${toString cfg.externalPort}" = {
-        extraConfig = ''
-          tls ${certDir}/cert.pem ${certDir}/key.pem
-          reverse_proxy http://127.0.0.1:${toString cfg.internalPort}
-        '';
-      };
-    };
+    # services.caddy = {
+    #   enable = true;
+    #   globalConfig = ''
+    #       default_sni ${cfg.hostname}
+    #   '';
+    #   # Listen on all interfaces on the external port
+    #   virtualHosts.":${toString cfg.externalPort}" = {
+    #     extraConfig = ''
+    #       tls ${certDir}/cert.pem ${certDir}/key.pem
+    #       reverse_proxy http://127.0.0.1:${toString cfg.internalPort}
+    #     '';
+    #   };
+    # };
 
     # journalctl -fu openvscode-server.service
     # connect to the VScodium server with `ssh -L 9090:localhost:3000 yeshey@143.47.53.175`, and go to http://localhost:9090 in your browser
