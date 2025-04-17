@@ -26,6 +26,7 @@ in
     ./searx.nix
     ./ollama.nix
     ./openhands.nix
+    ./overleaf.nix
   ];
 
   options.toHost = with lib; {
