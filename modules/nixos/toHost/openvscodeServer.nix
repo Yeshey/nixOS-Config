@@ -117,6 +117,7 @@ in
 
     networking.firewall.allowedTCPPorts = [
       cfg.externalPort
+      cfg.internalPort
 
       # these are needed for remote-ssh, idk if I even need them here
       80
