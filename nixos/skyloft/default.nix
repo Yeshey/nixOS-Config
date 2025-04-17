@@ -145,6 +145,7 @@
       enable = true; 
       # acceleration = "cuda"; #or 'rocm' # this issue https://github.com/NixOS/nixpkgs/issues/321920
     };
+    # overleaf.enable = true; # fiasco
   };
 
   time.timeZone = "Europe/Madrid";
