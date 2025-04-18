@@ -25,7 +25,7 @@ in
       eula = true;
       openFirewall = true;
       servers.pixelmon = {
-        serverProperties ={
+        serverProperties = {
           server-port = 44332;
           server-portv6 = 44333;
           difficulty = 1;
