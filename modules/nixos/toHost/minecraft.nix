@@ -57,10 +57,13 @@ in
       eula = true;
       openFirewall = true;
       servers.pixelmon = {
+        # options specific for pixelmon?
+        jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:G1MixedGCLiveThresholdPercent=50 -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:+PerfDisableSharedMem";
+        # connect to terminal with sudo tmux -S /run/minecraft/pixelmon.sock attach
         serverProperties = {
           server-port = 44332;
           server-portv6 = 44333;
-          difficulty = 1;
+          difficulty = 2;
           "allow-cheats" = "true";
           gamemode = 0;
           max-players = 60;
@@ -81,23 +84,9 @@ in
           jre_headless = pkgs_graalvm.graalvm-ce;
         };
 
-        # symlinks = {
-        #   mods = pkgs.linkFarmFromDrvs "mods" (
-        #     builtins.attrValues {
-        #       Fabric-API = pkgs.fetchurl {
-        #         url = "https://cdn.modrinth.com/data/P7dR8mSH/versions/9YVrKY0Z/fabric-api-0.115.0%2B1.21.1.jar";
-        #         sha512 = "e5f3c3431b96b281300dd118ee523379ff6a774c0e864eab8d159af32e5425c915f8664b1";
-        #       };
-        #       Backpacks = pkgs.fetchurl {
-        #         url = "https://cdn.modrinth.com/data/MGcd6kTf/versions/Ci0F49X1/1.2.1-backpacks_mod-1.21.2-1.21.3.jar";
-        #         sha512 = "6efcff5ded172d469ddf2bb16441b6c8de5337cc623b6cb579e975cf187af0b79291";
-        #       };
-        #     }
-        #   );
-        # };
-
         symlinks = {
           mods = pkgs.linkFarmFromDrvs "mods" (
+            # PIXELMON mods and friends
             builtins.attrValues {
               luckyBlock = pkgs.fetchurl {
                 url = "https://mediafilez.forgecdn.net/files/4817/267/lucky-block-forge-1.20.1-13.0.jar";
@@ -105,8 +94,8 @@ in
                 sha256 = "sha256-wQHdMm5e1CHQNz7sBlBUz1lyE09jnzhT01VC53ouGEw=";
               };
               Pixelmon = pkgs.fetchurl {
-                url = "https://mediafilez.forgecdn.net/files/4782/28/Pixelmon-1.20.1-9.2.3-universal.jar";
-                sha256 = "sha256-jyd39afNK1/EisP1Ux1DSvQSDH1ArcmSnVo3N8QEJGo=";
+                url = "https://mediafilez.forgecdn.net/files/4744/5/Pixelmon-1.20.1-9.2.2-universal.jar";
+                sha256 = "sha256-ZL76UjLdWGqSjOJoqOXpxmf8RtvmrNvorrsNTYkXmoQ=";
               };
               ProjectE = pkgs.fetchurl {
                 url = "https://mediafilez.forgecdn.net/files/4901/949/ProjectE-1.20.1-PE1.0.1.jar";
@@ -136,39 +125,52 @@ in
                 url = "https://mediafilez.forgecdn.net/files/5168/342/FactoryAPI-1.20.1-2.1.4-forge.jar";
                 sha256 = "sha256-lFUuTqQW8mFKox5gP432e65Xi1SBHbD+Scj7x5twzuI=";
               };
-              
+
+              # Some Server-side and Client-side Performance mods (from https://github.com/TheUsefulLists/UsefulMods/blob/main/Performance/Performance120.md)
+              ferritecore = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/4810/975/ferritecore-6.0.1-forge.jar";
+                sha256 = "sha256-nCyTlqSeeW2ISXdYyqRjfSvLtDPDGOLdnOvP+68PbFQ=";
+              };
+              memoryleakfix = pkgs.fetchurl {
+                url = "https://cdn.modrinth.com/data/NRjRiSSD/versions/3w0IxNtk/memoryleakfix-forge-1.17%2B-1.1.5.jar";
+                sha256 = "sha256-klw9tOHQhaQ8TSvqpO7Bg2fCKryQws6FlLihKf0/KN0=";
+              };
+              modernfix = pkgs.fetchurl {
+                url = "https://cdn.modrinth.com/data/nmDcB62a/versions/5m06ltZw/modernfix-forge-5.21.0%2Bmc1.20.1.jar";
+                sha256 = "sha256-NlhoeI0/xFPyfget/Do/ogSnkb/Rwx7xpsczVTXWAIk=";
+              };
+              krypton = pkgs.fetchurl {
+                url = "https://cdn.modrinth.com/data/fQEb0iXm/versions/jiDwS0W1/krypton-0.2.3.jar";
+                sha256 = "sha256-aa0YECBs4SGBsbCDZA8ETn4lB4HDbJbGVerDYgkFdpg=";
+              };
+              cupboard = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/5470/32/cupboard-1.20.1-2.7.jar";
+                sha256 = "sha256-Y6G26OnP/VPyg/rgT2S41j3Kqpn+Djg7tmTyPsh9OV8=";
+              };
+
+              # Some only Server-side Performance mods (from https://github.com/TheUsefulLists/UsefulMods/blob/main/Performance/Performance120.md)
+              clumps = pkgs.fetchurl {
+                url = "https://media.forgecdn.net/files/4598/426/Clumps-forge-1.20.1-12.0.0.2.jar";
+                sha256 = "sha256-hiEtI3xLZFd8YMfLmXyXH17tk40/YgisZQE9nB+Stz4=";
+              };
+              dynview = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/5345/889/dynview-1.20.1-4.0.jar";
+                sha256 = "sha256-qM+zu6/CgrZkn8sP9YL4gVd8BYTf9quwVpkUSI/F7nw=";
+              };
+              fastasyncworldsave = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/6303/144/fastasyncworldsave-1.20.1-2.4.jar";
+                sha256 = "sha256-617dYM/Di1OVdVwhDWPs+MAXdYD9Diytl96QrKxAJFc=";
+              };
+              smoothchunk = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/6296/598/smoothchunk-1.20.1-4.1.jar";
+                sha256 = "sha256-DuSPe/eAcKfLWFhJL6pv59WEQ6y9l6klR71mTucQ5cE=";
+              };
             }
           );
         };
 
 
-        #package = pkgs.forgeServers."1.16.5-36.2.8";
-        # symlinks = {
-        #   mods = pkgs.linkFarmFromDrvs "mods" (
-        #     builtins.attrValues {
-        #       Fabric-API = pkgs.fetchurl {
-        #         url = "https://cdn.modrinth.com/data/P7dR8mSH/versions/9YVrKY0Z/fabric-api-0.115.0%2B1.21.1.jar";
-        #         sha512 = "e5f3c3431b96b281300dd118ee523379ff6a774c0e864eab8d159af32e5425c915f8664b1";
-        #       };
-        #       Backpacks = pkgs.fetchurl {
-        #         url = "https://cdn.modrinth.com/data/MGcd6kTf/versions/Ci0F49X1/1.2.1-backpacks_mod-1.21.2-1.21.3.jar";
-        #         sha512 = "6efcff5ded172d469ddf2bb16441b6c8de5337cc623b6cb579e975cf187af0b79291";
-        #       };
-        #     }
-        #   );
-        # };
       };
     };
-
-
-    # environment.systemPackages = with pkgs; [
-    #   (callPackage ./../../pkgs/playit-cli.nix { }) # TODO ???
-    #   jdk17
-    # ];
-
-    # run playit-cli launch ./../main_server_config.toml
-    # in here: /home/yeshey/PersonalFiles/Servers/minecraft/Valhelsia5/server
-    # The address is quotes-sara.at.ply.gg:18976
-    # TODO make a service and add playit.cli to nixpkgs?
   };
 }
