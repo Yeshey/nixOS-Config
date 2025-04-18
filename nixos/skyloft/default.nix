@@ -134,7 +134,7 @@
       path = "/home/yeshey/PersonalFiles/Servers/dontstarvetogether/SurvivalServerMadeiraSummer2/DoNotStarveTogetherServer";
     };
     nextcloud.enable = true;
-    minecraft.enable = false;
+    minecraft.enable = true;
     openvscodeServer.enable = true;
     ngixServer.enable = true;
     mineclone.enable = true;
