@@ -116,8 +116,15 @@
       # Optional but recommended to limit the size of your system closure.
       inputs.nixpkgs.follows = "nixpkgs";
     }; */
-    nix-snapd.url = "github:nix-community/nix-snapd";
-    nix-snapd.inputs.nixpkgs.follows = "nixpkgs";
+    nix-minecraft = {
+      url = "github:Infinidoge/nix-minecraft";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
+    nix-snapd = {
+      url = "github:nix-community/nix-snapd";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -143,6 +150,7 @@
     #wolf,
     # lanzaboote,
     nix-snapd,
+    nix-minecraft,  
     ...
   }@inputs:
   let
