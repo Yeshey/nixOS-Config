@@ -76,7 +76,7 @@ in
 
         # Specify the custom minecraft server package
         #package = pkgs.fabricServers.fabric-1_21_1; #.override { loaderVersion = "0.16.10"; }; # Specific fabric loader version
-        package = pkgs.forgeServers.${serverVersion}.override {
+        package = pkgs.forgeServers.${serverVersion}.override { # forge for minecraft 1.20.1
           loaderVersion = forgeVersion;
           jre_headless = pkgs_graalvm.graalvm-ce;
         };
@@ -112,10 +112,6 @@ in
                 url = "https://mediafilez.forgecdn.net/files/4901/949/ProjectE-1.20.1-PE1.0.1.jar";
                 sha256 = "sha256-9R84flYwfnzaJpFcoMeJdg2F6XqLQLi/oJiL5mNx0Bg=";
               };
-              configuredForge = pkgs.fetchurl {
-                url = "https://mediafilez.forgecdn.net/files/5180/900/configured-forge-1.20.1-2.2.3.jar";
-                sha256 = "sha256-Bdzt3VeCX5ERNckpUE7zILdZU9BefckY26WKBXTlMV8=";
-              };
               journeymap = pkgs.fetchurl {
                 url = "https://mediafilez.forgecdn.net/files/5789/363/journeymap-1.20.1-5.10.3-forge.jar";
                 sha256 = "sha256-iyZ5t7SIHgqkMP0kNF6kRt6Rn6+KRb0qcdN8fo/2rh4=";
@@ -124,6 +120,23 @@ in
                 url = "https://mediafilez.forgecdn.net/files/6075/247/jei-1.20.1-forge-15.20.0.106.jar";
                 sha256 = "sha256-49jyxAKPpDE2jUK94luSsiEL3dLh+1mpMtDCzGLdNYc=";
               };
+              configuredForge = pkgs.fetchurl { # needed for jei (just enough items)
+                url = "https://mediafilez.forgecdn.net/files/5180/900/configured-forge-1.20.1-2.2.3.jar";
+                sha256 = "sha256-Bdzt3VeCX5ERNckpUE7zILdZU9BefckY26WKBXTlMV8=";
+              };
+              betterfurnaces = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/5128/669/BetterFurnaces-1.20.1-1.1.3-forge.jar";
+                sha256 = "sha256-sKAty2rO8b6JTFXhTrRSbgQMwWG5VrTVClTLcD6fNEk=";
+              };
+              architectury = pkgs.fetchurl { # needed for betterfurnaces
+                url = "https://mediafilez.forgecdn.net/files/5137/938/architectury-9.2.14-forge.jar";
+                sha256 = "sha256-IYtHHQuKH2zaFM/BvrnusN9UMEUArMbFYT2biOxl2a8=";
+              };
+              factory-api = pkgs.fetchurl { # needed for betterfurnaces
+                url = "https://mediafilez.forgecdn.net/files/5168/342/FactoryAPI-1.20.1-2.1.4-forge.jar";
+                sha256 = "sha256-lFUuTqQW8mFKox5gP432e65Xi1SBHbD+Scj7x5twzuI=";
+              };
+              
             }
           );
         };
