@@ -152,14 +152,18 @@
         ]
       },
       "locked": {
-        "lastModified": 1744809163,
-        "narHash": "sha256-m5HMmAspccJpfSFdahHk0Kw7BAO9FDJlSbPVqlFz4DM=",
-        "path": "/home/yeshey/PersonalFiles/2025/Projects/box64-binfmt/",
-        "type": "path"
+        "lastModified": 1744427223,
+        "narHash": "sha256-dbpuO700CASPgppjfYPCcMej7S5RBxUCx4Oitny8CNY=",
+        "owner": "Yeshey",
+        "repo": "box64-binfmt",
+        "rev": "aa8f81340ca58981ba4993cacffb68ecee5e75ad",
+        "type": "github"
       },
       "original": {
-        "path": "/home/yeshey/PersonalFiles/2025/Projects/box64-binfmt/",
-        "type": "path"
+        "owner": "Yeshey",
+        "ref": "main",
+        "repo": "box64-binfmt",
+        "type": "github"
       }
     },
     "cmp-buffer": {
@@ -1181,15 +1185,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1744855005,
-        "narHash": "sha256-pKTjh8Re/IzMdiceeoCN+dMMSl0NogmG2OdVxxZqpgg=",
-        "owner": "Infinidoge",
+        "lastModified": 1718962836,
+        "narHash": "sha256-cXUgQxlXSgo9ncK4OSpVxHrPmoPeGYg/f+NFPyZjQFU=",
+        "owner": "Faeranne",
         "repo": "nix-minecraft",
-        "rev": "34a4c1e1d96af67f73e449b2225764491a633ea7",
+        "rev": "f4e4514f1d65b6a19704eab85070741e40c1d272",
         "type": "github"
       },
       "original": {
-        "owner": "Infinidoge",
+        "owner": "Faeranne",
         "repo": "nix-minecraft",
         "type": "github"
       }

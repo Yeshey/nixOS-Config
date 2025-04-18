@@ -117,7 +117,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     }; */
     nix-minecraft = {
-      url = "github:Infinidoge/nix-minecraft";
+      #url = "github:Infinidoge/nix-minecraft";
+      url = "github:Faeranne/nix-minecraft"; # has forge support
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
