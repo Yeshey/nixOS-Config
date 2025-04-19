@@ -152,14 +152,18 @@
         ]
       },
       "locked": {
-        "lastModified": 1744809163,
-        "narHash": "sha256-m5HMmAspccJpfSFdahHk0Kw7BAO9FDJlSbPVqlFz4DM=",
-        "path": "/home/yeshey/PersonalFiles/2025/Projects/box64-binfmt/",
-        "type": "path"
+        "lastModified": 1745086944,
+        "narHash": "sha256-1GZM/TznfG0ukDGXmEqR90rkX0YYpn27p62//mAlAGY=",
+        "owner": "Yeshey",
+        "repo": "box64-binfmt",
+        "rev": "f0ef9588a3231658fd37515b3d9663d737993056",
+        "type": "github"
       },
       "original": {
-        "path": "/home/yeshey/PersonalFiles/2025/Projects/box64-binfmt/",
-        "type": "path"
+        "owner": "Yeshey",
+        "ref": "main",
+        "repo": "box64-binfmt",
+        "type": "github"
       }
     },
     "cmp-buffer": {
