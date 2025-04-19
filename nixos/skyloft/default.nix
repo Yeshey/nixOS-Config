@@ -149,6 +149,8 @@
     # overleaf.enable = true; # fiasco
   };
 
+  boot.binfmt.emulatedSystems = ["i686-linux" "x86_64-linux" "i386-linux" "i486-linux" "i586-linux" "i686-linux"];
+
   time.timeZone = "Europe/Madrid";
 
   system.autoUpgrade.allowReboot = true;
