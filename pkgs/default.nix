@@ -7,7 +7,6 @@
 with pkgs;
 
 rec {
-  # example = pkgs.callPackage ./example { };
   wallpapers = callPackage ./wallpapers { };
 
   myOnedriver = callPackage ./onedriver-his.nix { };  
