@@ -13,12 +13,12 @@ in
 {
   imports = [
     ./dontStarveTogetherServer.nix
-
     ./nextcloud.nix # TODO not working right boy nixos-rebuild build-vm --flake ~/.setup#skyloft not working
-    ./minecraft.nix
+    ./minecraft/default.nix
     ./openvscodeServer.nix # vscoduium is not well
     ./ngixServer
     ./mineclone.nix
+    ./mineclonia/default.nix
     ./kubo.nix
     ./mindustry-server.nix
     ./freeGames.nix

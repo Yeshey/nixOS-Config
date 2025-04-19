@@ -6,12 +6,14 @@
 }:
 
 let
-  cfg = config.toHost.mineclone;
-  port = 30000;
+  cfg = config.toHost.mineclonia;
+  port = 30001;
 in
 {
-  options.toHost.mineclone = {
-    enable = (lib.mkEnableOption "mineclone");
+  imports = [ ./minecloniaNixpkgsModule.nix ]; 
+
+  options.toHost.mineclonia = {
+    enable = (lib.mkEnableOption "mineclonia");
     # If left empty, the preStart script will automatically choose the latest tag.
     version = lib.mkOption {
       type = lib.types.str;
@@ -22,6 +24,22 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+
+    # The problem: https://github.com/NixOS/nixpkgs/issues/383670#issuecomment-2672619706
+    # Needed to have multiple minetest instances on the same PC
+    nixpkgs.overlays = 
+    let
+      disablePrometheus = final: prev: {
+        minetest = prev.minetest.overrideAttrs (oldAttrs: {
+          cmakeFlags = let
+            # Filter out any existing flags containing "ENABLE_PROMETHEUS"
+            filtered = prev.lib.filter (flag: !(prev.lib.strings.hasInfix "ENABLE_PROMETHEUS" flag)) oldAttrs.cmakeFlags;
+          in
+            filtered ++ [ "-DENABLE_PROMETHEUS=OFF" ];
+        });
+      };
+    in [ disablePrometheus ];
+
     environment.systemPackages = with pkgs; [
       gawk
       gnugrep
@@ -29,21 +47,20 @@ in
 
     # In this way, you need to copy the world to the right place while setting the USER and GROUP to minetest, like so:
     # sudo rsync -a /home/yeshey/PersonalFiles/Servers/minetest/MineCloneServerFirst/worlds/world/ /var/lib/minetest/.minetest/worlds/MineCloneFirstServerAnarchy/ && sudo chown -R minetest:minetest /var/lib/minetest/.minetest/worlds/MineCloneFirstServerAnarchy/
-    services.minetest-server = {
+    services.mineclonia-server = {
       enable = true;
       port = port;
       config = {
         # all default options: https://github.com/minetest/minetest/blob/master/minetest.conf.example
-        serverName = "Yeshey mineclone server";
+        serverName = "Yeshey mineclonia server";
         serverDescription = "mine here";
-        defaultGame = "mineclone2";
+        defaultGame = "mineclonia";
         serverAnnounce = false;
         enableDamage = true;
         creativeMode = false;
       }; # TODO put the whole config here instead
-      world = /var/lib/minetest/.minetest/worlds/MineCloneFirstServerAnarchy;
-      #gameId = "voxelibre";
-      gameId = "mineclone2";
+      world = /var/lib/minetest.minetest/worlds/MinecloniaFirstServerAnarchy;
+      gameId = "mineclonia";
     };
     # TODO pull request?
     # Pre-start script to clone/update VoxeLibre.
@@ -52,15 +69,15 @@ in
     #  2. Clone the VoxeLibre repository if the directory is empty.
     #  3. Pull the latest changes if the repo is already cloned.
     #  4. Fetch all tags.
-    #  5. If a version is provided in config.toHost.mineclone.version, reset to that version.
+    #  5. If a version is provided in config.toHost.mineclonia.version, reset to that version.
     #     Otherwise, find the latest tag and reset to that.
-    systemd.services.minetest-server.preStart =
+    systemd.services.mineclonia-server.preStart =
       let
         git = pkgs.git;
         # Use the new repository URL for VoxeLibre.
-        mod = "https://git.minetest.land/VoxeLibre/VoxeLibre.git";
+        mod = "https://codeberg.org/mineclonia/mineclonia.git";
         # Set the target directory based on the new gameId.
-        targetDirectory = "/var/lib/minetest/.minetest/games/mineclone2"; # i want to keep my old world
+        targetDirectory = "/var/lib/minetest.minetest/games/mineclonia"; # i want to keep my old world
       in
       lib.mkForce ''
         #!/usr/bin/env bash
@@ -99,7 +116,7 @@ in
             current_tag="$(${git}/bin/git describe --tags 2>/dev/null | cut -d '-' -f1 || true)"
             echo "Detected nearest tag (current version): [$current_tag]"
             if [ -n "$current_tag" ]; then
-                echo "Current VoxeLibre/Mineclone2 mod version is: $current_tag"
+                echo "Current VoxeLibre/mineclonia mod version is: $current_tag"
                 # List all tags in version order and find the tag immediately after the current one.
                 next_tag="$(${git}/bin/git tag --sort=v:refname | ${pkgs.gnugrep}/bin/grep '^[0-9]' | ${pkgs.gawk}/bin/awk -v cur="$current_tag" 'BEGIN {found=0} { if(found){ print; exit } } $0==cur {found=1}')" # to only get version tags, filter for tags that start with a number
                 if [ -n "$next_tag" ]; then
