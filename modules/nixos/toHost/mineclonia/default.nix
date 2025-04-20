@@ -60,9 +60,10 @@ in
           creativeMode = false;
         };
         world = "MinecloniaFirstServerAnarchy";
-        fetchGame = pkgs.fetchurl {
-          url    = "https://codeberg.org/mineclonia/mineclonia/archive/0.114.0.tar.gz";
-          sha256 = "sha256-VWfv27kRH/ZuDnyW2XKxsVk91991uYuBWYfiSi5nW9g=";
+        fetchGame = pkgs.fetchgit {
+          url       = "https://git.minetest.land/VoxeLibre/VoxeLibre.git";
+          rev       = "refs/tags/0.89.2"; # or simply "0.89.2"
+          sha256 = "sha256-57nrDr8W7SadNH15FRaFp1+cCUelyhwEdij79H8Fwhs=";
         };
         gameId = "mineclonia";
       };
@@ -78,6 +79,11 @@ in
           serverAnnounce = false;
           enableDamage = true;
           creativeMode = false;
+        };
+        fetchGame = pkgs.fetchgit {
+          url       = "https://codeberg.org/mineclonia/mineclonia.git";
+          rev       = "0.114.0";
+          sha256 = "sha256-3dnbQZQkHjYwfb6ACAckkJ6Sss25wNvPrt6toqiesDo=";
         };
         # world = /var/lib/minetest/.minetest/worlds/MinecloniaFirstServerAnarchy;
         gameId = "mineclonia";
