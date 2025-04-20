@@ -235,6 +235,8 @@ in
   };
 
   hardware.nvidia-container-toolkit.enable = true;
+  boot.binfmt.emulatedSystems = ["aarch64-linux"];
+  nix.settings.extra-platforms = ["aarch64-linux"];
 
   # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;
 
