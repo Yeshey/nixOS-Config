@@ -58,9 +58,9 @@ in {
         };
 
         world = lib.mkOption {
-          type = lib.types.nullOr lib.types.path;
+          type = lib.types.nullOr lib.types.str;
           default = null;
-          description = "World directory to use";
+          description = "World directory name to use";
         };
 
         configPath = lib.mkOption {
@@ -184,7 +184,11 @@ in {
               "--config" (builtins.toFile "minetest-${name}.conf" (toConf instanceCfg.config))
             ])
             ++ (flag instanceCfg.gameId "gameid")
-            ++ (flag instanceCfg.world "world")
+            ++ (if instanceCfg.world != null then
+                  [ "--world"   "worlds/${instanceCfg.world}" ]
+                else
+                  []
+              )
             ++ (flag instanceCfg.logPath "logfile")
             ++ (flag instanceCfg.port "port")
             ++ instanceCfg.extraArgs;

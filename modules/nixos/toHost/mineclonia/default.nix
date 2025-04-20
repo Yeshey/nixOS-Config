@@ -59,7 +59,7 @@ in
           enableDamage = true;
           creativeMode = false;
         };
-        # world = /var/lib/minetest/.minetest/worlds/MinecloniaFirstServerAnarchy;
+        world = "MinecloniaFirstServerAnarchy";
         fetchGame = pkgs.fetchurl {
           url    = "https://codeberg.org/mineclonia/mineclonia/archive/0.114.0.tar.gz";
           sha256 = "sha256-VWfv27kRH/ZuDnyW2XKxsVk91991uYuBWYfiSi5nW9g=";
