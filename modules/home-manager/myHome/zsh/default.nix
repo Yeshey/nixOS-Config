@@ -29,6 +29,9 @@ in
     home.packages = with pkgs; [
       safe-rm
       eza
+      # nerd-fonts.fira-code
+      # nerd-fonts.roboto-mono
+      # nerd-fonts.sauce-code-pro
       (nerdfonts.override {
         fonts = [
           "FiraCode"
