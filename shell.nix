@@ -3,7 +3,7 @@
 # Note that agenix secrets need to be moved manually
 {pkgs ? import <nixpkgs> {}, ...}: {
   default = pkgs.mkShell {
-    NIX_CONFIG = "extra-experimental-features = nix-command flakes ca-derivations";
+    NIX_CONFIG = "extra-experimental-features = nix-command flakes ca-derivations pipe-operators";
     nativeBuildInputs = with pkgs; [
       nix
       home-manager
