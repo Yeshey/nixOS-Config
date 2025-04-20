@@ -54,7 +54,7 @@ in {
         gameId = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
           default = null;
-          description = "Game ID to use (run 'minetestserver --gameid list' for options)";
+          description = "Game ID to use (run 'minetestserver --gameid list' for options). If not set and there is only one game in the server folder, will use that.";
         };
 
         world = lib.mkOption {
@@ -72,7 +72,7 @@ in {
         config = lib.mkOption {
           type = lib.types.attrsOf lib.types.anything;
           default = {};
-          description = "Configuration settings (ignored if configPath is set)";
+          description = "Configuration settings (ignored if configPath is set). All options here: https://github.com/minetest/minetest/blob/master/minetest.conf.example";
         };
 
         logPath = lib.mkOption {
@@ -82,15 +82,33 @@ in {
         };
 
         port = lib.mkOption {
-          type = lib.types.nullOr lib.types.port;
-          default = null;
+          type = lib.types.port;
+          default = 30000;
           description = "Port to listen on (default: 30000)";
+        };
+
+        openFirewall = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Whether to open the UDP port in the firewall for this instance.";
         };
 
         extraArgs = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           default = [];
           description = "Additional command-line arguments";
+        };
+
+        fetchGame = lib.mkOption {
+          type = lib.types.nullOr lib.types.package;
+          default = pkgs.fetchFromGitHub {
+            owner = "luanti-org";
+            repo  = "minetest_game";
+            rev   = "838ad60";  # latest commit on Apr 19, 2025
+            sha256 = "sha256-UVKsbfOQG5WD2/w6Yxdn6bMfgcexs09OBY+wdWtNuE0=";
+          };
+          description = "Derivation containing game files";
+          #example = 
         };
       };
     });
@@ -102,7 +120,11 @@ in {
     cfg = config.services.mineclonia-server;
     enabledInstances = lib.filterAttrs (_: ic: ic.enable) cfg;
   in lib.mkIf (enabledInstances != {}) {
-    systemd.services = lib.mapAttrs' (name: instanceCfg: {
+    networking.firewall.allowedUDPPorts = lib.concatMap (ic: # open firewall
+      lib.optional ic.openFirewall ic.port
+    ) (lib.attrValues enabledInstances);
+
+  systemd.services = lib.mapAttrs' (name: instanceCfg: {
       name = "mineclonia-server-${name}";
       value = {
         description = "Mineclonia Server Instance: ${name}";
@@ -118,6 +140,39 @@ in {
         environment = {
           HOME = "/var/lib/mineclonia-${name}";
         };
+
+        preStart = let
+          fetchGame = instanceCfg.fetchGame;
+        in ''
+          #!${pkgs.bash}/bin/bash
+          set -euo pipefail
+          target_dir="/var/lib/mineclonia-${name}/.minetest/games/${instanceCfg.gameId}"
+          mkdir -p "$target_dir"
+
+          # Handle different fetchGame types
+          if [ -d "${fetchGame}" ]; then
+            # Directory source (fetchFromGitHub/fetchgit)
+            ${pkgs.rsync}/bin/rsync -a --delete \
+              "${fetchGame}/" \
+              "$target_dir/"
+          else
+            # File source (fetchurl tarball) - handle gzip explicitly
+            ${pkgs.gnutar}/bin/tar \
+              --use-compress-program="${pkgs.gzip}/bin/gzip" \
+              -xf "${fetchGame}" \
+              -C "$target_dir" \
+              --strip-components=1
+            
+            # Fix permissions in case tarball has bad ownership
+            chmod -R u+w "$target_dir"
+          fi
+
+          # Handle potential nested game directory structure
+          if [ -d "$target_dir/games/${instanceCfg.gameId}" ]; then
+            mv "$target_dir/games/${instanceCfg.gameId}"/* "$target_dir/"
+            rm -rf "$target_dir/games"
+          fi
+        '';
 
         script = let
           flags = [
