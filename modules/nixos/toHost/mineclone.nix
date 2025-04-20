@@ -31,7 +31,7 @@ in
     # sudo rsync -a /home/yeshey/PersonalFiles/Servers/minetest/MineCloneServerFirst/worlds/world/ /var/lib/minetest/.minetest/worlds/MineCloneFirstServerAnarchy/ && sudo chown -R minetest:minetest /var/lib/minetest/.minetest/worlds/MineCloneFirstServerAnarchy/
     services.minetest-server = {
       enable = true;
-      port = port;
+      port = 30000;
       config = {
         # all default options: https://github.com/minetest/minetest/blob/master/minetest.conf.example
         serverName = "Yeshey mineclone server";

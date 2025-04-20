@@ -3,7 +3,7 @@
   description = "Hyrule";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
@@ -94,6 +94,12 @@
       #type = "path";
       #path = "/home/yeshey/PersonalFiles/2025/Projects/box64-binfmt/";
     };
+
+    nix-luanti = {
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      url = "github:lomenzel/nix-luanti";
+    };
+
     /*
     wolf = {
       #url = "github:games-on-whales/wolf/dev-nix";
@@ -152,6 +158,7 @@
     # lanzaboote,
     nix-snapd,
     nix-minecraft,  
+    nix-luanti,
     ...
   }@inputs:
   let
