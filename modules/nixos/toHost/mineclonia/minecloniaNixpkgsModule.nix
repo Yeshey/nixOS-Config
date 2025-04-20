@@ -22,8 +22,7 @@ let
     ) ''""" can't be on its own line in a minetest config.'';
     "${name} = \"\"\"\n${value}\n\"\"\"\n";
 
-  toConf =
-    values:
+  toConf = values:
     lib.concatStrings (
       lib.mapAttrsToList (
         name: value:
@@ -37,144 +36,108 @@ let
               toConfMultiline name value
             else
               "${name} = ${value}\n";
-        }
-        .${builtins.typeOf value}
+        }.${builtins.typeOf value}
       ) values
     );
 
-  cfg = config.services.mineclonia-server;
-  flag =
-    val: name:
-    lib.optionals (val != null) [
-      "--${name}"
-      "${toString val}"
-    ];
+  flag = val: name: lib.optionals (val != null) ["--${name}" (toString val)];
+in {
+  options.services.mineclonia-server = lib.mkOption {
+    type = lib.types.attrsOf (lib.types.submodule {
+      options = {
+        enable = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Whether to enable this Mineclonia server instance.";
+        };
 
-  flags =
-    [
-      "--server"
-    ]
-    ++ (
-      if cfg.configPath != null then
-        [
-          "--config"
-          cfg.configPath
-        ]
-      else
-        [
-          "--config"
-          (builtins.toFile "minetest.conf" (toConf cfg.config))
-        ]
-    )
-    ++ (flag cfg.gameId "gameid")
-    ++ (flag cfg.world "world")
-    ++ (flag cfg.logPath "logfile")
-    ++ (flag cfg.port "port")
-    ++ cfg.extraArgs;
-in
-{
-  options = {
-    services.mineclonia-server = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "If enabled, starts a Minetest Server.";
+        gameId = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
+          default = null;
+          description = "Game ID to use (run 'minetestserver --gameid list' for options)";
+        };
+
+        world = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          description = "World directory to use";
+        };
+
+        configPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          description = "Path to custom config file";
+        };
+
+        config = lib.mkOption {
+          type = lib.types.attrsOf lib.types.anything;
+          default = {};
+          description = "Configuration settings (ignored if configPath is set)";
+        };
+
+        logPath = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
+          default = null;
+          description = "Path to log file (null for stdout)";
+        };
+
+        port = lib.mkOption {
+          type = lib.types.nullOr lib.types.port;
+          default = null;
+          description = "Port to listen on (default: 30000)";
+        };
+
+        extraArgs = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [];
+          description = "Additional command-line arguments";
+        };
       };
-
-      gameId = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = null;
-        description = ''
-          Id of the game to use. To list available games run
-          `minetestserver --gameid list`.
-
-          If only one game exists, this option can be null.
-        '';
-      };
-
-      world = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        description = ''
-          Name of the world to use. To list available worlds run
-          `minetestserver --world list`.
-
-          If only one world exists, this option can be null.
-        '';
-      };
-
-      configPath = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        description = ''
-          Path to the config to use.
-
-          If set to null, the config of the running user will be used:
-          `~/.minetest/minetest.conf`.
-        '';
-      };
-
-      config = lib.mkOption {
-        type = lib.types.attrsOf lib.types.anything;
-        default = { };
-        description = ''
-          Settings to add to the minetest config file.
-
-          This option is ignored if `configPath` is set.
-        '';
-      };
-
-      logPath = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        description = ''
-          Path to logfile for logging.
-
-          If set to null, logging will be output to stdout which means
-          all output will be caught by systemd.
-        '';
-      };
-
-      port = lib.mkOption {
-        type = lib.types.nullOr lib.types.int;
-        default = null;
-        description = ''
-          Port number to bind to.
-
-          If set to null, the default 30000 will be used.
-        '';
-      };
-
-      extraArgs = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        default = [ ];
-        description = ''
-          Additional command line flags to pass to the minetest executable.
-        '';
-      };
-    };
+    });
+    default = {};
+    description = "Multiple Mineclonia server instances";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = let
+    cfg = config.services.mineclonia-server;
+    enabledInstances = lib.filterAttrs (_: ic: ic.enable) cfg;
+  in lib.mkIf (enabledInstances != {}) {
+    systemd.services = lib.mapAttrs' (name: instanceCfg: {
+      name = "mineclonia-server-${name}";
+      value = {
+        description = "Mineclonia Server Instance: ${name}";
+        wantedBy = ["multi-user.target"];
+        after = ["network.target"];
 
-    systemd.services.mineclonia-server = {
-      description = "Minetest Server Service";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+        serviceConfig = {
+          DynamicUser = true;
+          StateDirectory = "mineclonia-${name}"; # will be /var/lib/mineclonia-${name}
+          Restart = "always";
+          WorkingDirectory = "/var/lib/mineclonia-${name}";
+        };
+        environment = {
+          HOME = "/var/lib/mineclonia-${name}";
+        };
 
-      serviceConfig = {
-        DynamicUser = true;
-        StateDirectory = "mineclonia"; # /var/lib/minetest
-
-        Restart = "always";
+        script = let
+          flags = [
+              "--server"
+            ]
+            ++ (if instanceCfg.configPath != null then [
+              "--config" instanceCfg.configPath
+            ] else [
+              "--config" (builtins.toFile "minetest-${name}.conf" (toConf instanceCfg.config))
+            ])
+            ++ (flag instanceCfg.gameId "gameid")
+            ++ (flag instanceCfg.world "world")
+            ++ (flag instanceCfg.logPath "logfile")
+            ++ (flag instanceCfg.port "port")
+            ++ instanceCfg.extraArgs;
+        in ''
+          cd "$STATE_DIRECTORY"
+          exec ${pkgs.minetest}/bin/minetest ${lib.escapeShellArgs flags}
+        '';
       };
-
-      script = ''
-        cd /var/lib/minetest
-        export HOME="/var/lib/minetest"
-
-        exec ${pkgs.minetest}/bin/minetest ${lib.escapeShellArgs flags}
-      '';
-    };
+    }) enabledInstances;
   };
 }

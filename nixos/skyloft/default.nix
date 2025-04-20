@@ -138,7 +138,7 @@
     openvscodeServer.enable = true;
     ngixServer.enable = true;
     mineclone.enable = true;
-    mineclonia.enable = false;
+    mineclonia.enable = true;
     kubo.enable = true;
     mindustry-server.enable = false;
     searx.enable = true;
