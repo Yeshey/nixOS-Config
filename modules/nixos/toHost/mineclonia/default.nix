@@ -46,9 +46,10 @@ in
     ];
 
     services.mineclonia-server = {
-      test1 = {
+      test2 = {
         enable = true;
         port = port;
+        openFirewall = true;
         config = {
           # all default options: https://github.com/minetest/minetest/blob/master/minetest.conf.example
           serverName = "Yeshey mineclonia server";
@@ -57,9 +58,29 @@ in
           serverAnnounce = false;
           enableDamage = true;
           creativeMode = false;
-        }; # TODO put the whole config here instead
-        world = /var/lib/minetest/.minetest/worlds/MinecloniaFirstServerAnarchy;
-        gameId = "minetest";
+        };
+        # world = /var/lib/minetest/.minetest/worlds/MinecloniaFirstServerAnarchy;
+        fetchGame = pkgs.fetchurl {
+          url    = "https://codeberg.org/mineclonia/mineclonia/archive/0.114.0.tar.gz";
+          sha256 = "sha256-VWfv27kRH/ZuDnyW2XKxsVk91991uYuBWYfiSi5nW9g=";
+        };
+        gameId = "mineclonia";
+      };
+      test3 = {
+        enable = true;
+        port = 30002;
+        openFirewall = true;
+        config = {
+          # all default options: https://github.com/minetest/minetest/blob/master/minetest.conf.example
+          serverName = "Yeshey mineclonia server 3";
+          serverDescription = "mine here";
+          defaultGame = "mineclonia";
+          serverAnnounce = false;
+          enableDamage = true;
+          creativeMode = false;
+        };
+        # world = /var/lib/minetest/.minetest/worlds/MinecloniaFirstServerAnarchy;
+        gameId = "mineclonia";
       };
     };
 
@@ -156,7 +177,6 @@ in
     #     exit 0
     #   '';
 
-    networking.firewall.allowedUDPPorts = [ port ];
-    networking.firewall.enable = false;
+    # networking.firewall.allowedUDPPorts = [ port ];
   };
 }
