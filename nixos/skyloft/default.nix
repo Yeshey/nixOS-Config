@@ -139,6 +139,7 @@
     ngixServer.enable = true;
     mineclone.enable = false;
     mineclonia.enable = true;
+    luanti.enable = true;
     kubo.enable = true;
     mindustry-server.enable = false;
     searx.enable = true;
