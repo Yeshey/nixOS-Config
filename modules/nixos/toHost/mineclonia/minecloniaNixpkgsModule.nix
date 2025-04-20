@@ -51,6 +51,13 @@ in {
           description = "Whether to enable this Mineclonia server instance.";
         };
 
+        package = lib.mkOption {
+          type = lib.types.package;
+          default = pkgs.minetest;
+          defaultText = lib.literalExpression "pkgs.minetest";
+          description = "Minetest server package to use";
+        };
+
         gameId = lib.mkOption {
           type = lib.types.nullOr lib.types.str;
           default = null;
@@ -149,29 +156,10 @@ in {
           target_dir="/var/lib/mineclonia-${name}/.minetest/games/${instanceCfg.gameId}"
           mkdir -p "$target_dir"
 
-          # Handle different fetchGame types
-          if [ -d "${fetchGame}" ]; then
-            # Directory source (fetchFromGitHub/fetchgit)
-            ${pkgs.rsync}/bin/rsync -a --delete \
-              "${fetchGame}/" \
-              "$target_dir/"
-          else
-            # File source (fetchurl tarball) - handle gzip explicitly
-            ${pkgs.gnutar}/bin/tar \
-              --use-compress-program="${pkgs.gzip}/bin/gzip" \
-              -xf "${fetchGame}" \
-              -C "$target_dir" \
-              --strip-components=1
-            
-            # Fix permissions in case tarball has bad ownership
-            chmod -R u+w "$target_dir"
-          fi
-
-          # Handle potential nested game directory structure
-          if [ -d "$target_dir/games/${instanceCfg.gameId}" ]; then
-            mv "$target_dir/games/${instanceCfg.gameId}"/* "$target_dir/"
-            rm -rf "$target_dir/games"
-          fi
+          # Directory source (fetchFromGitHub/fetchgit)
+          ${pkgs.rsync}/bin/rsync -a --delete \
+            "${fetchGame}/" \
+            "$target_dir/"
         '';
 
         script = let
@@ -194,7 +182,7 @@ in {
             ++ instanceCfg.extraArgs;
         in ''
           cd "$STATE_DIRECTORY"
-          exec ${pkgs.minetest}/bin/minetest ${lib.escapeShellArgs flags}
+          exec ${instanceCfg.package}/bin/minetest ${lib.escapeShellArgs flags}
         '';
       };
     }) enabledInstances;
