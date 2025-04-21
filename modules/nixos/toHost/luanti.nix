@@ -20,29 +20,22 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    # still needed?
-    # The problem: https://github.com/NixOS/nixpkgs/issues/383670#issuecomment-2672619706
-    # Needed to have multiple minetest instances on the same PC
-    nixpkgs.overlays = 
-    let
-      disablePrometheus = final: prev: {
-        minetest = prev.minetest.overrideAttrs (oldAttrs: {
-          cmakeFlags = let
-            # Filter out any existing flags containing "ENABLE_PROMETHEUS"
-            filtered = prev.lib.filter (flag: !(prev.lib.strings.hasInfix "ENABLE_PROMETHEUS" flag)) oldAttrs.cmakeFlags;
-          in
-            filtered ++ [ "-DENABLE_PROMETHEUS=OFF" ];
-        });
-      };
-    in [ disablePrometheus ];
+    nixpkgs.overlays = [
+      (final: prev: {
+        luanti-server = inputs.nixpkgs-unstable.legacyPackages.${prev.system}.luanti-server;
+        # If minetestserver also needs unstable:
+        # minetestserver = inputs.nixpkgs-unstable.legacyPackages.${prev.system}.minetestserver;
+      })
+    ];
 
     # Enable the luanti service with two servers
     services.luanti = {
       enable = true;
 
       servers = with nix-luanti; {
+        #package = pkgs.minetestserver;
         # First server: MineClone2 on port 30000
-        mineclone2 = {
+        anarchyMineclone2 = {
           game = games.mineclone2;
           port = 30000;
           # Per-server minetest config
@@ -57,7 +50,8 @@ in
         };
 
         # Second server: MineClonia on port 30001
-        mineclonia = {
+        anarchyMineclonia = {
+          #package = pkgs.minetestserver;
           game = games.mineclonia;
           port = 30001;
           # Per-server minetest config

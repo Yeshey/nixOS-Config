@@ -99,7 +99,7 @@ in
       port = cfg.internalPort;
       user = "yeshey"; # TODO user variable?
       extensionsDir = "/home/yeshey/.vscode-oss/extensions"; # TODO user variable?
-      withoutConnectionToken = false; # So you don't need to grab the token that it generates here
+      withoutConnectionToken = true; # So you don't need to grab the token that it generates here
       # extraArguments = [ "--cert" ]; # Generates self-signed certificate
     };
 

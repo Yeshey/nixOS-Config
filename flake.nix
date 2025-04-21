@@ -96,7 +96,7 @@
     };
 
     nix-luanti = {
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
+      #inputs.nixpkgs.follows = "nixpkgs-unstable";
       url = "github:lomenzel/nix-luanti";
     };
 
