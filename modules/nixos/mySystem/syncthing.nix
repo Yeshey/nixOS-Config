@@ -106,7 +106,7 @@ let
       versioning = myVersioning;
     };
     "Minetest" = {
-      path = "/home/${config.mySystem.user}/.minetest";
+      path = "/home/${config.mySystem.user}/.minetest/worlds";
       devices = lib.mapAttrsToList (name: value: name) devices;
       versioning = myVersioning;
     };
