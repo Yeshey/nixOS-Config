@@ -7,6 +7,128 @@
 
 let
   cfg = config.toHost.overleaf;
+  
+  overleafRepo = pkgs.fetchFromGitHub {
+    owner = "Yeshey";
+    repo = "overleaf";
+    rev = "eebda7f63edcf095ea1a4d156b3bacb7dd23ab23";
+    sha256 = "sha256-9/DNYSW+CCGCBmtkPvVl4+E2qKyECjjHX/h6og3qaB4=";
+  };
+
+  toolkitRepo = pkgs.fetchFromGitHub {
+    owner = "overleaf";
+    repo = "toolkit";
+    rev = "895fe739417bdf4d292514036d2d65864c5d4310";
+    sha256 = "sha256-G9LS4r73mGQDBbuLUsa7z4qdFJt77XZcPLe7d/bEf6Y=";
+  };
+
+  # Script to build and set up Overleaf
+  setupScript = pkgs.writeShellScriptBin "setup-overleaf" ''
+    #!${pkgs.bash}/bin/bash
+    set -e
+
+    echo "Setting up Overleaf directories..."
+    mkdir -p ${cfg.dataDir}
+    cd ${cfg.dataDir}
+
+    # Copy repositories if not already present
+    if [ ! -d "${cfg.dataDir}/overleaf" ]; then
+      echo "Copying Overleaf repository..."
+      cp -r ${overleafRepo} ${cfg.dataDir}/overleaf
+    fi
+
+    if [ ! -d "${cfg.dataDir}/toolkit" ]; then
+      echo "Copying Toolkit repository..."
+      cp -r ${toolkitRepo} ${cfg.dataDir}/toolkit
+    fi
+
+    # Ensure toolkit config has correct version
+    echo "5.4.0" > ${cfg.dataDir}/toolkit/config/version
+
+    # Make the toolkit bin/up script executable
+    chmod +x ${cfg.dataDir}/toolkit/bin/up
+
+    # Build Docker images
+    echo "Building Docker images..."
+    cd ${cfg.dataDir}/overleaf/server-ce
+
+    # Set environment variables
+    export BRANCH_NAME="main"
+    export MONOREPO_REVISION=$(${pkgs.git}/bin/git rev-parse HEAD)
+    export OVERLEAF_BASE_BRANCH="sharelatex/sharelatex-base:$BRANCH_NAME"
+    export OVERLEAF_BASE_LATEST="sharelatex/sharelatex-base"
+    export OVERLEAF_BASE_TAG="sharelatex/sharelatex-base:$BRANCH_NAME-$MONOREPO_REVISION"
+    export OVERLEAF_BRANCH="sharelatex/sharelatex:$BRANCH_NAME"
+    export OVERLEAF_LATEST="sharelatex/sharelatex"
+    export OVERLEAF_TAG="sharelatex/sharelatex:$BRANCH_NAME-$MONOREPO_REVISION"
+
+    # Build base image
+    echo "Building base image..."
+    cp .dockerignore ${cfg.dataDir}/overleaf/
+    ${pkgs.docker}/bin/docker build \
+      --build-arg BUILDKIT_INLINE_CACHE=1 \
+      --progress=plain \
+      --file Dockerfile-base \
+      --pull \
+      --tag $OVERLEAF_BASE_TAG \
+      --tag $OVERLEAF_BASE_BRANCH \
+      ${cfg.dataDir}/overleaf
+
+    # Build community image
+    echo "Building community image..."
+    ${pkgs.docker}/bin/docker build \
+      --build-arg BUILDKIT_INLINE_CACHE=1 \
+      --progress=plain \
+      --build-arg OVERLEAF_BASE_TAG=$OVERLEAF_BASE_TAG \
+      --build-arg MONOREPO_REVISION=$MONOREPO_REVISION \
+      --file Dockerfile \
+      --tag $OVERLEAF_TAG \
+      --tag $OVERLEAF_BRANCH \
+      ${cfg.dataDir}/overleaf
+
+    # Tag the image with correct version for toolkit
+    echo "Tagging image with toolkit version..."
+    ${pkgs.docker}/bin/docker tag sharelatex/sharelatex:main sharelatex/sharelatex:5.4.0
+
+    # Set up toolkit configuration
+    cd ${cfg.dataDir}/toolkit
+    mkdir -p config
+
+    # Create configuration file
+    cat > config/overleaf.rc <<EOF
+SHARELATEX_PORT=${cfg.port}
+SHARELATEX_DATA_PATH=${cfg.dataDir}/overleaf-data
+EOF
+
+    # Create a wrapper for bin/up script that uses the right environment
+    cat > ${cfg.dataDir}/toolkit/bin/up-wrapper <<EOF
+#!${pkgs.bash}/bin/bash
+export PATH="${pkgs.lib.makeBinPath [ pkgs.bash pkgs.coreutils pkgs.docker pkgs.git pkgs.gnugrep pkgs.docker-compose ]}":\$PATH
+cd ${cfg.dataDir}/toolkit
+exec ./bin/up "\$@"
+EOF
+    chmod +x ${cfg.dataDir}/toolkit/bin/up-wrapper
+
+    echo "Setup completed successfully!"
+  '';
+
+  startScript = pkgs.writeShellScriptBin "start-overleaf" ''
+    #!${pkgs.bash}/bin/bash
+    set -e
+    cd ${cfg.dataDir}/toolkit
+    export PATH="${pkgs.lib.makeBinPath [ pkgs.bash pkgs.coreutils pkgs.docker pkgs.git pkgs.gnugrep pkgs.docker-compose ]}":\$PATH
+    
+    # Check if we need to clean up existing containers
+    if ${pkgs.docker}/bin/docker ps -a | grep -q "sharelatex"; then
+      echo "Stopping existing Overleaf containers..."
+      ${pkgs.docker-compose}/bin/docker-compose down || true
+    fi
+    
+    # Start Overleaf using the toolkit script
+    echo "Starting Overleaf..."
+    exec ${cfg.dataDir}/toolkit/bin/up-wrapper
+  '';
+
 in
 {
   options.toHost.overleaf = {
@@ -21,362 +143,104 @@ in
       default = "8093";
       description = "Host port to expose Overleaf web interface";
     };
+    buildImages = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = "Whether to build Docker images on service start";
+    };
   };
 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
+    # Enable Docker
+    virtualisation.docker.enable = true;
+    
+    # Directory setup service
+    systemd.services.overleaf-dir-setup = {
+      description = "Setup Overleaf directories";
+      wantedBy = [ "multi-user.target" ];
+      before = [ "overleaf-build.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        User = "root";
+      };
+      script = ''
+        #!${pkgs.bash}/bin/bash
+        mkdir -p ${cfg.dataDir}
+        mkdir -p ${cfg.dataDir}/overleaf-data
+      '';
+    };
 
-    # NOTHING OF THIS WORKED, you might as well wait for them to package overleaf in nixOS.
+    # Build Docker images
+    systemd.services.overleaf-build = lib.mkIf cfg.buildImages {
+      description = "Build Overleaf Docker images";
+      requires = [ "docker.service" "overleaf-dir-setup.service" ];
+      after = [ "docker.service" "overleaf-dir-setup.service" ];
+      wantedBy = [ "multi-user.target" ];
+      before = [ "overleaf.service" ];
+      path = with pkgs; [ 
+        bash
+        coreutils
+        docker
+        docker-compose
+        git
+        gnugrep
+      ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        User = "root";
+        TimeoutStartSec = "120min"; # Building might take a very long time (2 hours)
+      };
+      script = "${setupScript}/bin/setup-overleaf";
+    };
 
-    # to make it work with docker follow: https://github.com/overleaf/overleaf/issues/881 (and you can look at https://blog.znjoa.com/2024/11/24/installing-overleaf-community-edition-on-raspberry-pi/ for more details on the commands)
+    # Run Overleaf service
+    systemd.services.overleaf = {
+      description = "Overleaf Service";
+      requires = [ "docker.service" ];
+      after = [ "docker.service" ] ++ lib.optional cfg.buildImages "overleaf-build.service";
+      wantedBy = [ "multi-user.target" ];
+      path = with pkgs; [
+        bash
+        coreutils
+        docker
+        docker-compose
+        git
+        gnugrep
+      ];
+      #environment = {
+      #  PATH = "${pkgs.lib.makeBinPath [ pkgs.bash pkgs.coreutils pkgs.docker pkgs.git pkgs.gnugrep pkgs.docker-compose ]}:$PATH";
+      #};
+      serviceConfig = {
+        Type = "simple";
+        User = "root";
+        Restart = "always";
+        WorkingDirectory = "${cfg.dataDir}/toolkit";
+        ExecStart = "${startScript}/bin/start-overleaf";
+      };
+      preStop = ''
+        #!${pkgs.bash}/bin/bash
+        cd ${cfg.dataDir}/toolkit
+        ${pkgs.docker-compose}/bin/docker-compose down || true
+      '';
+    };
 
-    #  virtualisation.podman.enable = true;
-      
-    #   virtualisation.oci-containers.containers = {
-    #     overleaf = {
-    #       image = "abhilesh7/overleaf-arm:latest";
-    #       autoStart = true;
-    #       ports = [ "${cfg.port}:80" ];
-    #       volumes = [ "${cfg.dataDir}:/var/lib/overleaf-data" ];
-    #       extraOptions = [ "--pull=always" ];
-    #     };
-    #   };
+    # Add docker-compose to the system
+    environment.systemPackages = [ 
+      setupScript 
+      pkgs.docker-compose
+    ];
 
-    #   systemd.services.overleaf-dir-mgr = {
-    #     wantedBy = [ "multi-user.target" ];
-    #     script = ''
-    #       if [ ! -d "${cfg.dataDir}" ]; then
-    #         mkdir -p "${cfg.dataDir}"
-    #         chmod 777 "${cfg.dataDir}"
-    #       fi
-    #     '';
-    #     serviceConfig = {
-    #       Type = "oneshot";
-    #       User = "root";
-    #     };
-    #   };
-
-    #   systemd.services.podman-overleaf = {
-    #     requires = [ "overleaf-dir-mgr.service" ];
-    #     after = [ "overleaf-dir-mgr.service" ];
-    #   };
-
-    #   environment.systemPackages = with pkgs; [
-    #     (makeDesktopItem {
-    #       name = "Overleaf";
-    #       desktopName = "Overleaf";
-    #       genericName = "LaTeX Editor";
-    #       exec = "xdg-open http://localhost:${cfg.port}";
-    #       icon = "firefox";
-    #       categories = [ "Office" "X-WebApps" ];
-    #     })
-    #   ];
-    # };
-
-    # networking.firewall.enable = false;
-
-    # Runtime podman
-    # virtualisation.podman = {
-    #   enable = true;
-    #   autoPrune.enable = true;
-    #   dockerCompat = lib.mkForce true;
-    # };
-    # virtualisation.oci-containers.backend = "podman";
-
-    # Runtime docker
-    # boot.binfmt.registrations.x86_64-linux.fixBinary = true;
-
-    # virtualisation.docker = {
-    #   enable = true;
-    #   autoPrune.enable = true;
-    #   extraOptions = "--add-runtime qemu-x86_64=${pkgs.qemu}/bin/qemu-x86_64-static";
-    # };
-    # virtualisation.oci-containers.backend = "docker";
-
-    # # Containers
-    # virtualisation.oci-containers.containers."mongo" = {
-    #   image = "mongo:6.0";
-    #   environment = {
-    #     "MONGO_INITDB_DATABASE" = "sharelatex";
-    #   };
-    #   volumes = [
-    #     "/home/yeshey/Downloads/overleaf/bin/shared/mongodb-init-replica-set.js:/docker-entrypoint-initdb.d/mongodb-init-replica-set.js:rw"
-    #     "/home/yeshey/mongo_data:/data/db:rw"
-    #   ];
-    #   cmd = [ "--replSet" "overleaf" ];
-    #   log-driver = "journald";
-    #   extraOptions = [
-    #     "--add-host=mongo:127.0.0.1"
-    #     "--health-cmd=echo 'db.stats().ok' | mongosh localhost:27017/test --quiet"
-    #     "--health-interval=10s"
-    #     "--health-retries=5"
-    #     "--health-timeout=10s"
-    #     "--network-alias=mongo"
-    #     "--network=overleaf_default"
-    #   ];
-    # };
-    # systemd.services."docker-mongo" = {
-    #   serviceConfig = {
-    #     Restart = lib.mkOverride 90 "always";
-    #     RestartMaxDelaySec = lib.mkOverride 90 "1m";
-    #     RestartSec = lib.mkOverride 90 "100ms";
-    #     RestartSteps = lib.mkOverride 90 9;
-    #   };
-    #   after = [
-    #     "docker-network-overleaf_default.service"
-    #   ];
-    #   requires = [
-    #     "docker-network-overleaf_default.service"
-    #   ];
-    #   partOf = [
-    #     "docker-compose-overleaf-root.target"
-    #   ];
-    #   wantedBy = [
-    #     "docker-compose-overleaf-root.target"
-    #   ];
-    # };
-    # virtualisation.oci-containers.containers."redis" = {
-    #   image = "redis:6.2";
-    #   volumes = [
-    #     "/home/yeshey/redis_data:/data:rw"
-    #   ];
-    #   log-driver = "journald";
-    #   extraOptions = [
-    #     "--network-alias=redis"
-    #     "--network=overleaf_default"
-    #   ];
-    # };
-    # systemd.services."docker-redis" = {
-    #   serviceConfig = {
-    #     Restart = lib.mkOverride 90 "always";
-    #     RestartMaxDelaySec = lib.mkOverride 90 "1m";
-    #     RestartSec = lib.mkOverride 90 "100ms";
-    #     RestartSteps = lib.mkOverride 90 9;
-    #   };
-    #   after = [
-    #     "docker-network-overleaf_default.service"
-    #   ];
-    #   requires = [
-    #     "docker-network-overleaf_default.service"
-    #   ];
-    #   partOf = [
-    #     "docker-compose-overleaf-root.target"
-    #   ];
-    #   wantedBy = [
-    #     "docker-compose-overleaf-root.target"
-    #   ];
-    # };
-    # virtualisation.oci-containers.containers."sharelatex" = {
-    #   image = "sharelatex/sharelatex";
-    #   # platform = "linux/amd64"; # Explicit architecture
-    #   environment = {
-    #     "EMAIL_CONFIRMATION_DISABLED" = "true";
-    #     "ENABLED_LINKED_FILE_TYPES" = "project_file,project_output_file";
-    #     "ENABLE_CONVERSIONS" = "true";
-    #     "OVERLEAF_APP_NAME" = "Overleaf Community Edition";
-    #     "OVERLEAF_MONGO_URL" = "mongodb://mongo/sharelatex";
-    #     "OVERLEAF_REDIS_HOST" = "redis";
-    #     "REDIS_HOST" = "redis";
-    #     "SANDBOXED_COMPILES" = "true";
-    #     "SANDBOXED_COMPILES_HOST_DIR_COMPILES" = "/home/user/sharelatex_data/data/compiles";
-    #     "SANDBOXED_COMPILES_HOST_DIR_OUTPUT" = "/home/user/sharelatex_data/data/output";
-    #     "SANDBOXED_COMPILES_SIBLING_CONTAINERS" = "true";
-    #   };
-    #   volumes = [
-    #     "/home/yeshey/sharelatex_data:/var/lib/overleaf:rw"
-    #   ];
-    #   ports = [
-    #     "8094:80/tcp"
-    #   ];
-    #   dependsOn = [
-    #     "mongo"
-    #     "redis"
-    #   ];
-    #   log-driver = "journald";
-    #   extraOptions = [
-    #     "--platform=linux/amd64"
-    #     "--network-alias=sharelatex"
-    #     "--network=overleaf_default"
-    #   ];
-    # };
-    # systemd.services."docker-sharelatex" = {
-    #   serviceConfig = {
-    #     Restart = lib.mkOverride 90 "always";
-    #     RestartMaxDelaySec = lib.mkOverride 90 "1m";
-    #     RestartSec = lib.mkOverride 90 "100ms";
-    #     RestartSteps = lib.mkOverride 90 9;
-    #   };
-    #   after = [
-    #     "docker-network-overleaf_default.service"
-    #   ];
-    #   requires = [
-    #     "docker-network-overleaf_default.service"
-    #   ];
-    #   partOf = [
-    #     "docker-compose-overleaf-root.target"
-    #   ];
-    #   wantedBy = [
-    #     "docker-compose-overleaf-root.target"
-    #   ];
-    # };
-
-    # # Networks
-    # systemd.services."docker-network-overleaf_default" = {
-    #   path = [ pkgs.docker ];
-    #   serviceConfig = {
-    #     Type = "oneshot";
-    #     RemainAfterExit = true;
-    #     ExecStop = "docker network rm -f overleaf_default";
-    #   };
-    #   script = ''
-    #     docker network inspect overleaf_default || docker network create overleaf_default
-    #   '';
-    #   partOf = [ "docker-compose-overleaf-root.target" ];
-    #   wantedBy = [ "docker-compose-overleaf-root.target" ];
-    # };
-
-    # # Root service
-    # # When started, this will automatically create all resources and start
-    # # the containers. When stopped, this will teardown all resources.
-    # systemd.targets."docker-compose-overleaf-root" = {
-    #   unitConfig = {
-    #     Description = "Root target generated by compose2nix.";
-    #   };
-    #   wantedBy = [ "multi-user.target" ];
-    # };
-
+    # Firewall configuration
+    networking.firewall.allowedTCPPorts = [ (lib.toInt cfg.port) ];
   };
 }
-
-
-# DEEPSEEK SUGGESTINO IF I UPLOAD MY REPOS
-
-# { config, lib, pkgs, ... }:
-
-# let
-#   cfg = config.toHost.overleaf;
-  
-#   # Build the base image
-#   overleaf-base = pkgs.dockerTools.buildImage {
-#     name = "sharelatex/sharelatex-base";
-#     tag = "main";
-    
-#     copyToRoot = pkgs.buildEnv {
-#       name = "overleaf-base-root";
-#       paths = with pkgs; [
-#         bash
-#         coreutils
-#         gnused
-#         gawk
-#         findutils
-#         nodejs-16_x  # Match Overleaf's Node.js version
-#         python3
-#         git
-#         poppler_utils
-#         # Add other base dependencies from Dockerfile-base
-#       ];
-#       pathsToLink = [ "/bin" "/lib" ];
-#     };
-
-#     runAsRoot = ''
-#       #!${pkgs.runtimeShell}
-#       mkdir -p /var/lib/sharelatex
-#       mkdir -p /var/log/sharelatex
-#       # Add other directory setup from Dockerfile-base
-#     '';
-
-#     config = {
-#       WorkingDir = "/var/www/sharelatex";
-#       Env = [
-#         "PATH=/bin:/usr/bin:${pkgs.nodejs-16_x}/bin"
-#         "NODE_ENV=production"
-#       ];
-#       # Include other base config from Dockerfile-base
-#     };
-#   };
-
-#   # Build the community edition image
-#   overleaf-community = pkgs.dockerTools.buildImage {
-#     name = "sharelatex/sharelatex";
-#     tag = "3.1.0";
-    
-#     fromImage = overleaf-base;
-
-#     copyToRoot = let
-#       overleafSrc = pkgs.fetchFromGitHub {
-#         owner = "Yeshey";
-#         repo = "overleaf";
-#         rev = "COMMIT_HASH"; # Pin specific commit
-#         sha256 = "HASH"; # Get via nix-prefetch-github
-#       };
-#     in pkgs.buildEnv {
-#       name = "overleaf-community-root";
-#       paths = [
-#         (pkgs.runCommand "overleaf-app" {} ''
-#           mkdir -p $out/var/www/sharelatex
-#           cp -r ${overleafSrc}/server-ce/* $out/var/www/sharelatex/
-#           # Apply any ARM-specific patches here
-#         '')
-#       ];
-#     };
-
-#     runAsRoot = ''
-#       #!${pkgs.runtimeShell}
-#       npm install -g forever
-#       # Add any community edition specific setup
-#     '';
-
-#     config = {
-#       Cmd = [ "npm" "start" ];
-#       ExposedPorts = {
-#         "80/tcp" = {};
-#       };
-#       Volumes = {
-#         "/var/lib/sharelatex" = {};
-#         "/var/log/sharelatex" = {};
-#       };
-#     };
-#   };
-
-# in {
-#   # ... (keep previous options unchanged)
-
-#   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
-
-#     virtualisation.oci-containers.containers = {
-#       overleaf-mongo = { /* ... */ };
-      
-#       overleaf-redis = { /* ... */ };
-
-#       overleaf-sharelatex = {
-#         image = "${overleaf-community.imageName}:${overleaf-community.imageTag}";
-#         dependsOn = [ "overleaf-mongo" "overleaf-redis" ];
-#         ports = [ "${toString cfg.port}:80" ];
-#         environment = {
-#           SHARELATEX_MONGO_URL = "mongodb://overleaf-mongo:27017/sharelatex";
-#           SHARELATEX_REDIS_HOST = "overleaf-redis";
-#         };
-#         volumes = [
-#           "${cfg.dataDir}/sharelatex_data:/var/lib/sharelatex"
-#           "${cfg.dataDir}/sharelatex_uploads:/var/www/sharelatex/web/uploads"
-#         ];
-#       };
-#     };
-
-#     systemd.services.overleaf-image-build = {
-#       script = ''
-#         # Ensure images are built before podman tries to use them
-#         ${overleaf-community} 
-#       '';
-#       serviceConfig.Type = "oneshot";
-#       wantedBy = [ "podman-overleaf-sharelatex.service" ];
-#     };
-#   };
-# }
 
 # prompt i used:
 
 /*
-so, the official overleaf docker image isn't marked with arm support. So I'm compiling the overleaf docker to have arm support and scheme-full as well.
+so, the official overleaf docker image isn't marked with arm support. So I'm compiling the overleaf docker to have arm support and scheme-full latex as well.
 
 what I had to do was clone the repositories `https://github.com/overleaf/overleaf` and `https://github.com/overleaf/toolkit`. Have them like this:
 ```
@@ -430,7 +294,7 @@ And then follow these instructions:
 ```
 I managed to build the image on arm64 the way @aeaton-overleaf wrote:
 1. `make build-base` and `make build-community` from `server-ce/` directory in Overleaf repository. It creates sharelatex docker images in the system.
-2. `docker tag sharelatex/sharelatex:main sharelatex/sharelatex:3.1.0` (where 3.1.0 matches the version in the toolkit's `config/version` file)
+2. `docker tag sharelatex/sharelatex:main sharelatex/sharelatex:5.4.0` (where 5.4.0 matches the version in the toolkit's `config/version` file)
 3. run `bin/up` from `overleaf-toolkit` directory
 And it spins up on my remote machine. (I cannot connect to it for now, but I think it's the IP problem. The image seems to work.)
 ```
@@ -441,9 +305,26 @@ Also:
 5.4.0
 ```
 
-I am in nixOS, I can push these two repositories to my github with my changes, but can I then make a nix file that builds and runs the docker correctly with those repos with nix code?
+I am in nixOS, I pushed the overleaf repo fork that I used to build the overleaf docker images with latex-full to `https://github.com/Yeshey/overleaf`. And the toolkit overleaf repo I used was this one in this commit with no changes so I didn't fork it: `https://github.com/overleaf/toolkit/tree/895fe739417bdf4d292514036d2d65864c5d4310`
+I now need a nix file that builds and runs the docker correctly with those repos with nix code to put in my nixOS configuration
+YOu can use this to pull the repositories:
+```nix
+  overleafRepo = pkgs.fetchFromGitHub {
+    owner = "Yeshey";
+    repo = "overleaf";
+    rev = "eebda7f63edcf095ea1a4d156b3bacb7dd23ab23";
+    sha256 = "sha256-9/DNYSW+CCGCBmtkPvVl4+E2qKyECjjHX/h6og3qaB4=";
+  };
 
-my github is `https://github.com/Yeshey/<repo-name>`. Can finish the below nix file so it can use my docker repos and build this arm overleaf docker and install it in nixOS:
+  toolkitRepo = pkgs.fetchFromGitHub {
+    owner = "overleaf";
+    repo = "toolkit";
+    rev = "895fe739417bdf4d292514036d2d65864c5d4310";
+    sha256 = "sha256-G9LS4r73mGQDBbuLUsa7z4qdFJt77XZcPLe7d/bEf6Y=";
+  };
+```
+
+Can finish the below nix file so it can use my docker repos and build this arm overleaf docker and install it in nixOS:
 
 ```nix
 {
