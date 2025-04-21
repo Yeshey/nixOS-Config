@@ -153,7 +153,7 @@
     nextcloud.enable = true;
     minecraft.enable = true;
     openvscodeServer.enable = true;
-    ngixServer.enable = true;
+    ngixServer.enable = false;
     luanti.enable = true;
     kubo.enable = true;
     mindustry-server.enable = false;

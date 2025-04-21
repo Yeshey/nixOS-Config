@@ -5,6 +5,7 @@
   ...
 }:
 
+# Made with help by claude
 let
   cfg = config.toHost.overleaf;
   
@@ -22,93 +23,114 @@ let
     sha256 = "sha256-G9LS4r73mGQDBbuLUsa7z4qdFJt77XZcPLe7d/bEf6Y=";
   };
 
-  # Script to build and set up Overleaf
-  setupScript = pkgs.writeShellScriptBin "setup-overleaf" ''
+  # Script to copy repos, build images, and prepare environment
+  buildImagesScript = pkgs.writeShellScriptBin "build-overleaf-images" ''
     #!${pkgs.bash}/bin/bash
     set -e
-
-    echo "Setting up Overleaf directories..."
-    mkdir -p ${cfg.dataDir}
-    cd ${cfg.dataDir}
-
-    # Copy repositories if not already present
-    if [ ! -d "${cfg.dataDir}/overleaf" ]; then
-      echo "Copying Overleaf repository..."
-      cp -r ${overleafRepo} ${cfg.dataDir}/overleaf
-    fi
-
-    if [ ! -d "${cfg.dataDir}/toolkit" ]; then
-      echo "Copying Toolkit repository..."
-      cp -r ${toolkitRepo} ${cfg.dataDir}/toolkit
-    fi
-
-    # Ensure toolkit config has correct version
-    echo "5.4.0" > ${cfg.dataDir}/toolkit/config/version
-
-
-
-    # Make the toolkit bin/up script executable
-    chmod +x ${cfg.dataDir}/toolkit/bin/up
     
-    # Alternatively, we could just replace the entire read_configuration function
-    # but the sed approach above is more targeted and less intrusive
-
-    # Make the toolkit bin/up script executable
-    chmod +x ${cfg.dataDir}/toolkit/bin/up
-
-    # Build Docker images
-    echo "Building Docker images..."
-    cd ${cfg.dataDir}/overleaf/server-ce
-
-    # Set environment variables
+    echo "Setting up Overleaf repositories and building images..."
+    
+    # Create directories
+    mkdir -p ${cfg.dataDir}/repos
+    
+    # Copy repositories if not already present
+    if [ ! -d "${cfg.dataDir}/repos/overleaf" ]; then
+      echo "Copying Overleaf repository..."
+      cp -r ${overleafRepo} ${cfg.dataDir}/repos/overleaf
+      chmod -R u+w ${cfg.dataDir}/repos/overleaf
+    fi
+    
+    if [ ! -d "${cfg.dataDir}/repos/toolkit" ]; then
+      echo "Copying Toolkit repository..."
+      cp -r ${toolkitRepo} ${cfg.dataDir}/repos/toolkit
+      chmod -R u+w ${cfg.dataDir}/repos/toolkit
+    fi
+    
+    # Set up build environment
+    export MONOREPO_REVISION="${builtins.substring 0 40 overleafRepo.rev}"
     export BRANCH_NAME="main"
-    export MONOREPO_REVISION=$(${pkgs.git}/bin/git rev-parse HEAD)
     export OVERLEAF_BASE_BRANCH="sharelatex/sharelatex-base:$BRANCH_NAME"
     export OVERLEAF_BASE_LATEST="sharelatex/sharelatex-base"
     export OVERLEAF_BASE_TAG="sharelatex/sharelatex-base:$BRANCH_NAME-$MONOREPO_REVISION"
     export OVERLEAF_BRANCH="sharelatex/sharelatex:$BRANCH_NAME"
     export OVERLEAF_LATEST="sharelatex/sharelatex"
     export OVERLEAF_TAG="sharelatex/sharelatex:$BRANCH_NAME-$MONOREPO_REVISION"
+    
+    # Ensure .dockerignore exists
+    if [ ! -f ${cfg.dataDir}/repos/overleaf/.dockerignore ]; then
+      touch ${cfg.dataDir}/repos/overleaf/.dockerignore
+    fi
+    
+    # Build base image if it doesn't exist
+    if ! ${pkgs.docker}/bin/docker images | grep -q "sharelatex/sharelatex-base:main"; then
+      echo "Building base image..."
+      cp ${cfg.dataDir}/repos/overleaf/server-ce/.dockerignore ${cfg.dataDir}/repos/overleaf/ || touch ${cfg.dataDir}/repos/overleaf/.dockerignore
+      ${pkgs.docker}/bin/docker build \
+        --build-arg BUILDKIT_INLINE_CACHE=1 \
+        --progress=plain \
+        --file ${cfg.dataDir}/repos/overleaf/server-ce/Dockerfile-base \
+        --pull \
+        --tag $OVERLEAF_BASE_TAG \
+        --tag $OVERLEAF_BASE_BRANCH \
+        ${cfg.dataDir}/repos/overleaf
+    else
+      echo "Base image already exists, skipping build"
+    fi
+    
+    # Build community image if it doesn't exist
+    if ! ${pkgs.docker}/bin/docker images | grep -q "sharelatex/sharelatex:main"; then
+      echo "Building community image..."
+      ${pkgs.docker}/bin/docker build \
+        --build-arg BUILDKIT_INLINE_CACHE=1 \
+        --progress=plain \
+        --build-arg OVERLEAF_BASE_TAG=$OVERLEAF_BASE_TAG \
+        --build-arg MONOREPO_REVISION=$MONOREPO_REVISION \
+        --file ${cfg.dataDir}/repos/overleaf/server-ce/Dockerfile \
+        --tag $OVERLEAF_TAG \
+        --tag $OVERLEAF_BRANCH \
+        ${cfg.dataDir}/repos/overleaf
+    else
+      echo "Community image already exists, skipping build"
+    fi
+    
+    # Tag for toolkit
+    if ! ${pkgs.docker}/bin/docker images | grep -q "sharelatex/sharelatex:5.4.0"; then
+      echo "Tagging image for toolkit..."
+      ${pkgs.docker}/bin/docker tag sharelatex/sharelatex:main sharelatex/sharelatex:5.4.0
+    fi
+    
+    echo "Docker images built successfully"
+  '';
 
-    # Build base image
-    echo "Building base image..."
-    cp .dockerignore ${cfg.dataDir}/overleaf/
-    ${pkgs.docker}/bin/docker build \
-      --build-arg BUILDKIT_INLINE_CACHE=1 \
-      --progress=plain \
-      --file Dockerfile-base \
-      --pull \
-      --tag $OVERLEAF_BASE_TAG \
-      --tag $OVERLEAF_BASE_BRANCH \
-      ${cfg.dataDir}/overleaf
-
-    # Build community image
-    echo "Building community image..."
-    ${pkgs.docker}/bin/docker build \
-      --build-arg BUILDKIT_INLINE_CACHE=1 \
-      --progress=plain \
-      --build-arg OVERLEAF_BASE_TAG=$OVERLEAF_BASE_TAG \
-      --build-arg MONOREPO_REVISION=$MONOREPO_REVISION \
-      --file Dockerfile \
-      --tag $OVERLEAF_TAG \
-      --tag $OVERLEAF_BRANCH \
-      ${cfg.dataDir}/overleaf
-
-    # Tag the image with correct version for toolkit
-    echo "Tagging image with toolkit version..."
-    ${pkgs.docker}/bin/docker tag sharelatex/sharelatex:main sharelatex/sharelatex:5.4.0
-
-    # Set up toolkit configuration
-    cd ${cfg.dataDir}/toolkit
-    mkdir -p config
-
-    # Create configuration file with all required settings
-    cat > config/overleaf.rc <<EOF
+  # Setup toolkit config script
+  setupToolkitScript = pkgs.writeShellScriptBin "setup-overleaf-toolkit" ''
+    #!${pkgs.bash}/bin/bash
+    set -e
+    
+    echo "Setting up Overleaf toolkit..."
+    
+    # Create directories
+    mkdir -p ${cfg.dataDir}
+    mkdir -p ${cfg.dataDir}/toolkit
+    mkdir -p ${cfg.dataDir}/overleaf-data
+    mkdir -p ${cfg.dataDir}/overleaf-data/mongo
+    mkdir -p ${cfg.dataDir}/overleaf-data/redis
+    
+    # Copy toolkit files if not already present
+    if [ ! -d "${cfg.dataDir}/toolkit/bin" ]; then
+      echo "Copying toolkit files..."
+      cp -r ${cfg.dataDir}/repos/toolkit/* ${cfg.dataDir}/toolkit/
+      chmod -R u+w ${cfg.dataDir}/toolkit
+    fi
+    
+    # Ensure toolkit config file exists
+    mkdir -p ${cfg.dataDir}/toolkit/config
+    cat > ${cfg.dataDir}/toolkit/config/overleaf.rc <<EOF
 # Main Overleaf configuration
 PROJECT_NAME=overleaf
 OVERLEAF_PORT=${cfg.port}
 OVERLEAF_DATA_PATH=${cfg.dataDir}/overleaf-data
-OVERLEAF_LISTEN_IP=127.0.0.1
+OVERLEAF_LISTEN_IP=0.0.0.0
 
 # MongoDB configuration 
 MONGO_ENABLED=true
@@ -123,30 +145,49 @@ REDIS_IMAGE=redis:6.2
 REDIS_AOF_PERSISTENCE=true
 EOF
 
-    echo "Setup completed successfully!"
+    # Create variables.env file
+    cat > ${cfg.dataDir}/toolkit/config/variables.env <<EOF
+#### variables.env ####
+OVERLEAF_APP_NAME="Overleaf"
+
+ENABLED_LINKED_FILE_TYPES=project_file,project_output_file
+
+# Enables Thumbnail generation using ImageMagick
+ENABLE_CONVERSIONS=true
+
+# Disables email confirmation requirement
+EMAIL_CONFIRMATION_DISABLED=true
+EOF
+
+    # Ensure version file exists
+    echo "5.4.0" > ${cfg.dataDir}/toolkit/config/version
+    
+    # Make toolkit scripts executable
+    chmod +x ${cfg.dataDir}/toolkit/bin/up
+    chmod +x ${cfg.dataDir}/toolkit/bin/docker-compose
+    
+    echo "Toolkit setup completed successfully"
   '';
 
-  startScript = pkgs.writeShellScriptBin "start-overleaf" ''
+  # Script to start Overleaf service
+  startOverleafScript = pkgs.writeShellScriptBin "start-overleaf" ''
     #!${pkgs.bash}/bin/bash
     set -e
+    
     cd ${cfg.dataDir}/toolkit
     
-    # Debug output to verify the fix
-    echo "Verifying the shared-functions.sh patch..."
-    grep -A 1 "read_configuration" lib/shared-functions.sh
-    
-    # Check if we need to clean up existing containers
+    # Check if there are existing containers that need to be stopped
     if ${pkgs.docker}/bin/docker ps -a | grep -q "sharelatex"; then
       echo "Stopping existing Overleaf containers..."
       ./bin/docker-compose down || true
     fi
     
-    # Start Overleaf using the toolkit script
+    # Start Overleaf using toolkit
     echo "Starting Overleaf..."
     exec ./bin/up
   '';
 
-  # Path for binaries needed by the scripts
+  # Required packages for scripts
   requiredPkgs = with pkgs; [
     bash
     coreutils
@@ -180,10 +221,10 @@ in
       default = "8093";
       description = "Host port to expose Overleaf web interface";
     };
-    buildImages = lib.mkOption {
+    forceBuild = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Whether to build Docker images on service start";
+      description = "Force rebuilding Docker images even if they exist";
     };
   };
 
@@ -204,6 +245,7 @@ in
       script = ''
         #!${pkgs.bash}/bin/bash
         mkdir -p ${cfg.dataDir}
+        mkdir -p ${cfg.dataDir}/repos
         mkdir -p ${cfg.dataDir}/overleaf-data
         mkdir -p ${cfg.dataDir}/overleaf-data/mongo
         mkdir -p ${cfg.dataDir}/overleaf-data/redis
@@ -211,10 +253,30 @@ in
     };
 
     # Build Docker images
-    systemd.services.overleaf-build = lib.mkIf cfg.buildImages {
+    systemd.services.overleaf-build = {
       description = "Build Overleaf Docker images";
       requires = [ "docker.service" "overleaf-dir-setup.service" ];
       after = [ "docker.service" "overleaf-dir-setup.service" ];
+      wantedBy = [ "multi-user.target" ];
+      before = [ "overleaf-setup.service" ];
+      path = requiredPkgs;
+      environment = lib.optionalAttrs cfg.forceBuild {
+        FORCE_BUILD = "true";
+      };
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        User = "root";
+        TimeoutStartSec = "120min"; # Building might take a long time
+      };
+      script = "${buildImagesScript}/bin/build-overleaf-images";
+    };
+
+    # Setup Overleaf toolkit
+    systemd.services.overleaf-setup = {
+      description = "Setup Overleaf toolkit";
+      requires = [ "overleaf-build.service" ];
+      after = [ "overleaf-build.service" ];
       wantedBy = [ "multi-user.target" ];
       before = [ "overleaf.service" ];
       path = requiredPkgs;
@@ -222,118 +284,47 @@ in
         Type = "oneshot";
         RemainAfterExit = true;
         User = "root";
-        TimeoutStartSec = "120min"; # Building might take a very long time (2 hours)
       };
-      script = "${setupScript}/bin/setup-overleaf";
+      script = "${setupToolkitScript}/bin/setup-overleaf-toolkit";
     };
 
     # Run Overleaf service
     systemd.services.overleaf = {
       description = "Overleaf Service";
-      requires = [ "docker.service" ];
-      after = [ "docker.service" ] ++ lib.optional cfg.buildImages "overleaf-build.service";
+      requires = [ "docker.service" "overleaf-setup.service" ];
+      after = [ "docker.service" "overleaf-setup.service" ];
       wantedBy = [ "multi-user.target" ];
       path = requiredPkgs;
-      #environment = {
-      #  PATH = "${lib.makeBinPath requiredPkgs}:$PATH";
-      #};
       serviceConfig = {
         Type = "simple";
         User = "root";
         Restart = "on-failure";
         RestartSec = "10s";
         WorkingDirectory = "${cfg.dataDir}/toolkit";
-        ExecStart = "${startScript}/bin/start-overleaf";
+        ExecStart = "${startOverleafScript}/bin/start-overleaf";
       };
       preStop = ''
         #!${pkgs.bash}/bin/bash
         cd ${cfg.dataDir}/toolkit
         ./bin/docker-compose down || true
       '';
-      preStart = ''
-        #!${pkgs.bash}/bin/bash
-        echo "Setting up complete overleaf.rc configuration..."
-        
-        # Create toolkit config directory if it doesn't exist
-        mkdir -p ${cfg.dataDir}/toolkit/config
-        
-        # Create/overwrite a complete overleaf.rc file
-        cat > ${cfg.dataDir}/toolkit/config/overleaf.rc <<EOF
-      #### Overleaf RC ####
-      PROJECT_NAME=overleaf
-      # Sharelatex container
-      # Uncomment the OVERLEAF_IMAGE_NAME variable to use a user-defined image.
-      # OVERLEAF_IMAGE_NAME=sharelatex/sharelatex
-      OVERLEAF_DATA_PATH=${cfg.dataDir}/overleaf-data
-      SERVER_PRO=false
-      OVERLEAF_LISTEN_IP=0.0.0.0
-      OVERLEAF_PORT=${cfg.port}
-      # Sibling Containers
-      SIBLING_CONTAINERS_ENABLED=true
-      DOCKER_SOCKET_PATH=/var/run/docker.sock
-      # Mongo configuration
-      MONGO_ENABLED=true
-      MONGO_DATA_PATH=${cfg.dataDir}/overleaf-data/mongo
-      MONGO_IMAGE=mongo
-      MONGO_VERSION=6.0
-      # Redis configuration
-      REDIS_ENABLED=true
-      REDIS_DATA_PATH=${cfg.dataDir}/overleaf-data/redis
-      REDIS_IMAGE=redis:6.2
-      REDIS_AOF_PERSISTENCE=true
-      # Git-bridge configuration (Server Pro only)
-      GIT_BRIDGE_ENABLED=false
-      GIT_BRIDGE_DATA_PATH=${cfg.dataDir}/overleaf-data/git-bridge
-      # TLS proxy configuration (optional)
-      # See documentation in doc/tls-proxy.md
-      NGINX_ENABLED=false
-      NGINX_CONFIG_PATH=config/nginx/nginx.conf
-      NGINX_HTTP_PORT=80
-      # Replace these IP addresses with the external IP address of your host
-      NGINX_HTTP_LISTEN_IP=127.0.1.1
-      NGINX_TLS_LISTEN_IP=127.0.1.1
-      TLS_PRIVATE_KEY_PATH=config/nginx/certs/overleaf_key.pem
-      TLS_CERTIFICATE_PATH=config/nginx/certs/overleaf_certificate.pem
-      TLS_PORT=443
-      # In Air-gapped setups, skip pulling images
-      # PULL_BEFORE_UPGRADE=false
-      # SIBLING_CONTAINERS_PULL=false
-      EOF
-        
-        # Create/overwrite a complete variables.env file
-        cat > ${cfg.dataDir}/toolkit/config/variables.env <<EOF
-      #### variables.env ####
-      OVERLEAF_APP_NAME="Our Overleaf Instance"
-
-      ENABLED_LINKED_FILE_TYPES=project_file,project_output_file
-
-      # Enables Thumbnail generation using ImageMagick
-      ENABLE_CONVERSIONS=true
-
-      # Disables email confirmation requirement
-      EMAIL_CONFIRMATION_DISABLED=true
-      EOF
-
-
-        # Create required data directories
-        mkdir -p ${cfg.dataDir}/overleaf-data/mongo
-        mkdir -p ${cfg.dataDir}/overleaf-data/redis
-        
-        echo "Setup completed successfully!"
-      '';
     };
 
-    # Add docker-compose and setup script to the system
+    # Add tools to the system environment
     environment.systemPackages = [ 
-      setupScript 
+      buildImagesScript
+      setupToolkitScript
+      startOverleafScript
       pkgs.docker-compose
     ] ++ requiredPkgs;
 
     # Firewall configuration
     networking.firewall.allowedTCPPorts = [ (lib.toInt cfg.port) ];
+    
+    # Create a directory in /etc for overleaf specific configs
+    environment.etc."overleaf/REVISION".text = overleafRepo.rev;
   };
 }
-
 # prompt i used:
 
 /*
