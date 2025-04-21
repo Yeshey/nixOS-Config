@@ -90,7 +90,7 @@
     };
   };
 
-  box64-binfmt.enable = true;
+  box64-binfmt.enable = false;
 
   environment.systemPackages = [ 
     pkgs.file
@@ -138,7 +138,7 @@
     openvscodeServer.enable = true;
     ngixServer.enable = true;
     mineclone.enable = false;
-    mineclonia.enable = true;
+    mineclonia.enable = false;
     luanti.enable = true;
     kubo.enable = true;
     mindustry-server.enable = false;
