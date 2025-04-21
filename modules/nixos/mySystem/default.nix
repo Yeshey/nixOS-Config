@@ -60,6 +60,7 @@ in
     ./hardware/default.nix
     ./syncthing.nix
     ./borgBackups.nix
+    ./borgFolderBackups.nix
     ./ssh/default.nix
     ./agenix/default.nix
     ./waydroid.nix
