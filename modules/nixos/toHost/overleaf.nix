@@ -45,6 +45,14 @@ let
     # Ensure toolkit config has correct version
     echo "5.4.0" > ${cfg.dataDir}/toolkit/config/version
 
+
+
+    # Make the toolkit bin/up script executable
+    chmod +x ${cfg.dataDir}/toolkit/bin/up
+    
+    # Alternatively, we could just replace the entire read_configuration function
+    # but the sed approach above is more targeted and less intrusive
+
     # Make the toolkit bin/up script executable
     chmod +x ${cfg.dataDir}/toolkit/bin/up
 
@@ -123,6 +131,10 @@ EOF
     set -e
     cd ${cfg.dataDir}/toolkit
     
+    # Debug output to verify the fix
+    echo "Verifying the shared-functions.sh patch..."
+    grep -A 1 "read_configuration" lib/shared-functions.sh
+    
     # Check if we need to clean up existing containers
     if ${pkgs.docker}/bin/docker ps -a | grep -q "sharelatex"; then
       echo "Stopping existing Overleaf containers..."
@@ -145,11 +157,13 @@ EOF
     gnutar
     gzip
     gnused
-    gnused
     findutils
     gawk
     nettools
     procps
+    which
+    gnumake
+    hostname
   ];
 
 in
@@ -229,12 +243,83 @@ in
         Restart = "on-failure";
         RestartSec = "10s";
         WorkingDirectory = "${cfg.dataDir}/toolkit";
-        ExecStart = "${pkgs.bash}/bin/bash -c '${cfg.dataDir}/toolkit/bin/up'";
+        ExecStart = "${startScript}/bin/start-overleaf";
       };
       preStop = ''
         #!${pkgs.bash}/bin/bash
         cd ${cfg.dataDir}/toolkit
         ./bin/docker-compose down || true
+      '';
+      preStart = ''
+        #!${pkgs.bash}/bin/bash
+        echo "Setting up complete overleaf.rc configuration..."
+        
+        # Create toolkit config directory if it doesn't exist
+        mkdir -p ${cfg.dataDir}/toolkit/config
+        
+        # Create/overwrite a complete overleaf.rc file
+        cat > ${cfg.dataDir}/toolkit/config/overleaf.rc <<EOF
+      #### Overleaf RC ####
+      PROJECT_NAME=overleaf
+      # Sharelatex container
+      # Uncomment the OVERLEAF_IMAGE_NAME variable to use a user-defined image.
+      # OVERLEAF_IMAGE_NAME=sharelatex/sharelatex
+      OVERLEAF_DATA_PATH=${cfg.dataDir}/overleaf-data
+      SERVER_PRO=false
+      OVERLEAF_LISTEN_IP=0.0.0.0
+      OVERLEAF_PORT=${cfg.port}
+      # Sibling Containers
+      SIBLING_CONTAINERS_ENABLED=true
+      DOCKER_SOCKET_PATH=/var/run/docker.sock
+      # Mongo configuration
+      MONGO_ENABLED=true
+      MONGO_DATA_PATH=${cfg.dataDir}/overleaf-data/mongo
+      MONGO_IMAGE=mongo
+      MONGO_VERSION=6.0
+      # Redis configuration
+      REDIS_ENABLED=true
+      REDIS_DATA_PATH=${cfg.dataDir}/overleaf-data/redis
+      REDIS_IMAGE=redis:6.2
+      REDIS_AOF_PERSISTENCE=true
+      # Git-bridge configuration (Server Pro only)
+      GIT_BRIDGE_ENABLED=false
+      GIT_BRIDGE_DATA_PATH=${cfg.dataDir}/overleaf-data/git-bridge
+      # TLS proxy configuration (optional)
+      # See documentation in doc/tls-proxy.md
+      NGINX_ENABLED=false
+      NGINX_CONFIG_PATH=config/nginx/nginx.conf
+      NGINX_HTTP_PORT=80
+      # Replace these IP addresses with the external IP address of your host
+      NGINX_HTTP_LISTEN_IP=127.0.1.1
+      NGINX_TLS_LISTEN_IP=127.0.1.1
+      TLS_PRIVATE_KEY_PATH=config/nginx/certs/overleaf_key.pem
+      TLS_CERTIFICATE_PATH=config/nginx/certs/overleaf_certificate.pem
+      TLS_PORT=443
+      # In Air-gapped setups, skip pulling images
+      # PULL_BEFORE_UPGRADE=false
+      # SIBLING_CONTAINERS_PULL=false
+      EOF
+        
+        # Create/overwrite a complete variables.env file
+        cat > ${cfg.dataDir}/toolkit/config/variables.env <<EOF
+      #### variables.env ####
+      OVERLEAF_APP_NAME="Our Overleaf Instance"
+
+      ENABLED_LINKED_FILE_TYPES=project_file,project_output_file
+
+      # Enables Thumbnail generation using ImageMagick
+      ENABLE_CONVERSIONS=true
+
+      # Disables email confirmation requirement
+      EMAIL_CONFIRMATION_DISABLED=true
+      EOF
+
+
+        # Create required data directories
+        mkdir -p ${cfg.dataDir}/overleaf-data/mongo
+        mkdir -p ${cfg.dataDir}/overleaf-data/redis
+        
+        echo "Setup completed successfully!"
       '';
     };
 
