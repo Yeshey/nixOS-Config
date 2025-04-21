@@ -17,9 +17,7 @@ in
     ./minecraft/default.nix
     ./openvscodeServer.nix # vscoduium is not well
     ./ngixServer
-    ./mineclone.nix
     ./luanti.nix
-    ./mineclonia/default.nix
     ./kubo.nix
     ./mindustry-server.nix
     ./freeGames.nix
