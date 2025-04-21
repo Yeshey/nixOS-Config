@@ -469,7 +469,7 @@ with lib.hm.gvariant;
         sleep-inactive-ac-timeout = 1500;
         sleep-inactive-ac-type = "nothing";
         sleep-inactive-battery-timeout = 900;
-        sleep-inactive-battery-type = "suspend";
+        sleep-inactive-battery-type = "nothing";
       };
 
       "org/gnome/shell" = {
