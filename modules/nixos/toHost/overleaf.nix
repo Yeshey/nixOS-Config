@@ -94,20 +94,26 @@ let
     cd ${cfg.dataDir}/toolkit
     mkdir -p config
 
-    # Create configuration file
+    # Create configuration file with all required settings
     cat > config/overleaf.rc <<EOF
-SHARELATEX_PORT=${cfg.port}
-SHARELATEX_DATA_PATH=${cfg.dataDir}/overleaf-data
-EOF
+# Main Overleaf configuration
+PROJECT_NAME=overleaf
+OVERLEAF_PORT=${cfg.port}
+OVERLEAF_DATA_PATH=${cfg.dataDir}/overleaf-data
+OVERLEAF_LISTEN_IP=127.0.0.1
 
-    # Create a wrapper for bin/up script that uses the right environment
-    cat > ${cfg.dataDir}/toolkit/bin/up-wrapper <<EOF
-#!${pkgs.bash}/bin/bash
-export PATH="${pkgs.lib.makeBinPath [ pkgs.bash pkgs.coreutils pkgs.docker pkgs.git pkgs.gnugrep pkgs.docker-compose ]}":\$PATH
-cd ${cfg.dataDir}/toolkit
-exec ./bin/up "\$@"
+# MongoDB configuration 
+MONGO_ENABLED=true
+MONGO_IMAGE=mongo
+MONGO_VERSION=6.0
+MONGO_DATA_PATH=${cfg.dataDir}/overleaf-data/mongo
+
+# Redis configuration
+REDIS_ENABLED=true
+REDIS_DATA_PATH=${cfg.dataDir}/overleaf-data/redis
+REDIS_IMAGE=redis:6.2
+REDIS_AOF_PERSISTENCE=true
 EOF
-    chmod +x ${cfg.dataDir}/toolkit/bin/up-wrapper
 
     echo "Setup completed successfully!"
   '';
@@ -116,18 +122,35 @@ EOF
     #!${pkgs.bash}/bin/bash
     set -e
     cd ${cfg.dataDir}/toolkit
-    export PATH="${pkgs.lib.makeBinPath [ pkgs.bash pkgs.coreutils pkgs.docker pkgs.git pkgs.gnugrep pkgs.docker-compose ]}":\$PATH
     
     # Check if we need to clean up existing containers
     if ${pkgs.docker}/bin/docker ps -a | grep -q "sharelatex"; then
       echo "Stopping existing Overleaf containers..."
-      ${pkgs.docker-compose}/bin/docker-compose down || true
+      ./bin/docker-compose down || true
     fi
     
     # Start Overleaf using the toolkit script
     echo "Starting Overleaf..."
-    exec ${cfg.dataDir}/toolkit/bin/up-wrapper
+    exec ./bin/up
   '';
+
+  # Path for binaries needed by the scripts
+  requiredPkgs = with pkgs; [
+    bash
+    coreutils
+    docker
+    docker-compose
+    git
+    gnugrep
+    gnutar
+    gzip
+    gnused
+    gnused
+    findutils
+    gawk
+    nettools
+    procps
+  ];
 
 in
 {
@@ -168,6 +191,8 @@ in
         #!${pkgs.bash}/bin/bash
         mkdir -p ${cfg.dataDir}
         mkdir -p ${cfg.dataDir}/overleaf-data
+        mkdir -p ${cfg.dataDir}/overleaf-data/mongo
+        mkdir -p ${cfg.dataDir}/overleaf-data/redis
       '';
     };
 
@@ -178,14 +203,7 @@ in
       after = [ "docker.service" "overleaf-dir-setup.service" ];
       wantedBy = [ "multi-user.target" ];
       before = [ "overleaf.service" ];
-      path = with pkgs; [ 
-        bash
-        coreutils
-        docker
-        docker-compose
-        git
-        gnugrep
-      ];
+      path = requiredPkgs;
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
@@ -201,36 +219,30 @@ in
       requires = [ "docker.service" ];
       after = [ "docker.service" ] ++ lib.optional cfg.buildImages "overleaf-build.service";
       wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [
-        bash
-        coreutils
-        docker
-        docker-compose
-        git
-        gnugrep
-      ];
+      path = requiredPkgs;
       #environment = {
-      #  PATH = "${pkgs.lib.makeBinPath [ pkgs.bash pkgs.coreutils pkgs.docker pkgs.git pkgs.gnugrep pkgs.docker-compose ]}:$PATH";
+      #  PATH = "${lib.makeBinPath requiredPkgs}:$PATH";
       #};
       serviceConfig = {
         Type = "simple";
         User = "root";
-        Restart = "always";
+        Restart = "on-failure";
+        RestartSec = "10s";
         WorkingDirectory = "${cfg.dataDir}/toolkit";
-        ExecStart = "${startScript}/bin/start-overleaf";
+        ExecStart = "${pkgs.bash}/bin/bash -c '${cfg.dataDir}/toolkit/bin/up'";
       };
       preStop = ''
         #!${pkgs.bash}/bin/bash
         cd ${cfg.dataDir}/toolkit
-        ${pkgs.docker-compose}/bin/docker-compose down || true
+        ./bin/docker-compose down || true
       '';
     };
 
-    # Add docker-compose to the system
+    # Add docker-compose and setup script to the system
     environment.systemPackages = [ 
       setupScript 
       pkgs.docker-compose
-    ];
+    ] ++ requiredPkgs;
 
     # Firewall configuration
     networking.firewall.allowedTCPPorts = [ (lib.toInt cfg.port) ];
