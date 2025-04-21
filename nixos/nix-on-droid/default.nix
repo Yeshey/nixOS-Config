@@ -76,7 +76,7 @@
 
   # Set up nix for flakes
   nix.extraOptions = ''
-    experimental-features = nix-command flakes
+    experimental-features = nix-command flakes pipe-operators
   ''; # allowUnsupportedSystem = true :(
 
   # Set the default user shell to Zsh

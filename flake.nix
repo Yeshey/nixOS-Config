@@ -3,7 +3,7 @@
   description = "Hyrule";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/release-24.11";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
     home-manager = {
@@ -89,7 +89,7 @@
     };
 
     box64-binfmt = {
-      inputs.nixpkgs.follows = "nixpkgs";
+      # inputs.nixpkgs.follows = "nixpkgs";
       url = "github:Yeshey/box64-binfmt/main";
       #type = "path";
       #path = "/home/yeshey/PersonalFiles/2025/Projects/box64-binfmt/";

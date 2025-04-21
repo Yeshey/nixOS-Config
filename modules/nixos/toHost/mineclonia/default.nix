@@ -48,7 +48,7 @@ in
     services.mineclonia-server = {
       test2 = {
         enable = true;
-        port = port;
+        port = 30000;
         openFirewall = true;
         config = {
           # all default options: https://github.com/minetest/minetest/blob/master/minetest.conf.example
@@ -69,7 +69,7 @@ in
       };
       test3 = {
         enable = true;
-        port = 30002;
+        port = 30001;
         openFirewall = true;
         config = {
           # all default options: https://github.com/minetest/minetest/blob/master/minetest.conf.example
