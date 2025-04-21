@@ -56,6 +56,7 @@ in
       enable = true;
       eula = true;
       openFirewall = true;
+      # this server is at /srv/minecraft/pixelmon
       servers.pixelmon = {
         # options specific for pixelmon?
         jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:G1MixedGCLiveThresholdPercent=50 -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:+PerfDisableSharedMem";

@@ -14,7 +14,6 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./backups.nix
     #inputs.learnWithT.nixosModules.default
     inputs.box64-binfmt.nixosModules.default
   ];
@@ -87,6 +86,24 @@
     agenix = {
       enable = true;
       sshKeys.enable = true;
+    };
+
+    borgFolderBackups.jobs = {
+      anarchyMineclone2Server = {
+        repo = "/home/yeshey/PersonalFiles/Servers/luanti/anarchyMineclone2Borgbackup";
+        paths = [ "/var/lib/luanti-anarchyMineclone2/world" ];
+        user = "yeshey";  # This can be omitted if using mySystem.user default
+      };
+      anarchyMinecloniaServer = {
+        repo = "/home/yeshey/PersonalFiles/Servers/luanti/anarchyMinecloniaBorgbackup";
+        paths = [ "/var/lib/luanti-anarchyMineclonia/world" ];
+        user = "yeshey";  # This can be omitted if using mySystem.user default
+      };
+      pixelmonMinecraftServer = {
+        repo = "/home/yeshey/PersonalFiles/Servers/minecraft/pixelmonMinecraftBorgbackup";
+        paths = [ "/srv/minecraft/pixelmon/world" ];
+        user = "yeshey";  # This can be omitted if using mySystem.user default
+      };
     };
   };
 
