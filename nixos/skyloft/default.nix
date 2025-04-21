@@ -137,8 +137,6 @@
     minecraft.enable = true;
     openvscodeServer.enable = true;
     ngixServer.enable = true;
-    mineclone.enable = false;
-    mineclonia.enable = false;
     luanti.enable = true;
     kubo.enable = true;
     mindustry-server.enable = false;
