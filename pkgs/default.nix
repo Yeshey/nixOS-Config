@@ -13,8 +13,6 @@ rec {
 
   coreutils-with-safe-rm = callPackage ./coreutils-with-safe-rm.nix { };
 
-  my-webots = callPackage ./webots.nix { };
-
   muvm = callPackage ./muvm.nix { };
 
   # https://github.com/NixOS/nixpkgs/blob/master/pkgs/top-level/all-packages.nix
