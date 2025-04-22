@@ -220,12 +220,13 @@ in
       '';
     in
     {
-      syncthingIgnorePatterns.text = ''
-        # MinecraftPrismLauncher
-        ${ignorePattern "/home/yeshey/.local/share/PrismLauncher/instances" "
-          *
-        "}
-      '';
+      # Add ignore patters just for surface here:
+      # syncthingIgnorePatterns.text = ''
+      #   # MinecraftPrismLauncherMainInstance
+      #   ${ignorePattern "/home/yeshey/.local/share/PrismLauncher/instances/MainInstance/.minecraft" "
+      #     // *
+      #   "}
+      # '';
     };
 
   #boot.kernelModules = [
