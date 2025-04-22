@@ -49,6 +49,13 @@ Host oracle
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
 
+Host oracleroot
+  HostName 143.47.53.175
+  User root
+  IdentityFile ~/.ssh/temp
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+
 # Second hop: Connect from remote server to the Lenovo PC
 Host hyrulecastle
   HostName localhost
