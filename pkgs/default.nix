@@ -7,8 +7,6 @@
 with pkgs;
 
 rec {
-  wallpapers = callPackage ./wallpapers { };
-
   myOnedriver = callPackage ./onedriver-his.nix { };  
 
   coreutils-with-safe-rm = callPackage ./coreutils-with-safe-rm.nix { };

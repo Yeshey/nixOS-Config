@@ -4,7 +4,10 @@
   nvimPlugins = inputs.neovim-plugins.overlays.default;
   nur = inputs.nurpkgs.overlays.default; # nur packages available at pkgs.nur
   x86pkgs = inputs.box64-binfmt.overlays.default;
-
+  
+  my-wallpapers = final: _prev: {
+    wallpapers = import ./wallpapers { pkgs = final; };
+  };
 
   # This one brings our custom packages from the 'pkgs' directory
   additions = final: _prev: import ../pkgs { pkgs = final; };
