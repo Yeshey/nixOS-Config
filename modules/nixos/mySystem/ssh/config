@@ -59,6 +59,16 @@ Host hyrulecastle
   UserKnownHostsFile /dev/null
   ProxyJump oracle
 
+# Second hop: Connect from remote server to the Lenovo PC with root
+Host hyrulecastleroot
+  HostName localhost
+  Port 2232
+  User root
+  IdentityFile ~/.ssh/temp
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+  ProxyJump oracle
+
 # Second hop: Connect from remote server to the surface Pro
 Host kakariko
   HostName localhost
@@ -68,5 +78,16 @@ Host kakariko
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
   ProxyJump oracle
+
+# Second hop: Connect from remote server to the surface Pro
+Host kakarikoroot
+  HostName localhost
+  Port 2233
+  User root
+  IdentityFile ~/.ssh/temp
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+  ProxyJump oracle
+
 # You can bind a port from the target PC to the local PC with for example:
 # ssh -L 8891:localhost:8891 hyrulecastle
