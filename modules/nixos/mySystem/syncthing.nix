@@ -95,8 +95,8 @@ let
       devices = lib.mapAttrsToList (name: value: name) devices;
       versioning = myVersioning;
     };
-    "MinecraftPrismLauncher" = {
-      path = "/home/${config.mySystem.user}/.local/share/PrismLauncher/instances";
+    "MinecraftPrismLauncherMainInstance" = {
+      path = "/home/${config.mySystem.user}/.local/share/PrismLauncher/instances/MainInstance/.minecraft";
       devices = lib.mapAttrsToList (name: value: name) devices;
       versioning = myVersioning;
     };
@@ -223,6 +223,16 @@ in
             !/.zsh_history
             !/.bash_history
             !/.python_history
+            // Ignore everything else:
+            *
+          "}
+
+          # MinecraftPrismLauncherMainInstance
+          ${ignorePattern "MinecraftPrismLauncherMainInstance" "
+            !/saves
+            !/mods
+            !/shaderpacks
+            !/resourcepacks
             // Ignore everything else:
             *
           "}
