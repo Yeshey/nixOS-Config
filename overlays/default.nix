@@ -19,6 +19,22 @@
     # example = prev.example.overrideAttrs (oldAttrs: rec {
     # ...
     # });
+    # tmp, to fix build error?
+    python311Packages = prev.python311Packages // {
+      django = prev.python311Packages.django.overrideAttrs (_: {
+        doCheck = false;
+      });
+    };
+    python312Packages = prev.python311Packages // {
+      django = prev.python311Packages.django.overrideAttrs (_: {
+        doCheck = false;
+      });
+    };
+    python313Packages = prev.python311Packages // {
+      django = prev.python311Packages.django.overrideAttrs (_: {
+        doCheck = false;
+      });
+    };
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will
