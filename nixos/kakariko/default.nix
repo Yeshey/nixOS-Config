@@ -182,6 +182,8 @@ in
     searx.enable = false;
   };
 
+  boot.kernelParams = [ "usbcore.autosuspend=-1" ]; # lets see if this fixes connect&disconnect sound bug
+
   learnWithT = {
     development.openPorts.enable = true;
     appwrite = {
