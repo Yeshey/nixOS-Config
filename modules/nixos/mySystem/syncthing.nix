@@ -239,6 +239,7 @@ in
             !/minecraft/shaderpacks
             !/minecraft/resourcepacks
 
+            // Don't ignore top level files for prism launcher to find the instance
             !/*.*
             
             // Ignore everything else:
