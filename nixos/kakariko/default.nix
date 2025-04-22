@@ -144,7 +144,7 @@ in
     impermanence.enable = false;
 
     speedtest-tracker = {
-      enable = true;
+      enable = false;
       # scheduele = "*/10 * * * *"; # Runs every 10 minutes, default is every hour
     };
 
@@ -182,6 +182,8 @@ in
     searx.enable = false;
   };
 
+  boot.kernelParams = [ "usbcore.autosuspend=-1" ]; # lets see if this fixes connect&disconnect sound bug
+
   learnWithT = {
     development.openPorts.enable = true;
     appwrite = {
@@ -218,12 +220,13 @@ in
       '';
     in
     {
-      syncthingIgnorePatterns.text = ''
-        # MinecraftPrismLauncher
-        ${ignorePattern "/home/yeshey/.local/share/PrismLauncher/instances" "
-          *
-        "}
-      '';
+      # Add ignore patters just for surface here:
+      # syncthingIgnorePatterns.text = ''
+      #   # MinecraftPrismLauncherMainInstance
+      #   ${ignorePattern "/home/yeshey/.local/share/PrismLauncher/instances/MainInstance/.minecraft" "
+      #     // *
+      #   "}
+      # '';
     };
 
   #boot.kernelModules = [
