@@ -149,23 +149,28 @@ in
 
   echo "Trying to upgrade (almost) all flake inputs"
   nix flake update --flake /tmp/upgradeOnShutdown \
-                  nixpkgs \
-                  nixpkgs-unstable \
-                  home-manager \
-                  neovim-plugins \
-                  stylix \
-                  plasma-manager \
-                  nurpkgs \
-                  hyprland \
-                  hyprland-plugins \
-                  hyprland-contrib \
-                  nixos-nvidia-vgpu \
-                  deploy-rs \
-                  agenix \
-                  nix-on-droid \
-                  nixos-generators \
-                  learnWithT \
-                  impermanence
+    nixpkgs \
+    nixpkgs-unstable \
+    home-manager \
+    neovim-plugins \
+    stylix \
+    plasma-manager \
+    nurpkgs \
+    hyprland \
+    hyprland-plugins \
+    hyprland-contrib \
+    nixos-nvidia-vgpu \
+    fastapi-dls-nixos \
+    learnWithT \
+    impermanence \
+    deploy-rs \
+    agenix \
+    nixos-generators \
+    nix-on-droid \
+    box64-binfmt \
+    nix-luanti \
+    nix-minecraft \
+    nix-snapd
 
   ${nixos-rebuild} ${operation} --flake /tmp/upgradeOnShutdown#${cfg.host} || 
     (
