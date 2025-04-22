@@ -85,11 +85,11 @@ else
     fi
 fi
 '';
-      update-with-remote-off = pkgs.writeShellScriptBin "update-with-remote-off"
-''
+update-with-remote-off = pkgs.writeShellScriptBin "update-with-remote-off" ''
 export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
-echo "This will update the local system with the remote computer with the given IP and then power off both the remote and local machines. \n Run with Example: 'sudo update-with-remote-off 192.168.1.109'"
+echo "This will update the local system with the remote computer and then power off both machines."
+echo "Usage: sudo update-with-remote-off user@192.168.1.109"
 
 if [[ $EUID -ne 0 ]]; then
    echo "This script must be run with sudo. Please run it again as: sudo $0"
@@ -97,18 +97,29 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 if [ -z "$1" ]; then
-    echo "No IP given! Please provide an IP address."
+    echo "No remote address given! Please provide a user@ip address."
 else
-    REMOTE_IP=$1
+    REMOTE_ADDR=$1
 
-    # Ask for password upfront
-    # sudo -v
+    # Split user@ip if provided
+    if [[ "$REMOTE_ADDR" == *"@"* ]]; then
+        REMOTE_USER=''${REMOTE_ADDR%%@*}
+        REMOTE_IP=''${REMOTE_ADDR##*@}
+    else
+        REMOTE_USER="root"
+        REMOTE_IP="$REMOTE_ADDR"
+    fi
 
-    if nixos-rebuild boot --flake "${cfg.zsh.falkeLocation}#${config.mySystem.host}" --build-host root@"''${REMOTE_IP}" --verbose --option eval-cache false; then
+    if nixos-rebuild boot --flake "${cfg.zsh.falkeLocation}#${config.mySystem.host}" \
+        --build-host "$REMOTE_USER@$REMOTE_IP" \
+        --verbose \
+        --option eval-cache false; then
+        
         echo "NixOS update successful."
 
-        # Power off the remote machine
-        ssh -o StrictHostKeyChecking=no root@"''${REMOTE_IP}" "sudo poweroff" && echo "Remote machine powered off."
+        # Power off the remote machine using sudo
+        ssh -o StrictHostKeyChecking=no "$REMOTE_USER@$REMOTE_IP" "sudo poweroff" && \
+            echo "Remote machine ($REMOTE_ADDR) powered off."
 
         # Power off the local machine
         poweroff && echo "Local machine powered off."
