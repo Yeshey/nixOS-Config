@@ -240,7 +240,8 @@ in
             !/minecraft/resourcepacks
 
             // Don't ignore top level files for prism launcher to find the instance
-            !/*.*
+            !/*.json
+            !/*.cfg
             
             // Ignore everything else:
             *
