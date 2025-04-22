@@ -96,7 +96,7 @@ let
       versioning = myVersioning;
     };
     "MinecraftPrismLauncherMainInstance" = {
-      path = "/home/${config.mySystem.user}/.local/share/PrismLauncher/instances/MainInstance/.minecraft";
+      path = "/home/${config.mySystem.user}/.local/share/PrismLauncher/instances/MainInstance";
       devices = lib.mapAttrsToList (name: value: name) devices;
       versioning = myVersioning;
     };
@@ -229,10 +229,18 @@ in
 
           # MinecraftPrismLauncherMainInstance
           ${ignorePattern "MinecraftPrismLauncherMainInstance" "
-            !/saves
-            !/mods
-            !/shaderpacks
-            !/resourcepacks
+            !/.minecraft/saves
+            !/.minecraft/mods
+            !/.minecraft/shaderpacks
+            !/.minecraft/resourcepacks
+
+            !/minecraft/saves
+            !/minecraft/mods
+            !/minecraft/shaderpacks
+            !/minecraft/resourcepacks
+
+            !/*.*
+            
             // Ignore everything else:
             *
           "}
