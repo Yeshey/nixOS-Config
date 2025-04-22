@@ -144,7 +144,7 @@ in
     impermanence.enable = false;
 
     speedtest-tracker = {
-      enable = true;
+      enable = false;
       # scheduele = "*/10 * * * *"; # Runs every 10 minutes, default is every hour
     };
 
