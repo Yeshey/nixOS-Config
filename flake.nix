@@ -265,7 +265,7 @@
 
     deploy.nodes = {
       hyrulecastle = {
-        hostname = "192.168.1.109";
+        hostname = "hyrulecastle";
         profiles.system = {
           path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.hyrulecastle;
           sshUser = "yeshey";
@@ -276,7 +276,7 @@
         };
       };
       kakariko = {
-        hostname = "kakariko.lan";
+        hostname = "kakariko";
         profiles.system = {
           path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.kakariko;
           sshUser = "yeshey";
@@ -287,7 +287,7 @@
         };
       };
       skyloft = {
-        hostname = "143.47.53.175";
+        hostname = "oracle";
         profiles.system = {
           path = deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.skyloft;
           sshUser = "yeshey";
