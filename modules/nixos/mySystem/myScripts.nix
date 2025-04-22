@@ -36,8 +36,7 @@ else
     fi
 fi
 '';
-      upgrade-with-remote-off = pkgs.writeShellScriptBin "upgrade-with-remote-off"
-''
+    upgrade-with-remote-off = pkgs.writeShellScriptBin "upgrade-with-remote-off" ''
 export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
 
 if [[ $EUID -ne 0 ]]; then
@@ -45,36 +44,53 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-echo "This will upgrade the local system with the remote computer with the given IP and then power off both the remote and local machines. \n Run with Example: 'sudo upgrade-with-remote-off 192.168.1.109'"
+echo "This will upgrade the local system with the remote computer with the given IP and then power off both the remote and local machines. \n Run with Example: 'sudo upgrade-with-remote-off user@192.168.1.109"
 
 if [ -z "$1" ]; then
-    echo "No IP given! Please provide an IP address."
+    echo "No remote address given! Please provide a user@ip address."
 else
-    REMOTE_IP=$1
+    REMOTE_ADDR=$1
+
+    # Split user@ip if provided
+    if [[ "$REMOTE_ADDR" == *"@"* ]]; then
+        REMOTE_USER=''${REMOTE_ADDR%%@*}
+        REMOTE_IP=''${REMOTE_ADDR##*@}
+    else
+        REMOTE_USER="root"
+        REMOTE_IP="$REMOTE_ADDR"
+    fi
 
     trap "cd '${cfg.zsh.falkeLocation}' && git checkout -- flake.lock" INT # if interrupted
 
-    # Ask for password upfront
-    # sudo -v
-
     nix flake update --flake "${cfg.zsh.falkeLocation}"
 
-    if nixos-rebuild boot --flake "${cfg.zsh.falkeLocation}#${config.mySystem.host}" --build-host root@"''${REMOTE_IP}" --verbose --option eval-cache false; then
+    if nixos-rebuild boot --flake "${cfg.zsh.falkeLocation}#${config.mySystem.host}" \
+        --build-host "$REMOTE_USER@$REMOTE_IP" \
+        --verbose \
+        --option eval-cache false; then
+        
         echo "NixOS upgrade successful."
 
         # Power off the remote machine
-        ssh -o StrictHostKeyChecking=no root@"''${REMOTE_IP}" "sudo poweroff" && echo "Remote machine powered off."
+        ssh -o StrictHostKeyChecking=no "$REMOTE_USER@$REMOTE_IP" "sudo poweroff" && \
+            echo "Remote machine ($REMOTE_ADDR) powered off."
 
         # Power off the local machine
         poweroff && echo "Local machine powered off."
     else
         echo "Unable to update all flake inputs, trying to update just nixpkgs"
         cd "${cfg.zsh.falkeLocation}" && git checkout -- flake.lock
-        if nixos-rebuild boot --flake "${cfg.zsh.falkeLocation}#${config.mySystem.host}" --build-host root@"''${REMOTE_IP}" --verbose --option eval-cache false --update-input nixpkgs; then
+        if nixos-rebuild boot --flake "${cfg.zsh.falkeLocation}#${config.mySystem.host}" \
+            --build-host "$REMOTE_USER@$REMOTE_IP" \
+            --verbose \
+            --option eval-cache false \
+            --update-input nixpkgs; then
+            
             echo "NixOS upgrade with nixpkgs update successful."
 
             # Power off the remote machine
-            ssh  -o StrictHostKeyChecking=noroot@"''${REMOTE_IP}" "sudo poweroff" && echo "Remote machine powered off."
+            ssh -o StrictHostKeyChecking=no "$REMOTE_USER@$REMOTE_IP" "sudo poweroff" && \
+                echo "Remote machine ($REMOTE_ADDR) powered off."
 
             # Power off the local machine
             poweroff && echo "Local machine powered off."
