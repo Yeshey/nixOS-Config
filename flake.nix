@@ -96,11 +96,6 @@
       #path = "/home/yeshey/PersonalFiles/2025/Projects/box64-binfmt/";
     };
 
-    nix-luanti = {
-      #inputs.nixpkgs.follows = "nixpkgs-unstable";
-      url = "github:lomenzel/nix-luanti";
-    };
-
     /*
     wolf = {
       #url = "github:games-on-whales/wolf/dev-nix";
@@ -123,11 +118,6 @@
       # Optional but recommended to limit the size of your system closure.
       inputs.nixpkgs.follows = "nixpkgs";
     }; */
-    nix-minecraft = {
-      #url = "github:Infinidoge/nix-minecraft";
-      url = "github:Faeranne/nix-minecraft"; # has forge support
-      inputs.nixpkgs.follows = "nixpkgs-unstable";
-    };
 
     nix-snapd = {
       url = "github:nix-community/nix-snapd";
@@ -158,8 +148,6 @@
     #wolf,
     # lanzaboote,
     nix-snapd,
-    nix-minecraft,  
-    nix-luanti,
     ...
   }@inputs:
   let

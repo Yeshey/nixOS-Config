@@ -14,10 +14,8 @@ in
   imports = [
     ./dontStarveTogetherServer.nix
     ./nextcloud.nix # TODO not working right boy nixos-rebuild build-vm --flake ~/.setup#skyloft not working
-    ./minecraft/default.nix
     ./openvscodeServer.nix # vscoduium is not well
     ./ngixServer
-    ./luanti.nix
     ./kubo.nix
     ./mindustry-server.nix
     ./freeGames.nix
