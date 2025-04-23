@@ -50,6 +50,17 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-minecraft = {
+      #url = "github:Infinidoge/nix-minecraft";
+      url = "github:Faeranne/nix-minecraft"; # has forge support
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
+
+    nix-luanti = {
+      #inputs.nixpkgs.follows = "nixpkgs-unstable";
+      url = "github:lomenzel/nix-luanti";
+    };
+
     #nixos-nvidia-vgpu = { # sudo nixos-rebuild --flake ~/.setup#laptop switch --update-input nixos-nvidia-vgpu --impure
     #  type = "path";
     #  path = "/mnt/DataDisk/PersonalFiles/2023/Projects/Programming/nixos-nvidia-vgpu_nixOS/";
@@ -148,6 +159,8 @@
     #wolf,
     # lanzaboote,
     nix-snapd,
+    nix-minecraft,  
+    nix-luanti,
     ...
   }@inputs:
   let
