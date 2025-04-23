@@ -3,7 +3,7 @@
   description = "Hyrule";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/release-24.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     #nixpkgs.url = "github:NixOS/nixpkgs/c16961fda203155a314b0c75c13961c29e9ea7b0";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
@@ -48,6 +48,17 @@
       # use nixpkgs provided by system to save some space
       # do not use this in case of problems
       inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    nix-luanti = {
+      #inputs.nixpkgs.follows = "nixpkgs-unstable";
+      url = "github:lomenzel/nix-luanti";
+    };
+
+    nix-minecraft = {
+      #url = "github:Infinidoge/nix-minecraft";
+      url = "github:Faeranne/nix-minecraft"; # has forge support
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
     #nixos-nvidia-vgpu = { # sudo nixos-rebuild --flake ~/.setup#laptop switch --update-input nixos-nvidia-vgpu --impure
@@ -148,6 +159,8 @@
     #wolf,
     # lanzaboote,
     nix-snapd,
+    nix-minecraft,  
+    nix-luanti,
     ...
   }@inputs:
   let
