@@ -24,6 +24,8 @@ in
     ./ollama.nix
     ./openhands.nix
     ./overleaf.nix
+    ./minecraft/default.nix
+    ./luanti.nix
   ];
 
   options.toHost = with lib; {
