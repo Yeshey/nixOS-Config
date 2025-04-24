@@ -332,15 +332,15 @@ in
         hostName = lib.mkOverride 1010 "nixos-${cfg.host}";
       };
       
-      #networking.useNetworkd = true;
+      # networking.useNetworkd = true;
       # networking.firewall.enable = false;
 
       nixpkgs.config = {
         # allowUnsupportedSystem = true;
-        #    allowUnfree = true;
+        # allowUnfree = true;
         # TODO remove this below 
         permittedInsecurePackages = [ # for package openvscode-server
-          
+          "freeimage-unstable-2021-11-01"
         ];
       };
 

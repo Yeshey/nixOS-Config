@@ -162,7 +162,7 @@
       enable = true; 
       # acceleration = "cuda"; #or 'rocm' # this issue https://github.com/NixOS/nixpkgs/issues/321920
     };
-    overleaf.enable = true; # fiasco
+    overleaf.enable = true;
   };
 
   boot.binfmt.emulatedSystems = ["i686-linux" "x86_64-linux" "i386-linux" "i486-linux" "i586-linux" "i686-linux"];
@@ -178,10 +178,7 @@
   nixpkgs.config = {
     allowUnsupportedSystem = true;
     allowBroken = true;
-    #    allowUnfree = true;
-    permittedInsecurePackages = [
-      #"python3.12-chromadb-0.5.20" # ollama
-    ];
+    # permittedInsecurePackages # cant be in multiple files. Set it in mySystem
   };
 
   # Bootloader.

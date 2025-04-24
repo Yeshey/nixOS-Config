@@ -130,14 +130,5 @@ in
       })
     ];
 
-    nixpkgs.config = {
-      #allowUnsupportedSystem = true;
-      #allowBroken = true;
-      #    allowUnfree = true;
-      #permittedInsecurePackages = [ # for package openvscode-server
-      #  "python3.12-chromadb-0.5.20"
-      #];
-    };
-
   };
 }

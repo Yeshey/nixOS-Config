@@ -182,6 +182,7 @@ in
       acceleration = "cuda"; #or 'rocm' # this issue https://github.com/NixOS/nixpkgs/issues/321920
     };
     openhands.enable = false;
+    overleaf.enable = false;
   };
 
   learnWithT = {
@@ -206,15 +207,6 @@ in
       #libvirtUsers = [ "yeshey" ];
     };
     vgpu.enable = false;
-  };
-
-  nixpkgs.config = {
-    # allowUnsupportedSystem = true;
-    #    allowUnfree = true;
-    # TODO remove this below 
-    #permittedInsecurePackages = [ # for package openvscode-server
-    #  "nodejs-16.20.2"
-    #];
   };
 
   # nix.package = lib.mkForce pkgs.nixVersions.latest; # needed for clean to work without illigal character error?
@@ -293,6 +285,7 @@ in
   };
 
   environment.systemPackages = with pkgs; [ 
+    webots
     #jetbrains.idea-community-bin
     #jetbrains.pycharm-community-bin
     #jetbrains-toolbox

@@ -159,8 +159,8 @@ ENABLE_CONVERSIONS=true
 EMAIL_CONFIRMATION_DISABLED=true
 
 # Allow accessing via IP address
-SITE_URL=http://127.0.0.1:8093
-BASE_URL=http://127.0.0.1:8093
+SITE_URL=http://127.0.0.1:${cfg.port}
+BASE_URL=http://127.0.0.1:${cfg.port}
 # Disable strict host matching if needed
 RESTRICT_INVITES_TO_EXISTING_ACCOUNTS=false
 
