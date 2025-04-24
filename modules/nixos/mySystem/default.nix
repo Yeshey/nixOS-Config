@@ -340,7 +340,7 @@ in
         # allowUnfree = true;
         # TODO remove this below 
         permittedInsecurePackages = [ # for package openvscode-server
-          "freeimage-unstable-2021-11-01"
+          #"freeimage-unstable-2021-11-01"
         ];
       };
 
