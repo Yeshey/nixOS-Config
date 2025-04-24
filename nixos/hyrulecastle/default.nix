@@ -285,7 +285,6 @@ in
   };
 
   environment.systemPackages = with pkgs; [ 
-    webots
     #jetbrains.idea-community-bin
     #jetbrains.pycharm-community-bin
     #jetbrains-toolbox

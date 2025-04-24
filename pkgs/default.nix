@@ -8,7 +8,6 @@ with pkgs;
 
 rec {
   # examplepkg = callPackage ./example.nix {};
-  webots = libsForQt5.callPackage ./webots.nix { };
 
   myOnedriver = callPackage ./onedriver-his.nix { };  
 
