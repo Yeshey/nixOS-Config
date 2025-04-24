@@ -28,10 +28,10 @@
       system = final.system;
       config = {
         allowUnfree = true;
-        permittedInsecurePackages = [
+        # permittedInsecurePackages = [
           #"python3.12-chromadb-0.5.20" # ollama
           #"python3.12-vllm-0.6.2"
-        ];
+        # ];
       };
     };
   };
