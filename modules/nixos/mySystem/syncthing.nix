@@ -106,7 +106,7 @@ let
       versioning = myVersioning;
     };
     "Minetest" = {
-      path = "/home/${config.mySystem.user}/.minetest/worlds";
+      path = "/home/${config.mySystem.user}/.minetest";
       devices = lib.mapAttrsToList (name: value: name) devices;
       versioning = myVersioning;
     };
@@ -247,16 +247,31 @@ in
             *
           "}
 
+          # Minetest
+          ${ignorePattern "Minetest" "
+            !/games
+            !/worlds
+            
+            // Ignore everything else:
+            *
+          "}
+
           # Osu-Lazer 
           ${ignorePattern "Osu-Lazer" "
-            // Don't ignore these files...
-            // !/files
-            // !/screenshots
-            // !/collection.db
-            // !/client.realm
+            # 1) Un-ignore the maps directory and all its contents
+            !/files
+            !/files/**
 
-            // Ignore everything else in osu folder
-            // *
+            # 2) Un-ignore screenshots (and all screenshot files)
+            !/screenshots
+            !/screenshots/**
+
+            # 3) Un-ignore your collection database and client realm
+            !/collection.db
+            !/client.realm
+
+            # 4) Ignore everything else
+            *
           "}
 
           # Mindustry
