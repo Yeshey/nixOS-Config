@@ -17,7 +17,7 @@
     ssh.enable = true;
     homeApps = {
       enable = true;
-      general = false;
+      general.enable = false;
       cli = {
         enable = true;
         general.enable = true;
