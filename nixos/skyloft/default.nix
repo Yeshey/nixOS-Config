@@ -109,19 +109,19 @@
 
   # box64-binfmt.enable = true;
 
-  environment.systemPackages = [ 
-    pkgs.file
+#  environment.systemPackages = [ 
+#    pkgs.file
 #    pkgs.x86.steamcmd
 #    pkgs.x86.katawa-shoujo
 #    pkgs.x86.cmatrix
-    pkgs.mangohud
+#    pkgs.mangohud
 #    pkgs.x86.xonotic
 #    pkgs.x86.heroic
 #    pkgs.x86.superTuxKart
 #    pkgs.x86.glmark2
 #    pkgs.x86.vulkan-toolsmjn
 #    pkgs.x86.glxinfo 
-  ];
+#  ];
 
 #  boot.binfmt.emulatedSystems = ["i686-linux" "x86_64-linux"];
 
