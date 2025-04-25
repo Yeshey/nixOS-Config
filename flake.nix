@@ -155,7 +155,7 @@
     fastapi-dls-nixos,
     nixos-generators,
     impermanence,
-    box64-binfmt,
+    #box64-binfmt,
     #wolf,
     # lanzaboote,
     nix-snapd,
