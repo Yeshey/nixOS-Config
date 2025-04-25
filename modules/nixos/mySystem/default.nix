@@ -122,7 +122,6 @@ in
       mySystem.ssh.enable = lib.mkOverride 1010 true;
       mySystem.zsh.enable = lib.mkOverride 1010 true;
       mySystem.hardware.enable = lib.mkOverride 1010 true;
-      mySystem.hardware.thermald.enable = lib.mkOverride 1010 true;
 
       zramSwap.enable = lib.mkOverride 1010 true;
       boot.tmp.cleanOnBoot = lib.mkOverride 1010 true; # delete all files in /tmp during boot.
