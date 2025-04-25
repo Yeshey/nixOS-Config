@@ -152,10 +152,18 @@
       enable = false;
       path = "/home/yeshey/PersonalFiles/Servers/dontstarvetogether/SurvivalServerMadeiraSummer2/DoNotStarveTogetherServer";
     };
-    nextcloud.enable = true;
+    nextcloud = {
+      enable = true;
+      port = 85;
+      hostName = "143.47.53.175:85"; # Or use "localhost" for local access
+    };
     minecraft.enable = true;
     openvscodeServer.enable = true;
-    ngixServer.enable = false;
+    nginxServer = {
+      enable = true;
+      port = 7843;
+      listenAddress = "0.0.0.0";
+    };
     luanti.enable = true;
     kubo.enable = true;
     mindustry-server.enable = false;

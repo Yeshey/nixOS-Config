@@ -15,7 +15,7 @@ in
     ./dontStarveTogetherServer.nix
     ./nextcloud.nix # TODO not working right boy nixos-rebuild build-vm --flake ~/.setup#skyloft not working
     ./openvscodeServer.nix # vscoduium is not well
-    ./ngixServer
+    ./nginxServer
     ./kubo.nix
     ./mindustry-server.nix
     ./freeGames.nix

@@ -173,7 +173,7 @@ in
     #     remote = "oracle";
     #   };
     # };
-    #ngixServer.enable = true;
+    #nginxServer.enable = true;
     #mineclone.enable = true;
     #kubo.enable = true;
     #freeGames.enable = false;

@@ -10,44 +10,50 @@ let
 in
 {
   options.toHost.nextcloud = {
-    enable = (lib.mkEnableOption "nextcloud");
+    enable = lib.mkEnableOption "nextcloud";
+    port = lib.mkOption {
+      type = lib.types.port;
+      default = 85;
+      description = "Port for the Nextcloud server to listen on";
+    };
+    hostName = lib.mkOption {
+      type = lib.types.str;
+      default = "localhost";
+      description = "Hostname for Nextcloud";
+    };
   };
 
   config = lib.mkIf cfg.enable {
-
     # NextCloud
     services.nextcloud = {
       enable = true;
+      # Remove specific version to prevent downgrade issues
       package = pkgs.nextcloud30;
-      hostName = "143.47.53.175";
-      # Enable built-in virtual host management
-      # Takes care of somewhat complicated setup
-      # See here: https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/web-apps/nextcloud.nix#L529
-
-      # enableBrokenCiphersForSSE = false; # TODO remove?
-
-      # Use HTTPS for links
-      # https = true;
-
+      hostName = cfg.hostName;
+      
       # Auto-update Nextcloud Apps
       autoUpdateApps.enable = true;
-      # Set what time makes sense for you
       autoUpdateApps.startAt = "05:00:00";
-
-      config.objectstore.s3.port = 85;
-
-      config.adminpassFile = "${pkgs.writeText "adminpass" "test123"}"; # user: root, pass: test123
+      
+      # Object store configuration if needed
+      config = {
+        # Only include s3 configuration if you're actually using S3
+        # objectstore.s3.port = cfg.port;
+        adminpassFile = "${pkgs.writeText "adminpass" "test123"}"; # user: root, pass: test123
+      };
     };
 
-    services.nginx.virtualHosts."${config.services.nextcloud.hostName}".listen = [ {
-      addr = "143.47.53.175";
-      port = 85; # NOT an exposed port
-    } ];
+    services.nginx.virtualHosts."${config.services.nextcloud.hostName}" = {
+      listen = [{ 
+        addr = "0.0.0.0";  # Listen on all interfaces instead of specific IP
+        port = cfg.port;
+      }];
+    };
 
-    # networking.firewall.enable = false;
     networking.firewall.allowedTCPPorts = [
-      80
-      443
+      cfg.port
+      80  # Only include if needed
+      443 # Only include if needed
     ];
   };
 }
