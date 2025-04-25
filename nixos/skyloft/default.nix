@@ -15,7 +15,7 @@
   imports = [
     ./hardware-configuration.nix
     #inputs.learnWithT.nixosModules.default
-    inputs.box64-binfmt.nixosModules.default
+    # inputs.box64-binfmt.nixosModules.default
   ];
 
   nixpkgs = {
@@ -107,39 +107,41 @@
     # };
   };
 
-  box64-binfmt.enable = false;
+  # box64-binfmt.enable = true;
 
   environment.systemPackages = [ 
-    # pkgs.file
-    # pkgs.x86.steamcmd
-    # pkgs.x86.katawa-shoujo
-    # pkgs.x86.cmatrix
-    # pkgs.mangohud
-    # pkgs.x86.xonotic
-    # pkgs.x86.heroic
-    # pkgs.x86.superTuxKart
-    # pkgs.x86.glmark2
-    # pkgs.x86.vulkan-tools
-    # pkgs.x86.glxinfo 
+    pkgs.file
+#    pkgs.x86.steamcmd
+#    pkgs.x86.katawa-shoujo
+#    pkgs.x86.cmatrix
+    pkgs.mangohud
+#    pkgs.x86.xonotic
+#    pkgs.x86.heroic
+#    pkgs.x86.superTuxKart
+#    pkgs.x86.glmark2
+#    pkgs.x86.vulkan-toolsmjn
+#    pkgs.x86.glxinfo 
   ];
 
-    nix = {
-      distributedBuilds = true;
-      buildMachines = [{
-        hostName = "hyrulecastle";
-        system = "x86_64-linux";
-        sshUser = "yeshey";
-        # Replace with the path to your SSH private key or use SSH agent
-        sshKey = "/home/yeshey/.ssh/my_identity";
-        maxJobs = 1;
-          supportedFeatures = [ # saw with nix show-config --json | jq -r '.["system-features"].value'
-            "benchmark"
-            "big-parallel"
-            "kvm"
-            "nixos-test"
-           ];
-      }];
-    };
+#  boot.binfmt.emulatedSystems = ["i686-linux" "x86_64-linux"];
+
+  nix = {
+    distributedBuilds = true;
+    buildMachines = [{
+      hostName = "hyrulecastle";
+      system = "x86_64-linux";
+      sshUser = "yeshey";
+      # Replace with the path to your SSH private key or use SSH agent
+      sshKey = "/home/yeshey/.ssh/my_identity";
+      maxJobs = 1;
+        supportedFeatures = [ # saw with nix show-config --json | jq -r '.["system-features"].value'
+          "benchmark"
+          "big-parallel"
+          "kvm"
+          "nixos-test"
+          ];
+    }];
+  };
 
   toHost = {
     # remoteWorkstation = {
@@ -164,8 +166,6 @@
     # };
     # overleaf.enable = true;
   };
-
-  # boot.binfmt.emulatedSystems = ["i686-linux" "x86_64-linux" "i386-linux" "i486-linux" "i586-linux" "i686-linux"];
 
   time.timeZone = "Europe/Madrid";
 
