@@ -17,7 +17,7 @@ in
     ./hardware-configuration.nix
     ./pci-passthrough.nix
     ./vgpu.nix
-    inputs.learnWithT.nixosModules.default
+    # inputs.learnWithT.nixosModules.default
   ];
 
   nixpkgs = {
@@ -185,12 +185,12 @@ in
     overleaf.enable = false;
   };
 
-  learnWithT = {
-    development.openPorts.enable = true;
-    appwrite = {
-      enable = false;
-    };
-  };
+  # learnWithT = {
+  #   development.openPorts.enable = true;
+  #   appwrite = {
+  #     enable = false;
+  #   };
+  # };
 
   mySystemHyruleCastle = {
     # https://gist.github.com/WhittlesJr/a6de35b995e8c14b9093c55ba41b697c
