@@ -20,7 +20,7 @@ in
     enable = (lib.mkEnableOption "openvscodeServer");
     internalPort = lib.mkOption {
       type = lib.types.port;
-      default = 3000;
+      default = 2998;
       description = "Internal port for openvscode-server";
     };
     externalPort = lib.mkOption {
