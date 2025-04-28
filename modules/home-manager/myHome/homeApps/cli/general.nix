@@ -30,7 +30,7 @@ in
       wget
       tree
       btop
-      #file
+      file
       unzip
       #(pkgs.python311.withPackages (python-pkgs: with python-pkgs; [
       #  tensorflow
