@@ -1,5 +1,3 @@
-# my reddit rant on how this works: https://www.reddit.com/r/NixOS/comments/f3twx0/comment/l3rzd5f/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
-
 {
   config,
   lib,
@@ -129,6 +127,22 @@ in
         Unit = "my-nixos-upgrade.service";
       };
     };
+    
+    # Make sure the services we depend on stay alive until my-nixos-upgrade is done
+    systemd.services.autossh-reverseProxy = lib.mkIf (config.systemd.services ? "autossh-reverseProxy") {
+      unitConfig = {
+        # Only stop after my-nixos-upgrade is done
+        StopPropagatedFrom = "my-nixos-upgrade.service";
+      };
+    };
+    
+    systemd.services.sshd = {
+      unitConfig = {
+        # Only stop after my-nixos-upgrade is done
+        StopPropagatedFrom = "my-nixos-upgrade.service";
+      };
+    };
+    
     systemd.services.my-nixos-upgrade = 
     let
       nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
@@ -177,27 +191,20 @@ in
       echo "Upgrading all flake inputs failed, rolling back flake.lock..."
       ${pkgs.git}/bin/git -C /tmp/upgradeOnShutdown checkout -- flake.lock
 
-      echo "Trying to upgrade only nixpkgs, home-manager"
-      ${nixos-rebuild} ${operation} --flake /tmp/upgradeOnShutdown#${cfg.host} --update-input nixpkgs --update-input home-manager || 
+      echo "Trying to upgrade only nixpkgs"
+      ${nixos-rebuild} ${operation} --flake /tmp/upgradeOnShutdown#${cfg.host} --update-input nixpkgs || 
         (
-          echo "Upgrading nixpkgs, home-manager and nixos-hardware inputs failed, rolling back flake.lock..."
+          echo "Upgrading nixpkgs input failed, trying nixpkgs and home-manager..."
           ${pkgs.git}/bin/git -C /tmp/upgradeOnShutdown checkout -- flake.lock
 
-          echo "Trying to upgrade only nixpkgs and home-manager"
+          echo "Trying to upgrade nixpkgs and home-manager"
           ${nixos-rebuild} ${operation} --flake /tmp/upgradeOnShutdown#${cfg.host} --update-input nixpkgs --update-input home-manager || 
             (
-              echo "Upgrading nixpkgs and home-manager inputs failed, rolling back flake.lock..."
+              echo "Errors encountered, no upgrade possible, rolling back flake.lock..."
               ${pkgs.git}/bin/git -C /tmp/upgradeOnShutdown checkout -- flake.lock
-
-              echo "Trying to upgrade only nixpkgs"
-              ${nixos-rebuild} ${operation} --flake /tmp/upgradeOnShutdown#${cfg.host} --update-input nixpkgs || 
-                (
-                  echo "Errors encountered, no upgrade possible, rolling back flake.lock..."
-                  ${pkgs.git}/bin/git -C /tmp/upgradeOnShutdown checkout -- flake.lock
-                  echo "Activating previous config..."
-                  ${nixos-rebuild} ${operation} --flake /tmp/upgradeOnShutdown#${cfg.host}
-                  exit
-                )
+              echo "Activating previous config..."
+              ${nixos-rebuild} ${operation} --flake /tmp/upgradeOnShutdown#${cfg.host}
+              exit
             )
         ) 
     )
@@ -213,6 +220,9 @@ in
       restartIfChanged = false;
       unitConfig.X-StopOnRemoval = false;
 
+      # Make sure we stop before the services we need are killed
+      before = [ "autossh-reverseProxy.service.stop" "sshd.service.stop" ];
+      
       environment = config.nix.envVars // {
         inherit (config.environment.sessionVariables) NIX_PATH;
         HOME = "/root";
@@ -281,7 +291,7 @@ in
         "nss-lookup.target"
         "nix-daemon.service"
         "systemd-user-sessions.service"
-        #"sshd.service"
+        "sshd.service"
         "systemd-oomd.service"
       ];
 
