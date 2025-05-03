@@ -104,6 +104,11 @@
         paths = [ "/srv/minecraft/pixelmon/world" ];
         user = "yeshey";  # This can be omitted if using mySystem.user default
       };
+      zombiesMinecraftServer = {
+        repo = "/home/yeshey/PersonalFiles/Servers/minecraft/zombiesMinecraftBorgbackup";
+        paths = [ "/srv/minecraft/zombies/world" ];
+        user = "yeshey";  # This can be omitted if using mySystem.user default
+      };
     };
   };
 
