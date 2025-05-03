@@ -61,6 +61,10 @@ in
         # options specific for pixelmon?
         jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:G1MixedGCLiveThresholdPercent=50 -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:+PerfDisableSharedMem";
         # connect to terminal with sudo tmux -S /run/minecraft/pixelmon.sock attach
+        # Use this to get the output continuously if it is crashing to see why:
+        # while true; do sudo tmux -S /run/minecraft/zombies.sock capture-pane -p ; sleep 0.2 ; done 
+        # And check the hash of all the mods in current folder with:
+        # find . -type f -name '*.jar' -exec bash -c 'printf "%s  %s\n" "$(nix-hash --type sha256 --flat --sri "$1")" "$1"' _ {} \;
         serverProperties = {
           server-port = 44332;
           server-portv6 = 44333;
@@ -174,7 +178,7 @@ in
       servers.zombies = {
         # options specific for pixelmon?
         jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:G1MixedGCLiveThresholdPercent=50 -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:+PerfDisableSharedMem";
-        # connect to terminal with sudo tmux -S /run/minecraft/pixelmon.sock attach
+        # connect to terminal with sudo tmux -S /run/minecraft/zombies.sock attach
         serverProperties = {
           server-port = 44336;
           server-portv6 = 44337;
@@ -206,9 +210,17 @@ in
                 url = "https://mediafilez.forgecdn.net/files/5293/465/majruszs-difficulty-forge-1.20.1-1.9.10.jar";
                 sha256 = "sha256-Okfe54nkkFDigZ4cFzx/xNgCCoYE5+2a+0AXqUG6hvM=";
               };
+              MajruszsLibrary = pkgs.fetchurl { # requiered by MajruszsProgressiveDifficulty
+                url = "https://mediafilez.forgecdn.net/files/5302/100/majrusz-library-forge-1.20.1-7.0.8.jar";
+                sha256 = "sha256-TVj8LbJjQ9axY9u4+MmOVUrab/+2NLmJbC0nRikJBUg=";
+              };
               ImprovedMobs = pkgs.fetchurl {
                 url = "https://mediafilez.forgecdn.net/files/5950/926/improvedmobs-1.20.1-1.13.2-forge.jar";
                 sha256 = "sha256-JmuKeFkL6s0goLwsmGywcVraIVVOBY98xseH9/yLvy0=";
+              };
+              tenshilib = pkgs.fetchurl { # requiered by improvedmobs
+                url = "https://mediafilez.forgecdn.net/files/5240/455/tenshilib-1.20.1-1.7.6-forge.jar";
+                sha256 = "sha256-otvZ14OC0W72fUEAscs5DUO0s8heqXcOU876fd+ZR9g=";
               };
               MobSunscreen = pkgs.fetchurl {
                 url = "https://mediafilez.forgecdn.net/files/4647/106/mobsunscreen-forge-1.20.1-3.1.1.jar";
@@ -217,6 +229,14 @@ in
               BiomesOPlenty = pkgs.fetchurl {
                 url = "https://mediafilez.forgecdn.net/files/6364/65/BiomesOPlenty-forge-1.20.1-19.0.0.96.jar";
                 sha256 = "sha256-Mw9IJIesMTVVe26JjX4a5TMDIenP1bpj4ToWzy6Ni5g=";
+              };
+              glitchCore = pkgs.fetchurl { # requiered by BiomesOPlenty
+                url = "https://mediafilez.forgecdn.net/files/5787/839/GlitchCore-forge-1.20.1-0.0.1.1.jar";
+                sha256 = "sha256-5CqLUT2gipEMEzyur62fwvzCL9qqLrPiUW6REqWg22E=";
+              };
+              terraBlender = pkgs.fetchurl { # requiered by BiomesOPlenty
+                url = "https://mediafilez.forgecdn.net/files/6290/448/TerraBlender-forge-1.20.1-3.0.1.10.jar";
+                sha256 = "sha256-wQkBb0bKm9rmmXa/CAu/Lo5ZaMtmwKeIRfjKavXbvrE=";
               };
               journeymap = pkgs.fetchurl {
                 url = "https://mediafilez.forgecdn.net/files/5789/363/journeymap-1.20.1-5.10.3-forge.jar";
@@ -230,13 +250,25 @@ in
                 url = "https://mediafilez.forgecdn.net/files/5180/900/configured-forge-1.20.1-2.2.3.jar";
                 sha256 = "sha256-Bdzt3VeCX5ERNckpUE7zILdZU9BefckY26WKBXTlMV8=";
               };
-              TheurgyMagic = pkgs.fetchurl { 
-                url = "https://mediafilez.forgecdn.net/files/6145/150/theurgy-1.20.1-1.23.4.jar";
-                sha256 = "sha256-/Q74jDDlKWkZLbJ6IkkvBuvCT5lC8+jI3wMYTwiPVCE=";
+              GatewaysToEternity = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/5703/251/GatewaysToEternity-1.20.1-4.2.6.jar";
+                sha256 = "sha256-9hAdnxGxrtb5dHO3l7RyAdA9ip3LIpT0vLnV9c2/QT8=";
               };
-              Modonomicon = pkgs.fetchurl { # needed for TheurgyMagic
-                url = "https://mediafilez.forgecdn.net/files/6181/667/modonomicon-1.20.1-forge-1.77.6.jar";
-                sha256 = "sha256-TRs6/2mf9Sa1S7T2v5Y7YzmUsAoPcvQHVfHPEjBtBok=";
+              Placebo = pkgs.fetchurl { # requiered by GatewaysToEternity
+                url = "https://mediafilez.forgecdn.net/files/6274/231/Placebo-1.20.1-8.6.3.jar";
+                sha256 = "sha256-HN+QbPvLteW+LvG7ch95oksBvSrFWcjNv7dpP2JCFXE=";
+              };
+              attributeslibApothicAttributes = pkgs.fetchurl { # requiered by GatewaysToEternity
+                url = "https://mediafilez.forgecdn.net/files/5634/71/ApothicAttributes-1.20.1-1.3.7.jar";
+                sha256 = "sha256-aEh7EcDU4vZ6hfKwS/ZemawVKU8pI/Q5H4PpVCKTGHo=";
+              };
+              ars_nouveau = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/5894/609/ars_nouveau-1.20.1-4.12.6-all.jar";
+                sha256 = "sha256-IypDPd5Jd7IdEYVXAly7P6+5fNy4Eu5ifmUtDYupSiQ=";
+              };
+              curios = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/6418/456/curios-forge-5.14.1%2B1.20.1.jar";
+                sha256 = "sha256-HoF5GaNbN88wUkquxz8MpRMEUvI/Fo+ESFTfKC645R8=";
               };
 
               # Some Server-side and Client-side Performance mods (from https://github.com/TheUsefulLists/UsefulMods/blob/main/Performance/Performance120.md)
@@ -280,6 +312,26 @@ in
               };
             }
           );
+        };
+        # inside config folder, mobsunscreen-common.toml file (NEEDS TO BE rw!!)
+        files."config/mobsunscreen-common.toml" = pkgs.writeTextFile {
+          name = "mobsunscreen-common.toml";
+          text = ''
+[General]
+      #Print all found mob IDS to the console, will cause spam
+      printIDs = false
+      #Protects all mobs from fire
+      protectAllMobs = false
+      #Protects these mods from fire (any mobs with these namespaces)
+      mods = ["iceandfire"]
+      #Protects these mobs from fire (any mobs with these ids (namespace:name))
+      mobs = [
+        "minecraft:zombie",
+        "minecraft:zombie_villager",
+        "minecraft:husk",
+        "minecraft:drowned"
+      ]
+          '';
         };
       }; # End zombies server
 
