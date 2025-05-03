@@ -169,9 +169,120 @@ in
             }
           );
         };
+      }; # End pixelmon server
+      
+      servers.zombies = {
+        # options specific for pixelmon?
+        jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:G1MixedGCLiveThresholdPercent=50 -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:+PerfDisableSharedMem";
+        # connect to terminal with sudo tmux -S /run/minecraft/pixelmon.sock attach
+        serverProperties = {
+          server-port = 44336;
+          server-portv6 = 44337;
+          difficulty = 2;
+          "allow-cheats" = "true";
+          gamemode = 0;
+          max-players = 60;
+          motd = "MINE!!";
+          white-list = false;
+          enable-rcon = true;
+          "rcon.password" = "hunter2";
+          "rcon.port"=44338;
+          "query.port"=44339;
+          "online-mode"=false;
+        };
+        enable = true;
 
+        # Specify the custom minecraft server package
+        #package = pkgs.fabricServers.fabric-1_21_1; #.override { loaderVersion = "0.16.10"; }; # Specific fabric loader version
+        package = pkgs.forgeServers.${serverVersion}.override { # forge for minecraft 1.20.1
+          loaderVersion = forgeVersion;
+          jre_headless = pkgs_graalvm.graalvm-ce;
+        };
 
-      };
+        symlinks = {
+          mods = pkgs.linkFarmFromDrvs "mods" (
+            builtins.attrValues {
+              MajruszsProgressiveDifficulty = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/5293/465/majruszs-difficulty-forge-1.20.1-1.9.10.jar";
+                sha256 = "sha256-Okfe54nkkFDigZ4cFzx/xNgCCoYE5+2a+0AXqUG6hvM=";
+              };
+              ImprovedMobs = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/5950/926/improvedmobs-1.20.1-1.13.2-forge.jar";
+                sha256 = "sha256-JmuKeFkL6s0goLwsmGywcVraIVVOBY98xseH9/yLvy0=";
+              };
+              MobSunscreen = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/4647/106/mobsunscreen-forge-1.20.1-3.1.1.jar";
+                sha256 = "sha256-klldrNOl/M77YYGUUxZQZvl4U3gVot3UtNdMfQxpnJE=";
+              };
+              BiomesOPlenty = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/6364/65/BiomesOPlenty-forge-1.20.1-19.0.0.96.jar";
+                sha256 = "sha256-Mw9IJIesMTVVe26JjX4a5TMDIenP1bpj4ToWzy6Ni5g=";
+              };
+              journeymap = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/5789/363/journeymap-1.20.1-5.10.3-forge.jar";
+                sha256 = "sha256-iyZ5t7SIHgqkMP0kNF6kRt6Rn6+KRb0qcdN8fo/2rh4=";
+              };
+              jei = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/6075/247/jei-1.20.1-forge-15.20.0.106.jar";
+                sha256 = "sha256-49jyxAKPpDE2jUK94luSsiEL3dLh+1mpMtDCzGLdNYc=";
+              };
+              configuredForge = pkgs.fetchurl { # needed for jei (just enough items)
+                url = "https://mediafilez.forgecdn.net/files/5180/900/configured-forge-1.20.1-2.2.3.jar";
+                sha256 = "sha256-Bdzt3VeCX5ERNckpUE7zILdZU9BefckY26WKBXTlMV8=";
+              };
+              TheurgyMagic = pkgs.fetchurl { 
+                url = "https://mediafilez.forgecdn.net/files/6145/150/theurgy-1.20.1-1.23.4.jar";
+                sha256 = "sha256-/Q74jDDlKWkZLbJ6IkkvBuvCT5lC8+jI3wMYTwiPVCE=";
+              };
+              Modonomicon = pkgs.fetchurl { # needed for TheurgyMagic
+                url = "https://mediafilez.forgecdn.net/files/6181/667/modonomicon-1.20.1-forge-1.77.6.jar";
+                sha256 = "sha256-TRs6/2mf9Sa1S7T2v5Y7YzmUsAoPcvQHVfHPEjBtBok=";
+              };
+
+              # Some Server-side and Client-side Performance mods (from https://github.com/TheUsefulLists/UsefulMods/blob/main/Performance/Performance120.md)
+              ferritecore = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/4810/975/ferritecore-6.0.1-forge.jar";
+                sha256 = "sha256-nCyTlqSeeW2ISXdYyqRjfSvLtDPDGOLdnOvP+68PbFQ=";
+              };
+              memoryleakfix = pkgs.fetchurl {
+                url = "https://cdn.modrinth.com/data/NRjRiSSD/versions/3w0IxNtk/memoryleakfix-forge-1.17%2B-1.1.5.jar";
+                sha256 = "sha256-klw9tOHQhaQ8TSvqpO7Bg2fCKryQws6FlLihKf0/KN0=";
+              };
+              modernfix = pkgs.fetchurl {
+                url = "https://cdn.modrinth.com/data/nmDcB62a/versions/5m06ltZw/modernfix-forge-5.21.0%2Bmc1.20.1.jar";
+                sha256 = "sha256-NlhoeI0/xFPyfget/Do/ogSnkb/Rwx7xpsczVTXWAIk=";
+              };
+              krypton = pkgs.fetchurl {
+                url = "https://cdn.modrinth.com/data/fQEb0iXm/versions/jiDwS0W1/krypton-0.2.3.jar";
+                sha256 = "sha256-aa0YECBs4SGBsbCDZA8ETn4lB4HDbJbGVerDYgkFdpg=";
+              };
+              cupboard = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/5470/32/cupboard-1.20.1-2.7.jar";
+                sha256 = "sha256-Y6G26OnP/VPyg/rgT2S41j3Kqpn+Djg7tmTyPsh9OV8=";
+              };
+
+              # Some only Server-side Performance mods (from https://github.com/TheUsefulLists/UsefulMods/blob/main/Performance/Performance120.md)
+              clumps = pkgs.fetchurl {
+                url = "https://media.forgecdn.net/files/4598/426/Clumps-forge-1.20.1-12.0.0.2.jar";
+                sha256 = "sha256-hiEtI3xLZFd8YMfLmXyXH17tk40/YgisZQE9nB+Stz4=";
+              };
+              dynview = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/5345/889/dynview-1.20.1-4.0.jar";
+                sha256 = "sha256-qM+zu6/CgrZkn8sP9YL4gVd8BYTf9quwVpkUSI/F7nw=";
+              };
+              fastasyncworldsave = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/6303/144/fastasyncworldsave-1.20.1-2.4.jar";
+                sha256 = "sha256-617dYM/Di1OVdVwhDWPs+MAXdYD9Diytl96QrKxAJFc=";
+              };
+              smoothchunk = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/6296/598/smoothchunk-1.20.1-4.1.jar";
+                sha256 = "sha256-DuSPe/eAcKfLWFhJL6pv59WEQ6y9l6klR71mTucQ5cE=";
+              };
+            }
+          );
+        };
+      }; # End zombies server
+
     };
   };
 }
