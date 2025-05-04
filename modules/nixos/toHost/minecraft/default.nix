@@ -182,6 +182,7 @@ in
         serverProperties = {
           server-port = 44336;
           server-portv6 = 44337;
+          "level-type" = "lostcities"; # needed to generate lostcities
           difficulty = 2;
           "allow-cheats" = "true";
           gamemode = 0;
@@ -230,6 +231,10 @@ in
                 url = "https://mediafilez.forgecdn.net/files/6364/65/BiomesOPlenty-forge-1.20.1-19.0.0.96.jar";
                 sha256 = "sha256-Mw9IJIesMTVVe26JjX4a5TMDIenP1bpj4ToWzy6Ni5g=";
               };
+              LostCities = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/6174/986/lostcities-1.20-7.3.6.jar";
+                sha256 = "sha256-Az3KcvS7LXa3rij8C/FFNci88r8QZqzBH5GvB2EfYe4=";
+              };
               glitchCore = pkgs.fetchurl { # requiered by BiomesOPlenty
                 url = "https://mediafilez.forgecdn.net/files/5787/839/GlitchCore-forge-1.20.1-0.0.1.1.jar";
                 sha256 = "sha256-5CqLUT2gipEMEzyur62fwvzCL9qqLrPiUW6REqWg22E=";
@@ -270,6 +275,10 @@ in
                 url = "https://mediafilez.forgecdn.net/files/6418/456/curios-forge-5.14.1%2B1.20.1.jar";
                 sha256 = "sha256-HoF5GaNbN88wUkquxz8MpRMEUvI/Fo+ESFTfKC645R8=";
               };
+              graveStone = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/5794/82/gravestone-forge-1.20.1-1.0.24.jar";
+                sha256 = "sha256-9N/JKpvkFHFVgXIp26sNRtX0zmErOCaTtlh0r9qD11g=";
+              };              
 
               # Some Server-side and Client-side Performance mods (from https://github.com/TheUsefulLists/UsefulMods/blob/main/Performance/Performance120.md)
               ferritecore = pkgs.fetchurl {
@@ -291,6 +300,10 @@ in
               cupboard = pkgs.fetchurl {
                 url = "https://mediafilez.forgecdn.net/files/5470/32/cupboard-1.20.1-2.7.jar";
                 sha256 = "sha256-Y6G26OnP/VPyg/rgT2S41j3Kqpn+Djg7tmTyPsh9OV8=";
+              };
+              aquaculture2 = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/6296/111/Aquaculture-1.20.1-2.5.5.jar"; 
+                sha256 = "sha256-gYnQmt3lWM0u+XYn6UgOS2IMP6HeftBk0cIDRiiIQeU=";
               };
 
               # Some only Server-side Performance mods (from https://github.com/TheUsefulLists/UsefulMods/blob/main/Performance/Performance120.md)
@@ -314,27 +327,37 @@ in
           );
         };
         # inside config folder, mobsunscreen-common.toml file (NEEDS TO BE rw!!)
-        files."config/mobsunscreen-common.toml" = pkgs.writeTextFile {
-          name = "mobsunscreen-common.toml";
-          text = ''
-[General]
-      #Print all found mob IDS to the console, will cause spam
-      printIDs = false
-      #Protects all mobs from fire
-      protectAllMobs = false
-      #Protects these mods from fire (any mobs with these namespaces)
-      mods = ["iceandfire"]
-      #Protects these mobs from fire (any mobs with these ids (namespace:name))
-      mobs = [
-        "minecraft:zombie",
-        "minecraft:zombie_villager",
-        "minecraft:husk",
-        "minecraft:drowned"
-      ]
-          '';
-        };
-      }; # End zombies server
+        files = {
+          # make zombies not burn on sunlight
+          "config/mobsunscreen-common.toml" = pkgs.writeTextFile {
+            name = "mobsunscreen-common.toml";
+            text = ''
+  [General]
+        #Print all found mob IDS to the console, will cause spam
+        printIDs = false
+        #Protects all mobs from fire
+        protectAllMobs = false
+        #Protects these mods from fire (any mobs with these namespaces)
+        mods = ["iceandfire"]
+        #Protects these mobs from fire (any mobs with these ids (namespace:name))
+        mobs = [
+          "minecraft:zombie",
+          "minecraft:zombie_villager",
+          "minecraft:husk",
+          "minecraft:drowned"
+        ]
+            '';
+          };
+          # disables all things for skeletons and creepers (make creepers not break blocks)
+          # make difficultity increase 2 times slower
+          # "config/improvedmobs/common.toml" = pkgs.writeTextFile {
+          #   name = "common.toml";
+          #   text = builtins.readFile ./improvedmobs-zombies-common.toml;
+          # };
+        }; # End zombies server
 
+      };
     };
   };
 }
+
