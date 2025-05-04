@@ -14,7 +14,7 @@
         #Then it increases by 1 per mc day till it reaches 30 and then stops.
         #If you want to use negative values use | instead of - as the delimiter.
         #"Difficulty Increase" = ["0.0-0.1", "250.0-0.0"]
-        "Difficulty Increase" = ["0.0-0.05", "250.0-0.0"] # increase difficultity by half as it was before.
+        "Difficulty Increase" = ["-3.0|0.04", "250|0-0.0"] # increase difficultity by 0.04 per mc day, starting at -3.
         #Wether difficulty should only increase with at least one online players or not
         "Ignore Players" = false
         #If true will increase difficulty by the amount of time skipped. Else will only increase difficulty once.
