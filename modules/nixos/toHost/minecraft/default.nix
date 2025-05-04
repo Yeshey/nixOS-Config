@@ -449,6 +449,10 @@ in
                 url = "https://mediafilez.forgecdn.net/files/5794/82/gravestone-forge-1.20.1-1.0.24.jar";
                 sha256 = "sha256-9N/JKpvkFHFVgXIp26sNRtX0zmErOCaTtlh0r9qD11g=";
               };              
+              ProjectE = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/4901/949/ProjectE-1.20.1-PE1.0.1.jar";
+                sha256 = "sha256-9R84flYwfnzaJpFcoMeJdg2F6XqLQLi/oJiL5mNx0Bg=";
+              };
 
               # Some Server-side and Client-side Performance mods (from https://github.com/TheUsefulLists/UsefulMods/blob/main/Performance/Performance120.md)
               ferritecore = pkgs.fetchurl {
@@ -503,16 +507,16 @@ in
             name = "mobsunscreen-common.toml";
             text = builtins.readFile ./mobsunscreen-common.toml;
           };
-          # disables all things for skeletons and creepers (make creepers not break blocks)
-          # make difficultity increase 2 times slower
-          "config/improvedmobs/common.toml" = pkgs.writeTextFile {
-            name = "common.toml";
-            text = builtins.readFile ./improvedmobs-zombies-common.toml;
-          };
           # adds abandoned cities, some config details: has 0.25 ruins, 0.1 vines, 0.005 cities rarity
           "world/serverconfig/lostcities-server.toml" = pkgs.writeTextFile {
             name = "lostcities-server.toml";
             text = builtins.readFile ./lostcities-server.toml;
+          };
+          # disables all things for skeletons and creepers (make creepers not break blocks)
+          # make difficultity increase 2 times slower
+          "config/improvedmobs/common.toml" = pkgs.writeTextFile {
+            name = "common.toml";
+            text = builtins.readFile ./improvedmobs-common.toml;
           };
         };
       }; # End zombies2 server
