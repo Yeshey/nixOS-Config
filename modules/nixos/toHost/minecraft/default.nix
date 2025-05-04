@@ -56,15 +56,17 @@ in
       enable = true;
       eula = true;
       openFirewall = true;
+      # connect to terminal with sudo tmux -S /run/minecraft/pixelmon.sock attach
+      # Use this to get the output continuously if it is crashing to see why:
+      # while true; do sudo tmux -S /run/minecraft/zombies.sock capture-pane -p ; sleep 0.2 ; done 
+      # And check the hash of all the mods in current folder with:
+      # find . -type f -name '*.jar' -exec bash -c 'printf "%s  %s\n" "$(nix-hash --type sha256 --flat --sri "$1")" "$1"' _ {} \;
+      # ro recreate the world, delete just the world folder
+
       # this server is at /srv/minecraft/pixelmon
       servers.pixelmon = {
         # options specific for pixelmon?
         jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=100 -XX:+DisableExplicitGC -XX:TargetSurvivorRatio=90 -XX:G1NewSizePercent=50 -XX:G1MaxNewSizePercent=80 -XX:G1MixedGCLiveThresholdPercent=50 -XX:+ParallelRefProcEnabled -XX:+AlwaysPreTouch -XX:+PerfDisableSharedMem";
-        # connect to terminal with sudo tmux -S /run/minecraft/pixelmon.sock attach
-        # Use this to get the output continuously if it is crashing to see why:
-        # while true; do sudo tmux -S /run/minecraft/zombies.sock capture-pane -p ; sleep 0.2 ; done 
-        # And check the hash of all the mods in current folder with:
-        # find . -type f -name '*.jar' -exec bash -c 'printf "%s  %s\n" "$(nix-hash --type sha256 --flat --sri "$1")" "$1"' _ {} \;
         serverProperties = {
           server-port = 44332;
           server-portv6 = 44333;
@@ -331,22 +333,7 @@ in
           # make zombies not burn on sunlight
           "config/mobsunscreen-common.toml" = pkgs.writeTextFile {
             name = "mobsunscreen-common.toml";
-            text = ''
-  [General]
-        #Print all found mob IDS to the console, will cause spam
-        printIDs = false
-        #Protects all mobs from fire
-        protectAllMobs = false
-        #Protects these mods from fire (any mobs with these namespaces)
-        mods = ["iceandfire"]
-        #Protects these mobs from fire (any mobs with these ids (namespace:name))
-        mobs = [
-          "minecraft:zombie",
-          "minecraft:zombie_villager",
-          "minecraft:husk",
-          "minecraft:drowned"
-        ]
-            '';
+            text = builtins.readFile ./mobsunscreen-common.toml;
           };
           # disables all things for skeletons and creepers (make creepers not break blocks)
           # make difficultity increase 2 times slower
@@ -354,9 +341,9 @@ in
           #   name = "common.toml";
           #   text = builtins.readFile ./improvedmobs-zombies-common.toml;
           # };
-        }; # End zombies server
+        };
+      }; # End zombies server
 
-      };
     };
   };
 }
