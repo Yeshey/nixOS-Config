@@ -515,7 +515,7 @@ in
             text = builtins.readFile ./lostcities-server.toml;
           };
         };
-      }; # End zombies server
+      }; # End zombies2 server
 
     };
   };
