@@ -514,6 +514,7 @@ in
           };
           # disables all things for skeletons and creepers (make creepers not break blocks)
           # make difficultity increase 2 times slower
+          # use /improvedmobs difficulty set -10
           "config/improvedmobs/common.toml" = pkgs.writeTextFile {
             name = "common.toml";
             text = builtins.readFile ./improvedmobs-common.toml;
