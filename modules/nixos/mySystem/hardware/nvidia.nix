@@ -75,7 +75,7 @@ EndSection
 
     # Comment this to use only the nvidia Grpahics card (discrete graphics option in BIOS instead of switchable graphics)
     hardware.nvidia = {
-      open = false;
+      open = true;
       #package = config.boot.kernelPackages.nvidiaPackages.stable;
       modesetting.enable = lib.mkOverride 1010 true;
       # nvidiaPersistenced = true; # It ensures all GPUs stay awake even during headless mode.
@@ -96,5 +96,34 @@ EndSection
         hardware.nvidia.powerManagement.enable = lib.mkForce false;
       };
     }; */
+    
+    hardware.opengl.extraPackages = [
+      pkgs.nvidia-vaapi-driver
+    ];
+
+    environment.variables = {
+      NVD_BACKEND = "direct";
+      LIBVA_DRIVER_NAME = "nvidia";
+
+      MOZ_DISABLE_RDD_SANDBOX = "1"; # for firefox
+
+      # wayland support
+      # Required to run the correct GBM backend for nvidia GPUs on wayland
+      GBM_BACKEND = "nvidia-drm";
+      # Apparently, without this nouveau may attempt to be used instead
+      # (despite it being blacklisted)
+      __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+      # Hardware cursors are currently broken on wlroots
+      WLR_NO_HARDWARE_CURSORS = "1";
+    };
+
+    # Firefox support
+    programs.firefox.preferences = {
+      "media.ffmpeg.vaapi.enabled" = true;
+      "media.rdd-ffmpeg.enabled" = true;
+      "media.av1.enabled" = false; # Won't work on the 2060
+      "gfx.x11-egl.force-enabled" = true;
+      "widget.dmabuf.force-enabled" = true;
+    };
   };
 }
