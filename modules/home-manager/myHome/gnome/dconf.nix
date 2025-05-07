@@ -158,7 +158,7 @@ with lib.hm.gvariant;
           "org-gnome-console"
           "firefox"
           "com-google-androidstudio"
-          "vivaldi-stable"
+          #"vivaldi-stable"
           "discord"
           "gnome-power-panel"
           "code"
@@ -249,9 +249,9 @@ with lib.hm.gvariant;
         application-id = "steam.desktop";
       };
 
-      "org/gnome/desktop/notifications/application/vivaldi-stable" = {
-        application-id = "vivaldi-stable.desktop";
-      };
+      #"org/gnome/desktop/notifications/application/vivaldi-stable" = {
+      #  application-id = "vivaldi-stable.desktop";
+      #};
 
       "org/gnome/desktop/peripherals/touchpad" = {
         click-method = "areas";

@@ -69,7 +69,7 @@ in
         audacity
 
         # Browsers
-        cus_vivaldi
+        # cus_vivaldi
         #vivaldi
         floorp # in about:config set browser.tabs.tabMinWidth to 50 and browser.ctrlTab.sortByRecentlyUsed to true
         brave
