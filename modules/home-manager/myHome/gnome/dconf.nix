@@ -158,7 +158,7 @@ with lib.hm.gvariant;
           "org-gnome-console"
           "firefox"
           "com-google-androidstudio"
-          "vivaldi-stable"
+          #"vivaldi-stable"
           "discord"
           "gnome-power-panel"
           "code"
@@ -249,9 +249,9 @@ with lib.hm.gvariant;
         application-id = "steam.desktop";
       };
 
-      "org/gnome/desktop/notifications/application/vivaldi-stable" = {
-        application-id = "vivaldi-stable.desktop";
-      };
+      #"org/gnome/desktop/notifications/application/vivaldi-stable" = {
+      #  application-id = "vivaldi-stable.desktop";
+      #};
 
       "org/gnome/desktop/peripherals/touchpad" = {
         click-method = "areas";
@@ -485,6 +485,7 @@ with lib.hm.gvariant;
           "clipboard-indicator@tudmotu.com"
           "hibernate-status@dromi"
           "trayIconsReloaded@selfmade.pl"
+          "Vitals@CoreCoding.com"
         ];
         # favorite-apps = [ "org.gnome.Nautilus.desktop" "org.gnome.Console.desktop" "floorp.desktop" ];
         last-selected-power-profile = "power-saver";

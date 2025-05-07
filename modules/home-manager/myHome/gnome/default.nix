@@ -27,6 +27,7 @@ in
       gnomeExtensions.burn-my-windows
       gnomeExtensions.hibernate-status-button
       gnomeExtensions.tray-icons-reloaded
+      gnomeExtensions.vitals
     ];
 
     # fixed Icons missing in gnome in hyrule castle when using stylix (https://discourse.nixos.org/t/icons-missing-in-gnome-applications/49835/6)
