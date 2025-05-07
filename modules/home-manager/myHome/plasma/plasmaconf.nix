@@ -320,7 +320,6 @@ in
         "kded5rc"."Module-device_automounter"."autoload".value = false;
         "kded5rc"."PlasmaBrowserIntegration"."shownCount".value = 4;
         "kdeglobals"."DirSelect Dialog"."DirSelectDialog Size".value = "844,598";
-        "kdeglobals"."General"."BrowserApplication".value = "vivaldi-stable.desktop";
         "kdeglobals"."General"."XftHintStyle".value = "hintslight";
         "kdeglobals"."General"."XftSubPixel".value = "rgb";
         "kdeglobals"."General"."fixed".value = "Hack,10,-1,5,50,0,0,0,0,0";
