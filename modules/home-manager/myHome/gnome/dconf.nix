@@ -485,6 +485,7 @@ with lib.hm.gvariant;
           "clipboard-indicator@tudmotu.com"
           "hibernate-status@dromi"
           "trayIconsReloaded@selfmade.pl"
+          "Vitals@CoreCoding.com"
         ];
         # favorite-apps = [ "org.gnome.Nautilus.desktop" "org.gnome.Console.desktop" "floorp.desktop" ];
         last-selected-power-profile = "power-saver";
