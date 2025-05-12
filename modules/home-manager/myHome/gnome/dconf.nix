@@ -1,6 +1,9 @@
 # Generated via dconf2nix: https://github.com/gvolpe/dconf2nix
 # Generated with: nix-shell -p dconf2nix --command "dconf dump / | dconf2nix -e --verbose > dconf.nix"
 
+# The above command didn't work, had to exclude some parts, this worked:
+# nix shell nixpkgs#dconf nixpkgs#gawk nixpkgs-unstable#dconf2nix --command sh -c 'dconf dump / | gawk "/^\\[(com\\/github\\/flxzt\\/rnote|org\\/gnome\\/portal\\/filechooser\\/@joplinapp-desktop)\\]/ {skip=1; next} /^\\[/ {skip=0} !skip {print}" | dconf2nix -e --verbose > dconf.nix'
+
 # Generated via dconf2nix: https://github.com/gvolpe/dconf2nix
 {
   config,
@@ -519,6 +522,28 @@ with lib.hm.gvariant;
         tv-close-effect = true;
         tv-open-effect = false;
         wisps-open-effect = false;
+      };
+
+      # Vitals metrics display extension configuration
+      "org/gnome/shell/extensions/vitals" = {
+        alphabetize = true;
+        fixed-widths = true;
+        hide-icons = false;
+        hot-sensors = [ "_memory_usage_" "_processor_usage_" "__temperature_avg__" ];
+        icon-style = 0;
+        menu-centered = false;
+        position-in-panel = 0;
+        show-fan = false;
+        show-gpu = false;
+        show-memory = true;
+        show-network = true;
+        show-processor = true;
+        show-storage = true;
+        show-system = true;
+        show-temperature = true;
+        show-voltage = true;
+        update-time = 10;
+        use-higher-precision = false;
       };
 
       "org/gnome/shell/extensions/clipboard-indicator" = {
