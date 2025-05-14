@@ -58,9 +58,9 @@ in
       enable = true;
       package = pkgs.nix;
       extraOptions = ''
-        experimental-features = nix-command flakes pipe-operators
         !include ./extra.conf
       '';
+      experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
       cores = 4;
       max-jobs = 2;
       registry = lib.mapAttrs (_: value: { flake = value; }) inputs;

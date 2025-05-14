@@ -150,11 +150,8 @@ in
           # for compression to work with btrfs (https://github.com/NixOS/nix/issues/3550) ...?
           ''
             preallocate-contents = false 
-          ''
-          + ''
-            experimental-features = nix-command flakes pipe-operators
           '';
-
+        experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
         gc = {
           automatic = lib.mkOverride 1010 true;
           options = lib.mkOverride 1010 "--delete-older-than 14d";
