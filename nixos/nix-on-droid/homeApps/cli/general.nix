@@ -19,7 +19,7 @@ in
     home.packages = with pkgs; [
       busybox
       hyfetch
-      speedtest-cli
+      ookla-speedtest
       # yt-dlp # download youtube videos
       scrcpy # screen cast android phone
       ocrmypdf

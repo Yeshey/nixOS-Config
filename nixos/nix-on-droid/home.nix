@@ -85,7 +85,6 @@
   programs.zsh = {
     shellAliases = {
       update = "nix-on-droid --flake github:Yeshey/nixOS-Config#nix-on-droid switch";
-      speedtest = "speedtest-cli";
       clean = "nix-collect-garbage -d && nix-store --gc && echo 'Displaying stray roots:' && nix-store --gc --print-roots | egrep -v '^(/nix/var|/run/current-system|/run/booted-system|/proc|\{memory|\{censored)'";
     };
 
