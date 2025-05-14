@@ -97,7 +97,7 @@ EndSection
       };
     }; */
     
-    hardware.opengl.extraPackages = [
+    hardware.graphics.extraPackages = [
       pkgs.nvidia-vaapi-driver
     ];
 
