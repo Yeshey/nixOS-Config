@@ -67,7 +67,7 @@ else
     if nixos-rebuild boot --flake "${cfg.zsh.falkeLocation}#${config.mySystem.host}" \
         --build-host "$REMOTE_USER@$REMOTE_IP" \
         --verbose \
-        --option eval-cache false --max-jobs 2; then
+        --option eval-cache false --max-jobs 2 --cores 2; then
         
         echo "NixOS upgrade successful."
 
@@ -83,7 +83,7 @@ else
         if nixos-rebuild boot --flake "${cfg.zsh.falkeLocation}#${config.mySystem.host}" \
             --build-host "$REMOTE_USER@$REMOTE_IP" \
             --verbose \
-            --option eval-cache false --max-jobs 2 \
+            --option eval-cache false --max-jobs 2 --cores 2 \
             --update-input nixpkgs; then
             
             echo "NixOS upgrade with nixpkgs update successful."
@@ -129,7 +129,7 @@ else
     if nixos-rebuild boot --flake "${cfg.zsh.falkeLocation}#${config.mySystem.host}" \
         --build-host "$REMOTE_USER@$REMOTE_IP" \
         --verbose \
-        --option eval-cache false --max-jobs 2; then
+        --option eval-cache false --max-jobs 2 --cores 2; then
         
         echo "NixOS update successful."
 
