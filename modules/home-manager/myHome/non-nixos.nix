@@ -64,7 +64,7 @@ in
       settings = lib.mkMerge [
         {
           cores = 4;
-          max-jobs = 2;
+          max-jobs = 3;
           experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
           nix-path = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
           substituters = map (x: substituters.${x}.url) cfg.nix.substituters;
