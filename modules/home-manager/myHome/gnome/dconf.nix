@@ -529,7 +529,7 @@ with lib.hm.gvariant;
         alphabetize = true;
         fixed-widths = true;
         hide-icons = false;
-        hot-sensors = [ "_memory_usage_" "_processor_usage_" "__temperature_avg__" ];
+        hot-sensors = [ "_memory_usage_" "_memory_swap_usage_" "_processor_usage_" "__temperature_avg__" ];
         icon-style = 0;
         menu-centered = false;
         position-in-panel = 0;
