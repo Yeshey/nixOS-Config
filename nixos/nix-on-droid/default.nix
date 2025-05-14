@@ -75,9 +75,14 @@
   home-manager.config = ./home.nix;
 
   # Set up nix for flakes
-  nix.extraOptions = ''
-    experimental-features = nix-command flakes pipe-operators
-  ''; # allowUnsupportedSystem = true :(
+  nix = {
+    extraOptions = ''
+      experimental-features = nix-command flakes pipe-operators
+    ''; # allowUnsupportedSystem = true :(
+    auto-optimise-store = lib.mkOverride 1010 true;
+    cores = 2;
+    max-jobs = 2;
+  };
 
   # Set the default user shell to Zsh
   user = {

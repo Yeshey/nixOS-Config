@@ -167,6 +167,8 @@ in
             "@wheel"
           ]; # TODO remove (check the original guys config)
           auto-optimise-store = lib.mkOverride 1010 true;
+          cores = 4;
+          max-jobs = 2;
           substituters = map (x: substituters.${x}.url) cfg.nix.substituters;
           trusted-public-keys = map (x: substituters.${x}.key) cfg.nix.substituters;
         };

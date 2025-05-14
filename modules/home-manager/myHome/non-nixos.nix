@@ -61,6 +61,8 @@ in
         experimental-features = nix-command flakes pipe-operators
         !include ./extra.conf
       '';
+      cores = 4;
+      max-jobs = 2;
       registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
       settings = lib.mkMerge [
         {
