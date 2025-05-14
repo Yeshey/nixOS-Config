@@ -52,8 +52,8 @@ in
         source ${./git.zsh}
         source ${builtins.toFile "myAlias.zsh" (builtins.readFile ./myAlias.zsh + ''
           # complex alias that need nix syntax
-          alias update="sudo nixos-rebuild --flake ${cfg.falkeLocation}#${config.mySystem.host} switch --option eval-cache false --max-jobs 2 --cores 2"
-          alias update-re="sudo nixos-rebuild --flake ${cfg.falkeLocation}#${config.mySystem.host} boot --option eval-cache false --max-jobs 2 --cores 2 && reboot"
+          alias update="sudo nixos-rebuild --flake ${cfg.falkeLocation}#${config.mySystem.host} switch --option eval-cache false"
+          alias update-re="sudo nixos-rebuild --flake ${cfg.falkeLocation}#${config.mySystem.host} boot --option eval-cache false && reboot"
         '')}
 
 

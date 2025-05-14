@@ -151,13 +151,13 @@ in
           ''
             preallocate-contents = false 
           '';
-        experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
         gc = {
           automatic = lib.mkOverride 1010 true;
           options = lib.mkOverride 1010 "--delete-older-than 14d";
           dates = lib.mkOverride 1010 "weekly";
         };
         settings = {
+          experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
           trusted-users = [
             "root"
             "${config.mySystem.user}"
