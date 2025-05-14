@@ -76,9 +76,10 @@
 
   # Set up nix for flakes
   nix = {
-    extraOptions = ''
-      experimental-features = nix-command flakes pipe-operators
-    ''; # allowUnsupportedSystem = true :(
+    #extraOptions = ''
+    #  experimental-features = nix-command flakes pipe-operators
+    #''; # allowUnsupportedSystem = true :(
+    experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
     auto-optimise-store = lib.mkOverride 1010 true;
     cores = 2;
     max-jobs = 2;
