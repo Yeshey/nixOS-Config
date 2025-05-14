@@ -32,7 +32,7 @@
   # Simply install just the packages
   environment.packages = with pkgs; [
     busybox #:(
-    speedtest-cli
+    ookla-speedtest
     nettools
     curl
     vim # The Nano editor is installed by default.

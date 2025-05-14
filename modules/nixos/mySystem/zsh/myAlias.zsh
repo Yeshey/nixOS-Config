@@ -22,7 +22,6 @@ alias zshconfig="nano ~/.zshrc";
 #};
 alias re-kde="nix-shell -p killall --command \"kquitapp5 plasmashell || killall plasmashell ; kstart5 plasmashell\""; # Restart gui in KDE
 alias mount="mount|column -t";                      # Pretty mount
-alias speedtest="nix-shell -p python3 -p curl --command \"curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -\"";
 alias temperature="watch \"nix-shell -p lm_sensors --command sensors | grep temp1 | awk '{print $2}' | sed 's/+//'\"";
 alias ping="ping -c 5";                             # Control output of ping
 alias fastping="ping -c 100 -s 1"; 

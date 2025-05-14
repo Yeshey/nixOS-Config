@@ -54,8 +54,8 @@ in
       };
       # bash
       initExtra = ''
-        source ${./kubectl.zsh}
-        source ${./git.zsh}
+        # source ${./kubectl.zsh}
+        # source ${./git.zsh}
         source ${./myAlias.zsh}
 
         bindkey "^[[1;5C" forward-word

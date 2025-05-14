@@ -23,29 +23,28 @@ alias zshconfig="nano ~/.zshrc";
 #};
 alias re-kde="nix-shell -p killall --command \"kquitapp5 plasmashell || killall plasmashell ; kstart5 plasmashell\""; # Restart gui in KDE
 alias mount="mount|column -t";                      # Pretty mount
-alias speedtest="nix-shell -p python3 -p curl --command \"curl -s https://raw.githubusercontent.com/sivel/speedtest-cli/master/speedtest.py | python3 -\"";
 alias temperature="watch \"nix-shell -p lm_sensors --command sensors | grep temp1 | awk '{print $2}' | sed 's/+//'\"";
-alias ping="ping -c 5";                             # Control output of ping
-alias fastping="ping -c 100 -s 1";
-alias ports="netstat -tulanp";                      # Show Open ports
+# alias ping="ping -c 5";                             # Control output of ping
+# alias fastping="ping -c 100 -s 1";
+# alias ports="netstat -tulanp";                      # Show Open ports
 alias grep="grep --color=auto";
-alias egrep="egrep --color=auto";
-alias fgrep="fgrep --color=auto";
-alias diff="colordiff";
-alias dir="dir --color=auto";
-alias vdir="vdir --color=auto";
-alias week="
-    now=$(date '+%V %B %Y');
-    echo \"Week Date:\" $now
-";
+# alias egrep="egrep --color=auto";
+# alias fgrep="fgrep --color=auto";
+# alias diff="colordiff";
+# alias dir="dir --color=auto";
+# alias vdir="vdir --color=auto";
+# alias week="
+#     now=$(date '+%V %B %Y');
+#     echo \"Week Date:\" $now
+# ";
 alias myip="  
     echo \"Your external IP address is:\"
     curl -w '\n' https://ipinfo.io/ip
 ";
-alias chtp=" curl cht.sh/python/\"$1\" ";           # alias to use cht.sh for python help # TODO remove these
-alias chtc=" curl cht.sh/c/\"$1\" ";                # alias to use cht.sh for c help
-alias chtsharp=" curl cht.sh/csharp/\"$1\" ";           # alias to use cht.sh for c# help
-alias cht=" curl cht.sh/\"$1\" ";                   # alias to use cht.sh in general
+# alias chtp=" curl cht.sh/python/\"$1\" ";           # alias to use cht.sh for python help # TODO remove these
+# alias chtc=" curl cht.sh/c/\"$1\" ";                # alias to use cht.sh for c help
+# alias chtsharp=" curl cht.sh/csharp/\"$1\" ";           # alias to use cht.sh for c# help
+# alias cht=" curl cht.sh/\"$1\" ";                   # alias to use cht.sh in general
 
 space() {
     local target_dir=${1:-.}
@@ -64,6 +63,9 @@ gacp() {
     git commit -m "$1"
     git push
 }
+alias gl='git pull'
+alias ga='git add'
+alias gp='git push'
 alias cp="cp -i";                                   # Confirm before overwriting something
 alias rvt="nix-shell -p ffmpeg --command \"bash <(curl -s https://raw.githubusercontent.com/Yeshey/RecursiveVideoTranscoder/main/RecursiveVideoTranscoder.sh)\"";
 alias win10-vm="sh <(curl -s https://raw.githubusercontent.com/Yeshey/nixos-nvidia-vgpu/535.129/guides/run-vm.sh)";
