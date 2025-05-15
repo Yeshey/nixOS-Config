@@ -182,6 +182,13 @@ in
     searx.enable = false;
   };
 
+  nix = {
+    settings = {
+      cores = 4; # settings this per machine
+      max-jobs = 2;
+    };
+  };
+
   boot.kernelParams = [ "usbcore.autosuspend=-1" ]; # lets see if this fixes connect&disconnect sound bug
 
   # learnWithT = {

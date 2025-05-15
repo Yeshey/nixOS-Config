@@ -209,6 +209,13 @@ in
     vgpu.enable = false;
   };
 
+  nix = {
+    settings = {
+      cores = 3; # settings this per machine
+      max-jobs = 4;
+    };
+  };
+
   # nix.package = lib.mkForce pkgs.nixVersions.latest; # needed for clean to work without illigal character error?
 
   # roblox with sober (to not get the VK_ERROR_DEVICE_LOST error)

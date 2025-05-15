@@ -80,7 +80,7 @@
     #''; # allowUnsupportedSystem = true :(
     settings = {
       experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
-      cores = 2;
+      cores = 4;
       max-jobs = 2;
     };
     auto-optimise-store = lib.mkOverride 1010 true;
