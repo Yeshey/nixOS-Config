@@ -185,6 +185,13 @@
     overleaf.enable = true;
   };
 
+  nix = {
+    settings = {
+      cores = 2; # settings this per machine
+      max-jobs = 2;
+    };
+  };
+
   time.timeZone = "Europe/Madrid";
 
   system.autoUpgrade.allowReboot = true;

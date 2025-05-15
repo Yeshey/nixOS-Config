@@ -63,8 +63,8 @@ in
       registry = lib.mapAttrs (_: value: { flake = value; }) inputs;
       settings = lib.mkMerge [
         {
-          cores = 4;
-          max-jobs = 2;
+          # cores = 4;
+          # max-jobs = 2;
           experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
           nix-path = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
           substituters = map (x: substituters.${x}.url) cfg.nix.substituters;
