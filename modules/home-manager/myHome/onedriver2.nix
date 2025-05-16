@@ -7,7 +7,7 @@
 }:
 let
   cfg = config.myHome.onedriver2;
-  onedriverPackage = pkgs.onedriver; 
+  onedriverPackage = pkgs.myonedriver; 
 in
 {
   options.myHome.onedriver2 = with lib; {
