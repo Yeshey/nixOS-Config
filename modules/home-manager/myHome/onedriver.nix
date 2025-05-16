@@ -34,9 +34,13 @@ in
   };
 
   config = let
-    serviceName = cfg.serviceCoreName;
+    serviceName = cfg.serviceCoreName; # This is the Nix variable
     onedriverExec = "${onedriverPackage}/bin/onedriver"
       + (if cfg.cliOnlyMode then " -n" else "")
+      + " '${cfg.onedriverFolder}'";
+    authOnlyOnedriverExec = "${onedriverPackage}/bin/onedriver"
+      + (if cfg.cliOnlyMode then " -n" else "")
+      + " --auth-only"
       + " '${cfg.onedriverFolder}'";
 
     runForLoginScriptContent = pkgs.writeShellScriptBin "run-for-onedriver-login-internal" ''
@@ -44,32 +48,32 @@ in
       set -e # Exit immediately if a command exits with a non-zero status.
 
       MOUNT_POINT="${cfg.onedriverFolder}"
+      # Define a shell variable that gets its value from the Nix variable 'serviceName'
+      # Use $SHELL_VAR_NAME syntax later in the script for shell expansion
+      SHELL_SERVICE_CORE_NAME="${serviceName}"
       ORIGINAL_SCRIPT_NAME="run_for_login.sh" # The name of this script
       ORIGINAL_SCRIPT_PATH="$MOUNT_POINT/$ORIGINAL_SCRIPT_NAME"
 
-      # Attempt to create a unique temporary directory for the script
-      # mktemp will print the directory path to stdout
       TEMP_SCRIPT_DIR=$(${pkgs.coreutils}/bin/mktemp -d -p "/tmp" onedriver-login-XXXXXX)
-      # If mktemp fails, TEMP_SCRIPT_DIR will be empty or contain an error, handle this.
       if [ -z "$TEMP_SCRIPT_DIR" ] || [ ! -d "$TEMP_SCRIPT_DIR" ]; then
         echo "FATAL: Could not create temporary directory in /tmp. Exiting."
         exit 1
       fi
       TEMP_SCRIPT_PATH="$TEMP_SCRIPT_DIR/$ORIGINAL_SCRIPT_NAME"
 
-      OPERATION_SUCCESSFUL="false" # Flag to track if onedriver succeeded
+      OPERATION_SUCCESSFUL="false" # Flag to track if onedriver authentication succeeded
 
       # Cleanup function: always called on exit, SIGINT, SIGTERM
       cleanup() {
         EXIT_STATUS=$? # Capture the exit status of the last command before trap
         echo "----------------------------------------------------------------------"
-        echo "Running cleanup procedure..."
+        echo "Running cleanup procedure for authentication script..."
 
         if [ "$OPERATION_SUCCESSFUL" = "true" ]; then
-          echo "onedriver operation was successful."
+          echo "onedriver authentication was successful. Service restart was attempted."
           echo "The temporary script at $TEMP_SCRIPT_PATH and its directory $TEMP_SCRIPT_DIR will be removed."
         else
-          echo "onedriver operation failed or was interrupted (exit status for script: $EXIT_STATUS)."
+          echo "onedriver authentication failed or was interrupted (exit status for script: $EXIT_STATUS)."
           # Check if the script was actually moved to the temp location
           if [ -f "$TEMP_SCRIPT_PATH" ]; then
             echo "Attempting to move script from $TEMP_SCRIPT_PATH back to $ORIGINAL_SCRIPT_PATH..."
@@ -100,16 +104,11 @@ in
           fi
         fi
         
-        # If the script is run from a terminal that stays open,
-        # prompt the user to close it or press enter.
-        # This should be one of the last things.
         if [ "$INTERACTIVE_SHELL" = "true" ] ; then
+            echo "Authentication process finished."
             read -p "Press Enter to close this terminal window..."
         fi
 
-        # Preserve the original exit status if we are exiting due to an error in the main script body
-        # If cleanup itself had an error we can't do much about that here without more complexity.
-        # If OPERATION_SUCCESSFUL is true, we want to exit 0.
         if [ "$OPERATION_SUCCESSFUL" = "true" ]; then
             exit 0
         else
@@ -131,7 +130,11 @@ in
           INTERACTIVE_SHELL="true"
       fi
 
-      echo "onedriver Login Helper Script"
+      echo "onedriver Authentication Helper Script"
+      echo "----------------------------------------------------------------------"
+      echo "This script will:"
+      echo "1. Attempt to authenticate onedriver."
+      echo "2. If successful, restart the systemd service: onedriver@$SHELL_SERVICE_CORE_NAME.service"
       echo "----------------------------------------------------------------------"
       echo "Original script location: $ORIGINAL_SCRIPT_PATH"
       echo "Temporary script location: $TEMP_SCRIPT_PATH"
@@ -139,78 +142,80 @@ in
       echo "----------------------------------------------------------------------"
 
       # Before doing anything, check if this script is already running from the temp path
-      # This could happen if a previous run moved it but then was interrupted before cleanup could move it back
-      # In such a case, we assume the user re-ran it from the temp location.
-      # "$0" is the path of the currently executing script. Resolve it to an absolute path.
       CURRENT_EXECUTING_SCRIPT_PATH="$(${pkgs.coreutils}/bin/readlink -f "$0")"
 
       if [ "$CURRENT_EXECUTING_SCRIPT_PATH" = "$TEMP_SCRIPT_PATH" ]; then
         echo "Warning: Script appears to be already running from the temporary location."
         echo "This might indicate a previous run was interrupted."
-        echo "Proceeding with onedriver execution..."
+        echo "Proceeding with onedriver authentication..."
       elif [ -f "$ORIGINAL_SCRIPT_PATH" ]; then
-        # Only move if the script exists at the original location
-        echo "Moving script from $ORIGINAL_SCRIPT_PATH to $TEMP_SCRIPT_PATH to empty the mount point for onedriver."
-        # The script being executed is $ORIGINAL_SCRIPT_PATH. We move it.
-        # The shell keeps an open file descriptor to the script, so it continues executing from memory/disk cache
-        # even after the file is moved.
+        echo "Moving script from $ORIGINAL_SCRIPT_PATH to $TEMP_SCRIPT_PATH to prepare for onedriver authentication."
+        # onedriver --auth-only might still require the mount point to be clear or unmounted.
         if ! ${pkgs.coreutils}/bin/mv -f "$ORIGINAL_SCRIPT_PATH" "$TEMP_SCRIPT_PATH"; then
             echo "FATAL: Failed to move script to temporary location $TEMP_SCRIPT_PATH. Exiting."
-            # Trap will call cleanup, which will see OPERATION_SUCCESSFUL=false
-            # and won't try to move anything back as it failed here. It will just clean $TEMP_SCRIPT_DIR.
             exit 1
         fi
         echo "Script moved successfully."
       else
         echo "Warning: Original script not found at $ORIGINAL_SCRIPT_PATH."
-        echo "This script might have been moved manually or by a previous incomplete run."
-        echo "Assuming this script ($CURRENT_EXECUTING_SCRIPT_PATH) is the one to manage."
-        # If it's not in the original path, we can't move it from there.
-        # We also can't assume it's in TEMP_SCRIPT_PATH without being sure.
-        # This situation is a bit ambiguous. For now, proceed but be aware.
-        # A robust solution might involve the calling service ensuring the script is *always*
-        # placed in ORIGINAL_SCRIPT_PATH before this helper is invoked.
+        echo "This script ($CURRENT_EXECUTING_SCRIPT_PATH) might have been moved manually or by a previous incomplete run."
+        echo "Assuming this script is the one to manage and proceeding with authentication."
       fi
 
       echo "----------------------------------------------------------------------"
-      echo "Attempting to start/authenticate onedriver..."
-      echo "Command: ${onedriverExec}"
+      echo "Attempting to authenticate onedriver (auth-only mode)..."
+      # Nix will interpolate the value of authOnlyOnedriverExec here
+      echo "Command: ${authOnlyOnedriverExec}"
       echo "----------------------------------------------------------------------"
 
-      # Execute onedriver
-      # We need to allow onedriver to fail without `set -e` exiting the script immediately,
-      # so we can handle the EXIT_CODE.
-      set +e # Temporarily disable exit on error
-      ${onedriverExec}
-      ONEDRIVER_EXIT_CODE=$?
+      set +e # Temporarily disable exit on error for the onedriver command
+      ${authOnlyOnedriverExec} # Execute the onedriver --auth-only command
+      ONEDRIVER_AUTH_EXIT_CODE=$?
       set -e # Re-enable exit on error
 
       echo "----------------------------------------------------------------------"
-      if [ $ONEDRIVER_EXIT_CODE -eq 0 ]; then
-        echo "onedriver command finished with exit code 0 (potential success)."
-        # Check if mount point is active
-        if ${pkgs.util-linux}/bin/mountpoint -q "$MOUNT_POINT"; then
-          echo "Mount point '$MOUNT_POINT' is active."
-          echo "onedriver authentication/mount successful."
-          OPERATION_SUCCESSFUL="true" # Signal success to the cleanup trap
-          echo "The temporary script at $TEMP_SCRIPT_PATH will be removed upon exiting."
+      if [ $ONEDRIVER_AUTH_EXIT_CODE -eq 0 ]; then
+        echo "onedriver authentication command finished successfully (exit code 0)."
+        OPERATION_SUCCESSFUL="true" # Signal success to the cleanup trap
+        
+        echo "Attempting to restart systemd service: onedriver@$SHELL_SERVICE_CORE_NAME.service"
+        # Check current service state for better logging
+        if ${pkgs.systemd}/bin/systemctl --user is-active --quiet "onedriver@$SHELL_SERVICE_CORE_NAME.service"; then
+            echo "Service is currently active, attempting restart..."
+        elif ${pkgs.systemd}/bin/systemctl --user is-failed --quiet "onedriver@$SHELL_SERVICE_CORE_NAME.service"; then
+            echo "Service is in a failed state, attempting reset and restart..."
+            # Try to reset failed state before restarting
+            ${pkgs.systemd}/bin/systemctl --user reset-failed "onedriver@$SHELL_SERVICE_CORE_NAME.service"
         else
-          echo "onedriver command exited 0, BUT mount point '$MOUNT_POINT' is NOT active."
-          echo "This indicates a problem. The script will be restored to $ORIGINAL_SCRIPT_PATH."
-          # OPERATION_SUCCESSFUL remains false
+            echo "Service is currently inactive or in an unknown state, attempting start/restart..."
         fi
-      else
-        echo "onedriver command failed with exit code $ONEDRIVER_EXIT_CODE."
+        
+        set +e # systemctl restart can fail
+        ${pkgs.systemd}/bin/systemctl --user restart "onedriver@$SHELL_SERVICE_CORE_NAME.service"
+        SYSTEMCTL_EXIT_CODE=$?
+        set -e
+
+        if [ $SYSTEMCTL_EXIT_CODE -eq 0 ]; then
+          echo "systemctl restart command issued successfully for onedriver@$SHELL_SERVICE_CORE_NAME.service."
+          echo "You can check the service status with: systemctl --user status onedriver@$SHELL_SERVICE_CORE_NAME.service"
+        else
+          echo "ERROR: systemctl restart command failed with exit code $SYSTEMCTL_EXIT_CODE for onedriver@$SHELL_SERVICE_CORE_NAME.service."
+          echo "The service may not have started. Please check its status manually."
+          # OPERATION_SUCCESSFUL remains true because authentication itself was successful.
+          # The service restart failure is a subsequent, distinct issue.
+        fi
+      else # ONEDRIVER_AUTH_EXIT_CODE -ne 0
+        echo "onedriver authentication command failed with exit code $ONEDRIVER_AUTH_EXIT_CODE."
         echo "The script will be restored to $ORIGINAL_SCRIPT_PATH."
         # OPERATION_SUCCESSFUL remains false
         echo "Please check the output above for errors from onedriver."
       fi
 
-      # The trap on EXIT will handle the rest (cleanup, moving script back if needed, final prompt)
-      # Exiting here will trigger the `cleanup` function due to the `trap ... EXIT`.
-      # The exit code passed to `cleanup` (and then to `exit` within cleanup) will be $ONEDRIVER_EXIT_CODE
-      # if we exited due to onedriver's failure and `set -e` was active, or 0 if we reach here.
-      # The `cleanup` function handles setting the final exit code based on OPERATION_SUCCESSFUL.
+      # The trap on EXIT will handle the rest:
+      # - Moving script back if OPERATION_SUCCESSFUL is false
+      # - Removing temp directory
+      # - Final prompt
+      # - Exiting with appropriate status
     '';
   in lib.mkIf (config.myHome.enable && cfg.enable) {
 
