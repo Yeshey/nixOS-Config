@@ -87,19 +87,14 @@
     };
 
     borgFolderBackups.jobs = {
-      anarchyMineclone2Server = {
-        repo = "/home/yeshey/PersonalFiles/Servers/luanti/anarchyMineclone2Borgbackup";
-        paths = [ "/var/lib/luanti-anarchyMineclone2/world" ];
-        user = "yeshey";  # This can be omitted if using mySystem.user default
-      };
-      pixelmonMinecraftServer = {
-        repo = "/home/yeshey/PersonalFiles/Servers/minecraft/pixelmonMinecraftBorgbackup";
-        paths = [ "/srv/minecraft/pixelmon/world" ];
-        user = "yeshey";  # This can be omitted if using mySystem.user default
-      };
-      zombies2MinecraftServer = {
-        repo = "/home/yeshey/PersonalFiles/Servers/minecraft/zombies2MinecraftBorgbackup";
-        paths = [ "/srv/minecraft/zombies2/world" ];
+      # best bet to see what's inside is: nix-shell -p vorta borgbackup --run "vorta ."
+      allServersBorgRepo = {
+        repo = "/home/yeshey/PersonalFiles/Servers/allServersBorgRepo";
+        paths = [ 
+          "/var/lib/luanti-anarchyMineclone2/world"
+          "/srv/minecraft/pixelmon/world"
+          "/srv/minecraft/zombies2/world" 
+        ];
         user = "yeshey";  # This can be omitted if using mySystem.user default
       };
     };
