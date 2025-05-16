@@ -26,10 +26,18 @@ in
       default = true;
       description = "Periodically (monthly) wipe the OneDrive cache. Requires a new login when cache is wiped.";
     };
+    cliOnlyMode = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Run onedriver in CLI-only mode (with -n flag). Useful to prevent GUI authentication prompts on login if you prefer to authenticate manually via terminal. A helper script will be placed in the mount folder if authentication is needed.";
+    };
   };
 
   config = let
     serviceName = cfg.serviceCoreName;
+    onedriverExec = "${onedriverPackage}/bin/onedriver"
+      + (if cfg.cliOnlyMode then " -n" else "")
+      + " '${cfg.onedriverFolder}'";
   in lib.mkIf (config.myHome.enable && cfg.enable) {
 
     home.packages = [
@@ -69,7 +77,7 @@ in
 
         Service = {
           ExecStartPre = "${waitForNetwork}/bin/wait_for_network";
-          ExecStart = "${onedriverPackage}/bin/onedriver '${cfg.onedriverFolder}'";
+          ExecStart = onedriverExec;
           ExecStopPost = "${wrapperDir}/bin/fusermount -uz '${cfg.onedriverFolder}'";
           Restart = "on-abnormal";
           RestartSec = "3";
