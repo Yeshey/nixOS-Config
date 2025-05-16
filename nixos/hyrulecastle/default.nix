@@ -242,6 +242,13 @@ in
   # systemctl restart --user onedrive@onedrive.service
   # journalctl --user -f -u onedrive@onedrive.service
   services.onedrive.enable = true;
+  systemd.user.services."onedrive@" = {
+    # allow at most 3 restarts… within a 10‑minute window
+    unitConfig = {
+      StartLimitBurst = "5";
+      StartLimitIntervalSec = "600s";
+    };
+  };
   # onedrivegui for the gui?
 
   #programs.zsh.enable = true;
