@@ -250,6 +250,7 @@ in
         # This script checks if the mount folder is empty before creating the login script
         ExecStart = "${doTheThing}/bin/create-onedriver-login-script";
       };
+      Install.WantedBy = [ "default.target" ]; # makes it start on every boot
     };
 
     # Make sure mountpoint folder exists
