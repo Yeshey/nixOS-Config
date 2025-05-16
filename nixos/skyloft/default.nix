@@ -92,19 +92,9 @@
         paths = [ "/var/lib/luanti-anarchyMineclone2/world" ];
         user = "yeshey";  # This can be omitted if using mySystem.user default
       };
-      anarchyMinecloniaServer = {
-        repo = "/home/yeshey/PersonalFiles/Servers/luanti/anarchyMinecloniaBorgbackup";
-        paths = [ "/var/lib/luanti-anarchyMineclonia/world" ];
-        user = "yeshey";  # This can be omitted if using mySystem.user default
-      };
       pixelmonMinecraftServer = {
         repo = "/home/yeshey/PersonalFiles/Servers/minecraft/pixelmonMinecraftBorgbackup";
         paths = [ "/srv/minecraft/pixelmon/world" ];
-        user = "yeshey";  # This can be omitted if using mySystem.user default
-      };
-      zombiesMinecraftServer = {
-        repo = "/home/yeshey/PersonalFiles/Servers/minecraft/zombiesMinecraftBorgbackup";
-        paths = [ "/srv/minecraft/zombies/world" ];
         user = "yeshey";  # This can be omitted if using mySystem.user default
       };
       zombies2MinecraftServer = {
