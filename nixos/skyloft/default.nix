@@ -38,8 +38,6 @@
     ];
   };
 
-  # set an alias to poweroff ask if you're sure
-
   mySystem = rec {
     enable = true;
     plasma = {
@@ -117,42 +115,6 @@
     };
   };
 
-  # box64-binfmt.enable = true;
-
-  environment.systemPackages = [ 
-    pkgs.file
-#    pkgs.x86.steamcmd
-#    pkgs.x86.katawa-shoujo
-#    pkgs.x86.cmatrix
-    pkgs.mangohud
-#    pkgs.x86.xonotic
-#    pkgs.x86.heroic
-#    pkgs.x86.superTuxKart
-#    pkgs.x86.glmark2
-#    pkgs.x86.vulkan-toolsmjn
-#    pkgs.x86.glxinfo 
-  ];
-
-#  boot.binfmt.emulatedSystems = ["i686-linux" "x86_64-linux"];
-
-  nix = {
-    distributedBuilds = true;
-    buildMachines = [{
-      hostName = "hyrulecastle";
-      system = "x86_64-linux";
-      sshUser = "yeshey";
-      # Replace with the path to your SSH private key or use SSH agent
-      sshKey = "/home/yeshey/.ssh/my_identity";
-      maxJobs = 1;
-        supportedFeatures = [ # saw with nix show-config --json | jq -r '.["system-features"].value'
-          "benchmark"
-          "big-parallel"
-          "kvm"
-          "nixos-test"
-          ];
-    }];
-  };
-
   toHost = {
     remoteWorkstation = {
       sunshine.enable = true;
@@ -190,6 +152,46 @@
       cores = 2; # settings this per machine
       max-jobs = 2;
     };
+  };
+
+  programs.zsh = {
+    shellAliases = {
+    };
+  };
+
+  # box64-binfmt.enable = true;
+
+  environment.systemPackages = [ 
+    pkgs.file
+#    pkgs.x86.steamcmd
+#    pkgs.x86.katawa-shoujo
+#    pkgs.x86.cmatrix
+    pkgs.mangohud
+#    pkgs.x86.xonotic
+#    pkgs.x86.heroic
+#    pkgs.x86.superTuxKart
+#    pkgs.x86.glmark2
+#    pkgs.x86.vulkan-toolsmjn
+#    pkgs.x86.glxinfo 
+  ];
+
+#  boot.binfmt.emulatedSystems = ["i686-linux" "x86_64-linux"];
+
+  nix = {
+    distributedBuilds = true;
+    buildMachines = [{
+      hostName = "hyrulecastle";
+      system = "x86_64-linux";
+      sshUser = "yeshey";
+      # Replace with the path to your SSH private key or use SSH agent
+      sshKey = "/home/yeshey/.ssh/my_identity";
+      supportedFeatures = [ # saw with nix show-config --json | jq -r '.["system-features"].value'
+        "benchmark"
+        "big-parallel"
+        "kvm"
+        "nixos-test"
+        ];
+    }];
   };
 
   time.timeZone = "Europe/Madrid";
