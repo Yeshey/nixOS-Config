@@ -21,10 +21,23 @@ in
       example = "home-yeshey-OneDriver";
       description = "use `systemd-escape --template onedriver@.service --path /path/to/mountpoint` to figure out";
     };
+    periodicallyWipeCache = mkOption {
+      type = types.bool;
+      default = true;
+      description = "Periodically (monthly) wipe the OneDrive cache. Requires a new login when cache is wiped.";
+    };
+    cliOnlyMode = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Run onedriver in CLI-only mode (with -n flag). Useful to prevent GUI authentication prompts on login if you prefer to authenticate manually via terminal. A helper script will be placed in the mount folder if authentication is needed.";
+    };
   };
 
   config = let
     serviceName = cfg.serviceCoreName;
+    onedriverExec = "${onedriverPackage}/bin/onedriver"
+      + (if cfg.cliOnlyMode then " -n" else "")
+      + " '${cfg.onedriverFolder}'";
   in lib.mkIf (config.myHome.enable && cfg.enable) {
 
     home.packages = [
@@ -64,7 +77,7 @@ in
 
         Service = {
           ExecStartPre = "${waitForNetwork}/bin/wait_for_network";
-          ExecStart = "${onedriverPackage}/bin/onedriver '${cfg.onedriverFolder}'";
+          ExecStart = onedriverExec;
           ExecStopPost = "${wrapperDir}/bin/fusermount -uz '${cfg.onedriverFolder}'";
           Restart = "on-abnormal";
           RestartSec = "3";
@@ -77,7 +90,7 @@ in
       };
 
     # A systemd timer and service to delete all the cached files so it doesnt start taking up space
-    systemd.user.services."delete-onedriver-cache" = let
+    systemd.user.services."delete-onedriver-cache" = lib.mkIf cfg.periodicallyWipeCache (let
       script = pkgs.writeShellScriptBin "delete-onedriver-cache-script" ''
             ${onedriverPackage}/bin/onedriver --wipe-cache
           '';
@@ -89,12 +102,12 @@ in
         Type = "oneshot";
         ExecStart = "${script}/bin/delete-onedriver-cache-script"; # "${mystuff}/bin/doyojob";
       };
-    };
+    });
     systemd.user.timers."delete-onedriver-cache" = {
       Unit.Description = "delete-onedriver-cache schedule";
       Timer = {
         Unit = "delete-onedriver-cache.service";
-        OnCalendar = "*-*-1,4,7,10,13,16,19,22,25,28"; # "*-*-1,4,7,10,13,16,19,22,25,28"; # Every three days approximatley (every minute: "*-*-* *:*:00")
+        OnCalendar = "monthly";
         Persistent = true; # If missed, run on boot (https://www.freedesktop.org/software/systemd/man/systemd.timer.html)
       };
       Install.WantedBy = [ "timers.target" ]; # the timer starts with timers
