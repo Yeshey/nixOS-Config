@@ -9,8 +9,6 @@ with pkgs;
 rec {
   # examplepkg = callPackage ./example.nix {};
 
-  myOnedriver = callPackage ./onedriver-his.nix { };  
-
   coreutils-with-safe-rm = callPackage ./coreutils-with-safe-rm.nix { };
 
   muvm = callPackage ./muvm.nix { };

@@ -25,7 +25,5 @@ in
 {
   # You need at least one to decrypt. These are the users and systems that will be able to decrypt the .age files later with their corresponding private keys.
   "my_identity.age".publicKeys = systems ++ users; # [hyrulecastle2];
-  "onedriver_auth_isec.age".publicKeys = systems ++ users;
-  "onedriver_auth_iscte.age".publicKeys = systems ++ users;
   "free_games.age".publicKeys = systems ++ users;
 }
