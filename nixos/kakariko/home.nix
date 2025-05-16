@@ -82,7 +82,7 @@ in
       enable = true;
       onedriverFolder = "/home/yeshey/OneDriverISCTE";
       serviceCoreName = "home-yeshey-OneDriverISCTE"; # real name: onedriver@home-yeshey-OneDriverISCTE.service
-      cliOnlyMode = true;
+      cliOnlyMode = false;
     };
     agenix = {
       enable = true;
