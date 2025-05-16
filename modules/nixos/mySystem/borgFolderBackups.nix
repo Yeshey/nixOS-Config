@@ -132,7 +132,7 @@ in
     }) cfg.jobs;
 
     systemd.tmpfiles.rules = lib.concatLists (lib.mapAttrsToList (name: job: [
-      "d ${job.repo} 1777 ${job.user} ${job.user} -"
+      "d ${job.repo} 0700 ${job.user} ${job.user} -"
     ]) cfg.jobs);
   };
 }
