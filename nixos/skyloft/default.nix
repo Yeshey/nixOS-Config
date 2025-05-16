@@ -86,6 +86,20 @@
       sshKeys.enable = true;
     };
 
+    copyFoldersOnedriver.jobs = {
+      anarchyMineclone2ServerOnedriver = {
+        repo = "/home/yeshey/PersonalFiles/Servers/luanti/anarchyMineclone2Borgbackup";
+        paths = [ "/var/lib/luanti-anarchyMineclone2/world" ];
+        user = "yeshey";  # This can be omitted if using mySystem.user default
+        fuseRepoCheck = {
+          timeout = "3m";
+          interval = "15s";
+          expectedFuseTypes = [ "onedrive" "fuse.onedrive" "rclone" ]; # This should include "fuse.onedriver" based on your mount output
+          actualMountPointToCheck = "/home/yeshey/OneDriverISCTE"; # <<< SET THIS TO YOUR ACTUAL ONEDRIVE MOUNT POINT
+        };
+      };
+    };
+
     borgFolderBackups.jobs = {
       anarchyMineclone2Server = {
         repo = "/home/yeshey/PersonalFiles/Servers/luanti/anarchyMineclone2Borgbackup";
