@@ -79,14 +79,6 @@ in
     agenix = {
       enable = true;
       sshKeys.enable = true;
-      onedriver = {
-        enable = true;
-        ageOneDriverAuthFile = config.age.secrets.onedriver_auth_isec_yeshey.path;
-      };
-      onedriver2 = {
-        enable = true;
-        ageOneDriverAuthFile = config.age.secrets.onedriver_auth_iscte_yeshey.path;
-      };
     };
   };
 
