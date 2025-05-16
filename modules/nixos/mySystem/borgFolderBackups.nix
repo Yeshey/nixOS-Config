@@ -107,13 +107,7 @@ in
             default = true;
             description = "Whether to use a persistent timer";
           };
-          postHook = mkOption {
-            type = types.str;
-            default = "";
-            description = "Commands to run after the backup";
-          };
         };
-        config.postHook = lib.mkDefault "chown -R ${config.user} ${config.repo}";
       }));
       default = {};
       description = "Borg backup jobs for folders";
@@ -121,14 +115,19 @@ in
   };
 
   config = lib.mkIf (cfg.jobs != {}) {
-    services.borgbackup.jobs = lib.mapAttrs (name: job: {
-      inherit (job) paths exclude startAt persistentTimer;
-      repo = job.repo;
-      encryption.mode = job.encryption.mode;
-      extraCreateArgs = job.extraCreateArgs;
-      compression = job.compression;
-      prune.keep = job.prune.keep;
-      postHook = job.postHook;
+    services.borgbackup.jobs = lib.mapAttrs (name: job: 
+      let
+
+      in {
+        inherit (job) paths exclude startAt persistentTimer;
+        user = job.user;
+        repo = job.repo;
+        encryption.mode = job.encryption.mode;
+        extraCreateArgs = job.extraCreateArgs;
+        compression = job.compression;
+        prune.keep = job.prune.keep;
+        #preHook = "${moveToTmpAndChangePremissions}/bin/moveToTmpAndChangePremissions";
+        postHook = "chown -R ${job.user} ${job.repo}";
     }) cfg.jobs;
 
     systemd.tmpfiles.rules = lib.concatLists (lib.mapAttrsToList (name: job: [
