@@ -147,12 +147,12 @@
     overleaf.enable = true;
   };
 
-  nix = {
-    settings = {
-      cores = 2; # settings this per machine
-      max-jobs = 2;
-    };
-  };
+  # nix = {
+  #   settings = {
+  #     cores = 2; # settings this per machine
+  #     max-jobs = 2;
+  #   };
+  # };
 
   programs.zsh = {
     shellAliases = {

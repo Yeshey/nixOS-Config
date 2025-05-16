@@ -24,7 +24,7 @@ in
   };
 
   config = let
-    serviceName = "onedriver@" + cfg.serviceCoreName + ".service";
+    serviceName = cfg.serviceCoreName;
   in lib.mkIf (config.myHome.enable && cfg.enable) {
 
     home.packages = [
@@ -58,7 +58,7 @@ in
 
         Unit = {
           Description = "onedriver";
-          After = ["onedriverAgenixYeshey2.service" "network.target" "network-online.target" ];
+          After = [ "network.target" "network-online.target" ];
 
         };
 
