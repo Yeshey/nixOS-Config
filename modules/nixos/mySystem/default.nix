@@ -70,7 +70,6 @@ in
     ./piperTextToSpeech.nix
     ./snap.nix
     ./autossh.nix
-    ./copyFoldersOnedriver.nix
   ];
 
   options.mySystem = with lib; {
