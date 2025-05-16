@@ -67,14 +67,14 @@ in
       wallpaper = pkgs.wallpapers.johnKearneyCityscapePoster; # johnKearneyCityscapePoster #nierAutomataWallpaper
     };
     onedriver = {
-      enable = false;
+      enable = true;
       onedriverFolder = "/home/yeshey/OneDriverISEC";
       serviceCoreName = "home-yeshey-OneDriverISEC"; # real name: onedriver@home-yeshey-OneDriverISEC.service
     };
     onedriver2 = {
-      enable = false;
+      enable = true;
       onedriverFolder = "/home/yeshey/OneDriverISCTE";
-      serviceCoreName = "home-yeshey-OneDriverISCTE"; # real name: onedriver@home-yeshey-OneDriverISEC.service
+      serviceCoreName = "home-yeshey-OneDriverISCTE"; # real name: onedriver@home-yeshey-OneDriverISCTE.service
     };
     agenix = {
       enable = true;
