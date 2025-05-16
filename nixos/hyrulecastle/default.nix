@@ -211,7 +211,7 @@ in
 
   nix = {
     settings = {
-      cores = 3; # settings this per machine
+      cores = 6; # settings this per machine
       max-jobs = 4;
     };
   };
