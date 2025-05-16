@@ -83,12 +83,13 @@ in
       enable = true;
       onedriverFolder = "/home/yeshey/OneDriverISEC";
       serviceCoreName = "home-yeshey-OneDriverISEC"; # real name: onedriver@home-yeshey-OneDriverISEC.service
+      cliOnlyMode = true; # doesnt pop annoying windows if auth is needed again
     };
-
     onedriver2 = {
       enable = true;
       onedriverFolder = "/home/yeshey/OneDriverISCTE";
-      serviceCoreName = "home-yeshey-OneDriverISCTE"; # real name: onedriver@home-yeshey-OneDriverISEC.service
+      serviceCoreName = "home-yeshey-OneDriverISCTE"; # real name: onedriver@home-yeshey-OneDriverISCTE.service
+      cliOnlyMode = true;
     };
 
     agenix = {
