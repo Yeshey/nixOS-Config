@@ -70,6 +70,7 @@ in
     ./piperTextToSpeech.nix
     ./snap.nix
     ./autossh.nix
+    ./resticRcloneBackups.nix
   ];
 
   options.mySystem = with lib; {

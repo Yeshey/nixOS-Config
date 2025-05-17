@@ -147,6 +147,48 @@ in
      remoteUser = "yeshey";
      port = 2232;
     };
+
+    # to use this you need to create a remote with the name onedriveISCTE with `rclone config file`
+    resticRcloneBackups.jobs = {
+      #check this backup with sudo journalctl -fu restic-backups-mainBackupOneDrive.service
+      mainBackupOneDrive = {
+        enable = true;
+        user = "yeshey"; # To access /mnt/DataDisk and /home/yeshey
+        paths = [
+          "/mnt/DataDisk/PersonalFiles"
+          "/home/${user}" # Dynamically gets 'yeshey'
+        ];
+        rcloneRemoteName = "onedriveISCTE";
+        rcloneRemotePath = "ResticBackups/mainBackupOneDrive"; # This is like your 'repo' path, but on the remote
+        #rcloneConfigFile = "/var/lib/secrets/rclone/school-onedrive.conf";
+        #passwordFile = "/var/lib/secrets/restic/school-onedrive-password";
+        # rcloneConfigFile = "";
+        rcloneConfigFile = "/home/${user}/.config/rclone/rclone.conf";
+        passwordFile = "${builtins.toFile "restic-password" "123456789"}";
+        initialize = true; # Good for the first run
+
+        startAt = "weekly"; # Systemd timer will run daily
+        randomizedDelaySec = "6h"; # Spread runs
+
+        prune.enable = true; # Enable automatic pruning
+        prune.keep = {
+          within = "1d";
+          daily = 2;
+          weekly = 2;
+          monthly = 6;
+          yearly = 3;
+        };
+
+        exclude = [
+          "*/RecordedClasses"
+          # Add more cache/temporary directories
+        ];
+
+        noCache = false; # Use Restic cache (recommended)
+        extraBackupArgs = [ "--verbose=1" ];
+        # extraRcloneOpts = [ "onedrive-chunk-size=250M" ]; # If you find OneDrive needs larger chunks for Restic
+      };
+    };
   };
 
   toHost = {
