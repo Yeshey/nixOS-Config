@@ -115,7 +115,7 @@
       #check this backup with sudo journalctl -fu restic-backups-servers.service
       servers = {
         enable = true;
-        user = "yeshey"; # To access /mnt/DataDisk and /home/yeshey
+        user = "root"; # To access /mnt/DataDisk and /home/yeshey
         paths = [
           "/var/lib/luanti-anarchyMineclone2/world"
           "/srv/minecraft/pixelmon/world"
