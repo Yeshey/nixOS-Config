@@ -112,8 +112,8 @@
 
     # to use this you need to create a remote with the name onedriveISCTE with `rclone config`
     resticRcloneBackups.jobs = {
-      #check this backup with sudo journalctl -fu restic-backups-mainBackupOneDrive.service
-      mainBackupOneDrive = {
+      #check this backup with sudo journalctl -fu restic-backups-servers.service
+      servers = {
         enable = true;
         user = "yeshey"; # To access /mnt/DataDisk and /home/yeshey
         paths = [
