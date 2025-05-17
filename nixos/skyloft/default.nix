@@ -117,8 +117,9 @@
         enable = true;
         user = "yeshey"; # To access /mnt/DataDisk and /home/yeshey
         paths = [
-          "/mnt/DataDisk/PersonalFiles"
-          "/home/${user}" # Dynamically gets 'yeshey'
+          "/var/lib/luanti-anarchyMineclone2/world"
+          "/srv/minecraft/pixelmon/world"
+          "/srv/minecraft/zombies2/world" 
         ];
         rcloneRemoteName = "onedriveISCTE";
         rcloneRemotePath = "ResticBackups/servers"; # This is like your 'repo' path, but on the remote
