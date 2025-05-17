@@ -1,24 +1,24 @@
-{
-  buildGoModule,
-  fetchFromGitHub,
-  lib,
-  pkg-config,
-  webkitgtk_4_1,
-  glib,
-  fuse,
-  installShellFiles,
-  wrapGAppsHook3,
-  glib-networking,
-  wrapperDir ? "/run/wrappers/bin",
+# From this issue https://github.com/NixOS/nixpkgs/issues/308666
+{ buildGoModule
+, fetchFromGitHub
+, lib
+, pkg-config
+, webkitgtk_4_1
+, glib
+, fuse
+, installShellFiles
+, wrapGAppsHook #(3)?
+, glib-networking
+, wrapperDir ? "/run/wrappers/bin"
 }:
 let
-  pname = "myonedriver";
-  version = "0.14.1";
+  pname = "onedriver";
+  version = "0.14.2";
 
   src = fetchFromGitHub {
     owner = "yeshey";
     repo = "onedriver";
-    rev = "63c205294b394ef135bc8ecb471b73e771968bbe";
+    rev = "v${version}";
     hash = "sha256-X0ZTbRIELo+LHWaAiKiq1jEQor9HlqpgKM0NDf06DBA=";
   };
 in
@@ -26,17 +26,8 @@ buildGoModule {
   inherit pname version src;
   vendorHash = "sha256-JoinXXq9XuoXAa/ZgF3MIsKVooOUgKRS3KwWVWzjUJI=";
 
-  nativeBuildInputs = [
-    pkg-config
-    installShellFiles
-    wrapGAppsHook3
-  ];
-  buildInputs = [
-    webkitgtk_4_1
-    glib
-    fuse
-    glib-networking
-  ];
+  nativeBuildInputs = [ pkg-config installShellFiles wrapGAppsHook ];
+  buildInputs = [ webkitgtk_4_1 glib fuse glib-networking ];
 
   ldflags = [ "-X github.com/yeshey/onedriver/cmd/common.commit=63c205294b394ef135bc8ecb471b73e771968bbe" ];
 
@@ -51,13 +42,13 @@ buildGoModule {
     install -Dm644 ./pkg/resources/onedriver.png $out/share/icons/onedriver/onedriver.png
     install -Dm644 ./pkg/resources/onedriver-128.png $out/share/icons/onedriver/onedriver-128.png
 
-    install -Dm644 ./pkg/resources/onedriver.desktop $out/share/applications/onedriver.desktop
+    install -Dm644 ./pkg/resources/onedriver-launcher.desktop $out/share/applications/onedriver-launcher.desktop
     install -Dm644 ./pkg/resources/onedriver@.service $out/lib/systemd/user/onedriver@.service
 
     mkdir -p $out/share/man/man1
     installManPage ./pkg/resources/onedriver.1
 
-    substituteInPlace $out/share/applications/onedriver.desktop \
+    substituteInPlace $out/share/applications/onedriver-launcher.desktop \
       --replace "/usr/bin/onedriver-launcher" "$out/bin/onedriver-launcher" \
       --replace "/usr/share/icons" "$out/share/icons"
 
