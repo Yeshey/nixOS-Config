@@ -97,6 +97,18 @@
         ];
         user = "yeshey";  # This can be omitted if using mySystem.user default
       };
+      allServersBorgRepoOnedriver = {
+        repo = "/home/yeshey/OneDriverISCTE/Servers/allServersBorgRepo";
+        paths = [ 
+          "/var/lib/luanti-anarchyMineclone2/world"
+          "/srv/minecraft/pixelmon/world"
+          "/srv/minecraft/zombies2/world" 
+        ];
+        user = "yeshey";  # This can be omitted if using mySystem.user default
+        onedriver.enable = true; # Enable the onedriver check for this job
+        onedriver.mountPath = "/home/yeshey/OneDriverISCTE"; # Default, but can be overridden
+      };
+
     };
   };
 

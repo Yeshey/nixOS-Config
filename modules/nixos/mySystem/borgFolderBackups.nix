@@ -107,6 +107,18 @@ in
             default = true;
             description = "Whether to use a persistent timer";
           };
+          onedriver = {
+            enable = mkOption {
+              type = types.bool;
+              default = false;
+              description = "Whether to check for and wait for a onedriver mount in preHook.";
+            };
+            mountPath = mkOption {
+              type = types.str;
+              default = "/home/yeshey/OneDriverISCTE"; # Your default
+              description = "The path where onedriver is expected to be mounted.";
+            };
+          };
         };
       }));
       default = {};
@@ -117,7 +129,30 @@ in
   config = lib.mkIf (cfg.jobs != {}) {
     services.borgbackup.jobs = lib.mapAttrs (name: job: 
       let
+        # Script to check and wait for onedriver mount
+        waitForOnedriverScript = pkgs.writeShellScriptBin "wait-for-onedriver-${name}" ''
+          #!${pkgs.stdenv.shell}
+          set -eu # Exit on error, treat unset variables as error
 
+          MOUNT_POINT="${job.onedriver.mountPath}" # Get mount path from job config
+          MAX_CHECKS=10 # Wait for up to 10 minutes (10 checks * 60 seconds)
+          CHECKS_DONE=0
+
+          echo "Job '${name}': Checking if Onedriver is mounted at ${MOUNT_POINT}..."
+
+          while ! mount | grep -q " ''${MOUNT_POINT} "; do # Note the spaces around MOUNT_POINT
+            CHECKS_DONE=$((CHECKS_DONE + 1))
+            if [ "''${CHECKS_DONE}" -gt "''${MAX_CHECKS}" ]; then
+              echo "Job '${name}': Onedriver not mounted at ${MOUNT_POINT} after 10 minutes. Exiting with error." >&2
+              exit 1
+            fi
+            echo "Job '${name}': Onedriver not mounted yet (check ''${CHECKS_DONE}/''${MAX_CHECKS}). Waiting 60 seconds..."
+            sleep 60
+          done
+
+          echo "Job '${name}': Onedriver is mounted at ${MOUNT_POINT}. Proceeding with backup."
+          exit 0
+        '';
       in {
         inherit (job) paths exclude startAt persistentTimer;
         user = job.user;
@@ -126,7 +161,7 @@ in
         extraCreateArgs = job.extraCreateArgs;
         compression = job.compression;
         prune.keep = job.prune.keep;
-        #preHook = "${moveToTmpAndChangePremissions}/bin/moveToTmpAndChangePremissions";
+        preHook = lib.mkIf job.onedriver.enable "${waitForOnedriverScript}/bin/wait-for-onedriver-${name}";
         postHook = "chown -R ${job.user} ${job.repo}";
     }) cfg.jobs;
 
