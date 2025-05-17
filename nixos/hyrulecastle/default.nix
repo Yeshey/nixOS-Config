@@ -167,7 +167,7 @@ in
         passwordFile = "${builtins.toFile "restic-password" "123456789"}";
         initialize = true; # Good for the first run
 
-        startAt = "weekly"; # Systemd timer will run daily
+        startAt = "daily"; # Systemd timer will run daily
         randomizedDelaySec = "6h"; # Spread runs
 
         prune.enable = true; # Enable automatic pruning
