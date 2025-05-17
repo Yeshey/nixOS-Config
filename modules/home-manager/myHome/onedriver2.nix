@@ -7,7 +7,7 @@
 }:
 let
   cfg = config.myHome.onedriver2;
-  onedriverPackage = pkgs.myonedriver; 
+  onedriverPackage = pkgs.myonedriver;  # allows root and other users to also write in the mounted onedriver
 in
 {
   options.myHome.onedriver2 = with lib; {
