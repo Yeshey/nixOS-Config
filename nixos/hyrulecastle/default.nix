@@ -149,8 +149,9 @@ in
     };
 
     # to use this you need to create a remote with the name onedriveISCTE with `rclone config`
+    # with restic-browser you would check the contents of the backup by putting onedriveISCTE:ResticBackups/mainBackupOneDrive in remote section and selecting type rclone
     resticRcloneBackups.jobs = {
-      #check this backup with sudo journalctl -fu restic-backups-mainBackupOneDrive.service
+      #check this backup with journalctl -fu restic-backups-mainBackupOneDrive.service
       mainBackupOneDrive = {
         enable = true;
         user = "yeshey"; # To access /mnt/DataDisk and /home/yeshey
