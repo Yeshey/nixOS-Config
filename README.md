@@ -16,6 +16,8 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
 - Right click on wastebin and configure to delete trash after 7 days, still don't know how to declare this.
 
+- For remote backups, I'm using OneDrive with rclone, you will have to add the rclone remote with `rclone config` either as yeshey (for hyrulecastle) or as root (for skyloft) and set the name of the remote to `OneDriverISCTE`.
+
 - nix-on-droid: (don't forget you can connect your phone to the PC and control it with something like `scrcpy --legacy-paste`) install my flake in app by adding [the normal packages](https://nix-on-droid.unboiled.info/upgrade.txt) (restart `nix-on-droid` after that) and running `nix-shell -p git --run "nix-on-droid --flake github:Yeshey/nixOS-Config#nix-on-droid switch"`. (or use the `/nix-on-droid` branch if it isn't working)
   You'll have to find a way to send the ssh keys, `scp` isn't working, if you have root you can do this:
   - You can run a server on the localnetwork to serve the files: `nix-shell --pure -p python310 --run "cd /home/yeshey/.ssh && python3 -m http.server 8000"`, you might nee to turn off the firewall (`networking.firewall.enable = false;`). And From `termux`, not `nix-on-droid`, run:
@@ -91,7 +93,7 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
 - **Safe-rm** - I nuked my PC once by running `sudo rm -r /*` instead of `sudo -r rm ./*`, so I decided to change all my `rm` calls to `safe-rm` calls through changing the binary and adding aliases, both in `myHome`: [safe-rm.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/safe-rm.nix); and in `mySystem`: [safe-rm.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/safe-rm.nix);
 
-- **OneDriver** - home-manager module for [onedriver](https://github.com/jstaf/onedriver) that auto clears cache every 3 days, but Microsoft(🫠) [changed the user storage limits](https://blog.shi.com/next-generation-infrastructure/cloud/are-you-prepared-for-the-end-of-office-365-a1-plus-and-unlimited-cloud-storage/#:~:text=All%20school%20tenants,tenant%E2%80%99s%20100TB%20pool.), so now we only have 100GB per user instead of 1TB (for my uni account), so it's not as worth anymore 🥲, they were just reeling companies in before pulling the rug out, of course: [onedriver.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/onedriver.nix). Also has a agenix module that adds the json with the credentials to the right place, and takes into account the auto cleanups: [onedriver.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/agenix/onedriver.nix);
+- **OneDriver** - home-manager module for [onedriver](https://github.com/jstaf/onedriver) that auto clears cache every month, of course: [onedriver.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/onedriver.nix).
 
 - **Substituters** - Uses a bunch of substituters for extra caches to hopefully make rebuilds faster: [default.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/default.nix). Also in my module to activate when home manager is used standalone (untested): [non-nixos.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/non-nixos.nix);
 
