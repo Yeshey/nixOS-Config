@@ -81,7 +81,7 @@ in
           enable-rcon = true;
           "rcon.password" = "hunter2";
           "rcon.port"=44334;
-          "query.port"=44333;
+          "query.port"=44332;
           "online-mode"=false;
         };
 
@@ -212,7 +212,7 @@ in
           enable-rcon = true;
           "rcon.password" = "hunter2";
           "rcon.port"=44342;
-          "query.port"=44343;
+          "query.port"=44340;
           "online-mode"=false;
         };
 
