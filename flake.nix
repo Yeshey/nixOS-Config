@@ -52,7 +52,10 @@
 
     nix-minecraft = {
       #url = "github:Infinidoge/nix-minecraft";
-      url = "github:Faeranne/nix-minecraft"; # has forge support
+      #url = "github:Faeranne/nix-minecraft"; # has forge support
+      url = "github:Yeshey/nix-minecraft";
+      #type = "path";
+      #path = "/home/yeshey/Downloads/mynixmc/";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
 
