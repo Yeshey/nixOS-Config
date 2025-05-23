@@ -262,6 +262,15 @@ in
             RandomizedDelaySec = lib.mkIf (jobCfg.randomizedDelaySec != null) (toString jobCfg.randomizedDelaySec);
           };
 
+          backupPrepareCommand = ''
+            while ! /run/current-system/sw/bin/ping -c 1 1.0.0.1; do
+              echo "Waiting for internet connection..."
+              sleep 60
+            done
+
+            echo "Internet is up, let's upload ~raccoon memes~ some backups!"
+          '';
+
           # Construct pruneOpts only if prune is enabled for this job
           pruneOpts = lib.mkIf jobCfg.prune.enable (
             let keep = jobCfg.prune.keep;
@@ -279,6 +288,18 @@ in
         }
       )
     ) cfg.jobs;
+
+    systemd.services = lib.mapAttrs' (jobName: jobCfg:
+      lib.nameValuePair "restic-backups-${jobName}" (
+        lib.mkIf jobCfg.enable {
+          serviceConfig = {
+            Restart = "on-failure";
+            RestartSec = "15m"; # Restart after 15 minutes on failure
+          };
+        }
+      )
+    ) cfg.jobs;
+
     environment.systemPackages = with pkgs; [ 
       rclone
     ];
