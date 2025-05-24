@@ -158,7 +158,7 @@
 
   toHost = {
     remoteWorkstation = {
-      sunshine.enable = true;
+      sunshine.enable = false;
       xrdp.enable = true;
     };
     dontStarveTogetherServer = {
@@ -233,6 +233,11 @@
         "nixos-test"
         ];
     }];
+  };
+
+  # headless server doesn't need sddm (xrdp doesn't need it either)
+  services.displayManager.sddm = {
+    enable = false;
   };
 
   time.timeZone = "Europe/Madrid";
