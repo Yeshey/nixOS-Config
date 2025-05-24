@@ -195,7 +195,7 @@ in
         passwordFile = "${builtins.toFile "restic-password" "123456789"}";
         initialize = true; # Good for the first run
 
-        default = "*-*-* 14:00:00"; # Sets the default to 2 PM daily
+        startAt = "*-*-* 14:00:00"; # Sets the default to 2 PM daily
         randomizedDelaySec = "6h"; # Spread runs
 
         prune.enable = true; # Enable automatic pruning
