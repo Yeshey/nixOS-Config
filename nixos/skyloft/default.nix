@@ -235,6 +235,7 @@
     }];
   };
 
+  # you should also add `qdbus org.kde.LogoutPrompt /LogoutPrompt  org.kde.LogoutPrompt.promptLogout` to the command to run when inactive for a certain time in KDE plasma
   # headless server doesn't need sddm (xrdp doesn't need it either)
   services.displayManager.sddm = {
     enable = false;
