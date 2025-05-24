@@ -77,7 +77,7 @@ in
 
           startAt = mkOption {
             type = types.str;
-            default = "daily";
+            default = "*-*-* 14:00:00"; # Sets the default to 2 PM daily
             description = "When to trigger the backup (systemd OnCalendar= string).";
             example = "*-*-* 02:00:00";
           };
@@ -220,7 +220,6 @@ in
               "**/.direnv"
               "**/node_modules"
               "**/.git"
-              ".cache"
               "**/cache2"
               "**/Cache"
               "**/.config/Slack/logs"
@@ -232,10 +231,10 @@ in
               "**/.tox"
               "**/venv"
               "**/.venv"
-              "*cache*"
+              "**/*cache*/"
               "**/Android"
               "**/.gradle"
-              "**/.var"
+              "**/.var/app/*/cache/" # faltpak
               "**/.cabal"
               "**/.vscode"
               "**/.stremio-server"
@@ -250,7 +249,6 @@ in
               "**/.config/google-chrome"
               "**/.config/mozilla/firefox/*/cache2"
               "**/Trash"
-              "**/Games"
               # --- YOUR MODULE'S DEFAULT EXCLUDES END ---
             ] ++ jobCfg.exclude; # jobCfg.exclude now comes from the user's configuration of your module
 
