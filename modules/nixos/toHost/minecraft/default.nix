@@ -83,6 +83,7 @@ in
           "rcon.port"=44334;
           "query.port"=44332;
           "online-mode"=false;
+          "max-tick-time" = -1;
         };
 
         # Specify the custom minecraft server package
@@ -214,6 +215,7 @@ in
           "rcon.port"=44342;
           "query.port"=44340;
           "online-mode"=false;
+          "max-tick-time" = -1;
         };
 
         # Specify the custom minecraft server package
