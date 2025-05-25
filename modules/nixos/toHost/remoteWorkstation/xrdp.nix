@@ -53,7 +53,6 @@ in
         #autoLogin.enable = true;
         #autoLogin.user = config.mySystem.user;
         sddm.enable = lib.mkOverride 1010 true;
-        defaultWindowManager = "startplasma-x11";
       };
     };
 
