@@ -125,7 +125,6 @@ in
       # Surface and Desktop apps
       qbittorrent
       cheese
-      p3x-onenote # might be worth trying notekit(https://github.com/blackhole89/notekit) and Zettlr(https://github.com/Zettlr/Zettlr)
       signal-desktop
       blender # for blender
       gimp

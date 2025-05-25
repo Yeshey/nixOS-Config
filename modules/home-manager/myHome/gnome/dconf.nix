@@ -244,10 +244,6 @@ with lib.hm.gvariant;
         application-id = "org.gnome.tweaks.desktop";
       };
 
-      "org/gnome/desktop/notifications/application/p3x-onenote" = {
-        application-id = "p3x-onenote.desktop";
-      };
-
       "org/gnome/desktop/notifications/application/steam" = {
         application-id = "steam.desktop";
       };
