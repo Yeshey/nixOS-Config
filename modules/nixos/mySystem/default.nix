@@ -129,17 +129,17 @@ in
       boot.supportedFilesystems = [ "ntfs" "btrfs" ]; # lib.mkOverride 1010? Doesn't work with [] and {}?
 
       time.timeZone = lib.mkOverride 1010 "Europe/Lisbon";
-      i18n.defaultLocale = lib.mkOverride 1010 "en_GB.utf8";
+      i18n.defaultLocale = lib.mkOverride 1010 "en_GB.UTF-8";
       i18n.extraLocaleSettings = {
-        LC_ADDRESS = lib.mkOverride 1010 "pt_PT.utf8";
-        LC_IDENTIFICATION = lib.mkOverride 1010 "pt_PT.utf8";
-        LC_MEASUREMENT = lib.mkOverride 1010 "pt_PT.utf8";
-        LC_MONETARY = lib.mkOverride 1010 "pt_PT.utf8";
-        LC_NAME = lib.mkOverride 1010 "pt_PT.utf8";
-        LC_NUMERIC = lib.mkOverride 1010 "pt_PT.utf8";
-        LC_PAPER = lib.mkOverride 1010 "pt_PT.utf8";
-        LC_TELEPHONE = lib.mkOverride 1010 "pt_PT.utf8";
-        LC_TIME = lib.mkOverride 1010 "pt_PT.utf8";
+        LC_ADDRESS = lib.mkOverride 1010 "pt_PT.UTF-8"; 
+        LC_IDENTIFICATION = lib.mkOverride 1010 "pt_PT.UTF-8"; 
+        LC_MEASUREMENT = lib.mkOverride 1010 "pt_PT.UTF-8"; 
+        LC_MONETARY = lib.mkOverride 1010 "pt_PT.UTF-8"; 
+        LC_NAME = lib.mkOverride 1010 "pt_PT.UTF-8"; 
+        LC_NUMERIC = lib.mkOverride 1010 "pt_PT.UTF-8"; 
+        LC_PAPER = lib.mkOverride 1010 "pt_PT.UTF-8"; 
+        LC_TELEPHONE = lib.mkOverride 1010 "pt_PT.UTF-8"; 
+        LC_TIME = lib.mkOverride 1010 "pt_PT.UTF-8"; 
       };
       console.keyMap = lib.mkOverride 1010 "pt-latin1";
 
@@ -309,7 +309,7 @@ in
           libvdpau
           # ...
           # Some more libraries that I needed to run programs
-          gnome2.pango
+          pango
           cairo
           atk
           gdk-pixbuf

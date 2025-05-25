@@ -50,7 +50,10 @@ in
       profiles =
         let
           common-conf = {
-            bookmarks = [ ];
+            bookmarks = {
+              force = true;
+              settings = [ ];
+            };
             extensions = with pkgs.nur.repos.rycee.firefox-addons; [
               # You need to activate the extensions manually
               ublock-origin
@@ -91,15 +94,15 @@ in
                 };
                 "NixOS Wiki" = {
                   urls = [ { template = "https://nixos.wiki/index.php?search={searchTerms}"; } ];
-                  iconUpdateURL = "https://nixos.wiki/favicon.png";
+                  icon = "https://nixos.wiki/favicon.png";
                   updateInterval = 24 * 60 * 60 * 1000;
                   definedAliases = [ "@nw" ];
                 };
-                "Wikipedia (en)".metaData.alias = "@wiki";
+                "wikipedia".metaData.alias = "@wiki";
                 #"Google".metaData.hidden = true;
-                "Amazon.com".metaData.hidden = true;
-                "Bing".metaData.hidden = true;
-                "eBay".metaData.hidden = true;
+                "amazondotcom-us".metaData.hidden = true;
+                "bing".metaData.hidden = true;
+                "ebay".metaData.hidden = true;
               };
             };
             settings = {

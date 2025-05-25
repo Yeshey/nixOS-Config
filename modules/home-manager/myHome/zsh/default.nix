@@ -29,16 +29,9 @@ in
     home.packages = with pkgs; [
       safe-rm
       eza
-      # nerd-fonts.fira-code
-      # nerd-fonts.roboto-mono
-      # nerd-fonts.sauce-code-pro
-      (nerdfonts.override {
-        fonts = [
-          "FiraCode"
-          "RobotoMono"
-          "SourceCodePro"
-        ];
-      })
+      nerd-fonts.fira-code
+      nerd-fonts.roboto-mono
+      nerd-fonts.sauce-code-pro
       oxygenfonts
       source-sans-pro
     ];
@@ -53,7 +46,7 @@ in
         la = lib.mkOverride 1010 "eza -la --icons=auto";
       };
       # bash
-      initExtra = ''
+      initContent = ''
         # source ${./kubectl.zsh}
         # source ${./git.zsh}
         source ${./myAlias.zsh}
