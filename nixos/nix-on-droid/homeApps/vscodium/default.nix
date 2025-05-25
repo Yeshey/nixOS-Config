@@ -20,7 +20,6 @@ in
     in
     lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
 
-
     programs.vscode = {
       enable = true;
       mutableExtensionsDir = true;

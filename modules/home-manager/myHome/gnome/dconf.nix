@@ -296,11 +296,6 @@ with lib.hm.gvariant;
         resize-with-right-button = true;
       };
 
-      "org/gnome/eog/view" = {
-        background-color = "rgb(0,0,0)";
-        use-background-color = true;
-      };
-
       "org/gnome/epiphany" = {
         ask-for-default = false;
       };
