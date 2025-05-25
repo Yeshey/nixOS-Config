@@ -14,10 +14,10 @@ let
       url = "https://cache.nixos.org";
       key = "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=";
     };
-    cachethalheimio = {
-      url = "https://cache.thalheim.io";
-      key = "cache.thalheim.io-1:R7msbosLEZKrxk/lKxf9BTjOOH7Ax3H0Qj0/6wiHOgc=";
-    };
+    #cachethalheimio = {
+    #  url = "https://cache.thalheim.io";
+    #  key = "cache.thalheim.io-1:R7msbosLEZKrxk/lKxf9BTjOOH7Ax3H0Qj0/6wiHOgc=";
+    #};
     numtidecachixorg = {
       url = "https://numtide.cachix.org";
       key = "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE=";

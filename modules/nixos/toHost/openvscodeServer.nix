@@ -93,14 +93,14 @@ in
     # (ssh -L 9090:localhost:3000 -t yeshey@143.47.53.175 "sleep 90" &) && xdg-open http://localhost:9090
     services.openvscode-server = {
       enable = true;
-      # package = pkgs.code-server;
+      package = pkgs.code-server;
       # host = "localhost";
       host = "0.0.0.0"; # Bind to all network interfaces
       port = cfg.internalPort;
       user = "yeshey"; # TODO user variable?
       extensionsDir = "/home/yeshey/.vscode-oss/extensions"; # TODO user variable?
       withoutConnectionToken = true; # So you don't need to grab the token that it generates here
-      # extraArguments = [ "--cert" ]; # Generates self-signed certificate
+      # extraArguments = [ "--cert" ]; # Generates self-signed certificate, only for code-server
     };
 
     systemd.services.openvscode-server = {
