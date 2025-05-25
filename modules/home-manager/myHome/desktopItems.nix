@@ -20,7 +20,7 @@ in
       };
       extraclioptions = mkOption {
         type = types.str;
-        default = "/dynamic-resolution /kbd:0x0816 /audio-mode:1 /clipboard /network:modem /compression";
+        default = "/dynamic-resolution /audio-mode:1 /clipboard /network:modem /compression";
         description = "Extra command line options for xfreerdp";
       };
     };
@@ -78,7 +78,7 @@ in
           categories = [ "GTK" "X-WebApps" ];
           mimeTypes = [ "text/html" "text/xml" "application/xhtml_xml" ];
         };
-      in [ pkgs.openssh pkgs.xdg-utils govscodeserver vscodeserverDesktopItem ];
+      in [ pkgs.openssh pkgs.xdg-utils govscodeserver vscodeserverDesktopItem  ];
     })
   ];
 }
