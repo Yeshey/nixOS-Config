@@ -171,7 +171,8 @@
       hostName = "143.47.53.175:85"; # Or use "localhost" for local access
     };
     minecraft.enable = true;
-    openvscodeServer.enable = true;
+    openvscodeServer.enable = false;
+    code-server.enable = true;
     nginxServer = {
       enable = true;
       port = 7843;
