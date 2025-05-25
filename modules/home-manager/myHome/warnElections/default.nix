@@ -6,7 +6,7 @@
 }:
 
 let 
-myPython = (pkgs.python311.withPackages (python-pkgs: with python-pkgs; [
+myPython = (pkgs.python312.withPackages (python-pkgs: with python-pkgs; [
         beautifulsoup4
         requests
         numpy
