@@ -128,6 +128,19 @@ in
             })
           ];
       })
+
+      # tmp, TODO remove, issue https://github.com/NixOS/nixpkgs/issues/388681
+      (final: prev: {
+        pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [(
+          python-final: python-prev: {
+            onnxruntime = python-prev.onnxruntime.overridePythonAttrs (
+              oldAttrs: {
+                buildInputs = lib.lists.remove pkgs.onnxruntime oldAttrs.buildInputs;
+              }
+            );
+          }
+        )];
+      })
     ];
 
   };
