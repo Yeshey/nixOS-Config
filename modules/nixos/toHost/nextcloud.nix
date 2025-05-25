@@ -28,7 +28,7 @@ in
     services.nextcloud = {
       enable = true;
       # Remove specific version to prevent downgrade issues
-      package = pkgs.nextcloud30;
+      package = pkgs.nextcloud31;
       hostName = cfg.hostName;
       
       # Auto-update Nextcloud Apps
@@ -40,6 +40,7 @@ in
         # Only include s3 configuration if you're actually using S3
         # objectstore.s3.port = cfg.port;
         adminpassFile = "${pkgs.writeText "adminpass" "test123"}"; # user: root, pass: test123
+        dbtype = "mysql"; # recommended by nextcloud
       };
     };
 
