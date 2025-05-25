@@ -17,7 +17,6 @@ in
     environment = {
       systemPackages = with pkgs; [ firefox ];
       gnome.excludePackages = with pkgs; [
-        cheese # webcam tool
         gedit # text editor
         epiphany # web browser
         geary # email reader

@@ -124,7 +124,6 @@ in
 
       # Surface and Desktop apps
       qbittorrent
-      cheese
       signal-desktop
       blender # for blender
       gimp
