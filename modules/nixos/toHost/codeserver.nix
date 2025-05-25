@@ -9,23 +9,20 @@ let
   # and updating cfg accordingly if this service is permanently switching to code-server.
   cfg = config.toHost.code-server;
 
-  # certDir was likely intended for a Caddy setup.
-  # It may not be directly used if code-server handles its own TLS certificate as configured below.
-  certDir = "/var/lib/caddy/certs";
 in
 {
   # It's generally a good idea to rename this option set if the service fundamentally changes.
   # For example, to options.toHost.code-server and update the `cfg` variable above.
   options.toHost.code-server = {
     enable = (lib.mkEnableOption "code-server"); # Updated description
-    internalPort = lib.mkOption {
-      type = lib.types.port;
-      default = 2998;
-      description = "Internal port, potentially unused if code-server serves HTTPS directly on externalPort. May be used if a reverse proxy setup is re-introduced.";
-    };
+    # internalPort = lib.mkOption {
+    #   type = lib.types.port;
+    #   default = 2998;
+    #   description = "Internal port, potentially unused if code-server serves HTTPS directly on externalPort. May be used if a reverse proxy setup is re-introduced.";
+    # };
     externalPort = lib.mkOption {
       type = lib.types.port;
-      default = 8443; # Default HTTPS port for code-server
+      default = 2998; # Default HTTPS port for code-server
       description = "External HTTPS port for code-server";
     };
     hostname = lib.mkOption {
@@ -43,10 +40,11 @@ in
     # To check logs: journalctl -fu code-server.service
     services.code-server = {
       enable = true;
-      package = pkgs.code-server; # This uses the default code-server package from Nixpkgs.
+      # package = pkgs.code-server; # This uses the default code-server package from Nixpkgs.
       host = "0.0.0.0";          # Bind to all network interfaces.
       port = cfg.externalPort;   # code-server will listen on this port with HTTPS.
       user = "yeshey";           # User to run code-server as. (Consider using cfg.codeUser if defined above)
+      extraPackages = [pkgs.openssl]; 
       # group = "users";         # Optionally specify the group. Defaults usually work.
       # extraGroups = [];        # Optionally specify any extra groups.
 
@@ -82,13 +80,6 @@ in
       80
       443
     ];
-
-    systemd.services.code-server = {
-      path = [
-        pkgs.openssl
-      ];
-    };
-
 
   };
 }
