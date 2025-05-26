@@ -118,7 +118,6 @@ in
       resources # (better system monitor) (or missioncenter), bc psensor is unmaintained
 
       # draw
-      xournal
       unstable.joplin-desktop
       rnote
 
