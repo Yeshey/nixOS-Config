@@ -38,7 +38,7 @@ in
 
       in [
         # nexusmods-app-unfree # for game mods?
-        input-leap # :(
+        # input-leap # :(
         wineWow64Packages.full
       
         #jetbrains-toolbox # for code with me you need the toolbox
