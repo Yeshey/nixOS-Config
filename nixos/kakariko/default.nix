@@ -8,6 +8,37 @@
 }:
 
 let
+  hdaJackRetaskFwContent = ''
+[codec]
+0x10ec0274 0x10ec11e8 0
+
+[pincfg]
+0x12 0xb7a60130
+0x13 0x40000000
+0x14 0x411111f0
+0x15 0x411111f0
+0x16 0x411111f0
+0x17 0x411111f0
+0x18 0x411111f0
+0x19 0x90a60160
+0x1a 0x411111f0
+0x1b 0x90170110
+0x1d 0x4066192d
+0x1e 0x411111f0
+0x1f 0x411111f0
+0x21 0x03211020
+  '';
+
+  # Create a derivation that produces a directory containing the firmware file
+  hdaJackRetaskFwPkg = pkgs.runCommand "hda-jack-retask-custom-fw" {
+    # buildInputs can be empty if no tools are needed beyond shell builtins
+  } ''
+    # Create the standard directory structure for firmware
+    mkdir -p $out/lib/firmware 
+    # Write the content to the firmware file within that structure
+    echo "${hdaJackRetaskFwContent}" > $out/lib/firmware/hda-jack-retask.fw
+  '';
+
   # user = "yeshey";
 
   # TODO find a better way? see if its still needed
@@ -190,6 +221,15 @@ in
   };
 
   boot.kernelParams = [ "usbcore.autosuspend=-1" ]; # lets see if this fixes connect&disconnect sound bug
+
+  # Enable using internal Mic While headphones connected in jack
+  # found out by launching `hdajackretask`, going to Raltek ALC257, set Black Mic Override to "Internal mic" 
+  # Make the firmware file available to the kernel
+  hardware.firmware = [ hdaJackRetaskFwPkg ];
+  # Explicitly tell the snd-hda-intel kernel module to load this patch.
+  boot.extraModprobeConfig = ''
+    options snd-hda-intel patch=hda-jack-retask.fw
+  '';
 
   # learnWithT = {
   #   development.openPorts.enable = true;
