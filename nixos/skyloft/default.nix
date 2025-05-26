@@ -130,7 +130,7 @@
         passwordFile = "${builtins.toFile "restic-password" "123456789"}";
         initialize = true; # Good for the first run
 
-        startAt = "daily"; # Systemd timer will run daily
+        startAt = "*-*-* 14:00:00"; # Sets the default to 2 PM daily
         randomizedDelaySec = "6h"; # Spread runs
 
         prune.enable = true; # Enable automatic pruning
@@ -143,7 +143,9 @@
         };
 
         exclude = [
-          "*/RecordedClasses"
+          "**/.var"
+          "**/RecordedClasses"
+          "**/Games"
           # Add more cache/temporary directories
         ];
 
@@ -156,7 +158,7 @@
 
   toHost = {
     remoteWorkstation = {
-      sunshine.enable = true;
+      sunshine.enable = false;
       xrdp.enable = true;
     };
     dontStarveTogetherServer = {
@@ -164,12 +166,13 @@
       path = "/home/yeshey/PersonalFiles/Servers/dontstarvetogether/SurvivalServerMadeiraSummer2/DoNotStarveTogetherServer";
     };
     nextcloud = {
-      enable = true;
+      enable = false;
       port = 85;
       hostName = "143.47.53.175:85"; # Or use "localhost" for local access
     };
     minecraft.enable = true;
-    openvscodeServer.enable = true;
+    openvscodeServer.enable = false;
+    code-server.enable = true;
     nginxServer = {
       enable = true;
       port = 7843;
@@ -231,6 +234,13 @@
         "nixos-test"
         ];
     }];
+  };
+
+  # you should also add `qdbus org.kde.LogoutPrompt /LogoutPrompt  org.kde.LogoutPrompt.promptLogout` to the command to run when inactive for a certain time in KDE plasma
+  # Also screen locking, and screen locking after waking f rom sleep, should be disabled
+  # headless server doesn't need sddm (xrdp doesn't need it either)
+  services.displayManager.sddm = {
+    enable = false;
   };
 
   time.timeZone = "Europe/Madrid";

@@ -27,6 +27,7 @@ in
       tree
       unzip
       hyfetch
+      ookla-speedtest
     ];
 
     programs = {

@@ -77,7 +77,7 @@ in
 
           startAt = mkOption {
             type = types.str;
-            default = "daily";
+            default = "*-*-* 14:00:00"; # Sets the default to 2 PM daily
             description = "When to trigger the backup (systemd OnCalendar= string).";
             example = "*-*-* 02:00:00";
           };
@@ -212,43 +212,43 @@ in
           environmentFile = jobCfg.environmentFile;
           initialize = jobCfg.initialize;
           exclude = [
-              # --- YOUR MODULE'S DEFAULT EXCLUDES START ---
+              # --- MODULE'S DEFAULT EXCLUDES START ---
+              #  ** matches anything including paths `/`
+              #  *  matches anything except paths `/`
               "**/.cache"
               "**/Downloads"
               "**/.direnv"
               "**/node_modules"
               "**/.git"
-              ".cache"
-              "*/cache2"
-              "*/Cache"
-              ".config/Slack/logs"
-              ".config/Code/CachedData"
-              ".container-diff"
-              ".npm/_cacache"
-              "*/bower_components"
-              "*/_build"
-              "*/.tox"
-              "*/venv"
-              "*/.venv"
-              "*cache*"
-              "*/Android"
-              "*/.gradle"
-              "*/.var"
-              "*/.cabal"
-              "*/.vscode"
-              "*/.stremio-server"
-              "*/grapejuice"
-              "*/baloo"
-              "*/share/containers"
-              "*/share/waydroid"
-              "*/lutris"
-              "*/Steam"
+              "**/cache2"
+              "**/Cache"
+              "**/.config/Slack/logs"
+              "**/.config/Code/CachedData"
+              "**/.container-diff"
+              "**/.npm/_cacache"
+              "**/bower_components"
+              "**/_build"
+              "**/.tox"
+              "**/venv"
+              "**/.venv"
+              "**/*cache*/"
+              "**/Android"
+              "**/.gradle"
+              "**/.var/app/*/cache/" # faltpak
+              "**/.cabal"
+              "**/.vscode"
+              "**/.stremio-server"
+              "**/grapejuice"
+              "**/baloo"
+              "**/share/containers"
+              "**/share/waydroid"
+              "**/lutris"
+              "**/Steam"
               # ".config" # Still recommend against this as a default, be more specific
-              "*/.config/chromium"
-              "*/.config/google-chrome"
-              "*/.config/mozilla/firefox/*/cache2"
-              "*/Trash"
-              "*/Games"
+              "**/.config/chromium"
+              "**/.config/google-chrome"
+              "**/.config/mozilla/firefox/*/cache2"
+              "**/Trash"
               # --- YOUR MODULE'S DEFAULT EXCLUDES END ---
             ] ++ jobCfg.exclude; # jobCfg.exclude now comes from the user's configuration of your module
 
@@ -261,6 +261,15 @@ in
             OnCalendar = jobCfg.startAt;
             RandomizedDelaySec = lib.mkIf (jobCfg.randomizedDelaySec != null) (toString jobCfg.randomizedDelaySec);
           };
+
+          backupPrepareCommand = ''
+            while ! /run/current-system/sw/bin/ping -c 1 1.0.0.1; do
+              echo "Waiting for internet connection..."
+              sleep 60
+            done
+
+            echo "Internet is up, let's upload ~raccoon memes~ some backups!"
+          '';
 
           # Construct pruneOpts only if prune is enabled for this job
           pruneOpts = lib.mkIf jobCfg.prune.enable (
@@ -279,6 +288,18 @@ in
         }
       )
     ) cfg.jobs;
+
+    systemd.services = lib.mapAttrs' (jobName: jobCfg:
+      lib.nameValuePair "restic-backups-${jobName}" (
+        lib.mkIf jobCfg.enable {
+          serviceConfig = {
+            Restart = "on-failure";
+            RestartSec = "15m"; # Restart after 15 minutes on failure
+          };
+        }
+      )
+    ) cfg.jobs;
+
     environment.systemPackages = with pkgs; [ 
       rclone
     ];

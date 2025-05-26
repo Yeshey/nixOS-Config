@@ -61,10 +61,6 @@ with lib.hm.gvariant;
         ];
       };
 
-      "org/gnome/cheese" = {
-        burst-delay = 1000;
-      };
-
       "org/gnome/clocks" = {
         timers = "[{'duration': <240>, 'name': <''>}]";
       };
@@ -244,10 +240,6 @@ with lib.hm.gvariant;
         application-id = "org.gnome.tweaks.desktop";
       };
 
-      "org/gnome/desktop/notifications/application/p3x-onenote" = {
-        application-id = "p3x-onenote.desktop";
-      };
-
       "org/gnome/desktop/notifications/application/steam" = {
         application-id = "steam.desktop";
       };
@@ -294,11 +286,6 @@ with lib.hm.gvariant;
       "org/gnome/desktop/wm/preferences" = {
         button-layout = "appmenu:minimize,maximize,close";
         resize-with-right-button = true;
-      };
-
-      "org/gnome/eog/view" = {
-        background-color = "rgb(0,0,0)";
-        use-background-color = true;
       };
 
       "org/gnome/epiphany" = {
@@ -476,7 +463,7 @@ with lib.hm.gvariant;
       };
 
       "org/gnome/shell" = {
-        app-picker-layout = "[{'org.gnome.Geary.desktop': <{'position': <0>}>, 'org.gnome.Contacts.desktop': <{'position': <1>}>, 'org.gnome.Weather.desktop': <{'position': <2>}>, 'org.gnome.clocks.desktop': <{'position': <3>}>, 'org.gnome.Maps.desktop': <{'position': <4>}>, 'org.gnome.Photos.desktop': <{'position': <5>}>, 'org.gnome.Totem.desktop': <{'position': <6>}>, 'org.gnome.Calculator.desktop': <{'position': <7>}>, 'simple-scan.desktop': <{'position': <8>}>, 'org.gnome.Settings.desktop': <{'position': <9>}>, 'gnome-system-monitor.desktop': <{'position': <10>}>, 'yelp.desktop': <{'position': <11>}>, 'Utilities': <{'position': <12>}>, 'org.gnome.Cheese.desktop': <{'position': <13>}>, 'AnyDesk.desktop': <{'position': <14>}>, 'btop.desktop': <{'position': <15>}>, 'org.gnome.Calendar.desktop': <{'position': <16>}>, 'discord.desktop': <{'position': <17>}>, 'org.gnome.Extensions.desktop': <{'position': <18>}>, 'firefox.desktop': <{'position': <19>}>, 'github-desktop.desktop': <{'position': <20>}>, 'gparted.desktop': <{'position': <21>}>, 'org.pipewire.Helvum.desktop': <{'position': <22>}>, 'htop.desktop': <{'position': <23>}>}, {'startcenter.desktop': <{'position': <0>}>, 'base.desktop': <{'position': <1>}>, 'calc.desktop': <{'position': <2>}>, 'draw.desktop': <{'position': <3>}>, 'impress.desktop': <{'position': <4>}>, 'math.desktop': <{'position': <5>}>, 'writer.desktop': <{'position': <6>}>, 'cups.desktop': <{'position': <7>}>, 'org.gnome.Music.desktop': <{'position': <8>}>, 'nixos-manual.desktop': <{'position': <9>}>, 'com.obsproject.Studio.desktop': <{'position': <10>}>, 'p3x-onenote.desktop': <{'position': <11>}>, 'com.github.jeromerobert.pdfarranger.desktop': <{'position': <12>}>, 'psensor.desktop': <{'position': <13>}>, 'org.qbittorrent.qBittorrent.desktop': <{'position': <14>}>, 'org.gnome.Software.desktop': <{'position': <15>}>, 'smartcode-stremio.desktop': <{'position': <16>}>, 'org.gnome.TextEditor.desktop': <{'position': <17>}>, 'org.gnome.Tour.desktop': <{'position': <18>}>, 'code.desktop': <{'position': <19>}>, 'vlc.desktop': <{'position': <20>}>, 'xterm.desktop': <{'position': <21>}>}]";
+        app-picker-layout = "[{'org.gnome.Geary.desktop': <{'position': <0>}>, 'org.gnome.Contacts.desktop': <{'position': <1>}>, 'org.gnome.Weather.desktop': <{'position': <2>}>, 'org.gnome.clocks.desktop': <{'position': <3>}>, 'org.gnome.Maps.desktop': <{'position': <4>}>, 'org.gnome.Photos.desktop': <{'position': <5>}>, 'org.gnome.Totem.desktop': <{'position': <6>}>, 'org.gnome.Calculator.desktop': <{'position': <7>}>, 'simple-scan.desktop': <{'position': <8>}>, 'org.gnome.Settings.desktop': <{'position': <9>}>, 'gnome-system-monitor.desktop': <{'position': <10>}>, 'yelp.desktop': <{'position': <11>}>, 'Utilities': <{'position': <12>}>, 'AnyDesk.desktop': <{'position': <14>}>, 'btop.desktop': <{'position': <15>}>, 'org.gnome.Calendar.desktop': <{'position': <16>}>, 'discord.desktop': <{'position': <17>}>, 'org.gnome.Extensions.desktop': <{'position': <18>}>, 'firefox.desktop': <{'position': <19>}>, 'github-desktop.desktop': <{'position': <20>}>, 'gparted.desktop': <{'position': <21>}>, 'org.pipewire.Helvum.desktop': <{'position': <22>}>, 'htop.desktop': <{'position': <23>}>}, {'startcenter.desktop': <{'position': <0>}>, 'base.desktop': <{'position': <1>}>, 'calc.desktop': <{'position': <2>}>, 'draw.desktop': <{'position': <3>}>, 'impress.desktop': <{'position': <4>}>, 'math.desktop': <{'position': <5>}>, 'writer.desktop': <{'position': <6>}>, 'cups.desktop': <{'position': <7>}>, 'org.gnome.Music.desktop': <{'position': <8>}>, 'nixos-manual.desktop': <{'position': <9>}>, 'com.obsproject.Studio.desktop': <{'position': <10>}>, 'p3x-onenote.desktop': <{'position': <11>}>, 'com.github.jeromerobert.pdfarranger.desktop': <{'position': <12>}>, 'psensor.desktop': <{'position': <13>}>, 'org.qbittorrent.qBittorrent.desktop': <{'position': <14>}>, 'org.gnome.Software.desktop': <{'position': <15>}>, 'smartcode-stremio.desktop': <{'position': <16>}>, 'org.gnome.TextEditor.desktop': <{'position': <17>}>, 'org.gnome.Tour.desktop': <{'position': <18>}>, 'code.desktop': <{'position': <19>}>, 'vlc.desktop': <{'position': <20>}>, 'xterm.desktop': <{'position': <21>}>}]";
         disable-user-extensions = false;
         disabled-extensions = [
           # "rounded-window-corners@yilozt"

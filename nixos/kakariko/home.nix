@@ -70,6 +70,7 @@ in
       cursor = {
         package = pkgs.banana-cursor;
         name = "Banana";
+        size = 24;
       };
     };
     onedriver = {
@@ -101,7 +102,7 @@ in
         enable = true;
         remote.ip = "143.47.53.175";
         remote.user = "yeshey";
-        extraclioptions = "/w:1920 /h:1080 /smart-sizing /kbd:0x0816 /audio-mode:1 /clipboard /network:modem /compression";
+        extraclioptions = "/p: /w:1920 /h:1080 /smart-sizing /audio-mode:1 /clipboard /network:modem /compression";
       };
       openvscodeServer = {
         enable = true;
@@ -123,8 +124,6 @@ in
 
       # Surface and Desktop apps
       qbittorrent
-      cheese
-      p3x-onenote # might be worth trying notekit(https://github.com/blackhole89/notekit) and Zettlr(https://github.com/Zettlr/Zettlr)
       signal-desktop
       blender # for blender
       gimp

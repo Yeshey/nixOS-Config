@@ -152,7 +152,7 @@ in
     nixpkgs \
     nixpkgs-unstable \
     home-manager \
-    neovim-plugins \
+    nvf \
     stylix \
     plasma-manager \
     nurpkgs \

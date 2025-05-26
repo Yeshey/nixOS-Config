@@ -32,6 +32,7 @@ in
       example = {
         package = pkgs.banana-cursor;
         name = "Banana";
+        size = 24;
       };
     };
   };
@@ -61,6 +62,7 @@ in
       };
 
       targets.vscode.enable = false;
+      targets.firefox.profileNames = [ "${config.myHome.user}" ];
 
       /*
       fonts = {

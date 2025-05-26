@@ -16,10 +16,10 @@ let
       url = "https://cache.nixos.org";
       key = "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=";
     };
-    cachethalheimio = {
-      url = "https://cache.thalheim.io";
-      key = "cache.thalheim.io-1:R7msbosLEZKrxk/lKxf9BTjOOH7Ax3H0Qj0/6wiHOgc=";
-    };
+    #cachethalheimio = {
+    #  url = "https://cache.thalheim.io";
+    #  key = "cache.thalheim.io-1:R7msbosLEZKrxk/lKxf9BTjOOH7Ax3H0Qj0/6wiHOgc=";
+    #};
     numtidecachixorg = {
       url = "https://numtide.cachix.org";
       key = "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE=";
@@ -129,17 +129,17 @@ in
       boot.supportedFilesystems = [ "ntfs" "btrfs" ]; # lib.mkOverride 1010? Doesn't work with [] and {}?
 
       time.timeZone = lib.mkOverride 1010 "Europe/Lisbon";
-      i18n.defaultLocale = lib.mkOverride 1010 "en_GB.utf8";
+      i18n.defaultLocale = lib.mkOverride 1010 "en_GB.UTF-8";
       i18n.extraLocaleSettings = {
-        LC_ADDRESS = lib.mkOverride 1010 "pt_PT.utf8";
-        LC_IDENTIFICATION = lib.mkOverride 1010 "pt_PT.utf8";
-        LC_MEASUREMENT = lib.mkOverride 1010 "pt_PT.utf8";
-        LC_MONETARY = lib.mkOverride 1010 "pt_PT.utf8";
-        LC_NAME = lib.mkOverride 1010 "pt_PT.utf8";
-        LC_NUMERIC = lib.mkOverride 1010 "pt_PT.utf8";
-        LC_PAPER = lib.mkOverride 1010 "pt_PT.utf8";
-        LC_TELEPHONE = lib.mkOverride 1010 "pt_PT.utf8";
-        LC_TIME = lib.mkOverride 1010 "pt_PT.utf8";
+        LC_ADDRESS = lib.mkOverride 1010 "pt_PT.UTF-8"; 
+        LC_IDENTIFICATION = lib.mkOverride 1010 "pt_PT.UTF-8"; 
+        LC_MEASUREMENT = lib.mkOverride 1010 "pt_PT.UTF-8"; 
+        LC_MONETARY = lib.mkOverride 1010 "pt_PT.UTF-8"; 
+        LC_NAME = lib.mkOverride 1010 "pt_PT.UTF-8"; 
+        LC_NUMERIC = lib.mkOverride 1010 "pt_PT.UTF-8"; 
+        LC_PAPER = lib.mkOverride 1010 "pt_PT.UTF-8"; 
+        LC_TELEPHONE = lib.mkOverride 1010 "pt_PT.UTF-8"; 
+        LC_TIME = lib.mkOverride 1010 "pt_PT.UTF-8"; 
       };
       console.keyMap = lib.mkOverride 1010 "pt-latin1";
 
@@ -309,7 +309,7 @@ in
           libvdpau
           # ...
           # Some more libraries that I needed to run programs
-          gnome2.pango
+          pango
           cairo
           atk
           gdk-pixbuf
