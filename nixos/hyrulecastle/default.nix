@@ -379,7 +379,6 @@ in
   # found out by launching `hdajackretask`, going to Raltek ALC257, set Black Mic Override to "Internal mic" 
   # Make the firmware file available to the kernel
   hardware.firmware = [ hdaJackRetaskFwPkg ];
-
   # Explicitly tell the snd-hda-intel kernel module to load this patch.
   boot.extraModprobeConfig = ''
     options snd-hda-intel patch=hda-jack-retask.fw
