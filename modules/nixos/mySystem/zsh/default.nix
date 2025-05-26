@@ -25,7 +25,7 @@ in
 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
     environment = {
-      systemPackages = with pkgs; [ (nerdfonts.override { fonts = [ "FiraCode" ]; }) ];
+      systemPackages = with pkgs; [ nerd-fonts.fira-code ];
     };
     #programs.starship = {
     #  enable = true;

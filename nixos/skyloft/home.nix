@@ -90,9 +90,7 @@ in
       # texlive.combined.scheme-full
       github-desktop
 
-      
       # osu-lazer
-      openvscode-server
       gcc
     ];
   };

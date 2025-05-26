@@ -89,7 +89,8 @@
     };
 
     # For starting the ssh server
-    initExtra = ''
+    #initExtra
+    initContent = ''
       sshd-start
     '';
   };

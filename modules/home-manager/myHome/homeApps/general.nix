@@ -29,19 +29,16 @@ in
           dontPatchELF = true;
           nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ pkgs.kdePackages.wrapQtAppsHook ];
         });
-        my-input-leap = pkgs.input-leap.overrideAttrs (oldAttrs: {
-          src = fetchFromGitHub {
-            owner = "input-leap";
-            repo = "input-leap";
-            rev = "0a72fdcfcf9d2cc0e03789fd74e48694132a003c";
-            hash = "sha256-T/v4JMHAbJKO7ZTIt+Ru1J1T726Z1VoId45egTGxDfs=";
-            fetchSubmodules = true;
-          };
-        });
+
+        pkgs_old_wihotspot = import (builtins.fetchTarball {
+            url = "https://github.com/NixOS/nixpkgs/archive/67b4bf1df4ae54d6866d78ccbd1ac7e8a8db8b73.tar.gz";
+            sha256 = "sha256:07gzgcgaclgand7j99w45r07gc464b5jbpaa3wmv6nzwzdb3v3q4";
+        }){ inherit (pkgs) system; };
+        old_wihotspot = pkgs_old_wihotspot.linux-wifi-hotspot;
+
       in [
-        #input-leap
         # nexusmods-app-unfree # for game mods?
-        input-leap # :(
+        # input-leap # :(
         wineWow64Packages.full
       
         #jetbrains-toolbox # for code with me you need the toolbox
@@ -49,7 +46,7 @@ in
 
         vital # run with Vital
         helm
-        okular
+        kdePackages.okular
 
         unstable.joplin-desktop # note taking
         unstable.zed-editor
@@ -59,7 +56,6 @@ in
         obs-studio
         stremio
         #barrier
-        #input-leap
         bitwarden
         gparted
         baobab
@@ -83,6 +79,7 @@ in
         vlc
         # anydesk
         pdfarranger
+        # old_wihotspot
         linux-wifi-hotspot # hotspot
         # texlive.combined.scheme-full # LaTeX
 

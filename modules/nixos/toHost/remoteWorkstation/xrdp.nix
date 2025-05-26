@@ -43,13 +43,16 @@ in
     services = {
       xserver = {
         enable = true;    # X11 because setting up Wayland is more complicated than it is worth for me.
+        xkb = {
+          layout = "pt";
+          variant = "";
+        };
       };
       desktopManager.plasma6.enable = true;
       displayManager = {
         #autoLogin.enable = true;
         #autoLogin.user = config.mySystem.user;
         sddm.enable = lib.mkOverride 1010 true;
-        defaultSession = "plasmax11";
       };
     };
 
