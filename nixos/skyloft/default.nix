@@ -257,6 +257,14 @@
     # permittedInsecurePackages # cant be in multiple files. Set it in mySystem
   };
 
+  # hardening options
+  services.openssh = {
+    # require public key authentication for better security
+    settings.PasswordAuthentication = false;
+    settings.KbdInteractiveAuthentication = false;
+    settings.PermitRootLogin = "no";
+  };
+
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
