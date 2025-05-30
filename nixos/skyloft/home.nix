@@ -84,6 +84,26 @@ in
     };
   };
 
+  # Ignore Patterns Syncthing # Ignore Patterns Syncthing # You need to check that this doesnt override every other activation script, make lib.append? - if it was lib.mkFOrce it would override, like this it appends
+  # system.userActivationScripts =
+  #   let
+  #   #        mkdir -p ${path}
+  #       #echo "${patterns}" > ${path}/.stignore
+  #     ignorePattern = path: patterns: ''
+  #       mkdir -p ${path}
+  #       echo "${patterns}" > ${path}/.stignore
+  #     '';
+  #   in
+  #   {
+  #     # Add ignore patters just for surface here:
+  #     syncthingIgnorePatterns.text = ''
+  #       # MinecraftPrismLauncherMainInstance
+  #       ${ignorePattern "/home/yeshey/.local/share/PrismLauncher/instances/MainInstance/.minecraft" "
+  #         // *
+  #       "}
+  #     '';
+  #   };
+
   home = {
     # Specific packages # TODO check if you need these
     packages = with pkgs; [
