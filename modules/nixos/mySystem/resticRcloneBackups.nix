@@ -260,6 +260,7 @@ in
           timerConfig = {
             OnCalendar = jobCfg.startAt;
             RandomizedDelaySec = lib.mkIf (jobCfg.randomizedDelaySec != null) (toString jobCfg.randomizedDelaySec);
+            Persistent = true;
           };
 
           backupPrepareCommand = ''
