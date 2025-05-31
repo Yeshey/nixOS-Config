@@ -501,6 +501,33 @@ in
                 url = "https://cdn.modrinth.com/data/uCdwusMi/versions/94McsAoL/DistantHorizons-neoforge-fabric-2.3.2-b-1.21.4.jar";
                 sha256 = "sha256-uf/8HNmeY9oRLHyqRkVYGi1YapF+WxZyhXiMnqxSCzI=";
               };
+              # good shaders to use with distantHorizons: Bliss-Shader, 
+              particle-rain = pkgs.fetchurl {
+                url = "https://cdn.modrinth.com/data/nrikgvxm/versions/NUvMa5Xt/particle-rain-3.3.3.jar";
+                sha256 = "sha256-4nFBT4oK9oDXEoXLF5Ku+n8y8pGh/k2BnQfyhdEGaV8=";
+              };
+              ambientsounds = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/6206/435/AmbientSounds_FABRIC_v6.1.7_mc1.21.4.jar";
+                sha256 = "sha256-bWeXhxliyexsTkqes/179Fl+QUwSGAvjVHNoVG648JQ=";
+              };
+              creativecore = pkgs.fetchurl { # needed for ambient sounds
+                url = "https://mediafilez.forgecdn.net/files/6192/466/CreativeCore_FABRIC_v2.12.35_mc1.21.4.jar";
+                sha256 = "sha256-o7sOd9p+dS77JA8WQai/Jjlr8cYEtzO+mT/cGX3hrKw=";
+              };
+              PresenceFootsteps = pkgs.fetchurl {
+                url = "https://cdn.modrinth.com/data/rcTfTZr3/versions/Oxj0KnG2/PresenceFootsteps-1.11.0%2B1.21.4.jar";
+                sha256 = "sha256-STihPBcr6gjKInJQ1KRpqDD44C++bOfvXr8advWqgpU=";
+              };
+              # with the below two installed mods you can now run fresh-animations resource pack: https://www.curseforge.com/minecraft/texture-packs/fresh-animations
+              # other good resourcepacks: gentler weather and VanillaMashup
+              entity_model_features = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/6001/154/entity_model_features_fabric_1.21.4-2.4.1.jar";
+                sha256 = "sha256-DJEj2cvrUIW7FnQi3udFwvmUIAEWPMP+gLSw9VmBpCo=";
+              };
+              entity_texture_features = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/6045/344/entity_texture_features_fabric_1.21.4-6.2.10.jar";
+                sha256 = "sha256-MIdRkuj9zcLlrdEM+z6Kl+cJYJXneDhou5HJiVmBFLE=";
+              };            
               modernfix = pkgs.fetchurl {
                 url = "https://cdn.modrinth.com/data/nmDcB62a/versions/ZGxQddYr/modernfix-fabric-5.20.3%2Bmc1.21.4.jar";
                 sha256 = "sha256-zrQ15ShzUtw1Xty1yxxO/n8xYofpaATSF9ewEeqE/d4=";
@@ -547,6 +574,20 @@ in
               };
             }
           );
+        };
+        files = {
+          # Distant Horizons configuration with lodChunkRenderDistanceRadius = 512
+          "config/DistantHorizons.toml" = pkgs.writeTextFile {
+            name = "DistantHorizons.toml";
+            text = ''
+[client]
+  [client.advanced]
+    [client.advanced.graphics]
+      [client.advanced.graphics.quality]
+        # The radius of the mod's render distance. (measured in chunks)
+        lodChunkRenderDistanceRadius = 512
+'';
+          };
         };
       }; # End botw server
 
