@@ -112,6 +112,7 @@
 
     # to use this you need to create a remote with the name onedriveISCTE with `rclone config`
     # with restic-browser you would check the contents of the backup by putting onedriveISCTE:ResticBackups/servers in remote section and selecting type rclone
+    # pass é aquela que das set na config aqui
     resticRcloneBackups.jobs = {
       #check this backup with journalctl -fu restic-backups-servers.service
       servers = {
