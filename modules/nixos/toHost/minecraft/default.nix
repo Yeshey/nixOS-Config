@@ -389,6 +389,167 @@ in
         };
       }; # End zombies2 server
 
+
+      servers.botw = {
+        enable = true;
+        # general options
+        jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled";
+        # connect to terminal with sudo tmux -S /run/minecraft/botw.sock attach
+        serverProperties = {
+          # level-seed="-8932854458220952308"; # cool seed
+          server-port = 44345;
+          server-portv6 = 44346;
+          difficulty = 2;
+          "allow-cheats" = "true";
+          gamemode = 0;
+          max-players = 100;
+          motd = "Breath Of the Wild :)";
+          white-list = false;
+          enable-rcon = false;
+          "rcon.password" = "hunter2";
+          "rcon.port"=44347;
+          "query.port"=44345;
+          "online-mode"=false;
+          "max-tick-time" = -1; # Recommended with lazymc
+        };
+
+        # Specify the custom minecraft server package
+        #package = pkgs.fabricServers.fabric-1_21_1; #.override { loaderVersion = "0.16.10"; }; # Specific fabric loader version
+        package = pkgs.fabricServers.fabric-1_21_4.override { loaderVersion = "0.16.14"; };
+
+        lazymc = {
+          enable = true;
+          # package = let
+          # # you can use https://lazamar.co.uk/nix-versions/
+          #   pkgs-with-lazymc_0_2_10 = import (builtins.fetchTarball {
+          #       url = "https://github.com/NixOS/nixpkgs/archive/336eda0d07dc5e2be1f923990ad9fdb6bc8e28e3.tar.gz";
+          #       sha256 = "sha256:0v8vnmgw7cifsp5irib1wkc0bpxzqcarlv8mdybk6dck5m7p10lr";
+          #   }) { inherit (pkgs) system; };
+          # in pkgs-with-lazymc_0_2_10.lazymc;
+          config = {
+            # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
+            forge = false;
+          };
+        };
+
+        symlinks = {
+          mods = pkgs.linkFarmFromDrvs "mods" (
+            builtins.attrValues {
+              TravelersBackpack = pkgs.fetchurl {
+                 url = "https://mediafilez.forgecdn.net/files/6556/44/travelersbackpack-fabric-1.21.4-10.4.13.jar";
+                sha256 = "sha256-Wzej9iSNp0p7nzbiES/TjvnHpKaRWL1wnoN1KsYH8Kk=";
+              };
+              cardinal-components-api = pkgs.fetchurl { # needed by travelersbackpack
+                url = "https://mediafilez.forgecdn.net/files/6027/922/cardinal-components-api-6.2.2.jar";
+                sha256 = "sha256-LhlW1ZSCd2cWbCeq3ckl7TOqoltJr7KXZdnsMSLhhl0=";
+              };
+              cloth-config = pkgs.fetchurl { # needed by travelersbackpack
+                url = "https://mediafilez.forgecdn.net/files/5987/42/cloth-config-17.0.144-fabric.jar";
+                sha256 = "sha256-H9oMSonU8HXlGz61VwpJEocGVtJS2AbqMJHSu8Bngeo=";
+              };
+              RoughlyEnoughItems = pkgs.fetchurl { # requiered by MajruszsProgressiveDifficulty
+                url = "https://mediafilez.forgecdn.net/files/6406/333/RoughlyEnoughItems-18.0.804-fabric.jar";
+                sha256 = "sha256-HGb2P6waxjxSjh3djTq3/DG0/x4VkeyY9BNEVtHft5Y=";
+              };
+              architectury = pkgs.fetchurl { # needed by roughly enough items
+                url = "https://mediafilez.forgecdn.net/files/6206/630/architectury-15.0.3-fabric.jar";
+                sha256 = "sha256-nhH4HueGQBom3khql5hodVmlMp/sPNQV6U+jw5WDUvM=";
+              };
+              journeymap = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/6550/381/journeymap-fabric-1.21.4-6.0.0-beta.47.jar";
+                sha256 = "sha256-wi7EL6AHjvu1nYFlm7GJxRuXa45C/Q5ilCcavq0pqM0=";
+              };
+              sharedinv = pkgs.fetchurl {
+                url = "https://cdn.modrinth.com/data/MhGYDguV/versions/XFlgkgyM/sharedinv-1.2.1.jar";
+                sha256 = "sha256-VlHP//rrylAWxGNNzcDZ58qRohzybu1POhjbU+TDleI=";
+              };
+              itemalchemy = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/6546/161/itemalchemy-1.1.2.jar";
+                sha256 = "sha256-pM3EtGwhYq30AYSfe/x/pAjffFlT2GT1JkFB8u7mLCY=";
+              };
+              mcpitanlib = pkgs.fetchurl { # needed by itemalchemy
+                url = "https://mediafilez.forgecdn.net/files/6560/796/mcpitanlib-3.2.7-1.21.4-fabric.jar";
+                sha256 = "sha256-USfB4dI0yZ7CjhDGAfLd5WMjQj56Y/TJyyj8gIwqTpQ=";
+              };
+              eg_particle_interactions = pkgs.fetchurl {
+                url = "https://cdn.modrinth.com/data/xFCYuAs8/versions/oZCuVdkW/eg_particle_interactions-0.6.2-fabric-mc1.21.4.jar";
+                sha256 = "sha256-F38it/PtsWHmmtNSj9QHm/OR6shvPmH1VhF87cJHExQ=";
+              };
+              TreeTimberFabric = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/6027/13/TreeTimberFabric-1.0.0.jar";
+                sha256 = "sha256-MHaDascALHIttkWaRNHUDnt4yGHWO4kijxcebEgTimo=";
+              };
+              setworldspawnpoint = pkgs.fetchurl { # preserve Y axis in world spawn
+                url = "https://mediafilez.forgecdn.net/files/6185/213/setworldspawnpoint-1.21.4-3.5.jar";
+                sha256 = "sha256-J7Xr8o6HxIAGrK9girW5QeoS68feNvKa1gZYRmqc2DI=";
+              };
+              collective = pkgs.fetchurl { # needed by setworldspawnpoint
+                url = "https://mediafilez.forgecdn.net/files/6429/225/collective-1.21.4-8.3.jar";
+                sha256 = "sha256-mIeBy9zRcRUZlskk3BDSA518tyLQ04FwCRpDsboMhGo=";
+              };
+
+              # Performance & quality of life
+              sodium = pkgs.fetchurl {
+                url = "https://cdn.modrinth.com/data/AANobbMI/versions/c3YkZvne/sodium-fabric-0.6.13%2Bmc1.21.4.jar";
+                sha256 = "sha256-kreWI/wA8PlIAFoK5BbLQqUWRvJCO0A24n6GfkABpH4=";
+              };
+              lithium = pkgs.fetchurl {
+                url = "https://mediafilez.forgecdn.net/files/6401/281/lithium-fabric-0.15.3%2Bmc1.21.4.jar";
+                sha256 = "sha256-FTiR6NaYj+3/pQmIUacloTfD5coEqJqN9An+sxNiPrQ=";
+              };
+              DistantHorizons = pkgs.fetchurl {
+                url = "https://cdn.modrinth.com/data/uCdwusMi/versions/94McsAoL/DistantHorizons-neoforge-fabric-2.3.2-b-1.21.4.jar";
+                sha256 = "sha256-uf/8HNmeY9oRLHyqRkVYGi1YapF+WxZyhXiMnqxSCzI=";
+              };
+              modernfix = pkgs.fetchurl {
+                url = "https://cdn.modrinth.com/data/nmDcB62a/versions/ZGxQddYr/modernfix-fabric-5.20.3%2Bmc1.21.4.jar";
+                sha256 = "sha256-zrQ15ShzUtw1Xty1yxxO/n8xYofpaATSF9ewEeqE/d4=";
+              };
+              iris = pkgs.fetchurl { # for shaders
+                url = "https://cdn.modrinth.com/data/YL57xq9U/versions/Ca054sTe/iris-fabric-1.8.8%2Bmc1.21.4.jar";
+                sha256 = "sha256-cFcbI9TeF644BRX7TJ2t2C2W9+wbVzVThYoHu4BEXak=";
+              };
+              Zoomify = pkgs.fetchurl {
+                url = "https://cdn.modrinth.com/data/w7ThoJFB/versions/RKRjd2h1/Zoomify-2.14.2%2B1.21.3.jar";
+                sha256 = "sha256-9nZ/X2tCV2/UwYRDnkAjBBBhb+NRn+OJb51qcPigtbI=";
+              };
+              yet_another_config_lib = pkgs.fetchurl { # needed by zoomify
+                url = "https://cdn.modrinth.com/data/1eAoo2KR/versions/XeXZrziK/yet_another_config_lib_v3-3.6.6%2B1.21.4-fabric.jar";
+                sha256 = "sha256-dA1DpD99+uSn3r4v2WqTpsSfa2jrpOie8d6HBs5AT60=";
+              };
+              fabric-language-kotlin = pkgs.fetchurl { # needed by zoomify
+                url = "https://cdn.modrinth.com/data/Ha28R6CL/versions/iqWDz8qt/fabric-language-kotlin-1.13.3%2Bkotlin.2.1.21.jar";
+                sha256 = "sha256-0d58143zqMbIazgji/1pFA0b8OrV2O9bukjPPKE0LYs=";
+              };
+              ImmediatelyFast = pkgs.fetchurl {
+                url = "https://cdn.modrinth.com/data/5ZwdcRci/versions/ddjmgf0b/ImmediatelyFast-Fabric-1.8.0%2B1.21.4.jar";
+                sha256 = "sha256-EwniJ08fd2sV1yGWzZdlMeQV4EkEQOn4j5BkxDK/lP0=";
+              };
+              ferritecore = pkgs.fetchurl {
+                url = "https://cdn.modrinth.com/data/uXXizFIs/versions/IPM0JlHd/ferritecore-7.1.1-fabric.jar";
+                sha256 = "sha256-DdXpIDVSAk445zoPW0aoLrZvAxiyMonGhCsmhmMnSnk=";
+              };
+              fabric-api = pkgs.fetchurl { # do I need this?
+                url = "https://cdn.modrinth.com/data/P7dR8mSH/versions/sVqpGIb1/fabric-api-0.119.3%2B1.21.4.jar";
+                sha256 = "sha256-ay3wDFI5TDmA+HE3/Wk37o10iItFyuZ9RwfMoCZ6bR8=";
+              };
+              BiomesOPlenty = pkgs.fetchurl {
+                url = "https://cdn.modrinth.com/data/HXF82T3G/versions/1hMDdKWQ/BiomesOPlenty-fabric-1.21.4-21.4.0.23.jar";
+                sha256 = "sha256-n1OK5vDpVcFMEW6JgonTv7OJJgN62x4R04ZBDgxaMxg=";
+              };
+              GlitchCore = pkgs.fetchurl { # needed by biomesoplenty
+                url = "https://mediafilez.forgecdn.net/files/6054/290/GlitchCore-fabric-1.21.4-2.3.0.4.jar";
+                sha256 = "sha256-50xmoQwlDYEm+Vb3f3C6NfJgtpiXZcZuTdd94PyrPrw=";
+              };
+              TerraBlender = pkgs.fetchurl { # needed by biomesoplenty
+                url = "https://mediafilez.forgecdn.net/files/6055/20/TerraBlender-fabric-1.21.4-4.3.0.2.jar";
+                sha256 = "sha256-mBYDh/Qyw14DOHtxi4hVb52/Gs5Yjhi+SzNXBjYlQuQ=";
+              };
+            }
+          );
+        };
+      }; # End botw server
+
     };
   };
 }
