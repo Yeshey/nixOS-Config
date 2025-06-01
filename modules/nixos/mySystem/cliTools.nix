@@ -21,7 +21,6 @@ in
       pciutils
       curl
       vim # The Nano editor is installed by default.
-      htop
       tmux
       wget
       tree
