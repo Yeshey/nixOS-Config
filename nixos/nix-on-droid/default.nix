@@ -37,7 +37,6 @@
     curl
     vim # The Nano editor is installed by default.
     neovim
-    htop
     tmux
     wget
     tree
@@ -48,7 +47,6 @@
     nano
     git
     #openssh
-    htop
     tmux
   
     procps

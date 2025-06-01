@@ -30,7 +30,6 @@ in
       curl
       vim # The Nano editor is installed by default.
       neovim
-      htop
       tmux
       wget
       tree
