@@ -220,7 +220,10 @@ in
     };
   };
 
-  boot.kernelParams = [ "usbcore.autosuspend=-1" ]; # lets see if this fixes connect&disconnect sound bug
+  boot.kernelParams = [ "usbcore.autosuspend=-1" ]; # lets see if this fixes connect&disconnect sound bug (I haven't noticed it since)
+
+  zramSwap.enable = true;
+  zramSwap.memoryPercent = 100;
 
   # Enable using internal Mic While headphones connected in jack
   # found out by launching `hdajackretask`, going to Raltek ALC257, set Black Mic Override to "Internal mic" 
