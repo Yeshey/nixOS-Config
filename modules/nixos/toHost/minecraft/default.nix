@@ -585,7 +585,7 @@ in
     [client.advanced.graphics]
       [client.advanced.graphics.quality]
         # The radius of the mod's render distance. (measured in chunks)
-        lodChunkRenderDistanceRadius = 512
+        lodChunkRenderDistanceRadius = 1024
 '';
           };
         };
