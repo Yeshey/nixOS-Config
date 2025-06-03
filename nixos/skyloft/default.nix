@@ -122,6 +122,7 @@
           "/var/lib/luanti-anarchyMineclone2/world"
           "/srv/minecraft/pixelmon/world"
           "/srv/minecraft/zombies2/world" 
+          "/opt/docker/overleaf/overleaf-data"
         ];
         rcloneRemoteName = "onedriveISCTE";
         rcloneRemotePath = "ResticBackups/servers"; # This is like your 'repo' path, but on the remote
