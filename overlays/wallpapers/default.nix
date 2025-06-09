@@ -15,4 +15,7 @@ in
     url = "file://${current_folder}/StellarCollisionByKuldarLeement.jpg";
     sha256 = "sha256:1bl7d7qm4ln1bg72c8y2d236a0wn31kgji1h6zsf611qa0b43adm";
   };
+  tunaCoimbra2025 = pkgs.runCommand "tunaCoimbra2025.jpg" { } ''
+    cp ${./tunaCoimbra2025.jpg} $out
+  '';
 }
