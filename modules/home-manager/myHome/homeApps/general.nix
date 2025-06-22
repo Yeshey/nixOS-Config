@@ -40,6 +40,7 @@ in
         # nexusmods-app-unfree # for game mods?
         # input-leap # :(
         wineWow64Packages.full
+        restic-browser
       
         #jetbrains-toolbox # for code with me you need the toolbox
         #jetbrains.gateway
