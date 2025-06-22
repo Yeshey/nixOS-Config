@@ -172,6 +172,7 @@ in
       sshKeys.enable = false;
     };
     #isolateVMsNixStore = true;
+    waydroid.enable = true;
     impermanence.enable = false;
 
     speedtest-tracker = {
