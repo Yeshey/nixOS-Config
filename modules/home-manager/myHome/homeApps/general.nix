@@ -41,7 +41,8 @@ in
         # input-leap # :(
         wineWow64Packages.full
         restic-browser
-      
+        restic
+
         #jetbrains-toolbox # for code with me you need the toolbox
         #jetbrains.gateway
 
