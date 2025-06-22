@@ -72,7 +72,7 @@ in
       # https://www.youtube.com/watch?v=ljHkWgBaQWU
       enable = true;
       base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-mirage.yaml"; #gruvbox-dark-medium #pop
-      wallpaper = pkgs.wallpapers.stellarCollisionByKuldarleement; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement
+      wallpaper = pkgs.wallpapers.stellarCollisionByKuldarleement; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement #tunaCoimbra2025
       cursor = {
         package = pkgs.banana-cursor;
         name = "Banana";
