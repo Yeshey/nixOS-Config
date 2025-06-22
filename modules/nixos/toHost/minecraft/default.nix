@@ -64,6 +64,43 @@ in
       # to recreate the world, delete just the world folder
       # might need to delete /run/minecraft/zombies2.sock
 
+
+      # this server is at /srv/minecraft/pixelmon
+      servers.mainServer = {
+        enable = true;
+        # options specific for pixelmon?
+        jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";
+        serverProperties = {
+          server-port = 44329;
+          server-portv6 = 44330;
+          difficulty = 2;
+          "allow-cheats" = "true";
+          gamemode = 0;
+          max-players = 60;
+          motd = "MINE!!";
+          white-list = false;
+          enable-rcon = false;
+          "rcon.password" = "hunter2";
+          "rcon.port"=44331;
+          "query.port"=44329;
+          "online-mode"=false;
+          "max-tick-time" = -1; # Recommended with lazymc
+        };
+
+        # Specify the custom minecraft server package
+        #package = pkgs.fabricServers.fabric-1_21_1; #.override { loaderVersion = "0.16.10"; }; # Specific fabric loader version
+        package = pkgs.paperServers.paper;
+
+        lazymc = {
+          enable = true;
+          config = {
+            # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
+            forge = true;
+            time.sleep_after = 240; # Sleep after 4 minutes
+          };
+        };
+      }; # End mainInstance server
+
       # this server is at /srv/minecraft/pixelmon
       servers.pixelmon = {
         enable = true;
