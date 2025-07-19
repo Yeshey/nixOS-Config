@@ -42,6 +42,7 @@ in
         isNormalUser = true;
         # extraGroups = [ "wheel" "networkmanager" "keys" ]; # TODO
         extraGroups = [
+          "scanner"
           "networkmanager"
           "wheel"
           "dialout"
