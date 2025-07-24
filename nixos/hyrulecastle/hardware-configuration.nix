@@ -181,9 +181,9 @@
 
   # swap in btrfs as followed from https://nixos.wiki/wiki/Btrfs#:~:text=btrfs%20is%20a%20modern%20copy,tolerance,%20repair%20and%20easy%20administration.
   swapDevices = [
-    { device = "/swap/swapfile"; size = 1*1024; 
-      priority = 0; # Higher numbers indicate higher priority.
-    }
+    #{ device = "/swap/swapfile"; size = 1*1024; 
+    #  priority = 0; # Higher numbers indicate higher priority.
+    #}
     {
       device = "/dev/disk/by-label/DataDiskSwap";
       priority = 2; # Higher numbers indicate higher priority.
