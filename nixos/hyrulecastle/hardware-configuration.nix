@@ -93,7 +93,7 @@
     };
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/A665-64BE"; # BB10-773E";
+    { device = "/dev/disk/by-uuid/BB10-773E"; # BB10-773E"; A665-64BE
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" "defaults" ];
     };
