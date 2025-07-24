@@ -72,7 +72,7 @@ in
     # all the options
     host = "hyrulecastle";
     user = "yeshey";
-    dataStoragePath = "/home/${user}/Documents";
+    dataStoragePath = "/home/${user}";
     plasma.enable = false;
     gnome.enable = true; # TODO activate both plasma and gnome same time, maybe expose display manager
     hyprland.enable = false;
