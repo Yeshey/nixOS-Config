@@ -49,6 +49,10 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
       ```
     - From your phone, you can redirect port 2998 of your PC to http://localhost:2998 on your phone with `ssh -L 2998:localhost:2998 -J yeshey@143.47.53.175 yeshey@localhost -p 2232`
 
+  - If you get rate limitted, you can use authenticated requests:
+    - `gh auth login`
+    - `sudo nixos-rebuild --flake ~/.setup#hyrulecastle --option cores 6 --option max-jobs 3 switch --option access-tokens "github.com=$(gh auth token)"`
+
 ### Non-NixOS Home-manager standalone with flakes
 
 1. Install nix, follow [hm standalone](https://nix-community.github.io/home-manager/index.xhtml#sec-install-standalone). (These instructions assume system wide installation)
