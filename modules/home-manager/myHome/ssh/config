@@ -1,5 +1,5 @@
 # also makes it so you can use my_identity for github instead of their keys with weird names
-IdentityFile ~/.ssh/my_identity
+# IdentityFile ~/.ssh/my_identity # id_ed25519
 
 # Read more about SSH config files: https://linux.die.net/man/5/ssh_config
 
