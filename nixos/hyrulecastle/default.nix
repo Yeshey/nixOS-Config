@@ -185,7 +185,7 @@ in
         enable = true;
         user = "yeshey"; # To access /mnt/DataDisk and /home/yeshey
         paths = [
-          "/mnt/DataDisk/PersonalFiles"
+          # "/mnt/DataDisk/PersonalFiles"
           "/home/${user}" # Dynamically gets 'yeshey'
         ];
         rcloneRemoteName = "onedriveISCTE";
