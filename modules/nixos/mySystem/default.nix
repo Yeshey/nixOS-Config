@@ -71,6 +71,7 @@ in
     ./snap.nix
     ./autossh.nix
     ./resticRcloneBackups.nix
+    ./an-anime-game-launcher.nix
   ];
 
   options.mySystem = with lib; {
