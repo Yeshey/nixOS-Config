@@ -144,6 +144,7 @@
       # aagl.url = "github:ezKEa/aagl-gtk-on-nix/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs"; # Name of nixpkgs input you want to use
     };
+    nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
   };
 
   outputs = {
@@ -172,6 +173,7 @@
     nix-minecraft,  
     nix-luanti,
     aagl,
+    nix-flatpak,
     ...
   }@inputs:
   let

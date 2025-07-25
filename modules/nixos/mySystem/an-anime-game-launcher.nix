@@ -18,8 +18,18 @@ in
   };
 
   config = { 
+    services.flatpak.remotes = lib.mkOptionDefault [{
+      name = "launcher.moe";
+      location = "https://gol.launcher.moe/gol.launcher.moe.flatpakrepo";
+    }];
+
+    # nix version not working
+    services.flatpak.packages = [
+      { appId = "moe.launcher.an-anime-game-launcher"; origin = "launcher.moe";  }
+    ];
+
     # nix.settings = inputs.aagl.nixConfig; # Set up Cachix
-    programs.anime-game-launcher.enable = true; # Genshin Impact Adds launcher and /etc/hosts rules
+    #programs.anime-game-launcher.enable = true; # Genshin Impact Adds launcher and /etc/hosts rules
     # programs.anime-games-launcher.enable = true; # all others, but not working?
     #programs.honkers-railway-launcher.enable = true;
     #programs.honkers-launcher.enable = true;

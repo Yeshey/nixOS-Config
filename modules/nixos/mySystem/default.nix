@@ -72,6 +72,7 @@ in
     ./autossh.nix
     ./resticRcloneBackups.nix
     ./an-anime-game-launcher.nix
+    ./nix-flatpak.nix
   ];
 
   options.mySystem = with lib; {
