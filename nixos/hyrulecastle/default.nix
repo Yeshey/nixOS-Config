@@ -189,7 +189,7 @@ in
           # "/mnt/DataDisk/PersonalFiles"
           "/home/${user}" # Dynamically gets 'yeshey'
         ];
-        rcloneRemoteName = "onedriveISCTE";
+        rcloneRemoteName = "OneDriveISCTE";
         rcloneRemotePath = "ResticBackups/mainBackupOneDrive"; # This is like your 'repo' path, but on the remote
         #rcloneConfigFile = "/var/lib/secrets/rclone/school-onedrive.conf";
         #passwordFile = "/var/lib/secrets/restic/school-onedrive-password";
