@@ -11,7 +11,8 @@ let
   cfg = config.mySystem.aagl;
 in
 {
-  imports = [ inputs.aagl.nixosModules.default ];
+  # using the flatpak
+  # imports = [ inputs.aagl.nixosModules.default ];
 
   options.mySystem.aagl = with lib; {
     enable = mkEnableOption "aagl";
