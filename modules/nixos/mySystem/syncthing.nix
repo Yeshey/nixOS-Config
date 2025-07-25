@@ -186,6 +186,7 @@ in
             //.git
             ProjetoIAA
             PCLRepo
+            FMAP-Project
             *.ipynb
           "}
 
