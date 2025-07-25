@@ -339,7 +339,7 @@ in
           stdenv.cc.cc.lib # to provide libstdc++.so.6
         ];
       };  
-      
+            
       networking = {
         hostName = lib.mkOverride 1010 "nixos-${cfg.host}";
       };
