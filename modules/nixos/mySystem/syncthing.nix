@@ -18,7 +18,7 @@ let
   };
   devices = {
     "nixOS-Laptop" = {
-      id = "WVB5HBT-QH4536U-T4SHK3I-J6EW2QY-KAW44KE-UFGO4KI-DDYZDKE-FQJUTAK";
+      id = "MQJK4CT-TFXHX2Y-3E2BSCD-Q7775YX-SX7VHKF-4TY6OA6-OGZO2QX-3NPTWQN";
     };
     "manjaro-Laptop" = {
       id = "HWPEE67-I7DPOPG-H3A3SDX-5HFJK5W-33OIOUO-S6TD5E7-52OAO3B-OFAUAAF";
@@ -59,7 +59,7 @@ let
     };
     "2024" = {
       path = "${config.mySystem.dataStoragePath}/PersonalFiles/2024";
-      devices = lib.mapAttrsToList (name: value: name) devices; # all devices
+      # devices = lib.mapAttrsToList (name: value: name) devices; # not sharing anymore
       # mapAttrsToList: https://ryantm.github.io/nixpkgs/functions/library/attrsets/#function-library-lib.attrsets.mapAttrsToList
       versioning = myVersioning;
       # Ignore patterns: Recorded_Classes 

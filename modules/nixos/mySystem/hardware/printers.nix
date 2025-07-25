@@ -31,6 +31,10 @@ in
     # Madeira printer doesnt work:
     # services.printing.drivers = [ pkgs.dcp165c ];
     # extraGroups = [ "lp" ]; ?
+    # for Epson scanner
+    hardware.sane.extraBackends = [ pkgs.sane-airscan ];
+    services.udev.packages = [ pkgs.sane-airscan ];
+
     services.avahi = {
       enable = true;
       nssmdns4 = true;

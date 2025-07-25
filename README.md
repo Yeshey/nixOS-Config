@@ -16,7 +16,7 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
 - Right click on wastebin and configure to delete trash after 7 days, still don't know how to declare this.
 
-- For remote backups, I'm using OneDrive with rclone, you will have to add the rclone remote with `rclone config` either as yeshey (for hyrulecastle) or as root (for skyloft) and set the name of the remote to `OneDriverISCTE`.
+- For remote backups, I'm using OneDrive with rclone, you will have to add the rclone remote with `rclone config` either as yeshey (for hyrulecastle) or as root (for skyloft) and set the name of the remote to `OneDriveISCTE`.
 
 - nix-on-droid: (don't forget you can connect your phone to the PC and control it with something like `scrcpy --legacy-paste`) install my flake in app by adding [the normal packages](https://nix-on-droid.unboiled.info/upgrade.txt) (restart `nix-on-droid` after that) and running `nix-shell -p git --run "nix-on-droid --flake github:Yeshey/nixOS-Config#nix-on-droid switch"`. (or use the `/nix-on-droid` branch if it isn't working)
   You'll have to find a way to send the ssh keys, `scp` isn't working, if you have root you can do this:
@@ -48,6 +48,10 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
       ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@143.47.53.175
       ```
     - From your phone, you can redirect port 2998 of your PC to http://localhost:2998 on your phone with `ssh -L 2998:localhost:2998 -J yeshey@143.47.53.175 yeshey@localhost -p 2232`
+
+  - If you get rate limitted, you can use authenticated requests:
+    - `gh auth login`
+    - `sudo nixos-rebuild --flake ~/.setup#hyrulecastle --option cores 6 --option max-jobs 3 switch --option access-tokens "github.com=$(gh auth token)"`
 
 ### Non-NixOS Home-manager standalone with flakes
 

@@ -85,10 +85,10 @@ in
       serviceCoreName = "home-yeshey-OneDriverISCTE"; # real name: onedriver@home-yeshey-OneDriverISCTE.service
       cliOnlyMode = false;
     };
-    agenix = {
-      enable = true;
-      sshKeys.enable = true;
-    };
+    #agenix = {
+    #  enable = true;
+    #  sshKeys.enable = true;
+    #};
     impermanence.enable = false;
     #autosshReverseProxy = {
     #  enable = true;
