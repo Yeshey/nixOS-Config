@@ -93,10 +93,10 @@ in
       cliOnlyMode = false;
     };
 
-    agenix = {
-      enable = true;
-      sshKeys.enable = true;
-    };
+    #agenix = {
+    #  enable = true;
+    #  sshKeys.enable = true;
+    #};
     impermanence.enable = false;
     #autosshReverseProxy = {
     #  enable = true;
