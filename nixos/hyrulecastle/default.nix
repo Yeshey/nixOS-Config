@@ -72,7 +72,7 @@ in
     # all the options
     host = "hyrulecastle";
     user = "yeshey";
-    dataStoragePath = "/mnt/DataDisk";
+    dataStoragePath = "/home/${user}";
     plasma.enable = false;
     gnome.enable = true; # TODO activate both plasma and gnome same time, maybe expose display manager
     hyprland.enable = false;
@@ -126,23 +126,24 @@ in
     flatpaks.enable = true;
     i2p.enable = true;
 
-    borgBackups = {
-      enable = true;
-      paths = [
-        "/mnt/DataDisk/PersonalFiles"
-        "/home/${user}"
-      ];
-      repo = "/mnt/hdd-btrfs/Backups/borgbackup";
-      startAt = "daily";
-      prune.keep = {
-        within = "1d"; # Keep all archives from the last day
-        daily = 2; # keep the latest backup on each day, up to 7 most recent days with backups (days without backups do not count)
-        weekly = 2;
-        monthly = 6;
-        yearly = 3;
-      };
-      exclude = [ "*/RecordedClasses" ];
-    };
+    # borgBackups = {
+    #   enable = true;
+    #   paths = [
+    #     "/mnt/DataDisk/PersonalFiles"
+    #     "/home/${user}"
+    #   ];
+    #   repo = "/mnt/hdd-btrfs/Backups/borgbackup";
+    #   startAt = "daily";
+    #   prune.keep = {
+    #     within = "1d"; # Keep all archives from the last day
+    #     daily = 2; # keep the latest backup on each day, up to 7 most recent days with backups (days without backups do not count)
+    #     weekly = 2;
+    #     monthly = 6;
+    #     yearly = 3;
+    #   };
+    #   exclude = [ "*/RecordedClasses" ];
+    # };
+
     syncthing = {
       enable = true;
     };
@@ -152,10 +153,10 @@ in
 
     androidDevelopment.enable = true;
 
-    agenix = {
-      enable = true;
-      sshKeys.enable = true;
-    };
+    #agenix = {
+    #  enable = true;
+    #  sshKeys.enable = true;
+    #};
 
     waydroid.enable = true;
     #isolateVMsNixStore = true;
@@ -174,6 +175,7 @@ in
      remoteUser = "yeshey";
      port = 2232;
     };
+    aagl.enable = false;
 
     # to use this you need to create a remote with the name onedriveISCTE with `rclone config`
     # with restic-browser you would check the contents of the backup by putting onedriveISCTE:ResticBackups/mainBackupOneDrive in remote section and selecting type rclone
@@ -184,10 +186,10 @@ in
         enable = true;
         user = "yeshey"; # To access /mnt/DataDisk and /home/yeshey
         paths = [
-          "/mnt/DataDisk/PersonalFiles"
+          # "/mnt/DataDisk/PersonalFiles"
           "/home/${user}" # Dynamically gets 'yeshey'
         ];
-        rcloneRemoteName = "onedriveISCTE";
+        rcloneRemoteName = "OneDriveISCTE";
         rcloneRemotePath = "ResticBackups/mainBackupOneDrive"; # This is like your 'repo' path, but on the remote
         #rcloneConfigFile = "/var/lib/secrets/rclone/school-onedrive.conf";
         #passwordFile = "/var/lib/secrets/restic/school-onedrive-password";
@@ -343,36 +345,17 @@ in
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot/efi";
 */
+
   boot.loader = {
     timeout = 2;
     efi = {
       canTouchEfiVariables = true;
-      efiSysMountPoint = "/boot/efi";
+      efiSysMountPoint = "/boot";
     };
-    grub = {
+    systemd-boot = {
       enable = true;
+      configurationLimit = 15; # You can leave it null for no limit, but it is not recommended, as it can fill your boot partition.
       memtest86.enable = true; # to see if there is corruption: https://discourse.nixos.org/t/an-easier-way-to-repair-corrupted-nix-db/35915/13?u=yeshey
-      memtest86.params = ["console=ttyS0,115200"];
-      efiSupport = true;
-      devices = [ "nodev" ];
-      device = "nodev";
-      useOSProber = true;
-      # default = "saved"; # doesn't work with btrfs :(
-      extraEntries = ''
-        menuentry "Reboot" {
-            reboot
-        }
-        menuentry "Shut Down" {
-            halt
-        }
-        # Option info from /boot/grub/grub.cfg, technotes "Grub" section for more details
-        menuentry "NixOS - Console" --class nixos --unrestricted {
-        search --set=drive1 --fs-uuid 69e9ba80-fb1f-4c2d-981d-d44e59ff9e21
-        search --set=drive2 --fs-uuid 69e9ba80-fb1f-4c2d-981d-d44e59ff9e21
-          linux ($drive2)/@/nix/store/ll70jpkp1wgh6qdp3spxl684m0rj9ws4-linux-5.15.68/bzImage init=/nix/store/c2mg9sck85ydls81xrn8phh3i1rn8bph-nixos-system-nixos-22.11pre410602.ae1dc133ea5/init loglevel=4 3
-          initrd ($drive2)/@/nix/store/s38fgk7axcjryrp5abkvzqmyhc3m4pd1-initrd-linux-5.15.68/initrd
-        }
-      '';
     };
   };
 

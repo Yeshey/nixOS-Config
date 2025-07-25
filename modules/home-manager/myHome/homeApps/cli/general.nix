@@ -22,6 +22,7 @@ in
       ocrmypdf
       libnotify # so you can use notify-send
       xdotool
+      gh
 
       curl
       vim # The Nano editor is installed by default.

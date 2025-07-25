@@ -71,6 +71,8 @@ in
     ./snap.nix
     ./autossh.nix
     ./resticRcloneBackups.nix
+    ./an-anime-game-launcher.nix
+    ./nix-flatpak.nix
   ];
 
   options.mySystem = with lib; {
@@ -337,7 +339,7 @@ in
           stdenv.cc.cc.lib # to provide libstdc++.so.6
         ];
       };  
-      
+            
       networking = {
         hostName = lib.mkOverride 1010 "nixos-${cfg.host}";
       };
