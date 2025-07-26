@@ -102,6 +102,10 @@
 
   nix.package = pkgs.nix;
 
+  home.file."storage" = {
+    source = config.lib.file.mkOutOfStoreSymlink "/storage/emulated/0";
+  };
+
   home.packages = [
     pkgs.nix
   ];

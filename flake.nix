@@ -271,6 +271,7 @@
     nixOnDroidConfigurations.nix-on-droid = nix-on-droid.lib.nixOnDroidConfiguration {
       pkgs = import nixpkgs { 
         system = "aarch64-linux"; 
+        config.allowUnfree = true;  # Add this line
       };
       modules = [
         #(myCustomModule inputs outputs)
