@@ -25,6 +25,9 @@
     ./sshd.nix
   ];
 
+  # Add this line to allow unfree packages
+  #nixpkgs.config.allowUnfree = true;
+
   android-integration.am.enable = true;
   android-integration.termux-open-url.enable = true;
   android-integration.xdg-open.enable = true;
@@ -72,16 +75,24 @@
 
   home-manager.config = ./home.nix;
 
+  #home.file."storage" = {
+  #  source = lib.file.mkOutOfStoreSymlink "/storage/emulated/0";
+  #};
+
+  #home.activation.createStorageSymlink = lib.hm.dag.entryAfter ["writeBoundary"] ''
+  #  ln -sfn /storage/emulated/0 $HOME/storage
+  #'';
+
   # Set up nix for flakes
   nix = {
     #extraOptions = ''
     #''; # allowUnsupportedSystem = true :(
-    settings = {
-      experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
-      cores = 4;
-      max-jobs = 2;
-      auto-optimise-store = lib.mkOverride 1010 true;
-    };
+    #settings = {
+    #  experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
+    #  cores = 4;
+    #  max-jobs = 2;
+    #  auto-optimise-store = lib.mkOverride 1010 true;
+    #};
   };
 
   # Set the default user shell to Zsh
