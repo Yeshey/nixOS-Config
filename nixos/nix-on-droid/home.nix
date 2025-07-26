@@ -84,7 +84,7 @@
 
   programs.zsh = {
     shellAliases = {
-      update = "nix-on-droid --flake github:Yeshey/nixOS-Config#nix-on-droid switch";
+      update = "rm -rf ~/.cache/nix && nix-on-droid --flake github:Yeshey/nixOS-Config#nix-on-droid switch";
       clean = "nix-collect-garbage -d && nix-store --gc && echo 'Displaying stray roots:' && nix-store --gc --print-roots | egrep -v '^(/nix/var|/run/current-system|/run/booted-system|/proc|\{memory|\{censored)'";
     };
 
