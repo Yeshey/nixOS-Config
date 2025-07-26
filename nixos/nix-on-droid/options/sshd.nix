@@ -49,10 +49,8 @@ let
     #!${pkgs.runtimeShell}
     ${prefixLines generateKeyWhenNeededOf supportedKeysTypes}
 
-    if [ ! -f "${authorizedKeysFolder}/${config.user.userName}" ]; then
-      mkdir --parents "${authorizedKeysFolder}"
-      ${prefixLines appendAuthorizedKeysFiles cfg.authorizedKeysFiles}
-    fi
+    mkdir --parents "${authorizedKeysFolder}"
+    ${prefixLines appendAuthorizedKeysFiles cfg.authorizedKeysFiles}
 
     echo "Starting sshd on port ${lib.concatMapStrings toString cfg.ports} in the background"
     echo "connect with ssh nix-on-droid@<ip> -p 8022"
