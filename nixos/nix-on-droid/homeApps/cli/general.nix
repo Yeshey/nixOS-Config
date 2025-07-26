@@ -17,28 +17,7 @@ in
 
   config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && config.myHome.homeApps.cli.enable && cfg.enable) {
     home.packages = with pkgs; [
-      busybox
-      hyfetch
-      ookla-speedtest
-      # yt-dlp # download youtube videos
-      scrcpy # screen cast android phone
-      ocrmypdf
-      libnotify # so you can use notify-send
-      xdotool
-
-      nettools
-      curl
-      vim # The Nano editor is installed by default.
-      neovim
-      tmux
-      wget
-      tree
-      btop
-      htop
-      hyfetch
-      neofetch
-      #file
-      unzip
+      # not using bc unfree package is weird and i dont need, use nix on droid directly
     ];
   };
 }

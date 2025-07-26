@@ -35,6 +35,8 @@
   # Simply install just the packages
   environment.packages = with pkgs; [
     busybox #:(
+    hyfetch
+    neofetch
     ookla-speedtest
     nettools
     curl
