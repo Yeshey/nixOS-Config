@@ -54,8 +54,8 @@ in
           "tss" # For TPM access
           "input" # For https://github.com/kokoko3k/ssh-rdp
         ]; # TODO if you ever extend the module to be able to have several users, you need to see how to handle this
-        openssh.authorizedKeys.keys = [
-          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFGlaGOK+qN0/Fk0d2bVdRTNncfQwxaEofoOnKgwK95s"
+        openssh.authorizedKeys.keyFiles = [
+          ./../../../id_ed_mykey.pub
         ];
         # shell = pkgs.bash;
         #useDefaultShell = false;
@@ -65,8 +65,8 @@ in
         hashedPassword = "$6$rounds=2000000$/pvZKZOnJE51jPnR$FDiOHyOvkouz36fW8MLiPYOFdEYf/SknZWVc9tqV039bOEvQMfH9TsezvITcbsMwqVHFzA0uEPwS0msabEUKg1";
       };
       users.root = {
-        openssh.authorizedKeys.keys = [
-          "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFGlaGOK+qN0/Fk0d2bVdRTNncfQwxaEofoOnKgwK95s"
+        openssh.authorizedKeys.keyFiles = [
+          ./../../../id_ed_mykey.pub
         ];
       };
     };
