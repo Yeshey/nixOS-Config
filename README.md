@@ -19,20 +19,8 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 - For remote backups, I'm using OneDrive with rclone, you will have to add the rclone remote with `rclone config` either as yeshey (for hyrulecastle) or as root (for skyloft) and set the name of the remote to `OneDriveISCTE`.
 
 - nix-on-droid: (don't forget you can connect your phone to the PC and control it with something like `scrcpy --legacy-paste`) install my flake in app by adding [the normal packages](https://nix-on-droid.unboiled.info/upgrade.txt) (restart `nix-on-droid` after that) and running `nix-shell -p git --run "nix-on-droid --flake github:Yeshey/nixOS-Config#nix-on-droid switch"`. (or use the `/nix-on-droid` branch if it isn't working)
-  You'll have to find a way to send the ssh keys, `scp` isn't working, if you have root you can do this:
-  - You can run a server on the localnetwork to serve the files: `nix-shell --pure -p python310 --run "cd /home/yeshey/.ssh && python3 -m http.server 8000"`, you might nee to turn off the firewall (`networking.firewall.enable = false;`). And From `termux`, not `nix-on-droid`, run:
-    - `su`, to get into the root user, to change files in other apps. Change the ip as needed:
-    - ```sh
-      export server="http://10.61.0.104:8000" && mkdir -p /data/data/com.termux.nix/files/home/.ssh && curl -o /data/data/com.termux.nix/files/home/.ssh/my_identity $server/my_identity && curl -o /data/data/com.termux.nix/files/home/.ssh/my_identity.pub $server/my_identity.pub && curl -o /data/data/com.termux.nix/files/home/.ssh/config $server/config && mkdir -p /data/data/com.termux/files/home/.ssh && curl -o /data/data/com.termux/files/home/.ssh/my_identity $server/my_identity && curl -o /data/data/com.termux/files/home/.ssh/my_identity.pub $server/my_identity.pub && curl -o /data/data/com.termux/files/home/.ssh/config $server/config
-      ```
-    - Confirm with:
-      ```sh
-      ls /data/data/com.termux.nix/files/home/.ssh
-      ```
-      and
-      ```sh
-      ls /data/data/com.termux/files/home/.ssh
-      ```
+  You'll have to find a way to send the ssh keys, `scp` isn't working, you can do this:
+  - Transfer the files to `Downloads` folder in the phone and then use [this](https://github.com/nix-community/nix-on-droid/issues/238#issuecomment-1826796452) method to get it in nix-on-droid
   - To use `nix-on-droid` with root, you can try taking a look [here](https://github.com/nix-community/nix-on-droid/issues/3)
   - If you want to add a [termux:widget](https://github.com/termux/termux-widget) to connect to your computers with their reverse proxy to the server (can be enabled with [autosshReverseProxy](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/autosshReverseProxy.nix)) you can add to `~/.shortcuts/` these files:
     - `connectHyruleCastle`:
