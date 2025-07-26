@@ -34,6 +34,7 @@ in
       wget
       tree
       btop
+      htop
       #file
       unzip
     ];
