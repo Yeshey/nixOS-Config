@@ -75,14 +75,6 @@
 
   home-manager.config = ./home.nix;
 
-  #home.file."storage" = {
-  #  source = lib.file.mkOutOfStoreSymlink "/storage/emulated/0";
-  #};
-
-  #home.activation.createStorageSymlink = lib.hm.dag.entryAfter ["writeBoundary"] ''
-  #  ln -sfn /storage/emulated/0 $HOME/storage
-  #'';
-
   # Set up nix for flakes
   nix = {
     #extraOptions = ''

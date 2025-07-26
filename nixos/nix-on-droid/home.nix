@@ -101,8 +101,9 @@
   };
 
   nix.package = pkgs.nix;
-
-  home.file."storage" = {
+  
+  # give files premission to nix-on-droid, and then you can access storage through the storage symlink this creates in ~
+  home.file."storage" = { 
     source = config.lib.file.mkOutOfStoreSymlink "/storage/emulated/0";
   };
 
