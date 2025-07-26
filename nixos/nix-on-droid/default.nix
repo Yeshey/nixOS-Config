@@ -91,9 +91,6 @@
   user = {
     # userName = "yeshey";
     shell = "${pkgs.zsh}/bin/zsh";
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFGlaGOK+qN0/Fk0d2bVdRTNncfQwxaEofoOnKgwK95s"
-    ];
   };
 
   #nixpkgs.config = {
