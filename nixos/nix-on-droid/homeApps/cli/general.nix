@@ -35,6 +35,8 @@ in
       tree
       btop
       htop
+      hyfetch
+      neofetch
       #file
       unzip
     ];
