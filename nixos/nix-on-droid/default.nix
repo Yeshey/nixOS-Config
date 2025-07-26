@@ -80,8 +80,8 @@
       experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
       cores = 4;
       max-jobs = 2;
+      auto-optimise-store = lib.mkOverride 1010 true;
     };
-    auto-optimise-store = lib.mkOverride 1010 true;
   };
 
   # Set the default user shell to Zsh

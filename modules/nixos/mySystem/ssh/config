@@ -45,14 +45,12 @@ HOST raspberrypi-nogs
 Host oracle
   HostName 143.47.53.175
   User yeshey
-  IdentityFile ~/.ssh/temp
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
 
 Host oracleroot
   HostName 143.47.53.175
   User root
-  IdentityFile ~/.ssh/temp
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
 
@@ -61,7 +59,6 @@ Host hyrulecastle
   HostName localhost
   Port 2232
   User yeshey
-  IdentityFile ~/.ssh/temp
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
   ProxyJump oracle
@@ -71,7 +68,6 @@ Host hyrulecastleroot
   HostName localhost
   Port 2232
   User root
-  IdentityFile ~/.ssh/temp
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
   ProxyJump oracle
@@ -81,7 +77,6 @@ Host kakariko
   HostName localhost
   Port 2233
   User yeshey
-  IdentityFile ~/.ssh/temp
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
   ProxyJump oracle
@@ -91,7 +86,6 @@ Host kakarikoroot
   HostName localhost
   Port 2233
   User root
-  IdentityFile ~/.ssh/temp
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
   ProxyJump oracle
