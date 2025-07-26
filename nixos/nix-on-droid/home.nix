@@ -37,7 +37,7 @@
       enable = true;
       cli = {
         enable = true;
-        general.enable = false;
+        general.enable = false; # not using because unfree license nixpkgs doesnt apply and i dont know how
         git = {
           enable = true;
           personalGit = {
@@ -46,7 +46,7 @@
             userEmail = "yesheysangpo@hotmail.com";
           };
         };
-        tmux.enable = false; # broken
+        tmux.enable = true; # broken
       };
       firefox = {
         enable = false;
