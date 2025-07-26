@@ -16,4 +16,7 @@ in
   tunaCoimbra2025 = pkgs.runCommand "tunaCoimbra2025.jpg" { } ''
     cp ${./tunaCoimbra2025.jpg} $out
   '';
+  pinkSunsetMinimalHdWallpaper = pkgs.runCommand "pinkSunsetMinimalHdWallpaper.jpg" { } ''
+    cp ${./pinkSunsetMinimalHdWallpaper.jpg} $out
+  '';
 }
