@@ -113,7 +113,6 @@
     zsh.enable = true;
     neovim = {
       enable = true;
-      enableLSP = true;
     };
   };
 */

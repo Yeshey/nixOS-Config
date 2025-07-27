@@ -15,10 +15,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    nvf = {
-      url = "github:notashelf/nvf";
-      inputs.nixpkgs.follows = "nixpkgs";
+    nixvim = {
+        url = "github:nix-community/nixvim";
+        # If using a stable channel you can use `url = "github:nix-community/nixvim/nixos-<version>"`
+        inputs.nixpkgs.follows = "nixpkgs";
     };
+    nvix.url = "github:niksingh710/nvix";
     plasma-manager = {
       url = "github:pjones/plasma-manager";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -156,7 +158,8 @@
     home-manager,
     nix-on-droid,
     agenix,
-    nvf,
+    nixvim,
+    nvix,
     deploy-rs,
     stylix,
     plasma-manager,

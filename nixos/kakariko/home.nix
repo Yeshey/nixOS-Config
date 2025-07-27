@@ -38,7 +38,6 @@ in
         tmux.enable = true;
         neovim = {
           enable = true;
-          enableLSP = true;
         };
       };
       firefox = {
