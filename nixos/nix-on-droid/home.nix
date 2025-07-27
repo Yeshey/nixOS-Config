@@ -47,7 +47,6 @@
           };
         };
         tmux.enable = true; # broken
-        neovim.enable = true;
       };
       firefox = {
         enable = false;

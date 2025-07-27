@@ -13,7 +13,6 @@ in
     ./tmux.nix
     ./general.nix
     ./git.nix
-    ./neovim.nix
   ];
 
   options.myHome.homeApps.cli = {
