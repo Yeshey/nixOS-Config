@@ -23,6 +23,7 @@ in
       libnotify # so you can use notify-send
       xdotool
       gh
+      android-tools
 
       curl
       vim # The Nano editor is installed by default.
