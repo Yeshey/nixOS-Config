@@ -86,10 +86,10 @@
       dataStoragePath = "/home/${user}";
     };
     androidDevelopment.enable = false;
-    agenix = {
-      enable = true;
-      sshKeys.enable = true;
-    };
+    #agenix = {
+    #  enable = false;
+    #  sshKeys.enable = false;
+    #};
 
     # to use this you need to create a remote with the name onedriveISCTE with `rclone config`
     # with restic-browser you would check the contents of the backup by putting onedriveISCTE:ResticBackups/servers in remote section and selecting type rclone
@@ -165,7 +165,7 @@
     luanti.enable = true;
     kubo.enable = true;
     mindustry-server.enable = false;
-    searx.enable = true;
+    searx.enable = false;
     ollama = {
       enable = true; 
       # acceleration = "cuda"; #or 'rocm' # this issue https://github.com/NixOS/nixpkgs/issues/321920

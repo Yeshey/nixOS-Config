@@ -26,6 +26,7 @@ in
         "Pictures"
         "Documents"
         "Videos"
+        ".setup"
         ".gnupg"
         ".local/share/direnv"
         ".config/syncthing"
