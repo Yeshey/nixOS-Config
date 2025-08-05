@@ -168,6 +168,12 @@
     overleaf.enable = true;
   };
 
+  swapDevices = [
+    { device = "/swap/swapfile"; size = 8*1024; 
+      priority = 0; # Higher numbers indicate higher priority.
+    }
+  ];
+
   # nix = {
   #   settings = {
   #     cores = 2; # settings this per machine
