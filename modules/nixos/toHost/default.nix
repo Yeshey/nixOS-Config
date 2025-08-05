@@ -25,7 +25,7 @@ in
     ./ollama.nix
     ./openhands.nix
     ./overleaf.nix
-    ./minecraft/default.nix
+    # ./minecraft/default.nix
     ./luanti.nix
   ];
 
