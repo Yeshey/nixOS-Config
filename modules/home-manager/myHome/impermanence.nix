@@ -9,7 +9,7 @@ let
   cfg = config.myHome.impermanence;
 in
 {
-  imports = [ inputs.impermanence.nixosModules.home-manager.impermanence ];
+  imports = [ inputs.impermanence.homeManagerModules.impermanence ];
 
   options.myHome.impermanence = with lib; {
     enable = mkEnableOption "impermanence";
@@ -17,7 +17,7 @@ in
 
   config = lib.mkIf (config.myHome.enable && cfg.enable) {
 
-    home.persistence."/persist/home/yeshey" = {
+    home.persistence."/persistent/home/yeshey" = {
       # locations to spare religiously
       directories = [
         "PersonalFiles"
@@ -34,11 +34,15 @@ in
         
         ".config/syncthing"
         ".mozilla"
-        ".config/vivaldi/"
+        #".config/vivaldi/"
+        ".floorp"
         {
           directory = ".local/share/Steam";
           method = "symlink";
         }
+        { directory = ".ssh"; mode = "0700"; }
+        { directory = ".nixops"; mode = "0700"; }
+        { directory = ".local/share/keyrings"; mode = "0700"; }
       ];
       files = [
         ".screenrc"

@@ -81,7 +81,7 @@
     #   path = "/mnt/DataDisk/PersonalFiles/2024/Projects/Programming/learnWithT/";
     # };
 
-    impermanence.url = "github:nix-community/impermanence";
+    impermanence.url = "github:nix-community/impermanence/home-manager-v2";
     deploy-rs = {
       url = "github:serokell/deploy-rs";
       inputs.nixpkgs.follows = "nixpkgs";
