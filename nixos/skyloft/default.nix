@@ -15,7 +15,11 @@
   imports =
     [
       ./hardware-configuration.nix
-      "${builtins.fetchTarball "https://github.com/nix-community/disko/archive/v1.11.0.tar.gz"}/module.nix"
+      "${builtins.fetchTarball {
+        url = "https://github.com/nix-community/disko/archive/v1.11.0.tar.gz";
+        sha256 = "sha256:13brimg7z7k9y36n4jc1pssqyw94nd8qvgfjv53z66lv4xkhin92";
+      }}/module.nix"
+
      ./disk-config.nix
     ];
 
@@ -133,6 +137,7 @@
         # extraRcloneOpts = [ "onedrive-chunk-size=250M" ]; # If you find OneDrive needs larger chunks for Restic
       };
     };
+    impermanence.enable = true;
   };
 
   toHost = {

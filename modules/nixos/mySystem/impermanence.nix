@@ -26,7 +26,7 @@ in
       # I think I can ignore
 
 
-      programs.fuse.userAllowOther = true; # needed for nonchelant home manager impermanance stuff when impermanance is not used
+      # programs.fuse.userAllowOther = true; # needed for nonchelant home manager impermanance stuff when impermanance is not used
       /*
 
       # https://discourse.nixos.org/t/using-immutable-users-with-impermanence-on-luks/43459
@@ -65,33 +65,37 @@ in
 
       # https://discourse.nixos.org/t/using-immutable-users-with-impermanence-on-luks/43459
       # mv root subvolume to old_roots
-      boot.initrd.systemd.services.wipe-my-fs = {
-        requires = ["dev-mapper-cryptroot.device"];
-        after = ["dev-mapper-cryptroot.device" "clean-old-roots.service"];
-        before = [
-          "sysroot.mount"
-        ];
-        wantedBy = ["initrd.target"];
-        script = ''
-          mkdir /btrfs_tmp
-          mount /dev/disk/by-label/nixos /btrfs_tmp
-          if [[ -e /btrfs_tmp/root ]]; then
-              mkdir -p /btrfs_tmp/old_roots
-              timestamp=$(date --date="@$(stat -c %Y /btrfs_tmp/root)" "+%Y-%m-%-d_%H:%M:%S")
-              mv /btrfs_tmp/root "/btrfs_tmp/old_roots/$timestamp"
-          fi
+      boot.initrd.postResumeCommands = lib.mkAfter ''
+        mkdir /btrfs_tmp
+        mount /dev/sda2 /btrfs_tmp
+        if [[ -e /btrfs_tmp/@ ]]; then
+            mkdir -p /btrfs_tmp/old_roots
+            timestamp=$(date --date="@$(stat -c %Y /btrfs_tmp/@)" "+%Y-%m-%-d_%H:%M:%S")
+            mv /btrfs_tmp/@ "/btrfs_tmp/old_roots/$timestamp"
+        fi
 
-          btrfs subvolume create /btrfs_tmp/root
-          umount /btrfs_tmp
-        '';
-      };
+        delete_subvolume_recursively() {
+            IFS=$'\n'
+            for i in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
+                delete_subvolume_recursively "/btrfs_tmp/$i"
+            done
+            btrfs subvolume delete "$1"
+        }
+
+        for i in $(find /btrfs_tmp/old_roots/ -maxdepth 1 -mtime +30); do
+            delete_subvolume_recursively "$i"
+        done
+
+        btrfs subvolume create /btrfs_tmp/@
+        umount /btrfs_tmp
+      '';
 
       # needed for home manager to have premissions to access the folder (comment in video https://youtu.be/YPKwkWtK7l0?si=FxmuAGEF0wN96_Gv)
-      systemd.tmpfiles.rules = [
-        "d /persist/home/ 1777 root root -"     # /persist/home created, owned by root
-        "d /persist/home/yeshey 0770 yeshey users -" # /persist/home/<user> created, owned by that user
-      ];
-      environment.persistence."/persist" = {
+      #systemd.tmpfiles.rules = [
+      #  "d /persist/home/ 1777 root root -"     # /persist/home created, owned by root
+      #  "d /persist/home/yeshey 0770 yeshey users -" # /persist/home/<user> created, owned by that user
+      #];
+      environment.persistence."/persistent" = {
         enable = true;  # NB: Defaults to true, not needed
         hideMounts = true;
         directories = [
@@ -108,6 +112,25 @@ in
           "/etc/machine-id"
           { file = "/var/keys/secret_file"; parentDirectory = { mode = "u=rwx,g=,o="; }; }
         ];
+        # Taken care of in home manager
+        # users.yeshey = {
+        #   directories = [
+        #     "Downloads"
+        #     "Music"
+        #     "Pictures"
+        #     "Documents"
+        #     "Videos"
+        #     "PersonalFiles"
+        #     { directory = ".gnupg"; mode = "0700"; }
+        #     { directory = ".ssh"; mode = "0700"; }
+        #     { directory = ".nixops"; mode = "0700"; }
+        #     { directory = ".local/share/keyrings"; mode = "0700"; }
+        #     ".local/share/direnv"
+        #   ];
+        #   files = [
+        #     ".screenrc"
+        #   ];
+        # };
       };
     })
   ];
