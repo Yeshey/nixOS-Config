@@ -12,11 +12,12 @@
 # Reboot the machine, and during boot select in the console a different generation
 
 {
-  imports = [
-    ./hardware-configuration.nix
-    #inputs.learnWithT.nixosModules.default
-    # inputs.box64-binfmt.nixosModules.default
-  ];
+  imports =
+    [
+      ./hardware-configuration.nix
+      "${builtins.fetchTarball "https://github.com/nix-community/disko/archive/v1.11.0.tar.gz"}/module.nix"
+     ./disk-config.nix
+    ];
 
   nixpkgs = {
     # You can add overlays here
@@ -84,30 +85,6 @@
     agenix = {
       enable = true;
       sshKeys.enable = true;
-    };
-
-    borgFolderBackups.jobs = {
-      # best bet to see what's inside is: nix-shell -p vorta borgbackup --run "vorta ."
-      allServersBorgRepo = {
-        repo = "/home/yeshey/PersonalFiles/Servers/allServersBorgRepo";
-        paths = [ 
-          "/var/lib/luanti-anarchyMineclone2/world"
-          "/srv/minecraft/pixelmon/world"
-          "/srv/minecraft/zombies2/world" 
-        ];
-        user = "yeshey";  # This can be omitted if using mySystem.user default
-      };
-      allServersBorgRepoOnedriver = {
-        repo = "/home/yeshey/OneDriverISCTE/Servers/allServersBorgRepo";
-        paths = [ 
-          "/var/lib/luanti-anarchyMineclone2/world"
-          "/srv/minecraft/pixelmon/world"
-          "/srv/minecraft/zombies2/world" 
-        ];
-        user = "yeshey";  # This can be omitted if using mySystem.user default
-        onedriver.enable = true; # Enable the onedriver check for this job
-        onedriver.mountPath = "/home/yeshey/OneDriverISCTE"; # Default, but can be overridden
-      };
     };
 
     # to use this you need to create a remote with the name onedriveISCTE with `rclone config`
@@ -221,23 +198,6 @@
 
 #  boot.binfmt.emulatedSystems = ["i686-linux" "x86_64-linux"];
 
-  nix = {
-    distributedBuilds = true;
-    buildMachines = [{
-      hostName = "hyrulecastle";
-      system = "x86_64-linux";
-      sshUser = "yeshey";
-      # Replace with the path to your SSH private key or use SSH agent
-      sshKey = "/home/yeshey/.ssh/my_identity";
-      supportedFeatures = [ # saw with nix show-config --json | jq -r '.["system-features"].value'
-        "benchmark"
-        "big-parallel"
-        "kvm"
-        "nixos-test"
-        ];
-    }];
-  };
-
   # you should also add `qdbus org.kde.LogoutPrompt /LogoutPrompt  org.kde.LogoutPrompt.promptLogout` to the command to run when inactive for a certain time in KDE plasma
   # Also screen locking, and screen locking after waking f rom sleep, should be disabled
   # headless server doesn't need sddm (xrdp doesn't need it either)
@@ -271,5 +231,5 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
-  system.stateVersion = "22.05";
+  system.stateVersion = "25.05";
 }
