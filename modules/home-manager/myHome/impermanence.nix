@@ -17,7 +17,7 @@ in
 
   config = lib.mkIf (config.myHome.enable && cfg.enable) {
 
-    home.persistence."/persistent/home/yeshey" = {
+    home.persistence."/persistent" = {
       # locations to spare religiously
       directories = [
         "PersonalFiles"
@@ -27,19 +27,12 @@ in
         "Documents"
         "Videos"
         ".gnupg"
-        ".ssh"
-        ".nixops"
-        ".local/share/keyrings"
         ".local/share/direnv"
-        
         ".config/syncthing"
         ".mozilla"
         #".config/vivaldi/"
         ".floorp"
-        {
-          directory = ".local/share/Steam";
-          method = "symlink";
-        }
+        { directory = ".local/share/Steam"; }
         { directory = ".ssh"; mode = "0700"; }
         { directory = ".nixops"; mode = "0700"; }
         { directory = ".local/share/keyrings"; mode = "0700"; }
@@ -47,7 +40,6 @@ in
       files = [
         ".screenrc"
       ];
-      allowOther = true;
     };
 
   };
