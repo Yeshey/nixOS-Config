@@ -40,15 +40,15 @@ in
         { directory = ".local/share/keyrings"; mode = "0700"; }
 
         # syncthing
-        ".zsh_history"
-        ".bash_history"
-        ".python_history"
         ".stversions"
-        ".stignore"
         ".stfolder"
       ];
       files = [
-        ".screenrc"
+        # syncthing
+        ".stignore"
+        ".zsh_history"
+        ".bash_history"
+        ".python_history"
       ];
     };
 
