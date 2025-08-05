@@ -29,6 +29,7 @@ in
         ".setup"
         ".gnupg"
         ".local/share/direnv"
+        ".local/share/xrdp"
         ".config/syncthing"
         ".mozilla"
         #".config/vivaldi/"
@@ -37,6 +38,14 @@ in
         { directory = ".ssh"; mode = "0700"; }
         { directory = ".nixops"; mode = "0700"; }
         { directory = ".local/share/keyrings"; mode = "0700"; }
+
+        # syncthing
+        ".zsh_history"
+        ".bash_history"
+        ".python_history"
+        ".stversions"
+        ".stignore"
+        ".stfolder"
       ];
       files = [
         ".screenrc"
