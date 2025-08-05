@@ -73,6 +73,7 @@
   fileSystems."/persistent" =
     { device = "/dev/nvme0n1p5";
       fsType = "btrfs";
+      neededForBoot = true;
       options = [ 
         "subvol=@persistent" 
         "defaults"
