@@ -8,6 +8,8 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
 ## Installing on a new computer
 
+- `sudo nixos-rebuild --flake github:Yeshey/nixOS-Config#skyloft boot --max-jobs 2 --cores 4 --option experimental-features "nix-command flakes pipe-operators" --impure`
+
 - You might need to create the home manager folder manually `mkdir ~/.local/state/nix/profiles`
 
 - Yo'll have to find the syncthing ID by going to http://127.0.0.1:8384, getting the ID, and adding it in the syncthing config
