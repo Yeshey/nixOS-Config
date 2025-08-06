@@ -174,7 +174,7 @@
   };
 
   swapDevices = [
-    { device = "/swap/swapfile"; size = 8*1024; 
+    { device = "/swap/swapfile"; size = 4*1024; 
       priority = 0; # Higher numbers indicate higher priority.
     }
   ];
