@@ -67,7 +67,7 @@ in
     (lib.mkIf (config.myHome.enable && cfg.openvscodeServer.enable) {
       home.packages = let
         govscodeserver = pkgs.writeShellScriptBin "govscodeserver" ''
-          (ssh -L ${toString cfg.openvscodeServer.port}:localhost:${toString cfg.openvscodeServer.port} -t ${cfg.openvscodeServer.remote} "sleep 90" &) && sleep 1.5 && xdg-open "http://localhost:${toString cfg.openvscodeServer.port}/?folder=/home/yeshey/.setup"
+          (ssh -L ${toString cfg.openvscodeServer.port}:localhost:${toString cfg.openvscodeServer.port} -t ${cfg.openvscodeServer.remote} "sleep 90" &) && sleep 1.5 && brave "http://localhost:${toString cfg.openvscodeServer.port}/?folder=/home/yeshey/.setup"
         '';
         vscodeserverDesktopItem = pkgs.makeDesktopItem {
           name = "Oracle vscode-server";
