@@ -38,6 +38,16 @@ in
     in
     lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
 
+      # Used this to find out what was being changed
+      # nix-shell -p inotify-tools
+      # stdbuf -oL inotifywait -m -r ~ --format '%w%f %e' -e modify -e create -e delete > /tmp/t.txt
+      home.persistence."/persistent" = {
+        directories = [
+          ".local/share/code-server/User"
+          ".vscode-oss/extensions" 
+        ];
+      };
+
       #home.file."/home/${config.myHome.user}/.config/VSCodium/User/settings.json".source = ./VSCsettings.json;
       #home.file."/home/${config.myHome.user}/.config/Code/User/settings.json".source = ./VSCsettings.json;
       #home.file."/home/${config.myHome.user}/.config/Visual Studio Code/User/settings.json".source = ./VSCsettings.json;
