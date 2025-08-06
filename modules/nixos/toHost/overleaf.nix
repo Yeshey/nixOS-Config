@@ -1,3 +1,5 @@
+# journalctl -fu overleaf-build.service to check the build
+# journalctl -fu overleaf.service after the build is done, to check the running service 
 {
   config,
   lib,
@@ -100,6 +102,12 @@ let
     fi
     
     echo "Docker images built successfully"
+
+    # Add this to the end of your buildImagesScript
+    echo "Cleaning up build artifacts..."
+    ${pkgs.docker}/bin/docker image prune -f
+    ${pkgs.docker}/bin/docker builder prune -f
+    echo "Build cleanup completed"
   '';
 
   # Setup toolkit config script
@@ -324,6 +332,32 @@ in
       startOverleafScript
       pkgs.docker-compose
     ] ++ requiredPkgs;
+
+    environment.persistence."/persistent" = {
+      directories = [
+        # Preserve Docker images and container data
+        "/var/lib/docker"
+        
+        # Preserve your Overleaf data directory (contains repos, toolkit, and application data)
+        "${cfg.dataDir}"  # This will be "/opt/docker/overleaf" by default
+        
+        # If you want to be more selective, you can specify subdirectories:
+        # "${cfg.dataDir}/repos"           # Built repositories
+        # "${cfg.dataDir}/toolkit"         # Toolkit configuration
+        # "${cfg.dataDir}/overleaf-data"   # Application data (MongoDB, Redis, etc.)
+        
+        # Preserve Docker Compose state
+        "/var/lib/docker-compose"
+        
+        # Optional: preserve systemd journal logs for debugging
+        "/var/log/journal"
+      ];
+      
+      files = [
+        # Preserve any Docker daemon configuration if you have custom settings
+        # "/etc/docker/daemon.json"  # Uncomment if you have custom Docker config
+      ];
+    };
 
     # Firewall configuration
     networking.firewall.allowedTCPPorts = [ (lib.toInt cfg.port) ];
