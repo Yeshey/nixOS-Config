@@ -60,6 +60,7 @@
       cursor = {
         package = pkgs.apple-cursor;
         name = "Apple";
+        size = 24;
       };
     };
 
