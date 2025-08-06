@@ -84,6 +84,12 @@ in
     impermanence.enable = true;
   };
 
+  # server should auto logout bc GUI uses a lot of CPU
+  xdg.configFile."powerdevilrc".text = ''
+[AC][RunScript]
+IdleTimeoutCommand=qdbus org.kde.LogoutPrompt /LogoutPrompt org.kde.LogoutPrompt.promptLogout
+  '';
+
   # Ignore Patterns Syncthing # Ignore Patterns Syncthing # You need to check that this doesnt override every other activation script, make lib.append? - if it was lib.mkFOrce it would override, like this it appends
   # system.userActivationScripts =
   #   let
