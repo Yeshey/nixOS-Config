@@ -29,7 +29,6 @@ in
         ".setup"
         ".gnupg"
         ".local/share/direnv"
-        ".local/share/xrdp"
         ".config/syncthing"
         ".mozilla"
         #".config/vivaldi/"
