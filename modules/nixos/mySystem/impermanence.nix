@@ -103,6 +103,7 @@ in
           "/var/log"
           "/var/lib/bluetooth"
           "/var/lib/nixos"
+          "/etc/xrdp/"
           "/var/lib/systemd/coredump"
           "/etc/NetworkManager/system-connections"
           { directory = "/etc/ssh"; mode = "0755"; }
