@@ -24,7 +24,7 @@
                 subvolumes = {
                   "@" = {
                     mountpoint = "/";
-                    mountOptions = [ "compress-force=zstd:6" "noatime" "discard=async" ];
+                    mountOptions = [ "compress-force=zstd:6" "discard=async" ];
                   };
                   "@nix" = {
                     mountpoint = "/nix";
@@ -37,6 +37,10 @@
                   "@swap" = {
                     mountpoint = "/swap";
                     mountOptions = [ "noatime" "discard=async" ];
+                  };
+                  "@old_roots" = {
+                    mountpoint = "/old_roots";
+                    mountOptions = [ "compress-force=zstd:6" "noatime" "discard=async" ];
                   };
                 };
               };
