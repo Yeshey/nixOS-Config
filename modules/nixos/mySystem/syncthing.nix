@@ -57,13 +57,6 @@ let
       versioning = myVersioning;
       # Ignore patterns: Recorded_Classes 
     };
-    "2024" = {
-      path = "${config.mySystem.dataStoragePath}/PersonalFiles/2024";
-      # devices = lib.mapAttrsToList (name: value: name) devices; # not sharing anymore
-      # mapAttrsToList: https://ryantm.github.io/nixpkgs/functions/library/attrsets/#function-library-lib.attrsets.mapAttrsToList
-      versioning = myVersioning;
-      # Ignore patterns: Recorded_Classes 
-    };
     "A70Camera" = {
       path = "${config.mySystem.dataStoragePath}/PersonalFiles/Timeless/Syncthing/PhoneCamera";
       devices = lib.mapAttrsToList (name: value: name) devices;
@@ -115,12 +108,6 @@ let
       devices = lib.mapAttrsToList (name: value: name) devices;
       versioning = myVersioning;
     };
-    "Mindustry" = {
-      path = "/home/${config.mySystem.user}/.local/share/Mindustry";
-      devices = lib.mapAttrsToList (name: value: name) devices;
-      versioning = myVersioning;
-      # Potencial Ignore patterns: settings.bin settings.log
-    };
   };
 in
 {
@@ -161,6 +148,13 @@ in
       };
     };
 
+    # ADD IMPERMANENCE HERE for all syncthing folders:
+    environment.persistence."/persistent".users.yeshey = {
+      directories = lib.mapAttrsToList (name: folder: folder.path) (lib.filterAttrs 
+        (name: folder: name != "ssh" && name != "bash&zshHistory") # don't make the whole home persistent, and .ssh is always persisted
+      folders);
+    };
+
     # Ignore Patterns, userActivationScripts isntead of activationScripts to have user premissions
     system.userActivationScripts =
       let
@@ -187,16 +181,6 @@ in
             ProjetoIAA
             PCLRepo
             FMAP-Project
-            *.ipynb
-          "}
-
-          # 2024
-          ${ignorePattern "2024" "
-            //*
-            PhotosAndVideos
-            //.git
-            learnWithT*
-            AI-Master-Repo-IAA*
             *.ipynb
           "}
 
@@ -273,15 +257,6 @@ in
 
             # 4) Ignore everything else
             *
-          "}
-
-          # Mindustry
-          ${ignorePattern "Mindustry" "
-            (?i)settings.bin 
-            (?i)settings.log
-
-            // Ignore everything else in Mindustry folder
-            // *
           "}
         '';
       };
