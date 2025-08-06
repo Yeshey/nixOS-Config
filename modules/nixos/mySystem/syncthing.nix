@@ -150,9 +150,21 @@ in
 
     # ADD IMPERMANENCE HERE for all syncthing folders:
     environment.persistence."/persistent".users.yeshey = {
-      directories = lib.mapAttrsToList (name: folder: folder.path) (lib.filterAttrs 
-        (name: folder: name != "ssh" && name != "bash&zshHistory") # don't make the whole home persistent, and .ssh is always persisted
-      folders);
+      directories = [
+        # Data storage folders (full paths since they're outside home)
+        "PersonalFiles/2026"
+        "PersonalFiles/2025"
+        "PersonalFiles/Timeless/Syncthing/PhoneCamera"
+        "PersonalFiles/Timeless/Syncthing/Allsync"
+        "PersonalFiles/Timeless/Music"
+        "PersonalFiles/Servers"
+        
+        # User home folders (relative paths)
+        ".local/share/PrismLauncher/instances/MainInstance"
+        ".local/share/osu"
+        ".minetest"
+        ".local/share/The Powder Toy"
+      ];
     };
 
     # Ignore Patterns, userActivationScripts isntead of activationScripts to have user premissions

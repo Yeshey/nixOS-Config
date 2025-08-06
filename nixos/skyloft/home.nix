@@ -120,4 +120,9 @@ IdleTimeoutCommand=qdbus org.kde.LogoutPrompt /LogoutPrompt org.kde.LogoutPrompt
       gcc
     ];
   };
+  home.persistence."/persistent" = {
+    directories = [
+      ".config/GitHub Desktop/"
+    ];
+  };
 }
