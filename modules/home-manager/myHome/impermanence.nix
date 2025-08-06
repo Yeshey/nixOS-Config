@@ -19,6 +19,7 @@ in
 
     home.persistence."/persistent" = {
       # locations to spare religiously
+      hideMounts = true;
       directories = [
         "PersonalFiles"
         "Downloads"

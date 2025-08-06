@@ -151,14 +151,6 @@ in
     # ADD IMPERMANENCE HERE for all syncthing folders:
     environment.persistence."/persistent".users.yeshey = {
       directories = [
-        # Data storage folders (full paths since they're outside home)
-        "PersonalFiles/2026"
-        "PersonalFiles/2025"
-        "PersonalFiles/Timeless/Syncthing/PhoneCamera"
-        "PersonalFiles/Timeless/Syncthing/Allsync"
-        "PersonalFiles/Timeless/Music"
-        "PersonalFiles/Servers"
-        
         # User home folders (relative paths)
         ".local/share/PrismLauncher/instances/MainInstance"
         ".local/share/osu"
