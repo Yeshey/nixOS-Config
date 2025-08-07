@@ -171,6 +171,8 @@ sudo sh -c '
     echo "sudo Removing dangling docker and podman images, volumes and networks"
     ${pkgs.docker}/bin/docker system prune --volumes --force
     ${pkgs.podman}/bin/podman system prune -a -f
+
+    ${pkgs.nh}/bin/nh clean all
 '
 
 # Collect garbage again for cleanup
