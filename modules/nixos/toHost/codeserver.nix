@@ -20,6 +20,16 @@ in
     #   default = 2998;
     #   description = "Internal port, potentially unused if code-server serves HTTPS directly on externalPort. May be used if a reverse proxy setup is re-introduced.";
     # };
+    wireguard = {
+      enable = lib.mkEnableOption "WireGuard support for code-server";
+      serverIP = lib.mkOption {
+        type = lib.types.str;
+        default = "10.100.0.1"; # WireGuard server IP
+        description = "WireGuard server IP address";
+      };
+    };
+    
+
     externalPort = lib.mkOption {
       type = lib.types.port;
       default = 2998; # Default HTTPS port for code-server
@@ -41,7 +51,7 @@ in
     services.code-server = {
       enable = true;
       # package = pkgs.code-server; # This uses the default code-server package from Nixpkgs.
-      host = "0.0.0.0";          # Bind to all network interfaces.
+      host = if cfg.wireguard.enable then cfg.wireguard.serverIP else "0.0.0.0";          # Bind to all network interfaces.
       port = cfg.externalPort;   # code-server will listen on this port with HTTPS.
       user = "yeshey";           # User to run code-server as. (Consider using cfg.codeUser if defined above)
       extraPackages = [pkgs.openssl]; 
@@ -68,7 +78,7 @@ in
     # The preStart script previously used for openvscode-server to create directories
     # is generally not needed for services.code-server, as the NixOS module handles this.
 
-    networking.firewall.allowedTCPPorts = [
+    networking.firewall.allowedTCPPorts = lib.mkIf (!cfg.wireguard.enable) [
       cfg.externalPort   # Allow access to code-server on its HTTPS port.
 
       # cfg.internalPort # This port is likely not needed if code-server is serving HTTPS directly
