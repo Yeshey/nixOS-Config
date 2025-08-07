@@ -304,5 +304,12 @@ in
     environment.systemPackages = with pkgs; [ 
       rclone
     ];
+
+    environment.persistence."/persistent".users.yeshey = {
+      directories = [
+        "/home/yeshey/.config/rclone/"
+      ];
+    };
+
   };
 }

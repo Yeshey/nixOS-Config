@@ -180,11 +180,9 @@ in
           # 2025
           ${ignorePattern "2025" "
             //*
-            //(?i)Photos&PhotosAndVideos
+            (?i)PhotosAndVideos
             //.git
-            ProjetoIAA
-            PCLRepo
-            FMAP-Project
+            Masters
             *.ipynb
           "}
 
