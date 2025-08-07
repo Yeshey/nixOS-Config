@@ -105,8 +105,13 @@ in
       };
       openvscodeServer = {
         enable = true;
-        remote = "oracle";
+        wireguard = {
+          enable = true;
+          serverIP = "10.100.0.1"; # Your WireGuard server IP
         };
+        port = 2998;
+        remote = "oracle";
+      };
     };
     nh.enable = true;
   };
@@ -123,7 +128,6 @@ in
 
       # Surface and Desktop apps
       qbittorrent
-      signal-desktop
       blender # for blender
       gimp
       darktable

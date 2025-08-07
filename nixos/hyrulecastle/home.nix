@@ -113,8 +113,13 @@ in
       };
       openvscodeServer = {
         enable = true;
-        remote = "oracle";
+        wireguard = {
+          enable = true;
+          serverIP = "10.100.0.1"; # Your WireGuard server IP
         };
+        port = 2998;
+        remote = "oracle";
+      };
     };
     nh.enable = true;
   };
@@ -129,7 +134,6 @@ in
       gnome-clocks
       qbittorrent
       # p3x-onenote # might be worth trying notekit(https://github.com/blackhole89/notekit) and Zettlr(https://github.com/Zettlr/Zettlr)
-      signal-desktop
       blender # for blender
       gimp
       darktable
