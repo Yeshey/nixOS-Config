@@ -17,6 +17,14 @@ in
 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
 
+     systemd.services.sshd = { # run this script before starting sshd 
+      preStart = '' 
+  if [ ! -f /etc/ssh/sshd_config ]; then 
+    install -m600 /dev/null /etc/ssh/sshd_config 
+  fi 
+''; 
+     };
+
     services.openssh = with lib; {
       enable = true;
       #settings.PermitRootLogin = lib.mkOverride 1010 "yes"; # TODO no
