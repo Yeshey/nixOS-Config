@@ -78,15 +78,10 @@ in
     # The preStart script previously used for openvscode-server to create directories
     # is generally not needed for services.code-server, as the NixOS module handles this.
 
-    networking.firewall.allowedTCPPorts = lib.mkIf (!cfg.wireguard.enable) [
-      cfg.externalPort   # Allow access to code-server on its HTTPS port.
-
-      # cfg.internalPort # This port is likely not needed if code-server is serving HTTPS directly
-                         # on cfg.externalPort. Uncomment if you have a specific reason to expose it.
-      
-      # These ports were in your original configuration.
-      # They are not directly used by this code-server setup if it's running on cfg.externalPort (e.g., 8443).
-      # Keep them if they are needed for other services or for a potential future reverse proxy setup (e.g., Caddy for ACME).
+    networking.firewall.allowedTCPPorts = [
+      cfg.externalPort   # Always allow access to code-server on its HTTPS port
+    ] ++ lib.optionals (!cfg.wireguard.enable) [
+      # Only allow these ports if WireGuard is not enabled
       80
       443
     ];

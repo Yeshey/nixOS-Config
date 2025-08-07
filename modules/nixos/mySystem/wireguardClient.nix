@@ -25,8 +25,6 @@ in
       pkgs.networkmanagerapplet # Adds nm-connection-editor
       pkgs.wireguard-tools # Allows using wg and wg-quick commands
     ];
-    # Allow wireguard connections through firewall
-    networking.firewall.checkReversePath = "loose";
     # Prevent NetworkManager (GNOME) from managing WireGuard interfaces
     networking.networkmanager.unmanaged = [ "wgOracle" ]; # bc if you disconnected it in gnome it would go away forever
 
