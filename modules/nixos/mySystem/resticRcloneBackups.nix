@@ -301,7 +301,7 @@ in
       )
     ) cfg.jobs;
 
-    environment.systemPackagnixes = with pkgs; [ 
+    environment.systemPackages = with pkgs; [ 
       rclone
       restic-browser
       restic
