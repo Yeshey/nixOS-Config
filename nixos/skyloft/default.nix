@@ -137,6 +137,7 @@
         # extraRcloneOpts = [ "onedrive-chunk-size=250M" ]; # If you find OneDrive needs larger chunks for Restic
       };
     };
+    nh.enable = true;
     impermanence.enable = true;
   };
 

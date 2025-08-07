@@ -27,6 +27,7 @@ in
       unzip
       hyfetch
       ookla-speedtest
+      nh # nix helper
     ];
 
     programs = {

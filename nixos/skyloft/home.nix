@@ -81,6 +81,7 @@ in
     #  enable = false;
     #  sshKeys.enable = false;
     #};
+    nh.enable = true;
     impermanence.enable = true;
   };
 

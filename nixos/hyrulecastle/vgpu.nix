@@ -7,7 +7,7 @@
 }:
 
 let
-  cfg = config.mySystemHyruleCastle.vgpu;
+  cfg = config.mySystemHyruleCastle.vgpuSpecialisation;
 
   # need to pin because of this error: https://discourse.nixos.org/t/cant-update-nvidia-driver-on-stable-branch/39246
   inherit (pkgs.stdenv.hostPlatform) system;
@@ -19,27 +19,18 @@ let
     inherit system;
     config.allowUnfree = true;
   };
-in
-{
-  imports = [
-    #inputs.nixos-nvidia-vgpu.nixosModules.nvidia-vgpu
-    inputs.nvidia-vgpu-nixos.nixosModules.host
-    inputs.fastapi-dls-nixos.nixosModules.default
-  ];
-  
-  options.mySystemHyruleCastle.vgpu = {
-    enable = lib.mkEnableOption "NvidiaVgpuSharing";
-  };
 
-  config = lib.mkIf cfg.enable {
+  # Define the vGPU configuration as a separate attribute set
+  vgpuConfig = {
+    environment.etc."specialisation".text = "vgpuNixOS";
 
     environment.systemPackages = let
       # Looking glass B6 version in nixpkgs: 
-      myLookingGlassPkgs = import (builtins.fetchTarball {
-          url = "https://github.com/NixOS/nixpkgs/archive/394571358ce82dff7411395829aa6a3aad45b907.tar.gz";
-          sha256 = "sha256:1yrqrpmrdzbzcwb7kv9m6gbzjk68ljs098fv246brq6mc3s4v5qk";
-      }) { inherit system; };
-      looking-glass-client-B7-rc1 = myLookingGlassPkgs.looking-glass-client;
+      #myLookingGlassPkgs = import (builtins.fetchTarball {
+      #    url = "https://github.com/NixOS/nixpkgs/archive/394571358ce82dff7411395829aa6a3aad45b907.tar.gz";
+      #    sha256 = "sha256:1yrqrpmrdzbzcwb7kv9m6gbzjk68ljs098fv246brq6mc3s4v5qk";
+      #}) { inherit system; };
+      #looking-glass-client-B7-rc1 = myLookingGlassPkgs.looking-glass-client;
     in [
       # looking-glass-client-B7-rc1
       pkgs.looking-glass-client # for my windows 10 machine I want B7-rc1
@@ -57,14 +48,12 @@ in
       listen.ip = "0.0.0.0";      # DLS_URL localhost didn't work for me
     };
 
-    # needed!
     boot.extraModprobeConfig = 
       ''
       options nvidia vup_sunlock=1 vup_swrlwar=1 vup_qmode=1
       ''; # (for driver 535) bypasses `error: vmiop_log: NVOS status 0x1` in nvidia-vgpu-mgr.service when starting VM
     # environment.etc."nvidia-vgpu-xxxxx/vgpuConfig.xml".source = config.hardware.nvidia.package + /vgpuConfig.xml;
     boot.kernelModules = [ "nvidia-vgpu-vfio" ];
-
 
     boot.kernelPackages = pkgs.linuxPackages_6_1; # needed, 6.1 is LTS
 
@@ -81,12 +70,7 @@ in
     hardware.nvidia.vgpu.driverSource.url = "https://drive.usercontent.google.com/download?id=1iVXS0uzQFzjbJSIM_XV2FKRMBIGnssJ6&confirm=xxx"; # 16_5 zip
 
 
-    # static IP, This doesnt work, the network is being managed by networkmanager, you can make changes in the gui or figure out how to manage that declaritivley
-    # networking.interfaces.eth0.ipv4.addresses = [ {
-    #   address = "192.168.1.2";
-    #   prefixLength = 24;
-    # } ];
-    services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
+    services.samba-wsdd.enable = true;
     networking.firewall.allowedTCPPorts = [
       5357 # wsdd
     ];
@@ -101,11 +85,6 @@ in
           "server string" = "smbnix";
           "netbios name" = "smbnix";
           "security" = "user";
-          #"use sendfile" = "yes";
-          #"max protocol" = "smb2";
-          # note: localhost is the ipv6 localhost ::1
-          #"hosts allow" = "192.168.0. 127.0.0.1 localhost";
-          #"hosts deny" = "0.0.0.0/0";
           "guest account" = "nobody";
           "map to guest" = "bad user";
         };
@@ -116,8 +95,6 @@ in
           "guest ok" = "yes";
           "create mask" = "0644";
           "directory mask" = "0755";
-          #"force user" = "username";
-          #"force group" = "groupname";
         };
         DataDisk = {
           path = "/mnt/DataDisk";
@@ -126,23 +103,26 @@ in
           "guest ok" = "yes";
           "create mask" = "0644";
           "directory mask" = "0755";
-          #"force user" = "username";
-          #"force group" = "groupname";
         };
       };
     };
     networking.firewall.allowPing = true;
     services.samba.openFirewall = true;
-    # However, for this samba share to work you will need to run `sudo smbpasswd -a <yourusername>` after building your configuration! (as stated in the nixOS wiki for samba: https://nixos.wiki/wiki/Samba)
-    # In windows you can access them in file explorer with `\\192.168.1.xxx` or whatever your local IP is
-    # In Windowos you should also map them to a drive to use them in a lot of programs, for this:
-    #   - Add a file MapNetworkDriveDataDisk and MapNetworkDriveHdd-ntfs to the folder C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup (to be accessible to every user in every startup):
-    #      With these contents respectively:
-    #         net use V: "\\192.168.1.109\DataDisk" /p:yes
-    #      and
-    #         net use V: "\\192.168.1.109\hdd-ntfs" /p:yes
-    # Then to have those drives be usable by administrator programs, open a cmd with priviliges and also run both commands above! This might be needed if you want to for example install a game in them, see this reddit post: https://www.reddit.com/r/uplay/comments/tww5ey/any_way_to_install_games_to_a_network_drive/
-    # You can make them always be mounted with admin too, through the Task Schedueler > New Task > Tick "Run as admin" and add the path to the script as a program (could be the one in C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup)
+  };
 
+in
+{
+  imports = [
+    #inputs.nixos-nvidia-vgpu.nixosModules.nvidia-vgpu
+    inputs.nvidia-vgpu-nixos.nixosModules.host
+    inputs.fastapi-dls-nixos.nixosModules.default
+  ];
+  
+  options.mySystemHyruleCastle.vgpuSpecialisation = {
+    enable = lib.mkEnableOption "NvidiaVgpuSharing specialisation";
+  };
+
+  config = lib.mkIf cfg.enable {
+    specialisation.vgpuNixOS.configuration = vgpuConfig;
   };
 }

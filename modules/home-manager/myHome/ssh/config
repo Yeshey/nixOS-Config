@@ -10,42 +10,11 @@ Host minerva
     ForwardX11Trusted    yes
     IdentityFile ~/.ssh/id_minerva
 
-#Host haw
-#    User          otto
-#    HostName      svs24.ful.informatik.haw-hamburg.de
-#    ProxyJump     Joao.SilvadeAlmeida@haw-hamburg.de@hop-ful.informatik.haw-hamburg.de
-#    #ProxyCommand  ssh Joao.SilvadeAlmeida@haw-hamburg.de@hop-ful.informatik.haw-hamburg.de nc %h %p 2> /dev/null
-#    ForwardX11    yes
-#    ForwardX11Trusted    yes
-#    IdentityFile  ~/.ssh/haw
-
-HOST haw
-    HostName hop-ful.informatik.haw-hamburg.de
-    User Joao.SilvadeAlmeida@haw-hamburg.de
-  
-HOST svs24
-    HostName svs24.ful.informatik.haw-hamburg.de
-    User otto
-    ProxyJump haw
-
-HOST raspberrypi-nogs
-    HostName raspberrypi
-    User pi
-
-#Host raspberry
-#    HostName      192.168.12.230
-#    User          pi
-#    ForwardX11    yes
-#    ForwardX11Trusted    yes
-#    IdentityFile  ~/.ssh/raspberry_rsa
-
-
 # These are for connecting to my PCs with double hops through the server.
 # First hop: Connect to the remote server
 Host oracle
   HostName 143.47.53.175
   User yeshey
-  IdentityFile ~/.ssh/temp
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
 
@@ -54,7 +23,6 @@ Host hyrulecastle
   HostName localhost
   Port 2232
   User yeshey
-  IdentityFile ~/.ssh/temp
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
   ProxyJump oracle
@@ -64,7 +32,6 @@ Host kakariko
   HostName localhost
   Port 2233
   User yeshey
-  IdentityFile ~/.ssh/temp
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
   ProxyJump oracle

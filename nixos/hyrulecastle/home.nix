@@ -116,6 +116,7 @@ in
         remote = "oracle";
         };
     };
+    nh.enable = true;
   };
 
   home = {

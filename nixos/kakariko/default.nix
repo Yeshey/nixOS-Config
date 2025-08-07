@@ -167,10 +167,10 @@ in
 
     androidDevelopment.enable = true;
 
-    agenix = {
-      enable = false;
-      sshKeys.enable = false;
-    };
+    #agenix = {
+    #  enable = false;
+    #  sshKeys.enable = false;
+    #};
     #isolateVMsNixStore = true;
     waydroid.enable = true;
     impermanence.enable = false;
@@ -188,6 +188,7 @@ in
      remoteUser = "yeshey";
      port = 2233;
     };
+    nh.enable = true;
   };
 
   toHost = {

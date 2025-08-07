@@ -70,10 +70,10 @@
       serviceCoreName = "mnt-hdd\\x2dbtrfs-Yeshey-OneDriver"; 
     };*/
 
-    agenix = {
-      enable = false;
-      sshKeys.enable = true;
-    };
+    #agenix = {
+    #  enable = false;
+    #  sshKeys.enable = false;
+    #};
   };
 
   home = {
