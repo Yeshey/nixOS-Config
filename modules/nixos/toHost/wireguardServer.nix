@@ -1,4 +1,4 @@
-# see pub key: sudo wg show wg0
+# see pub key: sudo wg show wgOracle
 # helped by deepseek
 {
   config,
@@ -19,18 +19,28 @@ in
   # always active lib.mkIf (config.toHost.enable && cfg.enable) 
   config = lib.mkIf (cfg.enable) { 
 
+    environment.systemPackages = [
+      pkgs.networkmanager
+      pkgs.networkmanagerapplet # Adds nm-connection-editor
+      pkgs.wireguard-tools # Allows using wg and wg-quick commands
+    ];
+    # Allow wireguard connections through firewall
+    networking.firewall.checkReversePath = "loose";
+    # Prevent NetworkManager (GNOME) from managing WireGuard interfaces
+    networking.networkmanager.unmanaged = [ "wgOracle" ]; # bc if you disconnected it in gnome it would go away forever
+
     # enable NAT
     #networking.nat.enable = true;
     #networking.nat.externalInterface = "eth0";
-    #networking.nat.internalInterfaces = [ "wg0" ];
+    #networking.nat.internalInterfaces = [ "wgOracle" ];
     networking.firewall = {
       allowedUDPPorts = [ 51820 ];
     };
 
     networking.wireguard.enable = true;
     networking.wireguard.interfaces = {
-      # "wg0" is the network interface name. You can name the interface arbitrarily.
-      wg0 = {
+      # "wgOracle" is the network interface name. You can name the interface arbitrarily.
+      wgOracle = {
         # Determines the IP address and subnet of the server's end of the tunnel interface.
         ips = [ "10.100.0.1/24" ];
 
@@ -57,7 +67,7 @@ in
             # Feel free to give a meaningful name
             name = "hyruleCastleYeshey";
             # Public key of the peer (not a file path).
-            publicKey = "mhfuwWbBmZqw9WEDh8a4ce3IgMa/0YsFTf18jkw3Ezc="; # "{client public key}"; # use sudo wg show wg0
+            publicKey = "mhfuwWbBmZqw9WEDh8a4ce3IgMa/0YsFTf18jkw3Ezc="; # "{client public key}"; # use sudo wg show wgOracle
             # List of IPs assigned to this peer within the tunnel subnet. Used to configure routing.
             allowedIPs = [ "10.100.0.2/32" ];
           }
