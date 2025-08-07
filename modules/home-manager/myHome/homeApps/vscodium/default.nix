@@ -39,8 +39,7 @@ in
     lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
 
       # Used this to find out what was being changed
-      # nix-shell -p inotify-tools
-      # stdbuf -oL inotifywait -m -r ~ --format '%w%f %e' -e modify -e create -e delete > /tmp/t.txt
+      # nix-shell -p inotify-tools --run "stdbuf -oL inotifywait -m -r ~ --format '%w%f %e' -e modify -e create -e delete | tee /tmp/t.txt"
       home.persistence."/persistent" = {
         directories = [
           ".local/share/code-server/User"
