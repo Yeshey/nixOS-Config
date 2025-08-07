@@ -30,7 +30,7 @@ in
       wg0 = {
         # Determines the IP address and subnet of the client's end of the tunnel interface.
         ips = [ "10.100.0.2/24" ];
-        listenPort = 51820; # to match firewall allowedUDPPorts (without this wg uses random port numbers)
+        listenPort = port; # to match firewall allowedUDPPorts (without this wg uses random port numbers)
 
         generatePrivateKeyFile = true;
         privateKeyFile = "/etc/wireguard/client.key";
@@ -41,7 +41,7 @@ in
           {
             name = "OracleServer";
             # Public key of the server (not a file path).
-            publicKey = ""; # "{server public key}"; # # use sudo wg show wg0 
+            publicKey = "tFnVEEbaOZu4qW+SigRWx9cyaYuhl03M0+MLUYsgZ2I="; # "{server public key}"; # # use sudo wg show wg0 
 
             # Forward all the traffic via VPN.
             allowedIPs = [ "0.0.0.0/0" ];
