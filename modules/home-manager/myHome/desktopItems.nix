@@ -26,6 +26,14 @@ in
     };
     openvscodeServer = {
       enable = mkEnableOption "openvscodeServer desktop item";
+      wireguard = {
+        enable = mkEnableOption "WireGuard support for openvscodeServer";
+        serverIP = mkOption {
+          type = types.str;
+          default = "10.100.0.1"; # WireGuard server IP
+          description = "WireGuard server IP address";
+        };
+      };
       remote = mkOption {
         type = types.str;
         default = "oracle";
@@ -66,9 +74,18 @@ in
     })
     (lib.mkIf (config.myHome.enable && cfg.openvscodeServer.enable) {
       home.packages = let
-        govscodeserver = pkgs.writeShellScriptBin "govscodeserver" ''
-          (ssh -L ${toString cfg.openvscodeServer.port}:localhost:${toString cfg.openvscodeServer.port} -t ${cfg.openvscodeServer.remote} "sleep 90" &) && sleep 1.5 && brave "http://localhost:${toString cfg.openvscodeServer.port}/?folder=/home/yeshey/.setup"
-        '';
+        govscodeserver = pkgs.writeShellScriptBin "govscodeserver" (
+          if cfg.openvscodeServer.wireguard.enable then
+            # WireGuard mode: connect directly to WireGuard IP without SSH tunneling
+            ''
+              brave "https://${cfg.openvscodeServer.wireguard.serverIP}:${toString cfg.openvscodeServer.port}/?folder=/home/yeshey/.setup"
+            ''
+          else
+            # SSH tunnel mode (original behavior)
+            ''
+              (ssh -L ${toString cfg.openvscodeServer.port}:localhost:${toString cfg.openvscodeServer.port} -t ${cfg.openvscodeServer.remote} "sleep 90" &) && sleep 1.5 && brave "http://localhost:${toString cfg.openvscodeServer.port}/?folder=/home/yeshey/.setup"
+            ''
+        );
         vscodeserverDesktopItem = pkgs.makeDesktopItem {
           name = "Oracle vscode-server";
           desktopName = "Oracle vscode-server";
@@ -78,7 +95,11 @@ in
           categories = [ "GTK" "X-WebApps" ];
           mimeTypes = [ "text/html" "text/xml" "application/xhtml_xml" ];
         };
-      in [ pkgs.openssh pkgs.xdg-utils govscodeserver vscodeserverDesktopItem  ];
+      in [ 
+        pkgs.xdg-utils 
+        govscodeserver 
+        vscodeserverDesktopItem
+      ] ++ (lib.optionals (!cfg.openvscodeServer.wireguard.enable) [ pkgs.openssh ]); # Only include openssh if not using WireGuard
     })
   ];
 }
