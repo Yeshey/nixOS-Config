@@ -73,6 +73,7 @@ in
     ./resticRcloneBackups.nix
     ./an-anime-game-launcher.nix
     ./nix-flatpak.nix
+    ./nh.nix
   ];
 
   options.mySystem = with lib; {
@@ -341,7 +342,7 @@ in
       };  
             
       networking = {
-        hostName = lib.mkOverride 1010 "nixos-${cfg.host}";
+        hostName = lib.mkOverride 1010 "${cfg.host}";
       };
       
       # networking.useNetworkd = true;

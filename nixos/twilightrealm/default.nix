@@ -81,10 +81,10 @@
       #thermalConf = ./../kakariko/thermal-conf.xml;
     };
 
-    agenix = {
-      enable = false;
-      sshKeys.enable = true;
-    };
+    #agenix = {
+    #  enable = false;
+    #  sshKeys.enable = false;
+    #};
   };
 
   swapDevices =

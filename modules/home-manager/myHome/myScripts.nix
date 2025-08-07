@@ -43,6 +43,8 @@ sudo sh -c '
 # Collect garbage again for cleanup
 nix-collect-garbage -d
 
+${pkgs.nh}/bin/nh clean all
+
 echo "Removing dangling docker and podman images, volumes and networks"
 ${pkgs.docker}/bin/docker system prune --volumes --force
 ${pkgs.podman}/bin/podman system prune -a -f

@@ -24,6 +24,7 @@ in
       xdotool
       gh
       android-tools
+      nh # nix helper
 
       curl
       vim # The Nano editor is installed by default.
