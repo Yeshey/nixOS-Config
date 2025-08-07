@@ -1,4 +1,4 @@
-# see pub key: sudo wg show wg0
+# see pub key: sudo wg show wgOracle
 # helped by deepseek
 {
   config,
@@ -20,14 +20,24 @@ in
   # always active lib.mkIf (config.mySystem.enable && cfg.enable) 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) { 
 
+    environment.systemPackages = [
+      pkgs.networkmanager
+      pkgs.networkmanagerapplet # Adds nm-connection-editor
+      pkgs.wireguard-tools # Allows using wg and wg-quick commands
+    ];
+    # Allow wireguard connections through firewall
+    networking.firewall.checkReversePath = "loose";
+    # Prevent NetworkManager (GNOME) from managing WireGuard interfaces
+    networking.networkmanager.unmanaged = [ "wgOracle" ]; # bc if you disconnected it in gnome it would go away forever
+
     networking.firewall = {
       allowedUDPPorts = [ port ]; # Clients and peers can use the same port, see listenport
     };
     # Enable WireGuard
     networking.wireguard.enable = true;
     networking.wireguard.interfaces = {
-      # "wg0" is the network interface name. You can name the interface arbitrarily.
-      wg0 = {
+      # "wgOracle" is the network interface name. You can name the interface arbitrarily.
+      wgOracle = {
         # Determines the IP address and subnet of the client's end of the tunnel interface.
         ips = [ "10.100.0.2/24" ];
         listenPort = port; # to match firewall allowedUDPPorts (without this wg uses random port numbers)
@@ -41,10 +51,11 @@ in
           {
             name = "OracleServer";
             # Public key of the server (not a file path).
-            publicKey = "tFnVEEbaOZu4qW+SigRWx9cyaYuhl03M0+MLUYsgZ2I="; # "{server public key}"; # # use sudo wg show wg0 
+            publicKey = "tFnVEEbaOZu4qW+SigRWx9cyaYuhl03M0+MLUYsgZ2I="; # "{server public key}"; # # use sudo wg show wgOracle 
 
             # Forward all the traffic via VPN.
-            allowedIPs = [ "0.0.0.0/0" ];
+            # allowedIPs = [ "0.0.0.0/0" ];
+            allowedIPs = [ "10.100.0.1/32" ]; # or other internal IP ranges
             # Or forward only particular subnets
             #allowedIPs = [ "10.100.0.1" "91.108.12.0/22" ];
 
