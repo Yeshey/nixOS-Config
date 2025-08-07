@@ -55,7 +55,7 @@ in
 
             # Forward all the traffic via VPN.
             # allowedIPs = [ "0.0.0.0/0" ];
-            allowedIPs = [ "10.100.0.1/32" ]; # or other internal IP ranges
+            allowedIPs = [ "10.100.0.1/32" ]; # set this instead of the one above, because all traffic was being redirected to the VPN
             # Or forward only particular subnets
             #allowedIPs = [ "10.100.0.1" "91.108.12.0/22" ];
 
