@@ -80,7 +80,7 @@ in
 
     programs.zsh = {
       shellAliases = {
-        update = "home-manager switch --flake ~/.setup#yeshey";
+        update = "home-manager switch --flake ~/.setup#yeshey"; # nh home switch?
       };
     };
 

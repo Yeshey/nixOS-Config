@@ -23,13 +23,20 @@ in
       clean.extraArgs = "--keep-since 2d --keep 3";
       flake = "/home/yeshey/.setup";
     };
-    
+
+    # NixOS Configuration
     environment.shellAliases = {
-      sudo="sudo "; # makes aliases work even with sudo behind
-      nix = "${pkgs.nix-output-monitor}/bin/nom";
+      sudo = "sudo "; # makes aliases work even with sudo behind
+      # New-style nix commands with nom wrapper
+      "nix build" = "${pkgs.nix-output-monitor}/bin/nom build";
+      "nix shell" = "${pkgs.nix-output-monitor}/bin/nom shell";
+      "nix develop" = "${pkgs.nix-output-monitor}/bin/nom develop";
+      # Old-style nix commands with nom wrapper
+      "nix-build" = "${pkgs.nix-output-monitor}/bin/nom-build";
+      "nix-shell" = "${pkgs.nix-output-monitor}/bin/nom-shell";
     };
-    environment.systemPackages = with pkgs; [ 
-      nix-output-monitor # straight up changes the binary?
+    environment.systemPackages = with pkgs; [
+      nix-output-monitor
     ];
 
   };
