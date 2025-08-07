@@ -22,15 +22,21 @@ in
       flake = "/home/yeshey/.setup";
     };
 
-    # changing rm to safe-rm to prevent your dumb ass from deleting your PC
-    home.packages = with pkgs; [ 
+    # Home Manager Configuration
+    home.packages = with pkgs; [
       nix-output-monitor
     ];
     programs.bash.enable = true; # makes work in bash
     programs.zsh.enable = true;
     home.shellAliases = {
-      sudo="sudo "; # makes aliases work even with sudo behind
-      nix = "${pkgs.nix-output-monitor}/bin/nom";
+      sudo = "sudo "; # makes aliases work even with sudo behind
+      # New-style nix commands with nom wrapper
+      "nix build" = "${pkgs.nix-output-monitor}/bin/nom build";
+      "nix shell" = "${pkgs.nix-output-monitor}/bin/nom shell";
+      "nix develop" = "${pkgs.nix-output-monitor}/bin/nom develop";
+      # Old-style nix commands with nom wrapper
+      "nix-build" = "${pkgs.nix-output-monitor}/bin/nom-build";
+      "nix-shell" = "${pkgs.nix-output-monitor}/bin/nom-shell";
     };
 
   };
