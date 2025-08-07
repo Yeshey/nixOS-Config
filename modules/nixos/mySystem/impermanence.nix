@@ -89,11 +89,6 @@ in
         umount /btrfs_tmp
       '';
 
-      # needed for home manager to have premissions to access the folder (comment in video https://youtu.be/YPKwkWtK7l0?si=FxmuAGEF0wN96_Gv)
-      #systemd.tmpfiles.rules = [
-      #  "d /persist/home/ 1777 root root -"     # /persist/home created, owned by root
-      #  "d /persist/home/yeshey 0770 yeshey users -" # /persist/home/<user> created, owned by that user
-      #];
       environment.persistence."/persistent" = {
         enable = true;  # NB: Defaults to true, not needed
         hideMounts = true;

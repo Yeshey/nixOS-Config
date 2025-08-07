@@ -101,8 +101,8 @@
         user = "root"; # To access /mnt/DataDisk and /home/yeshey
         paths = [
           "/var/lib/luanti-anarchyMineclone2/world"
-          "/srv/minecraft/pixelmon/world"
           "/srv/minecraft/zombies2/world" 
+          "/srv/minecraft/mainServer/world"
           "/opt/docker/overleaf/overleaf-data"
         ];
         rcloneRemoteName = "onedriveISCTE";
@@ -155,7 +155,7 @@
       port = 85;
       hostName = "143.47.53.175:85"; # Or use "localhost" for local access
     };
-    # minecraft.enable = true;
+    minecraft.enable = true;
     openvscodeServer.enable = false;
     code-server.enable = true;
     nginxServer = {

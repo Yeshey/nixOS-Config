@@ -83,6 +83,12 @@ in
       };
     };
 
+    environment.persistence."/persistent" = {
+      directories = [
+        "/var/lib/luanti-anarchyMineclone2"
+        "/var/lib/luanti-anarchyMineclonia"
+      ];
+    };
 
     # Open both ports in the firewall, only UDP needed
     networking.firewall.allowedUDPPorts = [ 30000 30001 ];
