@@ -12,6 +12,11 @@ in
 {
   options.toHost.searx = {
     enable = (lib.mkEnableOption "searx");
+    bind_address = lib.mkOption {
+      type = lib.types.str;
+      default = "0.0.0.0";
+      description = "the address where connecting to searx";
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -21,7 +26,7 @@ in
       settings = {
         server = {
           port = port;
-          bind_address = "0.0.0.0";
+          bind_address = cfg.bind_address;
           secret_key = "secret key";
         };
         search = {
@@ -30,6 +35,8 @@ in
       };
     };
 
+    networking.firewall.allowedTCPPorts = [ port ];
+
     environment.systemPackages =
       with pkgs;
       let
@@ -37,7 +44,7 @@ in
           name = "Searx";
           desktopName = "Searx";
           genericName = "Searx";
-          exec = ''xdg-open "http://localhost:${toString port}#"'';
+          exec = ''xdg-open "http://${cfg.bind_address}:${toString port}#"'';
           icon = "firefox";
           categories = [
             "GTK"
