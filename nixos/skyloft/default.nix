@@ -166,7 +166,7 @@
     luanti.enable = true;
     kubo.enable = true;
     mindustry-server.enable = false;
-    searx.enable = false;
+    searx.enable = true;
     ollama = {
       enable = true; 
       # acceleration = "cuda"; #or 'rocm' # this issue https://github.com/NixOS/nixpkgs/issues/321920
