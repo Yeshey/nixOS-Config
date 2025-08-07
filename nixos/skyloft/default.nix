@@ -100,9 +100,9 @@
         enable = true;
         user = "root"; # To access /mnt/DataDisk and /home/yeshey
         paths = [
-          "/var/lib/luanti-anarchyMineclone2/world"
-          "/srv/minecraft/mainServer/world"
-          "/opt/docker/overleaf/overleaf-data"
+          "/var/lib/luanti-anarchyMineclone2/world" # chown -R luanti-anarchyMineclone2:luanti /var/lib/luanti-anarchyMineclone2
+          "/srv/minecraft/mainServer/world" # chown -R minecraft:minecraft /srv/minecraft/mainServer
+          "/opt/docker/overleaf/overleaf-data" # chown -R root:root /opt/docker/overleaf/overleaf-data
         ];
         rcloneRemoteName = "onedriveISCTE";
         rcloneRemotePath = "ResticBackups/servers"; # This is like your 'repo' path, but on the remote
@@ -171,6 +171,7 @@
       # acceleration = "cuda"; #or 'rocm' # this issue https://github.com/NixOS/nixpkgs/issues/321920
     };
     overleaf.enable = true;
+    wireguardServer.enable = true;
   };
 
   swapDevices = [

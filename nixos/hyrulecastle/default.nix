@@ -223,6 +223,7 @@ in
         # extraRcloneOpts = [ "onedrive-chunk-size=250M" ]; # If you find OneDrive needs larger chunks for Restic
       };
     };
+    wireguardClient.enable = true;
   };
 
   toHost = {
