@@ -1,3 +1,5 @@
+# see pub key: sudo wg show wg0
+# helped by deepseek
 {
   config,
   lib,
@@ -30,12 +32,13 @@ in
         listenPort = 51820; # to match firewall allowedUDPPorts (without this wg uses random port numbers)
 
         generatePrivateKeyFile = true;
-        privateKeyFile = "/etc/wireguard/server.key";
+        privateKeyFile = "/etc/wireguard/client.key";
 
         peers = [
           # For a client configuration, one peer entry for the server will suffice.
 
           {
+            name = "OracleServer";
             # Public key of the server (not a file path).
             publicKey = "{server public key}";
 

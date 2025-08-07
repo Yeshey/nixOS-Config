@@ -1,3 +1,5 @@
+# see pub key: sudo wg show wg0
+# helped by deepseek
 {
   config,
   lib,
@@ -47,15 +49,15 @@ in
         '';
 
         generatePrivateKeyFile = true;
-        privateKeyFile = "ls server.key";
+        privateKeyFile = "/etc/wireguard/server.key";
 
         peers = [
           # List of allowed peers.
           { 
             # Feel free to give a meaningful name
-            name = "Yeshey";
+            name = "hyruleCastleYeshey";
             # Public key of the peer (not a file path).
-            publicKey = "{client public key}";
+            publicKey = "mhfuwWbBmZqw9WEDh8a4ce3IgMa/0YsFTf18jkw3Ezc="; # "{client public key}";
             # List of IPs assigned to this peer within the tunnel subnet. Used to configure routing.
             allowedIPs = [ "10.100.0.2/32" ];
           }
