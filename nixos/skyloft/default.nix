@@ -101,7 +101,6 @@
         user = "root"; # To access /mnt/DataDisk and /home/yeshey
         paths = [
           "/var/lib/luanti-anarchyMineclone2/world"
-          "/srv/minecraft/zombies2/world" 
           "/srv/minecraft/mainServer/world"
           "/opt/docker/overleaf/overleaf-data"
         ];
