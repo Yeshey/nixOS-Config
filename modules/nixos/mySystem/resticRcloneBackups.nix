@@ -301,13 +301,16 @@ in
       )
     ) cfg.jobs;
 
-    environment.systemPackages = with pkgs; [ 
+    environment.systemPackagnixes = with pkgs; [ 
       rclone
+      restic-browser
+      restic
     ];
 
     environment.persistence."/persistent".users.yeshey = {
       directories = [
         "/home/yeshey/.config/rclone/"
+        "/home/yeshey/.config/org.restic.browser/"
       ];
     };
 
