@@ -54,7 +54,7 @@ in
 
     environment.persistence."/persistent" = {
       directories = [
-        "/srv/minecraft/mainServer/world"
+        { directory = "/srv/minecraft/mainServer/world"; user = "minecraft"; group = "minecraft"; mode = "u=rwx,g=rx,o="; }
       ];
     };
 

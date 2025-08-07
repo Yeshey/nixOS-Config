@@ -105,6 +105,8 @@ in
         ];
         files = [
           "/etc/machine-id"
+          "/root/.zsh_history"
+          "/root/.bash_history"
           { file = "/var/keys/secret_file"; parentDirectory = { mode = "u=rwx,g=,o="; }; }
         ];
       };
