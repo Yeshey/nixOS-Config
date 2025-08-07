@@ -156,7 +156,14 @@
     };
     minecraft.enable = true;
     openvscodeServer.enable = false;
-    code-server.enable = true;
+    code-server = {
+      enable = true;
+      wireguard = {
+        enable = true;
+        serverIP = "10.100.0.1"; # Your WireGuard server IP
+      };
+      externalPort = 2998;
+    };
     nginxServer = {
       enable = true;
       port = 7843;
