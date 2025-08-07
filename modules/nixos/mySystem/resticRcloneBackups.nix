@@ -1,3 +1,17 @@
+# restore with
+# sudo -E \                                                                                                                                                                                                                    17:23:28
+#   RESTIC_REPOSITORY="rclone:OneDriveISCTE:ResticBackups/servers" \
+#   RESTIC_PASSWORD="123456789" \
+#   RCLONE_CONFIG="/home/yeshey/.config/rclone/rclone.conf" \
+#   restic restore 1fc528f5 \
+#     --target / \
+#     --include "/var/*" \
+#     --include "/opt/*" \
+#     --include "/srv/*" \
+#     --overwrite always \
+#     --verbose
+# you'll have to chown, check https://github.com/restic/restic/pull/5449
+
 # Filename: e.g., modules/nixos/mySystem/resticRcloneBackups.nix
 { config, lib, pkgs, ... }:
 
@@ -309,8 +323,8 @@ in
 
     environment.persistence."/persistent".users.yeshey = {
       directories = [
-        "/home/yeshey/.config/rclone/"
-        "/home/yeshey/.config/org.restic.browser/"
+        ".config/rclone/"
+        ".config/org.restic.browser/"
       ];
     };
 

@@ -27,6 +27,7 @@ in
     ./overleaf.nix
     ./minecraft/default.nix
     ./luanti.nix
+    ./wireguardServer.nix
   ];
 
   options.toHost = with lib; {
