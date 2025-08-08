@@ -39,6 +39,8 @@ in
         { directory = ".nixops"; mode = "0700"; }
         { directory = ".local/share/keyrings"; mode = "0700"; }
 
+        ".local/share/baloo" # KDE plasma files index
+
         # syncthing
         ".stversions"
         ".stfolder"
