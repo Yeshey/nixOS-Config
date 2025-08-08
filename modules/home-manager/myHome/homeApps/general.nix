@@ -42,6 +42,7 @@ in
         wineWow64Packages.full
         restic-browser
         restic
+        blanket
 
         #jetbrains-toolbox # for code with me you need the toolbox
         #jetbrains.gateway
