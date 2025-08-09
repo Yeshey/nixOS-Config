@@ -1991,7 +1991,7 @@
         "nixpkgs": "nixpkgs_8"
       },
       "locked": {
-        "lastModified": 1754750383,
+        "lastModified": 1754772892,
         "narHash": "sha256-H1w+iXv5cFUVID+NohOPDDgUyS2X7fI/nWOJbLJjwhs=",
         "path": "/home/yeshey/Downloads/cmon",
         "type": "path"
