@@ -1300,22 +1300,6 @@
     },
     "nixpkgs_6": {
       "locked": {
-        "lastModified": 1744440957,
-        "narHash": "sha256-FHlSkNqFmPxPJvy+6fNLaNeWnF1lZSgqVCl/eWaJRc4=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "26d499fc9f1d567283d5d56fcf367edd815dba1d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "ref": "nixos-24.11",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "nixpkgs_7": {
-      "locked": {
         "lastModified": 1752480373,
         "narHash": "sha256-JHQbm+OcGp32wAsXTE/FLYGNpb+4GLi5oTvCxwSoBOA=",
         "owner": "NixOS",
@@ -1330,7 +1314,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_8": {
+    "nixpkgs_7": {
       "locked": {
         "lastModified": 1752077645,
         "narHash": "sha256-HM791ZQtXV93xtCY+ZxG1REzhQenSQO020cu6rHtAPk=",
@@ -1342,6 +1326,22 @@
       "original": {
         "owner": "NixOS",
         "ref": "nixpkgs-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_8": {
+      "locked": {
+        "lastModified": 1744440957,
+        "narHash": "sha256-FHlSkNqFmPxPJvy+6fNLaNeWnF1lZSgqVCl/eWaJRc4=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "26d499fc9f1d567283d5d56fcf367edd815dba1d",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-24.11",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -1372,7 +1372,7 @@
     "nixvim_2": {
       "inputs": {
         "flake-parts": "flake-parts_5",
-        "nixpkgs": "nixpkgs_8",
+        "nixpkgs": "nixpkgs_7",
         "nuschtosSearch": "nuschtosSearch_2",
         "systems": "systems_9"
       },
@@ -1536,29 +1536,11 @@
         "type": "github"
       }
     },
-    "nvidia-vgpu-nixos": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_6"
-      },
-      "locked": {
-        "lastModified": 1745217645,
-        "narHash": "sha256-6tMbKdvkKqZuVZnUj8UzCl1NpOC19pVbqxDa9yrFuvQ=",
-        "owner": "mrzenc",
-        "repo": "nvidia-vgpu-nixos",
-        "rev": "11ceea55de0c2387ee60f5d90ee1e992f71456a9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "mrzenc",
-        "repo": "nvidia-vgpu-nixos",
-        "type": "github"
-      }
-    },
     "nvix": {
       "inputs": {
         "flake-parts": "flake-parts_4",
         "git-hooks": "git-hooks",
-        "nixpkgs": "nixpkgs_7",
+        "nixpkgs": "nixpkgs_6",
         "nixpkgs-stable": "nixpkgs-stable",
         "nixvim": "nixvim_2",
         "systems": "systems_10"
@@ -1644,10 +1626,10 @@
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixvim": "nixvim",
         "nurpkgs": "nurpkgs",
-        "nvidia-vgpu-nixos": "nvidia-vgpu-nixos",
         "nvix": "nvix",
         "plasma-manager": "plasma-manager",
-        "stylix": "stylix"
+        "stylix": "stylix",
+        "vgpu4nixos": "vgpu4nixos"
       }
     },
     "scss-reset": {
@@ -2001,6 +1983,24 @@
       "original": {
         "owner": "numtide",
         "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "vgpu4nixos": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_8"
+      },
+      "locked": {
+        "lastModified": 1752922034,
+        "narHash": "sha256-TEnXV2H4sc3Liav+uC5/Fao6M5QDSaRlRhycyXBtwd0=",
+        "owner": "mrzenc",
+        "repo": "vgpu4nixos",
+        "rev": "fd1fe577e07e76d97a33a845f3b751dcb984a3d3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "mrzenc",
+        "repo": "vgpu4nixos",
         "type": "github"
       }
     },

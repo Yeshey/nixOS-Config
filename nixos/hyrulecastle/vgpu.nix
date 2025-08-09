@@ -114,7 +114,7 @@ in
 {
   imports = [
     #inputs.nixos-nvidia-vgpu.nixosModules.nvidia-vgpu
-    inputs.nvidia-vgpu-nixos.nixosModules.host
+    inputs.vgpu4nixos.nixosModules.host
     inputs.fastapi-dls-nixos.nixosModules.default
   ];
   
