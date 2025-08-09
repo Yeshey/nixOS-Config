@@ -40,7 +40,7 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     vgpu4nixos = {
-      #url = "github:mrzenc/vgpu4nixos";
+      url = "github:mrzenc/vgpu4nixos";
     };
     fastapi-dls-nixos = {
       url = "github:mrzenc/fastapi-dls-nixos";
