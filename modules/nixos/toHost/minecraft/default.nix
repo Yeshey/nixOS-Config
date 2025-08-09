@@ -54,7 +54,7 @@ in
 
     environment.persistence."/persistent" = {
       directories = [
-        { directory = "/srv/minecraft/mainServer/world"; user = "minecraft"; group = "minecraft"; mode = "u=rwx,g=rx,o="; }
+        { directory = "/srv/minecraft/mainServer"; user = "minecraft"; group = "minecraft"; mode = "u=rwx,g=rx,o="; }
       ];
     };
 
@@ -76,8 +76,8 @@ in
         # options specific for pixelmon?
         jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";
         serverProperties = {
-          server-port = 44329;
-          server-portv6 = 44330;
+          server-port = 44335;
+          server-portv6 = 44333;
           difficulty = 2;
           "allow-cheats" = "true";
           gamemode = 0;
@@ -86,8 +86,8 @@ in
           white-list = false;
           enable-rcon = false;
           "rcon.password" = "hunter2";
-          "rcon.port"=44331;
-          "query.port"=44329;
+          "rcon.port"=44334;
+          "query.port"=44335;
           "online-mode"=false;
           "max-tick-time" = -1; # Recommended with lazymc
         };
@@ -99,9 +99,9 @@ in
         lazymc = {
           enable = true;
           config = {
+            public.address = "0.0.0.0:44329";
             # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
-            forge = true;
-            time.sleep_after = 240; # Sleep after 4 minutes
+            time.sleep_after = 200; # Sleep after 4 minutes
           };
         };
       }; # End mainInstance server
