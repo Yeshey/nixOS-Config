@@ -40,7 +40,7 @@ in
 
       # Used this to find out what was being changed
       # nix-shell -p inotify-tools --run "stdbuf -oL inotifywait -m -r ~ --format '%w%f %e' -e modify -e create -e delete | tee /tmp/t.txt"
-      home.persistence."/persistent" = {
+      home.persistence."/persistent" = lib.mkIf config.myHome.impermanence.enable {
         directories = [
           ".local/share/code-server/User"
           ".vscode-oss/extensions" 

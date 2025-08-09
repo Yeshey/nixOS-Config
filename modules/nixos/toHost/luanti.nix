@@ -83,7 +83,7 @@ in
       };
     };
 
-    environment.persistence."/persistent" = {
+    environment.persistence."/persistent" = lib.mkIf config.mySystem.impermanence.enable {
       directories = [
         { directory = "/var/lib/luanti-anarchyMineclone2"; user = "luanti-anarchyMineclone2"; group = "luanti"; mode = "u=rwx,g=rx,o="; }
         { directory = "/var/lib/luanti-anarchyMineclonia"; user = "luanti-anarchyMineclonia"; group = "luanti"; mode = "u=rwx,g=rx,o="; }

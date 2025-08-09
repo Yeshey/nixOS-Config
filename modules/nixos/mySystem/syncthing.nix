@@ -148,16 +148,15 @@ in
       };
     };
 
-    # ADD IMPERMANENCE HERE for all syncthing folders:
-    environment.persistence."/persistent".users.yeshey = {
-      directories = [
-        # User home folders (relative paths)
-        ".local/share/PrismLauncher/instances/MainInstance"
-        ".local/share/osu"
-        ".minetest"
-        ".local/share/The Powder Toy"
-      ];
-    };
+    # Only configure persistence if impermanence is enabled
+    environment.persistence."/persistent".users.yeshey = lib.mkIf config.mySystem.impermanence.enable {
+        directories = [
+          ".local/share/PrismLauncher/instances/MainInstance"
+          ".local/share/osu"
+          ".minetest"
+          ".local/share/The Powder Toy"
+        ];
+      };
 
     # Ignore Patterns, userActivationScripts isntead of activationScripts to have user premissions
     system.userActivationScripts =

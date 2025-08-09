@@ -67,7 +67,7 @@ in
       };
     };
 
-    environment.persistence."/persistent" = {
+    environment.persistence."/persistent" = lib.mkIf config.mySystem.impermanence.enable {
       directories = [
         "/etc/wireguard/"
       ];
