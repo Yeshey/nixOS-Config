@@ -39,49 +39,24 @@
       url = "github:hyprwm/contrib";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    #nixos-nvidia-vgpu = {
-    #  url = "github:Yeshey/nixos-nvidia-vgpu/535.129";
-      # inputs.nixpkgs.follows = "nixpkgs";
-    #};
-
-    nvidia-vgpu-nixos.url = "github:mrzenc/nvidia-vgpu-nixos";
+    vgpu4nixos.url = "github:mrzenc/vgpu4nixos";
     fastapi-dls-nixos = {
       url = "github:mrzenc/fastapi-dls-nixos";
       # use nixpkgs provided by system to save some space
       # do not use this in case of problems
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     nix-minecraft = {
       #url = "github:Infinidoge/nix-minecraft";
-      #url = "github:Faeranne/nix-minecraft"; # has forge support
-      #url = "github:Yeshey/nix-minecraft"; 
       url = "github:Yeshey/nix-minecraft";
       #type = "path";
       #path = "/home/yeshey/Downloads/nm/";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-
     nix-luanti = {
       #inputs.nixpkgs.follows = "nixpkgs-unstable";
       url = "github:lomenzel/nix-luanti";
     };
-
-    #nixos-nvidia-vgpu = { # sudo nixos-rebuild --flake ~/.setup#laptop switch --update-input nixos-nvidia-vgpu --impure
-    #  type = "path";
-    #  path = "/mnt/DataDisk/PersonalFiles/2023/Projects/Programming/nixos-nvidia-vgpu_nixOS/";
-      # inputs.nixpkgs.follows = "nixpkgs";
-    #};
-
-    #learnWithT = {
-    #  url = "git+ssh://git@github.com/Yeshey/learnWithT.git?ref=main"; # fr my private repo
-    #  inputs.nixpkgs.follows = "nixpkgs-unstable";
-    #};
-    # learnWithT = {
-    #   type = "path";
-    #   path = "/mnt/DataDisk/PersonalFiles/2024/Projects/Programming/learnWithT/";
-    # };
-
     impermanence.url = "github:nix-community/impermanence/home-manager-v2";
     deploy-rs = {
       url = "github:serokell/deploy-rs";
@@ -98,7 +73,6 @@
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
     # Add the nix-on-droid input here
     nix-on-droid = {
       url = "github:nix-community/nix-on-droid/release-24.05";
@@ -112,42 +86,10 @@
     #  type = "path";
     #  path = "/home/yeshey/PersonalFiles/2025/Projects/box64-binfmt/";
     #};
-
-    /*
-    wolf = {
-      #url = "github:games-on-whales/wolf/dev-nix";
-      type = "path";
-      path = "/mnt/DataDisk/PersonalFiles/2023/Projects/Programming/nixos-nvidia-vgpu_nixOS/";
-      #inputs.nixpkgs.follows = "nixpkgs";
-      #inputs.home-manager.follows = "home-manager";
-    };
-    */
-    /*
-      nixgl = { # Might be needed for non-nixOS setups
-        url = "github:guibou/nixGL";
-        inputs.nixpkgs.follows = "nixpkgs";
-      };
-    */
-
-    /*
-    lanzaboote = { # for secure boot
-      url = "github:nix-community/lanzaboote/v0.3.0";
-      # Optional but recommended to limit the size of your system closure.
-      inputs.nixpkgs.follows = "nixpkgs";
-    }; */
-
     nix-snapd = {
       url = "github:nix-community/nix-snapd";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    # using the flatpak
-    #aagl = {
-    #  url = "github:ezKEa/aagl-gtk-on-nix";
-    #  # Or, if you follow Nixkgs release 25.05:
-    #  # aagl.url = "github:ezKEa/aagl-gtk-on-nix/release-25.05";
-    #  inputs.nixpkgs.follows = "nixpkgs"; # Name of nixpkgs input you want to use
-    #};
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
   };
 
@@ -166,7 +108,7 @@
     plasma-manager,
     nurpkgs,
     hyprland-plugins,
-    nvidia-vgpu-nixos,
+    vgpu4nixos,
     #learnWithT,
     fastapi-dls-nixos,
     nixos-generators,
