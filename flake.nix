@@ -39,7 +39,11 @@
       url = "github:hyprwm/contrib";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    vgpu4nixos.url = "github:mrzenc/vgpu4nixos";
+    vgpu4nixos = {
+      #url = "github:mrzenc/vgpu4nixos";
+      type = "path";
+      path = "/home/yeshey/Downloads/cmon";
+    };
     fastapi-dls-nixos = {
       url = "github:mrzenc/fastapi-dls-nixos";
       # use nixpkgs provided by system to save some space

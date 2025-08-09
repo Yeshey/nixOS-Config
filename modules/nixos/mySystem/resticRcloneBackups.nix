@@ -321,7 +321,7 @@ in
       restic
     ];
 
-    environment.persistence."/persistent".users.yeshey = {
+    environment.persistence."/persistent".users.yeshey = lib.mkIf config.mySystem.impermanence.enable {
       directories = [
         ".config/rclone/"
         ".config/org.restic.browser/"

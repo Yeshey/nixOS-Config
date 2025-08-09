@@ -52,7 +52,7 @@ in
       inputs.nix-minecraft.overlay 
     ] ++ overlays;
 
-    environment.persistence."/persistent" = {
+    environment.persistence."/persistent" = lib.mkIf config.mySystem.impermanence.enable {
       directories = [
         { directory = "/srv/minecraft/mainServer"; user = "minecraft"; group = "minecraft"; mode = "u=rwx,g=rx,o="; }
       ];

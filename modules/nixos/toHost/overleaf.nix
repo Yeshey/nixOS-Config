@@ -333,7 +333,7 @@ in
       pkgs.docker-compose
     ] ++ requiredPkgs;
 
-    environment.persistence."/persistent" = {
+    environment.persistence."/persistent" = lib.mkIf config.mySystem.impermanence.enable {
       directories = [
         # Preserve Docker images and container data
         "/var/lib/docker"
