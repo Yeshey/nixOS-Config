@@ -41,8 +41,6 @@
     };
     vgpu4nixos = {
       #url = "github:mrzenc/vgpu4nixos";
-      type = "path";
-      path = "/home/yeshey/Downloads/cmon";
     };
     fastapi-dls-nixos = {
       url = "github:mrzenc/fastapi-dls-nixos";
