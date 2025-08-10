@@ -1991,14 +1991,17 @@
         "nixpkgs": "nixpkgs_8"
       },
       "locked": {
-        "lastModified": 1754772892,
-        "narHash": "sha256-H1w+iXv5cFUVID+NohOPDDgUyS2X7fI/nWOJbLJjwhs=",
-        "path": "/home/yeshey/Downloads/cmon",
-        "type": "path"
+        "lastModified": 1752922034,
+        "narHash": "sha256-TEnXV2H4sc3Liav+uC5/Fao6M5QDSaRlRhycyXBtwd0=",
+        "owner": "mrzenc",
+        "repo": "vgpu4nixos",
+        "rev": "fd1fe577e07e76d97a33a845f3b751dcb984a3d3",
+        "type": "github"
       },
       "original": {
-        "path": "/home/yeshey/Downloads/cmon",
-        "type": "path"
+        "owner": "mrzenc",
+        "repo": "vgpu4nixos",
+        "type": "github"
       }
     },
     "xdph": {
