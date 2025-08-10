@@ -27,10 +27,6 @@ in
     # NixOS Configuration
     environment.shellAliases = {
       sudo = "sudo "; # makes aliases work even with sudo behind
-      # New-style nix commands with nom wrapper
-      "nix build" = "${pkgs.nix-output-monitor}/bin/nom build";
-      "nix shell" = "${pkgs.nix-output-monitor}/bin/nom shell";
-      "nix develop" = "${pkgs.nix-output-monitor}/bin/nom develop";
       # Old-style nix commands with nom wrapper
       "nix-build" = "${pkgs.nix-output-monitor}/bin/nom-build";
       "nix-shell" = "${pkgs.nix-output-monitor}/bin/nom-shell";
