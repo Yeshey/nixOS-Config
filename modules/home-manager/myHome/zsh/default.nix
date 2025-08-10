@@ -47,7 +47,6 @@ in
       };
       # bash
       initContent = ''
-        # source ${./kubectl.zsh}
         # source ${./git.zsh}
         source ${./myAlias.zsh}
 

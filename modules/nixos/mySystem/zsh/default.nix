@@ -48,7 +48,6 @@ in
         autoload -U promptinit; promptinit
       '';
       interactiveShellInit = ''
-        source ${./kubectl.zsh}
         source ${./git.zsh}
         source ${builtins.toFile "myAlias.zsh" (builtins.readFile ./myAlias.zsh + ''
           # complex alias that need nix syntax
