@@ -13,6 +13,7 @@ in
 {
   imports = [
     ./safe-rm.nix # always active
+    ./gc.nix # always active
     ./myScripts.nix
 
     ./gnome/default.nix
@@ -52,11 +53,6 @@ in
       username = lib.mkOverride 1010 cfg.user; # TODO username
       homeDirectory = lib.mkOverride 1010 "/home/${username}";
       stateVersion = lib.mkOverride 1010 "22.11";
-    };
-    nix.gc = {
-      automatic = lib.mkOverride 1010 true;
-      options = lib.mkOverride 1010 "--delete-older-than 14d";
-      frequency = lib.mkOverride 1010 "weekly";
     };
   };
 }
