@@ -13,6 +13,27 @@
 #         -name "*.sync-conflict-*" -ls -delete
 # }
 
+# Nix functions to emulate two-word aliases for nom build shell and develop
+function nix() {
+  case "$1" in
+    build)
+      shift
+      nom build "$@"
+      ;;
+    shell)
+      shift
+      nom shell "$@"
+      ;;
+    develop)
+      shift
+      nom develop "$@"
+      ;;
+    *)
+      command nix "$@"
+      ;;
+  esac
+}
+
 alias df="df -h";                                   # Human-readable sizes
 alias free="free -m";                               # Show sizes in MB
 alias zshreload="clear && zsh";
