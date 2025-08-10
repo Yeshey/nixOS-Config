@@ -243,126 +243,132 @@ in
     };
   };
 
-  config = lib.mkIf (config.mySystem.enable && cfg.enable) {
-    # Enable Docker
-    virtualisation.docker.enable = true;
+  config = lib.mkMerge [
     
-    # Directory setup service
-    systemd.services.overleaf-dir-setup = {
-      description = "Setup Overleaf directories";
-      wantedBy = [ "multi-user.target" ];
-      before = [ "overleaf-build.service" ];
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        User = "root";
-      };
-      script = ''
-        #!${pkgs.bash}/bin/bash
-        mkdir -p ${cfg.dataDir}
-        mkdir -p ${cfg.dataDir}/repos
-        mkdir -p ${cfg.dataDir}/overleaf-data
-        mkdir -p ${cfg.dataDir}/overleaf-data/mongo
-        mkdir -p ${cfg.dataDir}/overleaf-data/redis
-      '';
-    };
-
-    # Build Docker images
-    systemd.services.overleaf-build = {
-      description = "Build Overleaf Docker images";
-      requires = [ "docker.service" "overleaf-dir-setup.service" ];
-      after = [ "docker.service" "overleaf-dir-setup.service" ];
-      wantedBy = [ "multi-user.target" ];
-      before = [ "overleaf-setup.service" ];
-      path = requiredPkgs;
-      environment = lib.optionalAttrs cfg.forceBuild {
-        FORCE_BUILD = "true";
-      };
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        User = "root";
-        TimeoutStartSec = "120min"; # Building might take a long time
-      };
-      script = "${buildImagesScript}/bin/build-overleaf-images";
-    };
-
-    # Setup Overleaf toolkit
-    systemd.services.overleaf-setup = {
-      description = "Setup Overleaf toolkit";
-      requires = [ "overleaf-build.service" ];
-      after = [ "overleaf-build.service" ];
-      wantedBy = [ "multi-user.target" ];
-      before = [ "overleaf.service" ];
-      path = requiredPkgs;
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-        User = "root";
-      };
-      script = "${setupToolkitScript}/bin/setup-overleaf-toolkit";
-    };
-
-    # Run Overleaf service
-    systemd.services.overleaf = {
-      description = "Overleaf Service";
-      requires = [ "docker.service" "overleaf-setup.service" ];
-      after = [ "docker.service" "overleaf-setup.service" ];
-      wantedBy = [ "multi-user.target" ];
-      path = requiredPkgs;
-      serviceConfig = {
-        Type = "simple";
-        User = "root";
-        Restart = "on-failure";
-        RestartSec = "10s";
-        WorkingDirectory = "${cfg.dataDir}/toolkit";
-        ExecStart = "${startOverleafScript}/bin/start-overleaf";
-      };
-      preStop = ''
-        #!${pkgs.bash}/bin/bash
-        cd ${cfg.dataDir}/toolkit
-        ./bin/docker-compose down || true
-      '';
-    };
-
-    # Add tools to the system environment
-    environment.systemPackages = [ 
-      buildImagesScript
-      setupToolkitScript
-      startOverleafScript
-      pkgs.docker-compose
-    ] ++ requiredPkgs;
-
-    environment.persistence."/persistent" = lib.mkIf config.mySystem.impermanence.enable {
-      directories = [
-        # Preserve Docker images and container data
-        "/var/lib/docker"
-        
-        # Preserve your Overleaf data directory (contains repos, toolkit, and application data)
-        "${cfg.dataDir}"  # This will be "/opt/docker/overleaf" by default
-        
-        # If you want to be more selective, you can specify subdirectories:
-        # "${cfg.dataDir}/repos"           # Built repositories
-        # "${cfg.dataDir}/toolkit"         # Toolkit configuration
-        # "${cfg.dataDir}/overleaf-data"   # Application data (MongoDB, Redis, etc.)
-        
-        # Preserve Docker Compose state
-        "/var/lib/docker-compose"
-        
-        # Optional: preserve systemd journal logs for debugging
-        "/var/log/journal"
-      ];
+    (lib.mkIf (config.mySystem.enable && cfg.enable) {
+      # Enable Docker
+      virtualisation.docker.enable = true;
       
-      files = [
-        # Preserve any Docker daemon configuration if you have custom settings
-        # "/etc/docker/daemon.json"  # Uncomment if you have custom Docker config
-      ];
-    };
+      # Directory setup service
+      systemd.services.overleaf-dir-setup = {
+        description = "Setup Overleaf directories";
+        wantedBy = [ "multi-user.target" ];
+        before = [ "overleaf-build.service" ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          User = "root";
+        };
+        script = ''
+          #!${pkgs.bash}/bin/bash
+          mkdir -p ${cfg.dataDir}
+          mkdir -p ${cfg.dataDir}/repos
+          mkdir -p ${cfg.dataDir}/overleaf-data
+          mkdir -p ${cfg.dataDir}/overleaf-data/mongo
+          mkdir -p ${cfg.dataDir}/overleaf-data/redis
+        '';
+      };
 
-    # Firewall configuration
-    networking.firewall.allowedTCPPorts = [ (lib.toInt cfg.port) ];
-    
-    # Create a directory in /etc for overleaf specific configs
-    environment.etc."overleaf/REVISION".text = overleafRepo.rev;
-  };
+      # Build Docker images
+      systemd.services.overleaf-build = {
+        description = "Build Overleaf Docker images";
+        requires = [ "docker.service" "overleaf-dir-setup.service" ];
+        after = [ "docker.service" "overleaf-dir-setup.service" ];
+        wantedBy = [ "multi-user.target" ];
+        before = [ "overleaf-setup.service" ];
+        path = requiredPkgs;
+        environment = lib.optionalAttrs cfg.forceBuild {
+          FORCE_BUILD = "true";
+        };
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          User = "root";
+          TimeoutStartSec = "120min"; # Building might take a long time
+        };
+        script = "${buildImagesScript}/bin/build-overleaf-images";
+      };
+
+      # Setup Overleaf toolkit
+      systemd.services.overleaf-setup = {
+        description = "Setup Overleaf toolkit";
+        requires = [ "overleaf-build.service" ];
+        after = [ "overleaf-build.service" ];
+        wantedBy = [ "multi-user.target" ];
+        before = [ "overleaf.service" ];
+        path = requiredPkgs;
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          User = "root";
+        };
+        script = "${setupToolkitScript}/bin/setup-overleaf-toolkit";
+      };
+
+      # Run Overleaf service
+      systemd.services.overleaf = {
+        description = "Overleaf Service";
+        requires = [ "docker.service" "overleaf-setup.service" ];
+        after = [ "docker.service" "overleaf-setup.service" ];
+        wantedBy = [ "multi-user.target" ];
+        path = requiredPkgs;
+        serviceConfig = {
+          Type = "simple";
+          User = "root";
+          Restart = "on-failure";
+          RestartSec = "10s";
+          WorkingDirectory = "${cfg.dataDir}/toolkit";
+          ExecStart = "${startOverleafScript}/bin/start-overleaf";
+        };
+        preStop = ''
+          #!${pkgs.bash}/bin/bash
+          cd ${cfg.dataDir}/toolkit
+          ./bin/docker-compose down || true
+        '';
+      };
+
+      # Add tools to the system environment
+      environment.systemPackages = [ 
+        buildImagesScript
+        setupToolkitScript
+        startOverleafScript
+        pkgs.docker-compose
+      ] ++ requiredPkgs;
+
+      # Firewall configuration
+      networking.firewall.allowedTCPPorts = [ (lib.toInt cfg.port) ];
+      
+      # Create a directory in /etc for overleaf specific configs
+      environment.etc."overleaf/REVISION".text = overleafRepo.rev;
+    })
+  
+    (lib.mkIf (cfg.enable && config.mySystem.impermanence.enable) {
+      environment.persistence."/persistent" = {
+        directories = [
+          # Preserve Docker images and container data
+          "/var/lib/docker"
+          
+          # Preserve your Overleaf data directory (contains repos, toolkit, and application data)
+          "${cfg.dataDir}"  # This will be "/opt/docker/overleaf" by default
+          
+          # If you want to be more selective, you can specify subdirectories:
+          # "${cfg.dataDir}/repos"           # Built repositories
+          # "${cfg.dataDir}/toolkit"         # Toolkit configuration
+          # "${cfg.dataDir}/overleaf-data"   # Application data (MongoDB, Redis, etc.)
+          
+          # Preserve Docker Compose state
+          "/var/lib/docker-compose"
+          
+          # Optional: preserve systemd journal logs for debugging
+          "/var/log/journal"
+        ];
+        
+        files = [
+          # Preserve any Docker daemon configuration if you have custom settings
+          # "/etc/docker/daemon.json"  # Uncomment if you have custom Docker config
+        ];
+      };
+    })
+  ];
+   
 }
