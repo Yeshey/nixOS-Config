@@ -26,40 +26,46 @@ in
     enable = (lib.mkEnableOption "xrdp");
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkMerge [
+    
+      (lib.mkIf cfg.enable {
 
-    #services.xserver.enable = true;
-    #services.displayManager.sddm.enable = true;
-    #services.desktopManager.plasma6.enable = true;
-    services.xrdp.enable = true;
-    services.xrdp.defaultWindowManager = "startplasma-x11";
-    networking.firewall.allowedTCPPorts = [ 3389 ];
-    services.xrdp.extraConfDirCommands = ''
-      substituteInPlace $out/sesman.ini \
-        --replace param=.xorgxrdp.%s.log param=/tmp/xorgxrdp.%s.log
-    ''; # was taking 40GB in the server this file https://github.com/neutrinolabs/xrdp/issues/1845
+      #services.xserver.enable = true;
+      #services.displayManager.sddm.enable = true;
+      #services.desktopManager.plasma6.enable = true;
+      services.xrdp.enable = true;
+      services.xrdp.defaultWindowManager = "startplasma-x11";
+      networking.firewall.allowedTCPPorts = [ 3389 ];
+      services.xrdp.extraConfDirCommands = ''
+        substituteInPlace $out/sesman.ini \
+          --replace param=.xorgxrdp.%s.log param=/tmp/xorgxrdp.%s.log
+      ''; # was taking 40GB in the server this file https://github.com/neutrinolabs/xrdp/issues/1845
 
-    environment.persistence."/persistent" = lib.mkIf config.mySystem.impermanence.enable { # persist the key that identifies the server
-      files = [
-        "/run/xrdp/rsakeys.ini"
-      ];
-    };
-
-    services = {
-      xserver = {
-        enable = true;    # X11 because setting up Wayland is more complicated than it is worth for me.
-        xkb = {
-          layout = "pt";
-          variant = "";
+      services = {
+        xserver = {
+          enable = true;    # X11 because setting up Wayland is more complicated than it is worth for me.
+          xkb = {
+            layout = "pt";
+            variant = "";
+          };
+        };
+        desktopManager.plasma6.enable = true;
+        displayManager = {
+          #autoLogin.enable = true;
+          #autoLogin.user = config.mySystem.user;
+          sddm.enable = lib.mkOverride 1010 true;
         };
       };
-      desktopManager.plasma6.enable = true;
-      displayManager = {
-        #autoLogin.enable = true;
-        #autoLogin.user = config.mySystem.user;
-        sddm.enable = lib.mkOverride 1010 true;
-      };
-    };
 
-  };
+    }) 
+    
+    (lib.mkIf (cfg.enable && config.mySystem.impermanence.enable) {
+      environment.persistence."/persistent" = { # persist the key that identifies the server
+        files = [
+          "/run/xrdp/rsakeys.ini"
+        ];
+      };
+    })
+
+  ];
 }

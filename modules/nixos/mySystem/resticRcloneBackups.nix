@@ -215,118 +215,122 @@ in
     };
   };
 
-  config = lib.mkIf (cfg.jobs != {}) {
-    services.restic.backups = lib.mapAttrs' (jobName: jobCfg:
-      lib.nameValuePair jobName (
-        lib.mkIf jobCfg.enable {
-          user = jobCfg.user;
-          paths = jobCfg.paths;
-          repository = "rclone:${jobCfg.rcloneRemoteName}:${jobCfg.rcloneRemotePath}";
-          passwordFile = jobCfg.passwordFile; # Still required by services.restic.backups, but user can point to an empty file if RESTIC_PASSWORD is in environmentFile
-          environmentFile = jobCfg.environmentFile;
-          initialize = jobCfg.initialize;
-          exclude = [
-              # --- MODULE'S DEFAULT EXCLUDES START ---
-              #  ** matches anything including paths `/`
-              #  *  matches anything except paths `/`
-              "**/.cache"
-              "**/Downloads"
-              "**/.direnv"
-              "**/node_modules"
-              "**/.git"
-              "**/cache2"
-              "**/Cache"
-              "**/.config/Slack/logs"
-              "**/.config/Code/CachedData"
-              "**/.container-diff"
-              "**/.npm/_cacache"
-              "**/bower_components"
-              "**/_build"
-              "**/.tox"
-              "**/venv"
-              "**/.venv"
-              "**/*cache*/"
-              "**/Android"
-              "**/.gradle"
-              "**/.var/app/*/cache/" # faltpak
-              "**/.cabal"
-              "**/.vscode"
-              "**/.stremio-server"
-              "**/grapejuice"
-              "**/baloo"
-              "**/share/containers"
-              "**/share/waydroid"
-              "**/lutris"
-              "**/Steam"
-              # ".config" # Still recommend against this as a default, be more specific
-              "**/.config/chromium"
-              "**/.config/google-chrome"
-              "**/.config/mozilla/firefox/*/cache2"
-              "**/Trash"
-              # --- YOUR MODULE'S DEFAULT EXCLUDES END ---
-            ] ++ jobCfg.exclude; # jobCfg.exclude now comes from the user's configuration of your module
+  config = lib.mkMerge [
+    
+    (lib.mkIf (cfg.jobs != {}) {
+      services.restic.backups = lib.mapAttrs' (jobName: jobCfg:
+        lib.nameValuePair jobName (
+          lib.mkIf jobCfg.enable {
+            user = jobCfg.user;
+            paths = jobCfg.paths;
+            repository = "rclone:${jobCfg.rcloneRemoteName}:${jobCfg.rcloneRemotePath}";
+            passwordFile = jobCfg.passwordFile; # Still required by services.restic.backups, but user can point to an empty file if RESTIC_PASSWORD is in environmentFile
+            environmentFile = jobCfg.environmentFile;
+            initialize = jobCfg.initialize;
+            exclude = [
+                # --- MODULE'S DEFAULT EXCLUDES START ---
+                #  ** matches anything including paths `/`
+                #  *  matches anything except paths `/`
+                "**/.cache"
+                "**/Downloads"
+                "**/.direnv"
+                "**/node_modules"
+                "**/.git"
+                "**/cache2"
+                "**/Cache"
+                "**/.config/Slack/logs"
+                "**/.config/Code/CachedData"
+                "**/.container-diff"
+                "**/.npm/_cacache"
+                "**/bower_components"
+                "**/_build"
+                "**/.tox"
+                "**/venv"
+                "**/.venv"
+                "**/*cache*/"
+                "**/Android"
+                "**/.gradle"
+                "**/.var/app/*/cache/" # faltpak
+                "**/.cabal"
+                "**/.vscode"
+                "**/.stremio-server"
+                "**/grapejuice"
+                "**/baloo"
+                "**/share/containers"
+                "**/share/waydroid"
+                "**/lutris"
+                "**/Steam"
+                # ".config" # Still recommend against this as a default, be more specific
+                "**/.config/chromium"
+                "**/.config/google-chrome"
+                "**/.config/mozilla/firefox/*/cache2"
+                "**/Trash"
+                # --- YOUR MODULE'S DEFAULT EXCLUDES END ---
+              ] ++ jobCfg.exclude; # jobCfg.exclude now comes from the user's configuration of your module
 
-          rcloneConfigFile = jobCfg.rcloneConfigFile;
-          rcloneOptions = jobCfg.extraRcloneOpts; # Now this directly passes the attribute set
+            rcloneConfigFile = jobCfg.rcloneConfigFile;
+            rcloneOptions = jobCfg.extraRcloneOpts; # Now this directly passes the attribute set
 
-          extraBackupArgs = jobCfg.extraBackupArgs ++ (lib.optional jobCfg.noCache "--no-cache");
+            extraBackupArgs = jobCfg.extraBackupArgs ++ (lib.optional jobCfg.noCache "--no-cache");
 
-          timerConfig = {
-            OnCalendar = jobCfg.startAt;
-            RandomizedDelaySec = lib.mkIf (jobCfg.randomizedDelaySec != null) (toString jobCfg.randomizedDelaySec);
-            Persistent = true;
-          };
+            timerConfig = {
+              OnCalendar = jobCfg.startAt;
+              RandomizedDelaySec = lib.mkIf (jobCfg.randomizedDelaySec != null) (toString jobCfg.randomizedDelaySec);
+              Persistent = true;
+            };
 
-          backupPrepareCommand = ''
-            while ! /run/current-system/sw/bin/ping -c 1 1.0.0.1; do
-              echo "Waiting for internet connection..."
-              sleep 60
-            done
+            backupPrepareCommand = ''
+              while ! /run/current-system/sw/bin/ping -c 1 1.0.0.1; do
+                echo "Waiting for internet connection..."
+                sleep 60
+              done
 
-            echo "Internet is up, let's upload ~raccoon memes~ some backups!"
-          '';
+              echo "Internet is up, let's upload ~raccoon memes~ some backups!"
+            '';
 
-          # Construct pruneOpts only if prune is enabled for this job
-          pruneOpts = lib.mkIf jobCfg.prune.enable (
-            let keep = jobCfg.prune.keep;
-            in lib.filter (x: x != null && x != "") (
-              [
-                (lib.optionalString (keep.within != null) "--keep-within ${keep.within}")
-                (lib.optionalString (keep.hourly != null) "--keep-hourly ${toString keep.hourly}")
-                (lib.optionalString (keep.daily != null) "--keep-daily ${toString keep.daily}")
-                (lib.optionalString (keep.weekly != null) "--keep-weekly ${toString keep.weekly}")
-                (lib.optionalString (keep.monthly != null) "--keep-monthly ${toString keep.monthly}")
-                (lib.optionalString (keep.yearly != null) "--keep-yearly ${toString keep.yearly}")
-              ] ++ jobCfg.extraForgetArgs # Add any extra forget args
-            )
-          );
-        }
-      )
-    ) cfg.jobs;
+            # Construct pruneOpts only if prune is enabled for this job
+            pruneOpts = lib.mkIf jobCfg.prune.enable (
+              let keep = jobCfg.prune.keep;
+              in lib.filter (x: x != null && x != "") (
+                [
+                  (lib.optionalString (keep.within != null) "--keep-within ${keep.within}")
+                  (lib.optionalString (keep.hourly != null) "--keep-hourly ${toString keep.hourly}")
+                  (lib.optionalString (keep.daily != null) "--keep-daily ${toString keep.daily}")
+                  (lib.optionalString (keep.weekly != null) "--keep-weekly ${toString keep.weekly}")
+                  (lib.optionalString (keep.monthly != null) "--keep-monthly ${toString keep.monthly}")
+                  (lib.optionalString (keep.yearly != null) "--keep-yearly ${toString keep.yearly}")
+                ] ++ jobCfg.extraForgetArgs # Add any extra forget args
+              )
+            );
+          }
+        )
+      ) cfg.jobs;
 
-    systemd.services = lib.mapAttrs' (jobName: jobCfg:
-      lib.nameValuePair "restic-backups-${jobName}" (
-        lib.mkIf jobCfg.enable {
-          serviceConfig = {
-            Restart = "on-failure";
-            RestartSec = "15m"; # Restart after 15 minutes on failure
-          };
-        }
-      )
-    ) cfg.jobs;
+      systemd.services = lib.mapAttrs' (jobName: jobCfg:
+        lib.nameValuePair "restic-backups-${jobName}" (
+          lib.mkIf jobCfg.enable {
+            serviceConfig = {
+              Restart = "on-failure";
+              RestartSec = "15m"; # Restart after 15 minutes on failure
+            };
+          }
+        )
+      ) cfg.jobs;
 
-    environment.systemPackages = with pkgs; [ 
-      rclone
-      restic-browser
-      restic
-    ];
-
-    environment.persistence."/persistent".users.yeshey = lib.mkIf config.mySystem.impermanence.enable {
-      directories = [
-        ".config/rclone/"
-        ".config/org.restic.browser/"
+      environment.systemPackages = with pkgs; [ 
+        rclone
+        restic-browser
+        restic
       ];
-    };
-
-  };
+    }) 
+  
+    (lib.mkIf (config.mySystem.impermanence.enable) {
+      environment.persistence."/persistent".users.yeshey = {
+        directories = [
+          ".config/rclone/"
+          ".config/org.restic.browser/"
+        ];
+      };
+    })
+  ];
 }
