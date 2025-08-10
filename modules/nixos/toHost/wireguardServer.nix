@@ -66,7 +66,7 @@ in
               # Feel free to give a meaningful name
               name = "hyruleCastleYeshey";
               # Public key of the peer (not a file path).
-              publicKey = "mhfuwWbBmZqw9WEDh8a4ce3IgMa/0YsFTf18jkw3Ezc="; # "{client public key}"; # use sudo wg show wgOracle
+              publicKey = "DJ2tMsKC1urJuo0AgeA7VPtmOzExbYd0u3oIHbQuRig="; # "{client public key}"; # use sudo wg show wgOracle
               # List of IPs assigned to this peer within the tunnel subnet. Used to configure routing.
               allowedIPs = [ "10.100.0.2/32" ];
             }
