@@ -159,7 +159,7 @@
 
     nixosConfigurations = {
       hyrulecastle = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs outputs; };
+        specialArgs = { inherit inputs outputs vgpu4nixos fastapi-dls-nixos ; };
         modules = (builtins.attrValues nixosModules) ++ [
           nixos-generators.nixosModules.all-formats
           home-manager.nixosModules.default
