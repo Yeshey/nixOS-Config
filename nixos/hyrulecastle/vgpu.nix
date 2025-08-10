@@ -22,6 +22,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    #specialisation."vgpu".configuration = {
+    #  environment.etc.specialisation.text = "vgpu";
 
     boot = {
       kernelPackages = pkgs.linuxPackages_6_6;
@@ -89,6 +91,6 @@ in
     programs.mdevctl = {
       enable = true;
     };
-
+    #};
   };
 }
