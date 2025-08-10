@@ -283,7 +283,7 @@ in
       #pciIDs = "10de:1f11,10de:10f9,8086:1901,10de:1ada"; # Nvidia VGA, Nvidia Audia,... ;
       #libvirtUsers = [ "yeshey" ];
     };
-    vgpu.enable = false;
+    vgpu.enable = true;
   };
 
   nix = {
