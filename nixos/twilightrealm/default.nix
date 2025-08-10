@@ -38,8 +38,8 @@
     host = "twilightrealm";
     user = "yeshey";
     dataStoragePath = "~/Documents";
-    plasma.enable = true;
-    gnome.enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
+    plasma.enable = false;
+    gnome.enable = true; # TODO activate both plasma and gnome same time, maybe expose display manager
     hyprland.enable = false;
     ssh = {
       enable = true;
