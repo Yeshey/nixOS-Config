@@ -33,118 +33,72 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    hardware.nvidia.open = lib.mkForce false;
-
-    environment.systemPackages = let
-      # Looking glass B6 version in nixpkgs: 
-      myLookingGlassPkgs = import (builtins.fetchTarball {
-          url = "https://github.com/NixOS/nixpkgs/archive/394571358ce82dff7411395829aa6a3aad45b907.tar.gz";
-          sha256 = "sha256:1yrqrpmrdzbzcwb7kv9m6gbzjk68ljs098fv246brq6mc3s4v5qk";
-      }) { inherit system; };
-      looking-glass-client-B7-rc1 = myLookingGlassPkgs.looking-glass-client;
-    in [
-      # looking-glass-client-B7-rc1
-      pkgs.looking-glass-client # for my windows 10 machine I want B7-rc1
-      # for mdevctl you might need to create these folders if it gives error when running:
-      # /usr/lib/mdevctl/scripts.d/callouts
-      # /usr/lib/mdevctl/scripts.d/notifiers
-      pkgs.mdevctl
-    ];
-
-    services.fastapi-dls = {
-      enable = true;
-      # All possible options are listed here:
-      # https://git.collinwebdesigns.de/oscar.krause/fastapi-dls#configuration
-      debug = true;                # DEBUG
-      listen.ip = "0.0.0.0";      # DLS_URL localhost didn't work for me
+    boot = {
+      kernelPackages = pkgs.linuxPackages_6_6;
     };
 
-    # needed!
-    boot.extraModprobeConfig = 
-      ''
-      options nvidia vup_sunlock=1 vup_swrlwar=1 vup_qmode=1
-      ''; # (for driver 535) bypasses `error: vmiop_log: NVOS status 0x1` in nvidia-vgpu-mgr.service when starting VM
-    # environment.etc."nvidia-vgpu-xxxxx/vgpuConfig.xml".source = config.hardware.nvidia.package + /vgpuConfig.xml;
-    boot.kernelModules = [ "nvidia-vgpu-vfio" ];
-
-
-    boot.kernelPackages = pkgs.linuxPackages_6_1; # needed, 6.1 is LTS
-
-    hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.vgpu_16_5; # vgpu_17_3 vgpu_16_5
-
-    hardware.nvidia.vgpu.patcher.enable = true;
-    # hardware.nvidia.vgpu.patcher.options.remapP40ProfilesToV100D = true; # for 17_x
-    # hardware.nvidia.vgpu.patcher.options.doNotForceGPLLicense = true; # This breaks :'D
-    
-    #hardware.nvidia.vgpu.driverSource.name = "NVIDIA-GRID-Linux-KVM-550.90.05-550.90.07-552.74.zip"; # 17_3
-    #hardware.nvidia.vgpu.driverSource.url = "https://drive.usercontent.google.com/download?id=12m0G2_8osDbouJtFnCAKKBzbxaMURDD5&confirm=xxx"; # 17_3 zip # looking glass wasnt working?
-    
-    hardware.nvidia.vgpu.driverSource.name = "NVIDIA-GRID-Linux-KVM-535.161.05-535.161.08-538.46.zip"; # 16_5
-    hardware.nvidia.vgpu.driverSource.url = "https://drive.usercontent.google.com/download?id=1iVXS0uzQFzjbJSIM_XV2FKRMBIGnssJ6&confirm=xxx"; # 16_5 zip
-
-
-    # static IP, This doesnt work, the network is being managed by networkmanager, you can make changes in the gui or figure out how to manage that declaritivley
-    # networking.interfaces.eth0.ipv4.addresses = [ {
-    #   address = "192.168.1.2";
-    #   prefixLength = 24;
-    # } ];
-    services.samba-wsdd.enable = true; # make shares visible for windows 10 clients
-    networking.firewall.allowedTCPPorts = [
-      5357 # wsdd
-    ];
-    networking.firewall.allowedUDPPorts = [
-      3702 # wsdd
-    ];
-    services.samba = {
-      enable = true;
-      settings = {
-        global = {
-          "workgroup" = "WORKGROUP";
-          "server string" = "smbnix";
-          "netbios name" = "smbnix";
-          "security" = "user";
-          #"use sendfile" = "yes";
-          #"max protocol" = "smb2";
-          # note: localhost is the ipv6 localhost ::1
-          #"hosts allow" = "192.168.0. 127.0.0.1 localhost";
-          #"hosts deny" = "0.0.0.0/0";
-          "guest account" = "nobody";
-          "map to guest" = "bad user";
-        };
-        hdd-ntfs = {
-          path = "/mnt/hdd-ntfs";
-          browseable = "yes";
-          "read only" = "no";
-          "guest ok" = "yes";
-          "create mask" = "0644";
-          "directory mask" = "0755";
-          #"force user" = "username";
-          #"force group" = "groupname";
-        };
-        DataDisk = {
-          path = "/mnt/DataDisk";
-          browseable = "yes";
-          "read only" = "no";
-          "guest ok" = "yes";
-          "create mask" = "0644";
-          "directory mask" = "0755";
-          #"force user" = "username";
-          #"force group" = "groupname";
+    # https://docs.nvidia.com/vgpu/latest/pdf/grid-vgpu-user-guide.pdf
+    hardware = {
+      nvidia = {
+        package = config.boot.kernelPackages.nvidiaPackages.vgpu_17_3;
+        open = lib.mkForce false;
+        vgpu = {
+          patcher = {
+            enable = true;
+            options.doNotForceGPLLicense = true;
+            # runtimeOptions.enable = true;
+            copyVGPUProfiles = {
+              "1E93:0000" = "1E30:12BA"; # GeForce RTX 2080 SUPER Mobile / Max-Q
+              "1E07:0000" = "1E30:12BA"; # GeForce RTX 2080 Ti Rev. A
+            };
+            profileOverrides = {
+              # GRID RTX6000-1Q
+              "256" = {
+                vramAllocation = 1024;
+                heads = 4;
+                enableCuda = true;
+                display = {
+                  width = 7680;
+                  height = 4320;
+                };
+                framerateLimit = 0;
+              };
+              # GRID RTX6000-6Q
+              "260" = {
+                vramAllocation = 6144;
+                heads = 4;
+                enableCuda = true;
+                display = {
+                  width = 7680;
+                  height = 4320;
+                };
+                framerateLimit = 0;
+              };
+              # GRID RTX6000-24Q
+              "263" = {
+                vramAllocation = 16384;
+                heads = 4;
+                enableCuda = true;
+                display = {
+                  width = 7680;
+                  height = 4320;
+                };
+                framerateLimit = 0;
+              };
+            };
+          };
+          driverSource = {
+            name = "NVIDIA-Linux-x86_64-550.90.05-vgpu-kvm.run";
+            #url = "http://downloads.protoducer.com/vGPU/17.3/Host_Drivers/NVIDIA-Linux-x86_64-550.90.05-vgpu-kvm.run";
+            sha256 = "sha256-vBsxP1/SlXLQEXx70j/g8Vg/d6rGLaTyxsQQ19+1yp0=";
+          };
         };
       };
     };
-    networking.firewall.allowPing = true;
-    services.samba.openFirewall = true;
-    # However, for this samba share to work you will need to run `sudo smbpasswd -a <yourusername>` after building your configuration! (as stated in the nixOS wiki for samba: https://nixos.wiki/wiki/Samba)
-    # In windows you can access them in file explorer with `\\192.168.1.xxx` or whatever your local IP is
-    # In Windowos you should also map them to a drive to use them in a lot of programs, for this:
-    #   - Add a file MapNetworkDriveDataDisk and MapNetworkDriveHdd-ntfs to the folder C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup (to be accessible to every user in every startup):
-    #      With these contents respectively:
-    #         net use V: "\\192.168.1.109\DataDisk" /p:yes
-    #      and
-    #         net use V: "\\192.168.1.109\hdd-ntfs" /p:yes
-    # Then to have those drives be usable by administrator programs, open a cmd with priviliges and also run both commands above! This might be needed if you want to for example install a game in them, see this reddit post: https://www.reddit.com/r/uplay/comments/tww5ey/any_way_to_install_games_to_a_network_drive/
-    # You can make them always be mounted with admin too, through the Task Schedueler > New Task > Tick "Run as admin" and add the path to the script as a program (could be the one in C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup)
+
+    programs.mdevctl = {
+      enable = true;
+    };
 
   };
 }
