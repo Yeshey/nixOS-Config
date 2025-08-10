@@ -12,18 +12,18 @@ in
 {
   imports = [
     # from https://github.com/nix-community/home-manager/issues/1800, to make vscode settings writable
-    # Source: https://gist.github.com/piousdeer/b29c272eaeba398b864da6abf6cb5daa
+    # Source: https://gist.github.com/js6pak/d17a317de6a76ba9dac0d110adc651ed
     # Make vscode settings writable
 
     (import (builtins.fetchurl {
-      url = "https://gist.githubusercontent.com/piousdeer/b29c272eaeba398b864da6abf6cb5daa/raw/41e569ba110eb6ebbb463a6b1f5d9fe4f9e82375/mutability.nix";
-      sha256 = "4b5ca670c1ac865927e98ac5bf5c131eca46cc20abf0bd0612db955bfc979de8";
+      url = "https://gist.githubusercontent.com/js6pak/d17a317de6a76ba9dac0d110adc651ed/raw/309b3d066d00ca59e0342c458ceb2d10b1c5f6e9/mutability.nix";
+      sha256 = "sha256:1s4xjzy5p5fv283bvw5b4364djhy2dfbzicax4kmk1mcq5qacp2b";
     }) { inherit config lib; })
 
     (import (builtins.fetchurl {
-      url = "https://gist.githubusercontent.com/piousdeer/b29c272eaeba398b864da6abf6cb5daa/raw/41e569ba110eb6ebbb463a6b1f5d9fe4f9e82375/vscode.nix";
-      sha256 = "fed877fa1eefd94bc4806641cea87138df78a47af89c7818ac5e76ebacbd025f";
-    }) { inherit config lib pkgs; })
+      url = "https://gist.githubusercontent.com/js6pak/d17a317de6a76ba9dac0d110adc651ed/raw/309b3d066d00ca59e0342c458ceb2d10b1c5f6e9/vscode.nix";
+      sha256 = "sha256:0mb2fn4d61wrscv0nwi3hyflgs3gg8gaw78xayj97n5mslbj7sh9";
+    }) { inherit config lib pkgs; }) #
   
   ];
 
