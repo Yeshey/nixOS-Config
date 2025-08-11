@@ -43,7 +43,7 @@ in
     inputs.nixos-hardware.nixosModules.common-pc-ssd
     ./hardware-configuration.nix
     ./pci-passthrough.nix
-    ./vgpu.nix
+    ./vgpu/vgpu.nix
     # inputs.learnWithT.nixosModules.default
   ];
 

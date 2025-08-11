@@ -24,6 +24,7 @@ in
         imports = [
           inputs.vgpu4nixos.nixosModules.host
           inputs.fastapi-dls-nixos.nixosModules.default
+          ./dualPC.nix
         ];
       environment.etc.specialisation.text = "vgpu";
       system.nixos.tags = [ "vgpu" ];
