@@ -1,9 +1,9 @@
 # thanks to https://github.com/MakiseKurisu/nixos-config/blob/main/modules/nvidia-vgpu.nix
 {
-  inputs,
   config,
   pkgs,
   lib,
+  inputs,
   ...
 }:
 
@@ -13,8 +13,7 @@ in
 {
   imports = [
     #inputs.nixos-nvidia-vgpu.nixosModules.nvidia-vgpu
-    inputs.vgpu4nixos.nixosModules.host
-    inputs.fastapi-dls-nixos.nixosModules.default
+
   ];
   
   options.mySystemHyruleCastle.vgpu = {
@@ -22,8 +21,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    #specialisation."vgpu".configuration = {
-    #  environment.etc.specialisation.text = "vgpu";
+    specialisation."vgpu".configuration = { config, pkgs, lib, ... }: {
+        imports = [
+          inputs.vgpu4nixos.nixosModules.host
+          inputs.fastapi-dls-nixos.nixosModules.default
+        ];
+      environment.etc.specialisation.text = "vgpu";
+      system.nixos.tags = [ "vgpu" ];
 
     boot = {
       kernelPackages = pkgs.linuxPackages_6_6;
@@ -91,6 +95,6 @@ in
     programs.mdevctl = {
       enable = true;
     };
-    #};
+    };
   };
 }
