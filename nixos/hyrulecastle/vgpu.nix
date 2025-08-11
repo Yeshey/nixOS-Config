@@ -9,12 +9,11 @@
 
 let
   cfg = config.mySystemHyruleCastle.vgpu; # TODO make it a specialization
+  gdown-fetch = import ./gdown-fetch.nix { inherit pkgs; };
+  fileId = "1FOD_q0ZA04i9IqaoFEB8I7wcVkPBkkqT";
+  sha256 = "sha256-vBsxP1/SlXLQEXx70j/g8Vg/d6rGLaTyxsQQ19+1yp0=";
 in
 {
-  imports = [
-    #inputs.nixos-nvidia-vgpu.nixosModules.nvidia-vgpu
-
-  ];
   
   options.mySystemHyruleCastle.vgpu = {
     enable = lib.mkEnableOption "NvidiaVgpuSharing";
@@ -84,9 +83,9 @@ in
             };
           };
           driverSource = {
-            name = "NVIDIA-Linux-x86_64-550.90.05-vgpu-kvm.run";
-            # url get from https://drive.google.com/file/d/1FOD_q0ZA04i9IqaoFEB8I7wcVkPBkkqT/view?usp=sharing
-            sha256 = "sha256-vBsxP1/SlXLQEXx70j/g8Vg/d6rGLaTyxsQQ19+1yp0=";
+            name  = "NVIDIA-Linux-x86_64-550.90.05-vgpu-kvm.run";
+            url   = "file://${gdown-fetch { name = "NVIDIA-Linux-x86_64-550.90.05-vgpu-kvm.run"; id = fileId; inherit sha256; }}";
+            sha256 = sha256;
           };
         };
       };
