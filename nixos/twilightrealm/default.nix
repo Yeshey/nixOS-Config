@@ -10,6 +10,7 @@
 {
   imports = [ 
     ./hardware-configuration.nix 
+    ./vgpuGuest.nix
   ];
 
   nixpkgs = {
