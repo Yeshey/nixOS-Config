@@ -11,12 +11,26 @@
 
   boot.kernelParams = [
     "intel_iommu=on"
+    "kvm.ignore_msrs=1"
     "iommu=pt"
   ];
 
-  # Bind the GPU and its audio function to vfio-pci so vGPU stub can work
-  boot.extraModprobeConfig = ''
-    options vfio-pci ids=10de:1f11,10de:10f9
-  '';
+  boot.kernelModules = [
+    "vfio"
+    "vfio_iommu_type1"
+    "vfio_pci"
+    "vfio_virqfd"
+
+    "nvidia-vgpu-vfio"
+  ];
+
+  users.groups.libvirtd.members = [ "root" "yeshey" ];
+
+  boot.extraModprobeConfig = 
+    ''    
+    options nvidia vup_sunlock=1 vup_swrlwar=1 vup_qmode=1
+    ''; # (for driver 535) bypasses `error: vmiop_log: NVOS status 0x1` in nvidia-vgpu-mgr.service when starting VM
+  # environment.etc."nvidia-vgpu-xxxxx/vgpuConfig.xml".source = config.hardware.nvidia.package + /vgpuConfig.xml;
 
 }
+
