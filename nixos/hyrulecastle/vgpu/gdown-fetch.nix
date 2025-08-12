@@ -1,4 +1,4 @@
-# hlped by https://www.kimi.com
+# helped by https://www.kimi.com
 # to download the nvidia driver from google drive
 { pkgs }:
 { name, id, sha256 }:
