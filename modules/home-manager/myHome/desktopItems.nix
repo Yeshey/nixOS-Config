@@ -50,7 +50,7 @@ in
   config = lib.mkMerge [
     {
       home.packages = [
-        pkgs.cmatrix
+        
       ];
     }
     (lib.mkIf (config.myHome.enable && cfg.xrdp.enable) {
