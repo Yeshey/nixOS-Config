@@ -26,7 +26,7 @@
   # https://docs.nvidia.com/vgpu/latest/pdf/grid-vgpu-user-guide.pdf
   hardware = {
     nvidia = {
-      package = config.boot.kernelPackages.nvidiaPackages.grid_17_3;
+      package = config.boot.kernelPackages.nvidiaPackages.grid_17_2;
       open = lib.mkForce false;
       vgpu.patcher.enable = true;
     };
