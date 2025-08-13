@@ -7,34 +7,49 @@
   ...
 }:
 
+let
+  cfg = config.mySystem.guestVgpu; # TODO make it a specialization
+in
 {
   imports = [
     inputs.vgpu4nixos.nixosModules.guest
     inputs.fastapi-dls-nixos.nixosModules.default
   ];
 
-  mySystem.hardware.nvidia = {
-    enable = true;
-    intelBusId = "PCI:0:2:0";
-    nvidiaBusId = "PCI:1:0:0";
+  options.mySystem.guestVgpu = {
+    enable = lib.mkEnableOption "guestVgpu";
   };
 
-  boot = {
-    kernelPackages = pkgs.linuxPackages_6_6;
-  };
+  config = lib.mkIf cfg.enable {
 
-  # https://docs.nvidia.com/vgpu/latest/pdf/grid-vgpu-user-guide.pdf
-  hardware = {
-    nvidia = {
-      package = config.boot.kernelPackages.nvidiaPackages.grid_17_2;
-      open = lib.mkForce false;
-      vgpu.patcher.enable = true;
+    mySystem.hardware.nvidia = {
+      enable = true;
+      intelBusId = "PCI:0:2:0";
+      nvidiaBusId = "PCI:1:0:0";
     };
-  };
 
-  programs.mdevctl = {
-    enable = true;
-  };
+    boot = {
+      kernelPackages = pkgs.linuxPackages_6_6;
+    };
 
+    # https://docs.nvidia.com/vgpu/latest/pdf/grid-vgpu-user-guide.pdf
+    hardware = {
+      nvidia = {
+        package = config.boot.kernelPackages.nvidiaPackages.grid_17_3;
+        open = lib.mkForce false;
+        vgpu.patcher.enable = true;
+        # driverSource = {
+        #   name  = "cuda_nvcc-linux-x86_64-12.8.61-archive.tar.xz";
+        #   url   = "file://${gdown-fetch { name = "cuda_nvcc-linux-x86_64-12.8.61-archive.tar.xz"; id = fileId; inherit sha256; }}";
+        #   sha256 = sha256;
+        # };
+      };
+    };
+
+    programs.mdevctl = {
+      enable = true;
+    };
+
+  };
 }
 

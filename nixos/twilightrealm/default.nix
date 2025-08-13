@@ -82,6 +82,8 @@
       #thermalConf = ./../kakariko/thermal-conf.xml;
     };
 
+    guestVgpu.enable = false;
+
     #agenix = {
     #  enable = false;
     #  sshKeys.enable = false;
