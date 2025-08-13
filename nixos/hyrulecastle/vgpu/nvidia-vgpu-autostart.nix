@@ -154,6 +154,10 @@
     };
   };
   
+  environment.etc."tmpfiles.d/10-looking-glass.conf".text = ''
+    # Type Path Mode UID GID Age Argument
+  '';
+
   # Link the fallback timer to the fallback service
   systemd.services.create-vgpu-mdevs-fallback.wantedBy = 
     [ "create-vgpu-mdevs-fallback.timer" ];
