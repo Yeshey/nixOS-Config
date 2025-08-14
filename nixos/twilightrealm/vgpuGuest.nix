@@ -23,7 +23,7 @@ in
   config = lib.mkIf cfg.enable {
 
     mySystem.hardware.nvidia = {
-      enable = true;
+      enable = lib.mkForce true;
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:1:0:0";
     };
