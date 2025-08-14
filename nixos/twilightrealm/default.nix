@@ -27,7 +27,7 @@ in
     };
     plasma = {
       enable = true;
-      x11 = true;
+      x11 = false;
     };
     gnome = {
       enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
@@ -90,7 +90,7 @@ in
     };
     nh.enable = true;
     wireguardClient.enable = false;
-    guestVgpu.enable = true;
+    guestVgpu.enable = false;
   };
 
   toHost = {
