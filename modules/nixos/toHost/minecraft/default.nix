@@ -65,7 +65,7 @@ in
         # to recreate the world, delete just the world folder
         # might need to delete /run/minecraft/zombies2.sock
 
-        servers.familiaLopesTAISCTE = {
+        servers.FamiliaLopesTAISCTE = {
           enable = true;
           jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";
           serverProperties = {
@@ -665,7 +665,7 @@ in
       environment.persistence."/persistent" = {
         directories = [
           { directory = "/srv/minecraft/mainServer"; user = "minecraft"; group = "minecraft"; mode = "u=rwx,g=rx,o="; }
-          { directory = "/srv/minecraft/familiaLopesTAISCTE"; user = "minecraft"; group = "minecraft"; mode = "u=rwx,g=rx,o="; }
+          { directory = "/srv/minecraft/FamiliaLopesTAISCTE"; user = "minecraft"; group = "minecraft"; mode = "u=rwx,g=rx,o="; }
         ];
       };
     })
