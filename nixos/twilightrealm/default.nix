@@ -26,11 +26,11 @@ in
       home = ./home.nix;
     };
     plasma = {
-      enable = true;
+      enable = false;
       x11 = false;
     };
     gnome = {
-      enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
+      enable = true; # TODO activate both plasma and gnome same time, maybe expose display manager
     };
     hyprland.enable = false;
     ssh = {
@@ -44,7 +44,7 @@ in
     dockerHost = false;
     hardware = {
       enable = true;
-      bluetooth.enable = true;
+      bluetooth.enable = false;
       printers.enable = false;
       sound.enable = true;
       thermald = {
@@ -90,7 +90,7 @@ in
     };
     nh.enable = true;
     wireguardClient.enable = false;
-    guestVgpu.enable = false;
+    guestVgpu.enable = true;
   };
 
   toHost = {
@@ -117,6 +117,16 @@ in
     searx.enable = false;
   };
 
+# Enable the X11 windowing system.
+  services.xserver.enable = true;
+  
+  # enable Gnome
+  #services.xserver.displayManager.gdm.enable = true;
+  #services.xserver.desktopManager.gnome.enable = true;
+  #services.xserver.displayManager.gdm.wayland = false;
+
+#  boot.kernelParams = [ "module_blacklist=i915" ];
+
   nix = {
     settings = {
       cores = 4; # settings this per machine
@@ -140,9 +150,38 @@ in
       }
     ];
 
+  zramSwap.enable = false;
+
   # I'm a VM
-  services.qemuGuest.enable = true;
-  services.spice-vdagentd.enable = true;
+  #services.qemuGuest.enable = true;
+  #services.spice-vdagentd.enable = true;
+
+  services.xserver.videoDrivers = [ "nvidia" ];
+  hardware.nvidia.modesetting.enable = true;
+  hardware.nvidia.powerManagement.enable = false;
+
+boot.kernelParams = [
+  "modprobe.blacklist=qxl"
+  "modprobe.blacklist=virtio_gpu"
+
+  "video=vesafb:off"
+  "video=efifb:off"
+];
+
+  services.xserver = {
+    extraConfig = builtins.toFile "xorg-nvidia-only.conf" ''
+      Section "Device"
+        Identifier "nvidia"
+        Driver "nvidia"
+        BusID "PCI:7:0:0"
+      EndSection
+
+      Section "Screen"
+        Identifier "nvidia-screen"
+        Device "nvidia"
+      EndSection
+    '';
+  };
 
   # Bootloader.
   boot.loader.systemd-boot = {
