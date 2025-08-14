@@ -168,21 +168,6 @@ boot.kernelParams = [
   "video=efifb:off"
 ];
 
-  services.xserver = {
-    extraConfig = builtins.toFile "xorg-nvidia-only.conf" ''
-      Section "Device"
-        Identifier "nvidia"
-        Driver "nvidia"
-        BusID "PCI:7:0:0"
-      EndSection
-
-      Section "Screen"
-        Identifier "nvidia-screen"
-        Device "nvidia"
-      EndSection
-    '';
-  };
-
   # Bootloader.
   boot.loader.systemd-boot = {
    enable = true;
