@@ -26,6 +26,7 @@ in
           inputs.fastapi-dls-nixos.nixosModules.default
           ./dualPC.nix
           ./nvidia-vgpu-autostart.nix
+          ./fastapi-dls.nix
         ];
       environment.etc.specialisation.text = "vgpu";
       system.nixos.tags = [ "vgpu" ];
