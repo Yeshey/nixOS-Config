@@ -65,24 +65,22 @@ in
         # to recreate the world, delete just the world folder
         # might need to delete /run/minecraft/zombies2.sock
 
-        # this server is at /srv/minecraft/pixelmon
-        servers.mainServer = {
+        servers.familiaLopesTAISCTE = {
           enable = true;
-          # options specific for pixelmon?
           jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";
           serverProperties = {
-            server-port = 44335;
-            server-portv6 = 44333;
+            server-port = 1409;
+            "query.port" = 1409;
+            server-portv6 = 1410;
+            "rcon.port" = 1411;
             difficulty = 2;
             "allow-cheats" = "true";
             gamemode = 0;
             max-players = 60;
-            motd = "MINE!!";
+            motd = "Família Lopes";
             white-list = false;
             enable-rcon = false;
             "rcon.password" = "hunter2";
-            "rcon.port"=44334;
-            "query.port"=44335;
             "online-mode"=false;
             "max-tick-time" = -1; # Recommended with lazymc
           };
@@ -93,6 +91,39 @@ in
 
           lazymc = {
             enable = true;
+            # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
+            config = {
+              public.address = "0.0.0.0:1408"; # aniversario da Mills e do Uno
+            };
+          };
+        }; # End familiaLopesTAISCTE server
+
+        servers.mainServer = {
+          enable = true;
+          jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";
+          serverProperties = {
+            server-port = 44335;
+            "query.port"=44335;
+            server-portv6 = 44334;
+            "rcon.port"=44335;
+            "rcon.password" = "hunter2";
+            difficulty = 2;
+            "allow-cheats" = "true";
+            gamemode = 0;
+            max-players = 60;
+            motd = ":]";
+            white-list = false;
+            enable-rcon = false;
+            "online-mode"=false;
+            "max-tick-time" = -1; # Recommended with lazymc
+          };
+
+          # Specify the custom minecraft server package
+          #package = pkgs.fabricServers.fabric-1_21_1; #.override { loaderVersion = "0.16.10"; }; # Specific fabric loader version
+          package = pkgs.paperServers.paper;
+
+          lazymc = {
+            enable = false;
             config = {
               public.address = "0.0.0.0:44329";
               # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
@@ -101,7 +132,11 @@ in
           };
         }; # End mainInstance server
 
-        # this server is at /srv/minecraft/pixelmon
+        servers.testerido = {
+          enable = true;
+          lazymc.enable = true;
+        };
+
   #       servers.pixelmon = {
   #         enable = true;
   #         # options specific for pixelmon?
@@ -635,6 +670,7 @@ in
       environment.persistence."/persistent" = {
         directories = [
           { directory = "/srv/minecraft/mainServer"; user = "minecraft"; group = "minecraft"; mode = "u=rwx,g=rx,o="; }
+          { directory = "/srv/minecraft/familiaLopesTAISCTE"; user = "minecraft"; group = "minecraft"; mode = "u=rwx,g=rx,o="; }
         ];
       };
     })
