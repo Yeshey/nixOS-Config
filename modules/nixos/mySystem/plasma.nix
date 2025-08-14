@@ -11,11 +11,7 @@ in
 {
   options.mySystem.plasma = {
     enable = lib.mkEnableOption "plasma";
-    defaultSession = lib.mkOption {
-      type = lib.types.str;
-      default = "plasma";
-      example = "plasmax11";
-    };
+    x11 = lib.mkEnableOption "x11";
   };
 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
@@ -49,24 +45,23 @@ in
     networking.firewall.allowedTCPPorts = [ 67 68 53 
     ];
 
-    services = {
-      xserver.enable = lib.mkOverride 1010 true; # Enable the X11 windowing system.
-      displayManager = {
-        autoLogin.enable = lib.mkOverride 1010 true;
-        autoLogin.user = lib.mkOverride 1010 "${config.mySystem.user}"; # TODO
-        sddm = {
-	        wayland.enable = true;
-          enable = lib.mkOverride 1010 true;
-        };
-        defaultSession = lib.mkOverride 1010 cfg.defaultSession; # "none+bspwm" or "plasma"
-      };
-      desktopManager.plasma6 = {
-        enable = lib.mkOverride 1010 true;
-        enableQt5Integration = true;
-        # supportDDC = true; # doesnt work with nvidia # to support changing brightness for external monitors (https://discourse.nixos.org/t/how-to-enable-ddc-brightness-control-i2c-permissions/20800)
-      };
-      # windowManager.bspwm.enable = true; # but doesn't work
+    environment.sessionVariables = rec {
+      #KWIN_FORCE_SW_CURSOR="1";
     };
+    services = {
+      xserver = lib.mkIf cfg.x11 {
+        displayManager.startx.enable = true;
+        enable = true;    # X11 because setting up Wayland is more complicated than it is worth for me.
+      };
+      desktopManager.plasma6.enable = true;
+      displayManager = {
+        #autoLogin.enable = true;
+        #autoLogin.user = config.mySystem.user;
+        sddm.enable = true;
+        defaultSession = lib.mkForce "plasma";
+      };
+    };
+
     environment.systemPackages = with pkgs; [
       # FOR PLASMA DESKTOP
       kdePackages.sddm-kcm # for sddm configuration in settings
