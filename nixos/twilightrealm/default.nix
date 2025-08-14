@@ -26,7 +26,7 @@ in
       home = ./home.nix;
     };
     plasma = {
-      enable = false;
+      enable = true;
       x11 = true;
     };
     gnome = {
