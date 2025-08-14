@@ -137,6 +137,10 @@ in
       }
     ];
 
+  # I'm a VM
+  services.qemuGuest.enable = true;
+  services.spice-vdagentd.enable = true;
+
   # Bootloader.
   boot.loader.systemd-boot = {
    enable = true;
