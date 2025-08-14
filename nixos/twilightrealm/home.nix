@@ -16,8 +16,8 @@ in
     user = "yeshey";
     xdgPersonalFilesOrganization.enable = true;
     nonNixos.enable = false;
-    plasma.enable = false;
-    gnome.enable = true;
+    plasma.enable = true;
+    gnome.enable = false;
     ssh.enable = true;
     hyprland = {
       enable = false;
@@ -47,7 +47,7 @@ in
       };
       vscodium.enable = true;
       discord.enable = false;
-      gaming.enable = false;
+      gaming.enable = true;
       kitty.enable = false;
       alacritty.enable = false;
       libreoffice.enable = false;

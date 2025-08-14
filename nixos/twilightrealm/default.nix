@@ -25,9 +25,12 @@ in
       enable = true;
       home = ./home.nix;
     };
-    plasma.enable = false;
+    plasma = {
+      enable = false;
+      defaultSession = "plasmax11";
+    };
     gnome = {
-      enable = true; # TODO activate both plasma and gnome same time, maybe expose display manager
+      enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
     };
     hyprland.enable = false;
     ssh = {
@@ -36,7 +39,7 @@ in
     browser.enable = true;
     cliTools.enable = true;
     zsh.enable = true;
-    gaming.enable = false;
+    gaming.enable = true;
     vmHost = false;
     dockerHost = false;
     hardware = {
