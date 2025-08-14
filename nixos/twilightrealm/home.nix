@@ -38,7 +38,7 @@ in
         };
         tmux.enable = true;
         neovim = {
-          enable = false;
+          enable = false; # pulls texlive full
         };
       };
       firefox = {
