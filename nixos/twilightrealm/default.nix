@@ -125,6 +125,7 @@ in
     # jetbrains-toolbox
     # Games
     # steam-scalled
+    looking-glass-host
   ];
 
   swapDevices =
