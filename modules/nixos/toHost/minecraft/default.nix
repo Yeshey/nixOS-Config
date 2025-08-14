@@ -132,11 +132,6 @@ in
           };
         }; # End mainInstance server
 
-        servers.testerido = {
-          enable = true;
-          lazymc.enable = true;
-        };
-
   #       servers.pixelmon = {
   #         enable = true;
   #         # options specific for pixelmon?
