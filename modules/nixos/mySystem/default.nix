@@ -76,6 +76,7 @@ in
     ./nix-flatpak.nix
     ./nh.nix
     ./wireguardClient.nix
+    ./allTor.nix
   ];
 
   options.mySystem = with lib; {
