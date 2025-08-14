@@ -32,6 +32,19 @@ in
       kernelPackages = pkgs.linuxPackages_6_6;
     };
 
+    # https://docs.nvidia.com/vgpu/latest/pdf/grid-vgpu-user-guide.pdf
+    hardware = {
+      nvidia = {
+        package = config.boot.kernelPackages.nvidiaPackages.grid_17_3;
+        open = lib.mkForce false;
+        vgpu.patcher.enable = true;
+        # driverSource = {
+        #   name  = "cuda_nvcc-linux-x86_64-12.8.61-archive.tar.xz";
+        #   url   = "file://${gdown-fetch { name = "cuda_nvcc-linux-x86_64-12.8.61-archive.tar.xz"; id = fileId; inherit sha256; }}";
+        #   sha256 = sha256;
+        # };
+      };
+    };
 
     programs.mdevctl = {
       enable = true;
