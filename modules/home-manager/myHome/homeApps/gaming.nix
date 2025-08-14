@@ -28,7 +28,7 @@ let
     exec = "${downloadAndRunOsu}/bin/downloadAndRunOsu %f";
     icon = builtins.fetchurl {
       url = "https://raw.githubusercontent.com/ppy/osu/refs/heads/master/osu.Desktop/lazer.ico";
-      sha256 = "sha256:125llsb59zs453qy7ah52p8n2pdn9rp16sp4z3n41a6gkxa29z0q";
+      sha256 = "sha256:0m7dl7arnzn1cz02dyv34dp0rp3d67jrvhxa0ysl4hlxzw9ra3gg";
     };
     categories = [
       "Game"

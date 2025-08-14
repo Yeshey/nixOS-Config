@@ -1,5 +1,14 @@
-{ pkgs, config, ... }:
+{
+  inputs,
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
+let
+
+in
 {
   myHome = {
     enable = true;
@@ -9,13 +18,13 @@
     nonNixos.enable = false;
     plasma.enable = false;
     gnome.enable = true;
+    ssh.enable = true;
     hyprland = {
       enable = false;
-      nvidia = false;
     };
-    ssh.enable = true;
     homeApps = {
       enable = true;
+      general.enable = false;
       cli = {
         enable = true;
         general.enable = true;
@@ -29,51 +38,63 @@
         };
         tmux.enable = true;
         neovim = {
-          enable = true;
+          enable = false;
         };
       };
       firefox = {
-        enable = true;
-        i2pFirefoxProfile = false;
+        enable = false;
+        i2pFirefoxProfile = true;
       };
-      webApps.enable = false;
       vscodium.enable = true;
-      discord.enable = true;
+      discord.enable = false;
       gaming.enable = false;
       kitty.enable = false;
       alacritty.enable = false;
       libreoffice.enable = false;
       devops.enable = false;
     };
-
+    # autoStartApps = [ pkgs.vesktop ]; # only works with gnome??
     zsh = {
       enable = true;
       starshipTheme = "fredericrous"; # fredericrous # pinage404
     };
     direnv.enable = true;
-    
     stylix = {
       # https://www.youtube.com/watch?v=ljHkWgBaQWU
-      enable = true;
-      base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-mirage.yaml"; #gruvbox-dark-medium #pop
-      wallpaper = pkgs.wallpapers.nierAutomataWallpaper; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement
-      cursor = {
-        package = pkgs.apple-cursor;
-        name = "Apple";
-        size = 24;
+      enable = false;
+      base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-medium.yaml"; #pop.yaml
+      wallpaper = pkgs.wallpapers.stellarCollisionByKuldarleement; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement #tunaCoimbra2025
+    };
+    #agenix = {
+    #  enable = true;
+    #  sshKeys.enable = true;
+    #};
+    impermanence.enable = false;
+    #autosshReverseProxy = {
+    #  enable = true;
+    #  remoteIP = "143.47.53.175";
+    #  remoteUser = "yeshey";
+    #  port = 2233;
+    #};
+    warnElections.enable = false;
+    desktopItems = {
+      xrdp = {
+        enable = true;
+        remote.ip = "143.47.53.175";
+        remote.user = "yeshey";
+        extraclioptions = "/p: /w:1920 /h:1080 /smart-sizing /audio-mode:1 /clipboard /network:modem /compression";
+      };
+      openvscodeServer = {
+        enable = true;
+        wireguard = {
+          enable = true;
+          serverIP = "10.100.0.1"; # Your WireGuard server IP
+        };
+        port = 2998;
+        remote = "oracle";
       };
     };
-
-    /*onedriver = {
-      enable = true;
-      onedriverFolder = "/mnt/hdd-btrfs/Yeshey/OneDriver/";
-      serviceCoreName = "mnt-hdd\\x2dbtrfs-Yeshey-OneDriver"; 
-    };*/
-
-    #agenix = {
-    #  enable = false;
-    #  sshKeys.enable = false;
-    #};
+    nh.enable = true;
   };
 
   home = {
