@@ -12,6 +12,7 @@ in
 {
   imports = [
     ./hardware-configuration.nix
+    ./vgpuGuest.nix
     # inputs.learnWithT.nixosModules.default
   ];
 
@@ -86,6 +87,7 @@ in
     };
     nh.enable = true;
     wireguardClient.enable = false;
+    guestVgpu.enable = true;
   };
 
   toHost = {
