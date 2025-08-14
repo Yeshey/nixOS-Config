@@ -45,6 +45,12 @@ in
     networking.firewall.allowedTCPPorts = [ 67 68 53 
     ];
 
+    hardware.graphics.enable = true;
+    # hardware.graphics.enable32Bit = true; # idk if i need this?
+    # hardware.opengl.driSupport = true;
+
+    nixpkgs.config.pulseaudio = true; # (need to fix audio)
+
     environment.sessionVariables = rec {
       #KWIN_FORCE_SW_CURSOR="1";
     };
@@ -57,7 +63,7 @@ in
       displayManager = {
         #autoLogin.enable = true;
         #autoLogin.user = config.mySystem.user;
-        sddm.enable = true;
+        sddm.enable = false;
         defaultSession = lib.mkForce "plasma";
       };
     };
