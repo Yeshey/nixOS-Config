@@ -16,8 +16,8 @@ in
     user = "yeshey";
     xdgPersonalFilesOrganization.enable = true;
     nonNixos.enable = false;
-    plasma.enable = true;
-    gnome.enable = false;
+    plasma.enable = false;
+    gnome.enable = true;
     ssh.enable = true;
     hyprland = {
       enable = false;

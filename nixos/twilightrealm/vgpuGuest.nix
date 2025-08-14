@@ -23,10 +23,47 @@ in
   config = lib.mkIf cfg.enable {
 
     mySystem.hardware.nvidia = {
-      enable = lib.mkForce true;
+      enable = lib.mkForce false;
       intelBusId = "PCI:0:2:0";
       nvidiaBusId = "PCI:1:0:0";
     };
+
+
+
+    nixpkgs.config = {
+      cudaSupport = lib.mkOverride 1010 true; # for blender (nvidia)
+    };
+    nixpkgs.config.allowUnfreePredicate =
+      pkg:
+      builtins.elem (pkgs.lib.getName pkg) [
+        "nvidia-x11"
+        "nvidia-settings"
+      ];
+    environment.systemPackages = with pkgs; [
+      # NVIDIA
+      cudaPackages.cudatoolkit # for blender (nvidia)
+      # gwe?
+    ];
+    # NVIDIA drivers 
+    services.xserver.videoDrivers = [ "nvidia" ];
+    # hardware.graphics.enable = lib.mkOverride 1010 true;
+
+    # Comment this to use only the nvidia Grpahics card (discrete graphics option in BIOS instead of switchable graphics)
+    # required for external monitor usage on nvidia offload (or not?)
+    /*
+    specialisation = {
+      external-display.configuration = {
+        system.nixos.tags = [ "external-display" ];
+        hardware.nvidia.prime.offload.enable = lib.mkForce false;
+        hardware.nvidia.powerManagement.enable = lib.mkForce false;
+      };
+    }; */
+    
+    hardware.graphics.extraPackages = [
+      pkgs.nvidia-vaapi-driver
+    ];
+
+
 
     boot = {
       kernelPackages = pkgs.linuxPackages_6_6;
