@@ -224,7 +224,7 @@ in
       };
     };
     wireguardClient.enable = true;
-    allTor.enable = false;
+    allTor.enable = true;
   };
 
   toHost = {
