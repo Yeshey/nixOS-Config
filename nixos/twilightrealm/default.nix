@@ -7,40 +7,27 @@
   ...
 }:
 
+let
+in
 {
-  imports = [ 
-    ./hardware-configuration.nix 
-    ./vgpuGuest.nix
+  imports = [
+    ./hardware-configuration.nix
+    # inputs.learnWithT.nixosModules.default
   ];
-
-  nixpkgs = {
-    # You can add overlays here
-    overlays = [
-      # Add overlays your own flake exports (from overlays and pkgs dir):
-      outputs.overlays.additions
-      outputs.overlays.modifications
-      outputs.overlays.unstable-packages
-
-      # You can also add overlays exported from other flakes:
-      # neovim-nightly-overlay.overlays.default
-
-      # Or define it inline, for example:
-      # (final: prev: {
-      #   hi = final.hello.overrideAttrs (oldAttrs: {
-      #     patches = [ ./change-hello-to-hi.patch ];
-      #   });
-      # })
-    ];
-  };
 
   mySystem = rec {
     enable = true;
-    # all the options
     host = "twilightrealm";
-    user = "yeshey";
-    dataStoragePath = "~/Documents";
+    user = "yeshey"; # TODO make this into an option where you can do user."yeshey".home-manager.enable ) true etc.
+    dataStoragePath = "/home/${user}";
+    home-manager = {
+      enable = true;
+      home = ./home.nix;
+    };
     plasma.enable = false;
-    gnome.enable = true; # TODO activate both plasma and gnome same time, maybe expose display manager
+    gnome = {
+      enable = true; # TODO activate both plasma and gnome same time, maybe expose display manager
+    };
     hyprland.enable = false;
     ssh = {
       enable = true;
@@ -51,64 +38,109 @@
     gaming.enable = false;
     vmHost = false;
     dockerHost = false;
-    home-manager = {
-      enable = true;
-      home = ./home.nix;
-      #dataStoragePath = dataStoragePath;
-    };
     hardware = {
       enable = true;
       bluetooth.enable = true;
       printers.enable = false;
       sound.enable = true;
-      nvidia = {
+      thermald = {
         enable = false;
-        intelBusId = "PCI:0:2:0";
-        nvidiaBusId = "PCI:1:0:0";
+        thermalConf = ./thermal-conf.xml;
       };
-      lvm.enable = false;
+      nvidia.enable = false;
     };
     autoUpgrades = {
       enable = false;
       location = "/home/yeshey/.setup";
-      host = "hyrulecastle";
-      dates = "daily";
+      host = "kakariko";
+      dates = "weekly";
     };
-    flatpaks.enable = false;
+    flatpaks.enable = true;
     i2p.enable = false;
-
-    hardware.thermald = {
-      #enable = false;
-      #thermalConf = ./../kakariko/thermal-conf.xml;
+    syncthing = {
+      enable = false;
     };
 
-    guestVgpu.enable = false;
+    androidDevelopment.enable = false;
 
     #agenix = {
     #  enable = false;
     #  sshKeys.enable = false;
     #};
+    #isolateVMsNixStore = true;
+    waydroid.enable = false;
+    impermanence.enable = false;
+
+    speedtest-tracker = {
+      enable = false;
+      # scheduele = "*/10 * * * *"; # Runs every 10 minutes, default is every hour
+    };
+
+    piperTextToSpeech.enable = false;
+    snap.enable = false;
+    autossh = {
+     enable = false;
+     remoteIP = "143.47.53.175";
+     remoteUser = "yeshey";
+     port = 2233;
+    };
+    nh.enable = true;
+    wireguardClient.enable = false;
   };
+
+  toHost = {
+    #remoteWorkstation = {
+    #  sunshine.enable = false;
+    #  xrdp.enable = false;
+    #};
+    #dontStarveTogetherServer.enable = false;
+    #nextcloud.enable = true;
+    #minecraft.enable = false;
+    # openvscodeServer = {
+    #   enable = false;
+    #   desktopItem = {
+    #     enable = true;
+    #     remote = "oracle";
+    #   };
+    # };
+    #nginxServer.enable = true;
+    #mineclone.enable = true;
+    #kubo.enable = true;
+    #freeGames.enable = false;
+
+    ollama.enable = false; 
+    searx.enable = false;
+  };
+
+  nix = {
+    settings = {
+      cores = 4; # settings this per machine
+      max-jobs = 2;
+    };
+  };
+
+  environment.systemPackages = with pkgs; [
+    # jetbrains-toolbox
+    # Games
+    # steam-scalled
+  ];
 
   swapDevices =
     [ 
-      { device = "/var/swapfile"; 
-        size = 6*1024; 
+      {
+        device = "/swapfile";
+        size = 8*1024;
         priority = 0; # Higher numbers indicate higher priority.
-        options = [ "nofail" ];
       }
     ];
 
-  # Guest VM options
-  services.spice-vdagentd.enable = true;
-  services.spice-autorandr.enable = true; # auto resize guest
-  services.spice-webdavd.enable = true;
-  virtualisation.spiceUSBRedirection.enable = true;
-
-  environment.systemPackages = with pkgs; [
-    # Games
-    steam
-  ];
+  # Bootloader.
+  boot.loader.systemd-boot = {
+   enable = true;
+   configurationLimit = 10; # You can leave it null for no limit, but it is not recommended, as it can fill your boot partition.
+  };
+  boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.efi.efiSysMountPoint = "/boot";
 
   system.stateVersion = "22.05";
 }
