@@ -159,6 +159,10 @@
     f /dev/shm/looking-glass 0660 yeshey kvm -
   '';
 
+  environment.systemPackages = with pkgs; [ 
+    looking-glass-client
+  ];
+
   # Link the fallback timer to the fallback service
   systemd.services.create-vgpu-mdevs-fallback.wantedBy = 
     [ "create-vgpu-mdevs-fallback.timer" ];
