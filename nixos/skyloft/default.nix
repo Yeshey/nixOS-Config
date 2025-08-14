@@ -47,7 +47,7 @@
     enable = true;
     plasma = {
       enable = false;
-      defaultSession = "plasmax11";
+      x11 = true;
     };
     gnome.enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
     ssh.enable = true;
