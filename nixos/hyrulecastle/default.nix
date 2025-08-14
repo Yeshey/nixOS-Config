@@ -375,6 +375,7 @@ in
     #jetbrains.idea-community-bin
     #jetbrains.pycharm-community-bin
     #jetbrains-toolbox
+    looking-glass-host
   ];
 
   #powerManagement = { # TODO ???

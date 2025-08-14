@@ -13,5 +13,5 @@ rec {
 
   coreutils-with-safe-rm = callPackage ./coreutils-with-safe-rm.nix { };
 
-  muvm = callPackage ./muvm.nix { };
+  looking-glass-host = callPackage ./looking-glass-host.nix { };
 }
