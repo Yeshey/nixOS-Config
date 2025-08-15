@@ -3,6 +3,9 @@
 # check sudo mdevctl list -d
 { config, lib, pkgs, ... }:
 
+let 
+  profile = "nvidia-258";
+in 
 {
   ##############################################################################
   # 1. One-shot script that creates/starts the vGPUs with proper checks
@@ -41,8 +44,8 @@
         fi
         
         # Verify the specific vGPU type exists
-        if [ ! -d "/sys/bus/pci/devices/0000:01:00.0/mdev_supported_types/nvidia-333" ]; then
-          echo "ERROR: nvidia-333 vGPU type not found"
+        if [ ! -d "/sys/bus/pci/devices/0000:01:00.0/mdev_supported_types/${profile}" ]; then
+          echo "ERROR: ${profile} vGPU type not found"
           echo "Available types:"
           ls -la "/sys/bus/pci/devices/0000:01:00.0/mdev_supported_types/" || true
           exit 1
@@ -59,7 +62,7 @@
           
           # Create and start the vGPU
           echo "Creating vGPU with UUID $uuid"
-          mdevctl start -u "$uuid" -p 0000:01:00.0 --type nvidia-333
+          mdevctl start -u "$uuid" -p 0000:01:00.0 --type ${profile}
           
           # Make it persistent
           echo "Making vGPU $uuid persistent"

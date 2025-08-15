@@ -43,7 +43,7 @@
       url = "github:mrzenc/vgpu4nixos";
     };
     fastapi-dls-nixos = {
-      url = "github:mrzenc/fastapi-dls-nixos";
+      url = "github:mrzenc/fastapi-dls-nixos/v1.x";
       # use nixpkgs provided by system to save some space
       # do not use this in case of problems
       inputs.nixpkgs.follows = "nixpkgs";
