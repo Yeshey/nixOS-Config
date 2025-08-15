@@ -27,6 +27,7 @@ in
           ./dualPC.nix
           ./nvidia-vgpu-autostart.nix
           ./fastapi-dls.nix
+          ./folder_share.nix
         ];
       environment.etc.specialisation.text = "vgpu";
       system.nixos.tags = [ "vgpu" ];
