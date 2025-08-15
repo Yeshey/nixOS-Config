@@ -29,6 +29,7 @@ in
           ./fastapi-dls.nix
           ./folder_share.nix
           ./steam.nix
+          ./dekstopShortcut.nix
         ];
       environment.etc.specialisation.text = "vgpu";
       system.nixos.tags = [ "vgpu" ];
