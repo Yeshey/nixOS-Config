@@ -176,15 +176,16 @@
         ]
       },
       "locked": {
-        "lastModified": 1751916690,
-        "narHash": "sha256-Z8dlCaEoVVMc2VwvXSXRD4GhtItsdXOU1RBZEsVAsbo=",
+        "lastModified": 1745166920,
+        "narHash": "sha256-FPi7r3V44jcmPb3pwdpsjBBy5kv9QiVXo6i5icytnaA=",
         "owner": "mrzenc",
         "repo": "fastapi-dls-nixos",
-        "rev": "2606db50c88e177fa56753b056cd0365a82ea3c7",
+        "rev": "f384ff6d638da666dab2082d933941452b8ae95a",
         "type": "github"
       },
       "original": {
         "owner": "mrzenc",
+        "ref": "v1.x",
         "repo": "fastapi-dls-nixos",
         "type": "github"
       }
