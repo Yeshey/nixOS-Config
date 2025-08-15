@@ -153,20 +153,8 @@ in
   zramSwap.enable = false;
 
   # I'm a VM
-  #services.qemuGuest.enable = true;
-  #services.spice-vdagentd.enable = true;
-
-  services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.nvidia.modesetting.enable = true;
-  hardware.nvidia.powerManagement.enable = false;
-
-boot.kernelParams = [
-  "modprobe.blacklist=qxl"
-  "modprobe.blacklist=virtio_gpu"
-
-  "video=vesafb:off"
-  "video=efifb:off"
-];
+  services.qemuGuest.enable = true;
+  services.spice-vdagentd.enable = true;
 
   # Bootloader.
   boot.loader.systemd-boot = {
