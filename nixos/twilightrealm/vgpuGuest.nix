@@ -1,3 +1,4 @@
+# Unfortunatley I couldnt make it workproperly in a nixOS linux guest, the driver is suppoer buggy, only shows gui in gnome wayland, but even there, whenever I call an application thatn needs 3D graphics, it is very buggy or doesn't show or crashes
 # thanks to https://github.com/MakiseKurisu/nixos-config/blob/main/modules/nvidia-vgpu.nix
 {
   config,
