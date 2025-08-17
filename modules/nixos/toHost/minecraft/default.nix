@@ -123,7 +123,7 @@ in
           package = pkgs.paperServers.paper;
 
           lazymc = {
-            enable = false;
+            enable = true;
             config = {
               public.address = "0.0.0.0:44329";
               # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
