@@ -21,6 +21,10 @@ with lib.hm.gvariant;
   config = lib.mkIf (config.myHome.enable && cfg.enable) {
 
     dconf.settings = {
+      "org/gnome/system/location" = { # enables location in gnome
+        enabled = true;
+      };
+
       "org/gnome/Characters" = {
         recent-characters = [
           "🚌"
