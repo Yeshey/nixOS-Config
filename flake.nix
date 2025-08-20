@@ -143,7 +143,12 @@
       system:
       import nixpkgs {
         inherit system;
-        config.allowUnfree = true;
+        config = {
+          allowUnfree            = true;
+          allowUnsupportedSystem = true;
+          allowBroken            = true;
+          # permittedInsecurePackages = [ ];  # uncomment if you ever need it
+        };
       }
     );
   in
@@ -159,6 +164,7 @@
 
     nixosConfigurations = {
       hyrulecastle = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
         specialArgs = { inherit inputs outputs; };
         modules = (builtins.attrValues nixosModules) ++ [
           nixos-generators.nixosModules.all-formats
@@ -175,6 +181,7 @@
         ];
       };
       skyloft = nixpkgs.lib.nixosSystem {
+        system = "aarch64-linux";
         specialArgs = { inherit inputs outputs; };
         modules = (builtins.attrValues nixosModules) ++ [
           nixos-generators.nixosModules.all-formats
@@ -183,6 +190,7 @@
         ];
       };
       twilightrealm = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
         specialArgs = { inherit inputs outputs; };
         modules = (builtins.attrValues nixosModules) ++ [
           nixos-generators.nixosModules.all-formats

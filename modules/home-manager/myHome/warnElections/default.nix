@@ -6,11 +6,9 @@
 }:
 
 let 
-myPython = (pkgs.python312.withPackages (python-pkgs: with python-pkgs; [
-        beautifulsoup4
-        requests
-        numpy
-      ]));
+myPython = pkgs.python312.withPackages (ps: with ps; [
+  beautifulsoup4 requests numpy
+]);
 in 
 let
   cfg = config.myHome.warnElections;
