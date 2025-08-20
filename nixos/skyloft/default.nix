@@ -171,7 +171,7 @@
       listenAddress = "0.0.0.0";
     };
     luanti.enable = true;
-    kubo.enable = false;
+    kubo.enable = true;
     mindustry-server.enable = false;
     searx.enable = true;
     ollama = {
