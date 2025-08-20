@@ -125,6 +125,8 @@ in
     ( lib.mkIf cfg.enable {
       # Conditional config
 
+      services.geoclue2.enable = true;
+
       # defaults (enough for a minimal server)
       mySystem.ssh.enable = lib.mkOverride 1010 true;
       mySystem.zsh.enable = lib.mkOverride 1010 true;
