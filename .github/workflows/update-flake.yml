@@ -1,3 +1,4 @@
+
 name: "Update Flake Lock and Check"
 
 on:
@@ -8,26 +9,31 @@ on:
 jobs:
   update-and-check:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       # Step 1: Check out your repository's code so the workflow can access it.
       - name: Checkout repository
         uses: actions/checkout@v4
 
       # Step 2: Install the Nix package manager with flakes support enabled.
-      # This uses the action recommended in the guide you provided.
       - name: Install Nix
         uses: DeterminateSystems/determinate-nix-action@v3
 
       # Step 3: Update all the inputs in your flake.lock file.
-      # This command modifies the flake.lock file in the runner's local checkout.
+      # This uses the update-flake-lock action and passes the required
+      # experimental features via the nix-options input.
       - name: Update flake.lock
-        run: nix flake update
+        uses: DeterminateSystems/update-flake-lock@main
+        with:
+          nix-options: --extra-experimental-features "nix-command flakes pipe-operators"
 
       # Step 4: Run a check on your flake.
       # If this check fails, the entire workflow will stop, and the subsequent steps will not run.
       # This ensures that no broken lock file is ever committed.
+      # We must also pass the experimental features here.
       - name: Run nix flake check
-        run: nix flake check
+        run: nix flake check --extra-experimental-features "nix-command flakes pipe-operators"
 
       # Step 5: Commit the updated flake.lock file.
       # This step will only run if the previous steps (including nix flake check) were successful.
