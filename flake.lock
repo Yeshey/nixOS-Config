@@ -1013,11 +1013,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1755180504,
-        "narHash": "sha256-aNapO8s0BJOVkChto6PzwKIeKbvEdaFKA06ceaPMKNE=",
+        "lastModified": 1755654757,
+        "narHash": "sha256-8PFUR1YxrQDsxGZjiHa9DgCdo3KIyP+U6lfAHOvcp+o=",
         "owner": "Yeshey",
         "repo": "nix-minecraft",
-        "rev": "f22661ff46b025111c53b535977bae3962c62c3e",
+        "rev": "c4138f14370dc647555e3b202ec9a3b781254393",
         "type": "github"
       },
       "original": {
