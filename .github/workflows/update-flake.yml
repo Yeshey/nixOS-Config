@@ -1,34 +1,47 @@
 # .github/workflows/update-flake.yml
-name: "Update flake.lock (only if checks pass)"
+name: "Update flake.lock (both arches must pass)"
 
 on:
-  workflow_dispatch: # manual trigger
+  workflow_dispatch:
   # schedule:
   #   - cron: '0 0 1 * *'   # 00:00 UTC on the 1st of every month
 
 jobs:
-  update-flake:
+  check-x86_64:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write        # needed by git-auto-commit-action
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Install Determinate Nix
-        uses: DeterminateSystems/determinate-nix-action@v3
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/determinate-nix-action@v3
         with:
           extra-conf: |
             experimental-features = nix-command flakes pipe-operators
+      - run: nix flake update
+      - run: nix flake check
 
-      - name: Update flake.lock
-        run: nix flake update
+  check-aarch64:
+    runs-on: ubuntu-22.04-arm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/determinate-nix-action@v3
+        with:
+          extra-conf: |
+            experimental-features = nix-command flakes pipe-operators
+      - run: nix flake update
+      - run: nix flake check
 
-      - name: Check flake
-        run: nix flake check  # fails the job on non-zero exit
-
-      - name: Commit updated flake.lock
-        uses: stefanzweifel/git-auto-commit-action@v5
+  commit-lock:
+    needs: [check-x86_64, check-aarch64]   # only if both succeeded
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/determinate-nix-action@v3   # quick Nix install
+        with:
+          extra-conf: |
+            experimental-features = nix-command flakes pipe-operators
+      - run: nix flake update   # harmless second update; identical lock file
+      - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore(deps): update flake.lock"
           file_pattern: flake.lock
