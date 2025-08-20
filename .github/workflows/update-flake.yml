@@ -1,5 +1,5 @@
 # .github/workflows/update-flake.yml
-name: "Update flake.lock (both arches must pass)"
+name: "Update flake.lock (retry nixpkgs-only on failure)"
 
 on:
   workflow_dispatch:
@@ -7,7 +7,10 @@ on:
     - cron: '0 0 1 * *'   # 00:00 UTC on the 1st of every month
 
 jobs:
-  check-x86_64:
+  # ------------------------------------------------------------------
+  # 1.  full update + check
+  # ------------------------------------------------------------------
+  full-update-x86_64:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,8 +20,13 @@ jobs:
             experimental-features = nix-command flakes pipe-operators
       - run: nix flake update
       - run: nix flake check
+      - name: upload lock file (for later jobs)
+        uses: actions/upload-artifact@v4
+        with:
+          name: flake-lock-full
+          path: flake.lock
 
-  check-aarch64:
+  full-update-aarch64:
     runs-on: ubuntu-22.04-arm
     steps:
       - uses: actions/checkout@v4
@@ -28,20 +36,90 @@ jobs:
             experimental-features = nix-command flakes pipe-operators
       - run: nix flake update
       - run: nix flake check
+      - name: upload lock file (for later jobs)
+        uses: actions/upload-artifact@v4
+        with:
+          name: flake-lock-full-aarch64
+          path: flake.lock
 
-  commit-lock:
-    needs: [check-x86_64, check-aarch64]   # only if both succeeded
+  # ------------------------------------------------------------------
+  # 2.  nixpkgs-only update + check   (runs only if full fails)
+  # ------------------------------------------------------------------
+  nixpkgs-only-x86_64:
+    needs: [full-update-x86_64]
+    if: failure()
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/determinate-nix-action@v3
+        with:
+          extra-conf: |
+            experimental-features = nix-command flakes pipe-operators
+      - run: git restore flake.lock            # revert full update
+      - run: nix flake update nixpkgs nixpkgs-unstable
+      - run: nix flake check
+      - name: upload lock file (for later jobs)
+        uses: actions/upload-artifact@v4
+        with:
+          name: flake-lock-nixpkgs
+          path: flake.lock
+
+  nixpkgs-only-aarch64:
+    needs: [full-update-aarch64]
+    if: failure()
+    runs-on: ubuntu-22.04-arm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DeterminateSystems/determinate-nix-action@v3
+        with:
+          extra-conf: |
+            experimental-features = nix-command flakes pipe-operators
+      - run: git restore flake.lock            # revert full update
+      - run: nix flake update nixpkgs nixpkgs-unstable
+      - run: nix flake check
+      - name: upload lock file (for later jobs)
+        uses: actions/upload-artifact@v4
+        with:
+          name: flake-lock-nixpkgs-aarch64
+          path: flake.lock
+
+  # ------------------------------------------------------------------
+  # 3.  commit the chosen lock file
+  # ------------------------------------------------------------------
+  commit-lock:
+    needs:
+      # run after whichever path succeeded
+      - full-update-x86_64
+      - full-update-aarch64
+      - nixpkgs-only-x86_64
+      - nixpkgs-only-aarch64
+    runs-on: ubuntu-latest
+    if: always() && !cancelled() && !failure()
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - uses: DeterminateSystems/determinate-nix-action@v3   # quick Nix install
+      - uses: DeterminateSystems/determinate-nix-action@v3
         with:
           extra-conf: |
             experimental-features = nix-command flakes pipe-operators
-      - run: nix flake update   # harmless second update; identical lock file
-      - uses: stefanzweifel/git-auto-commit-action@v5
+
+      # choose the right lock file (full or nixpkgs-only)
+      - name: download lock file
+        uses: actions/download-artifact@v4
+        with:
+          name: flake-lock-full
+          path: ./
+        continue-on-error: true
+      - name: download nixpkgs-only lock file
+        if: failure() || !hashFiles('flake.lock')
+        uses: actions/download-artifact@v4
+        with:
+          name: flake-lock-nixpkgs
+          path: ./
+
+      - name: commit & push
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore(deps): update flake.lock"
           file_pattern: flake.lock
