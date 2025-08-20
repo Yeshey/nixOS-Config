@@ -1,0 +1,42 @@
+name: "Update Flake Lock and Check"
+
+on:
+  workflow_dispatch: # Allows the workflow to be triggered manually from the Actions tab
+  # schedule:
+    # - cron: '0 0 1 * *' # Uncomment this line to run the workflow on the 1st day of every month at 00:00 UTC
+
+jobs:
+  update-and-check:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Check out your repository's code so the workflow can access it.
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Install the Nix package manager with flakes support enabled.
+      # This uses the action recommended in the guide you provided.
+      - name: Install Nix
+        uses: DeterminateSystems/determinate-nix-action@v3
+
+      # Step 3: Update all the inputs in your flake.lock file.
+      # This command modifies the flake.lock file in the runner's local checkout.
+      - name: Update flake.lock
+        run: nix flake update
+
+      # Step 4: Run a check on your flake.
+      # If this check fails, the entire workflow will stop, and the subsequent steps will not run.
+      # This ensures that no broken lock file is ever committed.
+      - name: Run nix flake check
+        run: nix flake check
+
+      # Step 5: Commit the updated flake.lock file.
+      # This step will only run if the previous steps (including nix flake check) were successful.
+      # It commits the changes directly to your current branch.
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(deps): update flake.lock"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
+          commit_author: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+          file_pattern: "flake.lock"
