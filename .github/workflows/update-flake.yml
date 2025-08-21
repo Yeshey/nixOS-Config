@@ -1,4 +1,4 @@
-name: "Update flake.lock & cache NixOS (sequential)"
+name: Update flake.lock & pre-build NixOS (sequential)
 
 on:
   workflow_dispatch:
@@ -11,91 +11,152 @@ env:
   NIX_CONFIG: experimental-features = nix-command flakes pipe-operators
 
 jobs:
-  build-and-cache:
-    runs-on: ${{ matrix.runner }}
-    strategy:
-      matrix:
-        runner: [ubuntu-latest, ubuntu-22.04-arm]
-      max-parallel: 1            # << run sequentially
+  ##############################################################
+  # 1.  x86_64-linux
+  ##############################################################
+  build-x86_64:
+    runs-on: ubuntu-latest
     steps:
-      # ----------------------------------------------------------
-      # 0.  Max out disk space
-      # ----------------------------------------------------------
-      - name: Free disk space
-        run: |
-          sudo rm -rf /opt/hostedtoolcache
-          df -h
-
-      # ----------------------------------------------------------
-      # 1.  Install Nix (Determinate – no sudo needed)
-      # ----------------------------------------------------------
       - uses: actions/checkout@v4
+
+      # 0. Install Nix first
       - uses: DeterminateSystems/nix-installer-action@main
-      - uses: DeterminateSystems/magic-nix-cache-action@main
       - uses: cachix/cachix-action@v15
+      - name: Relocate /nix/store to larger disk  # 👈 NEW
+        run: |
+          sudo systemctl stop nix-daemon.socket || true
+          sudo mv /nix /mnt/
+          sudo ln -s /mnt/nix /nix
+          df -h /
         with:
           name: ${{ env.CACHIX_CACHE }}
           authToken: ${{ env.CACHIX_TOKEN }}
 
-      # ----------------------------------------------------------
-      # 2.  FULL flake update
-      # ----------------------------------------------------------
-      - name: Full flake update
+      # 1. Free disk space now that Nix is available
+      - name: Free disk space
         run: |
-          nix flake update
-          nix-collect-garbage -d          # clean before check
+          sudo rm -rf /opt/hostedtoolcache
+          nix-store --gc --option keep-outputs false
+          df -h
 
-      - name: Full flake check
+      # 2. Full update → build → push
+      - name: Full flake update
+        run: nix flake update
+
+      - name: nix flake check
         id: full
         run: nix flake check
         continue-on-error: true
 
-      - name: Build NixOS config (${{ matrix.runner }})
+      - name: Build NixOS desktop (x86_64-linux)
         if: steps.full.outcome == 'success'
         run: |
-          host=$([ "${{ matrix.runner }}" = "ubuntu-latest" ] && echo "desktop" || echo "skyloft")
-          nix build .#nixosConfigurations."$host".config.system.build.toplevel -L
+          nix build .#nixosConfigurations.desktop.config.system.build.toplevel -L
           cachix push ${{ env.CACHIX_CACHE }} ./result
-          nix-collect-garbage -d          # free space when done
 
-      # ----------------------------------------------------------
-      # 3.  FALLBACK: nixpkgs-only update
-      # ----------------------------------------------------------
+      # 3. Fallback: nixpkgs-only
+      - name: Clean store before fallback
+        if: steps.full.outcome == 'failure'
+        run: nix-store --gc --option keep-outputs false
+
       - name: Restore & nixpkgs-only update
         if: steps.full.outcome == 'failure'
         run: |
           git restore flake.lock
           nix flake update nixpkgs nixpkgs-unstable
-          nix-collect-garbage -d
 
-      - name: Nixpkgs-only flake check
+      - name: nix flake check (nixpkgs-only)
         id: nixpkgs
         if: steps.full.outcome == 'failure'
         run: nix flake check
         continue-on-error: true
 
-      - name: Build NixOS config (nixpkgs-only, ${{ matrix.runner }})
+      - name: Build NixOS desktop (nixpkgs-only)
         if: steps.nixpkgs.outcome == 'success'
         run: |
-          host=$([ "${{ matrix.runner }}" = "ubuntu-latest" ] && echo "desktop" || echo "skyloft")
-          nix build .#nixosConfigurations."$host".config.system.build.toplevel -L
+          nix build .#nixosConfigurations.desktop.config.system.build.toplevel -L
           cachix push ${{ env.CACHIX_CACHE }} ./result
-          nix-collect-garbage -d
 
-      # ----------------------------------------------------------
-      # 4.  Save resulting lock-file
-      # ----------------------------------------------------------
-      - name: Upload flake.lock
+      - name: Upload flake.lock (x86)
         uses: actions/upload-artifact@v4
         with:
-          name: flake-lock-${{ matrix.runner }}
+          name: flake-lock-x86_64
           path: flake.lock
 
-  ############################################################
-  # 5.  Commit only if both architectures succeeded
-  ############################################################
+  ##############################################################
+  # 2.  aarch64-linux (waits for x86)
+  ##############################################################
+  build-aarch64:
+    needs: build-x86_64
+    runs-on: ubuntu-22.04-arm
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: DeterminateSystems/nix-installer-action@main
+      - name: Relocate /nix/store to larger disk  # 👈 NEW
+        run: |
+          sudo systemctl stop nix-daemon.socket || true
+          sudo mv /nix /mnt/
+          sudo ln -s /mnt/nix /nix
+          df -h /
+      - uses: cachix/cachix-action@v15
+        with:
+          name: ${{ env.CACHIX_CACHE }}
+          authToken: ${{ env.CACHIX_TOKEN }}
+
+      - name: Free disk space
+        run: |
+          sudo rm -rf /opt/hostedtoolcache
+          nix-store --gc --option keep-outputs false
+          df -h
+
+      - name: Full flake update
+        run: nix flake update
+
+      - name: nix flake check
+        id: full
+        run: nix flake check
+        continue-on-error: true
+
+      - name: Build NixOS skyloft (aarch64-linux)
+        if: steps.full.outcome == 'success'
+        run: |
+          nix build .#nixosConfigurations.skyloft.config.system.build.toplevel -L
+          cachix push ${{ env.CACHIX_CACHE }} ./result
+
+      - name: Clean store before fallback
+        if: steps.full.outcome == 'failure'
+        run: nix-store --gc --option keep-outputs false
+
+      - name: Restore & nixpkgs-only update
+        if: steps.full.outcome == 'failure'
+        run: |
+          git restore flake.lock
+          nix flake update nixpkgs nixpkgs-unstable
+
+      - name: nix flake check (nixpkgs-only)
+        id: nixpkgs
+        if: steps.full.outcome == 'failure'
+        run: nix flake check
+        continue-on-error: true
+
+      - name: Build NixOS skyloft (nixpkgs-only)
+        if: steps.nixpkgs.outcome == 'success'
+        run: |
+          nix build .#nixosConfigurations.skyloft.config.system.build.toplevel -L
+          cachix push ${{ env.CACHIX_CACHE }} ./result
+
+      - name: Upload flake.lock (aarch)
+        uses: actions/upload-artifact@v4
+        with:
+          name: flake-lock-aarch64
+          path: flake.lock
+
+  ##############################################################
+  # 3.  Commit the lockfile
+  ##############################################################
   commit-lock:
-    needs: build-and-cache
+    needs: [build-x86_64, build-aarch64]
     runs-on: ubuntu-latest
     if: always() && !cancelled() && !failure()
     permissions:
