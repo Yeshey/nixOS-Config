@@ -1,4 +1,4 @@
-name: "Update flake.lock (retry nixpkgs-only on failure)"
+name: Update flake.lock & pre-build NixOS (sequential)
 
 on:
   workflow_dispatch:
@@ -11,25 +11,21 @@ env:
   NIX_CONFIG: experimental-features = nix-command flakes pipe-operators
 
 jobs:
-  ############################################################
-  # 1.  Build every NixOS configuration
-  ############################################################
-  nixos:
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - system: x86_64-linux
-            runner: ubuntu-latest
-            host: desktop
-          - system: aarch64-linux
-            runner: ubuntu-22.04-arm
-            host: skyloft
-    runs-on: ${{ matrix.runner }}
+  ##############################################################
+  # 1.  Build x86_64-linux
+  ##############################################################
+  build-x86_64:
+    runs-on: ubuntu-latest
     steps:
+      - name: Max out disk space
+        run: |
+          sudo rm -rf /opt/hostedtoolcache
+          sudo nix-collect-garbage -d
+          sudo nix-store --gc --option keep-outputs false
+          df -h
+
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
-      - uses: DeterminateSystems/magic-nix-cache-action@main
       - uses: cachix/cachix-action@v15
         with:
           name: ${{ env.CACHIX_CACHE }}
@@ -43,10 +39,10 @@ jobs:
         run: nix flake check
         continue-on-error: true
 
-      - name: Build NixOS ${{ matrix.host }} (${{ matrix.system }})
+      - name: Build NixOS desktop (x86_64-linux)
         if: steps.full.outcome == 'success'
         run: |
-          nix build .#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel -L
+          nix build .#nixosConfigurations.desktop.config.system.build.toplevel -L
           cachix push ${{ env.CACHIX_CACHE }} ./result
 
       - name: Restore & nixpkgs-only update
@@ -61,43 +57,40 @@ jobs:
         run: nix flake check
         continue-on-error: true
 
-      - name: Build NixOS ${{ matrix.host }} (nixpkgs-only)
+      - name: Build NixOS desktop (nixpkgs-only)
         if: steps.nixpkgs.outcome == 'success'
         run: |
-          nix build .#nixosConfigurations.${{ matrix.host }}.config.system.build.toplevel -L
+          nix build .#nixosConfigurations.desktop.config.system.build.toplevel -L
           cachix push ${{ env.CACHIX_CACHE }} ./result
 
-      - name: Upload final flake.lock
+      - name: Upload flake.lock (x86)
         uses: actions/upload-artifact@v4
         with:
-          name: flake-lock-nixos-${{ matrix.system }}
+          name: flake-lock-x86_64
           path: flake.lock
 
-  ############################################################
-  # 2.  Build every Home-Manager configuration
-  ############################################################
-  home-manager:
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - system: x86_64-linux
-            runner: ubuntu-latest
-            user: you@x86
-          - system: aarch64-linux
-            runner: ubuntu-22.04-arm
-            user: you@aarch
-    runs-on: ${{ matrix.runner }}
+  ##############################################################
+  # 2.  Build aarch64-linux (waits for x86 to finish)
+  ##############################################################
+  build-aarch64:
+    needs: build-x86_64      # sequential!
+    runs-on: ubuntu-22.04-arm
     steps:
+      - name: Max out disk space
+        run: |
+          sudo rm -rf /opt/hostedtoolcache
+          sudo nix-collect-garbage -d
+          sudo nix-store --gc --option keep-outputs false
+          df -h
+
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/nix-installer-action@main
-      - uses: DeterminateSystems/magic-nix-cache-action@main
       - uses: cachix/cachix-action@v15
         with:
           name: ${{ env.CACHIX_CACHE }}
           authToken: ${{ env.CACHIX_TOKEN }}
 
-      - name: Full flake update
+      - name: Full flake update (again – fast because already committed)
         run: nix flake update
 
       - name: nix flake check
@@ -105,10 +98,10 @@ jobs:
         run: nix flake check
         continue-on-error: true
 
-      - name: Build HM ${{ matrix.user }} (${{ matrix.system }})
+      - name: Build NixOS skyloft (aarch64-linux)
         if: steps.full.outcome == 'success'
         run: |
-          nix build .#homeConfigurations.${{ matrix.user }}.activationPackage -L
+          nix build .#nixosConfigurations.skyloft.config.system.build.toplevel -L
           cachix push ${{ env.CACHIX_CACHE }} ./result
 
       - name: Restore & nixpkgs-only update
@@ -123,23 +116,23 @@ jobs:
         run: nix flake check
         continue-on-error: true
 
-      - name: Build HM ${{ matrix.user }} (nixpkgs-only)
+      - name: Build NixOS skyloft (nixpkgs-only)
         if: steps.nixpkgs.outcome == 'success'
         run: |
-          nix build .#homeConfigurations.${{ matrix.user }}.activationPackage -L
+          nix build .#nixosConfigurations.skyloft.config.system.build.toplevel -L
           cachix push ${{ env.CACHIX_CACHE }} ./result
 
-      - name: Upload final flake.lock
+      - name: Upload flake.lock (aarch)
         uses: actions/upload-artifact@v4
         with:
-          name: flake-lock-hm-${{ matrix.system }}
+          name: flake-lock-aarch64
           path: flake.lock
 
-  ############################################################
-  # 3.  Commit the new lockfile only if **all** jobs succeeded
-  ############################################################
+  ##############################################################
+  # 3.  Commit the new lockfile only when both arches succeed
+  ##############################################################
   commit-lock:
-    needs: [nixos, home-manager]
+    needs: [build-x86_64, build-aarch64]
     runs-on: ubuntu-latest
     if: always() && !cancelled() && !failure()
     permissions:
