@@ -23,6 +23,8 @@ jobs:
           extra-conf: |
             experimental-features = nix-command flakes pipe-operators
 
+      - uses: DeterminateSystems/magic-nix-cache-action@main
+
       # ---------- 1. full update ----------
       - name: full update
         run: nix flake update
