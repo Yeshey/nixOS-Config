@@ -2,6 +2,17 @@
 {
   description = "Hyrule";
 
+  nixConfig = {
+    extra-substituters = [
+      "https://cache.nixos.org"
+      "https://yesheycachixorg.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+      "yesheycachixorg.cachix.org-1:bydgUycnD5wEF46F6CqQBiH9SWjjM2wOZqC9akDlllI="
+    ];
+  };
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
     #nixpkgs.url = "github:NixOS/nixpkgs/c16961fda203155a314b0c75c13961c29e9ea7b0";
