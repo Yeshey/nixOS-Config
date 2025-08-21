@@ -21,13 +21,13 @@ jobs:
 
       # 0. Install Nix first
       - uses: DeterminateSystems/nix-installer-action@main
-      - uses: cachix/cachix-action@v15
       - name: Relocate /nix/store to larger disk  # 👈 NEW
         run: |
           sudo systemctl stop nix-daemon.socket || true
           sudo mv /nix /mnt/
           sudo ln -s /mnt/nix /nix
           df -h /
+      - uses: cachix/cachix-action@v15
         with:
           name: ${{ env.CACHIX_CACHE }}
           authToken: ${{ env.CACHIX_TOKEN }}
