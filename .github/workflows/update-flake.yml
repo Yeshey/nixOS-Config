@@ -1,163 +1,67 @@
-name: Update flake.lock & pre-build NixOS (sequential)
+# .github/workflows/update-flake.yml
+name: "Update flake.lock (retry nixpkgs-only on failure)"
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 1 * *'
-
-env:
-  CACHIX_CACHE: yesheycachixorg
-  CACHIX_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
-  NIX_CONFIG: experimental-features = nix-command flakes pipe-operators
+    - cron: '0 0 1 * *'   # 00:00 UTC on the 1st of every month
 
 jobs:
-  ##############################################################
-  # 1.  x86_64-linux
-  ##############################################################
-  build-x86_64:
-    runs-on: ubuntu-latest
+  update-and-check:
+    strategy:
+      matrix:
+        include:
+          - runner: ubuntu-latest
+            system: x86_64-linux
+          - runner: ubuntu-22.04-arm
+            system: aarch64-linux
+    runs-on: ${{ matrix.runner }}
     steps:
       - uses: actions/checkout@v4
-
-      # 0. Install Nix first
-      - uses: DeterminateSystems/nix-installer-action@main
-      - uses: DeterminateSystems/magic-nix-cache-action@main
-      - uses: cachix/cachix-action@v15
+      - uses: DeterminateSystems/determinate-nix-action@v3
         with:
-          name: ${{ env.CACHIX_CACHE }}
-          authToken: ${{ env.CACHIX_TOKEN }}
+          extra-conf: |
+            experimental-features = nix-command flakes pipe-operators
 
-      # 1. Free disk space now that Nix is available
-      - name: Free disk space
-        run: |
-          sudo rm -rf /opt/hostedtoolcache
-          nix-store --gc --option keep-outputs false
-          df -h
-
-      # 2. Full update → build → push
-      - name: Full flake update
+      # ---------- 1. full update ----------
+      - name: full update
         run: nix flake update
-
-      - name: nix flake check
+      - name: full check
         id: full
         run: nix flake check
         continue-on-error: true
 
-      - name: Build NixOS desktop (x86_64-linux)
-        if: steps.full.outcome == 'success'
-        run: |
-          nix build .#nixosConfigurations.desktop.config.system.build.toplevel -L
-          cachix push ${{ env.CACHIX_CACHE }} ./result
-
-      # 3. Fallback: nixpkgs-only
-      - name: Clean store before fallback
-        if: steps.full.outcome == 'failure'
-        run: nix-store --gc --option keep-outputs false
-
-      - name: Restore & nixpkgs-only update
+      # ---------- 2. nixpkgs-only fallback ----------
+      - name: restore & nixpkgs-only update
         if: steps.full.outcome == 'failure'
         run: |
           git restore flake.lock
           nix flake update nixpkgs nixpkgs-unstable
-
-      - name: nix flake check (nixpkgs-only)
-        id: nixpkgs
+      - name: nixpkgs-only check
         if: steps.full.outcome == 'failure'
         run: nix flake check
-        continue-on-error: true
 
-      - name: Build NixOS desktop (nixpkgs-only)
-        if: steps.nixpkgs.outcome == 'success'
-        run: |
-          nix build .#nixosConfigurations.desktop.config.system.build.toplevel -L
-          cachix push ${{ env.CACHIX_CACHE }} ./result
-
-      - name: Upload flake.lock (x86)
+      # ---------- 3. upload whichever lock file succeeded ----------
+      - name: upload flake.lock
         uses: actions/upload-artifact@v4
         with:
-          name: flake-lock-x86_64
+          name: flake-lock-${{ matrix.system }}
           path: flake.lock
 
-  ##############################################################
-  # 2.  aarch64-linux (waits for x86)
-  ##############################################################
-  build-aarch64:
-    needs: build-x86_64
-    runs-on: ubuntu-22.04-arm
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: DeterminateSystems/nix-installer-action@main
-      - uses: DeterminateSystems/magic-nix-cache-action@main
-      - uses: cachix/cachix-action@v15
-        with:
-          name: ${{ env.CACHIX_CACHE }}
-          authToken: ${{ env.CACHIX_TOKEN }}
-
-      - name: Free disk space
-        run: |
-          sudo rm -rf /opt/hostedtoolcache
-          nix-store --gc --option keep-outputs false
-          df -h
-
-      - name: Full flake update
-        run: nix flake update
-
-      - name: nix flake check
-        id: full
-        run: nix flake check
-        continue-on-error: true
-
-      - name: Build NixOS skyloft (aarch64-linux)
-        if: steps.full.outcome == 'success'
-        run: |
-          nix build .#nixosConfigurations.skyloft.config.system.build.toplevel -L
-          cachix push ${{ env.CACHIX_CACHE }} ./result
-
-      - name: Clean store before fallback
-        if: steps.full.outcome == 'failure'
-        run: nix-store --gc --option keep-outputs false
-
-      - name: Restore & nixpkgs-only update
-        if: steps.full.outcome == 'failure'
-        run: |
-          git restore flake.lock
-          nix flake update nixpkgs nixpkgs-unstable
-
-      - name: nix flake check (nixpkgs-only)
-        id: nixpkgs
-        if: steps.full.outcome == 'failure'
-        run: nix flake check
-        continue-on-error: true
-
-      - name: Build NixOS skyloft (nixpkgs-only)
-        if: steps.nixpkgs.outcome == 'success'
-        run: |
-          nix build .#nixosConfigurations.skyloft.config.system.build.toplevel -L
-          cachix push ${{ env.CACHIX_CACHE }} ./result
-
-      - name: Upload flake.lock (aarch)
-        uses: actions/upload-artifact@v4
-        with:
-          name: flake-lock-aarch64
-          path: flake.lock
-
-  ##############################################################
-  # 3.  Commit the lockfile
-  ##############################################################
   commit-lock:
-    needs: [build-x86_64, build-aarch64]
+    needs: [update-and-check]        # waits for both matrix jobs
     runs-on: ubuntu-latest
     if: always() && !cancelled() && !failure()
     permissions:
       contents: write
     steps:
       - uses: actions/checkout@v4
+      # fetch lock file generated by *each* matrix job
       - uses: actions/download-artifact@v4
         with:
           pattern: flake-lock-*
           path: .
-          merge-multiple: true
+          merge-multiple: true          # all systems -> same dir
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore(deps): update flake.lock"

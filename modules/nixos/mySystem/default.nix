@@ -12,10 +12,6 @@ let
   # Extra caches to pull from (taken from https://discourse.nixos.org/t/package-building-in-flake-despite-provided-substitutes/18107)
   # Shouldn't need to set nixConfig.extra-substituters like this (https://nixos.org/manual/nix/stable/command-ref/conf-file#file-format)
   substituters = {
-    yeshey = {
-      url = "https://yesheycachixorg.cachix.org";
-      key = "yesheycachixorg.cachix.org-1:bydgUycnD5wEF46F6CqQBiH9SWjjM2wOZqC9akDlllI=";
-    };
     cachenixosorg = {
       url = "https://cache.nixos.org";
       key = "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=";
