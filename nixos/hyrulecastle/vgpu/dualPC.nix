@@ -1,3 +1,4 @@
+# if windows 11 isnt working, remove loader and nvram tags from windows 11 xml config
 # thanks to https://github.com/MakiseKurisu/nixos-config/blob/main/modules/nvidia-vgpu.nix
 {
   config,
