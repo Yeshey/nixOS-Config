@@ -93,6 +93,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
+    nixos-facter-modules.url = "github:nix-community/nixos-facter-modules";
   };
 
   outputs = {
@@ -167,6 +168,7 @@
         system = "x86_64-linux";
         specialArgs = { inherit inputs outputs; };
         modules = (builtins.attrValues nixosModules) ++ [
+          inputs.nixos-facter-modules.nixosModules.facter { config.facter.reportPath = ./facter.json; }
           nixos-generators.nixosModules.all-formats
           home-manager.nixosModules.default
           ./nixos/hyrulecastle
