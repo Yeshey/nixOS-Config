@@ -186,6 +186,7 @@
         system = "aarch64-linux";
         specialArgs = { inherit inputs outputs; };
         modules = (builtins.attrValues nixosModules) ++ [
+          inputs.nixos-facter-modules.nixosModules.facter { config.facter.reportPath = ./nixos/skyloft/facter.json; }
           nixos-generators.nixosModules.all-formats
           home-manager.nixosModules.default
           ./nixos/skyloft
