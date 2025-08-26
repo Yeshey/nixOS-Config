@@ -69,6 +69,7 @@ in
           });
           categories = [ "GTK" "X-WebApps" ];
           mimeTypes = [ "text/html" "text/xml" "application/xhtml_xml" ];
+          terminal = true;
         };
       in [ pkgs.freerdp pkgs.xdg-utils gofreerdp freerdpDesktopItem ];
     })
@@ -94,6 +95,7 @@ in
           icon = "vscode";
           categories = [ "GTK" "X-WebApps" ];
           mimeTypes = [ "text/html" "text/xml" "application/xhtml_xml" ];
+          # terminal = true;
         };
       in [ 
         pkgs.xdg-utils 
