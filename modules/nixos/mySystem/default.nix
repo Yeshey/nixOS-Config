@@ -77,7 +77,6 @@ in
     ./nh.nix
     ./wireguardClient.nix
     ./allTor.nix
-    ./udiskie.nix
   ];
 
   options.mySystem = with lib; {

@@ -24,7 +24,6 @@
     fsType = "none";
     options = [ "noauto" "nofail" "x-gvfs-hide" ];
   };
-  systemd.user.services.udiskie.enable = lib.mkForce false;
 
   # Samba
   # The VM by default sees the host at 192.168.122.1 
