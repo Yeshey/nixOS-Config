@@ -161,7 +161,6 @@
       enable = true;
       wireguard = {
         enable = true;
-        serverIP = "10.100.0.1"; # Your WireGuard server IP
       };
       externalPort = 2998;
     };
@@ -179,7 +178,8 @@
       # acceleration = "cuda"; #or 'rocm' # this issue https://github.com/NixOS/nixpkgs/issues/321920
     };
     overleaf.enable = true;
-    wireguardServer.enable = true;
+    #wireguardServer.enable = true;
+    wireguardVPN.enable = true;
   };
 
   swapDevices = [

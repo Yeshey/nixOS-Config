@@ -30,7 +30,7 @@ in
         enable = mkEnableOption "WireGuard support for openvscodeServer";
         serverIP = mkOption {
           type = types.str;
-          default = "10.100.0.1"; # WireGuard server IP
+          default = "10.99.99.1"; # WireGuard server IP
           description = "WireGuard server IP address";
         };
       };
@@ -79,12 +79,13 @@ in
           if cfg.openvscodeServer.wireguard.enable then
             # WireGuard mode: connect directly to WireGuard IP without SSH tunneling
             ''
-              brave "https://${cfg.openvscodeServer.wireguard.serverIP}:${toString cfg.openvscodeServer.port}/?folder=/home/yeshey/.setup"
+              nmcli connection up skyloftvpn
+              xdg-open "https://${cfg.openvscodeServer.wireguard.serverIP}:${toString cfg.openvscodeServer.port}/?folder=/home/yeshey/.setup"
             ''
           else
             # SSH tunnel mode (original behavior)
             ''
-              (ssh -L ${toString cfg.openvscodeServer.port}:localhost:${toString cfg.openvscodeServer.port} -t ${cfg.openvscodeServer.remote} "sleep 90" &) && sleep 1.5 && brave "http://localhost:${toString cfg.openvscodeServer.port}/?folder=/home/yeshey/.setup"
+              (ssh -L ${toString cfg.openvscodeServer.port}:localhost:${toString cfg.openvscodeServer.port} -t ${cfg.openvscodeServer.remote} "sleep 90" &) && sleep 1.5 && xdg-open "http://localhost:${toString cfg.openvscodeServer.port}/?folder=/home/yeshey/.setup"
             ''
         );
         vscodeserverDesktopItem = pkgs.makeDesktopItem {
