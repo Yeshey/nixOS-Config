@@ -37,6 +37,11 @@ in
             publicKey = "XxQBlzUpsyEN1jAX6W9j4fA7YJeLP/3foRI8r+T97EI=";  # sudo wg show wgvpn
             allowedIPs = [ "10.99.99.10/32" ];
           }
+          {
+            name = "kakarikoYeshey";
+            publicKey = "w9izimmFpSI4v5KMOi6JedextB2R37hbLBp+EiRMFGw=";  # sudo wg show wgvpn
+            allowedIPs = [ "10.99.99.11/32" ];
+          }
         ];
       };
 
