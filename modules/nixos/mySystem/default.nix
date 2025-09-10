@@ -75,7 +75,6 @@ in
     ./an-anime-game-launcher.nix
     ./nix-flatpak.nix
     ./nh.nix
-    ./wireguardClient.nix
     ./allTor.nix
   ];
 
