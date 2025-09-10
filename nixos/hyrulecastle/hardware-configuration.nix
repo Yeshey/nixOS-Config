@@ -215,48 +215,48 @@
   #     "nls=utf8" */
   #   ];
   # };
-  fileSystems."/mnt/hdd-ntfs" = {
-    device = "/dev/disk/by-label/hdd-ntfs";
-    fsType = "lowntfs-3g";
-    options = [
-      "uid=1000" "gid=1000" "rw" "exec" "umask=000" # "user"
-      # gaming options as per valve: https://github.com/ValveSoftware/Proton/wiki/Using-a-NTFS-disk-with-Linux-and-Windows
-      # "ignore_case" # prevents you from making any file or directory with any upper case letter... only lowntfs-3g might help some games
-      "x-gvfs-show"
-      #"windows_names" # makes games not work
-      "nofail"
-      /*
-      "defaults"
-      # "nosuid" "nodev" # security, probably should
-      "nofail"
-      "x-gvfs-show"
-      "windows_names"
-      "big_writes"
-      "streams_interface=windows" # only ntfs-3g 
-      "nls=utf8" */
-    ];
-  };
-  fileSystems."/mnt/hdd-btrfs" = {
-    device = "/dev/disk/by-label/hdd-btrfs";
-    fsType = "btrfs";
-    options = [
-      "defaults"
-      "nofail" # boots anyways if can't find the disk 
-      "x-gvfs-show" # show in gnome disks
-      #"noatime" # doesn't write access time to files
-      "compress-force=zstd:5" # compression level 3, good for slow drives. forces compression of every file even if fails to compress first segment of the file
-      # "ssd" # optimize for an ssd
-      # security "nosuid" "nodev" (https://serverfault.com/questions/547237/explanation-of-nodev-and-nosuid-in-fstab)
-    ];
-  };
-  fileSystems."/mnt/hdd-ext4" = {
-    device = "/dev/disk/by-label/hdd-ext4";
-    fsType = "ext4";
-    options = [
-      "nosuid"
-      "nodev"
-      "nofail"
-      "x-gvfs-show"
-    ];
-  };
+  # fileSystems."/mnt/hdd-ntfs" = {
+  #   device = "/dev/disk/by-label/hdd-ntfs";
+  #   fsType = "lowntfs-3g";
+  #   options = [
+  #     "uid=1000" "gid=1000" "rw" "exec" "umask=000" # "user"
+  #     # gaming options as per valve: https://github.com/ValveSoftware/Proton/wiki/Using-a-NTFS-disk-with-Linux-and-Windows
+  #     # "ignore_case" # prevents you from making any file or directory with any upper case letter... only lowntfs-3g might help some games
+  #     "x-gvfs-show"
+  #     #"windows_names" # makes games not work
+  #     "nofail"
+  #     /*
+  #     "defaults"
+  #     # "nosuid" "nodev" # security, probably should
+  #     "nofail"
+  #     "x-gvfs-show"
+  #     "windows_names"
+  #     "big_writes"
+  #     "streams_interface=windows" # only ntfs-3g 
+  #     "nls=utf8" */
+  #   ];
+  # };
+  # fileSystems."/mnt/hdd-btrfs" = {
+  #   device = "/dev/disk/by-label/hdd-btrfs";
+  #   fsType = "btrfs";
+  #   options = [
+  #     "defaults"
+  #     "nofail" # boots anyways if can't find the disk 
+  #     "x-gvfs-show" # show in gnome disks
+  #     #"noatime" # doesn't write access time to files
+  #     "compress-force=zstd:5" # compression level 3, good for slow drives. forces compression of every file even if fails to compress first segment of the file
+  #     # "ssd" # optimize for an ssd
+  #     # security "nosuid" "nodev" (https://serverfault.com/questions/547237/explanation-of-nodev-and-nosuid-in-fstab)
+  #   ];
+  # };
+  # fileSystems."/mnt/hdd-ext4" = {
+  #   device = "/dev/disk/by-label/hdd-ext4";
+  #   fsType = "ext4";
+  #   options = [
+  #     "nosuid"
+  #     "nodev"
+  #     "nofail"
+  #     "x-gvfs-show"
+  #   ];
+  # };
 }

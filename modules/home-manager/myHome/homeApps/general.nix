@@ -70,7 +70,7 @@ in
         # Browsers
         # cus_vivaldi
         #vivaldi
-        floorp # in about:config set browser.tabs.tabMinWidth to 50 and browser.ctrlTab.sortByRecentlyUsed to true
+        #floorp # disabled bc https://iscteiul365.sharepoint.com/ doesn't work in nixOS floorp version # in about:config set browser.tabs.tabMinWidth to 50 and browser.ctrlTab.sortByRecentlyUsed to true
         brave
         tor-browser-bundle-bin
         qutebrowser
