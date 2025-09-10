@@ -48,7 +48,7 @@ in
           Cryptomining = true;
           Fingerprinting = true;
         };
-        DisableFirefoxScreenshots = true;
+        DisableFirefoxScreenshots = false;
         OverrideFirstRunPage = "";
         OverridePostUpdatePage = "";
         DontCheckDefaultBrowser = true;
