@@ -88,7 +88,6 @@ in
         enable = true;
         wireguard = {
           enable = true;
-          serverIP = "10.100.0.1"; # Your WireGuard server IP
         };
         port = 2998;
         remote = "oracle";
