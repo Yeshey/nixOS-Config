@@ -189,6 +189,7 @@ in
      port = 2233;
     };
     nh.enable = true;
+    globalprotect.enable = true;
   };
 
   toHost = {
