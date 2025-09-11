@@ -224,6 +224,7 @@ in
       };
     };
     allTor.enable = false;
+    globalprotect.enable = true;
   };
 
   toHost = {

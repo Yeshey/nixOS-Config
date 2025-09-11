@@ -76,6 +76,7 @@ in
     ./nix-flatpak.nix
     ./nh.nix
     ./allTor.nix
+    ./globalprotect.nix
   ];
 
   options.mySystem = with lib; {
