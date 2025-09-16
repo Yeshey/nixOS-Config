@@ -147,7 +147,9 @@ in
       boot.tmp.cleanOnBoot = lib.mkOverride 1010 true; # delete all files in /tmp during boot.
       boot.supportedFilesystems = [ "ntfs" "btrfs" ]; # lib.mkOverride 1010? Doesn't work with [] and {}?
 
-      time.timeZone = lib.mkOverride 1010 "Europe/Lisbon";
+      #time.timeZone = lib.mkOverride 1010 "Europe/Lisbon";
+      services.automatic-timezoned.enable = true;
+      services.tzupdate.enable = true; # less accurate, but guarantees correct timezone
       i18n.defaultLocale = lib.mkOverride 1010 "en_GB.UTF-8";
       i18n.extraLocaleSettings = {
         LC_ADDRESS = lib.mkOverride 1010 "pt_PT.UTF-8"; 
