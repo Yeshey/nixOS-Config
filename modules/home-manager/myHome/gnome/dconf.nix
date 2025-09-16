@@ -21,6 +21,10 @@ with lib.hm.gvariant;
   config = lib.mkIf (config.myHome.enable && cfg.enable) {
 
     dconf.settings = {
+      "org/gnome/desktop/datetime" = {
+        automatic-timezone = true;
+      };
+
       "org/gnome/system/location" = { # enables location in gnome
         enabled = true;
       };
