@@ -18,7 +18,7 @@ in
       # 1. Kernel-level WireGuard
       networking.wireguard.enable = true;
       networking.wireguard.interfaces.${wgInterface} = {
-        ips = [ "10.99.99.1/24" ]; # Server gets .1, client gets .10
+        ips = [ "10.99.99.1/24" ]; # Server gets .1, client gets .10 or .11 or .12
         listenPort = wgPort;
         generatePrivateKeyFile = true;
         privateKeyFile = "/etc/wireguard/${wgInterface}.key";
@@ -41,6 +41,11 @@ in
             name = "kakarikoYeshey";
             publicKey = "w9izimmFpSI4v5KMOi6JedextB2R37hbLBp+EiRMFGw=";  # sudo wg show wgvpn
             allowedIPs = [ "10.99.99.11/32" ];
+          }
+          {
+            name = "A70PhoneYeshey";
+            publicKey = "o+0xLkJUxdgYb1ummggPWiAS/zSOfJ7ou3C6vTXrD3g=";  # sudo wg show wgvpn
+            allowedIPs = [ "10.99.99.12/32" ];
           }
         ];
       };
@@ -80,7 +85,7 @@ wg genkey | tee client.key | wg pubkey > client.pub
 # 2. Read server public key
 export SERVER_PUB=$(sudo wg show wgvpn public-key)
 # 3. Pick an unused IP from 10.99.99.0/24
-export CLIENT_IP="10.99.99.10/32"
+export CLIENT_IP="10.99.99.10/32" # change this number for a new machine
 export SERVER_PUBLIC_IP=143.47.53.175
 ```
 

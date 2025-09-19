@@ -225,7 +225,7 @@
     enable = false;
   };
 
-  time.timeZone = "Europe/Madrid";
+  # time.timeZone = "Europe/Madrid";
 
   system.autoUpgrade.allowReboot = true;
 
