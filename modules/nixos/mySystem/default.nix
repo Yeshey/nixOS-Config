@@ -150,6 +150,7 @@ in
       #time.timeZone = lib.mkOverride 1010 "Europe/Lisbon";
       services.automatic-timezoned.enable = true;
       services.tzupdate.enable = true; # less accurate, but guarantees correct timezone
+      # time.hardwareClockInLocalTime = true;   # match Windows (??? maybe should remove) Nah, I should make windows use UTC instead
       i18n.defaultLocale = lib.mkOverride 1010 "en_GB.UTF-8";
       i18n.extraLocaleSettings = {
         LC_ADDRESS = lib.mkOverride 1010 "pt_PT.UTF-8"; 
