@@ -105,7 +105,7 @@
           "/srv/minecraft/familiaLopesTAISCTE"
           "/opt/docker/overleaf/overleaf-data" # chown -R root:root /opt/docker/overleaf/overleaf-data
         ];
-        rcloneRemoteName = "onedriveISCTE";
+        rcloneRemoteName = "OneDriveISCTE";
         rcloneRemotePath = "ResticBackups/servers"; # This is like your 'repo' path, but on the remote
         #rcloneConfigFile = "/var/lib/secrets/rclone/school-onedrive.conf";
         #passwordFile = "/var/lib/secrets/restic/school-onedrive-password";
