@@ -149,7 +149,31 @@ in
 
       #time.timeZone = lib.mkOverride 1010 "Europe/Lisbon";
       services.automatic-timezoned.enable = true;
-      services.tzupdate.enable = true; # less accurate, but guarantees correct timezone
+      # services.tzupdate.enable = true; # less accurate, but guarantees correct timezone
+      services.timesyncd.enable = false;
+      services.chrony = {
+        enable  = true;
+        servers = [
+          # Cloudflare NTS (TCP 443, works behind eduroam)
+          "time.cloudflare.com nts"
+          "ntp.ubuntu.com        iburst"
+        ];
+        enableRTCTrimming = true;
+      };
+      systemd.services.chronyd = { # it was running before DNS were up...
+        after = [ "network-online.target" "nss-lookup.target" ];
+        wants = [ "network-online.target" ];
+
+        preStart = ''
+          echo "chrony: waiting for usable Internet/DNS ..."
+          while ! ${pkgs.inetutils}/bin/ping -c 1 -W 2 1.0.0.1 >/dev/null 2>&1; do
+            sleep 5
+          done
+          echo "chrony: Internet reachable, starting daemon."
+        '';
+      };
+      #services.timesyncd.enable = false;
+      #services.chrony.enable = true;
       # time.hardwareClockInLocalTime = true;   # match Windows (??? maybe should remove) Nah, I should make windows use UTC instead
       i18n.defaultLocale = lib.mkOverride 1010 "en_GB.UTF-8";
       i18n.extraLocaleSettings = {
