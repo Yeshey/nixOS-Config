@@ -43,6 +43,7 @@ in
         restic-browser
         restic
         blanket
+        zotero
 
         #jetbrains-toolbox # for code with me you need the toolbox
         #jetbrains.gateway
@@ -70,7 +71,7 @@ in
         # Browsers
         # cus_vivaldi
         #vivaldi
-        #floorp # disabled bc https://iscteiul365.sharepoint.com/ doesn't work in nixOS floorp version # in about:config set browser.tabs.tabMinWidth to 50 and browser.ctrlTab.sortByRecentlyUsed to true
+        unstable.floorp-bin # disabled bc https://iscteiul365.sharepoint.com/ doesn't work in nixOS floorp version # in about:config set browser.tabs.tabMinWidth to 50 and browser.ctrlTab.sortByRecentlyUsed to true
         brave
         tor-browser-bundle-bin
         qutebrowser
