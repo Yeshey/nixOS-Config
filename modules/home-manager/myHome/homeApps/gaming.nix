@@ -50,7 +50,7 @@ in
       bottles
       # tetrio-desktop # runs horribly, better on the web
       prismlauncher # polymc # prismlauncher # for Minecraft
-      heroic
+      unstable.heroic
       minetest
       the-powder-toy
 
