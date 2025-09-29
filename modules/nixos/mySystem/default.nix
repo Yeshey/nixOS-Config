@@ -77,6 +77,7 @@ in
     ./nh.nix
     ./allTor.nix
     ./globalprotect.nix
+    ./chrony.nix
   ];
 
   options.mySystem = with lib; {
@@ -152,30 +153,30 @@ in
       # services.tzupdate.enable = true; # less accurate, but guarantees correct timezone
       services.timesyncd.enable = false;
 
-      services.chrony = {
-        enable  = true;
-        servers = [
-          "time.cloudflare.com"
-          "ntp.ubuntu.com"
-          "pool.ntp.org"
-        ];
-        enableRTCTrimming = true;
-      };
-      systemd.services.chronyd = {
-        # start after the interface is up, but do NOT block on “online”
-        after  = [ "network.target" ];
-        wants  = [ "network.target" ];
+      # services.chrony = {
+      #   enable  = true;
+      #   servers = [
+      #     "time.cloudflare.com"
+      #     "ntp.ubuntu.com"
+      #     "pool.ntp.org"
+      #   ];
+      #   enableRTCTrimming = true;
+      # };
+      # systemd.services.chronyd = {
+      #   # start after the interface is up, but do NOT block on “online”
+      #   after  = [ "network.target" ];
+      #   wants  = [ "network.target" ];
 
-        # chrony handles unreachable servers by itself
-        serviceConfig = {
-          TimeoutStartSec = "30s";   # normal start timeout
-          Restart         = "on-failure";
-          RestartSec      = 30;
-        };
+      #   # chrony handles unreachable servers by itself
+      #   serviceConfig = {
+      #     TimeoutStartSec = "30s";   # normal start timeout
+      #     Restart         = "on-failure";
+      #     RestartSec      = 30;
+      #   };
 
-        # drop the hand-written probe completely
-        preStart = "";
-      };
+      #   # drop the hand-written probe completely
+      #   preStart = "";
+      # };
       # systemd.services.chronyd = { # it was running before DNS were up...
       #   after = [ "network-online.target" "nss-lookup.target" ];
       #   wants = [ "network-online.target" ];
