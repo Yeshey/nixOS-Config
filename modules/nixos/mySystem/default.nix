@@ -150,14 +150,32 @@ in
       #time.timeZone = lib.mkOverride 1010 "Europe/Lisbon";
       services.automatic-timezoned.enable = true;
       # services.tzupdate.enable = true; # less accurate, but guarantees correct timezone
-      # Disable chrony
-      services.chrony.enable = false;
+      services.timesyncd.enable = false;
 
-      # Enable systemd-timesyncd
-      services.timesyncd = { # doesnt work in eduroam even without firewall
-        enable = true;
+      services.chrony = {
+        enable  = true;
+        servers = [
+          "time.cloudflare.com"
+          "ntp.ubuntu.com"
+          "pool.ntp.org"
+        ];
+        enableRTCTrimming = true;
       };
-  
+      systemd.services.chronyd = {
+        # start after the interface is up, but do NOT block on “online”
+        after  = [ "network.target" ];
+        wants  = [ "network.target" ];
+
+        # chrony handles unreachable servers by itself
+        serviceConfig = {
+          TimeoutStartSec = "30s";   # normal start timeout
+          Restart         = "on-failure";
+          RestartSec      = 30;
+        };
+
+        # drop the hand-written probe completely
+        preStart = "";
+      };
       # systemd.services.chronyd = { # it was running before DNS were up...
       #   after = [ "network-online.target" "nss-lookup.target" ];
       #   wants = [ "network-online.target" ];
