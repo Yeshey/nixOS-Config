@@ -151,27 +151,45 @@ in
       services.automatic-timezoned.enable = true;
       # services.tzupdate.enable = true; # less accurate, but guarantees correct timezone
       services.timesyncd.enable = false;
+
       services.chrony = {
         enable  = true;
         servers = [
-          # Cloudflare NTS (TCP 443, works behind eduroam)
-          "time.cloudflare.com nts"
-          "ntp.ubuntu.com        iburst"
+          "time.cloudflare.com"
+          "ntp.ubuntu.com"
+          "pool.ntp.org"
         ];
         enableRTCTrimming = true;
       };
-      systemd.services.chronyd = { # it was running before DNS were up...
-        after = [ "network-online.target" "nss-lookup.target" ];
-        wants = [ "network-online.target" ];
+      systemd.services.chronyd = {
+        # start after the interface is up, but do NOT block on “online”
+        after  = [ "network.target" ];
+        wants  = [ "network.target" ];
 
-        preStart = ''
-          echo "chrony: waiting for usable Internet/DNS ..."
-          while ! ${pkgs.inetutils}/bin/ping -c 1 -W 2 1.0.0.1 >/dev/null 2>&1; do
-            sleep 5
-          done
-          echo "chrony: Internet reachable, starting daemon."
-        '';
+        # chrony handles unreachable servers by itself
+        serviceConfig = {
+          TimeoutStartSec = "30s";   # normal start timeout
+          Restart         = "on-failure";
+          RestartSec      = 30;
+        };
+
+        # drop the hand-written probe completely
+        preStart = "";
       };
+      # systemd.services.chronyd = { # it was running before DNS were up...
+      #   after = [ "network-online.target" "nss-lookup.target" ];
+      #   wants = [ "network-online.target" ];
+
+      #   serviceConfig.TimeoutStartSec = "infinity";
+
+      #   preStart = ''
+      #     echo "chrony: waiting for usable Internet/DNS ..."
+      #     while ! ${pkgs.inetutils}/bin/ping -c 1 -W 2 1.0.0.1 >/dev/null 2>&1; do
+      #       sleep 5
+      #     done
+      #     echo "chrony: Internet reachable, starting daemon."
+      #   '';
+      # };
       #services.timesyncd.enable = false;
       #services.chrony.enable = true;
       # time.hardwareClockInLocalTime = true;   # match Windows (??? maybe should remove) Nah, I should make windows use UTC instead
