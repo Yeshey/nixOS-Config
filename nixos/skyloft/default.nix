@@ -21,6 +21,8 @@
       }}/module.nix"
 
      ./disk-config.nix
+
+     inputs.box64-binfmt.nixosModules.default
     ];
 
   nixpkgs = {
@@ -200,7 +202,7 @@
     };
   };
 
-  # box64-binfmt.enable = true;
+  box64-binfmt.enable = true;
 
   environment.systemPackages = [ 
     pkgs.file
