@@ -142,9 +142,9 @@ in
       };
       nvidia.enable = false;
       lvm = {
-        enable = true;
-        cache.enable = true;
-        luks.enable = true;
+        enable = false;
+        cache.enable = false;
+        luks.enable = false;
       };
     };
     autoUpgrades = {
@@ -223,7 +223,9 @@ in
     };
   };
 
-  boot.kernelParams = [ "usbcore.autosuspend=-1" ]; # lets see if this fixes connect&disconnect sound bug (I haven't noticed it since)
+  boot.kernelParams = [ "usbcore.autosuspend=-1" "clocksource=hpet" ]; # lets see if this fixes connect&disconnect sound bug (I haven't noticed it since)
+
+  # time.hardwareClockInLocalTime = true;   # match Windows (??? maybe should remove) Nah, I should make windows use UTC instead
 
   zramSwap.enable = true;
   zramSwap.memoryPercent = 100;
