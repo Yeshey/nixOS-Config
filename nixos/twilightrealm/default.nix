@@ -89,7 +89,6 @@ in
      port = 2233;
     };
     nh.enable = true;
-    wireguardClient.enable = false;
     guestVgpu.enable = true;
   };
 
