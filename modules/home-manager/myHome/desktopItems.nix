@@ -79,7 +79,7 @@ in
           if cfg.openvscodeServer.vpn.enable then
             # vpn mode: connect directly to vpn IP without SSH tunneling
             ''
-              nmcli connection up skyloftvpn
+              nmcli connection up skyloftOpenVPN
               xdg-open "https://${cfg.openvscodeServer.vpn.serverIP}:${toString cfg.openvscodeServer.port}/?folder=/home/yeshey/.setup"
             ''
           else
