@@ -30,7 +30,7 @@ in
         enable = mkEnableOption "WireGuard support for openvscodeServer";
         serverIP = mkOption {
           type = types.str;
-          default = "10.99.99.1"; # WireGuard server IP
+          default = "10.8.0.1"; # WireGuard server IP
           description = "WireGuard server IP address";
         };
       };

@@ -28,6 +28,7 @@ in
     ./minecraft/default.nix
     ./luanti.nix
     ./wireguardVPN.nix
+    ./openVPN.nix
   ];
 
   options.toHost = with lib; {

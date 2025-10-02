@@ -22,7 +22,7 @@
 
      ./disk-config.nix
 
-     inputs.box64-binfmt.nixosModules.default
+      # inputs.box64-binfmt.nixosModules.default
     ];
 
   nixpkgs = {
@@ -181,7 +181,8 @@
     };
     overleaf.enable = true;
     #wireguardServer.enable = true;
-    wireguardVPN.enable = true;
+    wireguardVPN.enable = false;
+    openVPN.enable = true;
   };
 
   swapDevices = [
@@ -202,7 +203,7 @@
     };
   };
 
-  box64-binfmt.enable = true;
+  # box64-binfmt.enable = true;
 
   environment.systemPackages = [ 
     pkgs.file
