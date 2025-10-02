@@ -24,7 +24,7 @@ in
       enable = lib.mkEnableOption "WireGuard support for code-server";
       serverIP = lib.mkOption {
         type = lib.types.str;
-        default = "10.99.99.1"; # WireGuard server IP
+        default = "10.8.0.1"; # WireGuard server IP
         description = "WireGuard server IP address";
       };
     };
