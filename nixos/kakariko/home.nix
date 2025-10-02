@@ -105,7 +105,7 @@ in
       };
       openvscodeServer = {
         enable = true;
-        wireguard = {
+        vpn = {
           enable = true;
         };
         port = 2998;

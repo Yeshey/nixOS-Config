@@ -24,11 +24,19 @@ in
       enable = lib.mkEnableOption "WireGuard support for code-server";
       serverIP = lib.mkOption {
         type = lib.types.str;
-        default = "10.8.0.1"; # WireGuard server IP
+        default = "10.99.99.1"; # WireGuard server IP
         description = "WireGuard server IP address";
       };
     };
     
+    openVPN = {
+      enable = lib.mkEnableOption "openVPN support for code-server";
+      serverIP = lib.mkOption {
+        type = lib.types.str;
+        default = "10.8.0.1"; # openVPN server IP
+        description = "openVPN server IP address";
+      };
+    };
 
     externalPort = lib.mkOption {
       type = lib.types.port;
@@ -38,7 +46,7 @@ in
     hostname = lib.mkOption {
       type = lib.types.str;
       default = "143.47.53.175"; # IP address or hostname code-server is accessed by
-      description = "Hostname or IP address for code-server (used by self-signed certificate)";
+      description = "Hostname or IP address for code-server (used by self-signed certificate)"; 
     };
     # You could add options for user and extensionsDir here to make them configurable:
     # codeUser = lib.mkOption { type = lib.types.str; default = "yeshey"; description = "User to run code-server as."; };
@@ -51,7 +59,7 @@ in
     services.code-server = {
       enable = true;
       # package = pkgs.code-server; # This uses the default code-server package from Nixpkgs.
-      host = if cfg.wireguard.enable then cfg.wireguard.serverIP else "0.0.0.0";
+      host = if cfg.wireguard.enable then cfg.wireguard.serverIP else if cfg.openVPN.enable then cfg.openVPN.serverIP else "0.0.0.0";
       port = cfg.externalPort;   # code-server will listen on this port with HTTPS.
       user = "yeshey";           # User to run code-server as. (Consider using cfg.codeUser if defined above)
       extraPackages = [pkgs.openssl]; 

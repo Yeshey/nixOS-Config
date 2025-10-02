@@ -162,8 +162,9 @@
     code-server = {
       enable = true;
       wireguard = {
-        enable = true;
+        enable = false;
       };
+      openVPN.enable = true;
       externalPort = 2998;
     };
     nginxServer = {

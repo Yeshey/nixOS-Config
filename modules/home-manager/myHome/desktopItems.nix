@@ -26,12 +26,12 @@ in
     };
     openvscodeServer = {
       enable = mkEnableOption "openvscodeServer desktop item";
-      wireguard = {
-        enable = mkEnableOption "WireGuard support for openvscodeServer";
+      vpn = {
+        enable = mkEnableOption "vpn support for openvscodeServer";
         serverIP = mkOption {
           type = types.str;
-          default = "10.8.0.1"; # WireGuard server IP
-          description = "WireGuard server IP address";
+          default = "10.8.0.1"; # vpn server IP
+          description = "vpn server IP address";
         };
       };
       remote = mkOption {
@@ -76,11 +76,11 @@ in
     (lib.mkIf (config.myHome.enable && cfg.openvscodeServer.enable) {
       home.packages = let
         govscodeserver = pkgs.writeShellScriptBin "govscodeserver" (
-          if cfg.openvscodeServer.wireguard.enable then
-            # WireGuard mode: connect directly to WireGuard IP without SSH tunneling
+          if cfg.openvscodeServer.vpn.enable then
+            # vpn mode: connect directly to vpn IP without SSH tunneling
             ''
               nmcli connection up skyloftvpn
-              xdg-open "https://${cfg.openvscodeServer.wireguard.serverIP}:${toString cfg.openvscodeServer.port}/?folder=/home/yeshey/.setup"
+              xdg-open "https://${cfg.openvscodeServer.vpn.serverIP}:${toString cfg.openvscodeServer.port}/?folder=/home/yeshey/.setup"
             ''
           else
             # SSH tunnel mode (original behavior)
@@ -102,7 +102,7 @@ in
         pkgs.xdg-utils 
         govscodeserver 
         vscodeserverDesktopItem
-      ] ++ (lib.optionals (!cfg.openvscodeServer.wireguard.enable) [ pkgs.openssh ]); # Only include openssh if not using WireGuard
+      ] ++ (lib.optionals (!cfg.openvscodeServer.vpn.enable) [ pkgs.openssh ]); # Only include openssh if not using vpn
     })
   ];
 }
