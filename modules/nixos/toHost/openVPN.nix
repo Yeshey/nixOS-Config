@@ -176,11 +176,11 @@ easyrsa build-client-full "$CLIENT_NAME" nopass
 export SERVER_PUBLIC_IP="143.47.53.175"
 
 # 4. Create client configuration file
-cat > "${CLIENT_NAME}.ovpn" <<EOF
+cat > "${CLIENT_NAME}.ovpn" <<'EOF'
 client
 dev tun
 proto udp
-remote $SERVER_PUBLIC_IP ${toString vpnPort}
+remote 143.47.53.175 1194
 
 resolv-retry infinite
 nobind
@@ -200,25 +200,32 @@ dhcp-option DNS 1.1.1.1
 dhcp-option DNS 1.0.0.1
 
 <ca>
-$(cat pki/ca.crt)
+EOF
+cat pki/ca.crt >> "${CLIENT_NAME}.ovpn"
+cat >> "${CLIENT_NAME}.ovpn" <<'EOF'
 </ca>
 
 <cert>
-$(cat pki/issued/$CLIENT_NAME.crt)
+EOF
+cat pki/issued/${CLIENT_NAME}.crt >> "${CLIENT_NAME}.ovpn"
+cat >> "${CLIENT_NAME}.ovpn" <<'EOF'
 </cert>
 
 <key>
-$(cat pki/private/$CLIENT_NAME.key)
+EOF
+cat pki/private/${CLIENT_NAME}.key >> "${CLIENT_NAME}.ovpn"
+cat >> "${CLIENT_NAME}.ovpn" <<'EOF'
 </key>
 
 <tls-auth>
-$(cat ta.key)
+EOF
+cat ta.key >> "${CLIENT_NAME}.ovpn"
+cat >> "${CLIENT_NAME}.ovpn" <<'EOF'
 </tls-auth>
 key-direction 1
 EOF
 
 echo "Client configuration created: ${CLIENT_NAME}.ovpn"
-echo "Copy this file to your client device and import it."
 ```
 
 === IMPORTING ON CLIENT ===
