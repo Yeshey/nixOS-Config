@@ -161,7 +161,7 @@ in
             ${ignorePattern "2026" "
               //*
               //(?i)PhotosAndVideos
-              //.git
+              .git
               *.ipynb
             "}
 
@@ -169,7 +169,7 @@ in
             ${ignorePattern "2025" "
               //*
               (?i)PhotosAndVideos
-              //.git
+              .git
               Masters
               *.ipynb
             "}
