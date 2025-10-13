@@ -109,7 +109,7 @@ in
             difficulty = 2;
             "allow-cheats" = "false";
             gamemode = 0;
-            max-players = 60;
+            max-players = 100;
             motd = "tunaCraft";
             white-list = false;
             enable-rcon = false;
@@ -699,6 +699,7 @@ in
         directories = [
           { directory = "/srv/minecraft/mainServer"; user = "minecraft"; group = "minecraft"; mode = "u=rwx,g=rx,o="; }
           { directory = "/srv/minecraft/familiaLopesTAISCTE"; user = "minecraft"; group = "minecraft"; mode = "u=rwx,g=rx,o="; }
+          { directory = "/srv/minecraft/tunaCraft"; user = "minecraft"; group = "minecraft"; mode = "u=rwx,g=rx,o="; }
         ];
       };
     })

@@ -105,6 +105,7 @@
           "/var/lib/luanti-anarchyMineclone2/world" # chown -R luanti-anarchyMineclone2:luanti /var/lib/luanti-anarchyMineclone2
           "/srv/minecraft/mainServer/world" # chown -R minecraft:minecraft /srv/minecraft/mainServer
           "/srv/minecraft/familiaLopesTAISCTE"
+          "/srv/minecraft/tunaCraft"
           "/opt/docker/overleaf/overleaf-data" # chown -R root:root /opt/docker/overleaf/overleaf-data
         ];
         rcloneRemoteName = "OneDriveISCTE";
