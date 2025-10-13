@@ -102,15 +102,15 @@ in
           enable = true;
           jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";
           serverProperties = {
-            server-port = 713;
-            "query.port" = 713;
-            server-portv6 = 714;
-            "rcon.port" = 715;
+            server-port = 1208;
+            "query.port" = 1208;
+            server-portv6 = 1209;
+            "rcon.port" = 1210;
             difficulty = 2;
             "allow-cheats" = "false";
             gamemode = 0;
             max-players = 100;
-            motd = "tunaCraft";
+            motd = "TunaCraft Running! ♪♫♪";
             white-list = false;
             enable-rcon = false;
             "rcon.password" = "hunter2";
@@ -126,7 +126,10 @@ in
             enable = true;
             # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
             config = {
-              public.address = "0.0.0.0:712"; # 7 dezembro de 1990 (aniversario taiscte)
+              public.address = "0.0.0.0:1207"; # 7 dezembro de 1990 (aniversario taiscte)
+              motd.sleeping = "☠ TunaCraft is sleeping\n§2☻ Join to start it up";
+              #starting = "§2☻ Server is starting...\n§7⌛ Please wait..."
+              #stopping = "☠ Server going to sleep...\n⌛ Please wait..."
             };
           };
         }; # End tunaCraft server
