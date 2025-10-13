@@ -42,6 +42,7 @@ in
         wineWow64Packages.full
         restic-browser
         restic
+        rclone
         blanket
         zotero
 
