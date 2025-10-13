@@ -120,7 +120,7 @@ in
             white-list = false;
             enable-rcon = false;
             "rcon.password" = "hunter2";
-            "online-mode"=true;
+            "online-mode"=false;
             "max-tick-time" = -1; # Recommended with lazymc
           };
 
