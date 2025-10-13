@@ -8,6 +8,11 @@
 
 let
   cfg = config.toHost.minecraft;
+  extractVersion = name:
+    let
+      parts = lib.splitString "-" name;          # [ "paper" "1_20_4" "build.40" ]
+      verPart = lib.elemAt parts 1;              # "1_20_4"
+    in lib.replaceStrings ["_"] ["."] verPart;   # "1.20.4"
 in
 let 
   # using config from https://github.com/Stefanuk12/nixos-config/blob/main/system/vps/minecraft/servers/fearNightfall/default.nix
@@ -65,7 +70,7 @@ in
         # to recreate the world, delete just the world folder
         # might need to delete /run/minecraft/zombies2.sock
 
-        servers.familiaLopesTAISCTE = {
+        servers.familiaLopesTAISCTE = rec {
           enable = true;
           jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";
           serverProperties = {
@@ -94,11 +99,12 @@ in
             # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
             config = {
               public.address = "0.0.0.0:1408"; # aniversario da Mills e do Uno
+              motd.sleeping = "☠ LopesCraft is sleeping §2☻ Join to start it up\n§uversion:§c ${extractVersion package.name}";
             };
           };
         }; # End familiaLopesTAISCTE server
 
-        servers.tunaCraft = {
+        servers.tunaCraft = rec {
           enable = true;
           jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";
           serverProperties = {
@@ -127,14 +133,14 @@ in
             # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
             config = {
               public.address = "0.0.0.0:1207"; # 7 dezembro de 1990 (aniversario taiscte)
-              motd.sleeping = "☠ TunaCraft is sleeping\n§2☻ Join to start it up";
+              motd.sleeping = "☠ TunaCraft is sleeping §2☻ Join to start it up\n§uversion:§c ${extractVersion package.name}";
               #starting = "§2☻ Server is starting...\n§7⌛ Please wait..."
               #stopping = "☠ Server going to sleep...\n⌛ Please wait..."
             };
           };
         }; # End tunaCraft server
 
-        servers.mainServer = {
+        servers.mainServer = rec {
           enable = true;
           jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";
           serverProperties = {
@@ -162,6 +168,7 @@ in
             enable = true;
             config = {
               public.address = "0.0.0.0:44329";
+              motd.sleeping = "☠ Server is sleeping §2☻ Join to start it up\n§uversion:§c ${extractVersion package.name}";
               # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
               time.sleep_after = 200; # Sleep after 4 minutes
             };
