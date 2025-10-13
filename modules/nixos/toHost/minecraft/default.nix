@@ -98,6 +98,39 @@ in
           };
         }; # End familiaLopesTAISCTE server
 
+        servers.tunaCraft = {
+          enable = true;
+          jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";
+          serverProperties = {
+            server-port = 713;
+            "query.port" = 713;
+            server-portv6 = 714;
+            "rcon.port" = 715;
+            difficulty = 2;
+            "allow-cheats" = "false";
+            gamemode = 0;
+            max-players = 60;
+            motd = "tunaCraft";
+            white-list = false;
+            enable-rcon = false;
+            "rcon.password" = "hunter2";
+            "online-mode"=true;
+            "max-tick-time" = -1; # Recommended with lazymc
+          };
+
+          # Specify the custom minecraft server package
+          #package = pkgs.fabricServers.fabric-1_21_1; #.override { loaderVersion = "0.16.10"; }; # Specific fabric loader version
+          package = pkgs.paperServers.paper;
+
+          lazymc = {
+            enable = true;
+            # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
+            config = {
+              public.address = "0.0.0.0:712"; # 7 dezembro de 1990 (aniversario taiscte)
+            };
+          };
+        }; # End tunaCraft server
+
         servers.mainServer = {
           enable = true;
           jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";

@@ -22,7 +22,7 @@
 
      ./disk-config.nix
 
-#      inputs.box64-binfmt.nixosModules.default
+      inputs.box64-binfmt.nixosModules.default
     ];
 
   nixpkgs = {
@@ -203,12 +203,15 @@
     };
   };
 
- # box64-binfmt.enable = true;
+  #boot.binfmt.emulatedSystems = ["i686-linux" "x86_64-linux" "i386-linux" "i486-linux" "i586-linux" "i686-linux"];
+  #nix.settings.extra-platforms = ["i686-linux" "x86_64-linux" "i386-linux" "i486-linux" "i586-linux" "i686-linux"];
+  box64-binfmt.enable = false;
 
   environment.systemPackages = [ 
     pkgs.file
-#    pkgs.x86.steamcmd
-#    pkgs.x86.katawa-shoujo
+    #pkgs.x86.steamcmd
+    #pkgs.x86.steam-tui
+    #pkgs.x86.katawa-shoujo
 #    pkgs.x86.cmatrix
     pkgs.mangohud
 #    pkgs.x86.xonotic
