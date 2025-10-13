@@ -702,6 +702,66 @@ in
   #       }; # End botw server
 
       };
+
+      # tunaCraft openBackups
+      # makes a backup of the tuna craft server to tunaCraftOpenBackups on your iscte onedrive, they can be deleted as you're backing up to restic as well, this is just to share with the tuna folk
+      # it auto deletes backups in here older than 10 days
+      # Systemd service to backup TunaCraft to OneDrive
+      systemd.services.tunacraft-open-backup = {
+        description = "Backup TunaCraft to OneDrive";
+        
+        script = ''
+          BACKUP_NAME="tunaCraft-$(date +%s)"
+          REMOTE="OneDriveISCTE:tunaCraftOpenBackups"
+          CURRENT_TIME=$(date +%s)
+          CUTOFF_TIME=$((CURRENT_TIME - 864000))  # 10 days in seconds
+          
+          # Copy the directory to OneDrive with timestamp
+          ${pkgs.rclone}/bin/rclone copy /srv/minecraft/tunaCraft "$REMOTE/$BACKUP_NAME" \
+            --progress \
+            --transfers 4 \
+            --checkers 8
+          
+          echo "Backup completed: $BACKUP_NAME"
+          
+          # Delete backups older than 10 days based on folder timestamp
+          echo "Deleting backups older than $CUTOFF_TIME..."
+          ${pkgs.rclone}/bin/rclone lsf "$REMOTE" --dirs-only | while read -r folder; do
+            # Extract timestamp from folder name (assumes format: tunaCraft-TIMESTAMP)
+            folder_timestamp=$(echo "$folder" | grep -oP 'tunaCraft-\K\d+' || echo "")
+            
+            if [ -n "$folder_timestamp" ]; then
+              # Compare timestamps
+              if [ "$folder_timestamp" -lt "$CUTOFF_TIME" ]; then
+                echo "Deleting old backup: $folder (timestamp: $folder_timestamp)"
+                ${pkgs.rclone}/bin/rclone purge "$REMOTE/$folder"
+              fi
+            fi
+          done
+          
+          echo "Cleanup completed"
+        '';
+        
+        serviceConfig = {
+          Type = "oneshot";
+          User = "root";
+        };
+        
+        path = [ pkgs.rclone pkgs.gnugrep pkgs.coreutils ];
+      };
+
+      # Timer to run every 3 days
+      systemd.timers.tunacraft-open-backup = {
+        description = "Timer for TunaCraft OneDrive backup";
+        wantedBy = [ "timers.target" ];
+        
+        timerConfig = {
+          OnCalendar = "*-*-1,4,7,10,13,16,19,22,25,28,31 02:00:00";
+          Persistent = true;
+          RandomizedDelaySec = "1h";
+        };
+      };
+
     })
   
     (lib.mkIf (cfg.enable && config.mySystem.impermanence.enable)  {
