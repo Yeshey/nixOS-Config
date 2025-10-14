@@ -25,7 +25,24 @@ def parse_date(date_str, year):
     original = date_str
     date_str = date_str.lower().strip()
     
-    # First check for day-month pattern (e.g. "23 março")
+    # First, handle the common Portuguese format "X de MONTH"
+    de_pattern = re.search(
+        r'(\d{1,2})\s+de\s+([a-záéíóúãõâêôç]+)', 
+        date_str,
+        flags=re.IGNORECASE
+    )
+    if de_pattern:
+        try:
+            day = int(de_pattern.group(1))
+            month_str = de_pattern.group(2).strip()
+            # Match full month name with Portuguese characters
+            for month_name, month_num in MONTHS.items():
+                if month_name.startswith(month_str):
+                    return datetime(year, month_num, day)
+        except (ValueError, KeyError):
+            pass
+    
+    # Then check for other day-month patterns (e.g. "23 março")
     day_month = re.search(
         r'(\d{1,2})[\s\-/]*([a-záéíóúãõâêôç]+)', 
         date_str,
@@ -35,10 +52,13 @@ def parse_date(date_str, year):
         try:
             day = int(day_month.group(1))
             month_str = day_month.group(2).strip()
-            # Match full month name with Portuguese characters
-            for month_name, month_num in MONTHS.items():
-                if month_name.startswith(month_str):
-                    return datetime(year, month_num, day)
+            # Skip common Portuguese words that aren't months
+            if month_str in ['de', 'do', 'da', 'das', 'dos']:
+                pass
+            else:
+                for month_name, month_num in MONTHS.items():
+                    if month_name.startswith(month_str):
+                        return datetime(year, month_num, day)
         except (ValueError, KeyError):
             pass
     
@@ -46,6 +66,9 @@ def parse_date(date_str, year):
     if '/' in date_str:
         months = [m.strip() for m in date_str.split('/')]
         for month in months:
+            # Skip non-month words in ranges
+            if month in ['de', 'do', 'da', 'das', 'dos']:
+                continue
             for month_name, month_num in MONTHS.items():
                 if month_name.startswith(month):
                     return datetime(year, month_num, 15)  # Mid-month default
@@ -114,7 +137,7 @@ def check_elections():
         # elections.append((datetime.today() + timedelta(days=32), "Generic Election Test"))
 
         # Generic Notification: Election exactly 27 days away
-        #elections.append((datetime.today() + timedelta(days=27), "Generic Election Test"))
+        # elections.append((datetime.today() + timedelta(days=27), "Generic Election Test"))
 
         # Generic Notification: Election exactly 22 days away
         # elections.append((datetime.today() + timedelta(days=22), "Generic Election Test"))
