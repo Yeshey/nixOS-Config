@@ -13,12 +13,43 @@ MONTHS = {
 }
 
 def send_notification(subject, body):
-    """Send critical desktop notification"""
+    """Send critical desktop notification AND phone notification"""
+    # Desktop notification (existing)
     try:
         subprocess.run(["notify-send", "-u", "critical", subject, body], check=True)
-        print(f"Notification sent: {subject}")
+        print(f"Desktop notification sent: {subject}")
     except Exception as e:
-        print(f"Failed to send notification: {e}")
+        print(f"Failed to send desktop notification: {e}")
+    
+    # Pushbullet phone notification (new)
+    send_pushbullet_notification(subject, body)
+
+def send_pushbullet_notification(title, body):
+    """Send notification via Pushbullet"""
+    access_token = "o.yAa9ipEqeu3UsAPDhcmSf5SqNyylhuxp"  # Get from pushbullet.com
+        
+    data = {
+        "type": "note",
+        "title": title,
+        "body": body
+    }
+    headers = {
+        "Access-Token": access_token,
+        "Content-Type": "application/json"
+    }
+    
+    try:
+        response = requests.post(
+            "https://api.pushbullet.com/v2/pushes",
+            json=data,
+            headers=headers
+        )
+        if response.status_code == 200:
+            print("📱 Phone notification sent via Pushbullet")
+        else:
+            print(f"Pushbullet error: {response.status_code} - {response.text}")
+    except Exception as e:
+        print(f"Pushbullet failed: {e}")
 
 def parse_date(date_str, year):
     """Parse Portuguese date string with priority on day-month format"""
