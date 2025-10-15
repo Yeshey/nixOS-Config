@@ -8,6 +8,11 @@
 
 let
   cfg = config.toHost.minecraft;
+  extractVersion = name:
+    let
+      parts = lib.splitString "-" name;          # [ "paper" "1_20_4" "build.40" ]
+      verPart = lib.elemAt parts 1;              # "1_20_4"
+    in lib.replaceStrings ["_"] ["."] verPart;   # "1.20.4"
 in
 let 
   # using config from https://github.com/Stefanuk12/nixos-config/blob/main/system/vps/minecraft/servers/fearNightfall/default.nix
@@ -65,7 +70,7 @@ in
         # to recreate the world, delete just the world folder
         # might need to delete /run/minecraft/zombies2.sock
 
-        servers.familiaLopesTAISCTE = {
+        servers.familiaLopesTAISCTE = rec {
           enable = true;
           jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";
           serverProperties = {
@@ -94,27 +99,28 @@ in
             # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
             config = {
               public.address = "0.0.0.0:1408"; # aniversario da Mills e do Uno
+              motd.sleeping = "☠ LopesCraft is sleeping §2☻ Join to start it up\n§uversion:§c ${extractVersion package.name}";
             };
           };
         }; # End familiaLopesTAISCTE server
 
-        servers.tunaCraft = {
+        servers.tunaCraft = rec {
           enable = true;
           jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";
           serverProperties = {
-            server-port = 713;
-            "query.port" = 713;
-            server-portv6 = 714;
-            "rcon.port" = 715;
+            server-port = 1208;
+            "query.port" = 1208;
+            server-portv6 = 1209;
+            "rcon.port" = 1210;
             difficulty = 2;
             "allow-cheats" = "false";
             gamemode = 0;
             max-players = 100;
-            motd = "tunaCraft";
+            motd = "TunaCraft Running! ♪♫♪";
             white-list = false;
             enable-rcon = false;
             "rcon.password" = "hunter2";
-            "online-mode"=true;
+            "online-mode"=false;
             "max-tick-time" = -1; # Recommended with lazymc
           };
 
@@ -126,12 +132,15 @@ in
             enable = true;
             # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
             config = {
-              public.address = "0.0.0.0:712"; # 7 dezembro de 1990 (aniversario taiscte)
+              public.address = "0.0.0.0:1207"; # 7 dezembro de 1990 (aniversario taiscte)
+              motd.sleeping = "☠ TunaCraft is sleeping §2☻ Join to start it up\n§uversion:§c ${extractVersion package.name}";
+              #starting = "§2☻ Server is starting...\n§7⌛ Please wait..."
+              #stopping = "☠ Server going to sleep...\n⌛ Please wait..."
             };
           };
         }; # End tunaCraft server
 
-        servers.mainServer = {
+        servers.mainServer = rec {
           enable = true;
           jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";
           serverProperties = {
@@ -159,6 +168,7 @@ in
             enable = true;
             config = {
               public.address = "0.0.0.0:44329";
+              motd.sleeping = "☠ Server is sleeping §2☻ Join to start it up\n§uversion:§c ${extractVersion package.name}";
               # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
               time.sleep_after = 200; # Sleep after 4 minutes
             };
@@ -692,6 +702,66 @@ in
   #       }; # End botw server
 
       };
+
+      # tunaCraft openBackups
+      # makes a backup of the tuna craft server to tunaCraftOpenBackups on your iscte onedrive, they can be deleted as you're backing up to restic as well, this is just to share with the tuna folk
+      # it auto deletes backups in here older than 10 days
+      # Systemd service to backup TunaCraft to OneDrive
+      systemd.services.tunacraft-open-backup = {
+        description = "Backup TunaCraft to OneDrive";
+        
+        script = ''
+          BACKUP_NAME="tunaCraft-$(date +%s)"
+          REMOTE="OneDriveISCTE:tunaCraftOpenBackups"
+          CURRENT_TIME=$(date +%s)
+          CUTOFF_TIME=$((CURRENT_TIME - 864000))  # 10 days in seconds
+          
+          # Copy the directory to OneDrive with timestamp
+          ${pkgs.rclone}/bin/rclone copy /srv/minecraft/tunaCraft "$REMOTE/$BACKUP_NAME" \
+            --progress \
+            --transfers 4 \
+            --checkers 8
+          
+          echo "Backup completed: $BACKUP_NAME"
+          
+          # Delete backups older than 10 days based on folder timestamp
+          echo "Deleting backups older than $CUTOFF_TIME..."
+          ${pkgs.rclone}/bin/rclone lsf "$REMOTE" --dirs-only | while read -r folder; do
+            # Extract timestamp from folder name (assumes format: tunaCraft-TIMESTAMP)
+            folder_timestamp=$(echo "$folder" | grep -oP 'tunaCraft-\K\d+' || echo "")
+            
+            if [ -n "$folder_timestamp" ]; then
+              # Compare timestamps
+              if [ "$folder_timestamp" -lt "$CUTOFF_TIME" ]; then
+                echo "Deleting old backup: $folder (timestamp: $folder_timestamp)"
+                ${pkgs.rclone}/bin/rclone purge "$REMOTE/$folder"
+              fi
+            fi
+          done
+          
+          echo "Cleanup completed"
+        '';
+        
+        serviceConfig = {
+          Type = "oneshot";
+          User = "root";
+        };
+        
+        path = [ pkgs.rclone pkgs.gnugrep pkgs.coreutils ];
+      };
+
+      # Timer to run every 3 days
+      systemd.timers.tunacraft-open-backup = {
+        description = "Timer for TunaCraft OneDrive backup";
+        wantedBy = [ "timers.target" ];
+        
+        timerConfig = {
+          OnCalendar = "*-*-1,4,7,10,13,16,19,22,25,28,31 02:00:00";
+          Persistent = true;
+          RandomizedDelaySec = "1h";
+        };
+      };
+
     })
   
     (lib.mkIf (cfg.enable && config.mySystem.impermanence.enable)  {
