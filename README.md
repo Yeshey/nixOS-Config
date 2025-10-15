@@ -33,7 +33,7 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
       ```
     - `connectKakariko`:
       ```sh
-      ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@143.47.53.175 "ssh -t -p 2233 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@localhost"
+      ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@143.47.53.175 "ssh -t -p 2333 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@localhost"
       ```
     - `connectSkyloft`:
       ```sh

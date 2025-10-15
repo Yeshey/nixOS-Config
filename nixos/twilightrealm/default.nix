@@ -86,7 +86,7 @@ in
      enable = false;
      remoteIP = "143.47.53.175";
      remoteUser = "yeshey";
-     port = 2233;
+     port = 2333;
     };
     nh.enable = true;
     guestVgpu.enable = true;
