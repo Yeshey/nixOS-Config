@@ -74,7 +74,7 @@ in
     #  enable = true;
     #  remoteIP = "143.47.53.175";
     #  remoteUser = "yeshey";
-    #  port = 2233;
+    #  port = 2333;
     #};
     warnElections.enable = false;
     desktopItems = {
