@@ -107,6 +107,8 @@ in
         servers.tunaCraft = rec {
           enable = true;
           jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";
+          #managementSystem.systemd-socket.enable = true;
+          #managementSystem.tmux.enable = false;
           serverProperties = {
             server-port = 1208;
             "query.port" = 1208;
