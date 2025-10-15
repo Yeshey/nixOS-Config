@@ -1053,17 +1053,14 @@
         ]
       },
       "locked": {
-        "lastModified": 1755654757,
-        "narHash": "sha256-8PFUR1YxrQDsxGZjiHa9DgCdo3KIyP+U6lfAHOvcp+o=",
-        "owner": "Yeshey",
-        "repo": "nix-minecraft",
-        "rev": "c4138f14370dc647555e3b202ec9a3b781254393",
-        "type": "github"
+        "lastModified": 1760548054,
+        "narHash": "sha256-oF1yFeaUlMuCJoSQ0gGjMkxmc1vuarMvIyY7cPCiCkA=",
+        "path": "/home/yeshey/Downloads/nm/",
+        "type": "path"
       },
       "original": {
-        "owner": "Yeshey",
-        "repo": "nix-minecraft",
-        "type": "github"
+        "path": "/home/yeshey/Downloads/nm/",
+        "type": "path"
       }
     },
     "nix-on-droid": {
