@@ -157,7 +157,7 @@ in
             max-players = 60;
             motd = ":]";
             white-list = false;
-            enable-rcon = false;
+            #enable-rcon = false;
             "online-mode"=false;
             "max-tick-time" = -1; # Recommended with lazymc
           };
@@ -176,6 +176,43 @@ in
             };
           };
         }; # End mainInstance server
+
+#         servers.testServer = rec {
+#           enable = true;
+#           jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";
+#           serverProperties = {
+#             server-port = 44335;
+#             "query.port"=44335;
+#             server-portv6 = 44334;
+#             "rcon.port"=44335;
+#             "rcon.password" = "hunter2";
+#             difficulty = 2;
+#             "allow-cheats" = "true";
+#             gamemode = 0;
+#             max-players = 60;
+#             motd = ":]";
+# #            white-list = false;
+# #            enable-rcon = false;
+#             "online-mode"=false;
+#             "max-tick-time" = -1; # Recommended with lazymc
+#           };
+
+#           # Specify the custom minecraft server package
+#           #package = pkgs.fabricServers.fabric-1_21_1; #.override { loaderVersion = "0.16.10"; }; # Specific fabric loader version
+#           # package = pkgs.fabricServers.fabric;
+#           package = pkgs.vanillaServers.vanilla;
+
+#           lazymc = {
+#             enable = true;
+#             config = {
+#               public.address = "0.0.0.0:44329";
+#               motd.sleeping = "☠ Server is sleeping §2☻ Join to start it up\n§uversion:§c ${extractVersion package.name}";
+#               # server.freeze_process = false;
+#               # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
+#               # time.sleep_after = 5; # Sleep after 4 minutes
+#             };
+#           };
+#         }; # End mainInstance server
 
   #       servers.pixelmon = {
   #         enable = true;
