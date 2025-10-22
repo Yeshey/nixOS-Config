@@ -19,9 +19,10 @@ in
     };
   };
 
-  config = lib.mkIf (cfg.enable)  {
-
-    #networking.firewall.enable = false;
+  config = lib.mkMerge [
+  
+( lib.mkIf (cfg.enable)  {   
+  #networking.firewall.enable = false;
 
     services.ollama = {
       package = pkgs.unstable.ollama;
@@ -143,5 +144,14 @@ in
       })
     ];
 
-  };
+    }) 
+    
+    (lib.mkIf (cfg.enable && config.mySystem.impermanence.enable)  {
+      environment.persistence."/persistent" = {
+        directories = [
+          { directory = "/var/lib/ollama"; }
+        ];
+      };
+    })
+  ];
 }
