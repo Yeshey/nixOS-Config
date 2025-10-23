@@ -60,10 +60,10 @@
       url = "github:lomenzel/nix-luanti";
     };
     impermanence.url = "github:nix-community/impermanence/home-manager-v2";
-    deploy-rs = {
-      url = "github:serokell/deploy-rs";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    # deploy-rs = {
+    #   url = "github:serokell/deploy-rs";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
     agenix = { # For secrets management
       url = "github:ryantm/agenix";
       inputs = {
@@ -238,43 +238,43 @@
       ];
     };
 
-    deploy.nodes = {
-      hyrulecastle = {
-        hostname = "hyrulecastle";
-        profiles.system = {
-          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.hyrulecastle;
-          sshUser = "yeshey";
-          user = "root";
-          sshOpts = [ "-t" ];
-          magicRollback = true;
-          interactiveSudo = true;
-        };
-      };
-      kakariko = {
-        hostname = "kakariko";
-        profiles.system = {
-          path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.kakariko;
-          sshUser = "yeshey";
-          user = "root";
-          sshOpts = [ "-t" ];
-          magicRollback = true;
-          interactiveSudo = true;
-        };
-      };
-      skyloft = {
-        hostname = "oracle";
-        profiles.system = {
-          path = deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.skyloft;
-          sshUser = "yeshey";
-          user = "root";
-          sshOpts = [ "-t" ];
-          magicRollback = true;
-          interactiveSudo = true;
-        };
-      };
-    };
+    # deploy.nodes = {
+    #   hyrulecastle = {
+    #     hostname = "hyrulecastle";
+    #     profiles.system = {
+    #       path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.hyrulecastle;
+    #       sshUser = "yeshey";
+    #       user = "root";
+    #       sshOpts = [ "-t" ];
+    #       magicRollback = true;
+    #       interactiveSudo = true;
+    #     };
+    #   };
+    #   kakariko = {
+    #     hostname = "kakariko";
+    #     profiles.system = {
+    #       path = deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.kakariko;
+    #       sshUser = "yeshey";
+    #       user = "root";
+    #       sshOpts = [ "-t" ];
+    #       magicRollback = true;
+    #       interactiveSudo = true;
+    #     };
+    #   };
+    #   skyloft = {
+    #     hostname = "oracle";
+    #     profiles.system = {
+    #       path = deploy-rs.lib.aarch64-linux.activate.nixos self.nixosConfigurations.skyloft;
+    #       sshUser = "yeshey";
+    #       user = "root";
+    #       sshOpts = [ "-t" ];
+    #       magicRollback = true;
+    #       interactiveSudo = true;
+    #     };
+    #   };
+    # };
 
-    checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
+    # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
   };
 }
 
