@@ -163,7 +163,6 @@ in
     fastapi-dls-nixos \
     learnWithT \
     impermanence \
-    deploy-rs \
     agenix \
     nixos-generators \
     nix-on-droid \
