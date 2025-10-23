@@ -1,7 +1,7 @@
 name: Auto bump flake.lock
 on:
   schedule:
-    - cron: "0 6 * * *"
+    - cron: '0 0 1 * *' # 00:00 UTC on the 1st of every month
   workflow_dispatch:
 
 concurrency:
