@@ -1,6 +1,4 @@
 name: Auto bump flake.lock
-
-# run daily at 06:00 UTC (adjust cron if you want a different schedule)
 on:
   schedule:
     - cron: "0 6 * * *"
@@ -11,54 +9,44 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write   # needed so the workflow can push commits
+  contents: write
 
 jobs:
   bump:
     name: Bump flake.lock
     runs-on: ubuntu-latest
-
     steps:
-      # 1) Maximize build space BEFORE checkout (this action may mount over workspace)
-      - name: Maximize build space (optional; run only if you need more disk)
-        uses: easimon/maximize-build-space@master
+      # 1) Free up disk space for Nix specifically
+      - name: Nothing but Nix (reclaim disk space for /nix)
+        uses: wimpysworld/nothing-but-nix@main
         with:
-          # tune these if you need more/less reserve or swap; defaults are safe
-          root-reserve-mb: '512'
-          temp-reserve-mb: '100'
-          swap-size-mb: '4096'
-          # remove-dotnet: 'true'   # enable only if you're sure it won't break your job
-          # remove-android: 'false'
-          # overprovision-lvm: 'false'
-
-      # 2) Checkout repository (after maximizing space)
+          hatchet-protocol: 'cleave'  # Options: holster, carve, cleave (default), rampage
+      
+      # 2) Checkout repository
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-
-      # 3) Install Nix (so `nix flake update` works)
+      
+      # 3) Install Nix
       - name: Install Nix
         uses: cachix/install-nix-action@v20
-
-      # 4) (Optional) print some info for debugging
+      
+      # 4) Show free space & git status
       - name: Show free space & git status
         run: |
           df -h
           git --version
           git status --porcelain --untracked-files=no || true
-
+      
       # 5) Update flake.lock
       - name: Update flake.lock
         run: |
-          # ensure we are on the target branch
           git checkout main || git checkout -b main
-          # update flake inputs (updates flake.lock)
           nix flake update
-          # show changes (for debugging / logs)
           git --no-pager diff --name-only || true
-
-      # 6) Commit & push only flake.lock if it changed
+      
+      # 6) Commit & push
       - name: Commit and push flake.lock
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
@@ -68,7 +56,6 @@ jobs:
           commit_options: '--no-verify --signoff'
           file_pattern: flake.lock
           commit_user_name: 'Flake Bot'
-          #commit_user_email: 'my-github-actions-bot@example.org'
           commit_author: 'Flake Bot <actions@github.com>'
           skip_dirty_check: false
           skip_fetch: true
