@@ -106,7 +106,7 @@
     agenix,
     nixvim,
     nvix,
-    deploy-rs,
+    # deploy-rs,
     stylix,
     plasma-manager,
     nurpkgs,
