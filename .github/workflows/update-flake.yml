@@ -1,11 +1,9 @@
 # .github/workflows/update-flake.yml
 name: "Update flake.lock (retry nixpkgs-only on failure)"
-
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 1 * *'   # 00:00 UTC on the 1st of every month
-
+    - cron: '0 0 1 * *' # 00:00 UTC on the 1st of every month
 jobs:
   update-and-check:
     strategy:
@@ -17,14 +15,21 @@ jobs:
             system: aarch64-linux
     runs-on: ${{ matrix.runner }}
     steps:
+      - name: Maximize build space
+        uses: easimon/maximize-build-space@master
+        with:
+          root-reserve-mb: 512
+          swap-size-mb: 1024
+          remove-dotnet: 'true'
+          remove-android: 'true'
+          remove-haskell: 'true'
+          remove-codeql: 'true'
       - uses: actions/checkout@v4
       - uses: DeterminateSystems/determinate-nix-action@v3
         with:
           extra-conf: |
             experimental-features = nix-command flakes pipe-operators
-
       - uses: DeterminateSystems/magic-nix-cache-action@main
-
       # ---------- 1. full update ----------
       - name: full update
         run: nix flake update
@@ -32,7 +37,6 @@ jobs:
         id: full
         run: nix flake check
         continue-on-error: true
-
       # ---------- 2. nixpkgs-only fallback ----------
       - name: restore & nixpkgs-only update
         if: steps.full.outcome == 'failure'
@@ -42,16 +46,14 @@ jobs:
       - name: nixpkgs-only check
         if: steps.full.outcome == 'failure'
         run: nix flake check
-
       # ---------- 3. upload whichever lock file succeeded ----------
       - name: upload flake.lock
         uses: actions/upload-artifact@v4
         with:
           name: flake-lock-${{ matrix.system }}
           path: flake.lock
-
   commit-lock:
-    needs: [update-and-check]        # waits for both matrix jobs
+    needs: [update-and-check] # waits for both matrix jobs
     runs-on: ubuntu-latest
     if: always() && !cancelled() && !failure()
     permissions:
@@ -63,7 +65,7 @@ jobs:
         with:
           pattern: flake-lock-*
           path: .
-          merge-multiple: true          # all systems -> same dir
+          merge-multiple: true # all systems -> same dir
       - uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore(deps): update flake.lock"
