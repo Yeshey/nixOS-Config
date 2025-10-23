@@ -39,23 +39,54 @@ jobs:
           git --version
           git status --porcelain --untracked-files=no || true
       
-      # 5) Update flake.lock
-      - name: Update flake.lock
+      # 5) Try full update first
+      - name: Update all flake inputs
+        id: full-update
+        continue-on-error: true
         run: |
           git checkout main || git checkout -b main
           nix flake update
-          git --no-pager diff --name-only || true
+          git --no-pager diff flake.lock || true
       
-      # 6) Check flake before committing
-      - name: Check flake
+      # 6) Check flake after full update
+      - name: Check flake (full update)
+        id: full-check
+        if: steps.full-update.outcome == 'success'
+        continue-on-error: true
         run: |
           nix flake check
       
-      # 7) Commit & push (only runs if check succeeds)
+      # 7) If full update failed, rollback and try conservative update
+      - name: Rollback and update nixpkgs only
+        if: steps.full-check.outcome == 'failure'
+        run: |
+          echo "Full update failed flake check, trying conservative update..."
+          git restore flake.lock
+          nix flake update nixpkgs nixpkgs-unstable
+          git --no-pager diff flake.lock || true
+      
+      # 8) Check flake after conservative update
+      - name: Check flake (conservative update)
+        if: steps.full-check.outcome == 'failure'
+        run: |
+          nix flake check
+      
+      # 9) Determine commit message based on what succeeded
+      - name: Set commit message
+        id: commit-msg
+        run: |
+          if [ "${{ steps.full-check.outcome }}" == "success" ]; then
+            echo "message=chore(deps): update flake.lock (all inputs)" >> $GITHUB_OUTPUT
+          else
+            echo "message=chore(deps): update flake.lock (nixpkgs only)" >> $GITHUB_OUTPUT
+          fi
+      
+      # 10) Commit & push (only runs if at least one check succeeds)
       - name: Commit and push flake.lock
+        if: steps.full-check.outcome == 'success' || steps.full-check.outcome == 'failure'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: 'chore(deps): update flake.lock'
+          commit_message: ${{ steps.commit-msg.outputs.message }}
           branch: main
           commit_options: '--no-verify --signoff'
           file_pattern: flake.lock
