@@ -296,8 +296,13 @@ in
   #  cpufreq.max = 4700000;
   #};
 
+  boot.extraModulePackages = [
+    config.boot.kernelPackages.bcachefs
+  ];
+
   environment.systemPackages = with pkgs; [
     stremio-scalled
+    bcachefs-tools
     # jetbrains-toolbox
     # Games
     # steam-scalled
