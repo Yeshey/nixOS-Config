@@ -296,21 +296,18 @@ in
   #  cpufreq.max = 4700000;
   #};
 
-  boot.extraModulePackages = [
-    config.boot.kernelPackages.bcachefs
-  ];
+  #boot.extraModulePackages = [
+  #  config.boot.kernelPackages.bcachefs
+  #];
+  # services.bcachefs.autoScrub.enable = true; # enable after you have kernel 6.14 or later
+  # hardware.microsoft-surface.kernelVersion = "stable"; # newer kernel
 
   environment.systemPackages = with pkgs; [
     stremio-scalled
-    bcachefs-tools
     # jetbrains-toolbox
     # Games
     # steam-scalled
   ];
-
-  #networking = { # TODO can you remove
-  #  hostName = "kakariko"; # TODO make into variable
-  #};
 
   # Fix for:
   # jul 15 18:03:07 nixos-kakariko kernel: i915 0000:00:02.0: [drm] Resetting rcs0 for preemption time out
