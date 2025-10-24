@@ -57,7 +57,7 @@ jobs:
         if: steps.full-update.outcome == 'success'
         continue-on-error: true
         run: |
-          nix flake check
+          nix flake check --all-systems
       
       # 7) If full update failed, rollback and try conservative update
       - name: Rollback and update nixpkgs only
@@ -72,7 +72,7 @@ jobs:
       - name: Check flake (conservative update)
         if: steps.full-check.outcome == 'failure'
         run: |
-          nix flake check
+          nix flake check --all-systems
       
       # 9) Determine commit message based on what succeeded
       - name: Set commit message
