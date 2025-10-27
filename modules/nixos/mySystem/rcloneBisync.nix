@@ -1,3 +1,4 @@
+# also need RCLONE_TEST in the onedrive?
 { config, lib, pkgs, ... }:
 
 let
@@ -60,64 +61,72 @@ in
       fuse 
     ];
 
-    # ----------  NO ROOT DIRECTORY CREATION ANYWHERE  ----------
-    # systemd.tmpfiles.rules = [ ];   <-- GONE
-    # preStart = ''mkdir -p ...'';    <-- GONE from both services
+    /* ----------------------------------------------------------
+       1.  ROOT MOUNT SERVICE  (can actually do fusermount)
+       ---------------------------------------------------------- */
+systemd.services.rclone-mount = {
+  description = "OneDrive rclone mount (system)";
+  wantedBy = [ "multi-user.target" ];
+  after    = [ "network-online.target" ];
+  wants    = [ "network-online.target" ];
 
-    systemd.user.services = {
+  preStart = ''
+    mkdir -p ${lib.escapeShellArg cfg.mountPoint}
+    chown ${user}:users ${lib.escapeShellArg cfg.mountPoint}
+    ${pkgs.fuse}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
+  '';
 
-      rclone-mount = {
-        description = "OneDrive rclone mount (user session)";
-        wantedBy = [ "default.target" ];
-        after    = [ "network-online.target" ];
-        wants    = [ "network-online.target" ];
+  script = ''
+    exec ${pkgs.rclone}/bin/rclone mount \
+      ${lib.escapeShellArg cfg.remote} \
+      ${lib.escapeShellArg cfg.mountPoint} \
+      --vfs-cache-mode writes \
+      --vfs-read-chunk-size 128M \
+      --vfs-read-chunk-size-limit off \
+      --allow-other \
+      --config ${home}/.config/rclone/rclone.conf
+  '';
 
-        # no preStart, no postStop mkdir
-        script = ''
-          exec ${pkgs.rclone}/bin/rclone mount \
-            ${lib.escapeShellArg cfg.remote} \
-            ${lib.escapeShellArg cfg.mountPoint} \
-            --vfs-cache-mode writes \
-            --vfs-read-chunk-size 128M \
-            --vfs-read-chunk-size-limit off \
-            ${lib.optionalString cfg.allowOther "--allow-other"} \
-            --daemon \
-            --config ${home}/.config/rclone/rclone.conf
-        '';
+  postStop = ''
+    ${pkgs.fuse}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
+  '';
 
-        postStop = ''
-          ${pkgs.fuse}/bin/fusermount -u ${lib.escapeShellArg cfg.mountPoint} || true
-        '';
+  serviceConfig = {
+    Type        = "notify";
+    Restart     = "on-failure";
+    RestartSec  = "30s";
+    TimeoutStartSec = "60s";
+  };
+};
 
-        serviceConfig = {
-          Type       = "forking";
-          PIDFile    = "${home}/.cache/rclone/rclone.pid";
-          Restart    = "on-failure";
-          RestartSec = "10s";
-        };
-      };
+    /* ----------------------------------------------------------
+       2.  USER BISYNC SERVICE  (reads user config, needs mount)
+       ---------------------------------------------------------- */
+systemd.user.services.rclone-bisync = {
+  description = "OneDrive bisync";
 
-      rclone-bisync = {
-        description = "OneDrive bisync";
-        requires    = [ "rclone-mount.service" ];
-        after       = [ "rclone-mount.service" ];
+  script = ''
+    exec ${pkgs.rclone}/bin/rclone bisync \
+      ${lib.escapeShellArg cfg.localPath} \
+      ${lib.escapeShellArg cfg.remote} \
+      --check-access \
+      --compare size,modtime \
+      --resilient \
+      --recover \
+      --max-lock 2m \
+      --conflict-resolve newer \
+      --create-empty-src-dirs \
+      --verbose \
+      --config ${home}/.config/rclone/rclone.conf \
+      ${lib.optionalString cfg.firstRun "--resync"}
+  '';
+  
+  serviceConfig.Type = "oneshot";
+};
 
-        # no preStart mkdir
-        script = ''
-          exec ${pkgs.rclone}/bin/rclone bisync \
-            ${lib.escapeShellArg cfg.localPath} \
-            ${lib.escapeShellArg cfg.remote} \
-            --check-access \
-            --compare size,modtime \
-            --verbose \
-            --config ${home}/.config/rclone/rclone.conf \
-            ${lib.optionalString cfg.firstRun "--resync"}
-        '';
-
-        serviceConfig.Type = "oneshot";
-      };
-    };
-
+    /* ----------------------------------------------------------
+       3.  USER TIMER  (unchanged)
+       ---------------------------------------------------------- */
     systemd.user.timers.rclone-bisync = {
       wantedBy = [ "timers.target" ];
       timerConfig = {
@@ -128,6 +137,9 @@ in
       };
     };
 
+    /* ----------------------------------------------------------
+       4.  allow user linger so timer runs when not logged in
+       ---------------------------------------------------------- */
     users.users.${user}.linger = true;
   };
 }
