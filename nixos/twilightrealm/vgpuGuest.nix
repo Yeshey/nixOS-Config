@@ -30,7 +30,7 @@ in
     };
 
     nixpkgs.config = {
-      cudaSupport = lib.mkOverride 1010 false; # for blender (nvidia)
+      cudaSupport = lib.mkOverride 1010 true; # for blender (nvidia)
     };
     nixpkgs.config.allowUnfreePredicate =
       pkg:
