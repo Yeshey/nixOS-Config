@@ -284,7 +284,7 @@ in
       #pciIDs = "10de:1f11,10de:10f9,8086:1901,10de:1ada"; # Nvidia VGA, Nvidia Audia,... ;
       #libvirtUsers = [ "yeshey" ];
     };
-    vgpu.enable = true;
+    vgpu.enable = false;
   };
 
   nix = {
@@ -322,15 +322,18 @@ in
   # onedrive --reauth
   # systemctl restart --user onedrive@onedrive.service
   # journalctl --user -f -u onedrive@onedrive.service
-  services.onedrive.enable = true;
-  systemd.user.services."onedrive@" = {
-    # allow at most 3 restarts… within a 10‑minute window
-    unitConfig = {
-      StartLimitBurst = "5";
-      StartLimitIntervalSec = "600s";
-    };
-  };
-  # onedrivegui for the gui?
+  # services.onedrive.enable = true;
+  # services.onedrive.package = pkgs.unstable.onedrive;
+  # systemd.user.services."onedrive@" = {
+  #   # allow at most 3 restarts… within a 10‑minute window
+  #   unitConfig = {
+  #     StartLimitBurst = "5";
+  #     StartLimitIntervalSec = "600s";
+  #   };
+  # };
+  # environment.systemPackages = with pkgs; [ 
+  #   onedrivegui
+  # ];
 
   #programs.zsh.enable = true;
   #users.users.yeshey.shell = pkgs.zsh;
@@ -370,12 +373,6 @@ in
   boot.extraModprobeConfig = ''
     options snd-hda-intel patch=hda-jack-retask.fw
   '';
-
-  environment.systemPackages = with pkgs; [ 
-    #jetbrains.idea-community-bin
-    #jetbrains.pycharm-community-bin
-    #jetbrains-toolbox
-  ];
 
   #powerManagement = { # TODO ???
   #  cpuFreqGovernor = "ondemand";

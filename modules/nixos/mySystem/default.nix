@@ -16,6 +16,10 @@ let
       url = "https://cache.nixos.org";
       key = "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=";
     };
+    floxcache = { # https://flox.dev/blog/the-flox-catalog-now-contains-nvidia-cuda/
+      url = "https://cache.flox.dev";
+      key = "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs=";
+    };
     #cachethalheimio = {
     #  url = "https://cache.thalheim.io";
     #  key = "cache.thalheim.io-1:R7msbosLEZKrxk/lKxf9BTjOOH7Ax3H0Qj0/6wiHOgc=";
@@ -31,7 +35,7 @@ let
     nixcommunitycachixorg = {
       url = "https://nix-community.cachix.org";
       key = "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs=";
-    }; # has cuda
+    }; # has cuda? (not working I think)
     #nixgaming = {
     #  url = "https://nix-gaming.cachix.org";
     #  key = "nix-gaming.cachix.org-1:nbjlureqMbRAxR1gJ/f3hxemL9svXaZF/Ees8vCUUs4=";
@@ -61,7 +65,6 @@ in
     ./hardware/default.nix
     ./syncthing.nix
     ./borgBackups.nix
-    ./borgFolderBackups.nix
     ./ssh/default.nix
     ./agenix/default.nix
     ./waydroid.nix
@@ -72,6 +75,7 @@ in
     ./snap.nix
     ./autossh.nix
     ./resticRcloneBackups.nix
+    ./rcloneBisync.nix
     ./an-anime-game-launcher.nix
     ./nix-flatpak.nix
     ./nh.nix

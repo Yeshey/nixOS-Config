@@ -14,6 +14,10 @@ let
       url = "https://cache.nixos.org";
       key = "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=";
     };
+    floxcache = { # https://flox.dev/blog/the-flox-catalog-now-contains-nvidia-cuda/
+      url = "https://cache.flox.dev";
+      key = "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs=";
+    };
     #cachethalheimio = {
     #  url = "https://cache.thalheim.io";
     #  key = "cache.thalheim.io-1:R7msbosLEZKrxk/lKxf9BTjOOH7Ax3H0Qj0/6wiHOgc=";
