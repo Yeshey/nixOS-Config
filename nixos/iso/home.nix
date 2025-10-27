@@ -65,12 +65,6 @@
       };
     };*/
 
-    /*onedriver = {
-      enable = true;
-      onedriverFolder = "/mnt/hdd-btrfs/Yeshey/OneDriver/";
-      serviceCoreName = "mnt-hdd\\x2dbtrfs-Yeshey-OneDriver"; 
-    };*/
-
   };
 
   home = {

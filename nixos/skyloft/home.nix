@@ -65,18 +65,7 @@ in
       base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-medium.yaml"; #pop.yaml
       wallpaper = pkgs.wallpapers.tunaCoimbra2025; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement #tunaCoimbra2025
     };
-    onedriver = {
-      enable = true;
-      onedriverFolder = "/home/yeshey/OneDriverISEC";
-      serviceCoreName = "home-yeshey-OneDriverISEC"; # real name: onedriver@home-yeshey-OneDriverISEC.service
-      cliOnlyMode = true; # doesnt pop annoying windows if auth is needed again
-    };
-    onedriver2 = {
-      enable = true;
-      onedriverFolder = "/home/yeshey/OneDriverISCTE";
-      serviceCoreName = "home-yeshey-OneDriverISCTE"; # real name: onedriver@home-yeshey-OneDriverISCTE.service
-      cliOnlyMode = true;
-    };
+
     #agenix = {
     #  enable = false;
     #  sshKeys.enable = false;

@@ -72,18 +72,6 @@ in
         size = 24;
       };
     };
-    onedriver = {
-      enable = true;
-      onedriverFolder = "/home/yeshey/OneDriverISEC";
-      serviceCoreName = "home-yeshey-OneDriverISEC"; # real name: onedriver@home-yeshey-OneDriverISEC.service
-      cliOnlyMode = true; # doesnt pop annoying windows if auth is needed again
-    };
-    onedriver2 = {
-      enable = true;
-      onedriverFolder = "/home/yeshey/OneDriverISCTE";
-      serviceCoreName = "home-yeshey-OneDriverISCTE"; # real name: onedriver@home-yeshey-OneDriverISCTE.service
-      cliOnlyMode = false;
-    };
     #agenix = {
     #  enable = true;
     #  sshKeys.enable = true;

@@ -9,8 +9,6 @@ with pkgs;
 rec {
   # examplepkg = callPackage ./example.nix {};
 
-  myonedriver = callPackage ./onedriver.nix { };
-
   coreutils-with-safe-rm = callPackage ./coreutils-with-safe-rm.nix { };
 
   looking-glass-host = callPackage ./looking-glass-host.nix { };
