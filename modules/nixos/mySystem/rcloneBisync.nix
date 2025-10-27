@@ -1,7 +1,9 @@
-{ config, lib, inputs, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 let
   cfg = config.mySystem.rcloneBisync;
+  user = cfg.user;
+  home = "/home/${user}";
 in
 {
   options.mySystem.rcloneBisync = with lib; {
@@ -15,14 +17,14 @@ in
 
     remote = mkOption {
       type = types.str;
-      default = "onedrive:OneDriveISCTE";
-      description = "rclone remote name (eg. 'onedrive:').";
+      default = "OneDriveISCTE:";
+      description = "rclone remote/remote-path (eg. 'onedrive:' or 'onedrive:SomeFolder').";
     };
 
     localPath = mkOption {
       type = types.str;
       default = "/run/media/yeshey/hdd-btrfs/.onedriveISCTE-sync";
-      description = "Local folder used for two-way bisync with the remote.";
+      description = "Local folder on the external drive used for two-way bisync with the remote. Keep this on the external drive to avoid using home partition.";
     };
 
     user = mkOption {
@@ -36,63 +38,96 @@ in
       default = "10m";
       description = "Interval for the bisync timer (systemd OnUnitActiveSec format).";
     };
+
+    allowOther = mkOption {
+      type = types.bool;
+      default = false;
+      description = "If true, add --allow-other to rclone mount (requires user_allow_other in /etc/fuse.conf).";
+    };
+
+    firstRun = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Set to true for the first sync or when recovering from errors. This uses --resync which can overwrite data.";
+    };
   };
 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
 
-    # ensure rclone/fuse available on the system
-    environment.systemPackages = with pkgs; [
-      rclone
-      rclone-browser
-      fuse
-      coreutils
+    environment.systemPackages = with pkgs; [ 
+      unstable.rclone-browser
+      rclone 
+      fuse 
     ];
 
-    # create mount & local directories (won't fail boot if device absent)
-    systemd.tmpfiles.rules = [
-      "d ${cfg.mountPoint} 0755 ${cfg.user} ${cfg.user} - -"
-      "d ${cfg.localPath} 0755 ${cfg.user} ${cfg.user} - -"
-    ];
+    # ----------  NO ROOT DIRECTORY CREATION ANYWHERE  ----------
+    # systemd.tmpfiles.rules = [ ];   <-- GONE
+    # preStart = ''mkdir -p ...'';    <-- GONE from both services
 
-    # service that mounts the remote via rclone
-    systemd.services."rclone-mount" = {
-      description = "Mount OneDrive via rclone";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ];
-      serviceConfig = {
-        Type = "simple";
-        User = cfg.user;
-        Group = cfg.user;
-        # ensure the mountpoint directory exists and is owned by the user
-        ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p ${cfg.mountPoint} && ${pkgs.coreutils}/bin/chown ${cfg.user}:${cfg.user} ${cfg.mountPoint}";
-        ExecStart = "${pkgs.rclone}/bin/rclone mount ${cfg.remote} ${cfg.mountPoint} --vfs-cache-mode writes";
-        # try to unmount on stop; allow failure so the service stop doesn't error-out boot
-        ExecStop = "${pkgs.fuse}/bin/fusermount -u ${cfg.mountPoint} || true";
-        Restart = "on-failure";
-        RestartSec = "10s";
+    systemd.user.services = {
+
+      rclone-mount = {
+        description = "OneDrive rclone mount (user session)";
+        wantedBy = [ "default.target" ];
+        after    = [ "network-online.target" ];
+        wants    = [ "network-online.target" ];
+
+        # no preStart, no postStop mkdir
+        script = ''
+          exec ${pkgs.rclone}/bin/rclone mount \
+            ${lib.escapeShellArg cfg.remote} \
+            ${lib.escapeShellArg cfg.mountPoint} \
+            --vfs-cache-mode writes \
+            --vfs-read-chunk-size 128M \
+            --vfs-read-chunk-size-limit off \
+            ${lib.optionalString cfg.allowOther "--allow-other"} \
+            --daemon \
+            --config ${home}/.config/rclone/rclone.conf
+        '';
+
+        postStop = ''
+          ${pkgs.fuse}/bin/fusermount -u ${lib.escapeShellArg cfg.mountPoint} || true
+        '';
+
+        serviceConfig = {
+          Type       = "forking";
+          PIDFile    = "${home}/.cache/rclone/rclone.pid";
+          Restart    = "on-failure";
+          RestartSec = "10s";
+        };
+      };
+
+      rclone-bisync = {
+        description = "OneDrive bisync";
+        requires    = [ "rclone-mount.service" ];
+        after       = [ "rclone-mount.service" ];
+
+        # no preStart mkdir
+        script = ''
+          exec ${pkgs.rclone}/bin/rclone bisync \
+            ${lib.escapeShellArg cfg.localPath} \
+            ${lib.escapeShellArg cfg.remote} \
+            --check-access \
+            --compare size,modtime \
+            --verbose \
+            --config ${home}/.config/rclone/rclone.conf \
+            ${lib.optionalString cfg.firstRun "--resync"}
+        '';
+
+        serviceConfig.Type = "oneshot";
       };
     };
 
-    # oneshot service that performs a bisync between localPath <-> remote
-    systemd.services."rclone-bisync" = {
-      description = "rclone bisync between local folder and OneDrive remote";
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        Type = "oneshot";
-        User = cfg.user;
-        Group = cfg.user;
-        ExecStart = "${pkgs.rclone}/bin/rclone bisync ${cfg.localPath} ${cfg.remote} --check-access --compare size,modtime --resync";
-      };
-    };
-
-    # timer to run the bisync service periodically
-    systemd.timers."rclone-bisync.timer" = {
-      description = "Timer to run rclone-bisync regularly";
+    systemd.user.timers.rclone-bisync = {
       wantedBy = [ "timers.target" ];
       timerConfig = {
+        OnBootSec       = "2m";
         OnUnitActiveSec = cfg.bisyncInterval;
-        Persistent = "true";
+        Persistent      = true;
+        Unit            = "rclone-bisync.service";
       };
     };
+
+    users.users.${user}.linger = true;
   };
 }
