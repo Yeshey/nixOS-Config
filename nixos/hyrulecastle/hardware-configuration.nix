@@ -1,3 +1,4 @@
+# you need to create .onedriveISCTE-sync and OneDriveISCTE in the external drive path
 # initialy generated with nixos-generate-config
 {
   inputs,
