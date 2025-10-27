@@ -89,8 +89,6 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
 - **Safe-rm** - I nuked my PC once by running `sudo rm -r /*` instead of `sudo -r rm ./*`, so I decided to change all my `rm` calls to `safe-rm` calls through changing the binary and adding aliases, both in `myHome`: [safe-rm.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/safe-rm.nix); and in `mySystem`: [safe-rm.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/safe-rm.nix);
 
-- **OneDriver** - home-manager module for [onedriver](https://github.com/jstaf/onedriver) that auto clears cache every month, of course: [onedriver.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/onedriver.nix).
-
 - **Substituters** - Uses a bunch of substituters for extra caches to hopefully make rebuilds faster: [default.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/default.nix). Also in my module to activate when home manager is used standalone (untested): [non-nixos.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/non-nixos.nix);
 
 - **Agenix** - Using [agenix](https://github.com/ryantm/agenix) both at system (`mySystem` - [default.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/agenix/default.nix)):  and at user (`myHome` - [default.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/agenix/default.nix)) levels, they grab secrets from `/secrets`.

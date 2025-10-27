@@ -68,16 +68,10 @@
       starshipTheme = "fredericrous"; # fredericrous # pinage404
     };
 
-    onedriver = {
-      enable = false;
-      onedriverFolder = "/home/yeshey/OneDriver";
-      serviceCoreName = "home-yeshey-OneDriver";
-    };
     direnv.enable = true;
     #agenix = { # TODO allow to easily turn of agenix?
     #  enable = false;
     #  sshKeys.enable = true;
-    #  onedriver.enable = true;
     #};
     #impermanence.enable = false;
   };

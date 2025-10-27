@@ -29,8 +29,6 @@ in
       nvidiaBusId = "PCI:1:0:0";
     };
 
-
-
     nixpkgs.config = {
       cudaSupport = lib.mkOverride 1010 true; # for blender (nvidia)
     };
