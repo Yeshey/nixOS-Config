@@ -12,7 +12,7 @@ in
 
     mountPoint = mkOption {
       type = types.str;
-      default = "/run/media/yeshey/hdd-btrfs/OneDriveISCTE";
+      default = "/home/yeshey/OneDriveISCTE";
       description = "Path where the rclone remote will be mounted. System boot will not fail if the underlying device is not present.";
     };
 
@@ -24,7 +24,7 @@ in
 
     localPath = mkOption {
       type = types.str;
-      default = "/run/media/yeshey/hdd-btrfs/.onedriveISCTE-sync";
+      default = "/home/yeshey/.onedriveISCTE-sync";
       description = "Local folder on the external drive used for two-way bisync with the remote. Keep this on the external drive to avoid using home partition.";
     };
 
