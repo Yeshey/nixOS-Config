@@ -146,10 +146,15 @@ in
 
     }) 
     
-    (lib.mkIf (cfg.enable && config.mySystem.impermanence.enable)  {
+    (lib.mkIf (cfg.enable && config.mySystem.impermanence.enable) {
       environment.persistence."/persistent" = {
         directories = [
-          { directory = "/var/lib/ollama"; }
+          { 
+            directory = "/var/lib/private/ollama"; 
+            user = "nobody"; 
+            group = "nogroup"; 
+            mode = "0700";
+          }
         ];
       };
     })
