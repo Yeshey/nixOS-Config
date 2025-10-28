@@ -73,6 +73,7 @@ systemd.services.rclone-mount = {
   preStart = ''
     mkdir -p ${lib.escapeShellArg cfg.mountPoint}
     chown ${user}:users ${lib.escapeShellArg cfg.mountPoint}
+    chmod 755 ${lib.escapeShellArg cfg.mountPoint}
     ${pkgs.fuse}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
   '';
 
