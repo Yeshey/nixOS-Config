@@ -85,7 +85,7 @@ in
         # anydesk
         pdfarranger
         # old_wihotspot
-        linux-wifi-hotspot # hotspot
+        unstable.linux-wifi-hotspot # hotspot
         # texlive.combined.scheme-full # LaTeX
 
         # for amov, flutter need this
