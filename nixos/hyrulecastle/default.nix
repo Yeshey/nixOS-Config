@@ -58,6 +58,13 @@ in
       # You can also add overlays exported from other flakes:
       # neovim-nightly-overlay.overlays.default
 
+      # tmp so firefox doesn't take the whole year to build
+      (self: super: {
+        onnxruntime = super.onnxruntime.override {
+          cudaSupport = false;
+        };
+      })
+
       # Or define it inline, for example:
       # (final: prev: {
       #   hi = final.hello.overrideAttrs (oldAttrs: {
