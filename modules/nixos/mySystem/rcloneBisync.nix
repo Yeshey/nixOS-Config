@@ -81,9 +81,9 @@ systemd.services.rclone-mount = {
     exec ${pkgs.rclone}/bin/rclone mount \
       ${lib.escapeShellArg cfg.remote} \
       ${lib.escapeShellArg cfg.mountPoint} \
-      --vfs-cache-mode writes \
-      --vfs-read-chunk-size 128M \
-      --vfs-read-chunk-size-limit off \
+      --vfs-cache-mode full \
+      --vfs-cache-max-size 40G \
+      --vfs-cache-max-age 168h \
       --allow-other \
       --config ${home}/.config/rclone/rclone.conf
   '';
