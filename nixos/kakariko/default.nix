@@ -190,6 +190,7 @@ in
     };
     nh.enable = true;
     globalprotect.enable = true;
+    rcloneBisync.enable = true;
   };
 
   toHost = {
