@@ -16,37 +16,57 @@ in
 
   config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
 
+    home.packages = with pkgs; [
+      nil # <-- language server
+      nixfmt-rfc-style
+      zathura # for latex
+    ];
+
     programs.zed-editor = {
       enable = true;
-      extensions = [ "nix" "toml" "rust" "latex" "react-typescript-snippets" "react-typescript-snippets" ];
+      extensions = [
+        "nix"
+        "toml"
+        "rust"
+        "latex"
+        "react-typescript-snippets"
+      ];
       userSettings = {
         hour_format = "hour24";
         # vim_mode = true;
         # Tell Zed to use direnv and direnv can use a flake.nix environment
         load_direnv = "shell_hook";
         base_keymap = "VSCode";
-        
+
         # ---------- LaTeX ----------
-        "lsp" = {
-          "texlab" = {
-            "settings" = {
-              "texlab" = {
-                "build" = {
-                  "onSave" = true;               # compile when you save
-                  "forwardSearchAfter" = true;   # jump to PDF after build
-                  "executable" = "latexmk";
-                  "args" = [
-                    "-pdf"
-                    "-synctex=1"
-                    "-interaction=nonstopmode"
-                    "-file-line-error"
-                    "%f"
-                  ];
-                };
+        # LaTeX
+        lsp.texlab = {
+          settings = {
+            texlab = {
+              build = {
+                onSave = true;
+                forwardSearchAfter = true;
+                executable = "latexmk";
+                args = [
+                  "-pdf"
+                  "-synctex=1"
+                  "-interaction=nonstopmode"
+                  "-file-line-error"
+                  "%f"
+                ];
+              };
+              forwardSearch = {
+                executable = "zathura";
+                args = [
+                  "--synctex-forward"
+                  "%l:1:%f"
+                  "%p"
+                ];
               };
             };
           };
         };
+
       };
     };
 
