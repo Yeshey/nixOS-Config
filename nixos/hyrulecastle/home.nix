@@ -57,8 +57,9 @@ in
       alacritty.enable = false;
       libreoffice.enable = true;
       devops.enable = false;
+      zed-editor.enable = true;
     };
-    
+
     # autoStartApps = [ pkgs.vesktop ]; # doesnt work
 
     zsh = {
@@ -66,11 +67,11 @@ in
       starshipTheme = "pinage404"; # fredericrous # pinage404
     };
     direnv.enable = true;
-    
+
     stylix = {
       # https://www.youtube.com/watch?v=ljHkWgBaQWU
       enable = true;
-      base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-mirage.yaml"; #gruvbox-dark-medium #pop
+      base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-mirage.yaml"; # gruvbox-dark-medium #pop
       wallpaper = pkgs.wallpapers.pinkSunsetMinimalHdWallpaper; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement #tunaCoimbra2025 #pinkSunsetMinimalHdWallpaper
       cursor = {
         package = pkgs.banana-cursor;
@@ -116,7 +117,7 @@ in
       # Surface and Desktop apps
       # github-desktop
       # grapejuice # roblox
-      
+
       gnome-clocks
       qbittorrent
       # p3x-onenote # might be worth trying notekit(https://github.com/blackhole89/notekit) and Zettlr(https://github.com/Zettlr/Zettlr)
