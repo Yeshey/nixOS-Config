@@ -25,6 +25,28 @@ in
         # Tell Zed to use direnv and direnv can use a flake.nix environment
         load_direnv = "shell_hook";
         base_keymap = "VSCode";
+        
+        # ---------- LaTeX ----------
+        "lsp" = {
+          "texlab" = {
+            "settings" = {
+              "texlab" = {
+                "build" = {
+                  "onSave" = true;               # compile when you save
+                  "forwardSearchAfter" = true;   # jump to PDF after build
+                  "executable" = "latexmk";
+                  "args" = [
+                    "-pdf"
+                    "-synctex=1"
+                    "-interaction=nonstopmode"
+                    "-file-line-error"
+                    "%f"
+                  ];
+                };
+              };
+            };
+          };
+        };
       };
     };
 
