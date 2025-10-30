@@ -170,7 +170,8 @@ in
               //*
               (?i)PhotosAndVideos
               .git
-              Masters
+              //Masters
+              Architectures for Artificial Intelligence M
               *.ipynb
             "}
 
