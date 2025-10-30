@@ -21,6 +21,7 @@ in
     ./devops.nix
     ./cli
     ./webApps.nix
+    ./zed-editor.nix
   ];
 
   options.myHome.homeApps = {

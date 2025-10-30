@@ -51,6 +51,7 @@ in
       alacritty.enable = false;
       libreoffice.enable = true;
       devops.enable = false;
+      zed-editor.enable = true;
     };
     # autoStartApps = [ pkgs.vesktop ]; # only works with gnome??
     zsh = {
