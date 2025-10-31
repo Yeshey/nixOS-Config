@@ -160,7 +160,7 @@ in
       dates = "daily";
     };
     flatpaks.enable = true;
-    i2p.enable = true;
+    i2p.enable = false;
     syncthing = {
       enable = true;
     };

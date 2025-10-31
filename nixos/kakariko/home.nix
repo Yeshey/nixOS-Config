@@ -42,7 +42,7 @@ in
       };
       firefox = {
         enable = true;
-        i2pFirefoxProfile = true;
+        i2pFirefoxProfile = false;
       };
       vscodium.enable = true;
       discord.enable = true;
