@@ -19,16 +19,22 @@ in
     home.packages = with pkgs; [
       nil # <-- language server
       nixfmt-rfc-style
+      kdePackages.okular
     ];
 
-    programs.zathura = {
-      enable = true;
-      package = pkgs.zathura;
-      options = {
-        synctex = true;
-        synctex-editor-command = "${pkgs.zed-editor}/bin/zeditor %{input}:%{line}"; # Inverse search
-      };
-    };
+    # zathura was a pdf reader that could integrate with zed, but problems like not opening links made me drop it
+    # Instead use okular and in settings > Editor, set custom and Command: `zeditor %f:%l`
+    # programs.zathura = {
+    #   enable = true;
+    #   package = pkgs.zathura;
+    #   options = {
+    #     synctex = true;
+    #     sandbox = "none";
+    #     double-click-follow = false;  # <-- single-click follows links
+    #     synctex-editor-command = "${pkgs.zed-editor}/bin/zeditor %{input}:%{line}"; # Inverse search
+    #   };
+    # };
+
 
     programs.zed-editor = {
       enable = true;
@@ -66,11 +72,10 @@ in
                 ];
               };
               forwardSearch = {
-                executable = "zathura";
+                executable = "okular";
                 args = [
-                  "--synctex-forward"
-                  "%l:1:%f"
-                  "%p"
+                  "--unique"
+                  "%p#src:%l%f"
                 ];
               };
             };
