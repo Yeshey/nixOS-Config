@@ -1,7 +1,7 @@
 name: Auto bump flake.lock
 on:
   schedule:
-    - cron: "0 6 * * *"
+    - cron: "0 6 1,16 * *"
   workflow_dispatch:
 
 concurrency:
@@ -20,28 +20,28 @@ jobs:
       - name: Nothing but Nix (reclaim disk space for /nix)
         uses: wimpysworld/nothing-but-nix@main
         with:
-          hatchet-protocol: 'cleave'
-      
+          hatchet-protocol: "cleave"
+
       # 2) Checkout repository
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       # 3) Install Nix with experimental features
       - name: Install Nix
         uses: cachix/install-nix-action@v31
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes pipe-operators
-      
+
       # 4) Show free space & git status
       - name: Show free space & git status
         run: |
           df -h
           git --version
           git status --porcelain --untracked-files=no || true
-      
+
       # 5) Try full update first
       - name: Update all flake inputs
         id: full-update
@@ -50,7 +50,7 @@ jobs:
           git checkout main || git checkout -b main
           nix flake update
           git --no-pager diff flake.lock || true
-      
+
       # 6) Check flake after full update
       - name: Check flake (full update)
         id: full-check
@@ -58,7 +58,7 @@ jobs:
         continue-on-error: true
         run: |
           nix flake check --all-systems
-      
+
       # 7) If full update failed, rollback and try conservative update
       - name: Rollback and update nixpkgs only
         if: steps.full-check.outcome == 'failure'
@@ -67,13 +67,13 @@ jobs:
           git restore flake.lock
           nix flake update nixpkgs nixpkgs-unstable
           git --no-pager diff flake.lock || true
-      
+
       # 8) Check flake after conservative update
       - name: Check flake (conservative update)
         if: steps.full-check.outcome == 'failure'
         run: |
           nix flake check --all-systems
-      
+
       # 9) Determine commit message based on what succeeded
       - name: Set commit message
         id: commit-msg
@@ -83,7 +83,7 @@ jobs:
           else
             echo "message=chore(deps): update flake.lock (nixpkgs only)" >> $GITHUB_OUTPUT
           fi
-      
+
       # 10) Commit & push (only runs if at least one check succeeds)
       - name: Commit and push flake.lock
         if: steps.full-check.outcome == 'success' || steps.full-check.outcome == 'failure'
@@ -91,9 +91,9 @@ jobs:
         with:
           commit_message: ${{ steps.commit-msg.outputs.message }}
           branch: main
-          commit_options: '--no-verify --signoff'
+          commit_options: "--no-verify --signoff"
           file_pattern: flake.lock
-          commit_user_name: 'github-actions[bot]'
-          commit_user_email: 'github-actions[bot]@users.noreply.github.com'
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "github-actions[bot]@users.noreply.github.com"
           skip_dirty_check: false
           skip_fetch: true
