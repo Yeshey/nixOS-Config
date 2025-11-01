@@ -34,7 +34,7 @@ let
     # buildInputs can be empty if no tools are needed beyond shell builtins
   } ''
     # Create the standard directory structure for firmware
-    mkdir -p $out/lib/firmware 
+    mkdir -p $out/lib/firmware
     # Write the content to the firmware file within that structure
     echo "${hdaJackRetaskFwContent}" > $out/lib/firmware/hda-jack-retask.fw
   '';
@@ -160,7 +160,7 @@ in
       dates = "daily";
     };
     flatpaks.enable = true;
-    i2p.enable = true;
+    i2p.enable = false;
     syncthing = {
       enable = true;
     };
@@ -172,7 +172,7 @@ in
     #  sshKeys.enable = false;
     #};
     #isolateVMsNixStore = true;
-    waydroid.enable = true;
+    waydroid.enable = false;
     impermanence.enable = false;
 
     speedtest-tracker = {
@@ -213,7 +213,7 @@ in
     #kubo.enable = true;
     #freeGames.enable = false;
 
-    ollama.enable = false; 
+    ollama.enable = false;
     searx.enable = false;
   };
 
@@ -232,7 +232,7 @@ in
   zramSwap.memoryPercent = 100;
 
   # Enable using internal Mic While headphones connected in jack
-  # found out by launching `hdajackretask`, going to Raltek ALC257, set Black Mic Override to "Internal mic" 
+  # found out by launching `hdajackretask`, going to Raltek ALC257, set Black Mic Override to "Internal mic"
   # Make the firmware file available to the kernel
   hardware.firmware = [ hdaJackRetaskFwPkg ];
   # Explicitly tell the snd-hda-intel kernel module to load this patch.
@@ -290,7 +290,7 @@ in
   #];
 
   # Trusted Platform Module:
-  
+
   #powerManagement = { # TODO ???
   #  cpuFreqGovernor = "ondemancdd";
   #  cpufreq.min = 800000;
