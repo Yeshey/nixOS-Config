@@ -63,6 +63,7 @@ in
 
       targets.vscode.enable = false;
       targets.firefox.profileNames = [ "${config.myHome.user}" ];
+      targets.zed.enable = false;
 
       /*
       fonts = {
