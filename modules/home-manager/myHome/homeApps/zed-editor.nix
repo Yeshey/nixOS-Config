@@ -54,12 +54,14 @@ in
               build = {
                 onSave = true;
                 forwardSearchAfter = true;
-                executable = "latexmk";
+                executable = "${pkgs.texlive.combined.scheme-full}/bin/latexmk";
                 args = [
-                  "-pdf"
+                  "--shell-escape"
+                  "-f"
                   "-synctex=1"
                   "-interaction=nonstopmode"
                   "-file-line-error"
+                  "-lualatex"
                   "%f"
                 ];
               };
