@@ -19,8 +19,16 @@ in
     home.packages = with pkgs; [
       nil # <-- language server
       nixfmt-rfc-style
-      zathura # for latex
     ];
+
+    programs.zathura = {
+      enable = true;
+      package = pkgs.zathura;
+      options = {
+        synctex = true;
+        synctex-editor-command = "${pkgs.zed-editor}/bin/zeditor %{input}:%{line}"; # Inverse search
+      };
+    };
 
     programs.zed-editor = {
       enable = true;

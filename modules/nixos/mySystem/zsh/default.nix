@@ -51,8 +51,8 @@ in
         source ${./git.zsh}
         source ${builtins.toFile "myAlias.zsh" (builtins.readFile ./myAlias.zsh + ''
           # complex alias that need nix syntax
-          alias update="nh os switch"
-          alias update-re="nh os boot && reboot"
+          alias update="sudo nh os switch --bypass-root-check"
+          alias update-re='sudo sh -c "nh os boot && reboot"'
         '')}
 
 
