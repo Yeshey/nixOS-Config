@@ -17,6 +17,10 @@ in
   # always active lib.mkIf (config.mySystem.enable && cfg.enable) 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) { 
 
+    security.sudo.extraConfig = ''
+      Defaults env_keep += "NH_FLAKE NH_HOSTNAME"
+    ''; # So it preserves the location of the flake variable when you do "sudo nh os switch" from yeshey user.
+
     programs.nh = {
       enable = true;
       flake = "/home/yeshey/.setup";
