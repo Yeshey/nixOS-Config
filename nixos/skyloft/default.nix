@@ -75,12 +75,12 @@
       };
       #nvidia.enable = false;
     };
-    autoUpgrades = {
-      enable = true;
-      location = "github:Yeshey/nixOS-Config"; # "github:Yeshey/nixOS-Config"
-      host = "skyloft";
-      dates = "weekly";
-    };
+    # autoUpgrades = {
+    #   enable = true;
+    #   location = "github:Yeshey/nixOS-Config"; # "github:Yeshey/nixOS-Config"
+    #   host = "skyloft";
+    #   dates = "weekly";
+    # };
     flatpaks.enable = false;
     i2p.enable = false;
     syncthing = {
@@ -186,6 +186,14 @@
     openVPN.enable = true;
   };
 
+  system.autoUpgrade.allowReboot = true;
+  system.autoUpgrade = {
+    enable = true;
+    dates = "weekly";  # or cfg.dates if you have that variable
+    operation = "switch";
+    flake = "github:Yeshey/nixOS-Config#skyloft";  # Replace 'skyloft' with your actual host name
+  };
+
   swapDevices = [
     { device = "/swap/swapfile"; size = 4*1024; 
       priority = 0; # Higher numbers indicate higher priority.
@@ -233,8 +241,6 @@
   };
 
   # time.timeZone = "Europe/Madrid";
-
-  system.autoUpgrade.allowReboot = true;
 
   networking.firewall.allowedTCPPorts = [
     8891 # for jupyternotebook servers (on this port) (`jupyter notebook --ip=0.0.0.0 --port=8891 --no-browser`)
