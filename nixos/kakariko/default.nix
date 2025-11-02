@@ -147,18 +147,18 @@ in
         luks.enable = false;
       };
     };
-    autoUpgrades = {
-      enable = false;
-      location = "/home/yeshey/.setup";
-      host = "kakariko";
-      dates = "weekly";
-    };
-    autoUpgradesSurface = {
-      enable = false;
-      location = "github:yeshey/nixOS-Config";
-      host = "kakariko";
-      dates = "daily";
-    };
+    # autoUpgrades = {
+    #   enable = false;
+    #   location = "/home/yeshey/.setup";
+    #   host = "kakariko";
+    #   dates = "weekly";
+    # };
+    # autoUpgradesSurface = {
+    #   enable = false;
+    #   location = "github:yeshey/nixOS-Config";
+    #   host = "kakariko";
+    #   dates = "daily";
+    # };
     flatpaks.enable = true;
     i2p.enable = false;
     syncthing = {

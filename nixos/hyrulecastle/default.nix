@@ -117,19 +117,25 @@ in
       };
       lvm.enable = false;
     };
-    autoUpgrades = {
-      enable = false;
-      location = "/home/yeshey/.setup";
-      host = "hyrulecastle";
-      dates = "daily";
-    };
-    autoUpgradesOnShutdown = {
-      enable = true;
-      gitRepo = "git@github.com:Yeshey/nixOS-Config.git";
-      ssh_key = "/home/yeshey/.ssh/my_identity";
-      host = "hyrulecastle";
-      dates = "*-*-1/3"; # "Fri *-*-* 20:00:00"; # Every Friday at 19:00 "*:0/5"; # Every 5 minutes
-    };
+    # autoUpgrades = {
+    #   enable = false;
+    #   location = "/home/yeshey/.setup";
+    #   host = "hyrulecastle";
+    #   dates = "daily";
+    # };
+    # autoUpdatesOnShutdown = {
+    #   enable = false;
+    #   location = "github:Yeshey/nixOS-Config";
+    #   host = "hyrulecastle";
+    #   dates = "*-*-1/3"; # "Fri *-*-* 20:00:00"; # Every Friday at 19:00 "*:0/5"; # Every 5 minutes
+    # };
+    # autoUpgradesOnShutdown = {
+    #   enable = false;
+    #   gitRepo = "git@github.com:Yeshey/nixOS-Config.git";
+    #   ssh_key = "/home/yeshey/.ssh/my_identity";
+    #   host = "hyrulecastle";
+    #   dates = "*-*-1/3"; # "Fri *-*-* 20:00:00"; # Every Friday at 19:00 "*:0/5"; # Every 5 minutes
+    # };
     flatpaks.enable = true;
     i2p.enable = true;
 
@@ -300,6 +306,17 @@ in
       cores = 6; # settings this per machine
       max-jobs = 4;
     };
+  };
+
+  system.autoUpgrade = {
+    enable = true;
+    dates = "weekly";  # or cfg.dates if you have that variable
+    operation = "switch";
+    flake = "github:Yeshey/nixOS-Config#hyrulecastle";  # Replace 'skyloft' with your actual host name
+    flags = [
+      "--max-jobs 4"
+      "--cores 6"
+    ];
   };
 
   # on hyrule castle I want it so when I close the lid it doesn't suspend
