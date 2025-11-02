@@ -52,7 +52,7 @@ in
         source ${builtins.toFile "myAlias.zsh" (builtins.readFile ./myAlias.zsh + ''
           # complex alias that need nix syntax
           alias update="sudo nh os switch --bypass-root-check"
-          alias update-re='sudo sh -c "nh os boot && reboot"'
+          alias update-re="sudo bash -c 'nh os boot --bypass-root-check && reboot'"
         '')}
 
 
