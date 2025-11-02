@@ -22,7 +22,7 @@ with lib.hm.gvariant;
 
     dconf.settings = {
       "org/gnome/desktop/datetime" = {
-        automatic-timezone = true;
+        automatic-timezone = false; # SUCKS, gets tricked by VPNs
       };
 
       "org/gnome/system/location" = { # enables location in gnome
