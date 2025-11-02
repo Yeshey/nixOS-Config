@@ -123,12 +123,6 @@ in
     #   host = "hyrulecastle";
     #   dates = "daily";
     # };
-    # autoUpdatesOnShutdown = {
-    #   enable = false;
-    #   location = "github:Yeshey/nixOS-Config";
-    #   host = "hyrulecastle";
-    #   dates = "*-*-1/3"; # "Fri *-*-* 20:00:00"; # Every Friday at 19:00 "*:0/5"; # Every 5 minutes
-    # };
     # autoUpgradesOnShutdown = {
     #   enable = false;
     #   gitRepo = "git@github.com:Yeshey/nixOS-Config.git";
