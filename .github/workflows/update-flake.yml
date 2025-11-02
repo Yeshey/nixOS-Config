@@ -3,14 +3,11 @@ on:
   schedule:
     - cron: "0 6 1,16 * *"
   workflow_dispatch:
-
 concurrency:
   group: bump-flake-lock
   cancel-in-progress: true
-
 permissions:
   contents: write
-
 jobs:
   bump:
     name: Bump flake.lock
@@ -21,27 +18,23 @@ jobs:
         uses: wimpysworld/nothing-but-nix@main
         with:
           hatchet-protocol: "cleave"
-
       # 2) Checkout repository
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       # 3) Install Nix with experimental features
       - name: Install Nix
         uses: cachix/install-nix-action@v31
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes pipe-operators
-
       # 4) Show free space & git status
       - name: Show free space & git status
         run: |
           df -h
           git --version
           git status --porcelain --untracked-files=no || true
-
       # 5) Try full update first
       - name: Update all flake inputs
         id: full-update
@@ -50,7 +43,6 @@ jobs:
           git checkout main || git checkout -b main
           nix flake update
           git --no-pager diff flake.lock || true
-
       # 6) Check flake after full update
       - name: Check flake (full update)
         id: full-check
@@ -58,35 +50,51 @@ jobs:
         continue-on-error: true
         run: |
           nix flake check --all-systems
-
-      # 7) If full update failed, rollback and try conservative update
-      - name: Rollback and update nixpkgs only
+      # 7) If full update failed, rollback and try nixpkgs + nixpkgs-unstable
+      - name: Rollback and update nixpkgs + nixpkgs-unstable
+        id: dual-update
         if: steps.full-check.outcome == 'failure'
+        continue-on-error: true
         run: |
-          echo "Full update failed flake check, trying conservative update..."
+          echo "Full update failed flake check, trying nixpkgs + nixpkgs-unstable update..."
           git restore flake.lock
           nix flake update nixpkgs nixpkgs-unstable
           git --no-pager diff flake.lock || true
-
-      # 8) Check flake after conservative update
-      - name: Check flake (conservative update)
-        if: steps.full-check.outcome == 'failure'
+      # 8) Check flake after nixpkgs + nixpkgs-unstable update
+      - name: Check flake (nixpkgs + nixpkgs-unstable)
+        id: dual-check
+        if: steps.full-check.outcome == 'failure' && steps.dual-update.outcome == 'success'
+        continue-on-error: true
         run: |
           nix flake check --all-systems
-
-      # 9) Determine commit message based on what succeeded
+      # 9) If nixpkgs + nixpkgs-unstable failed, rollback and try nixpkgs only
+      - name: Rollback and update nixpkgs only
+        if: steps.dual-check.outcome == 'failure'
+        run: |
+          echo "nixpkgs + nixpkgs-unstable update failed flake check, trying nixpkgs only..."
+          git restore flake.lock
+          nix flake update nixpkgs
+          git --no-pager diff flake.lock || true
+      # 10) Check flake after nixpkgs-only update
+      - name: Check flake (nixpkgs only)
+        id: single-check
+        if: steps.dual-check.outcome == 'failure'
+        run: |
+          nix flake check --all-systems
+      # 11) Determine commit message based on what succeeded
       - name: Set commit message
         id: commit-msg
         run: |
           if [ "${{ steps.full-check.outcome }}" == "success" ]; then
             echo "message=chore(deps): update flake.lock (all inputs)" >> $GITHUB_OUTPUT
+          elif [ "${{ steps.dual-check.outcome }}" == "success" ]; then
+            echo "message=chore(deps): update flake.lock (nixpkgs + nixpkgs-unstable)" >> $GITHUB_OUTPUT
           else
             echo "message=chore(deps): update flake.lock (nixpkgs only)" >> $GITHUB_OUTPUT
           fi
-
-      # 10) Commit & push (only runs if at least one check succeeds)
+      # 12) Commit & push (only runs if at least one check succeeds)
       - name: Commit and push flake.lock
-        if: steps.full-check.outcome == 'success' || steps.full-check.outcome == 'failure'
+        if: steps.full-check.outcome == 'success' || steps.dual-check.outcome == 'success' || steps.single-check.outcome == 'success'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: ${{ steps.commit-msg.outputs.message }}
