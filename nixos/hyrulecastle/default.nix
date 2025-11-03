@@ -308,17 +308,6 @@ in
     };
   };
 
-  system.autoUpgrade = {
-    enable = true;
-    dates = "weekly";  # or cfg.dates if you have that variable
-    operation = "switch";
-    flake = "github:Yeshey/nixOS-Config#hyrulecastle";  # Replace 'skyloft' with your actual host name
-    flags = [
-      "--max-jobs 4"
-      "--cores 6"
-    ];
-  };
-
   # on hyrule castle I want it so when I close the lid it doesn't suspend
   services.logind.lidSwitch = "ignore";
 

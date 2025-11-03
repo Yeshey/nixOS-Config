@@ -147,6 +147,12 @@ in
         luks.enable = false;
       };
     };
+    # autoUpdatesOnShutdown = {
+    #   enable = false;
+    #   location = "github:Yeshey/nixOS-Config";
+    #   host = "kakariko";
+    #   dates = "weekly";
+    # };
     # autoUpgrades = {
     #   enable = false;
     #   location = "/home/yeshey/.setup";
