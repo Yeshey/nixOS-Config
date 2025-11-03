@@ -130,6 +130,12 @@ in
     #   host = "hyrulecastle";
     #   dates = "*-*-1/3"; # "Fri *-*-* 20:00:00"; # Every Friday at 19:00 "*:0/5"; # Every 5 minutes
     # };
+    autoUpdatesOnShutdown = {
+      enable = true;
+      location = "github:Yeshey/nixOS-Config";
+      host = "hyrulecastle";
+      dates = "weekly";
+    };
     flatpaks.enable = true;
     i2p.enable = true;
 
