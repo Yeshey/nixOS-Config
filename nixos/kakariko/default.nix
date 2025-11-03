@@ -147,12 +147,12 @@ in
         luks.enable = false;
       };
     };
-    # autoUpdatesOnShutdown = {
-    #   enable = false;
-    #   location = "github:Yeshey/nixOS-Config";
-    #   host = "kakariko";
-    #   dates = "weekly";
-    # };
+    autoUpdatesOnShutdown = {
+      enable = true;
+      location = "github:Yeshey/nixOS-Config";
+      host = "kakariko";
+      dates = "weekly";
+    };
     # autoUpgrades = {
     #   enable = false;
     #   location = "/home/yeshey/.setup";
@@ -311,6 +311,7 @@ in
 
   environment.systemPackages = with pkgs; [
     stremio-scalled
+    cmatrix
     # jetbrains-toolbox
     # Games
     # steam-scalled
