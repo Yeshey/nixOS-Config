@@ -60,7 +60,7 @@ in
               build = {
                 onSave = true;
                 forwardSearchAfter = true;
-                executable = "${pkgs.texlive.combined.scheme-full}/bin/latexmk";
+                executable = "latexmk";
                 args = [
                   "--shell-escape"
                   "-f"
