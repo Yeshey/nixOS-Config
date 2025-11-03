@@ -148,7 +148,7 @@ in
       };
     };
     autoUpdatesOnShutdown = {
-      enable = true;
+      enable = false;
       location = "github:Yeshey/nixOS-Config";
       host = "kakariko";
       dates = "weekly";
@@ -311,7 +311,6 @@ in
 
   environment.systemPackages = with pkgs; [
     stremio-scalled
-    cmatrix
     # jetbrains-toolbox
     # Games
     # steam-scalled
