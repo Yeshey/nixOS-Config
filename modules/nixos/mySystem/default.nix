@@ -61,6 +61,7 @@ in
     ./flatpaks.nix
     ./autoUpgrades.nix
     ./autoUpgradesOnShutdown.nix
+    ./autoUpdatesOnShutdown.nix
     ./browser.nix
     ./hardware/default.nix
     ./syncthing.nix
