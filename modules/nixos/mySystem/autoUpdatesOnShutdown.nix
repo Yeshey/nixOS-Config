@@ -108,28 +108,28 @@ in
     ];
 
     # Use a timer to activate the service that will execute preStop on shutdown and not reboot
-    systemd.timers.my-nixos-upgrade = {
+    systemd.timers.my-nixos-update = {
       wantedBy = [ "timers.target" ];
       timerConfig = {
         Persistent = true; # If missed, run on boot
         OnCalendar = cfg.dates;
-        Unit = "my-nixos-upgrade.service";
+        Unit = "my-nixos-update.service";
       };
     };
 
-    systemd.services.my-nixos-upgrade = 
+    systemd.services.my-nixos-update = 
     let
       nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
       flake = "${cfg.location}#${cfg.host}";
       operation = "boot"; # switch doesn't work, gets stuck in `setting up tmpfiles`
       
-      upgradeScript = pkgs.writeShellScriptBin "nixos-upgrade-flake" ''
+      updateScript = pkgs.writeShellScriptBin "nixos-update-flake" ''
         echo "Upgrading NixOS from ${flake}..."
         ${nixos-rebuild} ${operation} --flake ${flake}
-        echo "Upgrade completed successfully"
+        echo "Update completed successfully"
       '';
     in {
-      description = "NixOS Upgrade on Shutdown";
+      description = "NixOS Update on Shutdown";
       restartIfChanged = false;
       unitConfig.X-StopOnRemoval = false;
 
@@ -148,18 +148,18 @@ in
       ];
 
       script = ''
-        ${notify-send-all}/bin/notify-send-all -u critical "Will upgrade on shutdown..."
+        ${notify-send-all}/bin/notify-send-all -u critical "Will update on shutdown..."
       '';
 
       preStop = ''
-        FLAG_FILE="/etc/nixos-reboot-upgrade.flag"
+        FLAG_FILE="/etc/nixos-reboot-update.flag"
 
         if ! systemctl list-jobs | egrep -q 'poweroff.target.*start'; then
-          echo "Not powering off (reboot or other), creating flag to upgrade after reboot."
+          echo "Not powering off (reboot or other), creating flag to update after reboot."
           touch $FLAG_FILE
         else
           echo "Powering off, upgrading now..."
-          ${upgradeScript}/bin/nixos-upgrade-flake
+          ${updateScript}/bin/nixos-update-flake
         fi
       '';
 
@@ -198,25 +198,25 @@ in
       };
     };
 
-    # Ensure poweroff.target doesn't kill the upgrade too early
+    # Ensure poweroff.target doesn't kill the update too early
     systemd.targets."poweroff" = {
       unitConfig = { 
         "JobTimeoutSec" = 36000; # 10h
       };
     };
 
-    # If it rebooted instead of powering off, check for flag and upgrade now
-    systemd.services.nixos-reboot-upgrade-check = {
-      description = "Check for upgrade flag file on boot";
+    # If it rebooted instead of powering off, check for flag and update now
+    systemd.services.nixos-reboot-update-check = {
+      description = "Check for update flag file on boot";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       
       script = ''
-        FLAG_FILE="/etc/nixos-reboot-upgrade.flag"
+        FLAG_FILE="/etc/nixos-reboot-update.flag"
 
         if [ -f "$FLAG_FILE" ]; then
-          echo "$FLAG_FILE present, activating my-nixos-upgrade.service for upgrade on shutdown..."
-          systemctl start my-nixos-upgrade.service
+          echo "$FLAG_FILE present, activating my-nixos-update.service for update on shutdown..."
+          systemctl start my-nixos-update.service
           echo "Removing flag $FLAG_FILE"
           rm "$FLAG_FILE"
         fi
