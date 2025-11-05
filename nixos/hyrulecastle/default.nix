@@ -345,7 +345,7 @@ in
   #   };
   # };
   environment.systemPackages = with pkgs; [ 
-    
+    cmatrix
   ];
 
   #programs.zsh.enable = true;
