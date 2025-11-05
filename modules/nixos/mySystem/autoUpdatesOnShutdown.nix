@@ -125,7 +125,8 @@ in
       
       updateScript = pkgs.writeShellScriptBin "nixos-update-flake" ''
         echo "Upgrading NixOS from ${flake}..."
-        ${nixos-rebuild} ${operation} --flake ${flake} --refresh
+        SYSTEMD_RUN_FLAGS=--collect \
+          ${nixos-rebuild} ${operation} --flake ${flake} --refresh
         echo "Update completed successfully"
       '';
     in {
@@ -190,6 +191,8 @@ in
         "autossh-reverseProxy.service"
         "sshd.service"
       ];
+
+      wants = [ "network-online.target" ]; # fixes a warning
 
       serviceConfig = {
         Type = "oneshot";
