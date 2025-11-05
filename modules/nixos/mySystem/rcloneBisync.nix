@@ -1,5 +1,10 @@
 # also need RCLONE_TEST in the onedrive?
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.mySystem.rcloneBisync;
@@ -55,92 +60,106 @@ in
 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
 
-    environment.systemPackages = with pkgs; [ 
+    environment.systemPackages = with pkgs; [
       unstable.rclone-browser
-      rclone 
-      fuse 
+      rclone
+      fuse
     ];
 
-    /* ----------------------------------------------------------
-       1.  ROOT MOUNT SERVICE  (can actually do fusermount)
-       ---------------------------------------------------------- */
-systemd.services.rclone-mount = {
-  description = "OneDrive rclone mount (system)";
-  wantedBy = [ "multi-user.target" ];
-  after    = [ "network-online.target" ];
-  wants    = [ "network-online.target" ];
+    /*
+      ----------------------------------------------------------
+      1.  ROOT MOUNT SERVICE  (can actually do fusermount)
+      ----------------------------------------------------------
+    */
+    systemd.services.rclone-mount = {
+      description = "OneDrive rclone mount (system)";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
 
-  preStart = ''
-    mkdir -p ${lib.escapeShellArg cfg.mountPoint}
-    chown ${user}:users ${lib.escapeShellArg cfg.mountPoint}
-    chmod 755 ${lib.escapeShellArg cfg.mountPoint}
-    ${pkgs.fuse}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
-  '';
+      preStart = ''
+        ${pkgs.coreutils}/bin/mkdir -p ${cfg.mountPoint}
+        mkdir -p ${lib.escapeShellArg cfg.mountPoint}
+        chown ${user}:users ${lib.escapeShellArg cfg.mountPoint}
+        chmod 755 ${lib.escapeShellArg cfg.mountPoint}
+        ${pkgs.fuse}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint}update 2>/dev/null || true
+      '';
 
-  script = ''
-    exec ${pkgs.rclone}/bin/rclone mount \
-      ${lib.escapeShellArg cfg.remote} \
-      ${lib.escapeShellArg cfg.mountPoint} \
-      --vfs-cache-mode full \
-      --vfs-cache-max-size 40G \
-      --vfs-cache-max-age 168h \
-      --allow-other \
-      --config ${home}/.config/rclone/rclone.conf
-  '';
+      script = ''
+        exec ${pkgs.rclone}/bin/rclone mount \
+          ${lib.escapeShellArg cfg.remote} \
+          ${lib.escapeShellArg cfg.mountPoint} \
+          --vfs-cache-mode full \
+          --vfs-cache-max-size 40G \
+          --vfs-cache-max-age 168h \
+          --config ${home}/.config/rclone/rclone.conf
+      '';
 
-  postStop = ''
-    ${pkgs.fuse}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
-  '';
+      postStop = ''
+        ${pkgs.fuse}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
+      '';
 
-  serviceConfig = {
-    Type        = "notify";
-    Restart     = "on-failure";
-    RestartSec  = "30s";
-    TimeoutStartSec = "60s";
-  };
-};
+      serviceConfig = {
+        Type = "notify";
+        User = "yeshey"; # Add this - run as your user, not root
+        Group = "users"; # Add this
+        Restart = "on-failure";
+        RestartSec = "30s";
+        TimeoutStartSec = "60s";
 
-    /* ----------------------------------------------------------
-       2.  USER BISYNC SERVICE  (reads user config, needs mount)
-       ---------------------------------------------------------- */
-systemd.user.services.rclone-bisync = {
-  description = "OneDrive bisync";
-
-  script = ''
-    exec ${pkgs.rclone}/bin/rclone bisync \
-      ${lib.escapeShellArg cfg.localPath} \
-      ${lib.escapeShellArg cfg.remote} \
-      --check-access \
-      --compare size,modtime \
-      --resilient \
-      --recover \
-      --max-lock 2m \
-      --conflict-resolve newer \
-      --create-empty-src-dirs \
-      --verbose \
-      --config ${home}/.config/rclone/rclone.conf \
-      ${lib.optionalString cfg.firstRun "--resync"}
-  '';
-  
-  serviceConfig.Type = "oneshot";
-};
-
-    /* ----------------------------------------------------------
-       3.  USER TIMER  (unchanged)
-       ---------------------------------------------------------- */
-    systemd.user.timers.rclone-bisync = {
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        OnBootSec       = "2m";
-        OnUnitActiveSec = cfg.bisyncInterval;
-        Persistent      = true;
-        Unit            = "rclone-bisync.service";
+        DeviceAllow = "/dev/fuse";
+        CapabilityBoundingSet = "CAP_SYS_ADMIN";
+        AmbientCapabilities = "CAP_SYS_ADMIN";
       };
     };
 
-    /* ----------------------------------------------------------
-       4.  allow user linger so timer runs when not logged in
-       ---------------------------------------------------------- */
+    /*
+      ----------------------------------------------------------
+      2.  USER BISYNC SERVICE  (reads user config, needs mount)
+      ----------------------------------------------------------
+    */
+    systemd.user.services.rclone-bisync = {
+      description = "OneDrive bisync";
+
+      script = ''
+        exec ${pkgs.rclone}/bin/rclone bisync \
+          ${lib.escapeShellArg cfg.localPath} \
+          ${lib.escapeShellArg cfg.remote} \
+          --check-access \
+          --compare size,modtime \
+          --resilient \
+          --recover \
+          --max-lock 2m \
+          --conflict-resolve newer \
+          --create-empty-src-dirs \
+          --verbose \
+          --config ${home}/.config/rclone/rclone.conf \
+          ${lib.optionalString cfg.firstRun "--resync"}
+      '';
+
+      serviceConfig.Type = "oneshot";
+    };
+
+    /*
+      ----------------------------------------------------------
+      3.  USER TIMER  (unchanged)
+      ----------------------------------------------------------
+    */
+    systemd.user.timers.rclone-bisync = {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnBootSec = "2m";
+        OnUnitActiveSec = cfg.bisyncInterval;
+        Persistent = true;
+        Unit = "rclone-bisync.service";
+      };
+    };
+
+    /*
+      ----------------------------------------------------------
+      4.  allow user linger so timer runs when not logged in
+      ----------------------------------------------------------
+    */
     users.users.${user}.linger = true;
   };
 }
