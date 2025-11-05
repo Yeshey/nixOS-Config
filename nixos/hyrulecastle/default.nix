@@ -344,9 +344,9 @@ in
   #     StartLimitIntervalSec = "600s";
   #   };
   # };
-  environment.systemPackages = with pkgs; [ 
-    cmatrix
-  ];
+  # environment.systemPackages = with pkgs; [ 
+  #   onedrivegui
+  # ];
 
   #programs.zsh.enable = true;
   #users.users.yeshey.shell = pkgs.zsh;
