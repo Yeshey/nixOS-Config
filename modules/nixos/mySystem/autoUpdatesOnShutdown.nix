@@ -164,15 +164,16 @@ in
       '';
 
       unitConfig = {
-        Conflicts = "reboot.target";
+        DefaultDependencies = false;  # Add this - very important!
       };
 
-      wants = [
-        "network-online.target"
-        "nss-lookup.target"
-        "nix-daemon.service"
-        "systemd-user-sessions.service"
-        "systemd-oomd.service"
+      conflicts = [
+        "reboot.target"
+        "shutdown.target"
+      ];
+
+      before = [
+        "shutdown.target"
       ];
 
       after = [
@@ -183,14 +184,11 @@ in
         "plymouth-quit-wait.service"
         "thermald.service"
         "systemd-oomd.service"
-      ];
-
-      requires = [
-        "network-online.target"
-        "nss-lookup.target"
-        "nix-daemon.service"
-        "systemd-user-sessions.service"
-        "systemd-oomd.service"
+        "systemd-timesyncd.service"
+        "systemd-resolved.service"
+        "dbus.service"
+        "autossh-reverseProxy.service"
+        "sshd.service"
       ];
 
       serviceConfig = {
