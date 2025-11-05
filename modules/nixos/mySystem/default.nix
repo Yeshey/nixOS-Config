@@ -244,7 +244,11 @@ in
       };
       programs.command-not-found.enable = true;
       programs.gphoto2.enable = true; # to be able to access cameras
-      environment.systemPackages = [ pkgs.kdePackages.kamera ];
+      environment.systemPackages = [ 
+        pkgs.kdePackages.kamera 
+        pkgs.libimobiledevice        # idevicepair, ideviceinfo, …
+        pkgs.ifuse                   # FUSE-mount helper
+      ];
       # pkgs.deploy-rs 
 
       networking.networkmanager = {
@@ -254,6 +258,14 @@ in
         ];
       };
       
+      # for Iphone
+      # 1.  Enable the usbmuxd daemon (pairing / USB comms)
+      services.usbmuxd = {
+        enable = true;
+        package = pkgs.usbmuxd2;   # newer code-base, fewer pairing bugs
+      };
+      services.gvfs.enable = true;
+
       networking.resolvconf.dnsExtensionMechanism = lib.mkOverride 1010 false; # fixes internet connectivity problems with some sites (https://discourse.nixos.org/t/domain-name-resolve-problem/885/2)
       
       #networking.nameservers = [ # (might need this for public WIFIs?)
