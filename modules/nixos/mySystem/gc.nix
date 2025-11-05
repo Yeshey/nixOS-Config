@@ -24,7 +24,7 @@ in
     programs.nh = {
       enable = true;
       clean.enable = true;
-      clean.extraArgs = "--keep-since 2d --keep 3";
+      clean.extraArgs = "--keep-since 21d --keep 3";
       flake = "/home/yeshey/.setup";
     };
 
