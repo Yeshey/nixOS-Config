@@ -72,7 +72,6 @@ in
     ./isolateVMsNixStore.nix
     ./impermanence.nix
     ./speedtest-tracker.nix
-    ./piperTextToSpeech.nix
     ./snap.nix
     ./autossh.nix
     ./resticRcloneBackups.nix

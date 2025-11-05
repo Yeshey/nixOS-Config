@@ -71,7 +71,7 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
     - Unstable packages available at `pkgs.unstable.<package>`, [NUR](https://github.com/nix-community/NUR) packages available at `pkgs.nur.<package>` using overlays. Check [Misterio77's](https://github.com/Misterio77) `standard` [nix-starter-configs](https://github.com/Misterio77/nix-starter-configs) for getting started with this structure.
 
-- **Auto Upgrades On Shutdown** - Setting auto upgrades on my desktop PC only on shutdown once every week: [autoUpgradesOnShutdown.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/autoUpgradesOnShutdown.nix);
+- **Auto Updates On Shutdown** - I have a github action that updates my flake.lock every 2 weeks [update-flake.yml](https://github.com/Yeshey/nixOS-Config/blob/main/.github/workflows/update-flake.yml). Then I have a service that updates the PC while shutting down, while keeping services like `sshh`, `oomd`, etc. working: [autoUpdatesOnShutdown.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/autoUpdatesOnShutdown.nix);
 
 - **Syncthing** - Declaratively set syncthing, including ignore patterns with `userActivationScripts` (TODO: set syncthing as a home manager service): [syncthing.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/syncthing.nix);
 
@@ -94,8 +94,6 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 - **Agenix** - Using [agenix](https://github.com/ryantm/agenix) both at system (`mySystem` - [default.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/agenix/default.nix)):  and at user (`myHome` - [default.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/agenix/default.nix)) levels, they grab secrets from `/secrets`.
 
 - **VSCodium** - Visual Studio Codium, the open source version of VSC, configuration settings propagated to appropriate locations for VScodium, VSCode and openvscode-server, has a bunch of extensions and configuration for latex nix language server, settings for special characters to work with starship theme in terminal, java, etc: [vscodium/default.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/homeApps/vscodium/default.nix)
-
-- **piper-tts as Text to Speach** - A single english voice, instead of the robotic default voice: [piperTextToSpeech.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/piperTextToSpeech.nix)
 
 ## Gallery
 
