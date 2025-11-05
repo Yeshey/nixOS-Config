@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-# test
 
 let
   cfg = config.mySystem.autoUpdatesOnShutdown;
@@ -126,7 +125,7 @@ in
       
       updateScript = pkgs.writeShellScriptBin "nixos-update-flake" ''
         echo "Upgrading NixOS from ${flake}..."
-        ${nixos-rebuild} ${operation} --flake ${flake}
+        ${nixos-rebuild} ${operation} --flake ${flake} --refresh
         echo "Update completed successfully"
       '';
     in {
