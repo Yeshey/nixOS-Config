@@ -101,8 +101,8 @@ in
 
       serviceConfig = {
         Type = "notify";
-        User = "yeshey"; # Add this - run as your user, not root
-        Group = "users"; # Add this
+        User = "yeshey";
+        Group = "users";
         Restart = "on-failure";
         RestartSec = "30s";
         TimeoutStartSec = "60s";

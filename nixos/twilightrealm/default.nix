@@ -80,7 +80,6 @@ in
       # scheduele = "*/10 * * * *"; # Runs every 10 minutes, default is every hour
     };
 
-    piperTextToSpeech.enable = false;
     snap.enable = false;
     autossh = {
      enable = false;
