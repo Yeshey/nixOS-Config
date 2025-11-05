@@ -125,8 +125,7 @@ in
       
       updateScript = pkgs.writeShellScriptBin "nixos-update-flake" ''
         echo "Upgrading NixOS from ${flake}..."
-        SYSTEMD_RUN_FLAGS=--collect \
-          ${nixos-rebuild} ${operation} --flake ${flake} --refresh
+        ${nixos-rebuild} ${operation} --flake ${flake} --refresh
         echo "Update completed successfully"
       '';
     in {
