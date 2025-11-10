@@ -144,6 +144,42 @@ else
     fi
 fi
 '';
+update-with-remote = pkgs.writeShellScriptBin "update-with-remote" ''
+export GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
+
+echo "This will update the local system with the remote computer and then power off both machines."
+echo "Usage: sudo update-with-remote user@192.168.1.109"
+
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run with sudo. Please run it again as: sudo $0"
+   exit 1
+fi
+
+if [ -z "$1" ]; then
+    echo "No remote address given! Please provide a user@ip address."
+else
+    REMOTE_ADDR=$1
+
+    # Split user@ip if provided
+    if [[ "$REMOTE_ADDR" == *"@"* ]]; then
+        REMOTE_USER=''${REMOTE_ADDR%%@*}
+        REMOTE_IP=''${REMOTE_ADDR##*@}
+    else
+        REMOTE_USER="root"
+        REMOTE_IP="$REMOTE_ADDR"
+    fi
+
+    if nixos-rebuild boot --flake "${cfg.zsh.falkeLocation}#${config.mySystem.host}" \
+        --build-host "$REMOTE_USER@$REMOTE_IP" \
+        --verbose \
+        --option eval-cache false; then
+        
+        echo "NixOS update successful."
+    else
+        echo "NixOS update failed."
+    fi
+fi
+'';
   clean = pkgs.writeShellScriptBin "clean"
 ''
 # Script to clean all generations and optimize the Nix store
@@ -212,6 +248,7 @@ in
       upgrade
       upgrade-with-remote-off
       update-with-remote-off
+      update-with-remote
       clean
       cleangit
       cleansyncthing
