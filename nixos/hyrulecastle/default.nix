@@ -301,9 +301,7 @@ in
     vgpu.enable = false;
   };
 
-  services.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "yeshey";
-  security.pam.services.gdm.enableGnomeKeyring = true;
+  services.xserver.displayManager.gdm.autoSuspend = false;
 
   nix = {
     settings = {
