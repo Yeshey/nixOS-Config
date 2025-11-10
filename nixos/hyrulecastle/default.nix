@@ -303,6 +303,7 @@ in
 
   services.displayManager.autoLogin.enable = true;
   services.xserver.displayManager.autoLogin.user = "yeshey";
+  security.pam.services.gdm.enableGnomeKeyring = true;
 
   nix = {
     settings = {
