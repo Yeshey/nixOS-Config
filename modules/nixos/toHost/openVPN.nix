@@ -169,11 +169,21 @@ in
         "d /etc/openvpn/ccd 0755 root root -"
       ];
       
-      # Create fixed IP configuration for hyrulecastle
       # Note: The filename MUST match the client certificate Common Name exactly!
+      # Create fixed IP configurations for clients
       environment.etc."openvpn/ccd/hyruleCastleYeshey".text = ''
         # Fixed IP for hyrulecastle
         ifconfig-push 10.8.0.10 255.255.255.0
+      '';
+      
+      environment.etc."openvpn/ccd/kakarikoYeshey".text = ''
+        # Fixed IP for kakariko
+        ifconfig-push 10.8.0.11 255.255.255.0
+      '';
+      
+      environment.etc."openvpn/ccd/A70PhoneYeshey".text = ''
+        # Fixed IP for A70 phone
+        ifconfig-push 10.8.0.12 255.255.255.0
       '';
     })
 
