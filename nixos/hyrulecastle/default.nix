@@ -300,6 +300,9 @@ in
     vgpu.enable = false;
   };
 
+  services.displayManager.autoLogin.enable = true;
+  services.xserver.displayManager.autoLogin.user = "yeshey";
+
   nix = {
     settings = {
       cores = 6; # settings this per machine
