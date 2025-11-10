@@ -176,7 +176,9 @@ in
 
       # 7. Create necessary directories
       systemd.tmpfiles.rules = [
-        "d /var/log/openvpn 0755 root root -"
+        # "d /var/log/openvpn 0755 root root -"
+        "d /var/log/openvpn 0755 nobody nogroup -"  # Change from root root to nobody nogroup
+
         "d /var/lib/openvpn 0755 root root -"
         "d /etc/openvpn 0755 root root -"
         "d /etc/openvpn/server 0755 root root -"
