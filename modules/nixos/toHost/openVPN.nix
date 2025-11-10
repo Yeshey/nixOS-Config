@@ -22,6 +22,9 @@ let
   keyPath = "${serverKeyDir}/server.key";
   dhPath = "${serverKeyDir}/dh2048.pem";
   taPath = "${serverKeyDir}/ta.key";
+  
+  # Client configuration directory
+  ccdDir = "/etc/openvpn/ccd";
 in
 {
   options.toHost.openVPN = with lib; {
@@ -30,147 +33,148 @@ in
 
   config = lib.mkMerge [
     (lib.mkIf cfg.enable {
-      # 1. OpenVPN UDP Server Configuration (Primary - Faster)
+      # 1. OpenVPN UDP Server Configuration
       services.openvpn.servers.skyloftVPN-UDP = {
         autoStart = true;
         config = ''
-          # Server mode
           mode server
           tls-server
           
-          # Protocol and port
           proto udp
           port ${toString vpnPortUDP}
           dev ${vpnInterfaceUDP}
           dev-type tun
           
-          # Network configuration
           topology subnet
           server 10.8.0.0 255.255.255.0
           ifconfig-pool-persist /var/lib/openvpn/ipp-udp.txt
           
-          # Certificates and keys
+          # Client-specific configuration directory
+          client-config-dir ${ccdDir}
+          
           ca ${caPath}
           cert ${certPath}
           key ${keyPath}
           dh ${dhPath}
           tls-auth ${taPath} 0
           
-          # Security settings
           cipher AES-256-GCM
           auth SHA256
           tls-version-min 1.2
           
-          # Client configuration
           push "redirect-gateway def1 bypass-dhcp"
           push "dhcp-option DNS 1.1.1.1"
           push "dhcp-option DNS 1.0.0.1"
           
-          # Connection settings
+          # Push route to allow clients to reach each other
+          push "route 10.8.0.0 255.255.255.0"
+          
+          # Allow client-to-client communication
+          client-to-client
+          
           keepalive 10 120
           persist-key
           persist-tun
           
-          # Logging
           verb 3
           status /var/log/openvpn/status-udp.log
           log-append /var/log/openvpn/openvpn-udp.log
           
-          # Performance
           comp-lzo
           
-          # User and group (drop privileges)
           user nobody
           group nogroup
         '';
       };
 
-      # 2. OpenVPN TCP Server Configuration (Fallback - For Restricted Networks)
+      # 2. OpenVPN TCP Server Configuration
       services.openvpn.servers.skyloftVPN-TCP = {
         autoStart = true;
         config = ''
-          # Server mode
           mode server
           tls-server
           
-          # Protocol and port - TCP on port 443 (HTTPS) to bypass firewalls
           proto tcp-server
           port ${toString vpnPortTCP}
           dev ${vpnInterfaceTCP}
           dev-type tun
           
-          # Network configuration - different subnet to avoid conflicts
           topology subnet
           server 10.8.1.0 255.255.255.0
           ifconfig-pool-persist /var/lib/openvpn/ipp-tcp.txt
           
-          # Certificates and keys (same as UDP)
+          # Client-specific configuration directory
+          client-config-dir ${ccdDir}
+          
           ca ${caPath}
           cert ${certPath}
           key ${keyPath}
           dh ${dhPath}
           tls-auth ${taPath} 0
           
-          # Security settings
           cipher AES-256-GCM
           auth SHA256
           tls-version-min 1.2
           
-          # Client configuration
           push "redirect-gateway def1 bypass-dhcp"
           push "dhcp-option DNS 1.1.1.1"
           push "dhcp-option DNS 1.0.0.1"
           
-          # Connection settings
+          # Push route to allow clients to reach each other
+          push "route 10.8.1.0 255.255.255.0"
+          
+          # Allow client-to-client communication
+          client-to-client
+          
           keepalive 10 120
           persist-key
           persist-tun
           
-          # Logging
           verb 3
           status /var/log/openvpn/status-tcp.log
           log-append /var/log/openvpn/openvpn-tcp.log
           
-          # Performance
           comp-lzo
           
-          # User and group (drop privileges)
           user nobody
           group nogroup
         '';
       };
 
-      # 3. Firewall configuration
       networking.firewall = {
         allowedUDPPorts = [ vpnPortUDP ];
         allowedTCPPorts = [ vpnPortTCP ];
         trustedInterfaces = [ vpnInterfaceUDP vpnInterfaceTCP ];
       };
 
-      # 4. NAT configuration for internet routing
       networking.nat = {
         enable = true;
         externalInterface = externalInterface;
         internalInterfaces = [ vpnInterfaceUDP vpnInterfaceTCP ];
       };
 
-      # 5. IP forwarding
       boot.kernel.sysctl."net.ipv4.ip_forward" = 1;
       boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = 1;
 
-      # 6. Convenience packages
       environment.systemPackages = with pkgs; [
         openvpn
         easyrsa
       ];
 
-      # 7. Create necessary directories
       systemd.tmpfiles.rules = [
         "d /var/log/openvpn 0755 root root -"
         "d /var/lib/openvpn 0755 root root -"
         "d /etc/openvpn 0755 root root -"
         "d /etc/openvpn/server 0755 root root -"
+        "d /etc/openvpn/ccd 0755 root root -"
       ];
+      
+      # Create fixed IP configuration for hyrulecastle
+      # Note: The filename MUST match the client certificate Common Name exactly!
+      environment.etc."openvpn/ccd/hyruleCastleYeshey".text = ''
+        # Fixed IP for hyrulecastle
+        ifconfig-push 10.8.0.10 255.255.255.0
+      '';
     })
 
     (lib.mkIf (cfg.enable && config.mySystem.impermanence.enable) {
@@ -370,4 +374,8 @@ nc -zv 143.47.53.175 443   # Test TCP
 - Port 443 (TCP) is the standard HTTPS port, making it harder for firewalls to block
 - You can keep your old .ovpn files - they'll still work with just UDP
 - The new dual-protocol .ovpn files work everywhere and pick the best protocol automatically
+- Use this to delete everything from a certain client:
+rm -f pki/reqs/${CLIENT_NAME}.req
+rm -f pki/private/${CLIENT_NAME}.key
+rm -f pki/issued/${CLIENT_NAME}.crt
 */
