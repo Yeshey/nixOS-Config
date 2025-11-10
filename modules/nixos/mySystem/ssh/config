@@ -72,6 +72,10 @@ Host hyrulecastleroot
   UserKnownHostsFile /dev/null
   ProxyJump oracle
 
+Host hyrulecastle-vpn
+    HostName 10.8.0.100
+    User yeshey
+
 # Second hop: Connect from remote server to the surface Pro
 Host kakariko
   HostName localhost

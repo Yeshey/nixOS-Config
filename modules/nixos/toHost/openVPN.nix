@@ -82,6 +82,12 @@ in
           # User and group (drop privileges)
           user nobody
           group nogroup
+
+          # (1) enable per-client configs (static IPs, etc.)
+          client-config-dir /etc/openvpn/ccd
+
+          # (2) optional: honour revocation list if you ever create one
+          crl-verify /etc/openvpn/server/crl.pem
         '';
       };
 
@@ -137,6 +143,10 @@ in
           # User and group (drop privileges)
           user nobody
           group nogroup
+
+          # --- NEW: same per-client support for TCP instance ---
+          client-config-dir /etc/openvpn/ccd
+          crl-verify /etc/openvpn/server/crl.pem
         '';
       };
 
@@ -167,6 +177,7 @@ in
       # 7. Create necessary directories
       systemd.tmpfiles.rules = [
         "d /var/log/openvpn 0755 root root -"
+        
         "d /var/lib/openvpn 0755 root root -"
         "d /etc/openvpn 0755 root root -"
         "d /etc/openvpn/server 0755 root root -"
@@ -248,6 +259,18 @@ easyrsa build-client-full "$CLIENT_NAME" nopass
 
 # 3. Set server public IP
 export SERVER_PUBLIC_IP="143.47.53.175"
+
+# ---------------------------------------------------------
+# NEW: give this client a fixed VPN address (optional)
+# ---------------------------------------------------------
+# 1. create the client-config directory once (skip if it exists)
+sudo mkdir -p /etc/openvpn/ccd
+
+# 2. lock this certificate to a chosen IP (example: 10.8.0.100) CHANGE FOR EACH CLIENT
+sudo tee /etc/openvpn/ccd/"$CLIENT_NAME" <<EOF
+ifconfig-push 10.8.0.100 255.255.255.0
+EOF
+# ---------------------------------------------------------
 
 # 4. Create client configuration file with UDP + TCP fallback
 cat > "${CLIENT_NAME}.ovpn" <<'EOF'

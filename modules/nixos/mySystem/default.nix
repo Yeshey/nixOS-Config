@@ -81,6 +81,7 @@ in
     ./nh.nix
     ./allTor.nix
     ./globalprotect.nix
+    ./virtualbox.nix
   ];
 
   options.mySystem = with lib; {
@@ -245,8 +246,8 @@ in
       programs.gphoto2.enable = true; # to be able to access cameras
       environment.systemPackages = [ 
         pkgs.kdePackages.kamera 
-        pkgs.libimobiledevice        # idevicepair, ideviceinfo, …
-        pkgs.ifuse                   # FUSE-mount helper
+        pkgs.libimobiledevice        # iphone idevicepair, ideviceinfo, …
+        pkgs.ifuse                   # ipnone FUSE-mount helper
       ];
       # pkgs.deploy-rs 
 
