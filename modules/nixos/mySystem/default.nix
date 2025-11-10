@@ -81,6 +81,7 @@ in
     ./nh.nix
     ./allTor.nix
     ./globalprotect.nix
+    ./virtualbox.nix
   ];
 
   options.mySystem = with lib; {
@@ -247,11 +248,6 @@ in
         pkgs.kdePackages.kamera 
         pkgs.libimobiledevice        # iphone idevicepair, ideviceinfo, …
         pkgs.ifuse                   # ipnone FUSE-mount helper
-
-        # TMP Data Mining course
-        pkgs.virtualbox
-        pkgs.virtualboxExtpack
-        pkgs.vagrant
       ];
       # pkgs.deploy-rs 
 
@@ -428,10 +424,6 @@ in
           #"freeimage-unstable-2021-11-01"
         ];
       };
-
-      # TMP
-      # for Data Mining Class
-      virtualisation.virtualbox.host.enable = true;
 
     })
   ];
