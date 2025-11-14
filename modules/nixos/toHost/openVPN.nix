@@ -5,17 +5,16 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.toHost.openVPN;
-  vpnPortUDP = 1194; # standard OpenVPN UDP port
-  vpnPortTCP = 443;  # HTTPS port - less likely to be blocked
-  vpnNetUDP = "10.8.0.0/24"; # VPN subnet for UDP
-  vpnNetTCP = "10.8.1.0/24"; # VPN subnet for TCP (different to avoid conflicts)
-  vpnInterfaceUDP = "tun0"; # OpenVPN UDP interface name
-  vpnInterfaceTCP = "tun1"; # OpenVPN TCP interface name
-  serverIPUDP = "10.8.0.1"; # Server IP in UDP VPN subnet
-  serverIPTCP = "10.8.1.1"; # Server IP in TCP VPN subnet
-  externalInterface = "enp0s6"; # Your external network interface
+  vpnPortUDP = 1194;
+  vpnPortTCP = 443;
+  vpnNetUDP = "10.8.0.0/24";
+  vpnNetTCP = "10.8.1.0/24";
+  vpnInterfaceUDP = "tun0";
+  vpnInterfaceTCP = "tun1";
+  serverIPUDP = "10.8.0.1";
+  serverIPTCP = "10.8.1.1";
+  externalInterface = "enp0s6";
   
-  # Paths for keys and certificates
   serverKeyDir = "/etc/openvpn/server";
   caPath = "${serverKeyDir}/ca.crt";
   certPath = "${serverKeyDir}/server.crt";
@@ -23,8 +22,9 @@ let
   dhPath = "${serverKeyDir}/dh2048.pem";
   taPath = "${serverKeyDir}/ta.key";
   
-  # Client configuration directory
-  ccdDir = "/etc/openvpn/ccd";
+  # Separate CCD directories for each protocol
+  ccdDirUDP = "/etc/openvpn/ccd-udp";
+  ccdDirTCP = "/etc/openvpn/ccd-tcp";
 in
 {
   options.toHost.openVPN = with lib; {
@@ -49,8 +49,8 @@ in
           server 10.8.0.0 255.255.255.0
           ifconfig-pool-persist /var/lib/openvpn/ipp-udp.txt
           
-          # Client-specific configuration directory
-          client-config-dir ${ccdDir}
+          # Client-specific configuration directory (UDP)
+          client-config-dir ${ccdDirUDP}
           
           ca ${caPath}
           cert ${certPath}
@@ -103,8 +103,8 @@ in
           server 10.8.1.0 255.255.255.0
           ifconfig-pool-persist /var/lib/openvpn/ipp-tcp.txt
           
-          # Client-specific configuration directory
-          client-config-dir ${ccdDir}
+          # Client-specific configuration directory (TCP)
+          client-config-dir ${ccdDirTCP}
           
           ca ${caPath}
           cert ${certPath}
@@ -166,24 +166,34 @@ in
         "d /var/lib/openvpn 0755 root root -"
         "d /etc/openvpn 0755 root root -"
         "d /etc/openvpn/server 0755 root root -"
-        "d /etc/openvpn/ccd 0755 root root -"
+        "d ${ccdDirUDP} 0755 root root -"
+        "d ${ccdDirTCP} 0755 root root -"
       ];
       
-      # Note: The filename MUST match the client certificate Common Name exactly!
-      # Create fixed IP configurations for clients
-      environment.etc."openvpn/ccd/hyruleCastleYeshey".text = ''
-        # Fixed IP for hyrulecastle
+      # UDP CCD - Static IPs for UDP connections
+      environment.etc."openvpn/ccd-udp/hyruleCastleYeshey".text = ''
         ifconfig-push 10.8.0.10 255.255.255.0
       '';
       
-      environment.etc."openvpn/ccd/kakarikoYeshey".text = ''
-        # Fixed IP for kakariko
+      environment.etc."openvpn/ccd-udp/kakarikoYeshey".text = ''
         ifconfig-push 10.8.0.11 255.255.255.0
       '';
       
-      environment.etc."openvpn/ccd/A70PhoneYeshey".text = ''
-        # Fixed IP for A70 phone
+      environment.etc."openvpn/ccd-udp/A70PhoneYeshey".text = ''
         ifconfig-push 10.8.0.12 255.255.255.0
+      '';
+      
+      # TCP CCD - Static IPs for TCP connections (matching UDP layout)
+      environment.etc."openvpn/ccd-tcp/hyruleCastleYeshey".text = ''
+        ifconfig-push 10.8.1.10 255.255.255.0
+      '';
+      
+      environment.etc."openvpn/ccd-tcp/kakarikoYeshey".text = ''
+        ifconfig-push 10.8.1.11 255.255.255.0
+      '';
+      
+      environment.etc."openvpn/ccd-tcp/A70PhoneYeshey".text = ''
+        ifconfig-push 10.8.1.12 255.255.255.0
       '';
     })
 
