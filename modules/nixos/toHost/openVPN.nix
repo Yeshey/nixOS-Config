@@ -70,7 +70,9 @@ in
           push "route 10.8.0.0 255.255.255.0"
           
           # Allow client-to-client communication
-          client-to-client
+          client-to-client  # Keep this on UDP
+          # ADD THIS LINE:
+          push "route 10.8.1.0 255.255.255.0"
           
           keepalive 10 120
           persist-key
@@ -124,7 +126,9 @@ in
           push "route 10.8.1.0 255.255.255.0"
           
           # Allow client-to-client communication
-          client-to-client
+          # REMOVE client-to-client line
+          # ADD THIS LINE:
+          push "route 10.8.0.0 255.255.255.0"
           
           keepalive 10 120
           persist-key
@@ -142,9 +146,20 @@ in
       };
 
       networking.firewall = {
+        enable = true;
         allowedUDPPorts = [ vpnPortUDP ];
         allowedTCPPorts = [ vpnPortTCP ];
         trustedInterfaces = [ vpnInterfaceUDP vpnInterfaceTCP ];
+        
+        extraCommands = ''
+          # NAT rules (as before)
+          ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s ${vpnNetUDP} -o ${externalInterface} -j MASQUERADE
+          ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s ${vpnNetTCP} -o ${externalInterface} -j MASQUERADE
+          
+          # NEW: Enable cross-TUN forwarding
+          ${pkgs.iptables}/bin/iptables -A FORWARD -i ${vpnInterfaceUDP} -o ${vpnInterfaceTCP} -j ACCEPT
+          ${pkgs.iptables}/bin/iptables -A FORWARD -i ${vpnInterfaceTCP} -o ${vpnInterfaceUDP} -j ACCEPT
+        '';
       };
 
       networking.nat = {
