@@ -3,6 +3,12 @@
 
 # Read more about SSH config files: https://linux.die.net/man/5/ssh_config
 
+Host unibo
+    HostName giano.cs.unibo.it
+    User joaofilipe.silvade@studio.unibo.it
+    RemoteCommand cd /scratch.hpc/joaofilipe.silvade && exec $SHELL
+    RequestTTY yes
+
 Host minerva
     HostName minerva.laced.isec.pt
     User jonnas
