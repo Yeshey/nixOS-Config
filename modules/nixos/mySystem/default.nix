@@ -183,7 +183,7 @@ in
         # drop the hand-written probe completely
         preStart = "";
       };
-      
+
       # systemd.services.chronyd = { # it was running before DNS were up...
       #   after = [ "network-online.target" "nss-lookup.target" ];
       #   wants = [ "network-online.target" ];
@@ -202,15 +202,15 @@ in
       #services.chrony.enable = true;
       i18n.defaultLocale = lib.mkOverride 1010 "en_GB.UTF-8";
       i18n.extraLocaleSettings = {
-        LC_ADDRESS = lib.mkOverride 1010 "pt_PT.UTF-8"; 
-        LC_IDENTIFICATION = lib.mkOverride 1010 "pt_PT.UTF-8"; 
-        LC_MEASUREMENT = lib.mkOverride 1010 "pt_PT.UTF-8"; 
-        LC_MONETARY = lib.mkOverride 1010 "pt_PT.UTF-8"; 
-        LC_NAME = lib.mkOverride 1010 "pt_PT.UTF-8"; 
-        LC_NUMERIC = lib.mkOverride 1010 "pt_PT.UTF-8"; 
-        LC_PAPER = lib.mkOverride 1010 "pt_PT.UTF-8"; 
-        LC_TELEPHONE = lib.mkOverride 1010 "pt_PT.UTF-8"; 
-        LC_TIME = lib.mkOverride 1010 "pt_PT.UTF-8"; 
+        LC_ADDRESS = lib.mkOverride 1010 "pt_PT.UTF-8";
+        LC_IDENTIFICATION = lib.mkOverride 1010 "pt_PT.UTF-8";
+        LC_MEASUREMENT = lib.mkOverride 1010 "pt_PT.UTF-8";
+        LC_MONETARY = lib.mkOverride 1010 "pt_PT.UTF-8";
+        LC_NAME = lib.mkOverride 1010 "pt_PT.UTF-8";
+        LC_NUMERIC = lib.mkOverride 1010 "pt_PT.UTF-8";
+        LC_PAPER = lib.mkOverride 1010 "pt_PT.UTF-8";
+        LC_TELEPHONE = lib.mkOverride 1010 "pt_PT.UTF-8";
+        LC_TIME = lib.mkOverride 1010 "pt_PT.UTF-8";
       };
       console.keyMap = lib.mkOverride 1010 "pt-latin1";
 
@@ -221,7 +221,7 @@ in
         extraOptions =
           # for compression to work with btrfs (https://github.com/NixOS/nix/issues/3550) ...?
           ''
-            preallocate-contents = false 
+            preallocate-contents = false
           '';
         settings = {
           experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
@@ -244,12 +244,12 @@ in
       };
       programs.command-not-found.enable = true;
       programs.gphoto2.enable = true; # to be able to access cameras
-      environment.systemPackages = [ 
-        pkgs.kdePackages.kamera 
+      environment.systemPackages = [
+        pkgs.kdePackages.kamera
         pkgs.libimobiledevice        # iphone idevicepair, ideviceinfo, …
         pkgs.ifuse                   # ipnone FUSE-mount helper
       ];
-      # pkgs.deploy-rs 
+      # pkgs.deploy-rs
 
       networking.networkmanager = {
         enable = lib.mkOverride 1010 true;
@@ -257,7 +257,7 @@ in
           networkmanager-openvpn
         ];
       };
-      
+
       # for Iphone
       # 1.  Enable the usbmuxd daemon (pairing / USB comms)
       services.usbmuxd = {
@@ -267,13 +267,13 @@ in
       services.gvfs.enable = true;
 
       networking.resolvconf.dnsExtensionMechanism = lib.mkOverride 1010 false; # fixes internet connectivity problems with some sites (https://discourse.nixos.org/t/domain-name-resolve-problem/885/2)
-      
+
       #networking.nameservers = [ # (might need this for public WIFIs?)
       #  "1.1.1.1"
       #  "8.8.8.8"
       #  "9.9.9.9"
       #]; # (https://unix.stackexchange.com/questions/510940/how-can-i-set-a-custom-dns-server-within-nixos)
-      
+
 
       # needed to access coimbra-dev raspberrypi from localnetwork
       #systemd.network.wait-online.enable = lib.mkOverride 1010 false;
@@ -314,11 +314,11 @@ in
           xorg.libxshmfence
           xorg.libXxf86vm
           libelf
-          
+
           # Required
           glib
           gtk2
-          
+
           # Without these it silently fails
           xorg.libXinerama
           xorg.libXcursor
@@ -350,7 +350,7 @@ in
           # it will segfault when opening files if you don’t do:
           # export XDG_DATA_DIRS=/nix/store/0nfsywbk0qml4faa7sk3sdfmbd85b7ra-gsettings-desktop-schemas-43.0/share/gsettings-schemas/gsettings-desktop-schemas-43.0:/nix/store/rkscn1raa3x850zq7jp9q3j5ghcf6zi2-gtk+3-3.24.35/share/gsettings-schemas/gtk+3-3.24.35/:$XDG_DATA_DIRS
           # other issue: (Unity:377230): GLib-GIO-CRITICAL **: 21:09:04.706: g_dbus_proxy_call_sync_internal: assertion 'G_IS_DBUS_PROXY (proxy)' failed
-          
+
           # Verified games requirements
           xorg.libXt
           xorg.libXmu
@@ -361,7 +361,7 @@ in
           glew110
           libidn
           tbb
-          
+
           # Other things from runtime
           flac
           freeglut
@@ -407,19 +407,19 @@ in
           # Needed to run, via virtualenv + pip, matplotlib & tikzplotlib
           stdenv.cc.cc.lib # to provide libstdc++.so.6
         ];
-      };  
-            
+      };
+
       networking = {
         hostName = lib.mkOverride 1010 "${cfg.host}";
       };
-      
+
       # networking.useNetworkd = true;
-      # networking.firewall.enable = false;
+      networking.firewall.enable = false;
 
       nixpkgs.config = {
         # allowUnsupportedSystem = true;
         # allowUnfree = true;
-        # TODO remove this below 
+        # TODO remove this below
         permittedInsecurePackages = [ # for package openvscode-server
           #"freeimage-unstable-2021-11-01"
         ];
