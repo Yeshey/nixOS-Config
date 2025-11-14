@@ -1,8 +1,8 @@
 # nix & nixOS Configuration / Linux Config
 The spiciest config on the market [😳🥵💦](https://matias.me/nsfw/)
 
-My reproducible nix Configuration & other configuration files.  
-More Documentation (for myself) about nixOS in my [TechNotes Repo](https://github.com/Yeshey/TechNotes).  
+My reproducible nix Configuration & other configuration files.
+More Documentation (for myself) about nixOS in my [TechNotes Repo](https://github.com/Yeshey/TechNotes).
 
 It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my MS Surface Pro 7(`kakariko`) and my Oracle `aarch64` server(`skyloft`).
 
@@ -12,7 +12,7 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
 - You might need to create the home manager folder manually `mkdir ~/.local/state/nix/profiles`
 
-- Yo'll have to find the syncthing ID by going to http://127.0.0.1:8384, getting the ID, and adding it in the syncthing config
+- You'll have to find the syncthing ID by going to http://127.0.0.1:8384, getting the ID, and adding it in the syncthing config
 
 - You'll have to add the new machine public key to the secrets for agenix with `cat /etc/ssh/ssh_host_rsa_key.pub` and add it in the `secrets/secrets.nix` and rekey the keys `cd ~/.setup/secrets` and `agenix --rekey`.
 
@@ -51,8 +51,8 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 2. `mkdir ~/.setup ; git clone git@github.com:Yeshey/nixOS-Config.git ~/.setup/ --depth 1`
 3. Follow [flakes Standalone setup](https://nix-community.github.io/home-manager/index.xhtml#sec-flakes-standalone), and use `nix run home-manager/master -- init --switch /home/yeshey/.setup` to set up the hm in the right place.
 4. `home-manager switch --flake ~/.setup#yeshey` to activate the configuration
-5. Set zsh shell as default:   
-   `echo "/home/$USER/.nix-profile/bin/zsh" | sudo tee -a /etc/shells`  
+5. Set zsh shell as default:
+   `echo "/home/$USER/.nix-profile/bin/zsh" | sudo tee -a /etc/shells`
    `chsh -s "/home/$USER/.nix-profile/bin/zsh" "$USER"`
 
 ## Credits
@@ -66,7 +66,7 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
 ## Highlights:
 
-- **Structure** 
+- **Structure**
     - Separation of home manager, nixOS system configuration and Host services through a myHome and mySystem and toHost modules, this way it could also be deployed on a home-manager only system the same way [LongerHV's](https://github.com/LongerHV) [nixos-configuration](https://github.com/LongerHV/nixos-configuration/tree/master) is set up;
 
     - Unstable packages available at `pkgs.unstable.<package>`, [NUR](https://github.com/nix-community/NUR) packages available at `pkgs.nur.<package>` using overlays. Check [Misterio77's](https://github.com/Misterio77) `standard` [nix-starter-configs](https://github.com/Misterio77/nix-starter-configs) for getting started with this structure.
