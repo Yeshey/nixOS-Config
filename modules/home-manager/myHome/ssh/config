@@ -44,23 +44,23 @@ Host kakariko
 # You can bind a port from the target PC to the local PC with for example:
 # ssh -L 8891:localhost:8891 hyrulecastle
 
-# VPN connections with UDP/TCP fallback
-Match host hyrulecastle-vpn exec "nc -w 1 -z 10.8.0.10 22"
-  HostName 10.8.0.10
-Match host hyrulecastle-vpn  # fallback to TCP VPN
-  HostName 10.8.1.10
 Host hyrulecastle-vpn
-  Port 22
+  HostName 10.8.0.10  # Always this IP
   User yeshey
+  Port 22
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
 
-Match host kakariko-vpn exec "nc -w 1 -z 10.8.0.11 22"
-  HostName 10.8.0.11
-Match host kakariko-vpn  # fallback to TCP VPN
-  HostName 10.8.1.11
 Host kakariko-vpn
-  Port 22
+  HostName 10.8.0.11
   User yeshey
+  Port 22
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+
+Host a70phone-vpn
+  HostName 10.8.0.12
+  User yeshey
+  Port 22
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
