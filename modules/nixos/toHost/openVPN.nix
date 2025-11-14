@@ -71,7 +71,6 @@ in
           
           # Allow client-to-client communication
           client-to-client  # Keep this on UDP
-          # ADD THIS LINE:
           push "route 10.8.1.0 255.255.255.0"
           
           keepalive 10 120
@@ -126,8 +125,6 @@ in
           push "route 10.8.1.0 255.255.255.0"
           
           # Allow client-to-client communication
-          # REMOVE client-to-client line
-          # ADD THIS LINE:
           push "route 10.8.0.0 255.255.255.0"
           
           keepalive 10 120
