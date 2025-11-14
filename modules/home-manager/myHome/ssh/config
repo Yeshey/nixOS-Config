@@ -9,13 +9,6 @@ Host unibo
     RemoteCommand cd /scratch.hpc/joaofilipe.silvade && exec $SHELL
     RequestTTY yes
 
-Host minerva
-    HostName minerva.laced.isec.pt
-    User jonnas
-    ForwardX11    yes
-    ForwardX11Trusted    yes
-    IdentityFile ~/.ssh/id_minerva
-
 # These are for connecting to my PCs with double hops through the server.
 # First hop: Connect to the remote server
 Host oracle
@@ -33,6 +26,22 @@ Host hyrulecastle
   UserKnownHostsFile /dev/null
   ProxyJump oracle
 
+# Second hop: Connect from remote server to the Lenovo PC with root
+Host hyrulecastleroot
+  HostName localhost
+  Port 2232
+  User root
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+  ProxyJump oracle
+
+Host hyrulecastle-vpn
+  HostName 10.8.0.10  # Always this IP
+  User root
+  Port 22
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+
 # Second hop: Connect from remote server to the surface Pro
 Host kakariko
   HostName localhost
@@ -41,19 +50,19 @@ Host kakariko
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
   ProxyJump oracle
-# You can bind a port from the target PC to the local PC with for example:
-# ssh -L 8891:localhost:8891 hyrulecastle
 
-Host hyrulecastle-vpn
-  HostName 10.8.0.10  # Always this IP
-  User yeshey
-  Port 22
+# Second hop: Connect from remote server to the surface Pro
+Host kakarikoroot
+  HostName localhost
+  Port 2333
+  User root
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
+  ProxyJump oracle
 
 Host kakariko-vpn
   HostName 10.8.0.11
-  User yeshey
+  User root
   Port 22
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
