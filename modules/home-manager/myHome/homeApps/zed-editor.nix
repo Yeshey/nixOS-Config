@@ -52,6 +52,13 @@ in
         load_direnv = "shell_hook";
         base_keymap = "VSCode";
 
+        # Auto-save after 500ms of inactivity
+        autosave = {
+          after_delay = {
+            milliseconds = 500;
+          };
+        };
+
         # ---------- LaTeX ----------
         # LaTeX
         lsp.texlab = {
