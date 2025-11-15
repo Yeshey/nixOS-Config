@@ -52,10 +52,10 @@ in
         load_direnv = "shell_hook";
         base_keymap = "VSCode";
 
-        # Auto-save after 500ms of inactivity
+        # Auto-save after 1 sec of inactivity
         autosave = {
           after_delay = {
-            milliseconds = 500;
+            milliseconds = 1000;
           };
         };
 
