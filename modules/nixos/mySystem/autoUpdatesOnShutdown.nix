@@ -148,6 +148,8 @@ in
       ];
 
       script = ''
+        echo "will notify in 3 min"
+        sleep 180
         ${notify-send-all}/bin/notify-send-all -u critical "Will update on shutdown..."
       '';
 
