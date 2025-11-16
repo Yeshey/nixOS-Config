@@ -92,7 +92,7 @@ in
         languages = {
           "LaTeX" = {
             # Enable word wrap for LaTeX files only
-            soft_wrap = "preferred_line_length";
+            soft_wrap = "editor_width";
           };
         };
 
