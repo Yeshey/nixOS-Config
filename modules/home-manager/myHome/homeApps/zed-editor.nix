@@ -44,6 +44,7 @@ in
         "rust"
         "latex"
         "react-typescript-snippets"
+        "codebook"
       ];
       userSettings = {
         hour_format = "hour24";
