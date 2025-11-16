@@ -62,32 +62,39 @@ in
 
         # ---------- LaTeX ----------
         # LaTeX
-        lsp.texlab = {
-          settings = {
-            texlab = {
-              build = {
-                onSave = true;
-                forwardSearchAfter = true;
-                executable = "latexmk";
-                args = [
-                  "--shell-escape"
-                  "-f"
-                  "-synctex=1"
-                  "-interaction=nonstopmode"
-                  "-file-line-error"
-                  "-lualatex"
-                  "%f"
-                ];
-              };
-              forwardSearch = {
-                executable = "okular";
-                args = [
-                  "--unique"
-                  "%p#src:%l%f"
-                ];
+        lsp = {
+          texlab = {
+            settings = {
+              texlab = {
+                build = {
+                  onSave = true;
+                  forwardSearchAfter = true;
+                  executable = "latexmk";
+                  args = [
+                    "--shell-escape"
+                    "-f"
+                    "-synctex=1"
+                    "-interaction=nonstopmode"
+                    "-file-line-error"
+                    "-lualatex"
+                    "%f"
+                  ];
+                };
+                forwardSearch = {
+                  executable = "okular";
+                  args = [
+                    "--unique"
+                    "%p#src:%l%f"
+                  ];
+                };
               };
             };
           };
+          # "codebook" = {
+          #   "initialization_options" = {
+          #     "logLevel" = "debug";
+          #   };
+          # };
         };
 
         languages = {
