@@ -93,7 +93,7 @@ in
     dates = lib.mkOption {
       type = lib.types.str;
       example = "weekly";
-      default = "*-*-1/3"; # every 3 days
+      default = "*-*-01,16 06:10:00";  # 10 minutes after GitHub Action
       description = ''
         How frequently to update (systemd calendar format)
       '';

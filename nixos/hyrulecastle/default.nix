@@ -134,7 +134,6 @@ in
       enable = true;
       location = "github:Yeshey/nixOS-Config";
       host = "hyrulecastle";
-      dates = "weekly";
     };
     flatpaks.enable = true;
     i2p.enable = true;
