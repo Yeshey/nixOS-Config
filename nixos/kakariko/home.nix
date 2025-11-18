@@ -117,7 +117,7 @@ in
       # Surface and Desktop apps
       qbittorrent
       blender # for blender
-      gimp
+      unstable.gimp
       darktable
       krita
       inkscape
