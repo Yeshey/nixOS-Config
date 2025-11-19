@@ -759,13 +759,14 @@ in
           ${pkgs.rclone}/bin/rclone copy /srv/minecraft/tunaCraft "$REMOTE/$BACKUP_NAME" \
             --progress \
             --transfers 4 \
-            --checkers 8
+            --checkers 8 \
+            --config /home/yeshey/.config/rclone/rclone.conf
           
           echo "Backup completed: $BACKUP_NAME"
           
           # Delete backups older than 10 days based on folder timestamp
           echo "Deleting backups older than $CUTOFF_TIME..."
-          ${pkgs.rclone}/bin/rclone lsf "$REMOTE" --dirs-only | while read -r folder; do
+          ${pkgs.rclone}/bin/rclone lsf "$REMOTE" --dirs-only --config /home/yeshey/.config/rclone/rclone.conf | while read -r folder; do  # Add --config here too
             # Extract timestamp from folder name (assumes format: tunaCraft-TIMESTAMP)
             folder_timestamp=$(echo "$folder" | grep -oP 'tunaCraft-\K\d+' || echo "")
             
@@ -773,7 +774,7 @@ in
               # Compare timestamps
               if [ "$folder_timestamp" -lt "$CUTOFF_TIME" ]; then
                 echo "Deleting old backup: $folder (timestamp: $folder_timestamp)"
-                ${pkgs.rclone}/bin/rclone purge "$REMOTE/$folder"
+                ${pkgs.rclone}/bin/rclone purge "$REMOTE/$folder" --config /home/yeshey/.config/rclone/rclone.conf  # And here
               fi
             fi
           done
