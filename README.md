@@ -71,7 +71,7 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
     - Unstable packages available at `pkgs.unstable.<package>`, [NUR](https://github.com/nix-community/NUR) packages available at `pkgs.nur.<package>` using overlays. Check [Misterio77's](https://github.com/Misterio77) `standard` [nix-starter-configs](https://github.com/Misterio77/nix-starter-configs) for getting started with this structure.
 
-- **Auto Updates On Shutdown** - I have a github action that updates my flake.lock every 2 weeks [update-flake.yml](https://github.com/Yeshey/nixOS-Config/blob/main/.github/workflows/update-flake.yml). Then I have a service that updates the PC while shutting down, while keeping services like `sshh`, `oomd`, etc. working: [autoUpdatesOnShutdown.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/autoUpdatesOnShutdown.nix);
+- **Auto Updates On Shutdown** - I have a github action that updates my flake.lock every 2 weeks [update-flake.yml](https://github.com/Yeshey/nixOS-Config/blob/main/.github/workflows/update-flake.yml). Then I have a service that updates the PC while shutting down, while keeping services like `sshd`, `oomd`, etc. working: [autoUpdatesOnShutdown.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/autoUpdatesOnShutdown.nix);
 
 - **Syncthing** - Declaratively set syncthing, including ignore patterns with `userActivationScripts` (TODO: set syncthing as a home manager service): [syncthing.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/syncthing.nix);
 
