@@ -84,7 +84,7 @@ in
         extraGroups = [
           "scanner"
           "networkmanager"
-          "wheel"
+          # "wheel" # dont give root access
           "dialout"
           "docker"
           "adbusers"
