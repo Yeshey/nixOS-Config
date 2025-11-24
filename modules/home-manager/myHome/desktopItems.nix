@@ -53,7 +53,7 @@ in
         
       ];
     }
-    (lib.mkIf (config.myHome.enable && cfg.xrdp.enable) {
+    (lib.mkIf (config.myHome.enable && cfg.xrdp.enable && config.home.username != "guest") {
       home.packages = let
         gofreerdp = pkgs.writeShellScriptBin "gofreerdpserver" ''
           ${pkgs.freerdp}/bin/xfreerdp /v:${cfg.xrdp.remote.ip} /u:${cfg.xrdp.remote.user} ${cfg.xrdp.extraclioptions}
@@ -73,7 +73,7 @@ in
         };
       in [ pkgs.freerdp pkgs.xdg-utils gofreerdp freerdpDesktopItem ];
     })
-    (lib.mkIf (config.myHome.enable && cfg.openvscodeServer.enable) {
+    (lib.mkIf (config.myHome.enable && cfg.openvscodeServer.enable && config.home.username != "guest") {
       home.packages = let
         govscodeserver = pkgs.writeShellScriptBin "govscodeserver" (
           if cfg.openvscodeServer.vpn.enable then

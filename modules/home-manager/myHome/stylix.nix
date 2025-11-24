@@ -37,7 +37,7 @@ in
     };
   };
 
-  config = lib.mkIf (config.myHome.enable && cfg.enable) {
+  config = lib.mkIf (config.myHome.enable && cfg.enable && config.home.username != "guest") {
 
     # to fix emojis in notifications and windows-key + V, etc. https://groups.google.com/g/linux.debian.bugs.dist/c/YLgE4_-sCbQ/m/xjoPbdv2AAAJ
     # made an issue in stylix (https://github.com/danth/stylix/issues/448)

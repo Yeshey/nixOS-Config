@@ -17,7 +17,7 @@ in
       example = [ pkgs.vesktop ];
     };
 
-  config = lib.mkIf (cfg != null && cfg.enable) {
+  config = lib.mkIf (cfg != null && cfg.enable && config.home.username != "guest") {
 
 /*
     home.file = builtins.listToAttrs (

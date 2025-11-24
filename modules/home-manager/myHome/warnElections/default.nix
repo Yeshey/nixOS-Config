@@ -22,7 +22,7 @@ in
     enable = lib.mkEnableOption "warnElections";
   };
 
-  config = lib.mkIf (config.myHome.enable && cfg.enable)  {
+  config = lib.mkIf (config.myHome.enable && cfg.enable && config.home.username != "guest")  {
     home.packages = [ 
       electionScript 
       myPython
