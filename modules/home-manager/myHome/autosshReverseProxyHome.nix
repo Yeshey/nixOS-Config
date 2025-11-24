@@ -28,7 +28,7 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf (cfg.enable && config.home.username != "guest") {
     # Ensure autossh is installed in the home environment.
     home.packages = [ pkgs.autossh ];
 

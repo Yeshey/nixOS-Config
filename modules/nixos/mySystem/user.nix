@@ -16,6 +16,13 @@ in
       default = "yeshey";
       type = lib.types.str;
     };
+    guest = {
+      enable = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = "guest user";
+      };
+    };
     home-manager = {
       enable = lib.mkEnableOption "home-manager";
       home = lib.mkOption {
@@ -35,6 +42,7 @@ in
       };
       sharedModules = builtins.attrValues outputs.homeManagerModules;
       users."${cfg.user}" = import cfg.home-manager.home;
+      users."guest" = import cfg.home-manager.home;
     };
     users = {
       # defaultUserShell = pkgs.zsh;
@@ -67,6 +75,24 @@ in
       users.root = {
         openssh.authorizedKeys.keyFiles = [
           ./../../../id_ed_mykey.pub
+        ];
+      };
+      users.guest = lib.mkIf cfg.guest.enable {
+        isNormalUser = true;
+        description = "Guest User";
+        initialPassword = "guest"; # Set a simple default password
+        extraGroups = [
+          "scanner"
+          "networkmanager"
+          "wheel"
+          "dialout"
+          "docker"
+          "adbusers"
+          "libvirtd"
+          "surface-control"
+          "audio"
+          "tss" # For TPM access
+          "input" # For https://github.com/kokoko3k/ssh-rdp
         ];
       };
     };
