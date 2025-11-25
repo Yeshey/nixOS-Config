@@ -9,8 +9,9 @@
 let
   cfg = config.myHome.gnome;
 in
+with lib.hm.gvariant;
 {
-  imports = [ ./dconf.nix ];
+  imports = [ ./dconf.nix ]; # my dconf, doesn't apply to guest user
   options.myHome.gnome = with lib; {
     enable = mkOption {
       type = types.bool;
@@ -39,6 +40,68 @@ in
         name = "Adwaita";
         # package = pkgs.kdePackages.breeze-icons;
         # name = "Breeze-Dark";
+      };
+    };
+
+    # Essential (also applies to guest user)
+    dconf.settings = {
+      "org/gnome/desktop/datetime" = {
+        automatic-timezone = false; # SUCKS, gets tricked by VPNs
+      };
+
+      "org/gnome/system/location" = { # enables location in gnome
+        enabled = true;
+      };
+
+      "org/gnome/desktop/peripherals/touchpad" = {
+        click-method = "areas";
+        tap-to-click = true;
+      };
+
+      "org/gnome/desktop/privacy" = {
+        remove-old-temp-files = true;
+        remove-old-trash-files = true;
+      };
+
+      "org/gnome/desktop/sound" = {
+        allow-volume-above-100-percent = true;
+      };
+
+      "org/gnome/desktop/input-sources" = {
+        show-all-sources = false;
+        sources = [
+          (mkTuple [
+            "xkb"
+            "pt"
+          ])
+          (mkTuple [
+            "xkb"
+            "br"
+          ])
+          (mkTuple [
+            "xkb"
+            "us"
+          ])
+        ];
+        xkb-options = [ "terminate:ctrl_alt_bksp" ];
+      };
+
+      "org/gnome/desktop/wm/preferences" = {
+        resize-with-right-button = true;
+      };
+
+      "org/gnome/shell" = {
+        disable-user-extensions = false;
+        disabled-extensions = [
+          # "rounded-window-corners@yilozt"
+          # "workspace-indicator@gnome-shell-extensions.gcampax.github.com"
+        ];
+        enabled-extensions = [
+          "clipboard-history@alexsaveau.dev"
+          "clipboard-indicator@tudmotu.com"
+          "hibernate-status@dromi"
+          "trayIconsReloaded@selfmade.pl"
+        ];
       };
     };
 
