@@ -26,7 +26,7 @@ in
     };
   };
 
-  config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && config.myHome.homeApps.cli.enable && cfg.enable) {
+  config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && config.myHome.homeApps.cli.enable && cfg.enable && config.home.username != "guest") {
     programs = {
       zsh.shellAliases = {
         lg = "lazygit";

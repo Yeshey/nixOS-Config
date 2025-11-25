@@ -18,7 +18,7 @@ let
 in
 with lib.hm.gvariant;
 {
-  config = lib.mkIf (config.myHome.enable && cfg.enable) {
+  config = lib.mkIf (config.myHome.enable && cfg.enable && config.home.username != "guest") {
 
     dconf.settings = {
       "org/gnome/desktop/datetime" = {

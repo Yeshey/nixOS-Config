@@ -39,10 +39,10 @@ in
     lib.mkMerge [
       (lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
 
-        #home.file."/home/${config.myHome.user}/.config/VSCodium/User/settings.json".source = ./VSCsettings.json;
-        #home.file."/home/${config.myHome.user}/.config/Code/User/settings.json".source = ./VSCsettings.json;
-        #home.file."/home/${config.myHome.user}/.config/Visual Studio Code/User/settings.json".source = ./VSCsettings.json;
-        home.file."/home/${config.myHome.user}/.openvscode-server/data/Machine/settings.json" = {
+        #home.file."/home/${config.home.username}/.config/VSCodium/User/settings.json".source = ./VSCsettings.json;
+        #home.file."/home/${config.home.username}/.config/Code/User/settings.json".source = ./VSCsettings.json;
+        #home.file."/home/${config.home.username}/.config/Visual Studio Code/User/settings.json".source = ./VSCsettings.json;
+        home.file."/home/${config.home.username}/.openvscode-server/data/Machine/settings.json" = {
           text = builtins.readFile ./VSCsettings.json;
           force = true;
           mutable = true;

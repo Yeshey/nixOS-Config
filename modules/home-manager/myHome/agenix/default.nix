@@ -24,7 +24,7 @@ in
     enable = mkEnableOption "agenix";
   };
 
-  config = lib.mkIf (config.myHome.enable && cfg.enable) {
+  config = lib.mkIf (config.myHome.enable && cfg.enable && config.home.username != "guest") {
     myHome.agenix.sshKeys.enable = lib.mkOverride 1010 false;  
 
     home.packages = [
