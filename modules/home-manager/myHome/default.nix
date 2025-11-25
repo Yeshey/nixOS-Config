@@ -39,7 +39,7 @@ in
     dataStoragePath = mkOption {
       type = types.str;
       description = "Storage drive or path to put everything. needs to be set if not set in mySystem module.";
-      default = "${osConfig.mySystem.dataStoragePath}";
+      default = "/home/${config.home.username}";
     };
     user = mkOption {
       type = types.str;

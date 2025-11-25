@@ -19,6 +19,7 @@ in
     enable = true;
     # All the options
     user = "yeshey";
+    # dataStoragePath = "/home/${config.home.username}"; # this is the default
     nonNixos.enable = false;
     plasma.enable = false;
     gnome.enable = false;
