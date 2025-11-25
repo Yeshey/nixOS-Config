@@ -14,7 +14,7 @@ in
     enable = mkEnableOption "xdgPersonalFilesOrganization";
   };
 
-  config = lib.mkIf (config.myHome.enable && cfg.enable) {
+  config = lib.mkIf (config.myHome.enable && cfg.enable && config.home.username != "guest") {
 
     xdg = {
       # for favourits in nautilus
