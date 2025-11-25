@@ -97,7 +97,7 @@ in
     };
     dataStoragePath = mkOption {
       type = types.str;
-      description = "Storage drive or pathosConfig.mySystem.dataStoragePath to put everything";
+      description = "Storage drive or path to put everything";
       default = "/home/${config.mySystem.user}";
     };
     host = mkOption {
