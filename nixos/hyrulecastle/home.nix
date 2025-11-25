@@ -16,7 +16,7 @@ in
     enable = true;
     # All the options
     user = "yeshey";
-    # dataStoragePath = "/mnt/DataDisk"; # Needs to be set if not set in mySystem module
+    # dataStoragePath = "/home/${config.home.username}"; # this is the default
     xdgPersonalFilesOrganization.enable = true;
     nonNixos.enable = false;
     plasma.enable = false;
