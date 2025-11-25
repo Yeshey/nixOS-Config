@@ -62,7 +62,7 @@ in
       };
 
       targets.vscode.enable = false;
-      targets.firefox.profileNames = [ "${config.myHome.user}" ];
+      targets.firefox.profileNames = [ "${config.home.username}" ];
       targets.zed.enable = false;
 
       /*

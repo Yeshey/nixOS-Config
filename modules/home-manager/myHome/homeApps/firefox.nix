@@ -77,7 +77,7 @@ in
               metamask
             ];
             id = 0; # default profile
-            name = "${config.myHome.user}";
+            name = "${config.home.username}";
             search = {
               force = true;
               default = "google"; # DuckDuckGo
@@ -149,7 +149,7 @@ in
         in
         {
           # to switch profile go to about:profiles
-          ${config.myHome.user} = common-conf;
+          ${config.home.username} = common-conf;
         } // lib.optionalAttrs cfg.i2pFirefoxProfile {
           i2p =
             common-conf
