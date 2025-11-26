@@ -80,7 +80,8 @@ in
       users.guest = lib.mkIf cfg.guest.enable {
         isNormalUser = true;
         description = "Guest User";
-        initialPassword = "guest"; # Set a simple default password
+        hashedPassword = "";
+        # initialPassword = "guest"; # Set a simple default password
         extraGroups = [
           "scanner"
           "networkmanager"
