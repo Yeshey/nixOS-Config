@@ -74,8 +74,8 @@ in
       users.guest = lib.mkIf cfg.guest.enable {
         isNormalUser = true;
         description = "Guest User";
-        hashedPassword = "";
-        # initialPassword = "guest"; # Set a simple default password
+        # hashedPassword = ""; # with this you'd have problems with keyring
+        initialPassword = "guest"; # Set a simple default password
         extraGroups = [
           "scanner"
           "networkmanager"
