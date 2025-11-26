@@ -36,7 +36,7 @@ in
       };
       sharedModules = builtins.attrValues outputs.homeManagerModules;
       users."${cfg.user}" = import cfg.home-manager.home;
-      users."guest" = import cfg.home-manager.home;
+      users."guest" = lib.mkIf cfg.guest.enable (import cfg.home-manager.home);
     };
     users = {
       # defaultUserShell = pkgs.zsh;
