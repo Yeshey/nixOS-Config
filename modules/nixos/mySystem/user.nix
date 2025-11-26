@@ -16,13 +16,7 @@ in
       default = "yeshey";
       type = lib.types.str;
     };
-    guest = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "guest user";
-      };
-    };
+    guest.enable = lib.mkEnableOption "guest user";
     home-manager = {
       enable = lib.mkEnableOption "home-manager";
       home = lib.mkOption {
