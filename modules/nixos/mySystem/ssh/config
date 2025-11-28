@@ -3,6 +3,18 @@
 
 # Read more about SSH config files: https://linux.die.net/man/5/ssh_config
 
+# tmp
+Host vagrant
+  HostName 127.0.0.1
+  User vagrant
+  Port 2222
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+  PasswordAuthentication no
+  IdentityFile /home/yeshey/PersonalFiles/2025/MastersUnibo/DataMiningModule2/vagrantVM/.vagrant/machines/default/virtualbox/private_key
+  IdentitiesOnly yes
+  LogLevel FATAL
+
 Host unibo
     HostName giano.cs.unibo.it
     User joaofilipe.silvade@studio.unibo.it
