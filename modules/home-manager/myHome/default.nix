@@ -18,6 +18,7 @@ in
 
     ./gnome/default.nix
     ./plasma/default.nix
+    ./cosmic.nix
     ./non-nixos.nix
     ./zsh/default.nix
     ./direnv.nix
