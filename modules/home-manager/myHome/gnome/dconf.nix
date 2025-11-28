@@ -73,10 +73,8 @@ with lib.hm.gvariant;
         use-higher-precision = false;
       };
 
-      "org/gnome/desktop/interface" = {
-        clock-show-seconds = true;
-        clock-show-weekday = true;
-        show-battery-percentage = true;
+      "org/gnome/nautilus/preferences" = {
+        click-policy = "single";
       };
 
     };

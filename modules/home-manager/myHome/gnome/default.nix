@@ -68,6 +68,10 @@ with lib.hm.gvariant;
         allow-volume-above-100-percent = true;
       };
 
+      "org/gnome/desktop/wm/keybindings" = {
+        show-desktop = [ "<Super>d" ];
+      };
+
       "org/gnome/desktop/input-sources" = {
         show-all-sources = false;
         sources = [
@@ -87,8 +91,20 @@ with lib.hm.gvariant;
         xkb-options = [ "terminate:ctrl_alt_bksp" ];
       };
 
+      "org/gnome/desktop/interface" = {
+        clock-show-seconds = true;
+        clock-show-weekday = true;
+        show-battery-percentage = true;
+      };
+
       "org/gnome/desktop/wm/preferences" = {
+        button-layout = "appmenu:minimize,maximize,close";
         resize-with-right-button = true;
+      };
+
+      "org/gnome/nautilus/preferences" = {
+        show-create-link = true;
+        show-delete-permanently = true;
       };
 
       "org/gnome/shell" = {
