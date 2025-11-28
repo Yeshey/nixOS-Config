@@ -21,6 +21,7 @@ in
     nonNixos.enable = false;
     plasma.enable = false;
     gnome.enable = true;
+    cosmic.enable = false;
     ssh.enable = true;
     hyprland = {
       enable = false;

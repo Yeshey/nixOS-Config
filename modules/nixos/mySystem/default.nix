@@ -54,6 +54,7 @@ in
     ./gaming.nix
     ./gnome.nix
     ./plasma.nix
+    ./cosmic.nix
     ./hyprland.nix
     ./virt.nix
     ./zsh/default.nix
