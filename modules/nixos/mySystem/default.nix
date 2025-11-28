@@ -252,6 +252,11 @@ in
       ];
       # pkgs.deploy-rs
 
+      programs.appimage = {
+        enable = true;
+        binfmt = true;  # Allows direct execution
+      };
+      
       networking.networkmanager = {
         enable = lib.mkOverride 1010 true;
         plugins = with pkgs; [
