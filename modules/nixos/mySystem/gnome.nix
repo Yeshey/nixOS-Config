@@ -30,6 +30,8 @@ in
       ];
     };
 
+    i18n.inputMethod.enabled = "ibus"; # with this you can use Super + . to get in emoji annotation mode. The type the name of your emoji and space to select the correct one
+
     # for audio and video properties in nautilus interface https://github.com/NixOS/nixpkgs/issues/53631
     environment.sessionVariables.GST_PLUGIN_SYSTEM_PATH_1_0 = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
       pkgs.gst_all_1.gst-plugins-good

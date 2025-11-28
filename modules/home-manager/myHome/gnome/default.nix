@@ -24,7 +24,8 @@ with lib.hm.gvariant;
     home.packages = with pkgs; [
       gnome-tweaks
       # For gnome
-      gnomeExtensions.clipboard-indicator
+      # gnomeExtensions.clipboard-indicator
+      gnomeExtensions.pano
       gnomeExtensions.burn-my-windows
       gnomeExtensions.hibernate-status-button
       gnomeExtensions.tray-icons-reloaded
@@ -97,11 +98,22 @@ with lib.hm.gvariant;
           # "workspace-indicator@gnome-shell-extensions.gcampax.github.com"
         ];
         enabled-extensions = [
-          "clipboard-history@alexsaveau.dev"
-          "clipboard-indicator@tudmotu.com"
           "hibernate-status@dromi"
           "trayIconsReloaded@selfmade.pl"
+          "pano@elhan.io" # clipboard history
         ];
+      };
+
+      "org/gnome/shell/extensions/pano" = {
+        history-length = 250;
+        play-audio-on-copy = false;
+        send-notification-on-copy = false;
+        session-only-mode = false;
+      };
+
+      "org/gnome/shell/extensions/hibernate-status-button" = {
+        show-hybrid-sleep = false;
+        show-suspend-then-hibernate = false;
       };
     };
 
