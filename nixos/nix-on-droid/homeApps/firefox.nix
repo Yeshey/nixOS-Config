@@ -62,7 +62,6 @@ in
               bitwarden
               # floccus
               # privacy-redirect
-              privacy-badger
               languagetool
               darkreader
               metamask
