@@ -24,7 +24,6 @@ with lib.hm.gvariant;
     home.packages = with pkgs; [
       gnome-tweaks
       # For gnome
-      # gnomeExtensions.clipboard-indicator
       gnomeExtensions.pano
       gnomeExtensions.burn-my-windows
       gnomeExtensions.hibernate-status-button
