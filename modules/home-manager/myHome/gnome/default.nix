@@ -23,11 +23,10 @@ with lib.hm.gvariant;
   config = lib.mkIf (config.myHome.enable && cfg.enable) {
     home.packages = with pkgs; [
       gnome-tweaks
-      # For gnome
-      gnomeExtensions.pano
+      gnomeExtensions.pano # clipboard history
       gnomeExtensions.burn-my-windows
       gnomeExtensions.hibernate-status-button
-      gnomeExtensions.tray-icons-reloaded
+      gnomeExtensions.appindicator # system tray
       gnomeExtensions.vitals
     ];
 
@@ -38,8 +37,6 @@ with lib.hm.gvariant;
       iconTheme = {
         package = pkgs.adwaita-icon-theme;
         name = "Adwaita";
-        # package = pkgs.kdePackages.breeze-icons;
-        # name = "Breeze-Dark";
       };
     };
 
@@ -114,7 +111,7 @@ with lib.hm.gvariant;
         ];
         enabled-extensions = [
           "hibernate-status@dromi"
-          "trayIconsReloaded@selfmade.pl"
+          "appindicatorsupport@rgcjonas.gmail.com" # system tray
           "pano@elhan.io" # clipboard history
         ];
       };
