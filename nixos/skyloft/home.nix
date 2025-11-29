@@ -64,7 +64,7 @@ in
       # https://www.youtube.com/watch?v=ljHkWgBaQWU
       enable = false;
       base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-medium.yaml"; #pop.yaml
-      wallpaper = pkgs.wallpapers.tunaCoimbra2025; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement #tunaCoimbra2025
+      # wallpaper = pkgs.wallpapers.tunaCoimbra2025; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement #tunaCoimbra2025
     };
 
     #agenix = {
