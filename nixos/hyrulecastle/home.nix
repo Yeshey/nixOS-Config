@@ -73,7 +73,7 @@ in
       # https://www.youtube.com/watch?v=ljHkWgBaQWU
       enable = true;
       base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-mirage.yaml"; # gruvbox-dark-medium #pop
-      wallpaper = pkgs.wallpapers.pinkSunsetMinimalHdWallpaper; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement #tunaCoimbra2025 #pinkSunsetMinimalHdWallpaper
+      # wallpaper = pkgs.wallpapers.pinkSunsetMinimalHdWallpaper; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement #tunaCoimbra2025 #pinkSunsetMinimalHdWallpaper
       cursor = {
         package = pkgs.banana-cursor;
         name = "Banana";

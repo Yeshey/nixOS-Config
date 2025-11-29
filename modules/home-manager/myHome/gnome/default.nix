@@ -30,16 +30,6 @@ with lib.hm.gvariant;
       gnomeExtensions.vitals
     ];
 
-    # fixed Icons missing in gnome in hyrule castle when using stylix (https://discourse.nixos.org/t/icons-missing-in-gnome-applications/49835/6)
-    gtk = {
-      enable = true;
-      #Icon Theme
-      iconTheme = {
-        package = pkgs.adwaita-icon-theme;
-        name = "Adwaita";
-      };
-    };
-
     # Essential (also applies to guest user)
     dconf.settings = {
       "org/gnome/desktop/datetime" = {
