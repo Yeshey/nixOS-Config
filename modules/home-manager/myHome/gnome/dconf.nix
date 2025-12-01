@@ -34,6 +34,13 @@ with lib.hm.gvariant;
         ];
       };
 
+      "org/gnome/settings-daemon/plugins/power" = {
+        sleep-inactive-ac-timeout = 1500;
+        sleep-inactive-ac-type = "nothing";
+        sleep-inactive-battery-timeout = 900;
+        sleep-inactive-battery-type = "nothing";
+      };
+
       "org/gnome/shell/extensions/burn-my-windows" = {
         close-preview-effect = "";
         fire-close-effect = false;
