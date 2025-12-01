@@ -59,9 +59,8 @@ in
 
         github-desktop
         obs-studio
-        stremio
         #barrier
-        bitwarden
+        bitwarden-desktop
         gparted
         baobab
         anki
@@ -74,7 +73,7 @@ in
         #vivaldi
         unstable.floorp-bin # disabled bc https://iscteiul365.sharepoint.com/ doesn't work in nixOS floorp version # in about:config set browser.tabs.tabMinWidth to 50 and browser.ctrlTab.sortByRecentlyUsed to true
         brave
-        tor-browser-bundle-bin
+        tor-browser
         qutebrowser
         # firefox
         # librewolf

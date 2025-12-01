@@ -21,22 +21,6 @@ in
     config = lib.mkMerge [
       
     (lib.mkIf cfg.enable {
-      nixpkgs.overlays = [ # needed while minetest is not called luanti
-        (final: prev: {
-          luanti-server = inputs.nixpkgs-unstable.legacyPackages.${prev.system}.luanti-server;
-          # If minetestserver also needs unstable:
-          # minetestserver = inputs.nixpkgs-unstable.legacyPackages.${prev.system}.minetestserver;
-        })
-        (final: prev: { # needed for multiple instances on different ports (see ://github.com/NixOS/nixpkgs/issues/383670#issuecomment-2672619706)
-          minetest = prev.minetest.overrideAttrs (oldAttrs: {
-            cmakeFlags = let
-              # Filter out any existing flags containing "ENABLE_PROMETHEUS"
-              filtered = prev.lib.filter (flag: !(prev.lib.strings.hasInfix "ENABLE_PROMETHEUS" flag)) oldAttrs.cmakeFlags;
-            in
-              filtered ++ [ "-DENABLE_PROMETHEUS=OFF" ];
-          });
-        })
-      ];
 
       # Worlds are in /var/lib/luanti-<serverName>/world
       # You can copy worlds into there with the right premissions with:
@@ -55,7 +39,7 @@ in
           anarchyMineclone2 = {
             game = games.mineclone2;
             port = 30000;
-            # Per-server minetest config
+            # Per-server luanti config
             config = {
               serverName        = "Yeshey mineclone server";
               serverDescription = "mine here";
@@ -68,10 +52,9 @@ in
 
           # Second server: MineClonia on port 30001
           anarchyMineclonia = {
-            #package = pkgs.minetestserver;
             game = games.mineclonia;
             port = 30001;
-            # Per-server minetest config
+            # Per-server luanti config
             config = {
               serverName        = "Yeshey mineclonia server";
               serverDescription = "mine here";

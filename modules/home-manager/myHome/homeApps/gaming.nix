@@ -50,7 +50,7 @@ in
       # tetrio-desktop # runs horribly, better on the web
       prismlauncher # polymc # prismlauncher # for Minecraft
       unstable.heroic
-      minetest
+      luanti
       the-powder-toy
 
       osuLazerOfficial

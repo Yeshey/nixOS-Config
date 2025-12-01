@@ -6,6 +6,8 @@ More Documentation (for myself) about nixOS in my [TechNotes Repo](https://githu
 
 It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my MS Surface Pro 7(`kakariko`) and my Oracle `aarch64` server(`skyloft`).
 
+**debugging** Use nix-tree to see what packages your current system depends on: `nix run nixpkgs#nix-tree -- /run/current-system`. Then use `/` to search for packages you want.
+
 ## Installing on a new computer
 
 - `sudo nixos-rebuild --flake github:Yeshey/nixOS-Config#skyloft boot --max-jobs 2 --cores 4 --option experimental-features "nix-command flakes pipe-operators" --impure`

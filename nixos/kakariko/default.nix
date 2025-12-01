@@ -61,23 +61,6 @@ let
       --set GDK_SCALE 2 \
       --add-flags "-t"
   '';
-
-  stremio-scalled = pkgs.runCommand "stremio" { buildInputs = [ pkgs.makeWrapper ]; } ''
-    mkdir $out
-    # Link every top-level folder from pkgs.stremio to our new target
-    ln -s ${pkgs.stremio}/* $out
-    # Except the bin folder
-    rm $out/bin
-    mkdir $out/bin
-    # We create the bin folder ourselves and link every binary in it
-    ln -s ${pkgs.stremio}/bin/* $out/bin
-    # Except the stremio binary
-    rm $out/bin/stremio
-    # Because we create this ourself, by creating a wrapper
-    makeWrapper ${pkgs.stremio}/bin/stremio $out/bin/stremio \
-      --set QT_AUTO_SCREEN_SCALE_FACTOR 1 \
-      --add-flags "-t"
-  '';
 in
 {
   imports = [
@@ -311,7 +294,6 @@ in
   hardware.microsoft-surface.kernelVersion = "stable"; # newer kernel
 
   environment.systemPackages = with pkgs; [
-    stremio-scalled
     # jetbrains-toolbox
     # Games
     # steam-scalled

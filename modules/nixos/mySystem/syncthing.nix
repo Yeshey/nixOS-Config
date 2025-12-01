@@ -318,6 +318,7 @@ in
           ".local/share/PrismLauncher/instances/MainInstance"
           ".local/share/osu"
           ".minetest"
+          ".luanti"
           ".local/share/The Powder Toy"
         ];
       };

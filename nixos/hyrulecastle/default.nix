@@ -326,7 +326,7 @@ in
   hardware.graphics = {
     enable = true;
     extraPackages = [
-      pkgs.vaapiVdpau
+      pkgs.libva-vdpau-driver
       pkgs.libvdpau-va-gl
     ];
   };

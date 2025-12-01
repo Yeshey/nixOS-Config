@@ -16,6 +16,6 @@ in
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
     users.users.${config.mySystem.user}.extraGroups = [ "adbusers" ];
     programs.adb.enable = true;
-    services.udev.packages = with pkgs; [ android-udev-rules ];
+    services.udev.packages = with pkgs; [ ];
   };
 }

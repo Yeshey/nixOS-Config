@@ -23,7 +23,7 @@ in
         # Libreoffice
         libreoffice
         corefonts # fonts
-        vistafonts # fonts
+        vista-fonts # fonts
         hunspell
         hunspellDicts.uk_UA
       ];

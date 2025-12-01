@@ -30,6 +30,8 @@ in
       ];
     };
 
+    programs.ssh.startAgent = lib.mkForce false; # because gnome now has their own ssh agent? gcr-ssh-agent
+
     # with this you can use Super + . to get in emoji annotation mode. The type the name of your emoji and space to select the correct one
     i18n.inputMethod.enabled = "ibus"; 
     #i18n.inputMethod.enabled = true; 
