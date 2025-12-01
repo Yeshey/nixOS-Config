@@ -23,7 +23,7 @@ with lib.hm.gvariant;
   config = lib.mkIf (config.myHome.enable && cfg.enable) {
     home.packages = with pkgs; [
       gnome-tweaks
-      gnomeExtensions.pano # clipboard history
+      gnomeExtensions.pano # clipboard history # there is a rewrite of it, maybe use that when it is in nixOS: https://github.com/boerdereinar/copyous
       gnomeExtensions.burn-my-windows
       gnomeExtensions.hibernate-status-button
       gnomeExtensions.appindicator # system tray
