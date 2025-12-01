@@ -105,6 +105,11 @@ let
       devices = lib.mapAttrsToList (name: value: name) devices;
       versioning = myVersioning;
     };
+    "WhatsAppPictures" = {
+      path = "${config.mySystem.dataStoragePath}/PersonalFiles/Timeless/Syncthing/WhatsAppPictures";
+      devices = lib.mapAttrsToList (name: value: name) devices;
+      versioning = myVersioning;
+    };
   };
 in
 {
