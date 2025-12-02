@@ -44,6 +44,7 @@ let
 in
 {
   imports = [
+    inputs.nix-index-database.nixosModules.nix-index # for command not found?
     ./user.nix # always active
     ./cliTools.nix # always active
     ./safe-rm.nix # always active
@@ -243,7 +244,6 @@ in
         enable = true;
         defaultEditor = lib.mkOverride 1010 true;
       };
-      programs.command-not-found.enable = true;
       programs.gphoto2.enable = true; # to be able to access cameras
       environment.systemPackages = [
         pkgs.kdePackages.kamera

@@ -70,7 +70,6 @@ in
           "git"
           "colored-man-pages"
           "alias-finder"
-          "command-not-found"
           "urltools"
           "bgnotify"
         ];
