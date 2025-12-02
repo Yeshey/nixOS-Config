@@ -16,6 +16,7 @@ in
 
   config = {
     environment.systemPackages = with pkgs; [
+      nettools # ifconfig
       git
       dnsutils
       pciutils

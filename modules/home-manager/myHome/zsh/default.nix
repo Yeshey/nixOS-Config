@@ -97,18 +97,6 @@ in
           src = "${pkgs.zsh-z}/share/zsh-z";
         }
       ];
-      /*
-        oh-my-zsh = {
-          enable = true;
-          plugins = [ "git"
-                      "colored-man-pages"
-                      "alias-finder"
-                      "command-not-found"
-                      "urltools"
-                      "bgnotify"];
-          theme = "agnoster"; # robbyrussell # agnoster # frisk
-        };
-      */
     };
   };
 }
