@@ -105,7 +105,6 @@
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     nixos-facter-modules.url = "github:nix-community/nixos-facter-modules";
-    globalprotect-openconnect.url = "github:yuezk/GlobalProtect-openconnect";
   };
 
   outputs = {
