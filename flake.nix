@@ -14,7 +14,7 @@
       url = "github:nix-community/stylix/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    nixos-hardware.url = "github:8bitbuddhist/nixos-hardware/surface-rust-target-spec-fix";
     nixvim = {
         url = "github:nix-community/nixvim";
         # If using a stable channel you can use `url = "github:nix-community/nixvim/nixos-<version>"`
