@@ -290,8 +290,18 @@ in
   #boot.extraModulePackages = [
   #  config.boot.kernelPackages.bcachefs
   #];
-  services.bcachefs.autoScrub.enable = true; # enable after you have kernel 6.14 or later
-  hardware.microsoft-surface.kernelVersion = "stable"; # newer kernel
+  #services.bcachefs.autoScrub.enable = true; # enable after you have kernel 6.14 or later
+  #hardware.microsoft-surface.kernelVersion = "stable"; # newer kernel
+
+  boot.kernelPatches = [
+    {
+      name = "disable-rust";
+      patch = null;
+      extraConfig = ''
+        RUST n
+      '';
+    }
+  ];
 
   environment.systemPackages = with pkgs; [
     # jetbrains-toolbox
