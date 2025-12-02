@@ -72,7 +72,7 @@ in
                 streetsidesoftware.code-spell-checker # spell checker
                 
                 bradlc.vscode-tailwindcss # tailwindcss
-                redhat.vscode-xml # not installed??
+                # redhat.vscode-xml # not installed??
                 # arrterian.nix-env-selector # nix environment selector
                 mkhl.direnv # direnv (the good one!)
                 jnoortheen.nix-ide # not work?
