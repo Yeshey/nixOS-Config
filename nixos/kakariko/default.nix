@@ -293,6 +293,7 @@ in
   #services.bcachefs.autoScrub.enable = true; # enable after you have kernel 6.14 or later
   #hardware.microsoft-surface.kernelVersion = "stable"; # newer kernel
 
+  # disable until I can use my powerfull PC to compile the surface pro
   boot.kernelPatches = [
     {
       name = "disable-rust";
