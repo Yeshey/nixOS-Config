@@ -73,6 +73,10 @@ with lib.hm.gvariant;
         use-higher-precision = false;
       };
 
+      "org/gnome/shell/extensions/pano" = {
+        session-only-mode = lib.mkForce false;
+      };
+
       "org/gnome/nautilus/preferences" = {
         click-policy = "single";
       };

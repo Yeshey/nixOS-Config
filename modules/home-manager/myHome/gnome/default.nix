@@ -110,7 +110,7 @@ with lib.hm.gvariant;
         history-length = 250;
         play-audio-on-copy = false;
         send-notification-on-copy = false;
-        session-only-mode = false;
+        session-only-mode = true;
       };
 
       "org/gnome/shell/extensions/hibernate-status-button" = {
