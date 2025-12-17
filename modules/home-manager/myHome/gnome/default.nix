@@ -107,6 +107,10 @@ with lib.hm.gvariant;
         ];
       };
 
+      "org/gnome/shell/extensions/appindicator" = {
+        tray-pos = "left";
+      };
+
       "org/gnome/shell/extensions/system-monitor" = {
         show-download = false;
         show-upload = false;
