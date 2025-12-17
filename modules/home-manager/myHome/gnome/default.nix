@@ -27,7 +27,7 @@ with lib.hm.gvariant;
       gnomeExtensions.burn-my-windows
       gnomeExtensions.hibernate-status-button
       gnomeExtensions.appindicator # system tray
-      gnomeExtensions.vitals
+      gnomeExtensions.system-monitor
     ];
 
     # Essential (also applies to guest user)
@@ -103,7 +103,13 @@ with lib.hm.gvariant;
           "hibernate-status@dromi"
           "appindicatorsupport@rgcjonas.gmail.com" # system tray
           "pano@elhan.io" # clipboard history
+          "system-monitor@gnome-shell-extensions.gcampax.github.com"
         ];
+      };
+
+      "org/gnome/shell/extensions/system-monitor" = {
+        show-download = false;
+        show-upload = false;
       };
 
       "org/gnome/shell/extensions/pano" = {
