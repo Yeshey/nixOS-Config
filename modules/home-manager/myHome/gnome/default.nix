@@ -25,7 +25,6 @@ with lib.hm.gvariant;
       gnome-tweaks
       gnomeExtensions.pano # clipboard history # there is a rewrite of it, maybe use that when it is in nixOS: https://github.com/boerdereinar/copyous
       gnomeExtensions.burn-my-windows
-      gnomeExtensions.hibernate-status-button
       gnomeExtensions.appindicator # system tray
       gnomeExtensions.system-monitor
     ];
@@ -100,7 +99,6 @@ with lib.hm.gvariant;
           # "workspace-indicator@gnome-shell-extensions.gcampax.github.com"
         ];
         enabled-extensions = [
-          "hibernate-status@dromi"
           "appindicatorsupport@rgcjonas.gmail.com" # system tray
           "pano@elhan.io" # clipboard history
           "system-monitor@gnome-shell-extensions.gcampax.github.com"
@@ -121,11 +119,6 @@ with lib.hm.gvariant;
         play-audio-on-copy = false;
         send-notification-on-copy = false;
         session-only-mode = true;
-      };
-
-      "org/gnome/shell/extensions/hibernate-status-button" = {
-        show-hybrid-sleep = false;
-        show-suspend-then-hibernate = false;
       };
     };
 
