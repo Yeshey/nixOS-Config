@@ -50,10 +50,6 @@ with lib.hm.gvariant;
         wisps-open-effect = false;
       };
 
-      "org/gnome/shell/extensions/pano" = {
-        session-only-mode = lib.mkForce false;
-      };
-
       "org/gnome/nautilus/preferences" = {
         click-policy = "single";
       };

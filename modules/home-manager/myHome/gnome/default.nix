@@ -25,7 +25,7 @@ with lib.hm.gvariant;
       gnome-tweaks
       gnomeExtensions.burn-my-windows
       gnomeExtensions.appindicator # system tray
-      gnomeExtensions.system-monitor
+      gnomeExtensions.system-monitor # official gnome extension
     ];
 
     # Essential (also applies to guest user)
