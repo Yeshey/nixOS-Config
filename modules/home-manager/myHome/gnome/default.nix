@@ -23,7 +23,6 @@ with lib.hm.gvariant;
   config = lib.mkIf (config.myHome.enable && cfg.enable) {
     home.packages = with pkgs; [
       gnome-tweaks
-      gnomeExtensions.pano # clipboard history # there is a rewrite of it, maybe use that when it is in nixOS: https://github.com/boerdereinar/copyous
       gnomeExtensions.burn-my-windows
       gnomeExtensions.appindicator # system tray
       gnomeExtensions.system-monitor
@@ -100,7 +99,6 @@ with lib.hm.gvariant;
         ];
         enabled-extensions = [
           "appindicatorsupport@rgcjonas.gmail.com" # system tray
-          "pano@elhan.io" # clipboard history
           "system-monitor@gnome-shell-extensions.gcampax.github.com"
         ];
       };
@@ -112,13 +110,6 @@ with lib.hm.gvariant;
       "org/gnome/shell/extensions/system-monitor" = {
         show-download = false;
         show-upload = false;
-      };
-
-      "org/gnome/shell/extensions/pano" = {
-        history-length = 250;
-        play-audio-on-copy = false;
-        send-notification-on-copy = false;
-        session-only-mode = true;
       };
     };
 
