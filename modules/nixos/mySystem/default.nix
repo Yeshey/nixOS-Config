@@ -159,6 +159,12 @@ in
       services.tzupdate.timer.enable = true;
       services.tzupdate.timer.interval = "*:0/40:00";
       services.timesyncd.enable = false;
+      systemd.services.tzupdate.serviceConfig = {
+        Restart = "on-failure";
+        RestartSec = "45s";  # Slightly longer to allow DHCP/DNS convergence
+        StartLimitIntervalSec = "5min";
+        StartLimitBurst = 3;  # Fewer retries since we waited for DNS
+      };
 
       services.chrony = {
         enable  = true;
