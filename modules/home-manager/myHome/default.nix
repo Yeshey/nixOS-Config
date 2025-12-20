@@ -14,6 +14,7 @@ in
   imports = [
     ./safe-rm.nix # always active
     ./gc.nix # always active
+    ./templates.nix # always active
     ./myScripts.nix
 
     ./gnome/default.nix
