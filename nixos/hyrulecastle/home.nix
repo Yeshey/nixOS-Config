@@ -54,7 +54,7 @@ in
       vscodium.enable = true;
       discord.enable = true;
       gaming.enable = true;
-      kitty.enable = true;
+      kitty.enable = false;
       alacritty.enable = false;
       libreoffice.enable = true;
       devops.enable = false;
