@@ -14,7 +14,7 @@
       url = "github:nix-community/stylix/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixos-hardware.url = "github:8bitbuddhist/nixos-hardware/surface-rust-target-spec-fix";
+    nixos-hardware.url = "github:8bitbuddhist/nixos-hardware/surface-kernel-6.18";
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -132,7 +132,7 @@
     #wolf,
     # lanzaboote,
     nix-snapd,
-    nix-minecraft,  
+    nix-minecraft,
     nix-luanti,
     #aagl,
     nix-flatpak,
@@ -235,13 +235,13 @@
       _module.args = {
         inherit inputs outputs;
       };
-      imports = [ 
+      imports = [
         ./nixos/nix-on-droid/default.nix
       ];
     };
     nixOnDroidConfigurations.nix-on-droid = nix-on-droid.lib.nixOnDroidConfiguration {
-      pkgs = import nixpkgs { 
-        system = "aarch64-linux"; 
+      pkgs = import nixpkgs {
+        system = "aarch64-linux";
         config.allowUnfree = true;  # Add this line
       };
       modules = [
@@ -289,5 +289,3 @@
     # checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) deploy-rs.lib;
   };
 }
-
-
