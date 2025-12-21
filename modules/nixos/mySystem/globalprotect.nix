@@ -23,11 +23,20 @@ in
       (pkgs.makeDesktopItem {
         name = "gpclient-iscte";
         desktopName = "GlobalProtect ISCTE-IUL";
+        genericName = "GlobalProtect VPN Client";
         comment = "Connect to ISCTE-IUL VPN";
-        exec = "sudo -E gpclient --fix-openssl connect --browser default vpn.iscte-iul.pt";
+        exec = "sudo -E gpclient --fix-openssl connect --browser default vpn.iscte-iul.pt %u";
         icon = "network-vpn";
-        categories = [ "Network" ];
-        terminal = true;  # This opens in your default terminal
+        categories = [ "Network" "Dialup" ];
+        keywords = [
+          "GlobalProtect"
+          "Openconnect"
+          "SAML"
+          "connection"
+          "VPN"
+        ];
+        mimeTypes = ["x-scheme-handler/globalprotectcallback"];
+        terminal = true;
       })
     ];
 
