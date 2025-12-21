@@ -53,6 +53,7 @@ in
           # complex alias that need nix syntax
           alias update="sudo nh os switch --bypass-root-check"
           alias update-re="sudo bash -c 'nh os boot --bypass-root-check && reboot'"
+          alias update-off="sudo bash -c 'nh os boot --bypass-root-check && poweroff'"
         '')}
 
 
