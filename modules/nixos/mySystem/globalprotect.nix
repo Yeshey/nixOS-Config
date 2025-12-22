@@ -18,14 +18,13 @@ in
 
     environment.systemPackages = [ 
       # inputs.globalprotect-openconnect.packages.${pkgs.system}.default
-      pkgs.gpclient
 
       (pkgs.makeDesktopItem {
         name = "gpclient-iscte";
         desktopName = "GlobalProtect ISCTE-IUL";
         genericName = "GlobalProtect VPN Client";
         comment = "Connect to ISCTE-IUL VPN";
-        exec = "sudo -E gpclient --fix-openssl connect --browser default vpn.iscte-iul.pt %u";
+        exec = "sudo ${pkgs.gpclient}/bin/gpclient --fix-openssl connect vpn.iscte-iul.pt";
         icon = "network-vpn";
         categories = [ "Network" "Dialup" ];
         keywords = [
