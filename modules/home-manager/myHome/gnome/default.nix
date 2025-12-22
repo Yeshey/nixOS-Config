@@ -15,7 +15,7 @@ with lib.hm.gvariant;
   options.myHome.gnome = with lib; {
     enable = mkOption {
       type = types.bool;
-      default = (osConfig.mySystem.gnome.enable or false) || (osConfig.services.xserver.desktopManager.gnome.enable or false);
+      default = (osConfig.mySystem.gnome.enable or false) || (osConfig.services.desktopManager.gnome.enable or false);
       description = "personal gnome configuration";
     };
   };

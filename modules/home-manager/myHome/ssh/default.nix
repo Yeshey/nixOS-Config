@@ -17,6 +17,13 @@ in
 
     programs.ssh = {
       enable = true;
+      enableDefaultConfig = false; # it will be removed in the future
+      matchBlocks."*" = {
+        forwardAgent = true;
+        compression = true;
+        serverAliveInterval = 120;
+      };
+
       extraConfig = builtins.readFile ./config; # puts in ~/.ssh/config
     };
 

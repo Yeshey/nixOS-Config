@@ -33,13 +33,19 @@ in
       };
       git = {
         enable = true;
-        userName = lib.mkIf cfg.personalGit.enable "${cfg.personalGit.userName}";
-        userEmail = lib.mkIf cfg.personalGit.enable "${cfg.personalGit.userEmail}";
-        extraConfig = {
-          core = {
-            filemode = false; # syncthing made file changes in git with no content
-          };
-        };
+        settings = lib.mkMerge [
+          {
+            core = {
+              filemode = false; # syncthing made file changes in git with no content
+            };
+          }
+          (lib.mkIf cfg.personalGit.enable {
+            user = {
+              name = cfg.personalGit.userName;
+              email = cfg.personalGit.userEmail;
+            };
+          })
+        ];
         # fix github desktop error
         lfs.enable = true; 
       };

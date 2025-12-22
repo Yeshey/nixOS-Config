@@ -302,7 +302,7 @@ in
     vgpu.enable = false;
   };
 
-  services.xserver.displayManager.gdm.autoSuspend = false;
+  services.displayManager.gdm.autoSuspend = false;
 
   nix = {
     settings = {
@@ -312,7 +312,7 @@ in
   };
 
   # on hyrule castle I want it so when I close the lid it doesn't suspend
-  services.logind.lidSwitch = "ignore";
+  services.logind.settings.Login.HandleLidSwitch = "ignore";
 
   # nix.package = lib.mkForce pkgs.nixVersions.latest; # needed for clean to work without illigal character error?
 

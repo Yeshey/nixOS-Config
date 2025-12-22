@@ -33,9 +33,10 @@ in
     programs.ssh.startAgent = lib.mkForce false; # because gnome now has their own ssh agent? gcr-ssh-agent
 
     # with this you can use Super + . to get in emoji annotation mode. The type the name of your emoji and space to select the correct one
-    i18n.inputMethod.enabled = "ibus"; 
-    #i18n.inputMethod.enabled = true; 
-    #i18n.inputMethod.type = "ibus"; 
+    i18n.inputMethod = {
+      enable = true;
+      type = "ibus";
+    };
 
     # for audio and video properties in nautilus interface https://github.com/NixOS/nixpkgs/issues/53631
     environment.sessionVariables.GST_PLUGIN_SYSTEM_PATH_1_0 = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
@@ -46,19 +47,16 @@ in
     ];
 
     services = {
-      xserver = {
-        enable = true;
-        # layout = "pt";
-        displayManager.gdm = {
-          enable = lib.mkOverride 1010 true;
-          # autoSuspend = false;
-          settings = {
-            greeter.IncludeAll = true;
-          };
+      # layout = "pt";
+      displayManager.gdm = {
+        enable = lib.mkOverride 1010 true;
+        # autoSuspend = false;
+        settings = {
+          greeter.IncludeAll = true;
         };
-        desktopManager = {
-          gnome.enable = true;
-        };
+      };
+      desktopManager = {
+        gnome.enable = true;
       };
       udev.packages = [ pkgs.gnome-settings-daemon ];
     };
