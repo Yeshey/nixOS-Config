@@ -30,6 +30,7 @@ with lib.hm.gvariant;
         enabled-extensions = [
           "burn-my-windows@schneegans.github.com"
           "user-theme@gnome-shell-extensions.gcampax.github.com" # for stylix
+          "copyous@boerdereinar.dev"
         ];
       };
 
