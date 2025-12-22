@@ -166,7 +166,6 @@ in
     agenix \
     nixos-generators \
     nix-on-droid \
-    box64-binfmt \
     nix-luanti \
     nix-minecraft \
     nix-snapd
