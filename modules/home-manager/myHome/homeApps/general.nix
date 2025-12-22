@@ -63,7 +63,6 @@ in
         bitwarden-desktop
         gparted
         baobab
-        anki
         xclip # for vim clipboard support :)
         # etcher #insecure?
         audacity
