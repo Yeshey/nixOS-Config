@@ -154,10 +154,6 @@ in
       boot.tmp.cleanOnBoot = lib.mkOverride 1010 true; # delete all files in /tmp during boot.
       boot.supportedFilesystems = [ "ntfs" "btrfs" ]; # lib.mkOverride 1010? Doesn't work with [] and {}?
 
-      # External monitors
-      #hardware.i2c.enable = true;
-      #services.ddccontrol.enable = true;
-
       #time.timeZone = lib.mkOverride 1010 "Europe/Lisbon";
       # services.automatic-timezoned.enable = true;
       services.tzupdate.enable = true; # less accurate, but guarantees correct timezone (not affected by VPNs)
