@@ -50,6 +50,7 @@ with lib.hm.gvariant;
 
       "org/gnome/desktop/sound" = {
         allow-volume-above-100-percent = true;
+        input-feedback-sounds = true;
       };
 
       "org/gnome/desktop/wm/keybindings" = {
