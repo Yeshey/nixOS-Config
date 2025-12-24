@@ -31,10 +31,10 @@ in
 
     # External monitors (I think you need this for the brightness to work, but it might be added to nixOS gnome module if it really works so I might just remove it in the future)
     # Also it doesn't currently work with nvidia apparently: https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/4763#note_2610835
-    hardware.i2c.enable = true;
-    services.ddccontrol.enable = true;
-    boot.kernelModules = ["i2c-dev" "ddcci_backlight"];
-    boot.extraModulePackages = [ config.boot.kernelPackages.ddcci-driver ];
+    # hardware.i2c.enable = true;
+    # services.ddccontrol.enable = true;
+    # boot.kernelModules = ["i2c-dev" "ddcci_backlight"];
+    # boot.extraModulePackages = [ config.boot.kernelPackages.ddcci-driver ];
 
     environment = {
       systemPackages = with pkgs; [ firefox ];
