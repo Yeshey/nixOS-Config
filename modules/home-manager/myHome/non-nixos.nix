@@ -18,6 +18,10 @@ let
       url = "https://cache.flox.dev";
       key = "flox-cache-public-1:7F4OyH7ZCnFhcze3fJdfyXYLQw/aV7GEed86nQ7IsOs=";
     };
+    nixos-cuda = {
+      url = "https://cache.nixos-cuda.org";
+      key = "cache.nixos-cuda.org:74DUi4Ye579gUqzH4ziL9IyiJBlDpMRn9MBN8oNan9M=";
+    };
     #cachethalheimio = {
     #  url = "https://cache.thalheim.io";
     #  key = "cache.thalheim.io-1:R7msbosLEZKrxk/lKxf9BTjOOH7Ax3H0Qj0/6wiHOgc=";

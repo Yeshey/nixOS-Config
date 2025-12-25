@@ -55,6 +55,12 @@ with lib.hm.gvariant;
 
       "org/gnome/desktop/wm/keybindings" = {
         show-desktop = [ "<Super>d" ];
+        switch-windows = [ "<Alt>Tab" ];
+        switch-windows-backward = [ "<Shift><Alt>Tab" ];
+      };
+
+      "org/gnome/shell/window-switcher" = {
+        current-workspace-only = false;
       };
 
       "org/gnome/desktop/input-sources" = {
