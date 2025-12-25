@@ -46,6 +46,7 @@ in
         "latex"
         "react-typescript-snippets"
         "codebook"
+        "git-firefly" # .gitignore and git formatting
       ];
       userSettings = {
         hour_format = "hour24";
