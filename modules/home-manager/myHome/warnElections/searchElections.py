@@ -1,5 +1,6 @@
 import requests
 import re
+import time
 from datetime import datetime, timedelta
 import subprocess
 from bs4 import BeautifulSoup
@@ -14,14 +15,30 @@ MONTHS = {
 
 def send_notification(subject, body):
     """Send critical desktop notification AND phone notification"""
-    # Desktop notification (existing)
-    try:
-        subprocess.run(["notify-send", "-u", "critical", subject, body], check=True)
-        print(f"Desktop notification sent: {subject}")
-    except Exception as e:
-        print(f"Failed to send desktop notification: {e}")
+    # Wait for notification daemon to be available
+    max_attempts = 1000
+    for attempt in range(max_attempts):
+        try:
+            subprocess.run([
+                "/run/current-system/sw/bin/notify-send",
+                "-u", "critical", 
+                subject, 
+                body
+            ], check=True, capture_output=True, text=True)
+            print(f"Desktop notification sent: {subject}")
+            break
+        except subprocess.CalledProcessError as e:
+            stderr = e.stderr or ""
+            if "org.freedesktop.Notifications" in stderr and attempt < max_attempts - 1:
+                print(f"Notification daemon not ready, waiting... (attempt {attempt + 1}/{max_attempts})")
+                time.sleep(2)
+            else:
+                print(f"Failed to send desktop notification: {e}")
+                break
+        except Exception as e:
+            print(f"Failed to send desktop notification: {e}")
+            break
     
-    # Pushbullet phone notification (new)
     send_pushbullet_notification(subject, body)
 
 def send_pushbullet_notification(title, body):
