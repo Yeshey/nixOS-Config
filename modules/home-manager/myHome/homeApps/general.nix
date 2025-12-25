@@ -49,8 +49,14 @@ in
         #jetbrains-toolbox # for code with me you need the toolbox
         #jetbrains.gateway
 
+        # Music production
+        #ardour
+        #zrythm (better than ardour?)
         vital # run with Vital
         helm
+        #yoshimi
+        #bristol
+
         kdePackages.okular
 
         unstable.joplin-desktop # note taking
