@@ -292,27 +292,8 @@ in
       # Syncthing desktop shortcut
       environment.systemPackages =
         with pkgs;
-        let
-          syncthingWeb = makeDesktopItem {
-            name = "Syncthing";
-            desktopName = "Syncthing";
-            genericName = "Syncthing Web App";
-            exec = ''xdg-open "http://127.0.0.1:8384#"'';
-            icon = "firefox";
-            categories = [
-              "GTK"
-              "X-WebApps"
-            ];
-            mimeTypes = [
-              "text/html"
-              "text/xml"
-              "application/xhtml_xml"
-            ];
-          };
-        in
         [
           xdg-utils
-          syncthingWeb
         ];
     }) 
   
