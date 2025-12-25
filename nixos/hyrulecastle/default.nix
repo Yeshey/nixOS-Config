@@ -138,7 +138,7 @@ in
       host = "hyrulecastle";
     };
     flatpaks.enable = true;
-    i2p.enable = true;
+    i2p.enable = false;
 
     # borgBackups = {
     #   enable = true;
@@ -267,9 +267,9 @@ in
     # };
     #nginxServer.enable = true;
     #mineclone.enable = true;
-    kubo.enable = true;
+    kubo.enable = false;
     freeGames.enable = false;
-    searx.enable = true;
+    searx.enable = false;
     ollama = {
       enable = false; 
       # acceleration = "cuda"; #or 'rocm' # this issue https://github.com/NixOS/nixpkgs/issues/321920
