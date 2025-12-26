@@ -138,7 +138,7 @@ in
       host = "hyrulecastle";
     };
     flatpaks.enable = true;
-    i2p.enable = true;
+    i2p.enable = false;
 
     # borgBackups = {
     #   enable = true;
