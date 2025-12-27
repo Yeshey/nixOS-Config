@@ -186,32 +186,106 @@ def check_elections():
                 parsing_errors.append(raw_date)
                 print(f"Invalid year: {year_str}\n")
 
-        # Generic Notification: Election exactly 32 days away
-        # elections.append((datetime.today() + timedelta(days=32), "Generic Election Test"))
-
-        # Generic Notification: Election exactly 27 days away
-        # elections.append((datetime.today() + timedelta(days=27), "Generic Election Test"))
-
-        # Generic Notification: Election exactly 22 days away
-        # elections.append((datetime.today() + timedelta(days=22), "Generic Election Test"))
-
-        # Early Voting (EM MOBILIDADE): "TOMORROW" trigger – election 15 days away (since 14+1)
-        # elections.append((datetime.today() + timedelta(days=15), "EM MOBILIDADE Test"))
-
-        # Early Voting (EM MOBILIDADE): "TODAY" trigger – election 14 days away
-        # elections.append((datetime.today() + timedelta(days=14), "EM MOBILIDADE Test"))
-
-        # Early Voting (ELEITORES DOENTES INTERNADOS): "TOMORROW" trigger – election 21 days away (20+1)
-        # elections.append((datetime.today() + timedelta(days=21), "ELEITORES DOENTES INTERNADOS Test"))
-
-        # Early Voting (ELEITORES DOENTES INTERNADOS): "TODAY" trigger – election 20 days away
-        # elections.append((datetime.today() + timedelta(days=20), "ELEITORES DOENTES INTERNADOS Test"))
-
-        # Early Voting (ELEITORES DESLOCADOS NO ESTRANGEIRO): "TOMORROW" trigger – election 13 days away (12+1)
-        # elections.append((datetime.today() + timedelta(days=13), "ELEITORES DESLOCADOS NO ESTRANGEIRO Test"))
-
-        # Early Voting (ELEITORES DESLOCADOS NO ESTRANGEIRO): "TODAY" trigger – election 12 days away
-        #elections.append((datetime.today() + timedelta(days=12), "ELEITORES DESLOCADOS NO ESTRANGEIRO Test"))
+        # ============================================================
+        # UNIT TESTS - Uncomment the section you want to test
+        # ============================================================
+        
+        # ==================== APPROXIMATE ELECTIONS ====================
+        # These elections have month-only dates (e.g., "janeiro" or "setembro/outubro")
+        # They get 16 generic notifications: 32,27,22,21,15,14,13,12,10,8,6,5,4,3,2,1 days before
+        # Then daily "THIS MONTH" alerts once inside the month
+        
+        # TEST 1: Generic notification 32 days before approximate election (single month)
+        # elections.append((datetime.today() + timedelta(days=32), True, "março", "Test: Approximate Election"))
+        
+        # TEST 2: Generic notification 27 days before approximate election (single month)
+        # elections.append((datetime.today() + timedelta(days=27), True, "abril", "Test: Approximate Election"))
+        
+        # TEST 3: Generic notification 22 days before approximate election (single month)
+        # elections.append((datetime.today() + timedelta(days=22), True, "maio", "Test: Approximate Election"))
+        
+        # TEST 4: Additional approximate notifications (21, 15, 14, 13, 12, 10, 8, 6, 5, 4, 3, 2, 1 days before)
+        # These are the EXTRA notifications that approximate elections get
+        # elections.append((datetime.today() + timedelta(days=21), True, "junho", "Test: 21 days before"))
+        # elections.append((datetime.today() + timedelta(days=15), True, "julho", "Test: 15 days before"))
+        # elections.append((datetime.today() + timedelta(days=14), True, "agosto", "Test: 14 days before"))
+        # elections.append((datetime.today() + timedelta(days=13), True, "setembro", "Test: 13 days before"))
+        # elections.append((datetime.today() + timedelta(days=12), True, "outubro", "Test: 12 days before"))
+        # elections.append((datetime.today() + timedelta(days=10), True, "novembro", "Test: 10 days before"))
+        # elections.append((datetime.today() + timedelta(days=8), True, "dezembro", "Test: 8 days before"))
+        # elections.append((datetime.today() + timedelta(days=6), True, "janeiro", "Test: 6 days before"))
+        # elections.append((datetime.today() + timedelta(days=5), True, "fevereiro", "Test: 5 days before"))
+        # elections.append((datetime.today() + timedelta(days=4), True, "março", "Test: 4 days before"))
+        # elections.append((datetime.today() + timedelta(days=3), True, "abril", "Test: 3 days before"))
+        # elections.append((datetime.today() + timedelta(days=2), True, "maio", "Test: 2 days before"))
+        # elections.append((datetime.today() + timedelta(days=1), True, "junho", "Test: 1 day before"))
+        
+        # TEST 5: We are INSIDE an approximate election month (single month)
+        # Should trigger daily "Election THIS MONTH" alert
+        # elections.append((datetime(today.year, today.month, 1), True, "dezembro", "Test: Inside Approximate Month"))
+        
+        # TEST 6: We are INSIDE an approximate election month range (month/month)
+        # Should trigger daily "Election THIS MONTH" alert
+        # elections.append((datetime(today.year, today.month, 1), True, "dezembro/janeiro", "Test: Inside Month Range"))
+        
+        # TEST 7: We are in the SECOND month of a month/month range
+        # Should trigger daily "Election THIS MONTH" alert
+        # Example: if today is December, this simulates "novembro/dezembro" election
+        # elections.append((datetime(today.year, today.month - 1 if today.month > 1 else 12, 1), True, f"novembro/dezembro", "Test: Second Month of Range"))
+        
+        # TEST 8: REAL SCENARIO - Janeiro 2026 election (run this on Dec 27, 2025!)
+        # Should trigger notification TODAY because we're 5 days from Jan 1
+        # elections.append((datetime(2026, 1, 1), True, "janeiro", "Eleição do Presidente da República"))
+        
+        # ==================== EXACT DATE ELECTIONS ====================
+        # These elections have specific dates (e.g., "26 de janeiro")
+        # They get fewer notifications than approximate elections:
+        # - Generic: 32, 27, 22 days before
+        # - Early voting: 21 (ELEITORES DOENTES tomorrow), 20 (today), 15 (EM MOBILIDADE tomorrow), 
+        #                 14 (today), 13 (DESLOCADOS tomorrow), 12 (today)
+        # - Election day: 1 (tomorrow), 0 (today)
+        
+        # TEST 9: Generic notification 32 days before exact election
+        # elections.append((datetime.today() + timedelta(days=32), False, "32 days exact", "Test: Exact 32 days - Generic"))
+        
+        # TEST 10: Generic notification 27 days before exact election
+        # elections.append((datetime.today() + timedelta(days=27), False, "27 days exact", "Test: Exact 27 days - Generic"))
+        
+        # TEST 11: Generic notification 22 days before exact election
+        # elections.append((datetime.today() + timedelta(days=22), False, "22 days exact", "Test: Exact 22 days - Generic"))
+        
+        # TEST 12: Early voting notification 21 days before (ELEITORES DOENTES INTERNADOS - TOMORROW)
+        # elections.append((datetime.today() + timedelta(days=21), False, "21 days exact", "Test: Exact 21 days - Early Voting Tomorrow"))
+        
+        # TEST 13: Early voting notification 20 days before (ELEITORES DOENTES INTERNADOS - TODAY)
+        # elections.append((datetime.today() + timedelta(days=20), False, "20 days exact", "Test: Exact 20 days - Early Voting Today"))
+        
+        # TEST 14: Early voting notification 15 days before (EM MOBILIDADE - TOMORROW)
+        # elections.append((datetime.today() + timedelta(days=15), False, "15 days exact", "Test: Exact 15 days - Early Voting Tomorrow"))
+        
+        # TEST 15: Early voting notification 14 days before (EM MOBILIDADE - TODAY)
+        # elections.append((datetime.today() + timedelta(days=14), False, "14 days exact", "Test: Exact 14 days - Early Voting Today"))
+        
+        # TEST 16: Early voting notification 13 days before (ELEITORES DESLOCADOS - TOMORROW)
+        # elections.append((datetime.today() + timedelta(days=13), False, "13 days exact", "Test: Exact 13 days - Early Voting Tomorrow"))
+        
+        # TEST 17: Early voting notification 12 days before (ELEITORES DESLOCADOS - TODAY)
+        # elections.append((datetime.today() + timedelta(days=12), False, "12 days exact", "Test: Exact 12 days - Early Voting Today"))
+        
+        # TEST 18: Election day notification - TOMORROW (1 day before)
+        # elections.append((datetime.today() + timedelta(days=1), False, "1 day exact", "Test: Exact 1 day - Election Tomorrow"))
+        
+        # TEST 19: Election day notification - TODAY (0 days before)
+        # elections.append((datetime.today(), False, "today exact", "Test: Exact 0 days - Election Today"))
+        
+        # TEST 20: Compare approximate vs exact at same offset
+        # At 15 days: Approximate should get GENERIC notification, Exact should get EARLY VOTING notification
+        # elections.append((datetime.today() + timedelta(days=15), True, "março", "Test: Approximate 15 days"))
+        # elections.append((datetime.today() + timedelta(days=15), False, "15 days exact", "Test: Exact 15 days"))
+        
+        # TEST 21: No notification day for exact elections (e.g., 10 days before)
+        # Exact elections should NOT notify at 10, 8, 6, 5, 4, 3, 2 days (those are approximate-only)
+        # elections.append((datetime.today() + timedelta(days=10), False, "10 days exact", "Test: Exact 10 days - Should NOT notify"))
 
         # Check for elections in target range
         the_notification(elections)
@@ -229,7 +303,11 @@ def the_notification(elections):
     today = datetime.today().date()
     
     # --- Generic Notification Setup ---
-    generic_offsets = [32, 27, 22]
+    # Standard offsets for all elections
+    standard_generic_offsets = [32, 27, 22]
+    # Additional offsets ONLY for approximate elections (since we don't know exact date)
+    approximate_additional_offsets = [21, 15, 14, 13, 12, 10, 8, 6, 5, 4, 3, 2, 1]
+    
     generic_notifications = {}
     
     for election_date, is_approx, original_str, etype in elections:
@@ -268,8 +346,16 @@ def the_notification(elections):
                     )
                     send_notification("Election This Month Alert", message)
         
+        # Determine which offsets apply to this election
+        if is_approx:
+            # Approximate elections get ALL offsets (more frequent warnings)
+            applicable_offsets = standard_generic_offsets + approximate_additional_offsets
+        else:
+            # Exact date elections only get standard offsets
+            applicable_offsets = standard_generic_offsets
+        
         # Generic notifications at specific day offsets
-        if diff in generic_offsets:
+        if diff in applicable_offsets:
             generic_notifications.setdefault(diff, []).append((election_date, is_approx, original_str, etype))
     
     # Print scheduled generic notifications
