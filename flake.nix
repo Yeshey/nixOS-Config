@@ -67,8 +67,8 @@
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
     nix-luanti = {
+      url = "git+https://git.menzel.lol/leonard/nix-luanti";
       #inputs.nixpkgs.follows = "nixpkgs-unstable";
-      url = "github:lomenzel/nix-luanti";
     };
     impermanence.url = "github:nix-community/impermanence/home-manager-v2";
     # deploy-rs = {

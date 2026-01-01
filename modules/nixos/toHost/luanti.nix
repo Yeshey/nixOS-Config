@@ -22,6 +22,8 @@ in
       
     (lib.mkIf cfg.enable {
 
+      nixpkgs.overlays = [ inputs.nix-luanti.overlays.default ];
+
       # Worlds are in /var/lib/luanti-<serverName>/world
       # You can copy worlds into there with the right premissions with:
       # stop the service, then start it in the end again
@@ -33,7 +35,7 @@ in
       services.luanti = {
         enable = true;
 
-        servers = with nix-luanti; {
+        servers = with pkgs.luantiPackages; {
           #package = pkgs.minetestserver;
           # First server: MineClone2 on port 30000
           anarchyMineclone2 = {
