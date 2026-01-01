@@ -20,7 +20,7 @@ in
     # For Home Manager
     home.packages = with pkgs; [
       # Your nvix package
-      (inputs.nvix.packages.${pkgs.system}.full.extend { # Replace `default` with `bare`, `core`, or `full` as needed.
+      (inputs.nvix.packages.${stdenv.hostPlatform.system}.full.extend { # Replace `default` with `bare`, `core`, or `full` as needed.
         # Disable avante plugin because it's requiering to setup copilot and I dont know how to do that yet
         plugins.avante.enable = lib.mkForce false; 
       })

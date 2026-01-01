@@ -7,7 +7,7 @@
 }:
 
 let
-  inherit (pkgs) system;
+  inherit (pkgs.stdenv.hostPlatform) system;
   nix-luanti = inputs.nix-luanti.packages.${system};
   cfg = config.toHost.luanti;
 in

@@ -331,7 +331,7 @@ in
     ];
   };
 
-  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];  
+  # boot.binfmt.emulatedSystems = [ "aarch64-linux" ];  
 
   hardware.nvidia-container-toolkit.enable = true;
   # boot.kernelPackages = pkgs.linuxPackages_xanmod_latest;

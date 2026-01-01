@@ -17,7 +17,7 @@ in
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {  
 
     environment.systemPackages = [ 
-      # inputs.globalprotect-openconnect.packages.${pkgs.system}.default
+      # inputs.globalprotect-openconnect.packages.${pkgs.stdenv.hostPlatform.system}.default
 
       (pkgs.makeDesktopItem {
         name = "gpclient-iscte";

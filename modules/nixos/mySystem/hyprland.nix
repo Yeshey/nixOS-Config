@@ -22,7 +22,7 @@ in
     programs.hyprland = {
       enable = lib.mkOverride 1010 true;
       xwayland.enable = lib.mkOverride 1010 true;
-      package = inputs.hyprland.packages.${pkgs.system}.hyprland;
+      package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
       portalPackage = pkgs.xdg-desktop-portal-hyprland;
     };
 

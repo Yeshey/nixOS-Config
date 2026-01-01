@@ -33,7 +33,7 @@ in
         pkgs_old_wihotspot = import (builtins.fetchTarball {
             url = "https://github.com/NixOS/nixpkgs/archive/67b4bf1df4ae54d6866d78ccbd1ac7e8a8db8b73.tar.gz";
             sha256 = "sha256:07gzgcgaclgand7j99w45r07gc464b5jbpaa3wmv6nzwzdb3v3q4";
-        }){ inherit (pkgs) system; };
+        }){ inherit (pkgs.stdenv.hostPlatform) system; };
         old_wihotspot = pkgs_old_wihotspot.linux-wifi-hotspot;
 
       in [
@@ -89,7 +89,6 @@ in
         # anydesk
         pdfarranger
         # old_wihotspot
-        unstable.linux-wifi-hotspot # hotspot
         # texlive.combined.scheme-full # LaTeX
 
         # for amov, flutter need this

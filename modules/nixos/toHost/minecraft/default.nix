@@ -41,7 +41,7 @@ let
     rev = "a343533bccc62400e8a9560423486a3b6c11a23b";
     hash = "sha256-TofHtnlrOBCxtSZ9nnlsTybDnQXUmQrlIleXF1RQAwQ=";
   }) {
-    inherit (pkgs) system;
+    inherit (pkgs.stdenv.hostPlatform) system;
   };
 in 
 {
@@ -249,7 +249,7 @@ in
   #             pkgs-with-lazymc_0_2_10 = import (builtins.fetchTarball {
   #                 url = "https://github.com/NixOS/nixpkgs/archive/336eda0d07dc5e2be1f923990ad9fdb6bc8e28e3.tar.gz";
   #                 sha256 = "sha256:0v8vnmgw7cifsp5irib1wkc0bpxzqcarlv8mdybk6dck5m7p10lr";
-  #             }) { inherit (pkgs) system; };
+  #             }) { inherit (pkgs.stdenv.hostPlatform) system; };
   #           in pkgs-with-lazymc_0_2_10.lazymc;
   #           config = {
   #             # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
@@ -381,7 +381,7 @@ in
   #             pkgs-with-lazymc_0_2_10 = import (builtins.fetchTarball {
   #                 url = "https://github.com/NixOS/nixpkgs/archive/336eda0d07dc5e2be1f923990ad9fdb6bc8e28e3.tar.gz";
   #                 sha256 = "sha256:0v8vnmgw7cifsp5irib1wkc0bpxzqcarlv8mdybk6dck5m7p10lr";
-  #             }) { inherit (pkgs) system; };
+  #             }) { inherit (pkgs.stdenv.hostPlatform) system; };
   #           in pkgs-with-lazymc_0_2_10.lazymc;
   #           config = {
   #             # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
@@ -573,7 +573,7 @@ in
   #           #   pkgs-with-lazymc_0_2_10 = import (builtins.fetchTarball {
   #           #       url = "https://github.com/NixOS/nixpkgs/archive/336eda0d07dc5e2be1f923990ad9fdb6bc8e28e3.tar.gz";
   #           #       sha256 = "sha256:0v8vnmgw7cifsp5irib1wkc0bpxzqcarlv8mdybk6dck5m7p10lr";
-  #           #   }) { inherit (pkgs) system; };
+  #           #   }) { inherit (pkgs.stdenv.hostPlatform) system; };
   #           # in pkgs-with-lazymc_0_2_10.lazymc;
   #           config = {
   #             # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
