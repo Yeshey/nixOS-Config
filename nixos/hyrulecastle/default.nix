@@ -278,13 +278,6 @@ in
     overleaf.enable = false;
   };
 
-  # learnWithT = {
-  #   development.openPorts.enable = true;
-  #   appwrite = {
-  #     enable = false;
-  #   };
-  # };
-
   mySystemHyruleCastle = {
     # https://gist.github.com/WhittlesJr/a6de35b995e8c14b9093c55ba41b697c
     # Enable the module with pciIDs = ""; and then run one of these commands to find the pciIDs:
@@ -315,10 +308,6 @@ in
   services.logind.settings.Login.HandleLidSwitch = "ignore";
 
   # nix.package = lib.mkForce pkgs.nixVersions.latest; # needed for clean to work without illigal character error?
-
-  # roblox with sober (to not get the VK_ERROR_DEVICE_LOST error)
-  #nixpkgs.config.nvidia.acceptLicense = true;
-  #hardware.nvidia.package = config.boot.kernelPackages.nvidiaPackages.legacy_470;
 
   virtualisation.docker.storageDriver = "btrfs"; # for docker
 
