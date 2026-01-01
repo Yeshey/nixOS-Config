@@ -12,7 +12,7 @@ let
 in
 {
   imports = [
-    inputs.plasma-manager.homeManagerModules.plasma-manager
+    inputs.plasma-manager.homeModules.plasma-manager
   ];
 
   options.myHome.plasma = with lib; {

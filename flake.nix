@@ -173,7 +173,7 @@
     overlays = import ./overlays { inherit inputs outputs; };
 
     nixosModules = import ./modules/nixos;
-    homeManagerModules = import ./modules/home-manager;
+    homeModules = import ./modules/home-manager;
 
     nixosConfigurations = {
       hyrulecastle = nixpkgs.lib.nixosSystem {
@@ -219,7 +219,7 @@
       "yeshey" = home-manager.lib.homeManagerConfiguration {
         pkgs = pkgsFor.x86_64-linux;
         extraSpecialArgs = { inherit inputs outputs; };
-        modules = (builtins.attrValues homeManagerModules) ++ [ ./home-manager/home.nix ];
+        modules = (builtins.attrValues homeModules) ++ [ ./home-manager/home.nix ];
       };
     };
 

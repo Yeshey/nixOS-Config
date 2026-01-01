@@ -12,7 +12,7 @@ let
 in
 {
   imports = [
-    inputs.plasma-manager.homeManagerModules.plasma-manager
+    inputs.plasma-manager.homeModules.plasma-manager
     # ./plasmaconf.nix 
   ];
   config = lib.mkIf (config.myHome.enable && cfg.enable) {

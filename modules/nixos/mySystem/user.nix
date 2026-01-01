@@ -34,7 +34,7 @@ in
       extraSpecialArgs = {
         inherit inputs;
       };
-      sharedModules = builtins.attrValues outputs.homeManagerModules;
+      sharedModules = builtins.attrValues outputs.homeModules;
       users."${cfg.user}" = import cfg.home-manager.home;
       users."guest" = lib.mkIf cfg.guest.enable (import cfg.home-manager.home);
     };
