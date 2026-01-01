@@ -13,17 +13,17 @@ jobs:
     name: Bump flake.lock
     runs-on: ubuntu-latest
     steps:
-      # 1) Free up disk space for Nix specifically
-      - name: Nothing but Nix (reclaim disk space for /nix)
-        uses: wimpysworld/nothing-but-nix@main
-        with:
-          hatchet-protocol: "cleave"
-
-      # 1.5) Set up QEMU for ARM emulation
+      # 1) Set up QEMU FIRST (while Docker still exists) ⭐ MOVED UP
       - name: Set up QEMU for multi-arch
         uses: docker/setup-qemu-action@v3
         with:
           platforms: arm64
+
+      # 2) Free up disk space for Nix (this removes Docker)
+      - name: Nothing but Nix (reclaim disk space for /nix)
+        uses: wimpysworld/nothing-but-nix@main
+        with:
+          hatchet-protocol: "cleave"
 
       # 2) Checkout repository
       - name: Checkout
