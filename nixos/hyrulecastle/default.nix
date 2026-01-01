@@ -380,12 +380,6 @@ in
     options snd-hda-intel patch=hda-jack-retask.fw
   '';
 
-  #powerManagement = { # TODO ???
-  #  cpuFreqGovernor = "ondemand";
-  #  cpufreq.min = 800000;
-  #  cpufreq.max = 4700000;
-  #};
-
   #networking = { # TODO can you remove?
   #  hostName = "nixos-${inputs.host}"; # TODO make into variable
   #};
