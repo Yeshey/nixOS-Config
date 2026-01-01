@@ -114,4 +114,5 @@ jobs:
           commit_user_name: "github-actions[bot]"
           commit_user_email: "github-actions[bot]@users.noreply.github.com"
           skip_dirty_check: false
-          skip_fetch: true
+          skip_fetch: false
+          pull_options: '--rebase'
