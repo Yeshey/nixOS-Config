@@ -213,14 +213,6 @@
           ./nixos/twilightrealm
         ];
       };
-      iso = nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs outputs; };
-        modules = (builtins.attrValues nixosModules) ++ [
-          nixos-generators.nixosModules.all-formats
-          home-manager.nixosModules.default
-          ./nixos/iso
-        ];
-      };
     };
 
     homeConfigurations = {
@@ -231,14 +223,6 @@
       };
     };
 
-    myCustomModule = inputs: outputs: {
-      _module.args = {
-        inherit inputs outputs;
-      };
-      imports = [
-        ./nixos/nix-on-droid/default.nix
-      ];
-    };
     nixOnDroidConfigurations.nix-on-droid = nix-on-droid.lib.nixOnDroidConfiguration {
       pkgs = import nixpkgs {
         system = "aarch64-linux";

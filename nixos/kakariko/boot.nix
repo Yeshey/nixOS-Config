@@ -15,7 +15,7 @@ in
     #inputs.lanzaboote.nixosModules.lanzaboote
   ];
 
-  services.xserver.displayManager.gdm.debug = true;
+  # services.displayManager.gdm.debug = true;
 
   security.tpm2.enable = true;
   security.tpm2.pkcs11.enable = true;  # expose /run/current-system/sw/lib/libtpm2_pkcs11.so
