@@ -150,6 +150,7 @@ in
           settings = {
             options = {
               relaysEnabled = true;
+              urAccepted = true;
             };
             devices = devices;
             folders = folders;
