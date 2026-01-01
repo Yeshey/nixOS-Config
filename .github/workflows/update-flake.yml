@@ -18,17 +18,27 @@ jobs:
         uses: wimpysworld/nothing-but-nix@main
         with:
           hatchet-protocol: "cleave"
+
+      # 1.5) Set up QEMU for ARM emulation
+      - name: Set up QEMU for multi-arch
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
       # 2) Checkout repository
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      # 3) Install Nix with experimental features
+
+      # 3) Install Nix with experimental features + ARM support
       - name: Install Nix
         uses: cachix/install-nix-action@v31
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes pipe-operators
+            extra-platforms = aarch64-linux
+            extra-system-features = nixos-test benchmark big-parallel kvm
       # 4) Show free space & git status
       - name: Show free space & git status
         run: |
