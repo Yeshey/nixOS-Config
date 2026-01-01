@@ -239,7 +239,7 @@ in
     allTor.enable = false;
     globalprotect.enable = true;
     rcloneBisync.enable = true;
-    virtualbox.enable = false;
+    virtualbox.enable = true;
   };
 
   toHost = {
