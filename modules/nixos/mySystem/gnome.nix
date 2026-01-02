@@ -39,13 +39,10 @@ in
     environment = {
       systemPackages = with pkgs; [ firefox ];
       gnome.excludePackages = with pkgs; [
-        gedit # text editor
         epiphany # web browser
-        geary # email reader
+        # geary # email reader
         #evince # document viewer
-        totem # video player
-        gnome-connections
-        gnome-contacts
+        gnome-connections # Just don't use this one to connect to my server because the clipboard from the server to local PC ain't working
         # gnome-maps
         gnome-music
       ];

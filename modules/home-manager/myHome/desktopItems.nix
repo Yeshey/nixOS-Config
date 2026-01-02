@@ -20,7 +20,7 @@ in
       };
       extraclioptions = mkOption {
         type = types.str;
-        default = "/dynamic-resolution /p: /audio-mode:1 /clipboard /network:modem /compression /kbd:layout:0x0816";
+        default = "/dynamic-resolution /p: /audio-mode:1 /clipboard /network:auto /compression /kbd:layout:0x0816 /gfx:AVC420 /cache:glyph:on,bitmap:on -wallpaper -menu-anims";
         description = "Extra command line options for xfreerdp";
       };
     };

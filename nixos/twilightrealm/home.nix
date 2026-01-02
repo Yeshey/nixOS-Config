@@ -82,7 +82,6 @@ in
         enable = true;
         remote.ip = "143.47.53.175";
         remote.user = "yeshey";
-        extraclioptions = "/p: /w:1920 /h:1080 /smart-sizing /audio-mode:1 /clipboard /network:modem /compression";
       };
       openvscodeServer = {
         enable = true;
