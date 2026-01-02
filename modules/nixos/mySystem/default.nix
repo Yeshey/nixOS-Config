@@ -137,6 +137,7 @@ in
       # Conditional config
 
       services.geoclue2.enable = true;
+      services.avahi.enable = true; # needed apparently for geoclue to have access to networks
 
       # defaults (enough for a minimal server)
       mySystem.ssh.enable = lib.mkOverride 1010 true;
