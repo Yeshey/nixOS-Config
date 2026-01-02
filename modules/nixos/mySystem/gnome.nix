@@ -48,7 +48,6 @@ in
         gnome-contacts
         # gnome-maps
         gnome-music
-        gnome-weather
       ];
     };
 
