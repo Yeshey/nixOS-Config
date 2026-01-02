@@ -102,17 +102,31 @@ jobs:
           else
             echo "message=chore(deps): update flake.lock (nixpkgs only)" >> $GITHUB_OUTPUT
           fi
-      # 12) Commit & push (only runs if at least one check succeeds)
+      # 12) Commit & push with explicit pull/rebase
       - name: Commit and push flake.lock
         if: steps.full-check.outcome == 'success' || steps.dual-check.outcome == 'success' || steps.single-check.outcome == 'success'
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: ${{ steps.commit-msg.outputs.message }}
-          branch: main
-          commit_options: "--no-verify --signoff"
-          file_pattern: flake.lock
-          commit_user_name: "github-actions[bot]"
-          commit_user_email: "github-actions[bot]@users.noreply.github.com"
-          skip_dirty_check: false
-          skip_fetch: false
-          pull_options: '--rebase'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # Fetch latest changes
+          git fetch origin main
+          
+          # Stash our changes
+          git add flake.lock
+          git stash
+          
+          # Reset to remote
+          git reset --hard origin/main
+          
+          # Apply our changes back
+          git stash pop
+          
+          # Commit if there are changes
+          if ! git diff --quiet flake.lock; then
+            git add flake.lock
+            git commit --no-verify --signoff -m "${{ steps.commit-msg.outputs.message }}"
+            git push origin main
+          else
+            echo "No changes to commit"
+          fi
