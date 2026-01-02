@@ -275,39 +275,11 @@ in
       # '';
     };
 
-  #boot.kernelModules = [
-  #  "coretemp" # for temp sensors in intel (??)
-  #];
-
-  # Trusted Platform Module:
-
-  #powerManagement = { # TODO ???
-  #  cpuFreqGovernor = "ondemancdd";
-  #  cpufreq.min = 800000;
-  #  cpufreq.max = 4700000;
-  #};
-
-  #boot.extraModulePackages = [
-  #  config.boot.kernelPackages.bcachefs
-  #];
   services.bcachefs.autoScrub.enable = true; # enable after you have kernel 6.14 or later
   hardware.microsoft-surface.kernelVersion = "stable"; # newer kernel
 
-  # disable until I can use my powerfull PC to compile the surface pro
-  boot.kernelPatches = [
-    {
-      name = "disable-rust";
-      patch = null;
-      extraConfig = ''
-        RUST n
-      '';
-    }
-  ];
-
   environment.systemPackages = with pkgs; [
-    # jetbrains-toolbox
-    # Games
-    # steam-scalled
+
   ];
 
   # Fix for:
