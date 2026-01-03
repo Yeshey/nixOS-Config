@@ -9,10 +9,15 @@ let
   vpnPortTCP = 443;
   vpnNetUDP = "10.8.0.0/24";
   vpnNetTCP = "10.8.1.0/24";
+  # IPv6 subnets - using unique local addresses (ULA)
+  vpnNet6UDP = "fd00:8:0::/64";
+  vpnNet6TCP = "fd00:8:1::/64";
   vpnInterfaceUDP = "tun0";
   vpnInterfaceTCP = "tun1";
   serverIPUDP = "10.8.0.1";
   serverIPTCP = "10.8.1.1";
+  serverIP6UDP = "fd00:8:0::1";
+  serverIP6TCP = "fd00:8:1::1";
   externalInterface = "enp0s6";
   
   serverKeyDir = "/etc/openvpn/server";
@@ -22,18 +27,17 @@ let
   dhPath = "${serverKeyDir}/dh2048.pem";
   taPath = "${serverKeyDir}/ta.key";
   
-  # Separate CCD directories for each protocol
   ccdDirUDP = "/etc/openvpn/ccd-udp";
   ccdDirTCP = "/etc/openvpn/ccd-tcp";
 in
 {
   options.toHost.openVPN = with lib; {
-    enable = mkEnableOption "OpenVPN server (UDP + TCP, NetworkManager compatible)";
+    enable = mkEnableOption "OpenVPN server (UDP + TCP, NetworkManager compatible, IPv6 enabled)";
   };
 
   config = lib.mkMerge [
     (lib.mkIf cfg.enable {
-      # 1. OpenVPN UDP Server Configuration
+      # 1. OpenVPN UDP Server Configuration (IPv4 + IPv6)
       services.openvpn.servers.skyloftVPN-UDP = {
         autoStart = true;
         config = ''
@@ -45,11 +49,14 @@ in
           dev ${vpnInterfaceUDP}
           dev-type tun
           
+          # IPv4 configuration
           topology subnet
           server 10.8.0.0 255.255.255.0
           ifconfig-pool-persist /var/lib/openvpn/ipp-udp.txt
           
-          # Client-specific configuration directory (UDP)
+          # IPv6 configuration
+          server-ipv6 fd00:8:0::/64
+          
           client-config-dir ${ccdDirUDP}
           
           ca ${caPath}
@@ -62,16 +69,23 @@ in
           auth SHA256
           tls-version-min 1.2
           
+          # IPv4 routes and gateway
           push "redirect-gateway def1 bypass-dhcp"
+          push "route 10.8.0.0 255.255.255.0"
+          push "route 10.8.1.0 255.255.255.0"
+          
+          # IPv6 routes and gateway
+          push "route-ipv6 2000::/3"
+          push "route-ipv6 fd00:8:0::/64"
+          push "route-ipv6 fd00:8:1::/64"
+          
+          # DNS servers (IPv4 + IPv6)
           push "dhcp-option DNS 1.1.1.1"
           push "dhcp-option DNS 1.0.0.1"
+          push "dhcp-option DNS 2606:4700:4700::1111"
+          push "dhcp-option DNS 2606:4700:4700::1001"
           
-          # Push route to allow clients to reach each other
-          push "route 10.8.0.0 255.255.255.0"
-          
-          # Allow client-to-client communication
-          client-to-client  # Keep this on UDP
-          push "route 10.8.1.0 255.255.255.0"
+          client-to-client
           
           keepalive 10 120
           persist-key
@@ -88,7 +102,7 @@ in
         '';
       };
 
-      # 2. OpenVPN TCP Server Configuration
+      # 2. OpenVPN TCP Server Configuration (IPv4 + IPv6)
       services.openvpn.servers.skyloftVPN-TCP = {
         autoStart = true;
         config = ''
@@ -100,11 +114,14 @@ in
           dev ${vpnInterfaceTCP}
           dev-type tun
           
+          # IPv4 configuration
           topology subnet
           server 10.8.1.0 255.255.255.0
           ifconfig-pool-persist /var/lib/openvpn/ipp-tcp.txt
           
-          # Client-specific configuration directory (TCP)
+          # IPv6 configuration
+          server-ipv6 fd00:8:1::/64
+          
           client-config-dir ${ccdDirTCP}
           
           ca ${caPath}
@@ -117,15 +134,21 @@ in
           auth SHA256
           tls-version-min 1.2
           
+          # IPv4 routes and gateway
           push "redirect-gateway def1 bypass-dhcp"
+          push "route 10.8.1.0 255.255.255.0"
+          push "route 10.8.0.0 255.255.255.0"
+          
+          # IPv6 routes and gateway
+          push "route-ipv6 2000::/3"
+          push "route-ipv6 fd00:8:1::/64"
+          push "route-ipv6 fd00:8:0::/64"
+          
+          # DNS servers (IPv4 + IPv6)
           push "dhcp-option DNS 1.1.1.1"
           push "dhcp-option DNS 1.0.0.1"
-          
-          # Push route to allow clients to reach each other
-          push "route 10.8.1.0 255.255.255.0"
-          
-          # Allow client-to-client communication
-          push "route 10.8.0.0 255.255.255.0"
+          push "dhcp-option DNS 2606:4700:4700::1111"
+          push "dhcp-option DNS 2606:4700:4700::1001"
           
           keepalive 10 120
           persist-key
@@ -149,13 +172,21 @@ in
         trustedInterfaces = [ vpnInterfaceUDP vpnInterfaceTCP ];
         
         extraCommands = ''
-          # NAT rules (as before)
+          # IPv4 NAT rules
           ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s ${vpnNetUDP} -o ${externalInterface} -j MASQUERADE
           ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s ${vpnNetTCP} -o ${externalInterface} -j MASQUERADE
           
-          # NEW: Enable cross-TUN forwarding
+          # IPv6 NAT rules
+          ${pkgs.iptables}/bin/ip6tables -t nat -A POSTROUTING -s ${vpnNet6UDP} -o ${externalInterface} -j MASQUERADE
+          ${pkgs.iptables}/bin/ip6tables -t nat -A POSTROUTING -s ${vpnNet6TCP} -o ${externalInterface} -j MASQUERADE
+          
+          # Cross-TUN forwarding (IPv4)
           ${pkgs.iptables}/bin/iptables -A FORWARD -i ${vpnInterfaceUDP} -o ${vpnInterfaceTCP} -j ACCEPT
           ${pkgs.iptables}/bin/iptables -A FORWARD -i ${vpnInterfaceTCP} -o ${vpnInterfaceUDP} -j ACCEPT
+          
+          # Cross-TUN forwarding (IPv6)
+          ${pkgs.iptables}/bin/ip6tables -A FORWARD -i ${vpnInterfaceUDP} -o ${vpnInterfaceTCP} -j ACCEPT
+          ${pkgs.iptables}/bin/ip6tables -A FORWARD -i ${vpnInterfaceTCP} -o ${vpnInterfaceUDP} -j ACCEPT
         '';
       };
 
@@ -182,30 +213,36 @@ in
         "d ${ccdDirTCP} 0755 root root -"
       ];
       
-      # UDP CCD - Static IPs for UDP connections
+      # Static IPs - UDP
       environment.etc."openvpn/ccd-udp/hyruleCastleYeshey".text = ''
         ifconfig-push 10.8.0.10 255.255.255.0
+        ifconfig-ipv6-push fd00:8:0::10/64
       '';
       
       environment.etc."openvpn/ccd-udp/kakarikoYeshey".text = ''
         ifconfig-push 10.8.0.11 255.255.255.0
+        ifconfig-ipv6-push fd00:8:0::11/64
       '';
       
       environment.etc."openvpn/ccd-udp/A70PhoneYeshey".text = ''
         ifconfig-push 10.8.0.12 255.255.255.0
+        ifconfig-ipv6-push fd00:8:0::12/64
       '';
       
-      # TCP CCD - Static IPs for TCP connections (matching UDP layout)
+      # Static IPs - TCP
       environment.etc."openvpn/ccd-tcp/hyruleCastleYeshey".text = ''
         ifconfig-push 10.8.1.10 255.255.255.0
+        ifconfig-ipv6-push fd00:8:1::10/64
       '';
       
       environment.etc."openvpn/ccd-tcp/kakarikoYeshey".text = ''
         ifconfig-push 10.8.1.11 255.255.255.0
+        ifconfig-ipv6-push fd00:8:1::11/64
       '';
       
       environment.etc."openvpn/ccd-tcp/A70PhoneYeshey".text = ''
         ifconfig-push 10.8.1.12 255.255.255.0
+        ifconfig-ipv6-push fd00:8:1::12/64
       '';
     })
 
@@ -286,7 +323,7 @@ easyrsa build-client-full "$CLIENT_NAME" nopass
 export SERVER_PUBLIC_IP="143.47.53.175"
 
 # 4. Create client configuration file with UDP + TCP fallback
-cat > "${CLIENT_NAME}.ovpn" <<'EOF'
+cat > "${CLIENT_NAME}.ovpn" <<EOF
 client
 dev tun
 # Try UDP first (faster), then TCP (more compatible)
@@ -306,9 +343,14 @@ remote-cert-tls server
 verb 3
 comp-lzo
 
-# DNS
+# DNS (IPv4 + IPv6)
 dhcp-option DNS 1.1.1.1
 dhcp-option DNS 1.0.0.1
+dhcp-option DNS 2606:4700:4700::1111
+dhcp-option DNS 2606:4700:4700::1001
+
+# Enable IPv6
+tun-ipv6
 
 <ca>
 EOF
