@@ -248,6 +248,9 @@ in
         pkgs.kdePackages.kamera
         pkgs.libimobiledevice        # iphone idevicepair, ideviceinfo, …
         pkgs.ifuse                   # ipnone FUSE-mount helper
+        (pkgs.appimage-run.override {
+          extraPkgs = pkgs: [ pkgs.xorg.libxshmfence ];
+        })
       ];
       # pkgs.deploy-rs
 
