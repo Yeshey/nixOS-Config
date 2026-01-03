@@ -136,13 +136,8 @@ in
     ( lib.mkIf cfg.enable {
       # Conditional config
 
-      services.geoclue2.enable = true;
+      services.geoclue2.enable = false;
       services.avahi.enable = true; # needed apparently for geoclue to have access to networks
-      systemd.services.geoclue = {
-        # You should make an issue asking for this
-        after = lib.mkAfter [ "avahi-daemon.service" ];
-        wants = lib.mkAfter [ "avahi-daemon.service" ];
-      };
 
       # defaults (enough for a minimal server)
       mySystem.ssh.enable = lib.mkOverride 1010 true;
