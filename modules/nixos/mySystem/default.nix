@@ -137,7 +137,7 @@ in
       # Conditional config
 
       # Note to self, if you ever make a user friendly NixOS distro, tell users to install https://github.com/mjaakko/NeoStumbler so they can get location on their computer as well
-      services.geoclue2.enable = false;
+      services.geoclue2.enable = true;
       services.avahi.enable = true; # needed apparently for geoclue to have access to networks
 
       # defaults (enough for a minimal server)
