@@ -44,7 +44,7 @@ ENDPOINT = "https://files.minecraftforge.net/net/minecraftforge/forge/"
 MAVEN = "https://maven.minecraftforge.net/net/minecraftforge/forge/"
 MC_MAVEN = "https://maven.minecraftforge.net/net/minecraftforge/forge/"
 
-TIMEOUT = 5
+TIMEOUT = 20
 RETRIES = 5
 
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.INFO)
@@ -521,7 +521,7 @@ def make_client() -> requests.Session:
     Create and configure a requests session with retry and timeout settings.
     """
     http = requests.Session()
-    retries = Retry(total=RETRIES, backoff_factor=2, status_forcelist=[429, 501, 502, 503, 504])
+    retries = Retry(total=RETRIES, backoff_factor=120, status_forcelist=[429, 501, 502, 503, 504])
     adapter = TimeoutHTTPAdapter(max_retries=retries, pool_connections=100000, pool_maxsize=100000)
     http.mount("https://", adapter)
     http.verify = True 
