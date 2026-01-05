@@ -23,6 +23,7 @@ with lib.hm.gvariant;
   config = lib.mkIf (config.myHome.enable && cfg.enable) {
     home.packages = with pkgs; [
       gnome-tweaks
+      networkmanagerapplet # Has for example "Automatically connect to VPN when using this connection"
       gnomeExtensions.burn-my-windows
       gnomeExtensions.appindicator # system tray
       gnomeExtensions.system-monitor # official gnome extension
