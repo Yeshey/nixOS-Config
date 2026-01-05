@@ -29,6 +29,7 @@ in
     ./luanti.nix
     ./wireguardVPN.nix
     ./openVPN.nix
+    ./vnstat.nix
   ];
 
   options.toHost = with lib; {
