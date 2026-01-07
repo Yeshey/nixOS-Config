@@ -29,17 +29,7 @@ in
         }
       });
     '';
-
-    xdg.portal = {
-      enable = true;
-      config.common.default = "*";
-      extraPortals = with pkgs; [
-        xdg-desktop-portal-wlr
-        kdePackages.xdg-desktop-portal-kde
-        xdg-desktop-portal-gtk
-      ];
-    };
-
+    
     /*
       # More apps # TODO, doesnt work when in gnome??
       services.flatpak.enable = true;
