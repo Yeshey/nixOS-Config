@@ -417,6 +417,47 @@ in
         ];
       };
 
+      # Used by some of my services, it's unfortunate that I need this and there is no good way to know if I have internet with DNS
+      systemd.services.my-network-online = {
+        wantedBy = [ "multi-user.target"];
+        path = with pkgs; [ iputils coreutils ];
+        # Try 30 times (30 × 20s = 600s = 10 minutes)
+        script = ''
+          for i in {1..30}; do
+            if ${pkgs.iputils}/bin/ping -c1 google.com >/dev/null 2>&1; then
+              exit 0  # Success - internet is reachable
+            fi
+            ${pkgs.coreutils}/bin/sleep 20
+          done
+          exit 1
+        '';
+        serviceConfig = {
+          Type = "oneshot";
+          User = "root";
+          # Give the script 11 minutes to complete all attempts
+          TimeoutStartSec = "11min";
+        };
+      };
+      systemd.user.services.my-network-online = {
+        wantedBy = [ "default.target"];
+        path = with pkgs; [ iputils coreutils ];
+        script = ''
+          for i in {1..30}; do
+            if ${pkgs.iputils}/bin/ping -c1 google.com >/dev/null 2>&1; then
+              exit 0
+            fi
+            ${pkgs.coreutils}/bin/sleep 20
+          done
+          exit 1
+        '';
+        serviceConfig = {
+          Type = "oneshot";
+          # NO User = "root" - this runs as your user
+          TimeoutStartSec = "11min";
+        };
+      };
+
+
       networking = {
         hostName = lib.mkOverride 1010 "${cfg.host}";
       };

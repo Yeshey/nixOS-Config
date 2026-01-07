@@ -74,8 +74,9 @@ in
     systemd.services.rclone-mount = {
       description = "OneDrive rclone mount (system)";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" ];
-      wants = [ "network-online.target" ];
+      after = [ "network-online.target" "my-network-online.service"];
+      wants = [ "network-online.target" "my-network-online.service"];
+      requires = [ "network-online.target" "my-network-online.service"];
 
       preStart = ''
         ${pkgs.coreutils}/bin/mkdir -p ${cfg.mountPoint}

@@ -59,22 +59,12 @@ in
         #restartPolicy = "unless-stopped";
       };
     };
-    # need my own fucking service for this
-    systemd.services.my-network-online = {
-      wantedBy = [ "multi-user.target"];
-      path = [ pkgs.iputils ];
-      script = ''
-        until ${pkgs.iputils}/bin/ping -c1 google.com ; do ${pkgs.coreutils}/bin/sleep 5 ; done
-      '';
-      serviceConfig = {
-        Type = "oneshot";
-        User = "root";
-      };
-    };
+
     systemd.services.podman-speedtest_tracker = {
       # This adds to the settings that were already there
-      wants = [ "nss-lookup.target" "my-network-online.service"];
-      after = [ "nss-lookup.target" "my-network-online.service"];
+      after = [ "network-online.target" "my-network-online.service"];
+      wants = [ "network-online.target" "my-network-online.service"];
+      requires = [ "network-online.target" "my-network-online.service"];
     };
     systemd.services.speedtest-tracker-mgr = {
       wantedBy = [ "multi-user.target" "podman-speedtest_tracker.service" ];

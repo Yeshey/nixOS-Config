@@ -28,22 +28,6 @@ in
       myPython
     ];
 
-    # Wait for network online service
-    systemd.user.services."my-network-online" = let
-      script = pkgs.writeShellScriptBin "my-network-online-script" ''
-        until ${pkgs.iputils}/bin/ping -c1 google.com ; do ${pkgs.coreutils}/bin/sleep 5 ; done
-      '';
-    in {
-      Unit = {
-        Description = "Wait for network online";
-      };
-      Service = {
-        Type = "oneshot";
-        ExecStart = "${script}/bin/my-network-online-script";
-      };
-      Install.WantedBy = [ "default.target" ];
-    };
-
     # Elections check service that waits for network-online
     systemd.user.services."warn-elections" = {
       Unit = {
