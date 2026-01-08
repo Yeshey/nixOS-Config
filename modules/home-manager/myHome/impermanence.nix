@@ -9,7 +9,7 @@ let
   cfg = config.myHome.impermanence;
 in
 {
-  imports = [ inputs.impermanence.homeManagerModules.impermanence ];
+  imports = [  ];
 
   options.myHome.impermanence = with lib; {
     enable = mkEnableOption "impermanence";

@@ -70,7 +70,7 @@
       url = "git+https://git.menzel.lol/leonard/nix-luanti";
       #inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    impermanence.url = "github:nix-community/impermanence/home-manager-v2";
+    impermanence.url = "github:nix-community/impermanence";
     # deploy-rs = {
     #   url = "github:serokell/deploy-rs";
     #   inputs.nixpkgs.follows = "nixpkgs";
