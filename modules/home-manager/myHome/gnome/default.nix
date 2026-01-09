@@ -58,6 +58,8 @@ with lib.hm.gvariant;
         show-desktop = [ "<Super>d" ];
         switch-windows = [ "<Alt>Tab" ];
         switch-windows-backward = [ "<Shift><Alt>Tab" ];
+        switch-applications = [ ];
+        switch-applications-backward = [ ]; # Optional: also disable reverse app switching
       };
 
       "org/gnome/shell/window-switcher" = {
