@@ -27,6 +27,7 @@ in
           API = {
             HTTPHeaders = {
               "Access-Control-Allow-Origin" = [
+                "http://10.8.0.1:${toString cfg.port}" # For the VPN
                 "http://localhost:${toString cfg.port}"
                 "http://127.0.0.1:${toString cfg.port}"
                 "http://0.0.0.0:${toString cfg.port}"
