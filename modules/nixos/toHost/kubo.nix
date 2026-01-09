@@ -44,6 +44,7 @@ in
             # API = "/ip4/127.0.0.1/tcp/${toString cfg.port}";
             API     = "/ip4/0.0.0.0/tcp/${toString cfg.port}";    # listen on all interfaces
             Gateway = "/ip4/0.0.0.0/tcp/8080";                   # web gateway (webui) on all interfaces
+            # You could also make it work ONLY on your VPN 10.8.0.1
           };
           Experimental = {
             Libp2pStreamMounting = true;
