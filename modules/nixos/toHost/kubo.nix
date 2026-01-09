@@ -86,5 +86,19 @@ in
       [
         kuboDesktopItem
       ];
+
+    networking.firewall = {
+      # IPFS Gateway (HTTP)
+      allowedTCPPorts = [
+        8080 # people can see my gateway
+        4001 # discoverability
+      ];
+
+      # IPFS QUIC / UDP swarm
+      allowedUDPPorts = [
+        4001 # discoverability
+      ];
+    };
+
   };
 }
