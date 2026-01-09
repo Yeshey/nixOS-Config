@@ -267,7 +267,7 @@ in
     # };
     #nginxServer.enable = true;
     #mineclone.enable = true;
-    kubo.enable = false;
+    kubo.enable = true;
     freeGames.enable = false;
     searx.enable = false;
     ollama = {
