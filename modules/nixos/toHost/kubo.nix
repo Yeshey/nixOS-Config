@@ -40,8 +40,10 @@ in
           };
           Addresses = {
             # https://gist.github.com/schollz/b9bdddd83d9a83978afede443136c1cc
-            Gateway = "/ip4/127.0.0.1/tcp/8080";
-            API = "/ip4/127.0.0.1/tcp/${toString cfg.port}";
+            # Gateway = "/ip4/127.0.0.1/tcp/8080";
+            # API = "/ip4/127.0.0.1/tcp/${toString cfg.port}";
+            API     = "/ip4/0.0.0.0/tcp/${toString cfg.port}";    # listen on all interfaces
+            Gateway = "/ip4/0.0.0.0/tcp/8080";                   # web gateway (webui) on all interfaces
           };
           Experimental = {
             Libp2pStreamMounting = true;
