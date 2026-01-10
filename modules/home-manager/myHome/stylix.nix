@@ -47,8 +47,8 @@ in
 
     stylix = {
       overlays.enable = false; # needed when using global packages (https://github.com/nix-community/stylix/issues/1832)
-      enable = lib.mkOverride 1010 true;
-      autoEnable = lib.mkOverride 1010 true;
+      enable = config.myHome.stylix.enable;
+      autoEnable = config.myHome.stylix.enable;
       base16Scheme = lib.mkIf (cfg.base16Scheme != null) cfg.base16Scheme; #"${pkgs.base16-schemes}/share/themes/pop.yaml";
       image = lib.mkIf (cfg.wallpaper != null) cfg.wallpaper;
       polarity = lib.mkOverride 1010 "dark";

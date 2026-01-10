@@ -19,8 +19,8 @@ in
     # dataStoragePath = "/home/${config.home.username}"; # this is the default
     xdgPersonalFilesOrganization.enable = true;
     nonNixos.enable = false;
-    plasma.enable = false;
-    gnome.enable = true;
+    plasma.enable = true;
+    gnome.enable = false;
     cosmic.enable = false;
     ssh.enable = true;
     hyprland = {
@@ -69,7 +69,7 @@ in
 
     stylix = {
       # https://www.youtube.com/watch?v=ljHkWgBaQWU
-      enable = true;
+      enable = false;
       base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-mirage.yaml"; # gruvbox-dark-medium #pop
       # wallpaper = pkgs.wallpapers.pinkSunsetMinimalHdWallpaper; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement #tunaCoimbra2025 #pinkSunsetMinimalHdWallpaper
       cursor = {
