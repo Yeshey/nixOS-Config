@@ -53,7 +53,6 @@ in
       libreoffice.enable = false;
       devops.enable = false;
     };
-    # autoStartApps = [ pkgs.vesktop ]; # only works with gnome??
     zsh = {
       enable = true;
       starshipTheme = "fredericrous"; # fredericrous # pinage404
@@ -70,12 +69,6 @@ in
     #  sshKeys.enable = true;
     #};
     impermanence.enable = false;
-    #autosshReverseProxy = {
-    #  enable = true;
-    #  remoteIP = "143.47.53.175";
-    #  remoteUser = "yeshey";
-    #  port = 2333;
-    #};
     warnElections.enable = false;
     desktopItems = {
       xrdp = {

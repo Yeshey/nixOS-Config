@@ -61,8 +61,6 @@ in
       zed-editor.enable = true;
     };
 
-    # autoStartApps = [ pkgs.vesktop ]; # doesnt work
-
     zsh = {
       enable = true;
       starshipTheme = "pinage404"; # fredericrous # pinage404
@@ -86,12 +84,6 @@ in
     #  sshKeys.enable = true;
     #};
     impermanence.enable = false;
-    #autosshReverseProxy = {
-    #  enable = true;
-    #  remoteIP = "143.47.53.175";
-    #  remoteUser = "yeshey";
-    #  port = 2232;
-    #};
     warnElections.enable = true;
     desktopItems = {
       xrdp = {

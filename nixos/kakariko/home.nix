@@ -54,7 +54,6 @@ in
       devops.enable = false;
       zed-editor.enable = true;
     };
-    # autoStartApps = [ pkgs.vesktop ]; # only works with gnome??
     zsh = {
       enable = true;
       starshipTheme = "pinage404"; # fredericrous # pinage404
@@ -79,12 +78,6 @@ in
     #  sshKeys.enable = true;
     #};
     impermanence.enable = false;
-    #autosshReverseProxy = {
-    #  enable = true;
-    #  remoteIP = "143.47.53.175";
-    #  remoteUser = "yeshey";
-    #  port = 2333;
-    #};
     warnElections.enable = true;
     desktopItems = {
       xrdp = {

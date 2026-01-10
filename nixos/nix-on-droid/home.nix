@@ -61,8 +61,6 @@
       devops.enable = false;
     };
     
-    
-    # autoStartApps = [ pkgs.vesktop ]; # only works with gnome??
     zsh = {
       enable = true;
       starshipTheme = "fredericrous"; # fredericrous # pinage404

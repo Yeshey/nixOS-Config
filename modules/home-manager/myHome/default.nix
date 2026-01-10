@@ -25,7 +25,6 @@ in
     ./direnv.nix
     ./homeApps/default.nix
     ./hyprland/default.nix
-    ./autoStartApps.nix
     ./agenix/default.nix
     ./ssh/default.nix
     ./stylix.nix

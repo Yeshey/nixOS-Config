@@ -70,7 +70,12 @@ in
       devops.enable = false;
     };
     
-    # autoStartApps = [ pkgs.vesktop ]; # doesnt work
+    autosshReverseProxy = {
+     enable = true;
+     remoteIP = "143.47.53.175";
+     remoteUser = "yeshey";
+     port = 2232;
+    };
 
     zsh = {
       enable = true;
