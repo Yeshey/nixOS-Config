@@ -258,6 +258,7 @@ in
       };
       services.gvfs.enable = true;
 
+      services.automatic-timezoned.enable = true;
       networking.resolvconf.dnsExtensionMechanism = lib.mkOverride 1010 false; # fixes internet connectivity problems with some sites (https://discourse.nixos.org/t/domain-name-resolve-problem/885/2)
 
       #networking.nameservers = [ # (might need this for public WIFIs?)
