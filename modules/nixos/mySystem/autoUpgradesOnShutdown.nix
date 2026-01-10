@@ -153,7 +153,6 @@ in
     nixpkgs-unstable \
     home-manager \
     nvf \
-    stylix \
     plasma-manager \
     nurpkgs \
     hyprland \

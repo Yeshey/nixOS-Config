@@ -116,8 +116,8 @@ in
     # systemd.services.vllm-openhands = {
     #   description = "vLLM server for all-hands/openhands-lm-32b-v0.1 model";
     #   wantedBy = [ "multi-user.target" ];
-    #   wants = [ "nss-lookup.target" "my-network-online.service" ];
-    #   after = [ "nss-lookup.target" "my-network-online.service" ];
+    #   wants = [ "my-network-online.service" ];
+    #   after = [ "my-network-online.service" ];
     #   script = ''
     #     exec ${pkgs.python312Packages.vllm}/bin/python -m vllm.serve.serve --model=all-hands/openhands-lm-32b-v0.1 --port=11112
     #   '';

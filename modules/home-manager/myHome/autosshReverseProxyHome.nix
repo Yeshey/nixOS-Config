@@ -35,9 +35,9 @@ in
     systemd.user.services.autossh-reverse-proxy = {
       Unit = {
         Description = "Autossh reverse proxy to ${cfg.remoteIP}";
-        After = [ "nss-lookup.target" "my-network-online.service" ];
-        Wants = [ "nss-lookup.target" "my-network-online.service" ];
-        Requires = [ "nss-lookup.target" "my-network-online.service" ];
+        After = [ "my-network-online.service" ];
+        Wants = [ "my-network-online.service" ];
+        Requires = [ "my-network-online.service" ];
       };
 
       Service = {

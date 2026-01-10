@@ -10,10 +10,6 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    stylix = {
-      url = "github:nix-community/stylix/release-25.11";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nixos-hardware.url = "github:8bitbuddhist/nixos-hardware/surface-kernel-6.18";
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
@@ -119,7 +115,6 @@
     nixvim,
     nvix,
     # deploy-rs,
-    stylix,
     plasma-manager,
     nurpkgs,
     hyprland-plugins,

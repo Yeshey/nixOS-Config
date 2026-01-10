@@ -185,22 +185,6 @@ in
         preStart = "";
       };
 
-      # systemd.services.chronyd = { # it was running before DNS were up...
-      #   after = [ "network-online.target" "nss-lookup.target" ];
-      #   wants = [ "network-online.target" ];
-
-      #   serviceConfig.TimeoutStartSec = "infinity";
-
-      #   preStart = ''
-      #     echo "chrony: waiting for usable Internet/DNS ..."
-      #     while ! ${pkgs.inetutils}/bin/ping -c 1 -W 2 1.0.0.1 >/dev/null 2>&1; do
-      #       sleep 5
-      #     done
-      #     echo "chrony: Internet reachable, starting daemon."
-      #   '';
-      # };
-      #services.timesyncd.enable = false;
-      #services.chrony.enable = true;
       i18n.defaultLocale = lib.mkOverride 1010 "en_GB.UTF-8";
       i18n.extraLocaleSettings = {
         LC_ADDRESS = lib.mkOverride 1010 "pt_PT.UTF-8";

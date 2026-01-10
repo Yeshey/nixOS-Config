@@ -32,9 +32,9 @@ in
     systemd.user.services."warn-elections" = {
       Unit = {
         Description = "Check for upcoming elections";
-        After = [ "nss-lookup.target" "my-network-online.service" ];
-        Wants = [ "nss-lookup.target" "my-network-online.service" ];
-        Requires = [ "nss-lookup.target" "my-network-online.service" ];
+        After = [ "my-network-online.service" ];
+        Wants = [ "my-network-online.service" ];
+        Requires = [ "my-network-online.service" ];
       };
       Service = {
         Type = "oneshot";

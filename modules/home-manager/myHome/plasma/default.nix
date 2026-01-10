@@ -25,14 +25,15 @@ in
 
   config = lib.mkIf (config.myHome.enable && cfg.enable) {
 
-    # hope it doesn't conflict with stylix 🤞
+    home.packages = [ pkgs.banana-cursor ];
+
     # options: https://nix-community.github.io/plasma-manager/options.xhtml
     programs.plasma = {
       enable = true;
       workspace = {
         clickItemTo = "open";
         #lookAndFeel = "org.kde.breezedark.desktop";
-        #cursorTheme = "Bibata-Modern-Ice";
+        cursor.theme = "Banana";
         #iconTheme = "Papir";
         #wallpaper = ... # conflicts with stylix
       };
@@ -58,16 +59,6 @@ in
           whenSleepingEnter = "standbyThenHibernate";
           whenLaptopLidClosed = "sleep";
         };
-      };
-
-      kwin.nightLight = {
-        enable = true;
-        mode = "location";
-        location = {
-          latitude = "39,37"; # lisbon
-          longitude = "-8,93";
-        };
-        temperature.night = 2300;
       };
 
     };

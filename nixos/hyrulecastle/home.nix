@@ -67,18 +67,6 @@ in
     };
     direnv.enable = true;
 
-    stylix = {
-      # https://www.youtube.com/watch?v=ljHkWgBaQWU
-      enable = false;
-      base16Scheme = "${pkgs.base16-schemes}/share/themes/ayu-mirage.yaml"; # gruvbox-dark-medium #pop
-      # wallpaper = pkgs.wallpapers.pinkSunsetMinimalHdWallpaper; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement #tunaCoimbra2025 #pinkSunsetMinimalHdWallpaper
-      cursor = {
-        package = pkgs.banana-cursor;
-        name = "Banana";
-        size = 24;
-      };
-    };
-
     #agenix = {
     #  enable = true;
     #  sshKeys.enable = true;

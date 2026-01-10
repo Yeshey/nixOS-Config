@@ -58,12 +58,6 @@ in
       starshipTheme = "fredericrous"; # fredericrous # pinage404
     };
     direnv.enable = true;
-    stylix = {
-      # https://www.youtube.com/watch?v=ljHkWgBaQWU
-      enable = false;
-      base16Scheme = "${pkgs.base16-schemes}/share/themes/gruvbox-dark-medium.yaml"; #pop.yaml
-      wallpaper = pkgs.wallpapers.stellarCollisionByKuldarleement; # johnKearneyCityscapePoster #nierAutomataWallpaper #stellarCollisionByKuldarleement #tunaCoimbra2025
-    };
     #agenix = {
     #  enable = true;
     #  sshKeys.enable = true;

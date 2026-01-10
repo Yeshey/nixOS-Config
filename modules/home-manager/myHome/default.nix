@@ -27,7 +27,6 @@ in
     ./hyprland/default.nix
     ./agenix/default.nix
     ./ssh/default.nix
-    ./stylix.nix
     ./xdgPersonalFilesOrganization.nix
     ./impermanence.nix
     ./autosshReverseProxyHome.nix

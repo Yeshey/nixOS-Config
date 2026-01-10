@@ -21,12 +21,15 @@ with lib.hm.gvariant;
   };
 
   config = lib.mkIf (config.myHome.enable && cfg.enable) {
+
     home.packages = with pkgs; [
       gnome-tweaks
       networkmanagerapplet # Has for example "Automatically connect to VPN when using this connection"
       gnomeExtensions.burn-my-windows
       gnomeExtensions.appindicator # system tray
       gnomeExtensions.system-monitor # official gnome extension
+
+      banana-cursor # for the cursor
     ];
 
     # Essential (also applies to guest user)
@@ -89,6 +92,7 @@ with lib.hm.gvariant;
         clock-show-seconds = true;
         clock-show-weekday = true;
         show-battery-percentage = true;
+        cursor-theme = "Banana";  # Add this line
       };
 
       "org/gnome/desktop/wm/preferences" = {
