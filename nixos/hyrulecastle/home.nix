@@ -19,8 +19,8 @@ in
     # dataStoragePath = "/home/${config.home.username}"; # this is the default
     xdgPersonalFilesOrganization.enable = true;
     nonNixos.enable = false;
-    plasma.enable = true;
-    gnome.enable = false;
+    plasma.enable = false;
+    gnome.enable = true;
     cosmic.enable = false;
     ssh.enable = true;
     hyprland = {
