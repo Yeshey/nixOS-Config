@@ -51,9 +51,9 @@ in
         source ${./git.zsh}
         source ${builtins.toFile "myAlias.zsh" (builtins.readFile ./myAlias.zsh + ''
           # complex alias that need nix syntax
-          alias update="sudo nh os switch --bypass-root-check"
-          alias update-re="sudo bash -c 'nh os boot --bypass-root-check && reboot'"
-          alias update-off="sudo bash -c 'nh os boot --bypass-root-check && poweroff'"
+          alias update="sudo nh os switch --bypass-root-check -- --max-jobs 2 --cores 5"
+          alias update-re="sudo bash -c 'nh os boot --bypass-root-check -- --max-jobs 2 --cores 5 && reboot'"
+          alias update-off="sudo bash -c 'nh os boot --bypass-root-check -- --max-jobs 2 --cores 5 && poweroff'"
         '')}
 
 

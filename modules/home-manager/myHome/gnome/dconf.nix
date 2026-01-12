@@ -29,7 +29,6 @@ with lib.hm.gvariant;
         ];
         enabled-extensions = [
           "burn-my-windows@schneegans.github.com"
-          "copyous@boerdereinar.dev"
           "gnomelets@mcast.gnomext.com"
         ];
       };

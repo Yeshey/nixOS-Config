@@ -28,6 +28,8 @@ with lib.hm.gvariant;
       gnomeExtensions.burn-my-windows
       gnomeExtensions.appindicator # system tray
       gnomeExtensions.system-monitor # official gnome extension
+      gnomeExtensions.user-themes # # official gnome extension
+      unstable.gnomeExtensions.copyous # The best clipboard manager
 
       banana-cursor # for the cursor
     ];
@@ -114,6 +116,8 @@ with lib.hm.gvariant;
         enabled-extensions = [
           "appindicatorsupport@rgcjonas.gmail.com" # system tray
           "system-monitor@gnome-shell-extensions.gcampax.github.com"
+          "user-theme@gnome-shell-extensions.gcampax.github.com"
+          "copyous@boerdereinar.dev"
         ];
       };
 
