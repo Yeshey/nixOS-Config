@@ -74,9 +74,25 @@ in
     systemd.services.rclone-mount = {
       description = "OneDrive rclone mount (system)";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network-online.target" "my-network-online.service"];
-      wants = [ "network-online.target" "my-network-online.service"];
-      requires = [ "network-online.target" "my-network-online.service"];
+      after = [ "my-network-online.service"];
+      wants = [ "my-network-online.service"];
+      requires = [ "my-network-online.service"];
+
+      # Make it not prevent hibernating
+      before = [ 
+        "sleep.target" 
+        "suspend.target"           # Regular suspend (sleep to RAM)
+        "hibernate.target"         # Hibernate (sleep to disk)
+        "hybrid-sleep.target"      # Hybrid sleep
+        "suspend-then-hibernate.target"  # Optional but good to include
+      ];
+      conflicts = [ 
+        "sleep.target" 
+        "suspend.target"
+        "hibernate.target"
+        "hybrid-sleep.target"
+        "suspend-then-hibernate.target"
+      ];
 
       preStart = ''
         ${pkgs.coreutils}/bin/mkdir -p ${cfg.mountPoint}
@@ -111,6 +127,10 @@ in
         DeviceAllow = "/dev/fuse";
         CapabilityBoundingSet = "CAP_SYS_ADMIN";
         AmbientCapabilities = "CAP_SYS_ADMIN";
+
+        KillMode = "control-group";
+        KillSignal = "SIGTERM";
+        TimeoutStopSec = "30s";
       };
     };
 
