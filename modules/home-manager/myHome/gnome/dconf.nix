@@ -20,6 +20,10 @@ with lib.hm.gvariant;
 {
   config = lib.mkIf (config.myHome.enable && cfg.enable && config.home.username != "guest") {
 
+    home.packages = with pkgs; [
+      gnomeExtensions.power-off-options
+    ];
+
     dconf.settings = {
       "org/gnome/shell" = {
         disable-user-extensions = false;
@@ -30,7 +34,12 @@ with lib.hm.gvariant;
         enabled-extensions = [
           "burn-my-windows@schneegans.github.com"
           "gnomelets@mcast.gnomext.com"
+          "power-off-options@axelitama.github.io"
         ];
+      };
+
+      "org/gnome/shell/extensions/power-off-options" = {
+        show-reboot-to-bios=true;
       };
 
       "org/gnome/settings-daemon/plugins/power" = {
