@@ -79,20 +79,7 @@ in
       requires = [ "my-network-online.service"];
 
       # Make it not prevent hibernating
-      before = [ 
-        "sleep.target" 
-        "suspend.target"           # Regular suspend (sleep to RAM)
-        "hibernate.target"         # Hibernate (sleep to disk)
-        "hybrid-sleep.target"      # Hybrid sleep
-        "suspend-then-hibernate.target"  # Optional but good to include
-      ];
-      conflicts = [ 
-        "sleep.target" 
-        "suspend.target"
-        "hibernate.target"
-        "hybrid-sleep.target"
-        "suspend-then-hibernate.target"
-      ];
+      before = [ "sleep.target" ];
 
       preStart = ''
         ${pkgs.coreutils}/bin/mkdir -p ${cfg.mountPoint}
@@ -128,7 +115,8 @@ in
         CapabilityBoundingSet = "CAP_SYS_ADMIN";
         AmbientCapabilities = "CAP_SYS_ADMIN";
 
-        KillMode = "control-group";
+        # prevent stopping hibernation
+        KillMode = "control-group"; 
         KillSignal = "SIGTERM";
         TimeoutStopSec = "30s";
       };
@@ -139,9 +127,14 @@ in
       2.  USER BISYNC SERVICE  (reads user config, needs mount)
       ----------------------------------------------------------
     */
-    systemd.user.services.rclone-bisync = {
+    # Change from systemd.user.services to systemd.services
+    systemd.services.rclone-bisync = {
       description = "OneDrive bisync";
-
+      
+      # Now you can properly depend on the mount!
+      after = [ "rclone-mount.service" ];
+      requires = [ "rclone-mount.service" ];
+      
       script = ''
         exec ${pkgs.rclone}/bin/rclone bisync \
           ${lib.escapeShellArg cfg.localPath} \
@@ -157,17 +150,19 @@ in
           --config ${home}/.config/rclone/rclone.conf \
           ${lib.optionalString cfg.firstRun "--resync"}
       '';
-
-      serviceConfig.Type = "oneshot";
+      
+      serviceConfig = {
+        Type = "oneshot";
+        User = user;        # Run as your user
+        Group = "users";
+      };
     };
 
-    /*
-      ----------------------------------------------------------
-      3.  USER TIMER  (unchanged)
-      ----------------------------------------------------------
-    */
-    systemd.user.timers.rclone-bisync = {
+    # Change from systemd.user.timers to systemd.timers
+    systemd.timers.rclone-bisync = {
       wantedBy = [ "timers.target" ];
+      after = [ "rclone-mount.service" ];  # Timer also waits for mount
+      
       timerConfig = {
         OnBootSec = "2m";
         OnUnitActiveSec = cfg.bisyncInterval;
@@ -175,12 +170,6 @@ in
         Unit = "rclone-bisync.service";
       };
     };
-
-    /*
-      ----------------------------------------------------------
-      4.  allow user linger so timer runs when not logged in
-      ----------------------------------------------------------
-    */
-    users.users.${user}.linger = true;
+    
   };
 }
