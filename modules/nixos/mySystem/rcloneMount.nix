@@ -1,4 +1,3 @@
-# also need RCLONE_TEST in the onedrive?
 {
   config,
   lib,
@@ -54,6 +53,7 @@ in
     ];
 
     programs.fuse.enable = true;
+    programs.fuse.userAllowOther = true;
 
     /*
       ----------------------------------------------------------
@@ -63,19 +63,18 @@ in
     systemd.services.rclone-mount = {
       description = "OneDrive rclone mount (system)";
       wantedBy = [ "multi-user.target" ];
-      after = [ "my-network-online.service"];
-      wants = [ "my-network-online.service"];
-      requires = [ "my-network-online.service"];
+      after = [ "my-network-online.service" ];
+      wants = [ "my-network-online.service" ];
+      requires = [ "my-network-online.service" ];
 
       # Make it not prevent hibernating
       before = [ "sleep.target" ];
 
       preStart = ''
-        # try to unmount any stale FUSE mount (use fuse3 fusermount)
+        # try clean unmount (fuse3 fusermount)
         ${pkgs.fuse3}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || \
           /run/current-system/sw/bin/umount -l ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
 
-        # ensure mountpoint exists and owned by the right user
         ${pkgs.coreutils}/bin/mkdir -p ${lib.escapeShellArg cfg.mountPoint}
         chown ${user}:users ${lib.escapeShellArg cfg.mountPoint}
         chmod 755 ${lib.escapeShellArg cfg.mountPoint}
@@ -86,47 +85,53 @@ in
           ${lib.escapeShellArg cfg.remote} \
           ${lib.escapeShellArg cfg.mountPoint} \
           --vfs-cache-mode full \
-          --vfs-cache-max-size 20G \
+          --vfs-cache-max-size 30G \
           --vfs-cache-max-age 168h \
-          --vfs-cache-min-free-space 5G \
           --config ${home}/.config/rclone/rclone.conf \
+          --allow-other
       ''; # --log-level=DEBUG 
           # --no-check-certificate \
           # --disable-http2 \
           # --s3-no-check-bucket \
           # --s3-no-head-object \
+
+      # All stop/cleanup logic in postStop (declared-style Nix)
       postStop = ''
-        # Try clean FUSE unmount
+        # try regular fusermount first, fallback to lazy umount
         ${pkgs.fuse3}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || \
           /run/current-system/sw/bin/umount -l ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
 
-        # Kill any remaining rclone mount processes for this path
+        # kill any stray rclone processes that still reference the mountpoint
         ${pkgs.procps}/bin/pkill -f "rclone mount .* ${lib.escapeShellArg cfg.mountPoint}" || true
+
+        # brief pause & another unmount attempt to ensure kernel releases the endpoint
+        sleep 1
+        ${pkgs.fuse3}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
       '';
 
       serviceConfig = {
-        Type = "notify";
-        User = "yeshey";
+        Type = "simple";
+        User = user;
         Group = "users";
-        # RESTART POLICY - Progressive backoff for network changes
+
         Restart = "on-failure";
-        RestartSec = "5s";
-        RestartSteps = 8;
-        RestartMaxDelaySec = "120s";  # Cap at 120s between retries
-        
-        # TIMEOUTS
+        RestartSec = "10s";
+
         TimeoutStartSec = "60s";
-        TimeoutStopSec = "20s";
+        TimeoutStopSec = "60s";
+        KillMode = "control-group";
+        KillSignal = "SIGTERM";
 
         DeviceAllow = "/dev/fuse";
         CapabilityBoundingSet = "CAP_SYS_ADMIN";
         AmbientCapabilities = "CAP_SYS_ADMIN";
 
-        # prevent stopping hibernation
-        KillMode = "control-group"; 
-        KillSignal = "SIGTERM";
+        # limit restart burst so we don't hammer everything during network storms
+        StartLimitIntervalSec = 300;
+        StartLimitBurst = 5;
       };
     };
+
 
     # Make it so every time there is a Network change the rclone mount restarts
     environment.etc."NetworkManager/dispatcher.d/50-rclone-restart".text = ''
