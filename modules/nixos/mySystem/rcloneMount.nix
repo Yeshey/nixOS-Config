@@ -27,22 +27,10 @@ in
       description = "rclone remote/remote-path (eg. 'onedrive:' or 'onedrive:SomeFolder').";
     };
 
-    localPath = mkOption {
-      type = types.str;
-      default = "/home/yeshey/.onedriveISCTE-sync";
-      description = "Local folder on the external drive used for two-way bisync with the remote. Keep this on the external drive to avoid using home partition.";
-    };
-
     user = mkOption {
       type = types.str;
       default = "yeshey";
       description = "User that should own the mount point and run the services. Change if your username differs.";
-    };
-
-    bisyncInterval = mkOption {
-      type = types.str;
-      default = "10m";
-      description = "Interval for the bisync timer (systemd OnUnitActiveSec format).";
     };
 
     allowOther = mkOption {
