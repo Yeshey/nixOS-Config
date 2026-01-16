@@ -134,16 +134,37 @@ in
 
 
     # Make it so every time there is a Network change the rclone mount restarts
-    environment.etc."NetworkManager/dispatcher.d/50-rclone-restart".text = ''
-      #!/bin/sh
-      ACTION="$2"
-      case "$ACTION" in
-        up|down|vpn-up|vpn-down|connectivity-change|dhcp4-change|dhcp6-change)
-          /run/current-system/sw/bin/systemctl restart --no-block rclone-mount.service
-          ;;
-      esac
-    '';
-    environment.etc."NetworkManager/dispatcher.d/50-rclone-restart".mode = "0755";
+    # Don't restart on network changes during sleep
+    # environment.etc."NetworkManager/dispatcher.d/50-rclone-restart".text = ''
+    #   #!/bin/sh
+      
+    #   ACTION="$2"
+      
+    #   # Skip if going to sleep (lock file exists)
+    #   [ -f /tmp/rclone-sleep-lock ] && exit 0
+      
+    #   case "$ACTION" in
+    #     up|down|vpn-up|vpn-down|connectivity-change|dhcp4-change|dhcp6-change)
+    #       /run/current-system/sw/bin/systemctl restart --no-block rclone-mount.service
+    #       ;;
+    #   esac
+    # '';
+
+    # environment.etc."NetworkManager/dispatcher.d/50-rclone-restart".mode = "0755";
+
+    # # Create lock file before sleep, remove after wake
+    # systemd.services.rclone-sleep-handler = {
+    #   description = "Prevent rclone restart during sleep";
+    #   before = [ "sleep.target" ];
+    #   wantedBy = [ "sleep.target" ];
+      
+    #   serviceConfig = {
+    #     Type = "oneshot";
+    #     RemainAfterExit = true;
+    #     ExecStart = "${pkgs.coreutils}/bin/touch /tmp/rclone-sleep-lock";
+    #     ExecStop = "${pkgs.coreutils}/bin/rm -f /tmp/rclone-sleep-lock";
+    #   };
+    # };
     
   };
 }
