@@ -34,7 +34,7 @@ in
 
     allowOther = mkOption {
       type = types.bool;
-      default = false;
+      default = true;  # Changed to true by default to fix permission issues
       description = "If true, add --allow-other to rclone mount (requires user_allow_other in /etc/fuse.conf).";
     };
 
@@ -43,6 +43,12 @@ in
       default = false;
       description = "Set to true for the first sync or when recovering from errors. This uses --resync which can overwrite data.";
     };
+
+    idleTimeout = mkOption {
+      type = types.int;
+      default = 600;
+      description = "Time in seconds before the mount is automatically unmounted due to inactivity.";
+    };
   };
 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
@@ -50,66 +56,62 @@ in
     environment.systemPackages = with pkgs; [
       unstable.rclone-browser
       rclone
-      fuse
     ];
+
+    # Enable user_allow_other in fuse.conf (required for allow_other option)
+    programs.fuse.enable = true;
+    programs.fuse.userAllowOther = true;
 
     /*
       ----------------------------------------------------------
-      1.  ROOT MOUNT SERVICE  (can actually do fusermount)
+      SYSTEMD MOUNT UNIT (using rclone as mount helper)
       ----------------------------------------------------------
     */
-    systemd.services.rclone-mount = {
-      description = "OneDrive rclone mount (system)";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "my-network-online.service"];
-      wants = [ "my-network-online.service"];
-      requires = [ "my-network-online.service"];
-
-      # Make it not prevent hibernating
-      before = [ "sleep.target" ];
-
-      preStart = ''
-        ${pkgs.coreutils}/bin/mkdir -p ${cfg.mountPoint}
-        mkdir -p ${lib.escapeShellArg cfg.mountPoint}
-        chown ${user}:users ${lib.escapeShellArg cfg.mountPoint}
-        chmod 755 ${lib.escapeShellArg cfg.mountPoint}
-        ${pkgs.fuse}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint}update 2>/dev/null || true
-      '';
-
-      script = ''
-        exec ${pkgs.rclone}/bin/rclone mount \
-          ${lib.escapeShellArg cfg.remote} \
-          ${lib.escapeShellArg cfg.mountPoint} \
-          --vfs-cache-mode full \
-          --vfs-cache-max-size 20G \
-          --vfs-cache-max-age 168h \
-          --vfs-cache-min-free-space 5G \
-          --config ${home}/.config/rclone/rclone.conf \
-          --log-level=DEBUG
-      ''; 
-
-      postStop = ''
-        ${pkgs.fuse}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
-      '';
-
-      serviceConfig = {
-        Type = "notify";
-        User = "yeshey";
-        Group = "users";
-        Restart = "on-failure";
-        RestartSec = "30s";
-        TimeoutStartSec = "60s";
-
-        DeviceAllow = "/dev/fuse";
-        CapabilityBoundingSet = "CAP_SYS_ADMIN";
-        AmbientCapabilities = "CAP_SYS_ADMIN";
-
-        # prevent stopping hibernation
-        KillMode = "control-group"; 
-        KillSignal = "SIGTERM";
-        TimeoutStopSec = "30s";
+    # rclone Documentation on how to do this: https://rclone.org/commands/rclone_mount/#rclone-as-unix-mount-helper
+    # check logs: journalctl -fu home-yeshey-OneDriveISCTE.mount
+    systemd.mounts = [{
+      description = "OneDrive rclone mount";
+      what = cfg.remote;
+      where = cfg.mountPoint;
+      type = "rclone";
+      
+      mountConfig = {
+        Options = lib.concatStringsSep "," (
+          [
+            "_netdev"
+            "args2env"
+            "vfs-cache-mode=full"
+            "vfs-cache-max-size=20G"
+            "vfs-cache-max-age=168h"
+            "vfs-cache-min-free-space=5G"
+            "config=${home}/.config/rclone/rclone.conf"
+            "env.PATH=/run/wrappers/bin"
+          ]
+          ++ lib.optional cfg.allowOther "allow_other"
+        );
       };
-    };
-    
+
+      # Network dependency - including your custom service
+      after = [ "my-network-online.service" "network-online.target" ];
+      wants = [ "my-network-online.service" "network-online.target" ];
+      requires = [ "my-network-online.service" "network-online.target" ];
+    }];
+
+    /*
+      ----------------------------------------------------------
+      SYSTEMD AUTOMOUNT UNIT
+      ----------------------------------------------------------
+    */
+    systemd.automounts = [{
+      description = "OneDrive rclone automount";
+      where = cfg.mountPoint;
+      wantedBy = [ "multi-user.target" ];
+      
+      automountConfig = {
+        TimeoutIdleSec = toString cfg.idleTimeout;
+      };
+    }];
+
+
   };
 }
