@@ -96,9 +96,10 @@ in
           --vfs-cache-mode full \
           --vfs-cache-max-size 20G \
           --vfs-cache-max-age 168h \
-          --vfs-cache-min-free-space 5G
-          --config ${home}/.config/rclone/rclone.conf
-      ''; # --log-level=DEBUG
+          --vfs-cache-min-free-space 5G \
+          --config ${home}/.config/rclone/rclone.conf \
+          --log-level=DEBUG
+      ''; 
 
       postStop = ''
         ${pkgs.fuse}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
