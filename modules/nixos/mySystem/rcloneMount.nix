@@ -84,6 +84,10 @@ in
             "vfs-cache-max-size=20G"
             "vfs-cache-max-age=168h"
             "vfs-cache-min-free-space=5G"
+            "no-check-certificate"
+            #"disable-http2"
+            #"s3-no-check-bucket"
+            #"s3-no-head-object"
             "config=${home}/.config/rclone/rclone.conf"
             "env.PATH=/run/wrappers/bin"
           ]
