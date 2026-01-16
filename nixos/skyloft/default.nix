@@ -185,6 +185,7 @@
     wireguardVPN.enable = false;
     openVPN.enable = true;
     vnstat.enable = true;
+    jupyter.enable = true;
   };
 
   system.autoUpgrade.allowReboot = true;

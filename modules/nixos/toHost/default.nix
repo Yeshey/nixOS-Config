@@ -30,6 +30,7 @@ in
     ./wireguardVPN.nix
     ./openVPN.nix
     ./vnstat.nix
+    ./jupyternotebook.nix
   ];
 
   options.toHost = with lib; {

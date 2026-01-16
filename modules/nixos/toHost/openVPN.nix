@@ -166,7 +166,6 @@ in
       };
 
       networking.firewall = {
-        enable = true;
         allowedUDPPorts = [ vpnPortUDP ];
         allowedTCPPorts = [ vpnPortTCP ];
         trustedInterfaces = [ vpnInterfaceUDP vpnInterfaceTCP ];

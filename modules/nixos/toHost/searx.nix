@@ -7,7 +7,7 @@
 
 let
   cfg = config.toHost.searx;
-  port = 8888;
+  port = 5564;
 in
 {
   options.toHost.searx = {
