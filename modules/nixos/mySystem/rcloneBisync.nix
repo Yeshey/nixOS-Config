@@ -155,6 +155,11 @@ in
         Type = "oneshot";
         User = user;        # Run as your user
         Group = "users";
+
+        Restart = "on-failure";
+        RestartSec = "5s";
+        StartLimitBurst = 3;
+        StartLimitIntervalSec = "20s";
       };
     };
 
