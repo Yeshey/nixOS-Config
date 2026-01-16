@@ -18,6 +18,7 @@ in
   config = lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && config.myHome.homeApps.cli.enable && cfg.enable) {
     home.packages = with pkgs; [
       jq
+      killall
       cmatrix
       ffmpeg-full
       yt-dlp # download youtube videos
