@@ -158,6 +158,8 @@ in
 
         Restart = "on-failure";
         RestartSec = "5s";
+      };
+      unitConfig = {
         StartLimitBurst = 3;
         StartLimitIntervalSec = "20s";
       };

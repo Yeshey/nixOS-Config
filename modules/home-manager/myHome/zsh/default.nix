@@ -47,18 +47,20 @@ in
       };
       # bash
       initContent = ''
-        # source ${./git.zsh}
+        zvm_after_init() {
+          bindkey '^[[A' history-substring-search-up
+          bindkey '^[OA' history-substring-search-up
+          bindkey '^[[B' history-substring-search-down
+          bindkey '^[OB' history-substring-search-down
+        }
+
         source ${./myAlias.zsh}
 
+        # Workaround for ZVM overwriting keybindings
+        # Basic keybindings
         bindkey "^[[1;5C" forward-word
         bindkey "^[[1;5D" backward-word
         bindkey '^[[Z' reverse-menu-complete
-
-        # Workaround for ZVM overwriting keybindings
-        zvm_after_init_commands+=("bindkey '^[[A' history-substring-search-up")
-        zvm_after_init_commands+=("bindkey '^[OA' history-substring-search-up")
-        zvm_after_init_commands+=("bindkey '^[[B' history-substring-search-down")
-        zvm_after_init_commands+=("bindkey '^[OB' history-substring-search-down")
       '';
       localVariables = {
         ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE = "fg=13,underline";
