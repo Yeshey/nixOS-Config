@@ -179,7 +179,7 @@ in
     };
     nh.enable = true;
     globalprotect.enable = true;
-    rcloneBisync.enable = true;
+    rcloneMount.enable = true;
     virtualbox.enable = false;
   };
 

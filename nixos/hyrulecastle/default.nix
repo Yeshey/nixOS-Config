@@ -238,7 +238,7 @@ in
     };
     allTor.enable = false;
     globalprotect.enable = true;
-    rcloneBisync.enable = true;
+    rcloneMount.enable = true;
     virtualbox.enable = false;
   };
 

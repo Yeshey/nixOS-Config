@@ -7,13 +7,13 @@
 }:
 
 let
-  cfg = config.mySystem.rcloneBisync;
+  cfg = config.mySystem.rcloneMount;
   user = cfg.user;
   home = "/home/${user}";
 in
 {
-  options.mySystem.rcloneBisync = with lib; {
-    enable = mkEnableOption "rcloneBisync";
+  options.mySystem.rcloneMount = with lib; {
+    enable = mkEnableOption "rcloneMount";
 
     mountPoint = mkOption {
       type = types.str;
@@ -119,62 +119,6 @@ in
         KillMode = "control-group"; 
         KillSignal = "SIGTERM";
         TimeoutStopSec = "30s";
-      };
-    };
-
-    /*
-      ----------------------------------------------------------
-      2.  USER BISYNC SERVICE  (reads user config, needs mount)
-      ----------------------------------------------------------
-    */
-    # Change from systemd.user.services to systemd.services
-    systemd.services.rclone-bisync = {
-      description = "OneDrive bisync";
-      
-      # Now you can properly depend on the mount!
-      after = [ "rclone-mount.service" ];
-      requires = [ "rclone-mount.service" ];
-      
-      script = ''
-        exec ${pkgs.rclone}/bin/rclone bisync \
-          ${lib.escapeShellArg cfg.localPath} \
-          ${lib.escapeShellArg cfg.remote} \
-          --check-access \
-          --compare size,modtime \
-          --resilient \
-          --recover \
-          --max-lock 2m \
-          --conflict-resolve newer \
-          --create-empty-src-dirs \
-          --verbose \
-          --config ${home}/.config/rclone/rclone.conf \
-          ${lib.optionalString cfg.firstRun "--resync"}
-      '';
-      
-      serviceConfig = {
-        Type = "oneshot";
-        User = user;        # Run as your user
-        Group = "users";
-
-        Restart = "on-failure";
-        RestartSec = "5s";
-      };
-      unitConfig = {
-        StartLimitBurst = 3;
-        StartLimitIntervalSec = "20s";
-      };
-    };
-
-    # Change from systemd.user.timers to systemd.timers
-    systemd.timers.rclone-bisync = {
-      wantedBy = [ "timers.target" ];
-      after = [ "rclone-mount.service" ];  # Timer also waits for mount
-      
-      timerConfig = {
-        OnBootSec = "2m";
-        OnUnitActiveSec = cfg.bisyncInterval;
-        Persistent = true;
-        Unit = "rclone-bisync.service";
       };
     };
     

@@ -81,7 +81,7 @@ in
     ./snap.nix
     ./autossh.nix
     ./resticRcloneBackups.nix
-    ./rcloneBisync.nix
+    ./rcloneMount.nix
     ./an-anime-game-launcher.nix
     ./nix-flatpak.nix
     ./nh.nix
