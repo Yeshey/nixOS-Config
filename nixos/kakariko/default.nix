@@ -180,7 +180,7 @@ in
     nh.enable = true;
     globalprotect.enable = true;
     rcloneBisync.enable = true;
-    virtualbox.enable = true;
+    virtualbox.enable = false;
   };
 
   toHost = {
