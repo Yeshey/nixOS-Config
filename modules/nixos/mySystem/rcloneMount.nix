@@ -1,3 +1,4 @@
+# also need RCLONE_TEST in the onedrive?
 {
   config,
   lib,
@@ -34,7 +35,7 @@ in
 
     allowOther = mkOption {
       type = types.bool;
-      default = true;  # Changed to true by default to fix permission issues
+      default = false;
       description = "If true, add --allow-other to rclone mount (requires user_allow_other in /etc/fuse.conf).";
     };
 
@@ -42,12 +43,6 @@ in
       type = types.bool;
       default = false;
       description = "Set to true for the first sync or when recovering from errors. This uses --resync which can overwrite data.";
-    };
-
-    idleTimeout = mkOption {
-      type = types.int;
-      default = 600;
-      description = "Time in seconds before the mount is automatically unmounted due to inactivity.";
     };
   };
 
@@ -58,64 +53,92 @@ in
       rclone
     ];
 
-    # Enable user_allow_other in fuse.conf (required for allow_other option)
     programs.fuse.enable = true;
-    programs.fuse.userAllowOther = true;
 
     /*
       ----------------------------------------------------------
-      SYSTEMD MOUNT UNIT (using rclone as mount helper)
+      1.  ROOT MOUNT SERVICE  (can actually do fusermount)
       ----------------------------------------------------------
     */
-    # rclone Documentation on how to do this: https://rclone.org/commands/rclone_mount/#rclone-as-unix-mount-helper
-    # check logs: journalctl -fu home-yeshey-OneDriveISCTE.mount
-    systemd.mounts = [{
-      description = "OneDrive rclone mount";
-      what = cfg.remote;
-      where = cfg.mountPoint;
-      type = "rclone";
-      
-      mountConfig = {
-        Options = lib.concatStringsSep "," (
-          [
-            "_netdev"
-            "args2env"
-            "vfs-cache-mode=full"
-            "vfs-cache-max-size=20G"
-            "vfs-cache-max-age=168h"
-            "vfs-cache-min-free-space=5G"
-            "no-check-certificate"
-            #"disable-http2"
-            #"s3-no-check-bucket"
-            #"s3-no-head-object"
-            "config=${home}/.config/rclone/rclone.conf"
-            "env.PATH=/run/wrappers/bin"
-          ]
-          ++ lib.optional cfg.allowOther "allow_other"
-        );
-      };
-
-      # Network dependency - including your custom service
-      after = [ "my-network-online.service" "network-online.target" ];
-      wants = [ "my-network-online.service" "network-online.target" ];
-      requires = [ "my-network-online.service" "network-online.target" ];
-    }];
-
-    /*
-      ----------------------------------------------------------
-      SYSTEMD AUTOMOUNT UNIT
-      ----------------------------------------------------------
-    */
-    systemd.automounts = [{
-      description = "OneDrive rclone automount";
-      where = cfg.mountPoint;
+    systemd.services.rclone-mount = {
+      description = "OneDrive rclone mount (system)";
       wantedBy = [ "multi-user.target" ];
-      
-      automountConfig = {
-        TimeoutIdleSec = toString cfg.idleTimeout;
+      after = [ "my-network-online.service"];
+      wants = [ "my-network-online.service"];
+      requires = [ "my-network-online.service"];
+
+      # Make it not prevent hibernating
+      before = [ "sleep.target" ];
+
+      preStart = ''
+        # try to unmount any stale FUSE mount (use fuse3 fusermount)
+        ${pkgs.fuse3}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || \
+          /run/current-system/sw/bin/umount -l ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
+
+        # ensure mountpoint exists and owned by the right user
+        ${pkgs.coreutils}/bin/mkdir -p ${lib.escapeShellArg cfg.mountPoint}
+        chown ${user}:users ${lib.escapeShellArg cfg.mountPoint}
+        chmod 755 ${lib.escapeShellArg cfg.mountPoint}
+      '';
+
+      script = ''
+        exec ${pkgs.rclone}/bin/rclone mount \
+          ${lib.escapeShellArg cfg.remote} \
+          ${lib.escapeShellArg cfg.mountPoint} \
+          --vfs-cache-mode full \
+          --vfs-cache-max-size 20G \
+          --vfs-cache-max-age 168h \
+          --vfs-cache-min-free-space 5G \
+          --config ${home}/.config/rclone/rclone.conf \
+      ''; # --log-level=DEBUG 
+          # --no-check-certificate \
+          # --disable-http2 \
+          # --s3-no-check-bucket \
+          # --s3-no-head-object \
+      postStop = ''
+        # Try clean FUSE unmount
+        ${pkgs.fuse3}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || \
+          /run/current-system/sw/bin/umount -l ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
+
+        # Kill any remaining rclone mount processes for this path
+        ${pkgs.procps}/bin/pkill -f "rclone mount .* ${lib.escapeShellArg cfg.mountPoint}" || true
+      '';
+
+      serviceConfig = {
+        Type = "notify";
+        User = "yeshey";
+        Group = "users";
+        # RESTART POLICY - Progressive backoff for network changes
+        Restart = "on-failure";
+        RestartSec = "5s";
+        RestartSteps = 8;
+        RestartMaxDelaySec = "120s";  # Cap at 120s between retries
+        
+        # TIMEOUTS
+        TimeoutStartSec = "60s";
+        TimeoutStopSec = "20s";
+
+        DeviceAllow = "/dev/fuse";
+        CapabilityBoundingSet = "CAP_SYS_ADMIN";
+        AmbientCapabilities = "CAP_SYS_ADMIN";
+
+        # prevent stopping hibernation
+        KillMode = "control-group"; 
+        KillSignal = "SIGTERM";
       };
-    }];
+    };
 
-
+    # Make it so every time there is a Network change the rclone mount restarts
+    environment.etc."NetworkManager/dispatcher.d/50-rclone-restart".text = ''
+      #!/bin/sh
+      ACTION="$2"
+      case "$ACTION" in
+        up|down|vpn-up|vpn-down|connectivity-change|dhcp4-change|dhcp6-change)
+          /run/current-system/sw/bin/systemctl restart --no-block rclone-mount.service
+          ;;
+      esac
+    '';
+    environment.etc."NetworkManager/dispatcher.d/50-rclone-restart".mode = "0755";
+    
   };
 }
