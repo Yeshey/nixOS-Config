@@ -58,7 +58,7 @@ in
       enable = true;
       starshipTheme = "pinage404"; # fredericrous # pinage404
     };
-    direnv.enable = true;
+    #direnv.enable = false;
     #agenix = {
     #  enable = true;
     #  sshKeys.enable = true;

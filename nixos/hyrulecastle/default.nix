@@ -85,6 +85,7 @@ in
     gnome.enable = true; # TODO activate both plasma and gnome same time, maybe expose display manager
     cosmic.enable = false;
     hyprland.enable = false;
+    direnv.enable = true;
     ssh = {
       enable = true;
     };

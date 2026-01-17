@@ -106,6 +106,7 @@ in
       enable = true; # TODO activate both plasma and gnome same time, maybe expose display manager
     };
     hyprland.enable = false;
+    direnv.enable = true;
     ssh = {
       enable = true;
     };

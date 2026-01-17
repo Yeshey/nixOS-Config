@@ -52,6 +52,7 @@
       x11 = true;
     };
     gnome.enable = false; # TODO activate both plasma and gnome same time, maybe expose display manager
+    direnv.enable = true;
     ssh.enable = true;
     browser.enable = true;
     cliTools.enable = true;

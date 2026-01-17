@@ -59,7 +59,7 @@ in
       enable = true;
       starshipTheme = "fredericrous"; # fredericrous # pinage404
     };
-    direnv.enable = true;
+    #direnv.enable = false;
 
     #agenix = {
     #  enable = false;

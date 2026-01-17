@@ -88,6 +88,7 @@ in
     ./allTor.nix
     ./globalprotect.nix
     ./virtualbox.nix
+    ./direnv.nix
   ];
 
   options.mySystem = with lib; {
