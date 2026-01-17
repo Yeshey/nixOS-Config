@@ -58,20 +58,7 @@ in
     programs.fuse.userAllowOther = true;
 
     systemd.tmpfiles.rules = [
-      # 1. Create the specific parent folder for the trackerignore file
-      #    'd' = create directory if missing. 
-      #"d /mnt/OneDrive 0755 ${user} users -"
       "d ${home}/OneDrive 0755 ${user} users -"
-
-      # 2. Create the .trackerignore file inside it
-      #    'f' = create file if missing.
-      #"f /mnt/OneDrive/.trackerignore 0644 ${user} users -"
-      "f ${home}/OneDrive/.trackerignore 0644 ${user} users -"
-
-      # 3. Create the actual Mount Point
-      #    This automatically handles 'mkdir -p' logic (creating parents if needed).
-      #    If /mnt/OneDrive was not created above, this line would create it, 
-      #    but defining it above ensures the specific permissions for the parent too.
       "d '${cfg.mountPoint}' 0755 ${user} users -"
     ];
 
@@ -109,6 +96,8 @@ in
           --vfs-cache-max-age 1h0m0s \
           --vfs-cache-min-free-space 5G \
           --no-seek \
+          --bind 0.0.0.0 \
+          --timeout 10s \
           --cache-db-purge \
           --config ${home}/.config/rclone/rclone.conf \
           --allow-other
@@ -182,6 +171,36 @@ in
         '';
       }
     ];
+
+    # If still hanging with trackerfiles maybe uncomment this
+    # # 3. THE WATCHDOG SERVICE (Resource usage is negligible)
+    # systemd.services.rclone-healthcheck = {
+    #   description = "Restart rclone if mount is frozen";
+    #   serviceConfig = {
+    #     Type = "oneshot";
+    #     User = "root";
+    #     ExecStart = pkgs.writeShellScript "rclone-check" ''
+    #       if systemctl is-active --quiet rclone-mount.service; then
+    #         # If 'ls' takes more than 5 seconds, the mount is dead.
+    #         if ! ${pkgs.coreutils}/bin/timeout 5s ${pkgs.coreutils}/bin/ls -1q ${lib.escapeShellArg cfg.mountPoint} >/dev/null 2>&1; then
+    #           echo "Healthcheck: Mount unresponsive. Restarting..."
+    #           systemctl restart rclone-mount.service
+    #         fi
+    #       fi
+    #     '';
+    #   };
+    # };
+
+    # # 4. THE TIMER (Runs check every 60s)
+    # systemd.timers.rclone-healthcheck = {
+    #   description = "Run rclone health check every minute";
+    #   wantedBy = [ "timers.target" ];
+    #   timerConfig = {
+    #     OnBootSec = "5m"; # Give it time to start initially
+    #     OnUnitActiveSec = "1m";
+    #   };
+    # };
+
     
   };
 }
