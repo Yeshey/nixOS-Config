@@ -91,6 +91,7 @@ in
         exec ${pkgs.rclone}/bin/rclone mount \
           ${lib.escapeShellArg cfg.remote} \
           ${lib.escapeShellArg cfg.mountPoint} \
+          --buffer-size 512M \
           --config ${home}/.config/rclone/rclone.conf \
           --allow-other
       ''; # --log-level=DEBUG 
