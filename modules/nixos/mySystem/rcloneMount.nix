@@ -72,7 +72,6 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "my-network-online.service" ];
       wants = [ "my-network-online.service" ];
-      requires = [ "my-network-online.service" ];
 
       # Make it not prevent hibernating
       before = [ "sleep.target" ];

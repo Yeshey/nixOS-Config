@@ -412,7 +412,7 @@ in
         path = with pkgs; [ iputils coreutils ];
         # Try 30 times (30 × 20s = 600s = 10 minutes)
         script = ''
-          for i in {1..30}; do
+          for i in {1..200}; do
             if ${pkgs.iputils}/bin/ping -c1 google.com >/dev/null 2>&1; then
               exit 0  # Success - internet is reachable
             fi
@@ -423,15 +423,16 @@ in
         serviceConfig = {
           Type = "oneshot";
           User = "root";
-          # Give the script 11 minutes to complete all attempts
-          TimeoutStartSec = "11min";
+          RemainAfterExit = true; 
+          # Give the script 70 minutes to complete all attempts
+          TimeoutStartSec = "70min";
         };
       };
       systemd.user.services.my-network-online = {
         wantedBy = [ "default.target"];
         path = with pkgs; [ iputils coreutils ];
         script = ''
-          for i in {1..30}; do
+          for i in {1..200}; do
             if ${pkgs.iputils}/bin/ping -c1 google.com >/dev/null 2>&1; then
               exit 0
             fi
@@ -441,8 +442,9 @@ in
         '';
         serviceConfig = {
           Type = "oneshot";
-          # NO User = "root" - this runs as your user
-          TimeoutStartSec = "11min";
+          RemainAfterExit = true; 
+          # Give the script 70 minutes to complete all attempts
+          TimeoutStartSec = "70min";
         };
       };
 
