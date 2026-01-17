@@ -17,7 +17,8 @@ in
     mountPoint = mkOption {
       type = types.str;
       #default = "/home/yeshey/OneDriveISCTE";
-      default = "/mnt/OneDrive/ISCTE";
+      #default = "/mnt/OneDrive/ISCTE"; # DON'T CHANGE!
+      default = "${home}/OneDrive/ISCTE"; # DON'T CHANGE!
       description = "Path where the rclone remote will be mounted. System boot will not fail if the underlying device is not present.";
     };
 
@@ -56,6 +57,24 @@ in
     programs.fuse.enable = true;
     programs.fuse.userAllowOther = true;
 
+    systemd.tmpfiles.rules = [
+      # 1. Create the specific parent folder for the trackerignore file
+      #    'd' = create directory if missing. 
+      # "d /mnt/OneDrive 0755 ${user} users -"
+      "d ${home}/OneDrive 0755 ${user} users -"
+
+      # 2. Create the .trackerignore file inside it
+      #    'f' = create file if missing.
+      #"f /mnt/OneDrive/.trackerignore 0644 ${user} users -"
+      "f ${home}/OneDrive/.trackerignore 0644 ${user} users -"
+
+      # 3. Create the actual Mount Point
+      #    This automatically handles 'mkdir -p' logic (creating parents if needed).
+      #    If /mnt/OneDrive was not created above, this line would create it, 
+      #    but defining it above ensures the specific permissions for the parent too.
+      "d '${cfg.mountPoint}' 0755 ${user} users -"
+    ];
+
     /*
       ----------------------------------------------------------
       1.  ROOT MOUNT SERVICE  (can actually do fusermount)
@@ -72,9 +91,6 @@ in
       before = [ "sleep.target" ];
 
       preStart = ''
-        mkdir -p ${cfg.mountPoint}
-        touch "/mnt/OneDrive/.trackerignore"
-
         # try clean unmount (fuse3 fusermount)
         ${pkgs.fuse3}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || \
           /run/current-system/sw/bin/umount -l ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
@@ -95,6 +111,8 @@ in
           --no-seek
           --config ${home}/.config/rclone/rclone.conf \
           --allow-other
+          --volname "OneDrive ISCTE" \
+          --umask 022
       ''; # --log-level=DEBUG 
           # --no-check-certificate \
           # --disable-http2 \
@@ -129,8 +147,7 @@ in
 
         TimeoutStartSec = "60s";
         TimeoutStopSec = "60s";
-        KillMode = "control-group";
-        KillSignal = "SIGTERM";
+        KillMode = "mixed";
 
         DeviceAllow = "/dev/fuse";
         CapabilityBoundingSet = "CAP_SYS_ADMIN";
@@ -142,39 +159,30 @@ in
       };
     };
 
+    # Restarts the mount when there is a network change for it to not die, with special logic to not prevent hibernating.
+    networking.networkmanager.dispatcherScripts = [
+      {
+        type = "basic";
+        source = pkgs.writeText "rclone-restart-hook" ''
+          #!/bin/sh
+          ACTION="$2"
+          
+          # Safety check: Don't run if system is shutting down or sleeping
+          if [ "$(systemctl is-system-running)" != "running" ]; then
+            exit 0
+          fi
 
-    # Make it so every time there is a Network change the rclone mount restarts
-    # Don't restart on network changes during sleep
-    # environment.etc."NetworkManager/dispatcher.d/50-rclone-restart".text = ''
-    #   #!/bin/sh
-      
-    #   ACTION="$2"
-      
-    #   # Skip if going to sleep (lock file exists)
-    #   [ -f /tmp/rclone-sleep-lock ] && exit 0
-      
-    #   case "$ACTION" in
-    #     up|down|vpn-up|vpn-down|connectivity-change|dhcp4-change|dhcp6-change)
-    #       /run/current-system/sw/bin/systemctl restart --no-block rclone-mount.service
-    #       ;;
-    #   esac
-    # '';
-
-    # environment.etc."NetworkManager/dispatcher.d/50-rclone-restart".mode = "0755";
-
-    # # Create lock file before sleep, remove after wake
-    # systemd.services.rclone-sleep-handler = {
-    #   description = "Prevent rclone restart during sleep";
-    #   before = [ "sleep.target" ];
-    #   wantedBy = [ "sleep.target" ];
-      
-    #   serviceConfig = {
-    #     Type = "oneshot";
-    #     RemainAfterExit = true;
-    #     ExecStart = "${pkgs.coreutils}/bin/touch /tmp/rclone-sleep-lock";
-    #     ExecStop = "${pkgs.coreutils}/bin/rm -f /tmp/rclone-sleep-lock";
-    #   };
-    # };
+          case "$ACTION" in
+            # Only restart on UP events (Connection established / VPN change)
+            up|vpn-up|vpn-down)
+              logger -t "rclone-dispatcher" "Network/VPN UP. Restarting rclone mount..."
+              systemctl try-restart rclone-mount.service
+              ;;
+            # We explicitly ignore 'down' events to prevent fighting with Hibernate
+          esac
+        '';
+      }
+    ];
     
   };
 }
