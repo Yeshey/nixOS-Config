@@ -91,14 +91,6 @@ in
         exec ${pkgs.rclone}/bin/rclone mount \
           ${lib.escapeShellArg cfg.remote} \
           ${lib.escapeShellArg cfg.mountPoint} \
-          --vfs-cache-mode full \
-          --vfs-cache-max-size 30G \
-          --vfs-cache-max-age 1h0m0s \
-          --vfs-cache-min-free-space 5G \
-          --no-seek \
-          --bind 0.0.0.0 \
-          --timeout 10s \
-          --cache-db-purge \
           --config ${home}/.config/rclone/rclone.conf \
           --allow-other
       ''; # --log-level=DEBUG 
@@ -106,6 +98,14 @@ in
           # --disable-http2 \
           # --s3-no-check-bucket \
           # --s3-no-head-object \
+          # --vfs-cache-mode full \
+          # --vfs-cache-max-size 30G \
+          # --vfs-cache-max-age 1h0m0s \
+          # --vfs-cache-min-free-space 5G \
+          # --no-seek \
+          # --bind 0.0.0.0 \
+          # --timeout 10s \
+
 
       # All stop/cleanup logic in postStop (declared-style Nix)
       postStop = ''
@@ -176,7 +176,7 @@ in
             # or let rclone wait. Restarting on down causes hibernation races.
             up|vpn-up|vpn-down)
               log "Network/VPN UP ($ACTION). Restarting rclone mount..."
-              systemctl try-restart rclone-mount.service
+              systemctl restart rclone-mount.service
               ;;
             *)
               # Ignore down, vpn-down, pre-up, etc.
