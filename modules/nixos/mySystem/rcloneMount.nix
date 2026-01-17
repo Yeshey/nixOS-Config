@@ -109,6 +109,10 @@ in
         ${pkgs.fuse3}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
       '';
 
+      unitConfig = {
+        AssertPathIsDirectory = cfg.mountPoint;
+      };
+
       serviceConfig = {
         Type = "simple";
         User = user;
