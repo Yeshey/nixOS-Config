@@ -55,83 +55,68 @@ in
     programs.fuse.enable = true;
     programs.fuse.userAllowOther = true;
 
-    /*
-      ----------------------------------------------------------
-      1.  ROOT MOUNT SERVICE  (can actually do fusermount)
-      ----------------------------------------------------------
-    */
-    systemd.services.rclone-mount = {
-      description = "OneDrive rclone mount (system)";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "my-network-online.service" ];
-      wants = [ "my-network-online.service" ];
-      requires = [ "my-network-online.service" ];
+    # Ensure the mountpoint and cache dir exist on boot (owner = user, group = users)
+    systemd.tmpfiles.rules = lib.mkForce [
+      # create mount point (cfg.mountPoint) and /mnt/rclonecache with desired perms and owner
+      "d ${cfg.mountPoint} 0755 ${user} users - -"
+      "d /mnt/rclonecache 0755 ${user} users - -"
+    ];
 
-      # Make it not prevent hibernating
+    systemd.services.rclone-onedrive = {
+      description = "RClone Service";
+      wantedBy = [ "multi-user.target" ];
+      wants = [ "network-online.target" ];
+      after = [ "network-online.target" ];
+
+      # keep hibernation/sleepable like your example
       before = [ "sleep.target" ];
 
-      preStart = ''
-        # try clean unmount (fuse3 fusermount)
-        ${pkgs.fuse3}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || \
-          /run/current-system/sw/bin/umount -l ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
+      # Unit-level AssertPathIsDirectory like in your example
+      unitConfig = {
+        AssertPathIsDirectory = cfg.mountPoint;
+      };
 
-        ${pkgs.coreutils}/bin/mkdir -p ${lib.escapeShellArg cfg.mountPoint}
-        chown ${user}:users ${lib.escapeShellArg cfg.mountPoint}
-        chmod 755 ${lib.escapeShellArg cfg.mountPoint}
-      '';
-
+      # ExecStart is provided via `script` (matches example ExecStart invocation)
       script = ''
-        exec ${pkgs.rclone}/bin/rclone mount \
-          ${lib.escapeShellArg cfg.remote} \
-          ${lib.escapeShellArg cfg.mountPoint} \
+        exec ${pkgs.rclone}/bin/rclone mount ${lib.escapeShellArg cfg.remote} ${lib.escapeShellArg cfg.mountPoint} \
+          --allow-other \
+          --dir-cache-time 5000h \
+          --syslog \
+          --poll-interval 10s \
+          --umask 0000 \
+          --user-agent OneDrive \
+          --cache-dir=/mnt/rclonecache \
           --vfs-cache-mode full \
-          --vfs-cache-max-size 30G \
-          --vfs-cache-max-age 168h \
-          --config ${home}/.config/rclone/rclone.conf \
-          --allow-other
-      ''; # --log-level=DEBUG 
-          # --no-check-certificate \
-          # --disable-http2 \
-          # --s3-no-check-bucket \
-          # --s3-no-head-object \
-
-      # All stop/cleanup logic in postStop (declared-style Nix)
-      postStop = ''
-        # try regular fusermount first, fallback to lazy umount
-        ${pkgs.fuse3}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || \
-          /run/current-system/sw/bin/umount -l ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
-
-        # kill any stray rclone processes that still reference the mountpoint
-        ${pkgs.procps}/bin/pkill -f "rclone mount .* ${lib.escapeShellArg cfg.mountPoint}" || true
-
-        # brief pause & another unmount attempt to ensure kernel releases the endpoint
-        sleep 1
-        ${pkgs.fuse3}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
+          --volname onedrive \
+          --vfs-cache-max-size 60G \
+          --vfs-read-chunk-size 128M \
+          --vfs-read-ahead 2G \
+          --vfs-cache-max-age 5000h \
+          --bwlimit-file 100M
       '';
+
+      environment = [
+        "RCLONE_CONFIG=/home/${user}/.config/rclone/rclone.conf"
+        "PATH=/run/wrappers/bin/:$PATH"
+      ];
 
       serviceConfig = {
-        Type = "simple";
-        User = user;
-        Group = "users";
-
+        Type = "notify";
+        RestartSec = "10";
+        # EXACTLY like your example's single cleanup line (adapted to cfg.mountPoint)
+        ExecStop = "${pkgs.fuse3}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint}";
         Restart = "on-failure";
-        RestartSec = "10s";
 
-        TimeoutStartSec = "60s";
-        TimeoutStopSec = "60s";
-        KillMode = "control-group";
-        KillSignal = "SIGTERM";
-
-        DeviceAllow = "/dev/fuse";
+        # ---- NixOS-specific permission bits needed for FUSE ----
+        DeviceAllow = "/dev/fuse rwm";
         CapabilityBoundingSet = "CAP_SYS_ADMIN";
         AmbientCapabilities = "CAP_SYS_ADMIN";
 
-        # limit restart burst so we don't hammer everything during network storms
-        StartLimitIntervalSec = 300;
-        StartLimitBurst = 5;
+        # run as provided user & group
+        User = user;
+        Group = "users";
       };
     };
-
 
     # Make it so every time there is a Network change the rclone mount restarts
     # Don't restart on network changes during sleep
