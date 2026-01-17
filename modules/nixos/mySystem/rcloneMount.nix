@@ -60,7 +60,7 @@ in
     systemd.tmpfiles.rules = [
       # 1. Create the specific parent folder for the trackerignore file
       #    'd' = create directory if missing. 
-      # "d /mnt/OneDrive 0755 ${user} users -"
+      #"d /mnt/OneDrive 0755 ${user} users -"
       "d ${home}/OneDrive 0755 ${user} users -"
 
       # 2. Create the .trackerignore file inside it
@@ -108,11 +108,10 @@ in
           --vfs-cache-max-size 30G \
           --vfs-cache-max-age 1h0m0s \
           --vfs-cache-min-free-space 5G \
-          --no-seek
+          --no-seek \
+          --cache-db-purge \
           --config ${home}/.config/rclone/rclone.conf \
           --allow-other
-          --volname "OneDrive ISCTE" \
-          --umask 022
       ''; # --log-level=DEBUG 
           # --no-check-certificate \
           # --disable-http2 \
@@ -135,6 +134,10 @@ in
 
       unitConfig = {
         AssertPathIsDirectory = cfg.mountPoint;
+        
+        # limit restart burst so we don't hammer everything during network storms
+        StartLimitIntervalSec = 300;
+        StartLimitBurst = 5;
       };
 
       serviceConfig = {
@@ -152,10 +155,6 @@ in
         DeviceAllow = "/dev/fuse";
         CapabilityBoundingSet = "CAP_SYS_ADMIN";
         AmbientCapabilities = "CAP_SYS_ADMIN";
-
-        # limit restart burst so we don't hammer everything during network storms
-        StartLimitIntervalSec = 300;
-        StartLimitBurst = 5;
       };
     };
 
