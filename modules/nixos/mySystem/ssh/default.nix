@@ -17,18 +17,17 @@ in
 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
 
-     systemd.services.sshd = { # run this script before starting sshd 
-      preStart = '' 
-  if [ ! -f /etc/ssh/sshd_config ]; then 
-    install -m600 /dev/null /etc/ssh/sshd_config 
-  fi 
-''; 
-     };
-
     services.openssh = with lib; {
       enable = true;
       #settings.PermitRootLogin = lib.mkOverride 1010 "yes"; # TODO no
       settings = {
+        # This allows a new tunnel to take over the port if the old one is stale
+        StreamLocalBindUnlink = "yes"; 
+        
+        # If you want to connect to the tunnel from OUTSIDE the server 
+        # (e.g., from your laptop to the server's IP:2232), you need this:
+        GatewayPorts = "clientspecified"; 
+        
         X11Forwarding = lib.mkOverride 1010 true;
         ClientAliveInterval = 300;
         ClientAliveCountMax = 3;
