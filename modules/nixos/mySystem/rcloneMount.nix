@@ -77,6 +77,8 @@ in
       before = [ "sleep.target" ];
 
       preStart = ''
+        ${pkgs.procps}/bin/pkill -u ${user} -x rclone || true
+
         # try clean unmount (fuse3 fusermount)
         ${pkgs.fuse3}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || \
           /run/current-system/sw/bin/umount -l ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
@@ -90,10 +92,13 @@ in
         exec ${pkgs.rclone}/bin/rclone mount \
           ${lib.escapeShellArg cfg.remote} \
           ${lib.escapeShellArg cfg.mountPoint} \
-          --buffer-size 512M \
+          --vfs-cache-mode full \
+          --links \
           --config ${home}/.config/rclone/rclone.conf \
           --allow-other
-      ''; # --log-level=DEBUG 
+      ''; # So, the only bad thing happening right now is that if it is in the middle of opperations and you try hibernating, it will not work. And if it doesn't finish uploading when you poweroff, when it boots up again, the mount won't appear until it finishes uploading the things from last time.
+          # --buffer-size 512M \ # --vfs-cache is finnicky sometimes! if you remove it put this in its place
+          # --log-level=DEBUG 
           # --no-check-certificate \
           # --disable-http2 \
           # --s3-no-check-bucket \
@@ -112,21 +117,19 @@ in
         # try regular fusermount first, fallback to lazy umount
         ${pkgs.fuse3}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || \
           /run/current-system/sw/bin/umount -l ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
-
-        # kill any stray rclone processes that still reference the mountpoint
-        ${pkgs.procps}/bin/pkill -f "rclone mount .* ${lib.escapeShellArg cfg.mountPoint}" || true
-
-        # brief pause & another unmount attempt to ensure kernel releases the endpoint
-        sleep 1
-        ${pkgs.fuse3}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
       '';
+      # # kill any stray rclone processes that still reference the mountpoint
+      # ${pkgs.procps}/bin/pkill -f "rclone mount .* ${lib.escapeShellArg cfg.mountPoint}" || true
+      # # brief pause & another unmount attempt to ensure kernel releases the endpoint
+      # sleep 1
+      # ${pkgs.fuse3}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
 
       unitConfig = {
         AssertPathIsDirectory = cfg.mountPoint;
         
         # limit restart burst so we don't hammer everything during network storms
-        StartLimitIntervalSec = 300;
-        StartLimitBurst = 5;
+        StartLimitIntervalSec = 100; 
+        StartLimitBurst = 10;
       };
 
       serviceConfig = {
@@ -137,8 +140,7 @@ in
         Restart = "on-failure";
         RestartSec = "10s";
 
-        TimeoutStartSec = "60s";
-        TimeoutStopSec = "60s";
+        TimeoutStopSec = "100s";
         KillMode = "mixed";
 
         DeviceAllow = "/dev/fuse";
