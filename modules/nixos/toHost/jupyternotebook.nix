@@ -11,6 +11,8 @@ let
   morePackages = [
     pkgs.git
     pkgs.virtualenv
+    pkgs.direnv
+    pkgs.nix-direnv
   ];
   myPythonPkgs = with pkgs.python3.pkgs; [
     jupyter
