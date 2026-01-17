@@ -1,4 +1,3 @@
-# WT ACTUAL F
 {
   config,
   lib,
@@ -9,7 +8,10 @@
 let
   cfg = config.toHost.jupyter;
   morePackages = [
+    # Needed for git interface
     pkgs.git
+    pkgs.openssh
+
     pkgs.virtualenv
     pkgs.direnv
     pkgs.nix-direnv
