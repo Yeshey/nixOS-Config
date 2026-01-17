@@ -155,18 +155,32 @@ in
           #!/bin/sh
           ACTION="$2"
           
-          # Safety check: Don't run if system is shutting down or sleeping
-          if [ "$(systemctl is-system-running)" != "running" ]; then
-            exit 0
+          # 1. LOGGING (So we know why it ran or didn't run)
+          log() { logger -t "rclone-dispatcher" "$1"; }
+
+          # 2. SLEEP CHECK
+          # Check if the system is currently executing a sleep/suspend/hibernate job.
+          # 'systemctl is-system-running' is sometimes too slow to update.
+          # We check if sleep.target is active or if the shutdown target is active.
+          if systemctl is-active --quiet sleep.target || \
+             systemctl is-active --quiet suspend.target || \
+             systemctl is-active --quiet hibernate.target || \
+             systemctl is-active --quiet suspend-then-hibernate.target || \
+             systemctl is-active --quiet hybrid-sleep.target; then
+             log "System is sleeping/hibernating. Ignoring event $ACTION."
+             exit 0
           fi
 
+          # 3. ACTION HANDLER
           case "$ACTION" in
-            # Only restart on UP events (Connection established / VPN change)
+            # or let rclone wait. Restarting on down causes hibernation races.
             up|vpn-up|vpn-down)
-              logger -t "rclone-dispatcher" "Network/VPN UP. Restarting rclone mount..."
+              log "Network/VPN UP ($ACTION). Restarting rclone mount..."
               systemctl try-restart rclone-mount.service
               ;;
-            # We explicitly ignore 'down' events to prevent fighting with Hibernate
+            *)
+              # Ignore down, vpn-down, pre-up, etc.
+              ;;
           esac
         '';
       }

@@ -80,6 +80,7 @@ EndSection
       modesetting.enable = lib.mkOverride 1010 true;
       # nvidiaPersistenced = true; # It ensures all GPUs stay awake even during headless mode.
       powerManagement.enable = lib.mkOverride 1010 true; # Experimental power management through systemd
+      powerManagement.finegrained = true;
       prime = {
         # sync.enable = lib.mkOverride 1010 true; # gpu always # https://github.com/NixOS/nixpkgs/issues/199024#issuecomment-1300650034 # does not work with GPU passthrough
         offload.enable = true; # gpu on demand # works with GPU passthrough
