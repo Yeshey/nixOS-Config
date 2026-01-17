@@ -139,6 +139,10 @@ in
       # Note to self, if you ever make a user friendly NixOS distro, tell users to install https://github.com/mjaakko/NeoStumbler so they can get location on their computer as well
       services.geoclue2.enable = true;
       services.avahi.enable = true; # needed apparently for geoclue to have access to networks
+      systemd.services.avahi-daemon = {
+        requires = [ "systemd-tmpfiles-resetup.service" ];
+        after = [ "systemd-tmpfiles-resetup.service" ];
+      };
 
       # defaults (enough for a minimal server)
       mySystem.ssh.enable = lib.mkOverride 1010 true;

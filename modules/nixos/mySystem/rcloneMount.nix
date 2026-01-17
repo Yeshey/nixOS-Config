@@ -16,7 +16,8 @@ in
 
     mountPoint = mkOption {
       type = types.str;
-      default = "/home/yeshey/OneDriveISCTE";
+      #default = "/home/yeshey/OneDriveISCTE";
+      default = "/mnt/OneDrive/ISCTE";
       description = "Path where the rclone remote will be mounted. System boot will not fail if the underlying device is not present.";
     };
 
@@ -71,6 +72,9 @@ in
       before = [ "sleep.target" ];
 
       preStart = ''
+        mkdir -p ${cfg.mountPoint}
+        touch "/mnt/OneDrive/.trackerignore"
+
         # try clean unmount (fuse3 fusermount)
         ${pkgs.fuse3}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || \
           /run/current-system/sw/bin/umount -l ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
@@ -86,7 +90,9 @@ in
           ${lib.escapeShellArg cfg.mountPoint} \
           --vfs-cache-mode full \
           --vfs-cache-max-size 30G \
-          --vfs-cache-max-age 168h \
+          --vfs-cache-max-age 1h0m0s \
+          --vfs-cache-min-free-space 5G \
+          --no-seek
           --config ${home}/.config/rclone/rclone.conf \
           --allow-other
       ''; # --log-level=DEBUG 
