@@ -79,6 +79,8 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
 - ~~**LUKS on LVM with LVM cache**~~ **bcacheFS as root ( ͡° ͜ʖ ͡°)** - across microSD (background_target) and NVME (foreground_target and promote_target) on `kakariko`: [boot.nix](https://github.com/Yeshey/nixOS-Config/blob/main/nixos/kakariko/boot.nix);
 
+- **On-Demand Onedrive with rclone mount** - A very resilient systemd service that mounts my Onedrive storage. [onedrive for linux](https://github.com/abraunegg/onedrive) doesn't work without my university explicitly allowing the application, but rclone is pre-authorized by microsoft. It reconnects when there are network changes so it doesn't hang and waits for network online before starting. I should put this in a flake. Requires my-network-online service, rclone configuration file in the user home directory and running once with `firstrun` set. [rcloneMount.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/rcloneMount.nix)
+
 - **clean** - `clean` is an alias for a script that cleans user and system dangling nix packages, optimises the store, uninstalls unused Flatpak packages, and removes dangling docker and podman images, volumes and networks: for [`myHome`](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/myScripts.nix) and for [`mySystem`](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/autoUpgradesOnShutdown.nix)
 
 - **pci-passthrough** - for passing my `NVIDIA GeForce RTX 2060 Mobile` to a virt-manager VM and using my intel processor for the host: [pci-passthrough.nix](https://github.com/Yeshey/nixOS-Config/blob/main/nixos/hyrulecastle/pci-passthrough.nix), but better yet:
