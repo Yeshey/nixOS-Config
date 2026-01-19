@@ -27,6 +27,7 @@ in
           API = {
             HTTPHeaders = {
               "Access-Control-Allow-Origin" = [
+                "*" # should probably remove later as well
                 "http://10.8.0.1:${toString cfg.port}" # For the VPN
                 "http://localhost:${toString cfg.port}"
                 "http://127.0.0.1:${toString cfg.port}"
@@ -36,6 +37,7 @@ in
               "Access-Control-Allow-Methods" = [
                 "PUT"
                 "POST"
+                "GET"
               ];
             };
           };
@@ -92,6 +94,7 @@ in
       allowedTCPPorts = [
         8080 # people can see my gateway
         4001 # discoverability
+        cfg.port # should remove later, allows access to API
       ];
 
       # IPFS QUIC / UDP swarm
