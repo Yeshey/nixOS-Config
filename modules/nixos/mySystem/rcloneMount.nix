@@ -150,6 +150,7 @@ in
     };
 
     # Restarts the mount when there is a network change for it to not die, with special logic to not prevent hibernating.
+    # Maybeeee it would be good to remove this
     networking.networkmanager.dispatcherScripts = [
       {
         type = "basic";
@@ -178,7 +179,7 @@ in
             # or let rclone wait. Restarting on down causes hibernation races.
             up|vpn-up|vpn-down)
               log "Network/VPN UP ($ACTION). Restarting rclone mount..."
-              systemctl restart rclone-mount.service
+              systemctl restart --no-block rclone-mount.service
               ;;
             *)
               # Ignore down, vpn-down, pre-up, etc.
