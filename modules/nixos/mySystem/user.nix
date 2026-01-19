@@ -56,6 +56,7 @@ in
           "tss" # For TPM access
           "input" # For https://github.com/kokoko3k/ssh-rdp
           "i2c"
+          config.services.kubo.group # "ipfs"
         ]; # TODO if you ever extend the module to be able to have several users, you need to see how to handle this
         openssh.authorizedKeys.keyFiles = [
           ./../../../id_ed_mykey.pub
