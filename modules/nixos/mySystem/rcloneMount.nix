@@ -96,6 +96,7 @@ in
           --links \
           --config ${home}/.config/rclone/rclone.conf \
           --allow-other
+          --log-level=DEBUG 
       ''; # So, the only bad thing happening right now is that if it is in the middle of opperations and you try hibernating, it will not work. And if it doesn't finish uploading when you poweroff, when it boots up again, the mount won't appear until it finishes uploading the things from last time.
           # --buffer-size 512M \ # --vfs-cache is finnicky sometimes! if you remove it put this in its place
           # --log-level=DEBUG 
