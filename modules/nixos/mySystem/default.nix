@@ -410,14 +410,16 @@ in
       # Used by some of my services, it's unfortunate that I need this and there is no good way to know if I have internet with DNS
       systemd.services.my-network-online = {
         wantedBy = [ "multi-user.target"];
-        path = with pkgs; [ iputils coreutils ];
+        path = with pkgs; [ iputils coreutils curl ];
         # Try 30 times (30 × 20s = 600s = 10 minutes)
         script = ''
-          for i in {1..200}; do
-            if ${pkgs.iputils}/bin/ping -c1 google.com >/dev/null 2>&1; then
-              exit 0  # Success - internet is reachable
-            fi
-            ${pkgs.coreutils}/bin/sleep 20
+          for i in {1..100}; do
+              # curl -s (silent) --head (headers only) https://google.com
+              if curl -s --head https://www.google.com >/dev/null; then
+                  exit 0
+              fi
+              echo "Web check failed, retrying in 20s..."
+              sleep 20
           done
           exit 1
         '';
@@ -431,13 +433,15 @@ in
       };
       systemd.user.services.my-network-online = {
         wantedBy = [ "default.target"];
-        path = with pkgs; [ iputils coreutils ];
+        path = with pkgs; [ iputils coreutils curl ];
         script = ''
-          for i in {1..200}; do
-            if ${pkgs.iputils}/bin/ping -c1 google.com >/dev/null 2>&1; then
-              exit 0
-            fi
-            ${pkgs.coreutils}/bin/sleep 20
+          for i in {1..100}; do
+              # curl -s (silent) --head (headers only) https://google.com
+              if curl -s --head https://www.google.com >/dev/null; then
+                  exit 0
+              fi
+              echo "Web check failed, retrying in 20s..."
+              sleep 20
           done
           exit 1
         '';
