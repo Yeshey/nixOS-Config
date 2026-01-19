@@ -23,6 +23,7 @@ let
     jupyterlab-git
     ipykernel
 
+    unsloth
     tensorflow
     torch
     keras
