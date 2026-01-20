@@ -688,5 +688,7 @@ echo "Guest configuration created: ${CLIENT_NAME}.ovpn"
 echo "This file can be shared with multiple people."
 echo "They will have internet access only, no access to your server services."
 ```
-
 */
+
+# Use this command to check every key with access rn:
+# ls -1 /etc/openvpn/server/pki/issued/*.crt | xargs -n1 basename | sed 's/.crt$//'
