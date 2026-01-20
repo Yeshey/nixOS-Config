@@ -21,6 +21,9 @@ let
     jupyterlab
     jupyter-collaboration
     jupyterlab-git
+    jupyterlab-lsp  # Language Server Protocol support (syntax highlighting, autocomplete)
+    python-lsp-server  # Python LSP backend
+    jupyterlab-widgets  # Interactive widgets
     ipykernel
 
     unsloth
