@@ -185,6 +185,7 @@
     overleaf.enable = true;
     wireguardVPN.enable = false;
     openVPN.enable = true;
+    openVPN.enableSharedGuest = true;
     vnstat.enable = true;
     jupyter.enable = true;
   };

@@ -1,5 +1,6 @@
 # Need to port forward:
 # - UDP 1194 (for UDP connections)
+# - UDP 1195 (for UDP connections to guest ovpns)
 # - TCP 443 (for TCP connections - uses HTTPS port to bypass firewalls)
 
 { config, lib, pkgs, ... }:
@@ -18,8 +19,18 @@ let
   serverIPTCP = "10.8.1.1";
   serverIP6UDP = "fd00:8:0::1";
   serverIP6TCP = "fd00:8:1::1";
-  externalInterface = "enp0s6";
   
+  guestPortUDP = 1195;
+  guestPortTCP = 8443;
+  guestNetUDP = "10.8.2.0/24";
+  guestNetTCP = "10.8.3.0/24";
+  guestNet6UDP = "fd00:8:2::/64";
+  guestNet6TCP = "fd00:8:3::/64";
+  guestInterfaceUDP = "tun2";
+  guestInterfaceTCP = "tun3";
+
+  externalInterface = "enp0s6";
+
   serverKeyDir = "/etc/openvpn/server";
   caPath = "${serverKeyDir}/ca.crt";
   certPath = "${serverKeyDir}/server.crt";
@@ -33,6 +44,7 @@ in
 {
   options.toHost.openVPN = with lib; {
     enable = mkEnableOption "OpenVPN server (UDP + TCP, NetworkManager compatible, IPv6 enabled)";
+    enableSharedGuest = mkEnableOption "Shared guest VPN (internet-only access)";
   };
 
   config = lib.mkMerge [
@@ -245,6 +257,155 @@ in
       '';
     })
 
+    (lib.mkIf (cfg.enable && cfg.enableSharedGuest) {
+      services.openvpn.servers.guest-UDP = {
+        autoStart = true;
+        config = ''
+          mode server
+          tls-server
+          
+          proto udp
+          port ${toString guestPortUDP}
+          dev ${guestInterfaceUDP}
+          dev-type tun
+          
+          topology subnet
+          server 10.8.2.0 255.255.255.0
+          ifconfig-pool-persist /var/lib/openvpn/ipp-guest-udp.txt
+          server-ipv6 fd00:8:2::/64
+          
+          ca ${caPath}
+          cert ${certPath}
+          key ${keyPath}
+          dh ${dhPath}
+          tls-auth ${taPath} 0
+          
+          cipher AES-256-GCM
+          auth SHA256
+          tls-version-min 1.2
+          
+          duplicate-cn
+          
+          push "redirect-gateway def1 bypass-dhcp"
+          push "route-ipv6 2000::/3"
+          
+          push "dhcp-option DNS 1.1.1.1"
+          push "dhcp-option DNS 1.0.0.1"
+          push "dhcp-option DNS 2606:4700:4700::1111"
+          push "dhcp-option DNS 2606:4700:4700::1001"
+          
+          keepalive 10 120
+          persist-key
+          persist-tun
+          
+          verb 3
+          status /var/log/openvpn/status-guest-udp.log
+          log-append /var/log/openvpn/openvpn-guest-udp.log
+          
+          comp-lzo
+          
+          user nobody
+          group nogroup
+        '';
+      };
+
+      services.openvpn.servers.guest-TCP = {
+        autoStart = true;
+        config = ''
+          mode server
+          tls-server
+          
+          proto tcp-server
+          port ${toString guestPortTCP}
+          dev ${guestInterfaceTCP}
+          dev-type tun
+          
+          topology subnet
+          server 10.8.3.0 255.255.255.0
+          ifconfig-pool-persist /var/lib/openvpn/ipp-guest-tcp.txt
+          server-ipv6 fd00:8:3::/64
+          
+          ca ${caPath}
+          cert ${certPath}
+          key ${keyPath}
+          dh ${dhPath}
+          tls-auth ${taPath} 0
+          
+          cipher AES-256-GCM
+          auth SHA256
+          tls-version-min 1.2
+          
+          duplicate-cn
+          
+          push "redirect-gateway def1 bypass-dhcp"
+          push "route-ipv6 2000::/3"
+          
+          push "dhcp-option DNS 1.1.1.1"
+          push "dhcp-option DNS 1.0.0.1"
+          push "dhcp-option DNS 2606:4700:4700::1111"
+          push "dhcp-option DNS 2606:4700:4700::1001"
+          
+          keepalive 10 120
+          persist-key
+          persist-tun
+          
+          verb 3
+          status /var/log/openvpn/status-guest-tcp.log
+          log-append /var/log/openvpn/openvpn-guest-tcp.log
+          
+          comp-lzo
+          
+          user nobody
+          group nogroup
+        '';
+      };
+
+      networking.firewall = {
+        allowedUDPPorts = [ vpnPortUDP guestPortUDP ];
+        allowedTCPPorts = [ vpnPortTCP guestPortTCP ];
+        trustedInterfaces = [ vpnInterfaceUDP vpnInterfaceTCP guestInterfaceUDP guestInterfaceTCP ];
+        
+        extraCommands = ''
+          ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s ${vpnNetUDP} -o ${externalInterface} -j MASQUERADE
+          ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s ${vpnNetTCP} -o ${externalInterface} -j MASQUERADE
+          ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s ${guestNetUDP} -o ${externalInterface} -j MASQUERADE
+          ${pkgs.iptables}/bin/iptables -t nat -A POSTROUTING -s ${guestNetTCP} -o ${externalInterface} -j MASQUERADE
+          
+          ${pkgs.iptables}/bin/ip6tables -t nat -A POSTROUTING -s ${vpnNet6UDP} -o ${externalInterface} -j MASQUERADE
+          ${pkgs.iptables}/bin/ip6tables -t nat -A POSTROUTING -s ${vpnNet6TCP} -o ${externalInterface} -j MASQUERADE
+          ${pkgs.iptables}/bin/ip6tables -t nat -A POSTROUTING -s ${guestNet6UDP} -o ${externalInterface} -j MASQUERADE
+          ${pkgs.iptables}/bin/ip6tables -t nat -A POSTROUTING -s ${guestNet6TCP} -o ${externalInterface} -j MASQUERADE
+          
+          ${pkgs.iptables}/bin/iptables -A FORWARD -i ${vpnInterfaceUDP} -o ${vpnInterfaceTCP} -j ACCEPT
+          ${pkgs.iptables}/bin/iptables -A FORWARD -i ${vpnInterfaceTCP} -o ${vpnInterfaceUDP} -j ACCEPT
+          
+          ${pkgs.iptables}/bin/ip6tables -A FORWARD -i ${vpnInterfaceUDP} -o ${vpnInterfaceTCP} -j ACCEPT
+          ${pkgs.iptables}/bin/ip6tables -A FORWARD -i ${vpnInterfaceTCP} -o ${vpnInterfaceUDP} -j ACCEPT
+          
+          ${pkgs.iptables}/bin/iptables -A FORWARD -s ${guestNetUDP} -d ${vpnNetUDP} -j REJECT
+          ${pkgs.iptables}/bin/iptables -A FORWARD -s ${guestNetUDP} -d ${vpnNetTCP} -j REJECT
+          ${pkgs.iptables}/bin/iptables -A FORWARD -s ${guestNetTCP} -d ${vpnNetUDP} -j REJECT
+          ${pkgs.iptables}/bin/iptables -A FORWARD -s ${guestNetTCP} -d ${vpnNetTCP} -j REJECT
+          
+          ${pkgs.iptables}/bin/iptables -A INPUT -s ${guestNetUDP} -p tcp -j REJECT
+          ${pkgs.iptables}/bin/iptables -A INPUT -s ${guestNetUDP} -p udp ! --dport 53 -j REJECT
+          ${pkgs.iptables}/bin/iptables -A INPUT -s ${guestNetTCP} -p tcp -j REJECT
+          ${pkgs.iptables}/bin/iptables -A INPUT -s ${guestNetTCP} -p udp ! --dport 53 -j REJECT
+          
+          ${pkgs.iptables}/bin/ip6tables -A FORWARD -s ${guestNet6UDP} -d ${vpnNet6UDP} -j REJECT
+          ${pkgs.iptables}/bin/ip6tables -A FORWARD -s ${guestNet6UDP} -d ${vpnNet6TCP} -j REJECT
+          ${pkgs.iptables}/bin/ip6tables -A FORWARD -s ${guestNet6TCP} -d ${vpnNet6UDP} -j REJECT
+          ${pkgs.iptables}/bin/ip6tables -A FORWARD -s ${guestNet6TCP} -d ${vpnNet6TCP} -j REJECT
+        '';
+      };
+
+      networking.nat = {
+        enable = true;
+        externalInterface = externalInterface;
+        internalInterfaces = [ vpnInterfaceUDP vpnInterfaceTCP guestInterfaceUDP guestInterfaceTCP ];
+      };
+    })
+
     (lib.mkIf (cfg.enable && config.mySystem.impermanence.enable) {
       environment.persistence."/persistent" = {
         directories = [
@@ -451,4 +612,81 @@ nc -zv 143.47.53.175 443   # Test TCP
 rm -f pki/reqs/${CLIENT_NAME}.req
 rm -f pki/private/${CLIENT_NAME}.key
 rm -f pki/issued/${CLIENT_NAME}.crt
+*/
+
+/*
+Generate guest config:
+
+```
+# 1. Navigate to Easy-RSA directory
+cd /etc/openvpn/server
+
+# 2. Generate the shared guest certificate
+export CLIENT_NAME="shared-guest"
+easyrsa build-client-full "$CLIENT_NAME" nopass
+
+# 3. Set server public IP
+export SERVER_PUBLIC_IP="143.47.53.175"
+
+# 4. Create guest configuration file with UDP + TCP fallback
+cat > "${CLIENT_NAME}.ovpn" <<EOF
+client
+dev tun
+# Try UDP first (faster), then TCP (more compatible)
+remote ${SERVER_PUBLIC_IP} 1195 udp
+remote ${SERVER_PUBLIC_IP} 8443 tcp
+
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+
+cipher AES-256-GCM
+auth SHA256
+tls-version-min 1.2
+
+remote-cert-tls server
+verb 3
+comp-lzo
+
+# DNS (IPv4 + IPv6)
+dhcp-option DNS 1.1.1.1
+dhcp-option DNS 1.0.0.1
+dhcp-option DNS 2606:4700:4700::1111
+dhcp-option DNS 2606:4700:4700::1001
+
+# Enable IPv6
+tun-ipv6
+
+<ca>
+EOF
+cat pki/ca.crt >> "${CLIENT_NAME}.ovpn"
+cat >> "${CLIENT_NAME}.ovpn" <<'EOF'
+</ca>
+
+<cert>
+EOF
+cat pki/issued/${CLIENT_NAME}.crt >> "${CLIENT_NAME}.ovpn"
+cat >> "${CLIENT_NAME}.ovpn" <<'EOF'
+</cert>
+
+<key>
+EOF
+cat pki/private/${CLIENT_NAME}.key >> "${CLIENT_NAME}.ovpn"
+cat >> "${CLIENT_NAME}.ovpn" <<'EOF'
+</key>
+
+<tls-auth>
+EOF
+cat ta.key >> "${CLIENT_NAME}.ovpn"
+cat >> "${CLIENT_NAME}.ovpn" <<'EOF'
+</tls-auth>
+key-direction 1
+EOF
+
+echo "Guest configuration created: ${CLIENT_NAME}.ovpn"
+echo "This file can be shared with multiple people."
+echo "They will have internet access only, no access to your server services."
+```
+
 */
