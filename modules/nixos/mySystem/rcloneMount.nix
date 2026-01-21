@@ -92,12 +92,9 @@ in
         exec ${pkgs.rclone}/bin/rclone mount \
           ${lib.escapeShellArg cfg.remote} \
           ${lib.escapeShellArg cfg.mountPoint} \
-          --vfs-cache-mode full \
           --links \
           --config ${home}/.config/rclone/rclone.conf \
-          --allow-other \
-          --daemon-timeout 15s \
-          -vv --debug-fuse --log-file=/tmp/rclone-fuse.log
+          --allow-other
       ''; # Next time it hangs use: tail -F /tmp/rclone-fuse.log
       # So, the only bad thing happening right now is that if it is in the middle of opperations and you try hibernating, it will not work. And if it doesn't finish uploading when you poweroff, when it boots up again, the mount won't appear until it finishes uploading the things from last time.
           # --buffer-size 512M \ # --vfs-cache is finnicky sometimes! if you remove it put this in its place
