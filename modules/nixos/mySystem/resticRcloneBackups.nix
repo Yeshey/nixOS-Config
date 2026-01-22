@@ -319,7 +319,6 @@ in
 
       environment.systemPackages = with pkgs; [ 
         rclone
-        restic-browser
         restic
       ];
     }) 
