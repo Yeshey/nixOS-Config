@@ -18,7 +18,8 @@ in
       type = types.str;
       #default = "/home/yeshey/OneDriveISCTE";
       #default = "/mnt/OneDrive/ISCTE"; # DON'T CHANGE!
-      default = "${home}/OneDrive/ISCTE"; # DON'T CHANGE!
+      #default = "${home}/OneDrive/ISCTE"; # DON'T CHANGE!
+      default = "/run/media/Onedrive";
       description = "Path where the rclone remote will be mounted. System boot will not fail if the underlying device is not present.";
     };
 
@@ -36,7 +37,7 @@ in
 
     allowOther = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
       description = "If true, add --allow-other to rclone mount (requires user_allow_other in /etc/fuse.conf).";
     };
 
@@ -58,136 +59,116 @@ in
     programs.fuse.userAllowOther = true;
 
     systemd.tmpfiles.rules = [
-      "d ${home}/OneDrive 0755 ${user} users -"
-      "d '${cfg.mountPoint}' 0755 ${user} users -"
+#      "d ${home}/OneDrive 0755 ${user} users -"
+#      "d '${cfg.mountPoint}' 0755 ${user} users -"
+      "d '${cfg.mountPoint}' 0750 root root -"
     ];
 
-    /*
-      ----------------------------------------------------------
-      1.  ROOT MOUNT SERVICE  (can actually do fusermount)
-      ----------------------------------------------------------
-    */
-    systemd.services.rclone-mount = {
-      description = "OneDrive rclone mount (system)";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "my-network-online.service" ];
-      wants = [ "my-network-online.service" ];
+    # --- systemd: rclone .mount (runs the actual rclone mount) ---
+    # Note: NixOS translates the following into /etc/systemd/system/<escaped>.mount
+    systemd.mounts = [
+      {
+        description = "rclone mount for ${cfg.remote} at ${cfg.mountPoint}";
+        # 'what' is the rclone remote identifier (eg. "OneDriveISCTE:")
+        what = cfg.remote;
+        where = cfg.mountPoint;
 
-      # Make it not prevent hibernating
-      before = [ "sleep.target" ];
+        after = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
+        # Make it not prevent hibernating
+        # before = [ "sleep.target" ];
 
-      preStart = ''
-        ${pkgs.procps}/bin/pkill -u ${user} -x rclone || true
+        # filesystem type to pass as '-t' to mount; rclone examples use 'rclone'
+        type = "rclone";
 
-        # try clean unmount (fuse3 fusermount)
-        ${pkgs.fuse3}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || \
-          /run/current-system/sw/bin/umount -l ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
+        # options passed as comma-separated: config=...,allow-other,...
+        # build the list conditionally so we keep config and allow-other if requested
+        options = lib.concatStringsSep "," (
+          lib.filter (x: x != null) [
+            "config=${home}/.config/rclone/rclone.conf"
+            (if cfg.allowOther then "allow-other" else null)
+            # optional:
+            # "vfs-cache-mode=full"
+          ]
+        );
 
-        ${pkgs.coreutils}/bin/mkdir -p ${lib.escapeShellArg cfg.mountPoint}
-        chown ${user}:users ${lib.escapeShellArg cfg.mountPoint}
-        chmod 755 ${lib.escapeShellArg cfg.mountPoint}
-      '';
+        # systemd unit-level directives for the mount unit
+        unitConfig = {
+          AssertPathIsDirectory = cfg.mountPoint;
+          
+          # limit restart burst so we don't hammer everything during network storms
+          StartLimitIntervalSec = 100; 
+          StartLimitBurst = 10;
+        };
 
-      script = ''
-        exec ${pkgs.rclone}/bin/rclone mount \
-          ${lib.escapeShellArg cfg.remote} \
-          ${lib.escapeShellArg cfg.mountPoint} \
-          --links \
-          --config ${home}/.config/rclone/rclone.conf \
-          --allow-other
-      ''; # Next time it hangs use: tail -F /tmp/rclone-fuse.log
-      # So, the only bad thing happening right now is that if it is in the middle of opperations and you try hibernating, it will not work. And if it doesn't finish uploading when you poweroff, when it boots up again, the mount won't appear until it finishes uploading the things from last time.
-          # --buffer-size 512M \ # --vfs-cache is finnicky sometimes! if you remove it put this in its place
-          # --log-level=DEBUG 
-          # --no-check-certificate \
-          # --disable-http2 \
-          # --s3-no-check-bucket \
-          # --s3-no-head-object \
-          # --vfs-cache-mode full \
-          # --vfs-cache-max-size 30G \
-          # --vfs-cache-max-age 1h0m0s \
-          # --vfs-cache-min-free-space 5G \
-          # --no-seek \
-          # --bind 0.0.0.0 \
-          # --timeout 10s \
+        # mount-specific options (these become members of [Mount])
+        # If you need additional systemd mount timeouts, add them here:
+        #mountConfig = {
+          # example: "x-systemd.idle-timeout" can be defined in options instead
+          # (left empty intentionally)
+        #};
+      }
+    ];
 
+    # --- systemd: automount to trigger on first access and auto-unmount after idle ---
+    systemd.automounts = [
+      {
+        description = "automount ${cfg.mountPoint} (rclone) - on-demand";
+        where = cfg.mountPoint;
 
-      # All stop/cleanup logic in postStop (declared-style Nix)
-      postStop = ''
-        # try regular fusermount first, fallback to lazy umount
-        ${pkgs.fuse3}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || \
-          /run/current-system/sw/bin/umount -l ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
-      '';
-      # # kill any stray rclone processes that still reference the mountpoint
-      # ${pkgs.procps}/bin/pkill -f "rclone mount .* ${lib.escapeShellArg cfg.mountPoint}" || true
-      # # brief pause & another unmount attempt to ensure kernel releases the endpoint
-      # sleep 1
-      # ${pkgs.fuse3}/bin/fusermount -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
+        # by default we want the automount unit started at boot
+        wantedBy = [ "multi-user.target" ];
 
-      unitConfig = {
-        AssertPathIsDirectory = cfg.mountPoint;
-        
-        # limit restart burst so we don't hammer everything during network storms
-        StartLimitIntervalSec = 100; 
-        StartLimitBurst = 10;
-      };
+        # Make it not prevent hibernating
+        # before = [ "sleep.target" ];
 
-      serviceConfig = {
-        Type = "notify";
-        User = user;
-        Group = "users";
-
-        Restart = "on-failure";
-        RestartSec = "10s";
-
-        TimeoutStopSec = "100s";
-        KillMode = "mixed";
-
-        DeviceAllow = "/dev/fuse";
-        CapabilityBoundingSet = "CAP_SYS_ADMIN";
-        AmbientCapabilities = "CAP_SYS_ADMIN";
-      };
-    };
+        # # If you want the automount to unmount after, e.g., 10 minutes idle:
+        # automountConfig = {
+        #   # TimeoutIdleSec controls how long the mount stays active after last access
+        #   TimeoutIdleSec = "1m";
+        # };
+      }
+    ];
 
     # Restarts the mount when there is a network change for it to not die, with special logic to not prevent hibernating.
     # Maybeeee it would be good to remove this
-    networking.networkmanager.dispatcherScripts = [
-      {
-        type = "basic";
-        source = pkgs.writeText "rclone-restart-hook" ''
-          #!/bin/sh
-          ACTION="$2"
+    # networking.networkmanager.dispatcherScripts = [
+    #   {
+    #     type = "basic";
+    #     source = pkgs.writeText "rclone-restart-hook" ''
+    #       #!/bin/sh
+    #       ACTION="$2"
           
-          # 1. LOGGING (So we know why it ran or didn't run)
-          log() { logger -t "rclone-dispatcher" "$1"; }
+    #       # 1. LOGGING (So we know why it ran or didn't run)
+    #       log() { logger -t "rclone-dispatcher" "$1"; }
 
-          # 2. SLEEP CHECK
-          # Check if the system is currently executing a sleep/suspend/hibernate job.
-          # 'systemctl is-system-running' is sometimes too slow to update.
-          # We check if sleep.target is active or if the shutdown target is active.
-          if systemctl is-active --quiet sleep.target || \
-             systemctl is-active --quiet suspend.target || \
-             systemctl is-active --quiet hibernate.target || \
-             systemctl is-active --quiet suspend-then-hibernate.target || \
-             systemctl is-active --quiet hybrid-sleep.target; then
-             log "System is sleeping/hibernating. Ignoring event $ACTION."
-             exit 0
-          fi
+    #       # 2. SLEEP CHECK
+    #       # Check if the system is currently executing a sleep/suspend/hibernate job.
+    #       # 'systemctl is-system-running' is sometimes too slow to update.
+    #       # We check if sleep.target is active or if the shutdown target is active.
+    #       if systemctl is-active --quiet sleep.target || \
+    #          systemctl is-active --quiet suspend.target || \
+    #          systemctl is-active --quiet hibernate.target || \
+    #          systemctl is-active --quiet suspend-then-hibernate.target || \
+    #          systemctl is-active --quiet hybrid-sleep.target; then
+    #          log "System is sleeping/hibernating. Ignoring event $ACTION."
+    #          exit 0
+    #       fi
 
-          # 3. ACTION HANDLER
-          case "$ACTION" in
-            # or let rclone wait. Restarting on down causes hibernation races.
-            up|vpn-up|vpn-down)
-              log "Network/VPN UP ($ACTION). Restarting rclone mount..."
-              systemctl restart --no-block rclone-mount.service
-              ;;
-            *)
-              # Ignore down, vpn-down, pre-up, etc.
-              ;;
-          esac
-        '';
-      }
-    ];
+    #       # 3. ACTION HANDLER
+    #       case "$ACTION" in
+    #         # or let rclone wait. Restarting on down causes hibernation races.
+    #         up|vpn-up|vpn-down)
+    #           log "Network/VPN ($ACTION). Restarting rclone mount..."
+    #           systemctl restart --no-block rclone-mount.service
+    #           ;;
+    #         *)
+    #           # Ignore down, vpn-down, pre-up, etc.
+    #           ;;
+    #       esac
+    #     '';
+    #   }
+    # ];
 
     # If still hanging with trackerfiles maybe uncomment this
     # # 3. THE WATCHDOG SERVICE (Resource usage is negligible)
