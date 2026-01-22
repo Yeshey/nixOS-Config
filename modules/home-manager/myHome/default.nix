@@ -33,6 +33,7 @@ in
     ./warnElections/default.nix
     ./desktopItems.nix
     ./nh.nix
+    ./rcloneMountHM.nix
   ];
   options.myHome = with lib; {
     enable = mkEnableOption "myHome";

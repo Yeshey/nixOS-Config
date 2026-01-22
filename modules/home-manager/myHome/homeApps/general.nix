@@ -39,7 +39,6 @@ in
       in [
         # nexusmods-app-unfree # for game mods?
         # input-leap # :(
-        rclone-ui
         wineWow64Packages.full
         restic-browser
         restic

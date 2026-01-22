@@ -90,6 +90,7 @@ in
       };
     };
     nh.enable = true;
+    rcloneMountHM.enable = true;
   };
 
   home = {

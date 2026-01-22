@@ -453,6 +453,9 @@ in
         };
       };
 
+      # This is needed for rclone mount by user. Maybe make a file turn it into an option idk.
+      programs.fuse.enable = true;
+      programs.fuse.userAllowOther = true;
 
       networking = {
         hostName = lib.mkOverride 1010 "${cfg.host}";

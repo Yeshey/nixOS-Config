@@ -1,0 +1,107 @@
+{
+  inputs,
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.myHome.rcloneMountHM;
+  home = config.home.homeDirectory;
+  user = config.home.username;
+in
+{
+  options.myHome.rcloneMountHM = with lib; {
+    enable = mkEnableOption "rcloneMountHM";
+
+    mountPoint = mkOption {
+      type = types.str;
+      default = "${home}/OneDrive/ISCTE";
+      description = "Path where the rclone remote will be mounted.";
+    };
+
+    remote = mkOption {
+      type = types.str;
+      default = "OneDriveISCTE:";
+      description = "rclone remote/remote-path (eg. 'onedrive:' or 'onedrive:SomeFolder').";
+    };
+
+    allowOther = mkOption {
+      type = types.bool;
+      default = false;
+      description = "If true, add --allow-other to rclone mount (requires user_allow_other in /etc/fuse.conf).";
+    };
+  };
+
+  config = lib.mkIf (config.myHome.enable && cfg.enable) {
+
+    home.packages = with pkgs; [
+      rclone
+      fuse3
+    ];
+
+    # Create parent directory during activation (before services start)
+    home.activation.createRcloneDirs = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p ${lib.escapeShellArg (builtins.dirOf cfg.mountPoint)}
+    '';
+
+    # Use systemctl --user status rclone-mount
+    systemd.user.services.rclone-mount = {
+      Unit = {
+        Description = "OneDrive rclone mount (user)";
+        After = [ "network-online.target" ];
+        Wants = [ "network-online.target" ];
+      };
+
+      Install = {
+        WantedBy = [ "default.target" ];
+      };
+
+      Service = {
+        Type = "notify";
+        
+        ExecStartPre = let
+          preStartScript = pkgs.writeShellScript "rclone-mount-pre" ''
+            ${pkgs.procps}/bin/pkill -x rclone || true
+
+            # try clean unmount
+            ${pkgs.fuse3}/bin/fusermount3 -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
+
+            ${pkgs.coreutils}/bin/mkdir -p ${lib.escapeShellArg cfg.mountPoint}
+            chmod 755 ${lib.escapeShellArg cfg.mountPoint}
+          '';
+        in "${preStartScript}";
+
+        ExecStart = let
+          mountScript = pkgs.writeShellScript "rclone-mount" ''
+            exec ${pkgs.rclone}/bin/rclone mount \
+              ${lib.escapeShellArg cfg.remote} \
+              ${lib.escapeShellArg cfg.mountPoint} \
+              --links \
+              --config ${home}/.config/rclone/rclone.conf \
+              ${lib.optionalString cfg.allowOther "--allow-other"}
+          '';
+        in "${mountScript}";
+
+        ExecStopPost = let
+          postStopScript = pkgs.writeShellScript "rclone-mount-post" ''
+            # try regular fusermount first, fallback to lazy umount
+            ${pkgs.fuse3}/bin/fusermount3 -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || \
+              ${pkgs.util-linux}/bin/umount -l ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
+          '';
+        in "${postStopScript}";
+
+        Restart = "on-failure";
+        RestartSec = "10s";
+        
+        TimeoutStopSec = "100s";
+        KillMode = "mixed";
+
+        # Limit restart burst
+        StartLimitIntervalSec = 100;
+        StartLimitBurst = 10;
+      };
+    };
+
+  };
+}

@@ -239,7 +239,7 @@ in
     };
     allTor.enable = false;
     globalprotect.enable = true;
-    rcloneMount.enable = false;
+    rcloneMount.enable = false; # Use the HM one!!!
     virtualbox.enable = false;
   };
 
@@ -339,7 +339,7 @@ in
   #   };
   # };
   environment.systemPackages = with pkgs; [ 
-    rclone-ui
+
   ];
 
   #programs.zsh.enable = true;
