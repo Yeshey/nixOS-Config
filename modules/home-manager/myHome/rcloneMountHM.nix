@@ -62,11 +62,13 @@ in
         
         ExecStartPre = let
           preStartScript = pkgs.writeShellScript "rclone-mount-pre" ''
+            # Kill any existing rclone processes
             ${pkgs.procps}/bin/pkill -x rclone || true
+            
+            # Wait a moment for processes to clean up
+            sleep 1
 
-            # try clean unmount
-            ${pkgs.fuse3}/bin/fusermount3 -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
-
+            # Ensure mount point exists and is a directory
             ${pkgs.coreutils}/bin/mkdir -p ${lib.escapeShellArg cfg.mountPoint}
             chmod 755 ${lib.escapeShellArg cfg.mountPoint}
           '';
@@ -78,18 +80,11 @@ in
               ${lib.escapeShellArg cfg.remote} \
               ${lib.escapeShellArg cfg.mountPoint} \
               --links \
+              --allow-non-empty \
               --config ${home}/.config/rclone/rclone.conf \
               ${lib.optionalString cfg.allowOther "--allow-other"}
           '';
-        in "${mountScript}";
-
-        ExecStopPost = let
-          postStopScript = pkgs.writeShellScript "rclone-mount-post" ''
-            # try regular fusermount first, fallback to lazy umount
-            ${pkgs.fuse3}/bin/fusermount3 -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || \
-              ${pkgs.util-linux}/bin/umount -l ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
-          '';
-        in "${postStopScript}";
+        in "${mountScript}"; # --allow-non-empty \ so it can mount anyways if it becomes unresponsive when you restart it
 
         Restart = "on-failure";
         RestartSec = "10s";
