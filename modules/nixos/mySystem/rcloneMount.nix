@@ -50,7 +50,6 @@ in
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
 
     environment.systemPackages = with pkgs; [
-      unstable.rclone-browser
       rclone
     ];
 
