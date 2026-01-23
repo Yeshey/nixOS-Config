@@ -51,10 +51,7 @@ in
         Description = "OneDrive rclone mount (user)";
         After = [ "network-online.target" "my-network-online" ];
         Wants = [ "network-online.target" "my-network-online" ];
-
-        # Limit restart burst
-        StartLimitIntervalSec = 100;
-        StartLimitBurst = 10;
+        Before = [ "sleep.target" ];
       };
 
       Install = {
@@ -102,8 +99,10 @@ in
 
         Restart = "on-failure";
         RestartSec = "10s";
+        RestartMaxDelaySec = "5min";
+        RestartSteps = "5"; # Steps: 10s → 20s → 40s → 80s → 160s → 5min → 5min → ...
         
-        TimeoutStopSec = "100s";
+        TimeoutStopSec = "30s";
         KillMode = "mixed";
       };
     };
