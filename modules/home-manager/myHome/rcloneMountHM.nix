@@ -82,7 +82,6 @@ in
               ${lib.escapeShellArg cfg.remote} \
               ${lib.escapeShellArg cfg.mountPoint} \
               --links \
-              --allow-non-empty \
               --vfs-cache-mode full \
               --config ${home}/.config/rclone/rclone.conf \
               ${lib.optionalString cfg.allowOther "--allow-other"}
