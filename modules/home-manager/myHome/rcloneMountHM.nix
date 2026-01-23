@@ -107,5 +107,13 @@ in
       };
     };
 
+    # This runs a server on localhost instead that you can access on nautilus with dav://localhost:8080. But it's not as fast or good
+    # systemd.user.services.rclone-webdav = {
+    #   Service = {
+    #     ExecStart = "${pkgs.rclone}/bin/rclone serve webdav OneDriveISCTE:";
+    #     Restart = "on-failure";
+    #   };
+    # };
+
   };
 }
