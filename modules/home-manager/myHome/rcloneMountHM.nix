@@ -49,8 +49,12 @@ in
     systemd.user.services.rclone-mount = {
       Unit = {
         Description = "OneDrive rclone mount (user)";
-        After = [ "network-online.target" ];
-        Wants = [ "network-online.target" ];
+        After = [ "network-online.target" "my-network-online" ];
+        Wants = [ "network-online.target" "my-network-online" ];
+
+        # Limit restart burst
+        StartLimitIntervalSec = 100;
+        StartLimitBurst = 10;
       };
 
       Install = {
@@ -65,8 +69,9 @@ in
             # Kill any existing rclone processes
             ${pkgs.procps}/bin/pkill -x rclone || true
             
-            # Wait a moment for processes to clean up
-            sleep 1
+            # try clean unmount
+            fusermount3 -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || \
+              umount -l ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
 
             # Ensure mount point exists and is a directory
             ${pkgs.coreutils}/bin/mkdir -p ${lib.escapeShellArg cfg.mountPoint}
@@ -81,20 +86,25 @@ in
               ${lib.escapeShellArg cfg.mountPoint} \
               --links \
               --allow-non-empty \
+              --vfs-cache-mode full \
               --config ${home}/.config/rclone/rclone.conf \
               ${lib.optionalString cfg.allowOther "--allow-other"}
           '';
         in "${mountScript}"; # --allow-non-empty \ so it can mount anyways if it becomes unresponsive when you restart it
+
+        ExecStopPost = let
+          postStopScript = pkgs.writeShellScript "rclone-mount-post" ''
+            # try regular fusermount first, fallback to lazy umount
+            fusermount3 -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || \
+              umount -l ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
+          '';
+        in "${postStopScript}";
 
         Restart = "on-failure";
         RestartSec = "10s";
         
         TimeoutStopSec = "100s";
         KillMode = "mixed";
-
-        # Limit restart burst
-        StartLimitIntervalSec = 100;
-        StartLimitBurst = 10;
       };
     };
 

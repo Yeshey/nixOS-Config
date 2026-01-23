@@ -90,7 +90,7 @@ in
       };
     };
     nh.enable = true;
-    rcloneMountHM.enable = true;
+    rcloneMountHM.enable = true; # enable with rcloneMountHM-helper in default.nix
   };
 
   home = {

@@ -241,6 +241,7 @@ in
     globalprotect.enable = true;
     rcloneMount.enable = false; # Use the HM one!!!
     virtualbox.enable = false;
+    rcloneMountHM-helper.enable = true; # enable with rcloneMountHM in home.nix
   };
 
   toHost = {

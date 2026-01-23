@@ -89,6 +89,7 @@ in
     ./globalprotect.nix
     ./virtualbox.nix
     ./direnv.nix
+    ./rcloneMountHM-helper.nix
   ];
 
   options.mySystem = with lib; {
