@@ -39,6 +39,7 @@ in
       in [
         # nexusmods-app-unfree # for game mods?
         # input-leap # :(
+        thunderbird
         wineWow64Packages.full
         restic-browser
         restic
