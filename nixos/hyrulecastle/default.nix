@@ -269,7 +269,7 @@ in
     # };
     #nginxServer.enable = true;
     #mineclone.enable = true;
-    kubo.enable = true;
+    kubo.enable = false;
     freeGames.enable = false;
     searx.enable = false;
     ollama = {
