@@ -1,4 +1,4 @@
-<h1 align="center"> Dendritc Design</h1>
+<h1 align="center"> Dendritic Design</h1>
 <h3 align="center"> with the Flake Parts Framework</h3>
 
 <p align="center">
