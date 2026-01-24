@@ -16,6 +16,11 @@ in
 
   # always active lib.mkIf (config.mySystem.enable && cfg.enable) 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
+
+    # This is needed for rclone mount by user. Maybe make a file turn it into an option idk.
+    programs.fuse.enable = true;
+    programs.fuse.userAllowOther = true;
+
     networking.networkmanager.dispatcherScripts = [
       {
         type = "basic";

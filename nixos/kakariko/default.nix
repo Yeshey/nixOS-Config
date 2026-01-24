@@ -180,7 +180,8 @@ in
     };
     nh.enable = true;
     globalprotect.enable = true;
-    rcloneMount.enable = true;
+    rcloneMount.enable = false;
+    rcloneMountHM-helper.enable = true; # enable with rcloneMountHM in home.nix
     virtualbox.enable = false;
   };
 
