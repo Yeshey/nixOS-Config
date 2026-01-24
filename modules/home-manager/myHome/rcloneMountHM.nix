@@ -84,6 +84,9 @@ in
               ${lib.escapeShellArg cfg.mountPoint} \
               --links \
               --vfs-cache-mode full \
+              --vfs-cache-max-age 168h \
+              --vfs-cache-min-free-space 10G \
+              --vfs-cache-max-size 20G \
               --config ${home}/.config/rclone/rclone.conf \
               ${lib.optionalString cfg.allowOther "--allow-other"}
           '';
