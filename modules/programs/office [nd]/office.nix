@@ -6,20 +6,27 @@
       config,
       ...
     }:
-    {
-      home.packages =
-        with pkgs;
-        [
+    lib.mkMerge [
+      {
+        home.packages = with pkgs; [
           pdfarranger
           notesnook
-        ]
-        ++ (lib.optionals (pkgs.stdenv.isLinux) [
+        ];
+        # settings for all systems
+      }
+      (lib.mkIf (pkgs.stdenv.isLinux) {
+        home.packages = with pkgs; [
           libreoffice-qt6
           gimp3-with-plugins
-        ])
-        ++ (lib.optionals (pkgs.stdenv.isDarwin) [
+        ];
+        # NixOS settings
+      })
+      (lib.mkIf (pkgs.stdenv.isDarwin) {
+        home.packages = with pkgs; [
           libreoffice-bin
           brewCasks.gimp
-        ]);
-    };
+        ];
+        # Nix-Darwin settings
+      })
+    ];
 }
