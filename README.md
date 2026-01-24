@@ -61,7 +61,7 @@ If you have any questions before you begin, please refer to the provided [FAQ](h
   - [Optional libraries](https://github.com/Doc-Steve/dendritic-design-with-flake-parts/wiki/Acknowledgement_and_additional_information#optional-libraries)
   - [Reference repositories utilizing the Dendritic Pattern](https://github.com/Doc-Steve/dendritic-design-with-flake-parts/wiki/Acknowledgement_and_additional_information#reference-repositories-utilizing-the-dendritic-pattern)
 
-- [Frequently Asked Questions](https://github.com/Doc-Steve/dendritic-design-with-flake-parts/wiki/FAQ.md)
+- [Frequently Asked Questions](https://github.com/Doc-Steve/dendritic-design-with-flake-parts/wiki/FAQ)
   - [What is it? Why should I care?](https://github.com/Doc-Steve/dendritic-design-with-flake-parts/wiki/FAQ#what-is-it-why-should-i-care)
   - [What are the advantages?](https://github.com/Doc-Steve/dendritic-design-with-flake-parts/wiki/FAQ#what-are-the-advantages)
   - [Why is the definition of the Dendritic Pattern so complicated? What if I don't understand everything?](https://github.com/Doc-Steve/dendritic-design-with-flake-parts/wiki/FAQ#why-is-the-definition-of-the-dendritic-pattern-so-complicated-what-if-i-dont-understand-everything)
