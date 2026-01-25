@@ -87,11 +87,13 @@ in
               --vfs-cache-max-age 168h \
               --vfs-cache-min-free-space 10G \
               --vfs-cache-max-size 20G \
+              --bwlimit 4M:off \
               --disable-http2 \
               --config ${home}/.config/rclone/rclone.conf \
               ${lib.optionalString cfg.allowOther "--allow-other"}
           '';
-        in "${mountScript}"; # --allow-non-empty \ so it can mount anyways if it becomes unresponsive when you restart it
+        in "${mountScript}"; # Let's see if --bwlimit 4M:off limiting upload makes downloads more responsive
+              # --allow-non-empty \ so it can mount anyways if it becomes unresponsive when you restart it
               # --debug-fuse \
               # -vv --log-file=/tmp/rclone-mount.log \
 
