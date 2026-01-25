@@ -50,8 +50,8 @@ in
     systemd.user.services.rclone-mount = {
       Unit = {
         Description = "OneDrive rclone mount (user)";
-        After = [ "network-online.target" "my-network-online" ];
-        Wants = [ "network-online.target" "my-network-online" ];
+        After = [ "network-online.target" "my-network-online.service" ];
+        Wants = [ "network-online.target" "my-network-online.service" ];
         Before = [ "sleep.target" ];
       };
 
