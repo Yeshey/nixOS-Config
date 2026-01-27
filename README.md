@@ -63,7 +63,7 @@ If you have any questions before you begin, please refer to the provided [FAQ](h
 
 - [Frequently Asked Questions](https://github.com/Doc-Steve/dendritic-design-with-flake-parts/wiki/FAQ)
   - [What is it? Why should I care?](https://github.com/Doc-Steve/dendritic-design-with-flake-parts/wiki/FAQ#what-is-it-why-should-i-care)
-  - [What are the advantages?](https://github.com/Doc-Steve/dendritic-design-with-flake-parts/wiki/FAQ#what-are-the-advantages)
+  - [What are the advantages/drawbacks?](https://github.com/Doc-Steve/dendritic-design-with-flake-parts/wiki/FAQ#what-are-the-advantagesdrawbacks)
   - [Why is the definition of the Dendritic Pattern so complicated? What if I don't understand everything?](https://github.com/Doc-Steve/dendritic-design-with-flake-parts/wiki/FAQ#why-is-the-definition-of-the-dendritic-pattern-so-complicated-what-if-i-dont-understand-everything)
   - [Is Flake-Parts the Dendritic Pattern? Why use two names?](https://github.com/Doc-Steve/dendritic-design-with-flake-parts/wiki/FAQ#is-flake-parts-the-dendritic-pattern-why-use-two-names)
   - [Should I start  my config design with the Dendritic Pattern? Is a migration worth it?](https://github.com/Doc-Steve/dendritic-design-with-flake-parts/wiki/FAQ#should-i-start--my-config-design-with-the-dendritic-pattern-is-a-migration-worth-it)
@@ -73,3 +73,4 @@ If you have any questions before you begin, please refer to the provided [FAQ](h
   - [I already use modules, why should I put an abstraction layer on top?](https://github.com/Doc-Steve/dendritic-design-with-flake-parts/wiki/FAQ#i-already-use-modules-why-should-i-put-an-abstraction-layer-on-top)
   - [Should I use Flake-Parts and what are the alternatives?](https://github.com/Doc-Steve/dendritic-design-with-flake-parts/wiki/FAQ#should-i-use-flake-parts-and-what-are-the-alternatives)
   - [Is it mandatory for me to learn all the `Aspect` patterns mentioned in the guide?](https://github.com/Doc-Steve/dendritic-design-with-flake-parts/wiki/FAQ#is-it-mandatory-for-me-to-learn-all-the-aspect-patterns-mentioned-in-the-guide)
+  - [Why is the `flake.nix` so empty?](https://github.com/Doc-Steve/dendritic-design-with-flake-parts/wiki/FAQ#why-is-the-flakenix-so-empty)
