@@ -17,7 +17,7 @@
 
       # Custom settings written to /etc/nix/nix.custom.conf
 
-      determinate-nix.customSettings = {
+      determinateNix.customSettings = {
         # Enables parallel evaluation (remove this setting or set the value to 1 to disable)
         eval-cores = 0;
 
