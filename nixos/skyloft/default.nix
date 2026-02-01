@@ -193,7 +193,7 @@
   system.autoUpgrade.allowReboot = true;
   system.autoUpgrade = {
     enable = true;
-    dates = "weekly";  # or cfg.dates if you have that variable
+    dates = "*-*-01,08,16,23 06:30:00"; # Runs weekly and also guarantees it runs right after the github action updates the flake
     operation = "switch";
     flake = "github:Yeshey/nixOS-Config#skyloft";  # Replace 'skyloft' with your actual host name
   };

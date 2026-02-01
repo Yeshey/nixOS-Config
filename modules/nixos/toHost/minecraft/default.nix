@@ -99,6 +99,7 @@ in
             # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
             config = {
               public.address = "0.0.0.0:1408"; # aniversario da Mills e do Uno
+              public.version = extractVersion package.name;
               motd.sleeping = "☠ LopesCraft is sleeping §2☻ Join to start it up\n§uversion:§c ${extractVersion package.name}";
             };
           };
@@ -135,6 +136,7 @@ in
             # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
             config = {
               public.address = "0.0.0.0:1207"; # 7 dezembro de 1990 (aniversario taiscte)
+              public.version = extractVersion package.name;
               motd.sleeping = "☠ TunaCraft is sleeping §2☻ Join to start it up\n§uversion:§c ${extractVersion package.name}";
               #starting = "§2☻ Server is starting...\n§7⌛ Please wait..."
               #stopping = "☠ Server going to sleep...\n⌛ Please wait..."
@@ -170,6 +172,7 @@ in
             enable = true;
             config = {
               public.address = "0.0.0.0:44329";
+              public.version = extractVersion package.name;
               motd.sleeping = "☠ Server is sleeping §2☻ Join to start it up\n§uversion:§c ${extractVersion package.name}";
               # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
               time.sleep_after = 200; # Sleep after 4 minutes

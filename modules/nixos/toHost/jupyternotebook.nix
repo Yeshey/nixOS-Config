@@ -12,7 +12,6 @@ let
     pkgs.git
     pkgs.openssh
 
-    pkgs.virtualenv
     pkgs.direnv
     pkgs.nix-direnv
   ];
@@ -26,7 +25,6 @@ let
     jupyterlab-widgets  # Interactive widgets
     ipykernel
 
-    unsloth
     tensorflow
     torch
     keras
