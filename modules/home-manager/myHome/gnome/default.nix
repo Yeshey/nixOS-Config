@@ -36,9 +36,9 @@ with lib.hm.gvariant;
 
     # Essential (also applies to guest user)
     dconf.settings = {
-      "org/gnome/desktop/datetime" = {
-        automatic-timezone = false; # SUCKS, gets tricked by VPNs
-      };
+      # "org/gnome/desktop/datetime" = {
+      #   automatic-timezone = false; # SUCKS, gets tricked by VPNs
+      # }; 
 
       "org/gnome/system/location" = { # enables location in gnome
         enabled = true;
