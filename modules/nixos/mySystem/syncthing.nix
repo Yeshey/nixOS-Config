@@ -110,6 +110,11 @@ let
       devices = lib.mapAttrsToList (name: value: name) devices;
       versioning = myVersioning;
     };
+    "WhatsAppMovies" = {
+      path = "${config.mySystem.dataStoragePath}/PersonalFiles/Timeless/Syncthing/WhatsAppMovies";
+      devices = lib.mapAttrsToList (name: value: name) devices;
+      versioning = myVersioning;
+    };
     "ZoteroStorage" = {
       path = "/home/${config.mySystem.user}/Zotero/storage";
       devices = lib.mapAttrsToList (name: value: name) devices;
