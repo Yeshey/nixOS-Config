@@ -60,6 +60,7 @@ in
     ./gnome.nix
     ./plasma.nix
     ./cosmic.nix
+    ./budgie.nix
     ./hyprland.nix
     ./virt.nix
     ./zsh/default.nix

@@ -41,7 +41,7 @@ in
     # networking.firewall.enable = false;
 
     programs.ssh = {
-      startAgent = true;
+      # startAgent = true;
       forwardX11 = true;
       extraConfig = builtins.readFile ./config; # puts in /etc/ssh/ssh_config that goes for everyone
     };
