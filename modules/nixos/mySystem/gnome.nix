@@ -52,7 +52,7 @@ in
         libjxl
         # For WebP support
         webp-pixbuf-loader
-        f3d # for 3D models 
+        # f3d # for 3D models broken 
       ];
       gnome.excludePackages = with pkgs; [
         epiphany # web browser
