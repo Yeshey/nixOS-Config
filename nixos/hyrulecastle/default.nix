@@ -298,7 +298,7 @@ in
     vgpu.enable = false;
   };
 
-  services.lact.enable = true; # for nvidia and amd GPUs
+  # services.lact.enable = true; # for nvidia and amd GPUs
   services.displayManager.gdm.autoSuspend = false;
 
   nix = {

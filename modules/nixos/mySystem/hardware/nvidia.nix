@@ -14,6 +14,15 @@ let
     export __VK_LAYER_NV_optimus=NVIDIA_only
     exec -a "$0" "$@"
   '';
+  nvitopDesktop = pkgs.makeDesktopItem {
+    name = "nvitop";
+    desktopName = "NVITOP";
+    comment = "NVIDIA GPU monitoring (nvitop)";
+    exec = "nvitop";
+    icon = "org.gnome.SystemMonitor";
+    categories = [ "System" "Monitor" "ConsoleOnly" ];
+    terminal = true;
+  };
 in
 {
   options.mySystem.hardware.nvidia = with lib; {
@@ -67,6 +76,8 @@ EndSection
       # NVIDIA
       cudaPackages.cudatoolkit # for blender (nvidia)
       nvidia-offload
+      nvitop # so good to view GPU usage
+      nvitopDesktop
       # gwe?
     ];
     # NVIDIA drivers 
