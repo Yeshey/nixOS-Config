@@ -40,12 +40,17 @@ let
     };
   };
   folders = {
-    "2026" = {
-      path = "${config.mySystem.dataStoragePath}/PersonalFiles/2026";
+    "2027" = {
+      path = "${config.mySystem.dataStoragePath}/PersonalFiles/2027";
       devices = lib.mapAttrsToList (name: value: name) devices; # all devices
       # mapAttrsToList: https://ryantm.github.io/nixpkgs/functions/library/attrsets/#function-library-lib.attrsets.mapAttrsToList
       versioning = myVersioning;
       # Ignore patterns: Recorded_Classes 
+    };
+    "2026" = {
+      path = "${config.mySystem.dataStoragePath}/PersonalFiles/2026";
+      devices = lib.mapAttrsToList (name: value: name) devices; # all devices
+      versioning = myVersioning;
     };
     "A70Camera" = {
       path = "${config.mySystem.dataStoragePath}/PersonalFiles/Timeless/Syncthing/PhoneCamera";
@@ -166,6 +171,14 @@ in
         in
         {
           syncthingIgnorePatterns.text = ''
+            # 2027
+            ${ignorePattern "2027" "
+              //*
+              //(?i)PhotosAndVideos
+              .git
+              *.ipynb
+            "}
+
             # 2026
             ${ignorePattern "2026" "
               //*
