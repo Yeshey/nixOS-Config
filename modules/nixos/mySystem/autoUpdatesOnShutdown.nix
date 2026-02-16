@@ -102,16 +102,12 @@ in
 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
 
-    environment.systemPackages = with pkgs; [
-      libnotify
-      notify-send-all
-    ];
+    environment.systemPackages = with pkgs; [ libnotify notify-send-all ];
 
-    # Use a timer to activate the service that will execute preStop on shutdown and not reboot
     systemd.timers.my-nixos-update = {
       wantedBy = [ "timers.target" ];
       timerConfig = {
-        Persistent = true; # If missed, run on boot
+        Persistent = true;
         OnCalendar = cfg.dates;
         Unit = "my-nixos-update.service";
       };
@@ -119,14 +115,42 @@ in
 
     systemd.services.my-nixos-update = 
     let
-      nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
-      flake = "${cfg.location}#${cfg.host}";
-      operation = "boot"; # switch doesn't work, gets stuck in `setting up tmpfiles`
+      flakeUri = "${cfg.location}#${cfg.host}";
       
+      # Instead of 'nixos-rebuild', we manually build and switch.
+      # This prevents systemd from trying to spawn a new service during shutdown.
       updateScript = pkgs.writeShellScriptBin "nixos-update-flake" ''
-        echo "Upgrading NixOS from ${flake}..."
-        ${nixos-rebuild} ${operation} --flake ${flake} --refresh
-        echo "Update completed successfully"
+        set -e
+        echo "Building system closure from ${flakeUri}..."
+        
+        # 1. Build the system and get the path (e.g., /nix/store/...-nixos-system-...)
+        # We use --no-link to avoid cluttering the filesystem
+        OUT_PATH=$(${pkgs.nix}/bin/nix build "${flakeUri}" --print-out-paths --no-link --refresh)
+
+        if [ -z "$OUT_PATH" ]; then
+          echo "Build failed! Aborting update."
+          exit 1
+        fi
+        
+        echo "Build successful: $OUT_PATH"
+        
+        # 2. Update the system profile (so 'nixos-rebuild' knows this is the current generation)
+        echo "Setting system profile..."
+        ${pkgs.nix}/bin/nix-env --profile /nix/var/nix/profiles/system --set "$OUT_PATH"
+        
+        # 3. Install the bootloader
+        # We set NIXOS_INSTALL_BOOTLOADER=1 to ensure Grub/systemd-boot is updated
+        echo "Installing bootloader..."
+        export NIXOS_INSTALL_BOOTLOADER=1
+        
+        # We run the activation script directly.
+        # 'boot' updates the bootloader but doesn't try to restart services (which would fail during shutdown)
+        if $OUT_PATH/bin/switch-to-configuration boot; then
+           echo "Bootloader installed successfully. Next boot will use this generation."
+        else
+           echo "Failed to install bootloader."
+           exit 1
+        fi
       '';
     in {
       description = "NixOS Update on Shutdown";
@@ -156,17 +180,26 @@ in
       preStop = ''
         FLAG_FILE="/etc/nixos-reboot-update.flag"
 
+        # Check if we are actually powering off
         if ! systemctl list-jobs | egrep -q 'poweroff.target.*start'; then
           echo "Not powering off (reboot or other), creating flag to update after reboot."
           touch $FLAG_FILE
         else
-          echo "Powering off, upgrading now..."
-          ${updateScript}/bin/nixos-update-flake
+          echo "Powering off detected. Running update script..."
+          
+          # Run the update
+          if ${updateScript}/bin/nixos-update-flake; then
+             echo "Update finished successfully."
+          else
+             echo "Update FAILED. The system will boot into the old generation."
+          fi
         fi
       '';
 
       unitConfig = {
         DefaultDependencies = false;  # Add this - very important!
+        # Valid systemd syntax is a space-separated string
+        RequiresMountsFor = "/boot /nix/store"; 
       };
 
       conflicts = [
@@ -191,9 +224,10 @@ in
         "dbus.service"
         "autossh-reverseProxy.service"
         "sshd.service"
+        "local-fs.target"
       ];
 
-      wants = [ "network-online.target" ]; # fixes a warning
+      wants = [ "network-online.target" ];
 
       serviceConfig = {
         Type = "oneshot";
@@ -202,19 +236,16 @@ in
       };
     };
 
-    # Ensure poweroff.target doesn't kill the update too early
     systemd.targets."poweroff" = {
       unitConfig = { 
-        "JobTimeoutSec" = 36000; # 10h
+        "JobTimeoutSec" = "10h"; 
       };
     };
 
-    # If it rebooted instead of powering off, check for flag and update now
     systemd.services.nixos-reboot-update-check = {
       description = "Check for update flag file on boot";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      
       script = ''
         FLAG_FILE="/etc/nixos-reboot-update.flag"
 
@@ -225,11 +256,9 @@ in
           rm "$FLAG_FILE"
         fi
       '';
-
       serviceConfig = {
         Type = "oneshot";
       };
     };
-
   };
 }

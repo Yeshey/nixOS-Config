@@ -127,13 +127,6 @@ in
     #   host = "hyrulecastle";
     #   dates = "daily";
     # };
-    # autoUpgradesOnShutdown = {
-    #   enable = false;
-    #   gitRepo = "git@github.com:Yeshey/nixOS-Config.git";
-    #   ssh_key = "/home/yeshey/.ssh/my_identity";
-    #   host = "hyrulecastle";
-    #   dates = "*-*-1/3"; # "Fri *-*-* 20:00:00"; # Every Friday at 19:00 "*:0/5"; # Every 5 minutes
-    # };
     autoUpdatesOnShutdown = {
       enable = true;
       location = "github:Yeshey/nixOS-Config";

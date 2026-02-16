@@ -67,7 +67,6 @@ in
     ./i2p.nix
     ./flatpaks.nix
     ./autoUpgrades.nix
-    ./autoUpgradesOnShutdown.nix
     ./autoUpdatesOnShutdown.nix
     ./browser.nix
     ./hardware/default.nix
