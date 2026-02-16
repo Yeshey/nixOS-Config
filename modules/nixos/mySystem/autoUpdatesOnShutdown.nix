@@ -125,7 +125,12 @@ in
         
         # 1. Build the system and get the path (e.g., /nix/store/...-nixos-system-...)
         # We use --no-link to avoid cluttering the filesystem
-        OUT_PATH=$(${pkgs.nix}/bin/nix build "${flakeUri}" --print-out-paths --no-link --refresh)
+        FLAKE_ATTR="${cfg.location}#nixosConfigurations.${cfg.host}.config.system.build.toplevel"
+        
+        echo "Building system closure from $FLAKE_ATTR..."
+        
+        # 1. Build the system
+        OUT_PATH=$(${pkgs.nix}/bin/nix build "$FLAKE_ATTR" --print-out-paths --no-link --refresh)
 
         if [ -z "$OUT_PATH" ]; then
           echo "Build failed! Aborting update."

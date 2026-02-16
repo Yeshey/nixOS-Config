@@ -40,6 +40,13 @@ let
     };
   };
   folders = {
+    "2029" = {
+      path = "${config.mySystem.dataStoragePath}/PersonalFiles/2029";
+      devices = lib.mapAttrsToList (name: value: name) devices; # all devices
+      # mapAttrsToList: https://ryantm.github.io/nixpkgs/functions/library/attrsets/#function-library-lib.attrsets.mapAttrsToList
+      versioning = myVersioning;
+      # Ignore patterns: Recorded_Classes 
+    };
     "2028" = {
       path = "${config.mySystem.dataStoragePath}/PersonalFiles/2028";
       devices = lib.mapAttrsToList (name: value: name) devices; # all devices
@@ -178,6 +185,14 @@ in
         in
         {
           syncthingIgnorePatterns.text = ''
+            # 2029
+            ${ignorePattern "2029" "
+              //*
+              //(?i)PhotosAndVideos
+              .git
+              *.ipynb
+            "}
+
             # 2028
             ${ignorePattern "2028" "
               //*
