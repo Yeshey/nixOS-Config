@@ -10,7 +10,7 @@
         "gitlens.codeLens.enabled": false,
         "gitlens.currentLine.enabled": false
     },
-    "workbench.iconTheme": "material-icon-theme",
+    "window.autoDetectColorScheme": true,
     "editor.fontLigatures": true,
     "code-runner.executorMap": {
       "python": "python3 -u"

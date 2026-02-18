@@ -10,8 +10,7 @@
         "gitlens.codeLens.enabled": false,
         "gitlens.currentLine.enabled": false
     },
-    "workbench.colorTheme": "Monokai Dark Soda",
-    "workbench.iconTheme": "material-icon-theme",
+    "window.autoDetectColorScheme": true,
     "editor.fontFamily": "'FuraCode Nerd Font Mono', 'FiraCode Nerd Font Mono', 'Fira Code', 'Droid Sans Mono', Menlo, Monaco, 'Courier New', monospace, 'Droid Sans Fallback'",
     "debug.console.fontSize": 16,
     "editor.fontSize": 16,

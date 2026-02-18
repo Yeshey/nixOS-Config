@@ -29,6 +29,7 @@ with lib.hm.gvariant;
       gnomeExtensions.system-monitor # official gnome extension
       gnomeExtensions.user-themes # # official gnome extension
       unstable.gnomeExtensions.copyous # The best clipboard manager
+      gnomeExtensions.night-theme-switcher
 
       banana-cursor # for the cursor
     ];
@@ -117,6 +118,7 @@ with lib.hm.gvariant;
           "system-monitor@gnome-shell-extensions.gcampax.github.com"
           "user-theme@gnome-shell-extensions.gcampax.github.com"
           "copyous@boerdereinar.dev"
+          "nightthemeswitcher@romainvigier.fr"
         ];
       };
 
