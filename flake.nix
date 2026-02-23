@@ -101,7 +101,6 @@
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     nixos-facter-modules.url = "github:nix-community/nixos-facter-modules";
-    vscode-server.url = "github:nix-community/nixos-vscode-server";
   };
 
   outputs = {
