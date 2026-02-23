@@ -102,7 +102,7 @@ in
                 # C
                 llvm-vs-code-extensions.vscode-clangd
 
-                ms-vscode-remote.remote-ssh
+                # ms-vscode-remote.remote-ssh
             ];
           };
         };
