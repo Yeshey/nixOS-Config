@@ -35,9 +35,16 @@ Host hyrulecastleroot
   UserKnownHostsFile /dev/null
   ProxyJump oracle
 
-Host hyrulecastle-vpn
+Host hyrulecastle-vpn-root
   HostName 10.8.0.10  # Always this IP
   User root
+  Port 22
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+
+Host hyrulecastle-vpn
+  HostName 10.8.0.10  # Always this IP
+  User yeshey
   Port 22
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
@@ -60,9 +67,16 @@ Host kakarikoroot
   UserKnownHostsFile /dev/null
   ProxyJump oracle
 
-Host kakariko-vpn
+Host kakariko-vpn-root
   HostName 10.8.0.11
   User root
+  Port 22
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+
+Host kakariko-vpn
+  HostName 10.8.0.11
+  User yeshey
   Port 22
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null

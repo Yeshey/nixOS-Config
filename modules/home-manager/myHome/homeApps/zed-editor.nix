@@ -37,6 +37,7 @@ in
 
 
     programs.zed-editor = {
+      installRemoteServer = true;
       enable = true;
       package = pkgs.unstable.zed-editor;
       extensions = [
