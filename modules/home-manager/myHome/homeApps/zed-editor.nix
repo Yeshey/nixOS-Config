@@ -48,6 +48,7 @@ in
         "react-typescript-snippets"
         "codebook"
         "git-firefly" # .gitignore and git formatting
+        "make" # Makefile
       ];
       userSettings = {
         hour_format = "hour24";
