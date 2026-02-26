@@ -8,6 +8,9 @@
 
 let
   cfg = config.myHome.homeApps.zed-editor;
+
+  ngram-en-pkg = inputs.nix-languagetool-ngram.packages.${pkgs.stdenv.hostPlatform.system}.ngrams-en;
+  ngram-en = "${ngram-en-pkg}/share/languagetool/ngrams"; # LTeX expects the parent folder containing the 'en' folder
 in
 {
   options.myHome.homeApps.zed-editor = with lib; {
@@ -19,7 +22,8 @@ in
     home.packages = with pkgs; [
       nil # <-- language server
       nixfmt-rfc-style
-      kdePackages.okular
+      kdePackages.okular # Settings > Editor > Command: `zeditor %f:%l`
+      ltex-ls-plus
     ];
 
     # zathura was a pdf reader that could integrate with zed, but problems like not opening links made me drop it
@@ -35,7 +39,6 @@ in
     #   };
     # };
 
-
     programs.zed-editor = {
       installRemoteServer = true;
       enable = true;
@@ -49,6 +52,7 @@ in
         "codebook"
         "git-firefly" # .gitignore and git formatting
         "make" # Makefile
+        "ltex"
       ];
       userSettings = {
         hour_format = "hour24";
@@ -67,6 +71,23 @@ in
         # ---------- LaTeX ----------
         # LaTeX
         lsp = {
+          ltex = {
+            binary = {
+              # You can keep this explicit path or remove it since ltex-ls-plus 
+              # is already in your home.packages and should be in PATH
+              path = "${pkgs.ltex-ls-plus}/bin/ltex-ls-plus"; 
+            };
+            settings = {
+              ltex = {
+                language = "en-US";
+                additionalRules = {
+                  enablePickyRules = true;
+                  languageModel = "${ngram-en}";  # Your ngram path
+                };
+              };
+            };
+          };
+
           texlab = {
             settings = {
               texlab = {
@@ -103,7 +124,12 @@ in
 
         languages = {
           "LaTeX" = {
-            # Enable word wrap for LaTeX files only
+            soft_wrap = "editor_width";
+          };
+          "Markdown" = {
+            soft_wrap = "editor_width";
+          };
+          "Plain Text" = {
             soft_wrap = "editor_width";
           };
         };

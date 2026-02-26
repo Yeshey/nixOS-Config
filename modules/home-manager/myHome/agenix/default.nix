@@ -9,7 +9,6 @@
 let
   cfg = config.myHome.agenix;
   inherit (pkgs.stdenv.hostPlatform) system; # for agenix pkg
-
   #mystuff = pkgs.writeShellScriptBin "echo-secret" ''
   #      ${pkgs.coreutils}/bin/cat ${config.age.secrets.my_identity_yeshey.path} > /home/yeshey/Downloads/ImOkay.txt
   #    '';
@@ -25,7 +24,7 @@ in
   };
 
   config = lib.mkIf (config.myHome.enable && cfg.enable && config.home.username != "guest") {
-    myHome.agenix.sshKeys.enable = lib.mkOverride 1010 false;  
+    myHome.agenix.sshKeys.enable = lib.mkOverride 1010 false;
 
     home.packages = [
       inputs.agenix.packages.${system}.agenix
