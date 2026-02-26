@@ -68,7 +68,7 @@ in
                 rust-lang.rust-analyzer
                 tamasfe.even-better-toml # Fully-featured TOML support
                 eamodio.gitlens
-                valentjn.vscode-ltex
+                ltex-plus.vscode-ltex-plus
                 streetsidesoftware.code-spell-checker # spell checker
                 
                 bradlc.vscode-tailwindcss # tailwindcss
@@ -110,6 +110,7 @@ in
         home.packages = with pkgs; [
           nixd
           nixfmt-rfc-style
+          ltex-ls-plus
           #nixd # nix language server 
         ];
       })

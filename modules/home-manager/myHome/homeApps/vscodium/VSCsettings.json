@@ -17,7 +17,6 @@
     },
     "code-runner.runInTerminal": true,
     "files.autoSave": "afterDelay",
-    "ltex.language": "auto",
     "editor.wordWrap": "on",
     "git.autofetch": true,
 
@@ -57,6 +56,21 @@
       }
     ],
 
+    "cSpell.enabledFileTypes": {
+        "latex": false,
+        "bibtex": false,
+        "markdown": true,
+        "plaintext": true,
+        "nix": true,
+        "python": true
+    },
+    "ltex.enabled": [
+        "latex",
+        "markdown",
+        "plaintext"
+    ],
+    "ltex.ltex-ls.path": "ltex-ls-plus",
+    "ltex.language": "en-US",
 
     "nix.enableLanguageServer": true,
     "nix.serverPath": "nixd",
