@@ -101,6 +101,10 @@
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
     nixos-facter-modules.url = "github:nix-community/nixos-facter-modules";
+    nix-languagetool-ngram = {
+      url = "github:Janik-Haag/nix-languagetool-ngram";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = {
@@ -131,6 +135,7 @@
     nix-luanti,
     #aagl,
     nix-flatpak,
+    nix-languagetool-ngram,
     ...
   }@inputs:
   let

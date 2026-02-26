@@ -8,6 +8,8 @@
 
 let
   cfg = config.myHome.homeApps.vscodium;
+  ngram-en-pkg = inputs.nix-languagetool-ngram.packages.${pkgs.stdenv.hostPlatform.system}.ngrams-en;
+  ngram-en = "${ngram-en-pkg}/share/languagetool/ngrams";
 in
 {
   imports = [
@@ -34,7 +36,13 @@ in
   config =
     let
       # VSC accepts normal json with comments
-      vscUserSettings = builtins.readFile ./VSCsettings.json;
+      baseSettings = builtins.fromJSON (builtins.readFile ./VSCsettings.json);
+      
+      # 2. Inject the dynamic Nix paths into a single variable
+      userSettings = baseSettings // {
+        "ltex.ltex-ls.path" = "${pkgs.ltex-ls-plus}";
+        "ltex.additionalRules.languageModel" = "${ngram-en}";
+      };
     in
     lib.mkMerge [
       (lib.mkIf (config.myHome.enable && config.myHome.homeApps.enable && cfg.enable) {
@@ -43,9 +51,8 @@ in
         #home.file."/home/${config.home.username}/.config/Code/User/settings.json".source = ./VSCsettings.json;
         #home.file."/home/${config.home.username}/.config/Visual Studio Code/User/settings.json".source = ./VSCsettings.json;
         home.file."/home/${config.home.username}/.openvscode-server/data/Machine/settings.json" = {
-          text = builtins.readFile ./VSCsettings.json;
+          text = builtins.toJSON userSettings; # Converts the Nix set back to a JSON string
           force = true;
-          mutable = true;
         };
         
         programs.vscode = {
@@ -53,7 +60,7 @@ in
           mutableExtensionsDir = true;
           package = pkgs.vscodium;
           profiles.default = {
-            userSettings = builtins.fromJSON (builtins.readFile ./VSCsettings.json);
+            userSettings = userSettings;
             extensions = with pkgs.vscode-extensions; [
                 # vscodevim.vim # this is later when you're a chad
                 ms-vsliveshare.vsliveshare

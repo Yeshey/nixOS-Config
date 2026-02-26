@@ -71,6 +71,7 @@
     ],
     "ltex.ltex-ls.path": "ltex-ls-plus",
     "ltex.language": "en-US",
+    "ltex.additionalRules.enablePickyRules": true,
 
     "nix.enableLanguageServer": true,
     "nix.serverPath": "nixd",
