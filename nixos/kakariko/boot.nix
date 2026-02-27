@@ -15,14 +15,12 @@ in
     #inputs.lanzaboote.nixosModules.lanzaboote
   ];
 
-  # services.displayManager.gdm.debug = true;
-
   security.tpm2.enable = true;
   security.tpm2.pkcs11.enable = true;  # expose /run/current-system/sw/lib/libtpm2_pkcs11.so
   security.tpm2.tctiEnvironment.enable = true;  # TPM2TOOLS_TCTI and TPM2_PKCS11_TCTI env variables
 
   fileSystems."/boot" =
-    { device = "/dev/disk/by-uuid/84A9-3C95";
+    { device = "/dev/disk/by-uuid/12CE-A600";
       fsType = "vfat";
       #options = [ "fmask=0022" "dmask=0022" ]; 
       # ⚠️ fix the security issue ⚠️
@@ -38,41 +36,6 @@ in
   };
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.efi.efiSysMountPoint = "/boot";
-
-  
-  # boot.loader = {
-  #   timeout = 5;
-  #   efi = {
-  #     canTouchEfiVariables = true;
-  #     efiSysMountPoint = "/boot";
-  #   };
-  #   grub = {
-  #     enable = true;
-  #     # version = 2;
-  #     efiSupport = true;
-  #     devices = [ "nodev" ];
-  #     device = "nodev";
-  #     useOSProber = true;
-  #     # default = "saved"; # doesn't work with btrfs :(
-  #     extraEntries = ''
-  #       menuentry "Reboot" {
-  #           reboot
-  #       }
-
-  #       menuentry "Shut Down" {
-  #           halt
-  #       }
-
-  #       # Option info from /boot/grub/grub.cfg, technotes "Grub" section for more details
-  #       menuentry "NixOS - Console" --class nixos --unrestricted {
-  #       search --set=drive1 --fs-uuid 69e9ba80-fb1f-4c2d-981d-d44e59ff9e21
-  #       search --set=drive2 --fs-uuid 69e9ba80-fb1f-4c2d-981d-d44e59ff9e21
-  #         linux ($drive2)/@/nix/store/ll70jpkp1wgh6qdp3spxl684m0rj9ws4-linux-5.15.68/bzImage init=/nix/store/c2mg9sck85ydls81xrn8phh3i1rn8bph-nixos-system-nixos-22.11pre410602.ae1dc133ea5/init loglevel=4 3
-  #         initrd ($drive2)/@/nix/store/s38fgk7axcjryrp5abkvzqmyhc3m4pd1-initrd-linux-5.15.68/initrd
-  #       }
-  #     '';
-  #   };
-  # };
   
   boot.initrd.preLVMCommands = lib.mkOrder 400 "sleep 7"; # in my case I had to wait a bit to let my hardware pick up on my microSD
 
@@ -85,7 +48,7 @@ in
   # Root filesystem with bcachefs
   fileSystems."/" =
     { #device = "/dev/nvme0n1p5:/dev/sdb3";
-      device = "/dev/disk/by-uuid/29164f68-4557-481f-a0e0-21bf4b095153";
+      device = "/dev/disk/by-uuid/25da13f9-ca89-4dc7-af80-f168d68f046a";
       fsType = "bcachefs";
       options = [
 #        "errors=ro" "noatime" "nodiratime"
@@ -100,12 +63,8 @@ in
 
   swapDevices =
     [ 
-      {
-        device = "/dev/disk/by-label/swap-microsd";
-        priority = 0; # Higher numbers indicate higher priority.
-      }
       { 
-        device = "/dev/disk/by-label/swap-nvme";
+        device = "/dev/disk/by-label/nvmeswap";
         priority = 1; # Higher numbers indicate higher priority.
       }
     ];
