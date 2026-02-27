@@ -93,7 +93,7 @@ in
 
   mySystem = {
     enable = true;
-    dataStoragePath = "/mnt/btrfsMicroSD-DataDisk";
+    # dataStoragePath = "/mnt/btrfsMicroSD-DataDisk";
     host = "kakariko";
     user = "yeshey"; # TODO make this into an option where you can do user."yeshey".home-manager.enable ) true etc.
     guest.enable = true;

@@ -14,7 +14,7 @@ in
     enable = true;
     # All the options
     user = "yeshey";
-    dataStoragePath = "/mnt/btrfsMicroSD-DataDisk"; # Needs to be set in mySystem and in here (default is home folder)
+    # dataStoragePath = "/mnt/btrfsMicroSD-DataDisk"; # Needs to be set in mySystem and in here (default is home folder)
     xdgPersonalFilesOrganization.enable = true;
     nonNixos.enable = false;
     plasma.enable = false;
