@@ -24,6 +24,7 @@ in
     programs.nh = {
       enable = true;
       clean.enable = true;
+      clean.dates = "monthly";
       clean.extraArgs = "--keep-since 21d --keep 3";
       flake = "/home/yeshey/.setup";
     };
