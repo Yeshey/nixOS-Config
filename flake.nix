@@ -133,7 +133,6 @@
     nix-snapd,
     nix-minecraft,
     nix-luanti,
-    #aagl,
     nix-flatpak,
     nix-languagetool-ngram,
     ...

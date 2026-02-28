@@ -183,7 +183,6 @@ in
      remoteUser = "yeshey";
      port = 2232;
     };
-    aagl.enable = false;
     nh.enable = true;
 
     # to use this you need to create a remote with the name onedriveISCTE with `rclone config`

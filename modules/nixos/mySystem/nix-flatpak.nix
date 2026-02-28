@@ -1,4 +1,3 @@
-# https://github.com/ezKEa/aagl-gtk-on-nix
 {
   config,
   lib,

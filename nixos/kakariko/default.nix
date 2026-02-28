@@ -216,20 +216,15 @@ in
     };
   };
 
-  boot.kernelParams = [ "usbcore.autosuspend=-1" "clocksource=hpet" ]; # lets see if this fixes connect&disconnect sound bug (I haven't noticed it since)
-
-  # while this isn't solved: https://github.com/linux-surface/linux-surface/issues/1497
-  # I force change the clock, it has to be like this for the connection to not fail because of certificates when the clock is wrong
   systemd.services.fix-surface-clock = {
-    description = "Fix broken Surface RTC using rdate (port 37)";
+    description = "Fix broken Surface RTC using ntpdate";
     wantedBy = [ "multi-user.target" ];
-    after = [ "network.target" ];
-    wants = [ "network.target" ];
+    after = [ "network-online.target" ];
+    wants = [ "network-online.target" ];
     script = ''
-      # Use NIST time servers on port 37 (no TLS, works with broken clock)
-      ${pkgs.busybox}/bin/busybox rdate -s time.nist.gov || \
-      ${pkgs.busybox}/bin/busybox rdate -s utcnist.colorado.edu || \
-      ${pkgs.busybox}/bin/busybox rdate -s 129.6.15.28
+      ${pkgs.ntp}/bin/ntpdate -u pool.ntp.org || \
+      ${pkgs.ntp}/bin/ntpdate -u time.cloudflare.com || \
+      ${pkgs.ntp}/bin/ntpdate -u time.google.com
     '';
     serviceConfig = {
       Type = "oneshot";

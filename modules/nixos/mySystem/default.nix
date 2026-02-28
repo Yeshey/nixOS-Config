@@ -82,7 +82,6 @@ in
     ./autossh.nix
     ./resticRcloneBackups.nix
     ./rcloneMount.nix
-    ./an-anime-game-launcher.nix
     ./nix-flatpak.nix
     ./nh.nix
     ./allTor.nix
