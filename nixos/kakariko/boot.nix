@@ -51,13 +51,12 @@ in
       device = "/dev/disk/by-uuid/25da13f9-ca89-4dc7-af80-f168d68f046a";
       fsType = "bcachefs";
       options = [
-#        "errors=ro" "noatime" "nodiratime"
         "replicas=1"
-#        "foreground_target=/dev/nvme0n1p5"
-#        "background_target=/dev/sdb3"
-#        "promote_target=/dev/nvme0n1p5"
         "compression=zstd:1"
-        "background_compression=zstd:6"
+        "foreground_target=nvme"
+        "metadata_target=nvme"
+        "promote_target=nvme"
+        "background_target=sdcard"
       ];
     };
 
