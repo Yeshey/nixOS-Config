@@ -254,6 +254,7 @@ in
           networkmanager-openvpn
         ];
       };
+      systemd.services.dhcpcd.enable = false; # Can cause conflict with network manager. For example, eduroam in ISCTE.
 
       # for Iphone
       # 1.  Enable the usbmuxd daemon (pairing / USB comms)
