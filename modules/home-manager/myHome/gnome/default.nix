@@ -28,7 +28,16 @@ with lib.hm.gvariant;
       gnomeExtensions.appindicator # system tray
       gnomeExtensions.system-monitor # official gnome extension
       gnomeExtensions.user-themes # # official gnome extension
-      unstable.gnomeExtensions.copyous # The best clipboard manager
+      # waiting for this issue to get fixed: https://github.com/boerdereinar/copyous/issues/67
+      (unstable.gnomeExtensions.copyous.overrideAttrs (old: {
+        buildInputs = [
+          pkgs.libgda5
+        ];
+        preInstall = ''
+          sed -i "1i import GIRepository from 'gi://GIRepository';\nGIRepository.Repository.dup_default().prepend_search_path('${pkgs.libgda5}/lib/girepository-1.0');\nGIRepository.Repository.dup_default().prepend_search_path('${pkgs.gsound}/lib/girepository-1.0');\n" lib/preferences/dependencies/dependencies.js
+          sed -i "1i import GIRepository from 'gi://GIRepository';\nGIRepository.Repository.dup_default().prepend_search_path('${pkgs.libgda5}/lib/girepository-1.0');\n" lib/misc/db.js
+        '';
+      }))
       gnomeExtensions.night-theme-switcher
 
       banana-cursor # for the cursor
