@@ -138,6 +138,12 @@ in
     (lib.mkIf (cfg.enable && config.mySystem.impermanence.enable) {
       environment.persistence."/persistent" = {
         directories = [
+          {
+            directory = "/var/lib/private";
+            user = "nobody";
+            group = "nogroup";
+            mode = "0700";
+          }
           { 
             directory = "/var/lib/private/ollama"; 
             user = "nobody"; 
