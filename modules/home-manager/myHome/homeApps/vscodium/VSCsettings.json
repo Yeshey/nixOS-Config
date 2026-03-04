@@ -58,9 +58,8 @@
 
     "cSpell.enabledFileTypes": {
         "latex": false,
-        "bibtex": false,
-        "markdown": true,
-        "plaintext": true,
+        "markdown": false,
+        "plaintext": false,
         "nix": true,
         "python": true
     },
@@ -70,7 +69,7 @@
         "plaintext"
     ],
     "ltex.ltex-ls.path": "ltex-ls-plus",
-    "ltex.language": "en-US",
+    "ltex.language": "auto",
     "ltex.additionalRules.enablePickyRules": true,
 
     "nix.enableLanguageServer": true,
