@@ -74,7 +74,6 @@
     "ltex.java.maximumHeapSize": 8192,
     "ltex.java.initialHeapSize": 2048,
     "ltex.language": "en-US",
-    "ltex.additionalRules.motherTongue": "pt-PT",
     "ltex.additionalRules.enablePickyRules": true,
 
     "nix.enableLanguageServer": true,
