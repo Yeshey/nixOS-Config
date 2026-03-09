@@ -180,6 +180,42 @@ in
           };
         }; # End mainInstance server
 
+        servers.craftoria = rec {
+          enable = true;
+          jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";
+          serverProperties = {
+            server-port = 44345;
+            "query.port"=44345;
+            server-portv6 = 44344;
+            "rcon.port"=44345;
+            "rcon.password" = "hunter2";
+            difficulty = 2;
+            "allow-cheats" = "true";
+            gamemode = 0;
+            max-players = 60;
+            motd = ":]";
+            white-list = false;
+            #enable-rcon = false;
+            "online-mode"=false;
+            "max-tick-time" = -1; # Recommended with lazymc
+          };
+
+          # Specify the custom minecraft server package
+          #package = pkgs.fabricServers.fabric-1_21_1; #.override { loaderVersion = "0.16.10"; }; # Specific fabric loader version
+          package = pkgs.neoforgeServers.neoforge-1_21_1;
+
+          lazymc = {
+            enable = true;
+            config = {
+              public.address = "0.0.0.0:44339";
+              public.version = extractVersion package.name;
+              motd.sleeping = "☠ Server is sleeping §2☻ Join to start it up\n§uversion:§c ${extractVersion package.name}";
+              # see lazymc config here: https://github.com/timvisee/lazymc/blob/master/res/lazymc.toml
+              time.sleep_after = 200; # Sleep after 4 minutes
+            };
+          };
+        }; # End mainInstance server
+
 #         servers.testServer = rec {
 #           enable = true;
 #           jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";
@@ -813,6 +849,7 @@ in
           { directory = "/srv/minecraft/mainServer"; user = "minecraft"; group = "minecraft"; mode = "u=rwx,g=rx,o="; }
           { directory = "/srv/minecraft/familiaLopesTAISCTE"; user = "minecraft"; group = "minecraft"; mode = "u=rwx,g=rx,o="; }
           { directory = "/srv/minecraft/tunaCraft"; user = "minecraft"; group = "minecraft"; mode = "u=rwx,g=rx,o="; }
+          { directory = "/srv/minecraft/craftoria"; user = "minecraft"; group = "minecraft"; mode = "u=rwx,g=rx,o="; }
         ];
       };
     })
