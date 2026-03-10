@@ -46,6 +46,7 @@ in
         rclone
         blanket
         zotero
+        winboat
 
         #jetbrains-toolbox # for code with me you need the toolbox
         #jetbrains.gateway
