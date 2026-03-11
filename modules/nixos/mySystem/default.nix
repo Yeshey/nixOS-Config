@@ -470,6 +470,9 @@ in
         ];
       };
 
+      # programs.command-not-found.enable = true; # not needed if I'm using nix-index
+      programs.nix-index-database.comma.enable = true; # Now you can directly run programs you don't have installed with for example: `, Ladybird`
+
     })
   ];
 }
