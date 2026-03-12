@@ -61,6 +61,10 @@ let
       --set GDK_SCALE 2 \
       --add-flags "-t"
   '';
+
+  pkgs-kernel = import inputs.nixpkgs-kernel {
+    inherit (pkgs) system config;
+  };
 in
 {
   imports = [
@@ -233,6 +237,7 @@ in
     };
   };
 
+  boot.kernelPackages = pkgs-kernel.linuxPackages_surface; # should prevent rebuilds?
   # time.hardwareClockInLocalTime = true;   # match Windows (??? maybe should remove) Nah, I should make windows use UTC instead
 
   zramSwap.enable = true;
