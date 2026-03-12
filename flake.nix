@@ -10,7 +10,7 @@
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    nixos-hardware.url = "github:8bitbuddhist/nixos-hardware/surface-kernel-6.18";
+    nixos-hardware.url = "github:8bitbuddhist/nixos-hardware";
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
       inputs.nixpkgs.follows = "nixpkgs";
