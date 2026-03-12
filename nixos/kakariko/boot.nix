@@ -43,8 +43,6 @@ in
   boot.initrd.systemd.tpm2.enable = true;
   boot.initrd.systemd.emergencyAccess = true;
 
-  boot.supportedFilesystems = [ "bcachefs" ];
-
   # Root filesystem with bcachefs
   fileSystems."/" =
     { #device = "/dev/nvme0n1p5:/dev/sdb3";
