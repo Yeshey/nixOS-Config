@@ -10,9 +10,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # nixos-hardware.url = "github:8bitbuddhist/nixos-hardware/surface-kernel-6.18";
-    nixpkgs-kernel.url = "github:NixOS/nixpkgs/3aadb7ca9eac2891d52a9dec199d9580a6e2bf44"; # from nixos-version_--json
+    nixpkgs-kernel.url = "github:NixOS/nixpkgs/98d6950e15f36939b41fb9091dd597b5054ac101"; # from nixos-version --json
     nixos-hardware = {
-      url = "github:8bitbuddhist/nixos-hardware/surface-kernel-6.18";
+      url = "github:mexisme/nixos-hardware/microsoft-surface/update-kernel-6.18.13";
     };
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
