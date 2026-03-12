@@ -1,52 +1,26 @@
-# hashes come from from common/default.nix in your nixos-hardware input
 # So I don't have to rebuild the kernel every time.
-{
-  inputs,
-  pkgs,
-  lib,
-  config,
-  ...
-}:
-
+# Now to update the kernel in the surface, just manually update the nixpkgs-kernel flake input and the nixos-hardware flake input as well!
+{ inputs, pkgs, lib, config, ... }:
 let
   pkgs-kernel = import inputs.nixpkgs-kernel {
     system = pkgs.stdenv.hostPlatform.system;
-    config = { allowUnfree = true; };  # explicit nixpkgs config, not NixOS config
+    config = { allowUnfree = true; };
   };
 
-  # Everything below is copy-pasted from common/default.nix,
-  # just with pkgs-kernel instead of pkgs:
-  srcVersion = "6.18.7";
-  srcHash = "sha256-tyak0Vz5rgYhm1bYeCB3bjTYn7wTflX7VKm5wwFbjx4=";
-
-  linux-surface = pkgs-kernel.fetchFromGitHub {
-    owner = "linux-surface";
-    repo = "linux-surface";
-    rev = "7d273267d9af19b3c6b2fdc727fad5a0f68b1a3d";
-    hash = "sha256-CPY/Pxt/LTGKyQxG0CZasbvoFVbd8UbXjnBFMnFVm9k=";
-  };
-
-  inherit (pkgs-kernel.callPackage "${inputs.nixos-hardware}/microsoft/surface/common/kernel/linux-package.nix" { })
-    linuxPackage
-    surfacePatches
-    ;
-
-  kernelPatches = surfacePatches {
-    version = srcVersion;
-    patchFn = "${inputs.nixos-hardware}/microsoft/surface/common/kernel/6.18/patches.nix";
-    patchSrc = "${linux-surface}/patches/6.18";
+  # Instead of copy-pasting common/default.nix, we CALL it directly
+  # with pkgs-kernel injected. It returns { options = ...; config = ...; }
+  surfaceModule = import "${inputs.nixos-hardware}/microsoft/surface/common/default.nix";
+  surfaceResult = surfaceModule {
+    inherit lib;
+    pkgs = pkgs-kernel;  # <-- the whole point
+    config = {
+      hardware.microsoft-surface.kernelVersion = "stable";
+    };
   };
 in
 {
-  boot.kernelPackages = lib.mkForce (linuxPackage {
-    inherit kernelPatches;
-    version = srcVersion;
-    sha256 = srcHash;
-    ignoreConfigErrors = true;
-  });
-  boot.extraModulePackages = lib.mkForce [ 
-    config.boot.kernelPackages.bcachefs  # uses pkgs-kernel's bcachefs via kernelPackages
+  boot.kernelPackages = lib.mkForce surfaceResult.config.boot.kernelPackages;
+  boot.extraModulePackages = lib.mkForce [
+    config.boot.kernelPackages.bcachefs
   ];
-
-  boot.supportedFilesystems = [ "bcachefs" ];
 }
