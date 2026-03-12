@@ -73,7 +73,8 @@ in
         {
           # cores = 4;
           # max-jobs = 2;
-          experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
+          experimental-features = [ "nix-command" "flakes" "pipe-operators" "ca-derivations" ];
+          always-allow-substitutes = true;
           nix-path = lib.mapAttrsToList (key: value: "${key}=${value.to.path}") config.nix.registry;
           substituters = map (x: substituters.${x}.url) cfg.nix.substituters;
           trusted-public-keys = map (x: substituters.${x}.key) cfg.nix.substituters;

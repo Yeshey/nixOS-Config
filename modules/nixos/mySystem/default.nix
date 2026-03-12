@@ -215,7 +215,8 @@ in
             preallocate-contents = false
           '';
         settings = {
-          experimental-features = [ "nix-command" "flakes" "pipe-operators" ];
+          experimental-features = [ "nix-command" "flakes" "pipe-operators" "ca-derivations" ];
+          always-allow-substitutes = true;
           trusted-users = [
             "root"
             "${config.mySystem.user}"
