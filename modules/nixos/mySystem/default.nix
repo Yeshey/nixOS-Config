@@ -151,6 +151,7 @@ in
       mySystem.hardware.enable = lib.mkOverride 1010 true;
 
       zramSwap.enable = lib.mkOverride 1010 true;
+      zramSwap.memoryPercent = 90;
       programs.htop = {
         enable = true;
         settings = {
