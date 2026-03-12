@@ -10,7 +10,11 @@
 # To recover in case of loosing access through SSH do the following:
 # Go to Oracle Cloud > Dashboard > Console Connection > Launch Cloud Shell Connection (You might have to delete the current connection and create a new one in "Create local connection" with you public key)
 # Reboot the machine, and during boot select in the console a different generation
-
+let 
+  pkgs-kernel = import inputs.nixpkgs-kernel {
+    inherit (pkgs) system config;
+  };
+in 
 {
   imports =
     [
@@ -203,6 +207,8 @@
       priority = 0; # Higher numbers indicate higher priority.
     }
   ];
+
+  boot.kernelPackages = pkgs-kernel.linuxPackages_surface; # should prevent rebuilds?
 
   # nix = {
   #   settings = {
