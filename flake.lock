@@ -1040,16 +1040,16 @@
     },
     "nixos-hardware": {
       "locked": {
-        "lastModified": 1771949169,
-        "narHash": "sha256-ysaPReQYmjvMy2VRG8QjIX4Lfi4ShlQkZJTs/egtglo=",
-        "owner": "mexisme",
+        "lastModified": 1769790339,
+        "narHash": "sha256-aH00WqZJmnefVAXZSV2I46KwIm6b960oUeoQMRjROno=",
+        "owner": "8bitbuddhist",
         "repo": "nixos-hardware",
-        "rev": "416dc120957592101f4f8982f7c43a41cd2bfbe8",
+        "rev": "ac6458d3bcef09b40317be72e2b4f3795936732c",
         "type": "github"
       },
       "original": {
-        "owner": "mexisme",
-        "ref": "microsoft-surface/update-kernel-6.18.13",
+        "owner": "8bitbuddhist",
+        "ref": "surface-kernel-6.18",
         "repo": "nixos-hardware",
         "type": "github"
       }
@@ -1104,17 +1104,17 @@
     },
     "nixpkgs-kernel": {
       "locked": {
-        "lastModified": 1773357155,
-        "narHash": "sha256-iYxQJqZTMFPeN7RyEbW7tOH7Lag5H69cWKPqYbUywQQ=",
+        "lastModified": 1771043024,
+        "narHash": "sha256-O1XDr7EWbRp+kHrNNgLWgIrB0/US5wvw9K6RERWAj6I=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "98d6950e15f36939b41fb9091dd597b5054ac101",
+        "rev": "3aadb7ca9eac2891d52a9dec199d9580a6e2bf44",
         "type": "github"
       },
       "original": {
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "98d6950e15f36939b41fb9091dd597b5054ac101",
+        "rev": "3aadb7ca9eac2891d52a9dec199d9580a6e2bf44",
         "type": "github"
       }
     },
