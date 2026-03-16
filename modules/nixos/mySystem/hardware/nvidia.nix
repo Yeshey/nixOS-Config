@@ -43,24 +43,6 @@ in
   };
 
   config = lib.mkIf (config.mySystem.enable && config.mySystem.hardware.enable && cfg.enable) {
-
-    system.activationScripts = {
-    # do i need this shit for external monitors to work as well?
-    # https://askubuntu.com/questions/986394/problem-with-second-monitors-resolution
-    # maybe use services.xserver.deviceSection?
-      monitors.text = ''
-        echo "
-Section "Device"
-    Identifier     "Device0"
-    Driver         "nvidia"
-    VendorName     "NVIDIA Corporation"
-    BoardName      "${cfg.GPUName}"
-    Option "IgnoreEDIDChecksum" "DFP-1"
-EndSection
-        " > "/etc/X11/xorg.conf"
-      '';
-    };
-
     # NVIDIA
     # Allow unfree packages
     nixpkgs.config = {
@@ -86,12 +68,12 @@ EndSection
 
     # Comment this to use only the nvidia Grpahics card (discrete graphics option in BIOS instead of switchable graphics)
     hardware.nvidia = {
-      open = true; # my GPU is listed under compatible GPUs: https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus
+      open = false; # my GPU is listed under compatible GPUs: https://github.com/NVIDIA/open-gpu-kernel-modules#compatible-gpus
       #package = config.boot.kernelPackages.nvidiaPackages.stable;
       modesetting.enable = lib.mkOverride 1010 true;
       # nvidiaPersistenced = true; # It ensures all GPUs stay awake even during headless mode.
       powerManagement.enable = lib.mkOverride 1010 true; # Experimental power management through systemd
-      powerManagement.finegrained = true;
+      powerManagement.finegrained = false;
       prime = {
         # sync.enable = lib.mkOverride 1010 true; # gpu always # https://github.com/NixOS/nixpkgs/issues/199024#issuecomment-1300650034 # does not work with GPU passthrough
         offload.enable = true; # gpu on demand # works with GPU passthrough
