@@ -61,7 +61,7 @@ in
 
         kdePackages.okular
 
-        joplin-desktop # note taking
+        unstable.joplin-desktop # note taking
         # unstable.zed-editor
         rnote
 
