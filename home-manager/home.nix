@@ -82,7 +82,6 @@ in
       starshipTheme = "pinage404"; # fredericrous # pinage404
     };
     direnv.enable = true;
-    
   };
 
   # You can import other home-manager modules here

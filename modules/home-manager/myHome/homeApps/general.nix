@@ -37,6 +37,7 @@ in
         old_wihotspot = pkgs_old_wihotspot.linux-wifi-hotspot;
 
       in [
+        devenv
         # nexusmods-app-unfree # for game mods?
         # input-leap # :(
         thunderbird
