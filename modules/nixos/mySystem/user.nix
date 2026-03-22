@@ -56,6 +56,7 @@ in
           "tss" # For TPM access
           "input" # For https://github.com/kokoko3k/ssh-rdp
           "i2c"
+          "kvm"
           config.services.kubo.group # "ipfs"
         ]; # TODO if you ever extend the module to be able to have several users, you need to see how to handle this
         openssh.authorizedKeys.keyFiles = [
@@ -89,6 +90,7 @@ in
           "surface-control"
           "audio"
           "tss" # For TPM access
+          "kvm"
           "input" # For https://github.com/kokoko3k/ssh-rdp
         ];
       };
