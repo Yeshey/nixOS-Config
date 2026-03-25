@@ -52,6 +52,9 @@
       flake = false;
       url = "path:./secrets";
     };
+    nixos-hardware = {
+      url = "github:mexisme/nixos-hardware/microsoft-surface/update-kernel-6.18.13";
+    };
   };
 
 }

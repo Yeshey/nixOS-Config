@@ -1,5 +1,6 @@
 {
   inputs,
+  lib,
   ...
 }:
 {
@@ -17,7 +18,7 @@
         })
       ];
       nixpkgs.config.allowUnfree = true;
-      system.stateVersion = "25.05";
+      system.stateVersion = lib.mkDefault "25.05";
 
       nix.settings = {
         substituters = [
