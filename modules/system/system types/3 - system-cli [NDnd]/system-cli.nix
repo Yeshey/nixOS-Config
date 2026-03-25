@@ -9,6 +9,8 @@
     imports = with inputs.self.modules.nixos; [
       system-default
 
+      direnv
+      shell
       ssh
       firmware
       cli-tools
@@ -19,6 +21,7 @@
     imports = with inputs.self.modules.darwin; [
       system-default
 
+      direnv
       ssh
       cli-tools
     ];
@@ -28,7 +31,10 @@
     imports = with inputs.self.modules.homeManager; [
       system-default
 
+      nh
+      direnv
       shell
+      cli-tools
     ];
   };
 }

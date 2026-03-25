@@ -55,6 +55,11 @@
     nixos-hardware = {
       url = "github:mexisme/nixos-hardware/microsoft-surface/update-kernel-6.18.13";
     };
+    nix-languagetool-ngram = {
+      url = "github:Janik-Haag/nix-languagetool-ngram";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nurpkgs.url = "github:nix-community/NUR";
   };
 
 }

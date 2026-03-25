@@ -36,7 +36,7 @@
   };
 
   # impermanence is not added by default to home-manager, because of missing Darwin implementation
-  # for linux home-manager stand-alone configurations it has to be added manualy
+  # for linux home-manager stand-alone configurations it has to be added manually
 
   flake.modules.homeManager.system-default = {
     imports =

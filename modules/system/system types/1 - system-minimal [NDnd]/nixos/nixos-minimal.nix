@@ -16,9 +16,15 @@
             system = pkgs.stdenv.hostPlatform.system;
           };
         })
+        (final: prev: {
+          nur = import inputs.nurpkgs {
+            nurpkgs = prev;
+            pkgs = prev;
+          };
+        })
       ];
       nixpkgs.config.allowUnfree = true;
-      system.stateVersion = lib.mkDefault "25.05";
+      system.stateVersion = lib.mkDefault "25.11";
 
       nix.settings = {
         substituters = [

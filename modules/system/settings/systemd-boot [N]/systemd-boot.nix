@@ -1,7 +1,16 @@
 {
   flake.modules.nixos.systemd-boot = {
     boot.loader = {
-      systemd-boot.enable = true;
+      timeout = 2;
+      efi = {
+        canTouchEfiVariables = true;
+        efiSysMountPoint = "/boot";
+      };
+      systemd-boot = {
+        enable = true;
+        configurationLimit = 15;
+        memtest86.enable = true;
+      };
     };
   };
 }
