@@ -63,7 +63,7 @@ in
 
     zsh = {
       enable = true;
-      starshipTheme = "pinage404"; # fredericrous # pinage404
+      # starshipTheme = "fredericrous"; # fredericrous # pinage404
     };
     # direnv.enable = false;
 
