@@ -6,6 +6,9 @@
   flake.modules.nixos.gnome-base = 
     { pkgs, lib, ... }: 
     {
+      home-manager.sharedModules = [
+        inputs.self.modules.homeManager.gnome-base
+      ];
       imports = with inputs.self.modules.nixos; [
         gnome-minimal
       ];

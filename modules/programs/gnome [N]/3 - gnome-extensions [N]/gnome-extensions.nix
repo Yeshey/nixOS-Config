@@ -4,6 +4,9 @@
 }:
 {
   flake.modules.nixos.gnome-extensions = {
+    home-manager.sharedModules = [
+      inputs.self.modules.homeManager.gnome-extensions
+    ];
     imports = with inputs.self.modules.nixos; [
       gnome-base
     ];

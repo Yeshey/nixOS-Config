@@ -6,7 +6,7 @@
   flake.modules.nixos.hyrulecastle = {
     imports = with inputs.self.modules.nixos; [
       system-desktop
-      gnome-full
+      gnome-extensions
       systemd-boot
       bluetooth
       firmware

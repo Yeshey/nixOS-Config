@@ -36,7 +36,6 @@ in
     {
       imports = with inputs.self.modules.homeManager; [
         system-desktop
-        gnome-extensions
       ];
 
       home.username = "${username}";

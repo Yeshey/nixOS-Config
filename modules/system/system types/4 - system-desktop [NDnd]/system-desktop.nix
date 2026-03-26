@@ -24,7 +24,6 @@
       system-cli
       desktop-apps
       firefox-browser
-      office
       vscodium
     ];
   };
