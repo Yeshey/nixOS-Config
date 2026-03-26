@@ -17,7 +17,6 @@
       ];
 
       home.packages = with pkgs; [
-        gnome-extension-manager
         networkmanagerapplet # Has for example "Automatically connect to VPN when using this connection"
         
         gnomeExtensions.power-off-options

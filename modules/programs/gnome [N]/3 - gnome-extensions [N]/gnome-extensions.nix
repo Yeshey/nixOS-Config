@@ -16,8 +16,6 @@
         gnome-base
       ];
       home.packages = with pkgs; [
-        gnome-extension-manager
-
         gnomeExtensions.appindicator # system tray
         gnomeExtensions.system-monitor # official gnome extension
         gnomeExtensions.user-themes # # official gnome extension
