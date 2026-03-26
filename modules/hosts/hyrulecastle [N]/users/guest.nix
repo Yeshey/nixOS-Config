@@ -3,13 +3,13 @@
   ...
 }:
 let
-  username = "yeshey";
+  username = "guest";
 in
 {
   flake.modules.nixos.hyrulecastle =
     { ... }:
     {
-      imports = with inputs.self.modules.nixos; [
+      imports =   [
         inputs.self.modules.nixos.${username}
       ];
 

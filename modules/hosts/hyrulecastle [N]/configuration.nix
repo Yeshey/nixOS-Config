@@ -20,6 +20,8 @@
       nvidia = "PCI:1:0:0";
     };
 
+    services.displayManager.gdm.autoSuspend = false;
+
     networking.hostName = "hyrulecastle"; 
   };
 }

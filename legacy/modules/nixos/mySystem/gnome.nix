@@ -84,7 +84,6 @@ in
       # layout = "pt";
       displayManager.gdm = {
         enable = lib.mkOverride 1010 true;
-        # autoSuspend = false;
         settings = {
           greeter.IncludeAll = true;
         };
