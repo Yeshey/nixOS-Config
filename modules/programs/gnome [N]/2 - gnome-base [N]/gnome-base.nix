@@ -1,20 +1,14 @@
-{ inputs, ... }:
 {
-  flake.modules.nixos.gnome =
-    { pkgs, lib, ... }:
+  inputs,
+  ...
+}:
+{
+  flake.modules.nixos.gnome-base = 
+    { pkgs, lib, ... }: 
     {
-      home-manager.sharedModules = [
-        inputs.self.modules.homeManager.gnome
+      imports = with inputs.self.modules.nixos; [
+        gnome-minimal
       ];
-
-      services.displayManager.gdm = {
-        enable = true;
-      };
-      services.desktopManager.gnome.enable = true;
-
-      programs.ssh.startAgent = lib.mkForce false;
-
-      security.rtkit.enable = true;
 
       i18n.inputMethod = {
         enable = true;
@@ -48,9 +42,13 @@
         ]);
     };
 
-  flake.modules.homeManager.gnome =
-    { pkgs, lib, ... }:
+  flake.modules.homeManager.gnome-base = 
+    { lib, ... }: 
     {
+      imports = with inputs.self.modules.homeManager; [
+        gnome-minimal
+      ];
+
       dconf.settings = {
         "org/gnome/system/location" = { # enables location in gnome
           enabled = true;

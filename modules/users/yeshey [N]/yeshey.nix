@@ -39,9 +39,7 @@ in
     {
       imports = with inputs.self.modules.homeManager; [
         system-desktop
-        gnome
-        gnome-base-extensions
-        gnome-extra-extensions
+        gnome-full
       ];
 
       programs = {

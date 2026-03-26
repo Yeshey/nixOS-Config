@@ -1,7 +1,20 @@
 {
-  flake.modules.homeManager.gnome-base-extensions =
-    { pkgs, ... }:
+  inputs,
+  ...
+}:
+{
+  flake.modules.nixos.gnome-extensions = {
+    imports = with inputs.self.modules.nixos; [
+      gnome-base
+    ];
+  };
+
+  flake.modules.homeManager.gnome-extensions = 
+    { pkgs, ... }: 
     {
+      imports = with inputs.self.modules.homeManager; [
+        gnome-base
+      ];
       home.packages = with pkgs; [
         gnome-extension-manager
 
@@ -31,6 +44,15 @@
             "user-theme@gnome-shell-extensions.gcampax.github.com"
             "copyous@boerdereinar.dev"
           ];
+        };
+
+        "org/gnome/shell/extensions/appindicator" = {
+          tray-pos = "left";
+        };
+        
+        "org/gnome/shell/extensions/system-monitor" = {
+          show-download = false;
+          show-upload = false;
         };
       };
     };

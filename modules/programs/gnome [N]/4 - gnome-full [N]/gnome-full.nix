@@ -1,7 +1,21 @@
 {
-  flake.modules.homeManager.gnome-extra-extensions =
-    { pkgs, ... }:
+  inputs,
+  ...
+}:
+{
+  flake.modules.nixos.gnome-full = {
+    imports = with inputs.self.modules.nixos; [
+      gnome-extensions
+    ];
+  };
+
+  flake.modules.homeManager.gnome-full = 
+    { pkgs, ... }: 
     {
+      imports = with inputs.self.modules.homeManager; [
+        gnome-extensions
+      ];
+
       home.packages = with pkgs; [
         gnome-extension-manager
         networkmanagerapplet # Has for example "Automatically connect to VPN when using this connection"
@@ -63,4 +77,5 @@
         };
       };
     };
+  
 }
