@@ -15,6 +15,8 @@
       nvidia
 
       waydroid
+      virt
+      docker
     ];
 
     hardware.nvidia.prime.busIds = {
