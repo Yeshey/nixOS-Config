@@ -6,13 +6,15 @@
   flake.modules.nixos.hyrulecastle = {
     imports = with inputs.self.modules.nixos; [
       system-desktop
-      gnome-extensions
+      gnome-full
       systemd-boot
       bluetooth
       firmware
       tpm2
       btrfs
       nvidia
+
+      waydroid
     ];
 
     hardware.nvidia.prime.busIds = {

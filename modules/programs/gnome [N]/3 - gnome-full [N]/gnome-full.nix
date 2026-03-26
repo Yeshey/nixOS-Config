@@ -3,16 +3,16 @@
   ...
 }:
 {
-  flake.modules.nixos.gnome-extensions = {
+  flake.modules.nixos.gnome-full = {
     home-manager.sharedModules = [
-      inputs.self.modules.homeManager.gnome-extensions
+      inputs.self.modules.homeManager.gnome-full
     ];
     imports = with inputs.self.modules.nixos; [
       gnome-base
     ];
   };
 
-  flake.modules.homeManager.gnome-extensions = 
+  flake.modules.homeManager.gnome-full = 
     { pkgs, ... }: 
     {
       imports = with inputs.self.modules.homeManager; [
