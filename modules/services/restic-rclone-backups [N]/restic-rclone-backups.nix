@@ -7,7 +7,7 @@
 #     --target / \
 #     --include "/home/yeshey" \
 #     --verbose
-{ inputs, ... }: # TODO impermanence
+{ ... }: # TODO impermanence
 {
   flake.modules.nixos.restic-rclone-backups =
     { config, lib, pkgs, ... }:

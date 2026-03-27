@@ -401,6 +401,22 @@
         "type": "github"
       }
     },
+    "nix-flatpak": {
+      "locked": {
+        "lastModified": 1767983141,
+        "narHash": "sha256-7ZCulYUD9RmJIDULTRkGLSW1faMpDlPKcbWJLYHoXcs=",
+        "owner": "gmodena",
+        "repo": "nix-flatpak",
+        "rev": "440818969ac2cbd77bfe025e884d0aa528991374",
+        "type": "github"
+      },
+      "original": {
+        "owner": "gmodena",
+        "ref": "latest",
+        "repo": "nix-flatpak",
+        "type": "github"
+      }
+    },
     "nix-languagetool-ngram": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -660,6 +676,7 @@
         "impermanence": "impermanence",
         "import-tree": "import-tree",
         "nix-darwin": "nix-darwin",
+        "nix-flatpak": "nix-flatpak",
         "nix-languagetool-ngram": "nix-languagetool-ngram",
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_3",

@@ -1,8 +1,17 @@
+{ inputs, ... }:
 {
   flake.modules.nixos.flatpak = 
     { ... }:
     {
-      services.flatpak.enable = true;
+      imports = [ inputs.nix-flatpak.nixosModules.nix-flatpak ];
+
+      services.flatpak = {
+        enable = true;
+        update.auto = {
+          enable = true;
+          onCalendar = "weekly"; # Default value
+        };
+      };
 
       # allow guest user, and other users to install flatpaks globally
       security.polkit.extraConfig = ''
