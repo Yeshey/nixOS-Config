@@ -1,6 +1,12 @@
 # nix & nixOS Configuration / Linux Config
 The spiciest config on the market [😳🥵💦](https://matias.me/nsfw/)
 
+# TODO
+- Standalone Home Manager
+- Add [Nn] when the home manager part of the module also makes sense standalone
+- There are places you refactored without adding impermanence like restic-rclone-backups
+- Idk if restic backups are working yet
+
 My reproducible nix Configuration & other configuration files.
 More Documentation (for myself) about nixOS in my [TechNotes Repo](https://github.com/Yeshey/TechNotes).
 
