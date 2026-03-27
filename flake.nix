@@ -60,6 +60,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nurpkgs.url = "github:nix-community/NUR";
+    plasma-manager = {
+      url = "github:pjones/plasma-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.home-manager.follows = "home-manager";
+    };
   };
 
 }

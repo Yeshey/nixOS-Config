@@ -15,50 +15,16 @@ in
   };
 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
-    # KDE Plasma
-    #programs.qt5ct.enable = true;
-/*
-    qt = {
-      enable = true;
-      platformTheme = "";
-      style = "adwait";
-    }; */
-/*
-    qt = {
-      enable = true;
-      platformTheme = "qt5ct";
-      style = "breeze";
-    };*/
-    /*
-    gtk = {
-      #enable = true;
-      theme = {
-        name = "Breeze-Dark";
-        package = pkgs.libsForQt5.breeze-gtk;
-      };
-    };*/
-
     # For hotspot to connect (in KDE plasma)
     # https://github.com/NixOS/nixpkgs/issues/263359
-    networking.firewall.allowedUDPPorts = [ 67 68 53 
-    ];
-    networking.firewall.allowedTCPPorts = [ 67 68 53 
-    ];
+    networking.firewall.allowedUDPPorts = [ 67 68 53 ];
+    networking.firewall.allowedTCPPorts = [ 67 68 53 ];
 
     services = {
       desktopManager.plasma6.enable = true;
-
       displayManager.sddm.enable = true;
-
-      displayManager.sddm.wayland.enable = true;
-
       xserver = {
         enable = true;
-
-        #xkb = {
-        #  layout = "us";
-        #  variant = "";
-        #};
       };
     };
 

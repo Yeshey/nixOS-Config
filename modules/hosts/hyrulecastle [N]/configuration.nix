@@ -6,7 +6,8 @@
   flake.modules.nixos.hyrulecastle = {
     imports = with inputs.self.modules.nixos; [
       system-desktop
-      gnome-full
+      # gnome-full
+      plasma-full
       systemd-boot
       bluetooth
       firmware
@@ -28,8 +29,6 @@
       intel = "PCI:0:2:0";
       nvidia = "PCI:1:0:0";
     };
-
-    services.displayManager.gdm.autoSuspend = false;
 
     networking.hostName = "hyrulecastle"; 
   };
