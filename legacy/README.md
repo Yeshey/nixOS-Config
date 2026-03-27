@@ -1,6 +1,10 @@
 # nix & nixOS Configuration / Linux Config
 The spiciest config on the market [😳🥵💦](https://matias.me/nsfw/)
 
+# TODO
+- Standalone Home Manager
+- Add [Nn] when the home manager part of the module also makes sense standalone
+
 My reproducible nix Configuration & other configuration files.
 More Documentation (for myself) about nixOS in my [TechNotes Repo](https://github.com/Yeshey/TechNotes).
 
