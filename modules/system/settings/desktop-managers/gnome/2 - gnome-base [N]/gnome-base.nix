@@ -45,88 +45,102 @@
         ]);
     };
 
-  flake.modules.homeManager.gnome-base = 
-    { lib, ... }: 
-    {
-      imports = with inputs.self.modules.homeManager; [
-        gnome-minimal
-      ];
+  flake.modules.homeManager.gnome-base = { lib, ... }: {
+    imports = [ inputs.self.modules.homeManager.gnome-minimal ];
 
-      dconf.settings = {
-        "org/gnome/system/location" = { # enables location in gnome
-          enabled = true;
-        };
+    # Make sure correct fonts/icons are used (useful if you switch from KDE)
+    gtk.enable = true;
+    fonts.fontconfig.enable = true;
+    home.activation.cleanupKdeTrash = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      $DRY_RUN_CMD rm -rf $VERBOSE_ARG \
+        ~/.config/gtk-3.0 ~/.config/gtk-4.0 \
+        ~/.config/fontconfig ~/.fonts.conf \
+        ~/.cache/icon-cache.kcache
+    '';
 
-        "org/gnome/desktop/peripherals/touchpad" = {
-          click-method = "areas";
-          tap-to-click = true;
-        };
+    dconf.settings = {
+      # Make sure correct fonts/icons are used (useful if you switch from KDE)
+      "org/gnome/desktop/interface" = {
+        icon-theme = "Adwaita";
+        font-antialiasing = "rgba";
+        font-hinting = "slight";
+        monospace-font-name = "FiraCode Nerd Font 10";
+      };
 
-        "org/gnome/desktop/privacy" = {
-          remove-old-temp-files = true;
-          remove-old-trash-files = true;
-        };
+      "org/gnome/system/location" = { # enables location in gnome
+        enabled = true;
+      };
 
-        "org/gnome/desktop/sound" = {
-          allow-volume-above-100-percent = true;
-          input-feedback-sounds = true;
-        };
+      "org/gnome/desktop/peripherals/touchpad" = {
+        click-method = "areas";
+        tap-to-click = true;
+      };
 
-        "org/gnome/desktop/wm/keybindings" = {
-          show-desktop = [ "<Super>d" ];
-          switch-windows = [ "<Alt>Tab" ];
-          switch-windows-backward = [ "<Shift><Alt>Tab" ];
-          switch-applications = [ ];
-          switch-applications-backward = [ ]; # Optional: also disable reverse app switching
-        };
+      "org/gnome/desktop/privacy" = {
+        remove-old-temp-files = true;
+        remove-old-trash-files = true;
+      };
 
-        "org/gnome/shell/window-switcher" = {
-          current-workspace-only = false;
-        };
+      "org/gnome/desktop/sound" = {
+        allow-volume-above-100-percent = true;
+        input-feedback-sounds = true;
+      };
 
-        "org/gnome/desktop/input-sources" = with lib.hm.gvariant; {
-          show-all-sources = false;
-          sources = [
-            (mkTuple [
-              "xkb"
-              "pt"
-            ])
-            (mkTuple [
-              "xkb"
-              "br"
-            ])
-            (mkTuple [
-              "xkb"
-              "us"
-            ])
-          ];
-          xkb-options = [ "terminate:ctrl_alt_bksp" ];
-        };
+      "org/gnome/desktop/wm/keybindings" = {
+        show-desktop = [ "<Super>d" ];
+        switch-windows = [ "<Alt>Tab" ];
+        switch-windows-backward = [ "<Shift><Alt>Tab" ];
+        switch-applications = [ ];
+        switch-applications-backward = [ ]; # Optional: also disable reverse app switching
+      };
 
-        "org/gnome/desktop/interface" = {
-          clock-show-seconds = true;
-          clock-show-weekday = true;
-          show-battery-percentage = true;
-        };
+      "org/gnome/shell/window-switcher" = {
+        current-workspace-only = false;
+      };
 
-        "org/gnome/desktop/wm/preferences" = {
-          button-layout = "appmenu:minimize,maximize,close";
-          resize-with-right-button = true;
-        };
+      "org/gnome/desktop/input-sources" = with lib.hm.gvariant; {
+        show-all-sources = false;
+        sources = [
+          (mkTuple [
+            "xkb"
+            "pt"
+          ])
+          (mkTuple [
+            "xkb"
+            "br"
+          ])
+          (mkTuple [
+            "xkb"
+            "us"
+          ])
+        ];
+        xkb-options = [ "terminate:ctrl_alt_bksp" ];
+      };
 
-        "org/gnome/nautilus/preferences" = {
-          show-create-link = true;
-          show-delete-permanently = true;
-        };
+      "org/gnome/desktop/interface" = {
+        clock-show-seconds = true;
+        clock-show-weekday = true;
+        show-battery-percentage = true;
+      };
 
-        "org/gnome/shell/extensions/appindicator" = {
-          tray-pos = "left";
-        };
+      "org/gnome/desktop/wm/preferences" = {
+        button-layout = "appmenu:minimize,maximize,close";
+        resize-with-right-button = true;
+      };
 
-        "org/gnome/shell/extensions/system-monitor" = {
-          show-download = false;
-          show-upload = false;
-        };
+      "org/gnome/nautilus/preferences" = {
+        show-create-link = true;
+        show-delete-permanently = true;
+      };
+
+      "org/gnome/shell/extensions/appindicator" = {
+        tray-pos = "left";
+      };
+
+      "org/gnome/shell/extensions/system-monitor" = {
+        show-download = false;
+        show-upload = false;
       };
     };
+  };
 }
