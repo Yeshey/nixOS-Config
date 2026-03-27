@@ -11,6 +11,7 @@
       [
         system-minimal
         home-manager
+        safe-rm
         secrets
       ]
       ++ (with inputs.self.modules.generic; [
@@ -43,6 +44,7 @@
       with inputs.self.modules.homeManager;
       [
         system-minimal
+        safe-rm
         secrets
       ]
       ++ [ inputs.self.modules.generic.systemConstants ];

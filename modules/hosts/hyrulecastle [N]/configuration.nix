@@ -19,7 +19,9 @@
       docker
       podman
       syncthing
-      speedtest-tracker
+
+      # hosting
+      # speedtest-tracker
     ];
 
     hardware.nvidia.prime.busIds = {
