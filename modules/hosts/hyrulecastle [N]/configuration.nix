@@ -20,6 +20,7 @@
       docker
       podman
       syncthing
+      my-scripts
 
       # hosting
       # speedtest-tracker
@@ -28,6 +29,12 @@
     hardware.nvidia.prime.busIds = {
       intel = "PCI:0:2:0";
       nvidia = "PCI:1:0:0";
+    };
+
+    my-scripts = {
+      enable = true;
+      flakeLocation = "/home/yeshey/.setup";
+      # hostName auto-detected from networking.hostName
     };
 
     networking.hostName = "hyrulecastle"; 

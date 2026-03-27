@@ -3,7 +3,7 @@
   flake.modules.homeManager.yeshey =
     { config, ... }:
     {
-      imports = [ inputs.self.modules.homeManager.rclone-mount-onedrive ];
+      imports = with inputs.self.modules.homeManager; [ rclone-mount-onedrive ];
 
       rclone-mount-onedrive = {
         enable     = true;
