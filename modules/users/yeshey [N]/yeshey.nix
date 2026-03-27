@@ -37,28 +37,36 @@ in
   flake.modules.homeManager."${username}" =
     { ... }:
     {
+      options."${username}".dataStoragePath = lib.mkOption {
+        type = lib.types.str;
+        default = "/home/${username}";
+        description = "Root path for personal data storage";
+      };
+
       imports = with inputs.self.modules.homeManager; [
         system-desktop
       ];
 
-      programs = {
-        zsh.shellAliases = {
-          lg = "lazygit";
-        };
-        git = {
-          enable = true;
-          settings = {
-            core.filemode = false; # syncthing made file changes in git with no content
-            user = {
-              name = "Yeshey";
-              email = "yesheysangpo@hotmail.com";
-            };
+      config = {
+        programs = {
+          zsh.shellAliases = {
+            lg = "lazygit";
           };
-          lfs.enable = true; # fix github desktop error
+          git = {
+            enable = true;
+            settings = {
+              core.filemode = false; # syncthing made file changes in git with no content
+              user = {
+                name = username;
+                email = "yesheysangpo@hotmail.com";
+              };
+            };
+            lfs.enable = true; # fix github desktop error
+          };
         };
-      };
 
-      home.username = "${username}";
-      home.stateVersion = "25.11";
+        home.username = "${username}";
+        home.stateVersion = "25.11";
+      };
     };
 }

@@ -17,6 +17,7 @@
       waydroid
       virt
       docker
+      syncthing
     ];
 
     hardware.nvidia.prime.busIds = {

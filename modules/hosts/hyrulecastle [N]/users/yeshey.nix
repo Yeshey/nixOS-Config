@@ -13,8 +13,8 @@ in
         inputs.self.modules.nixos.${username}
       ];
 
-      home-manager.users."${username}" = { # add something to this user on this machine
-        ###
+      home-manager.users."${username}" = {
+        "${username}".dataStoragePath = "/mnt/DataDisk";
       };
     };
 }
