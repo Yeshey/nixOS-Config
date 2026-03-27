@@ -17,7 +17,9 @@
       waydroid
       virt
       docker
+      podman
       syncthing
+      speedtest-tracker
     ];
 
     hardware.nvidia.prime.busIds = {
