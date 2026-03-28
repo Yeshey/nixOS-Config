@@ -47,6 +47,7 @@
     nixos-hardware.url = "github:mexisme/nixos-hardware/microsoft-surface/update-kernel-6.18.13";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-25.11-darwin";
+    nixpkgs-kernel.url = "github:NixOS/nixpkgs/98d6950e15f36939b41fb9091dd597b5054ac101";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nurpkgs.url = "github:nix-community/NUR";
     packages = {

@@ -15,7 +15,7 @@
       # so the kernel package comes from the pinned nixpkgs, not current nixpkgs.
       # This avoids rebuilding the kernel on every nixpkgs bump.
       surfaceModule = import
-        "${inputs.nixos-hardware}/modules/microsoft/surface/common/default.nix";
+        "${inputs.nixos-hardware}/microsoft/surface/common/default.nix";
 
       surfaceResult = surfaceModule {
         inherit lib;

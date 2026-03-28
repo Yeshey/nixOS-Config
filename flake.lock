@@ -521,6 +521,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-kernel": {
+      "locked": {
+        "lastModified": 1773357155,
+        "narHash": "sha256-iYxQJqZTMFPeN7RyEbW7tOH7Lag5H69cWKPqYbUywQQ=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "98d6950e15f36939b41fb9091dd597b5054ac101",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "98d6950e15f36939b41fb9091dd597b5054ac101",
+        "type": "github"
+      }
+    },
     "nixpkgs-lib": {
       "locked": {
         "lastModified": 1772328832,
@@ -700,6 +716,7 @@
         "nixos-hardware": "nixos-hardware",
         "nixpkgs": "nixpkgs_3",
         "nixpkgs-darwin": "nixpkgs-darwin",
+        "nixpkgs-kernel": "nixpkgs-kernel",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nurpkgs": "nurpkgs",
         "packages": "packages",
