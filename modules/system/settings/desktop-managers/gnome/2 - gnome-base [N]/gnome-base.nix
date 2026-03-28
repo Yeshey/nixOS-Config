@@ -72,7 +72,6 @@
       };
 
       "org/gnome/desktop/peripherals/touchpad" = {
-        click-method = "areas";
         tap-to-click = true;
       };
 
