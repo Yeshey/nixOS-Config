@@ -1,3 +1,4 @@
+# To see connected iphones
 {
   flake.modules.nixos.iphone =
     { pkgs, ... }:

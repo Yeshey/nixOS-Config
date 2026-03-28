@@ -40,6 +40,10 @@
       inputs.nixpkgs.follows = "nixpkgs-darwin";
     };
     nix-flatpak.url = "github:gmodena/nix-flatpak/?ref=latest";
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nix-languagetool-ngram = {
       url = "github:Janik-Haag/nix-languagetool-ngram";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -50,6 +54,7 @@
     nixpkgs-kernel.url = "github:NixOS/nixpkgs/98d6950e15f36939b41fb9091dd597b5054ac101";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nurpkgs.url = "github:nix-community/NUR";
+    nvix.url = "github:niksingh710/nvix";
     packages = {
       url = "path:./packages";
       flake = false;

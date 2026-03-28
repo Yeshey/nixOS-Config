@@ -13,7 +13,7 @@
         home-manager
         safe-rm
         gc
-        nix-index
+        nix-index-database
         nix-ld
         location
         restic-rclone-backups
@@ -65,10 +65,9 @@
         system-minimal
         safe-rm
         gc
-        nix-index
+        nix-index-database
         secrets
         nix-your-shell
-        nix-index
       ]
       ++ [ inputs.self.modules.generic.systemConstants ];
   };
