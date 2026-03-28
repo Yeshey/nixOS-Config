@@ -39,20 +39,20 @@
         configFile = ./thermal-conf.xml;
       };
 
-      # if thermald isn't working properly activate this
-      # systemd.services.restart-thermald = {
-      #   description = "Restart thermald after 10 seconds";
-      #   after = [ "network.target" "multi-user.target" ];
-      #   wantedBy = [ "multi-user.target" ];
-      #   script = ''
-      #     echo "restarting thermald to make sure it works..."
-      #     ${pkgs.systemd}/bin/systemctl restart thermald
-      #   '';
-      #   serviceConfig = {
-      #     Type = "oneshot";
-      #     ExecStartPre = "${pkgs.coreutils}/bin/sleep 40";
-      #   };
-      # };
+      # if thermald isn't working properly activate this (not sure if needed)
+      systemd.services.restart-thermald = {
+        description = "Restart thermald after 10 seconds";
+        after = [ "network.target" "multi-user.target" ];
+        wantedBy = [ "multi-user.target" ];
+        script = ''
+          echo "restarting thermald to make sure it works..."
+          ${pkgs.systemd}/bin/systemctl restart thermald
+        '';
+        serviceConfig = {
+          Type = "oneshot";
+          ExecStartPre = "${pkgs.coreutils}/bin/sleep 40";
+        };
+      };
 
       boot.initrd.availableKernelModules = [ "xhci_pci" "nvme" "usb_storage" "sd_mod" ];
       boot.initrd.kernelModules = [ "dm-snapshot" ];
