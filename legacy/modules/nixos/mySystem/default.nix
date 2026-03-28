@@ -234,7 +234,7 @@ in
         enable = true;
         defaultEditor = lib.mkOverride 1010 true;
       };
-      programs.gphoto2.enable = true; # to be able to access cameras
+      programs.gphoto2.enable = true; # to be able to access digital cameras
       environment.systemPackages = [
         pkgs.kdePackages.kamera
         pkgs.libimobiledevice        # iphone idevicepair, ideviceinfo, …

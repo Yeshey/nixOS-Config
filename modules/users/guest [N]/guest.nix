@@ -25,6 +25,7 @@ in
           "kvm"
           "libvirtd"
           "adbusers"
+          "camera"
         ];
         shell = pkgs.zsh;
       };

@@ -1,4 +1,3 @@
-{ inputs, ... }:
 {
   flake.modules.homeManager.desktop-apps =
     { pkgs, lib, ... }:
@@ -6,6 +5,9 @@
         {
           home.packages = with pkgs; [
             inkscape
+            blender
+            qbittorrent
+            vesktop
             vlc
             pdfarranger
             thunderbird

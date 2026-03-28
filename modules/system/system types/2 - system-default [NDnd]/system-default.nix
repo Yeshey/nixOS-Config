@@ -5,7 +5,7 @@
 {
   # import all essential nix-tools which are used in all modules of a specific class
 
-  flake.modules.nixos.system-default = {
+  flake.modules.nixos.system-default = { pkgs, lib, ... }: {
     imports =
       with inputs.self.modules.nixos;
       [
@@ -14,12 +14,28 @@
         safe-rm
         gc
         nix-index
+        nix-ld
+        location
+        zram
         secrets
       ]
       ++ (with inputs.self.modules.generic; [
         systemConstants
         pkgs-by-name
       ]);
+
+      boot.tmp.cleanOnBoot = lib.mkDefault true;
+      boot.supportedFilesystems = [ "ntfs" "btrfs" ];
+      programs.gphoto2.enable = true; # to be able to access digital cameras
+      networking.resolvconf.dnsExtensionMechanism = lib.mkDefault false; # https://github.com/NixOS/nixpkgs/issues/24433
+      services.automatic-timezoned.enable = true;
+      networking.networkmanager = {
+        enable = lib.mkOverride 1010 true;
+        plugins = [
+          pkgs.networkmanager-openvpn
+        ];
+      };
+      systemd.services.dhcpcd.enable = false; # Can cause conflict with network manager. For example, eduroam in ISCTE.
   };
 
   flake.modules.darwin.system-default = {

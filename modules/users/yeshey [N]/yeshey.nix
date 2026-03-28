@@ -23,6 +23,7 @@ in
           "kvm"
           "libvirtd"
           "adbusers"
+          "camera"
         ];
         # generated with mkpasswd --method=sha-512 --rounds=2000000
         hashedPassword = "$6$rounds=2000000$/pvZKZOnJE51jPnR$FDiOHyOvkouz36fW8MLiPYOFdEYf/SknZWVc9tqV039bOEvQMfH9TsezvITcbsMwqVHFzA0uEPwS0msabEUKg1";

@@ -13,6 +13,8 @@
       virt
       steam
       adb
+      iphone
+      appimage
 
       waydroid
       my-scripts
