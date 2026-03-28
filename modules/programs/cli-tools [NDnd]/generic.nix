@@ -2,7 +2,6 @@ let
   genericPackages = pkgs: with pkgs; [
     git
     tmux
-    htop
     unstable.devenv
     curl
     vim
@@ -27,6 +26,7 @@ in
     { pkgs, ... }: 
     {
       environment.systemPackages = genericPackages pkgs;
+      programs.htop.enable = true;
     };
 
   flake.modules.darwin.cli-tools =
@@ -56,5 +56,6 @@ in
           android-tools
           rclone
         ]);
+      programs.htop.enable = true;
     };
 }

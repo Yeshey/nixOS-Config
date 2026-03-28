@@ -16,8 +16,8 @@
         nix-index
         nix-ld
         location
-        zram
         secrets
+        zram
       ]
       ++ (with inputs.self.modules.generic; [
         systemConstants

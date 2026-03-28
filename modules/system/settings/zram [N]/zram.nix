@@ -7,7 +7,7 @@
         memoryPercent = lib.mkDefault 60;
       };
 
-      programs.htop = {
+      programs.htop = { # TODO doesnt show
         enable = true;
         settings = {
           header_layout = "two_50_50";
