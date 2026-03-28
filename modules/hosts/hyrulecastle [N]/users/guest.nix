@@ -7,7 +7,6 @@ let
 in
 {
   flake.modules.nixos.hyrulecastle =
-    { ... }:
     {
       imports =   [
         inputs.self.modules.nixos.${username}

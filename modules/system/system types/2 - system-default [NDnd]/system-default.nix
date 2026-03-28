@@ -16,8 +16,9 @@
         nix-index
         nix-ld
         location
-        secrets
+        restic-rclone-backups
         zram
+        secrets
       ]
       ++ (with inputs.self.modules.generic; [
         systemConstants

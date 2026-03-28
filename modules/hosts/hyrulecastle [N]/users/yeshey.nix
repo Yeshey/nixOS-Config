@@ -7,15 +7,13 @@ let
 in
 {
   flake.modules.nixos.hyrulecastle =
-    { lib, config, ... }:
     {
       imports = with inputs.self.modules.nixos; [
         inputs.self.modules.nixos.${username}
-        restic-rclone-backups
       ];
 
       home-manager.users."${username}" = {
-        "${username}".dataStoragePath = "/mnt/DataDisk";
+        "${username}".dataStoragePath = "/home/yeshey";
       };
 
       restic-rclone-backups.jobs.mainBackupOneDrive = {
