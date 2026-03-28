@@ -13,6 +13,7 @@
         home-manager
         safe-rm
         gc
+        nix-index
         secrets
       ]
       ++ (with inputs.self.modules.generic; [
@@ -47,7 +48,10 @@
         system-minimal
         safe-rm
         gc
+        nix-index
         secrets
+        nix-your-shell
+        nix-index
       ]
       ++ [ inputs.self.modules.generic.systemConstants ];
   };

@@ -11,6 +11,12 @@ let
     btop
     jq
     xdg-utils
+    nettools # ifconfig
+    dnsutils
+    pciutils
+    unzip
+    ookla-speedtest
+    comma
     home-manager
     local.cowsay
   ];
@@ -36,10 +42,10 @@ in
         (genericPackages pkgs)
         ++ (with pkgs; [
           ffmpeg-full
+          hyfetch
           yt-dlp # download youtube videos
           rsync
           file
-          unzip
           killall
           cmatrix
           scrcpy # screen cast android phone

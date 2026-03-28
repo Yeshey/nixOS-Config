@@ -12,6 +12,7 @@
       printing
       virt
       steam
+      adb
 
       waydroid
       my-scripts
