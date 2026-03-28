@@ -34,6 +34,7 @@
       desktop-apps
       firefox-browser
       vscodium
+      zed-editor
 
       my-scripts
       syncthing
