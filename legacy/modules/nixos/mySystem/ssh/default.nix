@@ -17,7 +17,7 @@ in
 
   config = lib.mkIf (config.mySystem.enable && cfg.enable) {
 
-    services.openssh = with lib; {
+    services.openssh = {
       enable = true;
       #settings.PermitRootLogin = lib.mkOverride 1010 "yes"; # TODO no
       settings = {
