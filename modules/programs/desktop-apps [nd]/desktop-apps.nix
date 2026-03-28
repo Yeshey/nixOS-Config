@@ -41,6 +41,7 @@
             heroic
             luanti
             the-powder-toy
+            gnome-remote-desktop
 
             # Global Protect VPN to connect to ISCTE
             gpclient

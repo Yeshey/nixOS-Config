@@ -58,6 +58,10 @@
         ~/.cache/icon-cache.kcache
     '';
 
+    # Templates for right click context window
+    home.file."Templates/Markdown.md".text = "";
+    home.file."Templates/Text.txt".text = "";
+
     dconf.settings = {
       # Make sure correct fonts/icons are used (useful if you switch from KDE)
       "org/gnome/desktop/interface" = {
