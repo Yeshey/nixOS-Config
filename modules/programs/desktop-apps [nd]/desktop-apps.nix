@@ -39,6 +39,27 @@
             heroic
             luanti
             the-powder-toy
+
+            # Global Protect VPN to connect to ISCTE
+            gpclient
+            (pkgs.makeDesktopItem {
+              name = "gpclient-iscte";
+              desktopName = "GlobalProtect ISCTE-IUL";
+              genericName = "GlobalProtect VPN Client";
+              comment = "Connect to ISCTE-IUL VPN";
+              exec = "sudo ${pkgs.gpclient}/bin/gpclient --fix-openssl connect vpn.iscte-iul.pt --browser firefox";
+              icon = "network-vpn";
+              categories = [ "Network" "Dialup" ];
+              keywords = [
+                "GlobalProtect"
+                "Openconnect"
+                "SAML"
+                "connection"
+                "VPN"
+              ];
+              mimeTypes = ["x-scheme-handler/globalprotectcallback"];
+              terminal = true;
+            })
           ];
           # settings for all systems
         }

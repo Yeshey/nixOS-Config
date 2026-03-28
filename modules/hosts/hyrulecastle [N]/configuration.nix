@@ -8,19 +8,14 @@
       system-desktop
       gnome-full
       # plasma-full
+      # cosmic
       systemd-boot
       bluetooth
-      firmware
       tpm2
       btrfs
       nvidia
 
-      waydroid
-      virt
-      docker
-      podman
-      syncthing
-      my-scripts
+      i2p
 
       # hosting
       # speedtest-tracker

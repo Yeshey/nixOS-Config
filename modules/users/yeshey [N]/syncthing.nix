@@ -21,11 +21,15 @@ let
 in
 {
   flake.modules.homeManager.yeshey =
-    { lib, config, ... }:
+    { config, ... }:
     let
       dataPath = config.yeshey.dataStoragePath;
     in
     {
+      imports = with inputs.self.modules.homeManager; [
+        syncthing
+      ];
+
       services.syncthing.settings = {
         devices = {
           "nixOS-Laptop".id    = "MQJK4CT-TFXHX2Y-3E2BSCD-Q7775YX-SX7VHKF-4TY6OA6-OGZO2QX-3NPTWQN";

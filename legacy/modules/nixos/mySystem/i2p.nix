@@ -19,27 +19,5 @@ in
     services.i2p = {
       enable = true;
     };
-
-    # can't make general firefox profiles, being done in hm. The desktop file would be made like this tho:
-
-    # makeDesktopItem https://discourse.nixos.org/t/proper-icon-when-using-makedesktopitem/32026
-    /*
-      environment.systemPackages = with pkgs;
-      let
-        profile = ./i2p;
-        i2ptest = makeDesktopItem {
-          name = "i2ptest";
-          desktopName = "i2ptest";
-          genericName = "i2ptest";
-          exec = ''firefox --name firefox %U --profile ${profile}'';
-          icon = "firefox";
-          categories = [ "Network" "WebBrowser" ];
-          mimeTypes = [ "text/html" "text/xml" "application/xhtml+xml" "application/vnd.mozilla.xul+xml" "x-scheme-handler/http" "x-scheme-handler/https" ];
-        };
-      in
-      [
-        i2ptest
-      ];
-    */
   };
 }

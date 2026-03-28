@@ -27,12 +27,6 @@
       programs.nh = {
         enable = true;
         flake = "${config.home.homeDirectory}/.setup";
-        osFlake = "${config.home.homeDirectory}/.setup";
-        
-        clean = {
-          enable = true;
-          extraArgs = "--keep-since 4d --keep 3";
-        };
       };
     };
 }

@@ -45,6 +45,7 @@ in
 
       imports = with inputs.self.modules.homeManager; [
         system-desktop
+        my-scripts
       ];
 
       config = {

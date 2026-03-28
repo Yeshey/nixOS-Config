@@ -1,3 +1,18 @@
+let
+  mkCleanSyncthing = pkgs: pkgs.writeShellScriptBin "cleansyncthing" ''
+    echo "Deleting Syncthing conflict files in: $(pwd)"
+    find . -mount -mindepth 1 -type f \
+        -not \( -path "*/.Trash-1000/*" -or -path "*.local/share/Trash/*" \) \
+        -name "*.sync-conflict-*" -ls -delete
+  '';
+
+  mkCleanGit = pkgs: pkgs.writeShellScriptBin "cleangit" ''
+    find . -type d -name '.git' -execdir sh -c \
+      'echo "Cleaning repository in $(pwd)"; git clean -fdx' \;
+  '';
+
+  portableScripts = pkgs: [ (mkCleanSyncthing pkgs) (mkCleanGit pkgs) ];
+in
 {
   flake.modules.nixos.my-scripts =
     { pkgs, lib, config, ... }:
@@ -134,17 +149,6 @@
 
         echo "Cleanup complete. Reboot recommended to clear boot entries."
       '';
-
-      cleangit = pkgs.writeShellScriptBin "cleangit" ''
-        find . -type d \( -name '.stversions' -prune \) -o \( -name '.git' -type d -execdir sh -c 'echo "Cleaning $(pwd)"; git clean -fdx' \; \)
-      '';
-
-      cleansyncthing = pkgs.writeShellScriptBin "cleansyncthing" ''
-        echo "Deleting Syncthing conflict files in: $(pwd)"
-        find . -mount -mindepth 1 -type f \
-            -not \( -path "*/.Trash-1000/*" -or -path "*.local/share/Trash/*" \) \
-            -name "*.sync-conflict-*" -ls -delete
-      '';
     in
     {
       options.my-scripts = {
@@ -164,14 +168,15 @@
       };
 
       config = lib.mkIf cfg.enable {
-        environment.systemPackages = [
-          upgrade
-          update-with-remote-off
-          update-with-remote
-          clean
-          cleangit
-          cleansyncthing
-        ];
+        environment.systemPackages =
+          (portableScripts pkgs)
+          ++ [ upgrade update-with-remote-off update-with-remote clean ];
       };
+    };
+
+  flake.modules.homeManager.my-scripts =
+    { pkgs, ... }:
+    {
+      home.packages = portableScripts pkgs;
     };
 }

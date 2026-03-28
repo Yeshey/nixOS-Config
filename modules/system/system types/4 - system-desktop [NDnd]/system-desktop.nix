@@ -10,6 +10,12 @@
       system-cli
       flatpak
       printing
+      virt
+      steam
+
+      waydroid
+      my-scripts
+      syncthing
     ];
   };
 
@@ -25,6 +31,9 @@
       desktop-apps
       firefox-browser
       vscodium
+
+      my-scripts
+      syncthing
     ];
   };
 }

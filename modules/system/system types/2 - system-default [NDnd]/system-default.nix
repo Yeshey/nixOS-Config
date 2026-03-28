@@ -12,6 +12,7 @@
         system-minimal
         home-manager
         safe-rm
+        gc
         secrets
       ]
       ++ (with inputs.self.modules.generic; [
@@ -45,6 +46,7 @@
       [
         system-minimal
         safe-rm
+        gc
         secrets
       ]
       ++ [ inputs.self.modules.generic.systemConstants ];
