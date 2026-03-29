@@ -3,6 +3,8 @@ The spiciest config on the market [😳🥵💦](https://matias.me/nsfw/)
 
 # TODO
 - Standalone Home Manager
+- check what is Factory
+- Check if you can pull isKdePlasma and isGnome into something global.
 - Add [Nn] when the home manager part of the module also makes sense standalone
 - There are places you refactored without adding impermanence like restic-rclone-backups
 - Idk if restic backups are working yet

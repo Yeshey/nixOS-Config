@@ -6,7 +6,7 @@ let
   username = "yeshey";
 in
 {
-  flake.modules.nixos.kakariko =
+  flake.modules.nixos.skyloft =
     {
       imports = with inputs.self.modules.nixos; [
         inputs.self.modules.nixos.${username}

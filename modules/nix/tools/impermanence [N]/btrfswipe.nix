@@ -1,29 +1,12 @@
+{ inputs, ... }:
 {
-  config,
-  lib,
-  pkgs,
-  inputs,
-  ...
-}:
-
-let
-  cfg = config.mySystem.impermanence;
-in
-{
-  imports = [ inputs.impermanence.nixosModules.impermanence ];
-
-  options.mySystem.impermanence = with lib; {
-    enable = mkEnableOption "impermanence";
-  };
-
-  config = lib.mkMerge [
-    # Requires btrfs with fileSystems."/nix" and fileSystems."/persist" (with neededForBoot = true) and root subvolumes. 
-    # Using systemd for boot as well.
-    # Should have fileSystems."/swap" in a seperate subvolume as well.
-    ( lib.mkIf (config.mySystem.enable && cfg.enable) {
-
-      # https://discourse.nixos.org/t/using-immutable-users-with-impermanence-on-luks/43459
-      # mv root subvolume to old_roots
+  flake.modules.nixos.impermanence =
+    { lib, ... }:
+    {
+      # BTRFS root-wipe on boot.
+      # When enabled: root subvolume @ is moved to @old_roots/<timestamp> and a
+      # fresh @ is created. Old roots older than 2 days are deleted automatically.
+      # DO NOT ENABLE until all modules have their impermanence.nix configured.
       boot.initrd.postResumeCommands = lib.mkAfter ''
         mkdir /btrfs_tmp
         mount /dev/sda2 /btrfs_tmp
@@ -49,26 +32,26 @@ in
       '';
 
       environment.persistence."/persistent" = {
-        enable = true;  # NB: Defaults to true, not needed
         hideMounts = true;
         directories = [
-          "/etc/nixos"
           "/var/log"
           "/var/lib/bluetooth"
           "/var/lib/nixos"
-          "/etc/xrdp/"
           "/var/lib/systemd/coredump"
           "/etc/NetworkManager/system-connections"
           { directory = "/etc/ssh"; mode = "0755"; }
-          { directory = "/var/lib/colord"; user = "colord"; group = "colord"; mode = "u=rwx,g=rx,o="; }
         ];
         files = [
           "/etc/machine-id"
           "/root/.zsh_history"
           "/root/.bash_history"
-          { file = "/var/keys/secret_file"; parentDirectory = { mode = "u=rwx,g=,o="; }; }
         ];
       };
-    })
-  ];
+
+      programs.fuse.userAllowOther = true;
+
+      home-manager.sharedModules = [{
+        home.persistence."/persistent" = { };
+      }];
+    };
 }

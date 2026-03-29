@@ -26,7 +26,6 @@ let
     unzip
     ookla-speedtest
     home-manager
-    local.cowsay
 
     # nvim with nvix and development tools for nvix
     (nvix pkgs lib)

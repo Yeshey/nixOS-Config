@@ -13,10 +13,10 @@ in
       ];
 
       home-manager.users."${username}" = {
-        "${username}".dataStoragePath = "/home/yeshey";
+        "${username}".dataStoragePath = "/home/${username}";
       };
 
-      restic-rclone-backups.jobs.mainBackupOneDrive = {
+      restic-rclone-backups.jobs.mainBackupOneDrive = { # TODO, does this work?
         enable           = true;
         user             = "yeshey";
         paths            = [ "/home/yeshey" ];
