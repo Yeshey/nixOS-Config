@@ -5,7 +5,7 @@
 {
   # import all essential nix-tools which are used in all modules of a specific class
 
-  flake.modules.nixos.system-default = { lib, ... }: {
+  flake.modules.nixos.system-default = { lib, pkgs, ... }: {
     imports =
       with inputs.self.modules.nixos;
       [
@@ -27,6 +27,11 @@
 
       boot.tmp.cleanOnBoot = lib.mkDefault true;
       boot.supportedFilesystems = [ "ntfs" "btrfs" ];
+      systemd.services.avahi-daemon = {
+        serviceConfig.ExecStartPre = [
+          "-${pkgs.coreutils}/bin/rm -f /run/avahi-daemon/pid"
+        ];
+      };
   };
 
   flake.modules.darwin.system-default = {
