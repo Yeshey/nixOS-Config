@@ -58,13 +58,6 @@
       }
     ],
 
-    "cSpell.enabledFileTypes": {
-        "latex": false,
-        "markdown": false,
-        "plaintext": false,
-        "nix": true,
-        "python": true
-    },
     "ltex.enabled": [
         "latex",
         "markdown",

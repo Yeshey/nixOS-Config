@@ -1,45 +1,21 @@
 { inputs, ... }:
 {
   flake.modules.homeManager.vscodium =
-    { pkgs, lib, config, ... }:
+    { pkgs, config, ... }:
     let
       ngram-en-pkg = inputs.nix-languagetool-ngram.packages.${pkgs.stdenv.hostPlatform.system}.ngrams-en;
       ngram-en = "${ngram-en-pkg}/share/languagetool/ngrams";
     in
     {
-      imports = [
-        # from https://github.com/nix-community/home-manager/issues/1800, to make vscode settings writable
-        # Source: https://gist.github.com/js6pak/d17a317de6a76ba9dac0d110adc651ed
-        # Make vscode settings writable
-
-        (import (builtins.fetchurl {
-          url = "https://gist.githubusercontent.com/js6pak/d17a317de6a76ba9dac0d110adc651ed/raw/309b3d066d00ca59e0342c458ceb2d10b1c5f6e9/mutability.nix";
-          sha256 = "sha256:1s4xjzy5p5fv283bvw5b4364djhy2dfbzicax4kmk1mcq5qacp2b";
-        }) { inherit config lib; })
-
-        (import (builtins.fetchurl {
-          url = "https://gist.githubusercontent.com/js6pak/d17a317de6a76ba9dac0d110adc651ed/raw/309b3d066d00ca59e0342c458ceb2d10b1c5f6e9/vscode.nix";
-          sha256 = "sha256:0mb2fn4d61wrscv0nwi3hyflgs3gg8gaw78xayj97n5mslbj7sh9";
-        }) { inherit config lib pkgs; }) #
-      
-      ];
-
       config =
       let
-        # VSC accepts normal json with comments
         baseSettings = builtins.fromJSON (builtins.readFile ./VSCsettings.json);
-        
-        # 2. Inject the dynamic Nix paths into a single variable
         userSettings = baseSettings // {
           "ltex.ltex-ls.path" = "${pkgs.ltex-ls-plus}";
           "ltex.additionalRules.languageModel" = "${ngram-en}";
         };
       in
         {
-
-          #home.file."/home/${config.home.username}/.config/VSCodium/User/settings.json".source = ./VSCsettings.json;
-          #home.file."/home/${config.home.username}/.config/Code/User/settings.json".source = ./VSCsettings.json;
-          #home.file."/home/${config.home.username}/.config/Visual Studio Code/User/settings.json".source = ./VSCsettings.json;
           home.file."/home/${config.home.username}/.openvscode-server/data/Machine/settings.json" = {
             text = builtins.toJSON userSettings; # Converts the Nix set back to a JSON string
             force = true;
@@ -52,54 +28,30 @@
             profiles.default = {
               userSettings = userSettings;
               extensions = with pkgs.vscode-extensions; [
-                  # vscodevim.vim # this is later when you're a chad
-                  ms-vsliveshare.vsliveshare
+                  mkhl.direnv 
+                  jnoortheen.nix-ide
                   ms-azuretools.vscode-docker
-                  usernamehw.errorlens # Improve highlighting of errors, warnings and other language diagnostics.
-                  ritwickdey.liveserver # for html and css development
-                  # glenn2223.live-sass # not in nixpkgs
-                  yzhang.markdown-all-in-one # markdown
-                  formulahendry.code-runner
-                  james-yu.latex-workshop
-                  tamasfe.even-better-toml # TOML language support
-                  rust-lang.rust-analyzer
-                  tamasfe.even-better-toml # Fully-featured TOML support
+                  usernamehw.errorlens
                   eamodio.gitlens
+                  ritwickdey.liveserver
+                  yzhang.markdown-all-in-one
+                  james-yu.latex-workshop
+                  rust-lang.rust-analyzer
+                  tamasfe.even-better-toml
                   ltex-plus.vscode-ltex-plus
-                  streetsidesoftware.code-spell-checker # spell checker
-                  
-                  bradlc.vscode-tailwindcss # tailwindcss
-                  # redhat.vscode-xml # not installed??
-                  # arrterian.nix-env-selector # nix environment selector
-                  mkhl.direnv # direnv (the good one!)
-                  jnoortheen.nix-ide # not work?
-                  # you should try adding this one to have better nix code
-                  # b4dm4n.vscode-nixpkgs-fmt # for consistent nix code formatting (https://github.com/nix-community/nixpkgs-fmt)
-
-                  haskell.haskell
-
+                  bradlc.vscode-tailwindcss
                   # python
-                  # ms-python.python # Gives this error for now:
-                  #ERROR: Could not find a version that satisfies the requirement lsprotocol>=2022.0.0a9 (from jedi-language-server) (from versions: none)
-                  #ERROR: No matching distribution found for lsprotocol>=2022.0.0a9
                   ms-python.vscode-pylance
                   ms-python.python
                   ms-toolsai.jupyter
-                  # ms-python.python # Causing an error now
 
                   # java
                   redhat.java
-                  #search for extension pack for java
                   vscjava.vscode-java-debug
-                  # vscjava.vscode-java-dependency
-                  # vscjava.vscode-java-pack
                   vscjava.vscode-java-test
-                  # vscjava.vscode-maven
 
                   # C
                   llvm-vs-code-extensions.vscode-clangd
-
-                  # ms-vscode-remote.remote-ssh
               ];
             };
           };
@@ -108,7 +60,6 @@
             nixd
             nixfmt-rfc-style
             ltex-ls-plus
-            #nixd # nix language server 
           ];
         };
       };
