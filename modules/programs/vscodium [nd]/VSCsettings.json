@@ -1,5 +1,6 @@
 {
     "terminal.integrated.defaultProfile.linux": "zsh",
+    "terminal.integrated.fontFamily": "'FiraCode Nerd Font Mono'",
     "customPresentationMode.overrides": {
         "workbench.colorTheme": "Visual Studio Light",
         "window.zoomLevel": 1,

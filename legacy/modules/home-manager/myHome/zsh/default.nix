@@ -27,7 +27,6 @@ in
     # Need these fonts for starship theme to work
     fonts.fontconfig.enable = true;
     home.packages = with pkgs; [
-      safe-rm
       eza
       nerd-fonts.fira-code
       nerd-fonts.roboto-mono

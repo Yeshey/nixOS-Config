@@ -28,8 +28,8 @@
       boot.tmp.cleanOnBoot = lib.mkDefault true;
       boot.supportedFilesystems = [ "ntfs" "btrfs" ];
       systemd.services.avahi-daemon = {
-        serviceConfig.ExecStartPre = [
-          "-${pkgs.coreutils}/bin/rm -f /run/avahi-daemon/pid"
+        serviceConfig.ExecStartPre = lib.mkBefore [
+          "+${pkgs.coreutils}/bin/rm -f /run/avahi-daemon/pid"
         ];
       };
   };

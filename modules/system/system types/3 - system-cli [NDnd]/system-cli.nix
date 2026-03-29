@@ -11,6 +11,7 @@
 
       direnv
       shell
+      starship
       ssh
       firmware
       cli-tools
@@ -34,6 +35,7 @@
       nh
       direnv
       shell
+      starship
       cli-tools
     ];
   };

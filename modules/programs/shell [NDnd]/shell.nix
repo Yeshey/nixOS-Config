@@ -38,6 +38,7 @@
         dotDir = "${config.xdg.configHome}/zsh";
         autosuggestion.enable = true;
         syntaxHighlighting.enable = true;
+        historySubstringSearch.enable = true;
         enableCompletion = true;
         history.size = 100000;
 
