@@ -30,7 +30,7 @@
       };
 
       services.desktopManager.plasma6.enable = true;
-      services.displayManager.sddm.enable = lib.mkOverride 1010 true;
+      services.displayManager.sddm.enable = true;
 
       networking.firewall.allowedTCPPorts = [ 3389 ];
     };

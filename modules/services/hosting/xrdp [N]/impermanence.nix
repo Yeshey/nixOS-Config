@@ -4,9 +4,9 @@
     { config, ... }:
     {
       environment = inputs.self.lib.mkIfPersistence config {
-        persistence."/persistent".directories = [{
-          directory = "/run/xrdp";
-        }];
+        persistence."/persistent".files = [
+          "/run/xrdp/rsakeys.ini"
+        ];
       };
     };
 }
