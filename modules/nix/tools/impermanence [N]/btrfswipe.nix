@@ -34,21 +34,22 @@
       environment.persistence."/persistent" = {
         hideMounts = true;
         directories = [
+          "/etc/nixos"
           "/var/log"
           "/var/lib/bluetooth"
           "/var/lib/nixos"
           "/var/lib/systemd/coredump"
+          "/var/lib/systemd/matches"
           "/etc/NetworkManager/system-connections"
-          { directory = "/etc/ssh"; mode = "0755"; }
+          { directory = "/var/lib/colord"; user = "colord"; group = "colord"; mode = "u=rwx,g=rx,o="; }
         ];
         files = [
           "/etc/machine-id"
           "/root/.zsh_history"
           "/root/.bash_history"
+          { file = "/var/keys/secret_file"; parentDirectory = { mode = "u=rwx,g=,o="; }; }
         ];
       };
-
-      programs.fuse.userAllowOther = true;
 
       home-manager.sharedModules = [{
         home.persistence."/persistent" = { };

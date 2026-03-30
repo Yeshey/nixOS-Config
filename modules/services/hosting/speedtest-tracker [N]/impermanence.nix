@@ -1,11 +1,11 @@
 { inputs, ... }:
 {
-  flake.modules.nixos.vnstat =
+  flake.modules.nixos.speedtest-tracker =
     { config, ... }:
     {
       environment = inputs.self.lib.mkIfPersistence config {
         persistence."/persistent".directories = [
-          "/etc/xrdp/"
+          "/var/lib/speedtest-tracker/"
         ];
       };
     };

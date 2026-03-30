@@ -4,11 +4,6 @@
     { pkgs, lib, ... }:
     {
       imports = [ inputs.nix-luanti.nixosModules.default ];
-
-      experimental-features = [
-        "pipe-operators"
-      ];
-
       # Worlds are in /var/lib/luanti-<serverName>/world
       # To migrate a world:
       #   stop the service

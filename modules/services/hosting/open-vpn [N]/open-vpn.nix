@@ -252,7 +252,7 @@
           '';
         })
 
-    (lib.mkIf config.open-vpn.enableSharedGuest.enable {
+    (lib.mkIf config.open-vpn.enableSharedGuest {
       services.openvpn.servers.guest-UDP = {
         autoStart = true;
         config = ''

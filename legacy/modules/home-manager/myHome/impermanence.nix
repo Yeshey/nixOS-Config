@@ -32,7 +32,6 @@ in
         ".local/share/direnv"
         ".config/syncthing"
         ".mozilla"
-        #".config/vivaldi/"
         ".floorp"
         { directory = ".local/share/Steam"; }
         { directory = ".ssh"; mode = "0700"; }

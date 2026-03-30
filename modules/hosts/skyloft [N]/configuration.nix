@@ -20,6 +20,7 @@
       vscodium
       firefox
       open-vpn
+      luanti
     ];
 
     nixpkgs.config.allowUnsupportedSystem = true;

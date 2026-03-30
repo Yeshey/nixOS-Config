@@ -57,7 +57,7 @@ in
           "/var/lib/bluetooth"
           "/var/lib/nixos"
           "/etc/xrdp/"
-          "/var/lib/systemd/coredump"
+          "/var/lib/systemd/matches"
           "/etc/NetworkManager/system-connections"
           { directory = "/etc/ssh"; mode = "0755"; }
           { directory = "/var/lib/colord"; user = "colord"; group = "colord"; mode = "u=rwx,g=rx,o="; }
