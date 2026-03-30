@@ -1,12 +1,12 @@
-{ ... }:
+{ inputs, ... }:
 {
-  flake.modules.nixos.xrdp =
-    { ... }:
+  flake.modules.nixos.vnstat =
+    { config, ... }:
     {
-      environment.persistence."/persistent" = {
-        files = [
-          "/run/xrdp/rsakeys.ini" # server identity key
-        ];
+      environment = inputs.self.lib.mkIfPersistence config {
+        persistence."/persistent".directories = [{
+          directory = "/run/xrdp";
+        }];
       };
     };
 }
