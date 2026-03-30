@@ -31,8 +31,6 @@
           files = [
             # syncthing
             ".stignore"
-            ".zsh_history"
-            ".bash_history"
             ".python_history"
           ];
         };
