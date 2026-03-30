@@ -11,7 +11,7 @@
       let
         baseSettings = builtins.fromJSON (builtins.readFile ./VSCsettings.json);
         userSettings = baseSettings // {
-          "ltex.ltex-ls.path" = "${pkgs.ltex-ls-plus}";
+          # "ltex.ltex-ls.path" = "${pkgs.ltex-ls-plus}";
           "ltex.additionalRules.languageModel" = "${ngram-en}";
         };
       in
@@ -59,7 +59,7 @@
           home.packages = with pkgs; [
             nixd
             nixfmt-rfc-style
-            ltex-ls-plus
+            # ltex-ls-plus
           ];
         };
       };

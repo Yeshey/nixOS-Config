@@ -95,7 +95,7 @@
           cairo
           atk
           gdk-pixbuf
-          fontconfig
+          # fontconfig # TODO
           freetype
           dbus
           alsa-lib
