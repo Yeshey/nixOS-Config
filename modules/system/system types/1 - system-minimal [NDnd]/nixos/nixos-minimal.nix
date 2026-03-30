@@ -43,7 +43,7 @@
         experimental-features = [
           "nix-command"
           "flakes"
-          # "allow-import-from-derivation"
+          "pipe-operators"
         ];
 
         download-buffer-size = 1024 * 1024 * 1024;

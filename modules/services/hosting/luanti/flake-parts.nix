@@ -1,6 +1,14 @@
 {
+  inputs,
+  ...
+}:
+{
   flake-file.inputs.nix-luanti = {
-    url = "github:minetest/nix-luanti"; # adjust to the actual flake URL you use
+    url = "gitlab:leonard/nix-luanti?host=git.menzel.lol";
     inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+  flake = {
+    overlays.nix-luanti = inputs.nix-luanti.overlays.default;
   };
 }

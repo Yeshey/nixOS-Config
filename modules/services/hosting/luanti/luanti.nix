@@ -5,7 +5,9 @@
     {
       imports = [ inputs.nix-luanti.nixosModules.default ];
 
-      nixpkgs.overlays = [ inputs.nix-luanti.overlays.default ];
+      experimental-features = [
+        "pipe-operators"
+      ];
 
       # Worlds are in /var/lib/luanti-<serverName>/world
       # To migrate a world:
