@@ -1,12 +1,13 @@
 { inputs, ... }:
 {
-  flake.modules.nixos.openvscode-server =
+  flake.modules.nixos.open-vpn =
     { config, ... }:
     {
       environment = inputs.self.lib.mkIfPersistence config {
         persistence."/persistent".users.yeshey.directories = [
-          ".local/share/code-server/User"
-          ".vscode-oss/extensions"
+          "/etc/openvpn/"
+          "/var/lib/openvpn/"
+          "/var/log/openvpn/"
         ];
       };
     };

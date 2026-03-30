@@ -9,16 +9,17 @@
       plasma-full
       systemd-boot
       btrfs
-      # impermanence
+      impermanence
 
       # hosting
       # speedtest-tracker
       vnstat
       searx
-      openvscode-server
+      code-server
       xrdp
       vscodium
       firefox
+      open-vpn
     ];
 
     nixpkgs.config.allowUnsupportedSystem = true;
@@ -53,12 +54,6 @@
       settings.PasswordAuthentication = false;
       settings.KbdInteractiveAuthentication = false;
       settings.PermitRootLogin = "no";
-    };
-
-    openvscode-server = {
-      hostname     = "143.47.53.175";
-      internalPort = 2998;
-      user         = "yeshey";
     };
 
     networking.hostName = "skyloft"; 
