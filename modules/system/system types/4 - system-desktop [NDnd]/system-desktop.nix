@@ -17,7 +17,6 @@
       appimage
 
       waydroid
-      my-scripts
       syncthing
     ];
 
@@ -47,7 +46,6 @@
       vscodium
       zed-editor
 
-      my-scripts
       syncthing
     ];
   };

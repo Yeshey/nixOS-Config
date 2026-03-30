@@ -15,6 +15,7 @@
       ssh
       firmware
       cli-tools
+      my-scripts
     ];
   };
 
@@ -37,6 +38,7 @@
       shell
       starship
       cli-tools
+      my-scripts
     ];
   };
 }
