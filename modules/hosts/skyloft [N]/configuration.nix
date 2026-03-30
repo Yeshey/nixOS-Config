@@ -18,6 +18,8 @@
       openvscode-server
     ];
 
+    nixpkgs.config.allowUnsupportedSystem = true;
+    nixpkgs.config.allowBroken = true;
     restic-rclone-backups.jobs.servers = {
       enable           = true;
       user             = "root";

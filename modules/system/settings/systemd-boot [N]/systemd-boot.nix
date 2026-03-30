@@ -9,6 +9,7 @@
       systemd-boot = {
         enable = true;
         configurationLimit = 15;
+        memtest86.enable = true;
       };
     };
   };
