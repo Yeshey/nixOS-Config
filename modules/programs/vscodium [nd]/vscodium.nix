@@ -17,7 +17,7 @@
       in
         {
           home.file."/home/${config.home.username}/.openvscode-server/data/Machine/settings.json" = {
-            text = builtins.toJSON userSettings; # Converts the Nix set back to a JSON string
+            text = builtins.toJSON userSettings;
             force = true;
           };
           
