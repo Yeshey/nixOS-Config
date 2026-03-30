@@ -4,11 +4,13 @@
     { config, ... }:
     {
       environment = inputs.self.lib.mkIfPersistence config {
-        persistence."/persistent".users.yeshey.directories = [
-          "/etc/openvpn/"
-          "/var/lib/openvpn/"
-          "/var/log/openvpn/"
-        ];
+        persistence."/persistent" = {
+          directories = [
+            "/etc/openvpn"
+            "/var/lib/openvpn"
+            "/var/log/openvpn"
+          ];
+        };
       };
     };
 }

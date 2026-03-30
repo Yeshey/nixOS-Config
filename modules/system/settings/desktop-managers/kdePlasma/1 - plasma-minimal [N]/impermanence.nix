@@ -13,7 +13,7 @@
         persistence."/persistent" = {
           hideMounts = true;
           directories = [
-            ".local/share/baloo" # KDE plasma files index
+            # ".local/share/baloo" # KDE plasma files index
           ];
         };
       };
