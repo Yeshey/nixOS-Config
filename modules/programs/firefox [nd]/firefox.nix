@@ -1,5 +1,13 @@
+{ inputs, ... }:
 {
-  flake.modules.homeManager.firefox-browser =
+  flake.modules.nixos.firefox =
+    {
+      home-manager.sharedModules = [
+        inputs.self.modules.homeManager.firefox
+      ];
+    }; 
+
+  flake.modules.homeManager.firefox =
     {
       pkgs,
       lib,

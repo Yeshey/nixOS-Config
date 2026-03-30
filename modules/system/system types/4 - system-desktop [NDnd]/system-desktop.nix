@@ -46,7 +46,7 @@
     imports = with inputs.self.modules.homeManager; [
       system-cli
       desktop-apps
-      firefox-browser
+      firefox
       vscodium
       zed-editor
 

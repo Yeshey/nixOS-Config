@@ -18,6 +18,7 @@
       openvscode-server
       xrdp
       vscodium
+      firefox
     ];
 
     nixpkgs.config.allowUnsupportedSystem = true;
