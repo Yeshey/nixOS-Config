@@ -48,16 +48,15 @@
   flake.modules.homeManager.gnome-base = { lib, ... }: {
     imports = [ inputs.self.modules.homeManager.gnome-minimal ];
 
-    # TODO
     # Make sure correct fonts/icons are used (useful if you switch from KDE)
-    # gtk.enable = true;
-    # fonts.fontconfig.enable = true;
-    # home.activation.cleanupKdeTrash = lib.hm.dag.entryAfter ["writeBoundary"] ''
-    #   $DRY_RUN_CMD rm -rf $VERBOSE_ARG \
-    #     ~/.config/gtk-3.0 ~/.config/gtk-4.0 \
-    #     ~/.config/fontconfig ~/.fonts.conf \
-    #     ~/.cache/icon-cache.kcache
-    # '';
+    gtk.enable = true;
+    fonts.fontconfig.enable = true;
+    home.activation.cleanupKdeTrash = lib.hm.dag.entryAfter ["writeBoundary"] ''
+      $DRY_RUN_CMD rm -rf $VERBOSE_ARG \
+        ~/.config/gtk-3.0 ~/.config/gtk-4.0 \
+        ~/.config/fontconfig ~/.fonts.conf \
+        ~/.cache/icon-cache.kcache
+    '';
 
     # Templates for right click context window
     home.file."Templates/Markdown.md".text = "";

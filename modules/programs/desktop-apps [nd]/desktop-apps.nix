@@ -30,12 +30,12 @@
             audacity
             unstable.floorp-bin
             brave
-            # tor-browser
+            tor-browser
             qutebrowser
             qpwgraph # ch.ange sound inputs and outputs
 
             # gaming
-            # unstable.osu-lazer-bin
+            unstable.osu-lazer-bin
             bottles
             prismlauncher # polymc # prismlauncher # for Minecraft
             heroic
