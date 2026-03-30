@@ -9,6 +9,8 @@
 
       config.systemConstants = {
         adminEmail = "admin@test.org";
+        isGnome = lib.mkDefault false;
+        isKdePlasma = lib.mkDefault false;
       };
     };
 }

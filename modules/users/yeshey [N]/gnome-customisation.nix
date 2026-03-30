@@ -1,20 +1,11 @@
-let
-  username = "yeshey";
+let 
+  username = "yeshey"; 
 in
 {
-  flake.modules.homeManager.${username} = 
-    { pkgs, lib, config, osConfig, ... }: 
-    let
-      isGnome = osConfig.services.desktopManager.gnome.enable or false;
-    in
+  flake.modules.homeManager.${username} =
+    { pkgs, lib, osConfig, ... }:
     {
-      options.${username}.enableGnomeCustomizations = lib.mkOption {
-        type = lib.types.bool;
-        default = isGnome || false; # osConfig detects gnome in NixOS, and you can override in HM standalone
-        description = "Enable ${username}'s gnome customizations. Auto-detected on NixOS, set manually for standalone HM.";
-      };
-
-      config = lib.mkIf config.${username}.enableGnomeCustomizations {
+      config = lib.mkIf (osConfig.systemConstants.isGnome or false) {
         home.packages = with pkgs; [
           networkmanagerapplet # Has for example "Automatically connect to VPN when using this connection"
           

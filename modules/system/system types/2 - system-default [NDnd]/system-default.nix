@@ -24,14 +24,18 @@
         systemConstants
         pkgs-by-name
       ]);
+      
+    home-manager.sharedModules = [
+      inputs.self.modules.homeManager.system-default
+    ];
 
-      boot.tmp.cleanOnBoot = lib.mkDefault true;
-      boot.supportedFilesystems = [ "ntfs" "btrfs" ];
-      systemd.services.avahi-daemon = {
-        serviceConfig.ExecStartPre = lib.mkBefore [
-          "+${pkgs.coreutils}/bin/rm -f /run/avahi-daemon/pid"
-        ];
-      };
+    boot.tmp.cleanOnBoot = lib.mkDefault true;
+    boot.supportedFilesystems = [ "ntfs" "btrfs" ];
+    systemd.services.avahi-daemon = {
+      serviceConfig.ExecStartPre = lib.mkBefore [
+        "+${pkgs.coreutils}/bin/rm -f /run/avahi-daemon/pid"
+      ];
+    };
   };
 
   flake.modules.darwin.system-default = {

@@ -1,25 +1,20 @@
-{ inputs, ... }:
-let
+# idk whats the best way to do this, I should maybe use den man, they even have the conditionalAspect: https://github.com/vic/den/blob/main/templates/ci/modules/features/conditional-config.nix
+{
+  inputs,
+  ...
+}:
+let 
   username = "yeshey";
 in
 {
-  flake.modules.homeManager.${username} = 
-    { pkgs, lib, config, osConfig, ... }: 
-    let
-      isKdePlasma = osConfig.services.desktopManager.plasma6.enable or false;
-    in
+  flake.modules.homeManager.${username} =
+    { pkgs, lib, osConfig, ... }:
     {
       imports = [
         inputs.plasma-manager.homeModules.plasma-manager
       ];
 
-      options.${username}.enableKdePlasmaCustomizations = lib.mkOption {
-        type = lib.types.bool;
-        default = isKdePlasma || false; # osConfig detects plasma in NixOS, and you can override in HM standalone
-        description = "Enable ${username}'s KDE Plasma customizations. Auto-detected on NixOS, set manually for standalone HM.";
-      };
-
-      config = lib.mkIf config.${username}.enableKdePlasmaCustomizations {
+      config = lib.mkIf (osConfig.systemConstants.isKdePlasma or false) {
         home.packages = [ pkgs.banana-cursor ];
 
         # options: https://nix-community.github.io/plasma-manager/options.xhtml

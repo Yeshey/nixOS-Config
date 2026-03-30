@@ -36,7 +36,6 @@ in
     { pkgs, ... }:
     {
       imports = with inputs.self.modules.homeManager; [
-        system-desktop
       ];
 
       home.username = "${username}";

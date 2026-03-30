@@ -17,6 +17,10 @@
       cli-tools
       my-scripts
     ];
+
+    home-manager.sharedModules = [
+      inputs.self.modules.homeManager.system-cli
+    ];
   };
 
   flake.modules.darwin.system-cli = {
