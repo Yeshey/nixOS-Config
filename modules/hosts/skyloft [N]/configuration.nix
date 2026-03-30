@@ -16,6 +16,7 @@
       vnstat
       searx
       openvscode-server
+      xrdp
     ];
 
     nixpkgs.config.allowUnsupportedSystem = true;
