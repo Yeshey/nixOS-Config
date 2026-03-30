@@ -1,5 +1,12 @@
 { inputs, ... }:
 {
+  flake.modules.nixos.vscodium =
+    {
+      home-manager.sharedModules = [
+        inputs.self.modules.homeManager.vscodium
+      ];
+    }; 
+
   flake.modules.homeManager.vscodium =
     { pkgs, config, ... }:
     let

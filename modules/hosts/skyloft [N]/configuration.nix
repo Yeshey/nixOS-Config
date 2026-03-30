@@ -17,6 +17,7 @@
       searx
       openvscode-server
       xrdp
+      vscodium
     ];
 
     nixpkgs.config.allowUnsupportedSystem = true;
