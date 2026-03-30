@@ -27,6 +27,10 @@
       url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     flake-file.url = "github:vic/flake-file";
     flake-parts.url = "github:hercules-ci/flake-parts";
     home-manager = {
@@ -46,6 +50,10 @@
     };
     nix-languagetool-ngram = {
       url = "github:Janik-Haag/nix-languagetool-ngram";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-luanti = {
+      url = "github:minetest/nix-luanti";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nixos-hardware.url = "github:mexisme/nixos-hardware/microsoft-surface/update-kernel-6.18.13";

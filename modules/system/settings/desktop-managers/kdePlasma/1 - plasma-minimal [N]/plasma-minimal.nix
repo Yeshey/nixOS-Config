@@ -4,7 +4,6 @@
 }:
 {
   flake.modules.nixos.plasma-minimal = 
-    { lib, ... }:
     {
       home-manager.sharedModules = [
         inputs.self.modules.homeManager.plasma-minimal
