@@ -31,14 +31,13 @@
     ];
     nixpkgs.config.allowUnsupportedSystem = true;
     nixpkgs.config.allowBroken = true;
+
     restic-rclone-backups.jobs.servers = {
       enable           = true;
       user             = "root";
       paths            = [
         "/var/lib/luanti-anarchyMineclone2/world"
-        "/srv/minecraft/mainServer/world"
-        "/srv/minecraft/familiaLopesTAISCTE"
-        "/srv/minecraft/tunaCraft"
+        "/srv/minecraft"
         "/opt/docker/overleaf/overleaf-data"
       ];
       rcloneRemoteName = "OneDriveISCTE";
