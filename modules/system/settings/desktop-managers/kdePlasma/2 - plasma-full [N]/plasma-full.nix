@@ -48,8 +48,6 @@
 
   flake.modules.homeManager.plasma-full = 
     {
-      imports = with inputs.self.modules.homeManager; [
-        plasma-minimal
-      ];
+
     };
 }

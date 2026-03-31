@@ -15,9 +15,6 @@
   flake.modules.homeManager.gnome-full = 
     { pkgs, ... }: 
     {
-      imports = with inputs.self.modules.homeManager; [
-        gnome-base
-      ];
       home.packages = with pkgs; [
         gnomeExtensions.appindicator # system tray
         gnomeExtensions.system-monitor # official gnome extension

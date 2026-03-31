@@ -61,7 +61,6 @@
     imports =
       with inputs.self.modules.homeManager;
       [
-        system-minimal
         safe-rm
         gc
         nix-index-database
