@@ -1,13 +1,17 @@
 {
+  inputs,
+  ...
+}:
+{
   flake.modules.homeManager.skyloft =
     { lib, osConfig, ... }:
     {
+      imports = [ inputs.plasma-manager.homeModules.plasma-manager ];
       config = lib.mkIf (osConfig.systemConstants.isKdePlasma or false) {
-        # server should auto logout bc GUI uses a lot of CPU
-        xdg.configFile."powerdevilrc".text = ''
-          [AC][RunScript]
-          IdleTimeoutCommand=qdbus org.kde.LogoutPrompt /LogoutPrompt org.kde.LogoutPrompt.promptLogout
-        '';
+        programs.plasma.configFile."powerdevilrc"."AC/RunScript" = {
+          "IdleTimeoutCommand" = lib.mkForce "qdbus org.kde.LogoutPrompt /LogoutPrompt org.kde.LogoutPrompt.promptLogout";
+          "idleTime" = lib.mkForce 600000;
+        };
       };
     };
 }

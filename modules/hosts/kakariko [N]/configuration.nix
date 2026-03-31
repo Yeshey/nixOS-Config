@@ -20,6 +20,9 @@
       # hosting
       # speedtest-tracker
     ];
+    home-manager.sharedModules = [
+      inputs.self.modules.homeManager.kakariko
+    ];
 
     my-scripts = {
       enable = true;
@@ -39,4 +42,6 @@
 
     networking.hostName = "kakariko"; 
   };
+
+  flake.modules.homeManager.kakariko = { };
 }

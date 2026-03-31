@@ -21,6 +21,9 @@
       # hosting
       # speedtest-tracker
     ];
+    home-manager.sharedModules = [
+      inputs.self.modules.homeManager.hyrulecastle
+    ];
 
     hardware.nvidia.prime.busIds = {
       intel = "PCI:0:2:0";
@@ -42,4 +45,5 @@
 
     networking.hostName = "hyrulecastle"; 
   };
+  flake.modules.homeManager.hyrulecastle = { };
 }

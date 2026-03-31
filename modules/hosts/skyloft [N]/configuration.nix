@@ -6,7 +6,7 @@
   flake.modules.nixos.skyloft = {
     imports = with inputs.self.modules.nixos; [
       system-cli
-      plasma-full
+      plasma-minimal
       systemd-boot
       btrfs
       impermanence
@@ -22,7 +22,9 @@
       open-vpn
       luanti
     ];
-
+    home-manager.sharedModules = [
+      inputs.self.modules.homeManager.skyloft
+    ];
     nixpkgs.config.allowUnsupportedSystem = true;
     nixpkgs.config.allowBroken = true;
     restic-rclone-backups.jobs.servers = {
@@ -59,4 +61,5 @@
 
     networking.hostName = "skyloft"; 
   };
+  flake.modules.homeManager.skyloft = { };
 }
