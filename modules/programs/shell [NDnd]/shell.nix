@@ -57,14 +57,8 @@
           ${lib.optionalString (builtins.pathExists ./git.zsh) (builtins.readFile ./git.zsh)}
           ${lib.optionalString (builtins.pathExists ./myAlias.zsh) (builtins.readFile ./myAlias.zsh)}
 
-          # Keybindings for word navigation (standard for xterm-256color)
-          bindkey "^[[1;5C" forward-word
-          bindkey "^[[1;5D" backward-word
-          bindkey '^[[Z' reverse-menu-complete
-
           # Plugin sources
           source ${pkgs.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh
-          source ${pkgs.zsh-vi-mode}/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
           source ${pkgs.zsh-you-should-use}/share/zsh/plugins/you-should-use/you-should-use.plugin.zsh
         '';
 
@@ -76,6 +70,7 @@
             "alias-finder"
             "urltools"
             "bgnotify"
+            "history-substring-search"
           ];
           theme = "agnoster";
         };
@@ -83,7 +78,6 @@
 
       home.packages = with pkgs; [
         zsh-nix-shell
-        zsh-vi-mode
         zsh-you-should-use
       ];
 
