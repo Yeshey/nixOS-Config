@@ -72,7 +72,8 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 - Derived from [LongerHV's](https://github.com/LongerHV) [nixos-configuration](https://github.com/LongerHV/nixos-configuration/tree/master);
 - Based on [Misterio77's](https://github.com/Misterio77) [nix-starter-configs](https://github.com/Misterio77/nix-starter-configs);
 - Inspiered by [pinage404](https://gitlab.com/pinage404) [dotfiles](https://gitlab.com/pinage404/dotfiles)
-- (Future?/To-Do) Looking into [mightyiam's](https://github.com/mightyiam) [config](https://github.com/mightyiam/infra) and [Dendritic Pattern](https://github.com/mightyiam/dendritic)
+- Refactored using the [Dendritic Pattern](https://github.com/mightyiam/dendritic), basing off of [these docs and examples](https://github.com/Doc-Steve/dendritic-design-with-flake-parts)!
+- (Future/To-Do?) Maybe It would have been easier to use the [`den` framework](https://github.com/vic/den)... keep an eye on it.
 
 ## Highlights:
 
