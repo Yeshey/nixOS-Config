@@ -41,5 +41,17 @@
       };
     };
 
+    mkNixOnDroid = name: {
+      ${name} = inputs.nix-on-droid.lib.nixOnDroidConfiguration {
+        pkgs = import inputs.nixpkgs {
+          system = "aarch64-linux";
+          config.allowUnfree = true;
+        };
+        modules = [
+          inputs.self.modules.nixOnDroid.${name}
+        ];
+      };
+    };
+
   };
 }
