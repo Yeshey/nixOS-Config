@@ -46,6 +46,7 @@ in
 
       imports = with inputs.self.modules.homeManager; [
         my-scripts
+        desktop-items
       ];
 
       config = {
