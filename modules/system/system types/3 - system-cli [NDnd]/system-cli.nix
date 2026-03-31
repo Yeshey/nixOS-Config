@@ -11,7 +11,7 @@
 
       direnv
       shell
-      # starship
+      starship
       ssh
       firmware
       cli-tools
@@ -40,7 +40,7 @@
       nh
       direnv
       shell
-      # starship
+      starship
       cli-tools
       my-scripts
     ];
