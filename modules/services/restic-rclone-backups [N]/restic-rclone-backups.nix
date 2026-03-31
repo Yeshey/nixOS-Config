@@ -48,7 +48,7 @@ let
       "**/.cache"      "**/.git"         "**/node_modules"
       "**/Cache"       "**/_build"        "**/venv"
       "**/.venv"       "**/Steam"         "**/Trash"
-      "**/.var/app/*/cache/"
+      "**/.var/app/*/cache/" "**/.local/share/waydroid"
     ] ++ job.exclude;
 
     extraBackupArgs = [ "--verbose=1" ] ++ job.extraBackupArgs;
