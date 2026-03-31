@@ -3,6 +3,20 @@
   ...
 }:
 {
+  flake.modules.nixos.ssh =
+    { ... }:
+    {
+      home-manager.sharedModules = [
+        inputs.self.modules.homeManager.ssh
+      ];
+
+      environment.persistence."/persistent" = {
+        directories = [
+          { directory = "/etc/ssh"; mode = "0755"; }
+        ];
+      };
+    };
+
   flake.modules.homeManager.ssh =
     {
       config,
@@ -16,16 +30,6 @@
             { directory = ".ssh"; mode = "0700"; }
           ];
         };
-      };
-    };
-
-  flake.modules.nixos.impermanence =
-    { ... }:
-    {
-      environment.persistence."/persistent" = {
-        directories = [
-          { directory = "/etc/ssh"; mode = "0755"; }
-        ];
       };
     };
 }

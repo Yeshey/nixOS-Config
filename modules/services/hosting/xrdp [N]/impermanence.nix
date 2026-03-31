@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  flake.modules.nixos.vnstat =
+  flake.modules.nixos.xrdp =
     { config, ... }:
     {
       environment = inputs.self.lib.mkIfPersistence config {
