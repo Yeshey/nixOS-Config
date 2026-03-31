@@ -4,7 +4,6 @@ The spiciest config on the market [😳🥵💦](https://matias.me/nsfw/)
 # TODO
 - Standalone Home Manager
 - check what is Factory
-- Idk if restic backups are working yet
 
 My reproducible nix Configuration & other configuration files.
 More Documentation (for myself) about nixOS in my [TechNotes Repo](https://github.com/Yeshey/TechNotes).
