@@ -32,7 +32,7 @@
             enable = true;
             settings.user.name  = "Yeshey";
             settings.user.email = "yesheysangpo@hotmail.com";
-            gpg.format = null;
+            signing.format = null;
           };
           programs.zsh = {
             enable = true;
