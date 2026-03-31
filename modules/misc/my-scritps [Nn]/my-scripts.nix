@@ -11,7 +11,9 @@ let
       'echo "Cleaning repository in $(pwd)"; git clean -fdx' \;
   '';
 
-  portableScripts = pkgs: [ (mkCleanSyncthing pkgs) (mkCleanGit pkgs) ];
+  combfiles = pkgs: pkgs.writeShellScriptBin "combfiles" (builtins.readFile ./combfiles.sh);
+
+  portableScripts = pkgs: [ (mkCleanSyncthing pkgs) (mkCleanGit pkgs) (combfiles pkgs) ];
 in
 {
   flake.modules.nixos.my-scripts =
