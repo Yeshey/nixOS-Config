@@ -13,12 +13,10 @@ in
 {
   options.toHost.openhands = {
     enable = lib.mkEnableOption "openhands";
-    # You can add more options here if needed, e.g. for port, state directory, etc.
   };
 
   config = lib.mkIf cfg.enable {
 
-    # Enable Podman/OCI container support.
     virtualisation.podman.enable = true;
 
     # a good local LLM to use with this: https://ollama.com/skratos115/qwen2-7b-opendevin-f16
@@ -53,11 +51,6 @@ in
         ];
       };
     };
-    # WORKSPACE_DIR="./workspace"
-    # LLM_API_KEY="ollama"
-    # LLM_BASE_URL="http://localhost:11434"
-    # LLM_EMBEDDING_MODEL="local"
-    # LLM_MODEL ='ollama/llama2'
 
     systemd.services.podman-openhands = {
       # This adds to the settings that were already there
@@ -110,24 +103,5 @@ in
         xdg-utils
         openhandsWeb
       ];
-
-    # This should be to serve the model that seems to be the best one rn for openHands: https://www.all-hands.dev/blog/introducing-openhands-lm-32b----a-strong-open-coding-agent-model
-    # You can use vllm to serve or maybe better sglang. Former has build errors, latter is not yet packaged, but seems like it might be soon.
-    # systemd.services.vllm-openhands = {
-    #   description = "vLLM server for all-hands/openhands-lm-32b-v0.1 model";
-    #   wantedBy = [ "multi-user.target" ];
-    #   wants = [ "my-network-online.service" ];
-    #   after = [ "my-network-online.service" ];
-    #   script = ''
-    #     exec ${pkgs.python312Packages.vllm}/bin/python -m vllm.serve.serve --model=all-hands/openhands-lm-32b-v0.1 --port=11112
-    #   '';
-    #   serviceConfig = {
-    #     Restart = "always";
-    #     RestartSec = "5";
-    #     User = "root";
-    #     #WorkingDirectory = "${home}";
-    #   };
-    # };
-
   };
 }

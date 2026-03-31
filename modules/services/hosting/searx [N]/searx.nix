@@ -6,9 +6,9 @@
         enable = true;
         settings = {
           server = {
-            port         = 8888;
+            port         = 5564;
             bind_address = "0.0.0.0";
-            secret_key   = "secret key"; # TODO: replace with agenix secret
+            secret_key   = "secret key";
           };
           search.formats = [ "html" "json" ]; # json needed for ollama
         };

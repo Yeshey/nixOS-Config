@@ -21,6 +21,9 @@
       firefox
       open-vpn
       luanti
+      jupyter
+      ollama
+      kubo
     ];
     home-manager.sharedModules = [
       inputs.self.modules.homeManager.skyloft

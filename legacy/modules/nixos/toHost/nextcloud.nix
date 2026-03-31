@@ -28,7 +28,7 @@ in
     services.nextcloud = {
       enable = true;
       # Remove specific version to prevent downgrade issues
-      package = pkgs.nextcloud31;
+      package = pkgs.nextcloud33;
       hostName = cfg.hostName;
       
       # Auto-update Nextcloud Apps
