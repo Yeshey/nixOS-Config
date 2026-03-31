@@ -30,7 +30,6 @@
           ];
           files = [
             # syncthing
-            ".stignore"
             ".python_history"
           ];
         };
