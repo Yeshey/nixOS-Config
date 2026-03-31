@@ -43,7 +43,7 @@
       ];
       rcloneRemoteName = "OneDriveISCTE";
       rcloneRemotePath = "ResticBackups/servers";
-      rcloneConfigFile = "/home/yeshey/.config/rclone/rclone.conf";
+      rcloneConfigFile = "/root/.config/rclone/rclone.conf";
       passwordFile     = builtins.toFile "restic-password" "123456789";
       initialize       = true;
       startAt          = "*-*-* 14:00:00";

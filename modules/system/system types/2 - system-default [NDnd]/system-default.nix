@@ -66,6 +66,7 @@
         nix-index-database
         secrets
         nix-your-shell
+        restic-rclone-backups
       ]
       ++ [ inputs.self.modules.generic.systemConstants ];
   };
