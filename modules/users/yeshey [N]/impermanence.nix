@@ -22,6 +22,8 @@
             ".setup"
             ".gnupg"
             ".floorp"
+            ".config/rclone"
+            ".config/org.restic.browser"
             { directory = ".local/share/keyrings"; mode = "0700"; }
 
             # syncthing

@@ -41,8 +41,6 @@
           "/var/lib/systemd/coredump"
           "/var/lib/systemd/matches"
           "/etc/NetworkManager/system-connections"
-          ".config/rclone/"
-          ".config/org.restic.browser/"
           { directory = "/var/lib/colord"; user = "colord"; group = "colord"; mode = "u=rwx,g=rx,o="; }
         ];
         files = [
