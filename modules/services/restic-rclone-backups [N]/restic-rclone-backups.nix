@@ -76,10 +76,12 @@
             };
 
             backupPrepareCommand = ''
-              while ! ping -c 1 1.0.0.1 &>/dev/null; do
-                echo "Waiting for internet..."
+              while ! /run/current-system/sw/bin/ping -c 1 1.0.0.1; do
+                echo "Waiting for internet connection..."
                 sleep 60
               done
+
+              echo "Internet is up, let's upload ~raccoon memes~ some backups!"
             '';
           }
         ) config.restic-rclone-backups.jobs;
