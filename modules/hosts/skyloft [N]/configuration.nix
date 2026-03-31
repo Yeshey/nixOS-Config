@@ -24,6 +24,7 @@
       jupyter
       ollama
       kubo
+      minecraft
     ];
     home-manager.sharedModules = [
       inputs.self.modules.homeManager.skyloft

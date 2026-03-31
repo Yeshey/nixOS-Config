@@ -56,6 +56,10 @@
       url = "gitlab:leonard/nix-luanti?host=git.menzel.lol";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-minecraft = {
+      url = "github:Yeshey/nix-minecraft";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
     nixos-hardware.url = "github:mexisme/nixos-hardware/microsoft-surface/update-kernel-6.18.13";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-25.11-darwin";
