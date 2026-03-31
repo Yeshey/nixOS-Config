@@ -1,11 +1,8 @@
 {
-  flake.modules.homeManager.skyloft = 
-    { lib, osConfig, ... }: 
-    let
-      isKdePlasma = osConfig.services.desktopManager.plasma6.enable or false;
-    in
+  flake.modules.homeManager.skyloft =
+    { lib, osConfig, ... }:
     {
-      config = lib.mkIf isKdePlasma {
+      config = lib.mkIf (osConfig.systemConstants.isKdePlasma or false) {
         # server should auto logout bc GUI uses a lot of CPU
         xdg.configFile."powerdevilrc".text = ''
           [AC][RunScript]
