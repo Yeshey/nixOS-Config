@@ -19,6 +19,7 @@
         { ... }:
         {
           imports = with inputs.self.modules.homeManager; [
+            # system-cli
             shell
             starship
             direnv
@@ -27,7 +28,6 @@
             nix-index-database
             nix-your-shell
             gc
-            safe-rm
           ];
 
           programs.git = {
