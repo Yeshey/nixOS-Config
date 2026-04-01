@@ -19,17 +19,16 @@
         { ... }:
         {
           imports = with inputs.self.modules.homeManager; [
-            # system-cli
-            system-cli
+            system-minimal
 
-            # shell
-            # starship
-            # direnv
-            # cli-tools
-            # nh
-            # nix-index-database
-            # nix-your-shell
-            # gc
+            shell
+            starship
+            direnv
+            cli-tools
+            nh
+            nix-index-database
+            nix-your-shell
+            gc
           ];
 
           programs.git = {
