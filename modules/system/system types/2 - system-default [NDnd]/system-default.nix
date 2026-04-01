@@ -3,7 +3,7 @@
   ...
 }:
 {
-  flake.modules.nixos.system-cli = {
+  flake.modules.nixos.system-default = {
     imports = with inputs.self.modules.nixos; [
       system-default-tier
     ];

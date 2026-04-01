@@ -19,7 +19,7 @@
     ];
   };
 
-  flake.modules.darwin.system-cli-tier = {
+  flake.modules.darwin.system-cli = {
     imports = with inputs.self.modules.darwin; [
       system-default-tier
 
