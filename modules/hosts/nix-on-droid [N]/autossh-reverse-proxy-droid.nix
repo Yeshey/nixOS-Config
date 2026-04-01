@@ -11,22 +11,17 @@
 
       autossh-reverse-proxy = pkgs.writeScriptBin autossh-reverse-proxy-bin ''
         #!${pkgs.runtimeShell}
-        PROXY_RUNNING=$(${pkgs.procps}/bin/ps -a | ${pkgs.toybox}/bin/grep autossh || true)
-        if [ -z "$PROXY_RUNNING" ]; then
-          ${pkgs.autossh}/bin/autossh \
-            -M 0 \
-            -f \
-            -N \
-            -o ExitOnForwardFailure=yes \
-            -o ServerAliveInterval=60 \
-            -o ServerAliveCountMax=3 \
-            -R ${toString remotePort}:localhost:8022 \
-            ${remoteUser}@${remoteIP} \
-            && echo "Reverse proxy started: ${remoteUser}@${remoteIP} port ${toString remotePort}" \
-            || echo "WARNING: reverse proxy failed to start, you won't be able to reach this device remotely"
-        else
-          echo "Reverse proxy already running"
-        fi
+        ${pkgs.autossh}/bin/autossh \
+          -M 0 \
+          -f \
+          -N \
+          -o ExitOnForwardFailure=yes \
+          -o ServerAliveInterval=60 \
+          -o ServerAliveCountMax=3 \
+          -R ${toString remotePort}:localhost:8022 \
+          ${remoteUser}@${remoteIP} \
+          && echo "Reverse proxy started: ${remoteUser}@${remoteIP} port ${toString remotePort}" \
+          || echo "WARNING: reverse proxy failed to start, you won't be able to reach this device remotely"
       '';
     in
     {

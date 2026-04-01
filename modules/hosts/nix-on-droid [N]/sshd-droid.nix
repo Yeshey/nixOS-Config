@@ -33,14 +33,9 @@
         mkdir --parents "${authorizedKeysFolder}"
         ${prefixLines appendAuthorizedKeysFiles authorizedKeysFiles}
 
-        SSHD_RUNNING=$(${pkgs.procps}/bin/ps -a | ${pkgs.toybox}/bin/grep sshd || true)
-        if [ -z "$SSHD_RUNNING" ]; then
-          echo "Starting sshd on port ${lib.concatMapStrings toString ports} in the background"
-          echo "connect with ssh nix-on-droid@<ip> -p 8022"
-          ${pkgs.openssh}/bin/sshd -f "/etc/${configPath}"
-        else
-          echo "sshd already running"
-        fi
+        echo "Starting sshd on port ${lib.concatMapStrings toString ports} in the background"
+        echo "connect with ssh nix-on-droid@<ip> -p 8022"
+        ${pkgs.openssh}/bin/sshd -f "/etc/${configPath}"
       '';
     in
     {
