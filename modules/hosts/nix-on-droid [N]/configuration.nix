@@ -3,8 +3,9 @@
   flake.modules.nixOnDroid.nix-on-droid =
     { pkgs, ... }:
     {
-      imports = [
-        inputs.self.modules.nixOnDroid.sshd
+      imports = with inputs.self.modules.nixOnDroid; [
+        sshd-droid
+        autossh-reverse-proxy-droid
       ];
 
       android-integration.am.enable = true;
@@ -43,9 +44,6 @@
               update = lib.mkForce "rm -rf ~/.cache/nix && nix-on-droid switch --flake github:Yeshey/nixOS-Config#nix-on-droid";
               clean  = lib.mkForce "nix-collect-garbage -d && nix-store --gc && echo 'Displaying stray roots:' && nix-store --gc --print-roots | egrep -v '^(/nix/var|/run/current-system|/run/booted-system|/proc|\\{memory|\\{censored)'";
             };
-            initContent = lib.mkBefore ''
-              sshd-start
-            '';
           };
           home.activation.storageSymlink = ''
             ln -sfn /storage/emulated/0 $HOME/storage

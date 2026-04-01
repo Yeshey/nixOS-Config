@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  flake.modules.nixOnDroid.sshd =
+  flake.modules.nixOnDroid.sshd-droid =
     { config, lib, pkgs, ... }:
     let
       concatLines = list: builtins.concatStringsSep "\n" list;
@@ -33,12 +33,25 @@
         mkdir --parents "${authorizedKeysFolder}"
         ${prefixLines appendAuthorizedKeysFiles authorizedKeysFiles}
 
-        echo "Starting sshd on port ${lib.concatMapStrings toString ports} in the background"
-        echo "connect with ssh nix-on-droid@<ip> -p 8022"
-        ${pkgs.openssh}/bin/sshd -f "/etc/${configPath}"
+        SSHD_RUNNING=$(${pkgs.procps}/bin/ps -a | ${pkgs.toybox}/bin/grep sshd || true)
+        if [ -z "$SSHD_RUNNING" ]; then
+          echo "Starting sshd on port ${lib.concatMapStrings toString ports} in the background"
+          echo "connect with ssh nix-on-droid@<ip> -p 8022"
+          ${pkgs.openssh}/bin/sshd -f "/etc/${configPath}"
+        else
+          echo "sshd already running"
+        fi
       '';
     in
     {
+      home-manager.config =
+        { ... }:
+        {
+          imports = with inputs.self.modules.homeManager; [
+            sshd-droid
+          ];
+        };
+
       environment.etc."${configPath}".text = ''
         ${lib.concatMapStrings (port: "Port ${toString port}\n") ports}
         AuthorizedKeysFile ${authorizedKeysFolder}/%u
@@ -57,5 +70,14 @@
           $DRY_RUN_CMD ${sshd-start}/bin/${sshd-start-bin}
         fi
       '';
+    };
+  flake.modules.homeManager.sshd-droid =
+    { lib, ... }:
+    {
+      programs.zsh = {
+        initContent = lib.mkBefore ''
+          sshd-start
+        '';
+      };
     };
 }
