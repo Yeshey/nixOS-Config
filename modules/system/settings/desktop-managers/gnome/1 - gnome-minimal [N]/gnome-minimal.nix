@@ -1,17 +1,8 @@
 {
-  inputs,
-  lib,
-  ...
-}:
-{
   flake.modules.nixos.gnome-minimal = 
     { lib, ... }:
     {
       systemConstants.isGnome = true;
-
-      home-manager.sharedModules = [
-        inputs.self.modules.homeManager.gnome-minimal
-      ];
       services.displayManager.gdm = {
         enable = true;
       };

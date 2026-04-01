@@ -10,6 +10,7 @@
       with inputs.self.modules.nixos;
       [
         system-minimal
+
         home-manager
         safe-rm
         gc
@@ -24,10 +25,6 @@
         systemConstants
         pkgs-by-name
       ]);
-      
-    home-manager.sharedModules = [
-      inputs.self.modules.homeManager.system-default
-    ];
 
     boot.tmp.cleanOnBoot = lib.mkDefault true;
     boot.supportedFilesystems = [ "ntfs" "btrfs" ];
@@ -43,6 +40,7 @@
       with inputs.self.modules.darwin;
       [
         system-minimal
+
         determinate
         home-manager
         homebrew
@@ -61,6 +59,8 @@
     imports =
       with inputs.self.modules.homeManager;
       [
+        system-minimal
+
         safe-rm
         gc
         nix-index-database

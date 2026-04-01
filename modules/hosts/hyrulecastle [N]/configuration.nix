@@ -45,5 +45,11 @@
 
     networking.hostName = "hyrulecastle"; 
   };
-  flake.modules.homeManager.hyrulecastle = { };
+  flake.modules.homeManager.hyrulecastle = { 
+    imports = with inputs.self.modules.homeManager; [
+      system-desktop # need to figure out how to use home-manager.sharedModules on these tiered modules wihtout importing some HM configurations multiple times
+      gnome-full
+      # plasma-full
+    ];
+  };
 }

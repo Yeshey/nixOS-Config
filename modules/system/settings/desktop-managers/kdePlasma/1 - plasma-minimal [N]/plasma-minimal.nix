@@ -1,16 +1,7 @@
 {
-  inputs,
-  lib,
-  ...
-}:
-{
   flake.modules.nixos.plasma-minimal = 
     {
       systemConstants.isKdePlasma = true;
-
-      home-manager.sharedModules = [
-        inputs.self.modules.homeManager.plasma-minimal
-      ];
       services = {
         desktopManager.plasma6.enable = true;
         displayManager.sddm.enable = true;

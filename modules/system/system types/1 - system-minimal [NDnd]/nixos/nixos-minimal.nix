@@ -9,10 +9,6 @@
   flake.modules.nixos.system-minimal =
     { pkgs, ... }:
     {
-      home-manager.sharedModules = [
-        inputs.self.modules.homeManager.system-minimal
-      ];
-
       nixpkgs.overlays = [
         (final: _prev: {
           unstable = import inputs.nixpkgs-unstable {

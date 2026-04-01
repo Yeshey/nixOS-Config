@@ -17,10 +17,6 @@
       cli-tools
       my-scripts
     ];
-
-    home-manager.sharedModules = [
-      inputs.self.modules.homeManager.system-cli
-    ];
   };
 
   flake.modules.darwin.system-cli = {
@@ -35,6 +31,8 @@
 
   flake.modules.homeManager.system-cli = {
     imports = with inputs.self.modules.homeManager; [
+      system-default
+      
       nh
       direnv
       shell

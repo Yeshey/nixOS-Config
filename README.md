@@ -51,7 +51,7 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
     - `gh auth login`
     - `sudo nixos-rebuild --flake ~/.setup#hyrulecastle --option cores 6 --option max-jobs 3 switch --option access-tokens "github.com=$(gh auth token)"`
 
-### Non-NixOS Home-manager standalone with flakes
+### Non-NixOS Home-manager standalone with flakes (not working rn)
 
 1. Install nix, follow [hm standalone](https://nix-community.github.io/home-manager/index.xhtml#sec-install-standalone). (These instructions assume system wide installation)
 2. `mkdir ~/.setup ; git clone git@github.com:Yeshey/nixOS-Config.git ~/.setup/ --depth 1`

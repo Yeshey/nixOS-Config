@@ -17,7 +17,7 @@
         if pkgs.stdenv.isDarwin then
           (lib.mkForce "/Users/${config.home.username}")
         else
-          "/home/${config.home.username}";
+          lib.mkDefault "/home/${config.home.username}";
       home.stateVersion = lib.mkDefault "25.11";
     };
 }

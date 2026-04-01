@@ -6,9 +6,6 @@
   flake.modules.nixos.plasma-full = 
     { pkgs, ... }: 
     {
-      home-manager.sharedModules = [
-        inputs.self.modules.homeManager.plasma-full
-      ];
       imports = with inputs.self.modules.nixos; [
         plasma-minimal
       ];
@@ -46,8 +43,9 @@
         ];
     };
 
-  flake.modules.homeManager.plasma-full = 
-    {
-
-    };
+  flake.modules.homeManager.plasma-full = {
+    imports = with inputs.self.modules.homeManager; [
+      plasma-minimal
+    ];
+  };
 }

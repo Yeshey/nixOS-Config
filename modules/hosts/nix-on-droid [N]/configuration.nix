@@ -21,8 +21,6 @@
           imports = with inputs.self.modules.homeManager; [
             # system-cli
             system-cli
-            system-default
-            system-minimal
 
             # shell
             # starship

@@ -8,6 +8,7 @@
   flake.modules.nixos.system-desktop = { pkgs, lib, ... }: {
     imports = with inputs.self.modules.nixos; [
       system-cli
+
       flatpak
       printing
       virt
@@ -15,13 +16,8 @@
       adb
       iphone
       appimage
-
       waydroid
       syncthing
-    ];
-
-    home-manager.sharedModules = [
-      inputs.self.modules.homeManager.system-desktop
     ];
 
     programs.gphoto2.enable = true; # to be able to access digital cameras
@@ -44,11 +40,12 @@
 
   flake.modules.homeManager.system-desktop = {
     imports = with inputs.self.modules.homeManager; [
+      system-cli
+
       desktop-apps
       firefox
       vscodium
       zed-editor
-
       syncthing
     ];
   };

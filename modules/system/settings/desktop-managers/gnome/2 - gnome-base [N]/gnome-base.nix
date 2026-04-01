@@ -6,9 +6,6 @@
   flake.modules.nixos.gnome-base = 
     { pkgs, lib, ... }: 
     {
-      home-manager.sharedModules = [
-        inputs.self.modules.homeManager.gnome-base
-      ];
       imports = with inputs.self.modules.nixos; [
         gnome-minimal
       ];
@@ -46,6 +43,9 @@
     };
 
   flake.modules.homeManager.gnome-base = { lib, ... }: {
+    imports = with inputs.self.modules.homeManager; [
+      gnome-minimal
+    ];
     # Make sure correct fonts/icons are used (useful if you switch from KDE)
     gtk.enable = true;
     fonts.fontconfig.enable = true;
