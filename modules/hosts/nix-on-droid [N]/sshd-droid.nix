@@ -51,6 +51,10 @@
         ${lib.concatMapStrings (port: "Port ${toString port}\n") ports}
         AuthorizedKeysFile ${authorizedKeysFolder}/%u
 
+        PubkeyAuthentication yes
+        PasswordAuthentication no
+        StrictModes no
+
         LogLevel VERBOSE
       '';
 
