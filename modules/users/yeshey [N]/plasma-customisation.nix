@@ -8,21 +8,18 @@ let
 in
 {
   flake.modules.homeManager.${username} =
-    { pkgs, lib, osConfig, ... }:
+    { lib, osConfig, ... }:
     {
       imports = [
         inputs.plasma-manager.homeModules.plasma-manager
       ];
 
       config = lib.mkIf (osConfig.systemConstants.isKdePlasma or false) {
-        home.packages = [ pkgs.banana-cursor ];
-
         # options: https://nix-community.github.io/plasma-manager/options.xhtml
         programs.plasma = {
           enable = true;
           workspace = {
             clickItemTo = "open";
-            cursor.theme = "Banana";
           };
           
           powerdevil = {

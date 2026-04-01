@@ -36,7 +36,7 @@ in
     };
 
   flake.modules.homeManager."${username}" =
-    { ... }:
+    { pkgs, ... }:
     {
       options."${username}".dataStoragePath = lib.mkOption {
         type = lib.types.str;
@@ -50,6 +50,13 @@ in
       ];
 
       config = {
+        home.pointerCursor = {
+          name = "Banana";
+          package = pkgs.banana-cursor;
+          gtk.enable = true;
+          x11.enable = true;
+        };
+
         programs = {
           zsh.shellAliases = {
             lg = "lazygit";

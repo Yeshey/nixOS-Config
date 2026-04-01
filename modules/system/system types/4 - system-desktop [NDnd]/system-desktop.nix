@@ -12,4 +12,9 @@
       inputs.self.modules.homeManager.system-desktop-tier
     ];
   };
+  flake.modules.homeManager.system-desktop = {
+    imports = with inputs.self.modules.homeManager; [
+      system-desktop-tier
+    ];
+  };
 }

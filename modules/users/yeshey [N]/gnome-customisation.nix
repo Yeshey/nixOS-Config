@@ -13,7 +13,6 @@ in
           gnomeExtensions.burn-my-windows
           unstable.gnomeExtensions.gnomelets
           gnomeExtensions.night-theme-switcher
-          banana-cursor # for the cursor
         ];
 
         dconf.settings = {
@@ -55,10 +54,6 @@ in
             sleep-inactive-ac-type = "nothing";
             sleep-inactive-battery-timeout = 900;
             sleep-inactive-battery-type = "nothing";
-          };
-
-          "org/gnome/desktop/interface" = {
-            cursor-theme = "Banana";
           };
 
           "org/gnome/nautilus/preferences" = {
