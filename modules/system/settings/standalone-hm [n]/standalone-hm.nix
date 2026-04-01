@@ -1,7 +1,23 @@
+{ inputs, ... }:
 {
   flake.modules.homeManager.standalone-hm =
-    { lib, pkgs, config, inputs, ... }:
+    { lib, pkgs, config, ... }:
     {
+      nixpkgs.overlays = [
+        (final: _prev: {
+          unstable = import inputs.nixpkgs-unstable {
+            inherit (final) config;
+            system = pkgs.stdenv.hostPlatform.system;
+          };
+        })
+        (final: prev: {
+          nur = import inputs.nurpkgs {
+            nurpkgs = prev;
+            pkgs = prev;
+          };
+        })
+      ];
+
       # Ensure nix is in PATH — needed when HM manages nix on non-NixOS
       home.packages = [
         pkgs.hostname

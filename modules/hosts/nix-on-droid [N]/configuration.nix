@@ -13,19 +13,20 @@
       android-integration.xdg-open.enable = true;
 
       environment.packages = with pkgs; [
-        tmux wget tree git
+        tmux wget tree git devenv ookla-speedtest
       ];
 
       home-manager.config =
         { ... }:
         {
           imports = with inputs.self.modules.homeManager; [
-            system-minimal
+            standalone-hm
+            # system-cli
 
             shell
+            ssh
             starship
             direnv
-            # cli-tools
             nh
             nix-index-database
             nix-your-shell
