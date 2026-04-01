@@ -74,7 +74,7 @@
       };
 
       "org/gnome/desktop/datetime" = {
-        automatic-timezone = false; # Gets tricked by VPNs if you don't have location data.
+        automatic-timezone = true; # Gets tricked by VPNs if you don't have location data.
       }; 
 
       "org/gnome/desktop/peripherals/touchpad" = {
