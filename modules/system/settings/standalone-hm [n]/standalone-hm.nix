@@ -40,6 +40,11 @@
           nix-path = lib.mapAttrsToList
             (key: value: "${key}=${value.to.path}")
             config.nix.registry;
+          experimental-features = [
+            "nix-command"
+            "flakes"
+            "pipe-operators"
+          ];
         };
       };
 
