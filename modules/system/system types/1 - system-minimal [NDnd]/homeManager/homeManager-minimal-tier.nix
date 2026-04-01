@@ -5,7 +5,8 @@
 {
   # default settings needed for all homeManagerConfigurations
 
-  flake.modules.homeManager.system-minimal =
+  flake.modules.homeManager.system-minimal-tier
+   =
     {
       config,
       pkgs,

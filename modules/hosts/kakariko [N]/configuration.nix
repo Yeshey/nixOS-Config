@@ -42,11 +42,5 @@
 
     networking.hostName = "kakariko"; 
   };
-  flake.modules.homeManager.kakariko = { 
-    imports = with inputs.self.modules.homeManager; [
-      system-desktop
-      gnome-full
-      # plasma-full
-    ];
-  };
+  flake.modules.homeManager.kakariko = { };
 }

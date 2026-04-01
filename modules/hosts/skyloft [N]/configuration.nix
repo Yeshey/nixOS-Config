@@ -64,10 +64,5 @@
 
     networking.hostName = "skyloft"; 
   };
-  flake.modules.homeManager.skyloft = { 
-    imports = with inputs.self.modules.homeManager; [
-      system-cli
-      plasma-minimal
-    ];
-  };
+  flake.modules.homeManager.skyloft = { };
 }

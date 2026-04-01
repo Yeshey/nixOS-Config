@@ -3,7 +3,7 @@
   ...
 }:
 {
-  flake.modules.homeManager.plasma-minimal =
+  flake.modules.homeManager.plasma-minimal-tier =
     {
       config,
       ...
