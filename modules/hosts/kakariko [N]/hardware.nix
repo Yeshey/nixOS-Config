@@ -73,7 +73,7 @@
       nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
       hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
-      systemd.services.fix-surface-clock = {
+      systemd.services.fix-surface-clock = { # for when the time is so wrong it can't connect to the internet, this uses a http server so it can connect and update the time.
         description = "Fix broken Surface RTC using ntpdate";
         wantedBy = [ "multi-user.target" ];
         after = [ "network-online.target" ];
