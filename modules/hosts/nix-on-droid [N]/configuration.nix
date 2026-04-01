@@ -24,7 +24,7 @@
             shell
             starship
             direnv
-            cli-tools
+            # cli-tools
             nh
             nix-index-database
             nix-your-shell
