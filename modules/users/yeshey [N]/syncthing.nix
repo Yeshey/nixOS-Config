@@ -170,7 +170,7 @@ in
           (?i)AllMusic-mp3
         '';
         ".stignore".text = ''
-          !/.zsh_history
+          !.config/zsh/.zsh_history
           !/.bash_history
           !/.python_history
           // Ignore everything else:

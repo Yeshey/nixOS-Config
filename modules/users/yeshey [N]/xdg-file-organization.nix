@@ -22,5 +22,14 @@
         videos    = lib.mkDefault "${config.home.homeDirectory}/Videos";
       };
     };
+
+    gtk = {
+      enable = true;
+      gtk3.bookmarks = [
+        "sftp://hyrulecastle Hyrule Castle"
+        "sftp://kakariko Kakariko"
+        "sftp://oracle Oracle"
+      ];
+    };
   };
 }

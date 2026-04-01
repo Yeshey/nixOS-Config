@@ -52,7 +52,7 @@ Host hyrulecastle-vpn
 # Second hop: Connect from remote server to the surface Pro
 Host kakariko
   HostName localhost
-  Port 2333
+  Port 2233
   User yeshey
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
@@ -61,7 +61,7 @@ Host kakariko
 # Second hop: Connect from remote server to the surface Pro
 Host kakarikoroot
   HostName localhost
-  Port 2333
+  Port 2233
   User root
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
