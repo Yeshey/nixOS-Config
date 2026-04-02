@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  flake.modules.nixOnDroid.root-droid =
+  flake.modules.nixOnDroid.root-droid =  
     { pkgs, ... }:
     let
       drop-root = pkgs.writeScriptBin "drop-root" ''
