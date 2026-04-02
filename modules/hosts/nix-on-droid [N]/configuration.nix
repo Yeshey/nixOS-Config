@@ -18,7 +18,7 @@
         procps diffutils findutils util-linux
         zip unzip gnutar gzip xz
         gnugrep gnused nano
-        devenv ookla-speedtest
+        devenv ookla-speedtest btop
       ];
 
       home-manager.config =
@@ -47,7 +47,7 @@
           programs.zsh = {
             enable = true;
             shellAliases = {
-              update-remote = lib.mkForce "rm -rf ~/.cache/nix && nix-on-droid switch --flake github:Yeshey/nixOS-Config#nix-on-droid --max-jobs 1 --option 'experimental-features' 'nix-command flakes pipe-operators' -v |& ${pkgs.nix-output-monitor}/bin/nom";
+              update-remote = lib.mkForce "nix-on-droid switch --flake github:Yeshey/nixOS-Config#nix-on-droid --max-jobs 1 --option 'experimental-features' 'nix-command flakes pipe-operators' -v |& ${pkgs.nix-output-monitor}/bin/nom";
               update = lib.mkForce "echo 'updating from local .setup...' && nix-on-droid switch --flake $HOME/.setup#nix-on-droid --max-jobs 1 --option 'experimental-features' 'nix-command flakes pipe-operators' -v |& ${pkgs.nix-output-monitor}/bin/nom";
               clean  = lib.mkForce "nix-collect-garbage -d && nix-store --gc && echo 'Displaying stray roots:' && nix-store --gc --print-roots | egrep -v '^(/nix/var|/run/current-system|/run/booted-system|/proc|\\{memory|\\{censored)'";
             };
