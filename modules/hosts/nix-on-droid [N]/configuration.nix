@@ -31,6 +31,7 @@
             standalone-hm
             # system-cli
 
+            zed-editor-host
             nvix
             tmux
             shell
