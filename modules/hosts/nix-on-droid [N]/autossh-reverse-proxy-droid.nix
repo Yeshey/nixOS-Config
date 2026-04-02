@@ -25,7 +25,6 @@
       '';
     in
     {
-      # TODO, is there a difference between home-manager.config and home-manager.sharedModules here?
       home-manager.config =
         { ... }:
         {
