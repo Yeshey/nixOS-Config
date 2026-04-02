@@ -1,7 +1,11 @@
 { inputs, ... }:
 let
-  devTools = pkgs: with pkgs; [ gcc gnumake pkg-config ];
+  devTools = pkgs: with pkgs; [ 
+    lazygit fd git imagemagick ghostscript ripgrep
+  ];
 
+  # https://github.com/niksingh710/nvix
+  # Replace `core` with `bare` or `full` as needed
   nvix = pkgs: lib:
     inputs.nvix.packages.${pkgs.stdenv.hostPlatform.system}.bare.extend {
       plugins.avante.enable = lib.mkForce false;
