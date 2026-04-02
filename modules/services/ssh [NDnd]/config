@@ -58,6 +58,14 @@ Host kakariko
   UserKnownHostsFile /dev/null
   ProxyJump oracle
 
+Host a70
+  HostName localhost
+  Port 2234
+  User yeshey
+  StrictHostKeyChecking no
+  UserKnownHostsFile /dev/null
+  ProxyJump oracle
+
 # Second hop: Connect from remote server to the surface Pro
 Host kakarikoroot
   HostName localhost

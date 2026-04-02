@@ -18,7 +18,7 @@
         procps diffutils findutils util-linux
         zip unzip gnutar gzip xz
         gnugrep gnused nano
-        devenv ookla-speedtest btop
+        devenv ookla-speedtest
       ];
 
       home-manager.config =
