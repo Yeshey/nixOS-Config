@@ -28,6 +28,7 @@
             standalone-hm
             # system-cli
 
+            nvix
             shell
             ssh
             starship

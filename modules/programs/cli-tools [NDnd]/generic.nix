@@ -1,14 +1,5 @@
-{ inputs, ... }:
-
+{ self, ... }:
 let
-  # https://github.com/niksingh710/nvix
-  # Replace `core` with `bare` or `full` as needed
-  nvix = pkgs: lib:
-    inputs.nvix.packages.${pkgs.stdenv.hostPlatform.system}.bare.extend {
-      plugins.avante.enable = lib.mkForce false; # requires copilot setup
-      plugins.obsidian.enable = lib.mkForce false; # requires workspace config
-    };
-
   genericPackages = pkgs: lib: with pkgs; [
     git
     tmux
@@ -26,18 +17,13 @@ let
     unzip
     ookla-speedtest
     home-manager
-
-    # nvim with nvix and development tools for nvix
-    (nvix pkgs lib)
-    gcc
-    gnumake
-    pkg-config
   ];
 in
 {
   flake.modules.nixos.cli-tools =
     { pkgs, lib, ... }:
     {
+      imports = [ self.modules.nixos.nvix ];
       environment.systemPackages = genericPackages pkgs lib;
       programs.htop.enable = true;
     };
@@ -45,12 +31,14 @@ in
   flake.modules.darwin.cli-tools =
     { pkgs, lib, ... }:
     {
+      imports = [ self.modules.darwin.nvix ];
       environment.systemPackages = genericPackages pkgs lib;
     };
 
   flake.modules.homeManager.cli-tools =
     { pkgs, lib, ... }:
     {
+      imports = [ self.modules.homeManager.nvix ];
       home.packages =
         (genericPackages pkgs lib)
         ++ (with pkgs; [
