@@ -26,72 +26,16 @@
           -- /system/bin/sh -c 'exec sh /data/data/com.termux.nix/files/usr/usr/lib/login-inner'
       '';
 
-      root-login = pkgs.writeScriptBin "root-login" ''
-        #!${pkgs.runtimeShell}
-
-        set -eu -o pipefail
-
-        export USER="nix-on-droid"
-        export HOME="/data/data/com.termux.nix/files/home"
-        export PROOT_TMP_DIR=/data/data/com.termux.nix/files/usr/tmp
-        export PROOT_L2S_DIR=/data/data/com.termux.nix/files/usr/.l2s
-        export PATH=$PATH:/data/adb/ksu/bin:/data/adb
-        export TMPDIR=/data/data/com.termux.nix/files/usr/tmp
-
-        if [ "$(${pkgs.coreutils}/bin/whoami)" != "root" ]; then
-          echo 'use root? [y/N]'
-          read x
-          if [[ "$x" == "y" ]]; then
-            # Try ksud directly, or nsenter trick
-            ksud -c "${pkgs.util-linux}/bin/unshare -m $(${pkgs.coreutils}/bin/realpath $0)"
-          fi
-          exit
-        fi
-
-        if ! ${pkgs.procps}/bin/pgrep proot-static > /dev/null 2>&1; then
-          if test -e /data/data/com.termux.nix/files/usr/bin/.proot-static.new; then
-            echo "Installing new proot-static..."
-            mv /data/data/com.termux.nix/files/usr/bin/.proot-static.new \
-              /data/data/com.termux.nix/files/usr/bin/proot-static
-          fi
-
-          if test -e /data/data/com.termux.nix/files/usr/usr/lib/.login-inner.new; then
-            echo "Installing new login-inner..."
-            mv /data/data/com.termux.nix/files/usr/usr/lib/.login-inner.new \
-              /data/data/com.termux.nix/files/usr/usr/lib/login-inner
+      root-shell = pkgs.writeScript "root-shell" ''
+        #!/system/bin/sh
+        if [ "$(id -u)" != "0" ]; then
+          printf "Launch as root? [y/N] "
+          read -r ans
+          if [ "$ans" = "y" ] || [ "$ans" = "Y" ]; then
+            exec /system/bin/su -c '/data/data/com.termux.nix/files/usr/bin/login'
           fi
         fi
-
-        CHROOT_PATH=/data/data/com.termux.nix/files/chroot
-        FILES_USR=/data/data/com.termux.nix/files/usr
-        NOD_DIRS="nix bin etc tmp usr dev/shm"
-
-        mkdir -p $CHROOT_PATH
-
-        ${pkgs.busybox}/bin/busybox mount --make-rslave /
-
-        for DIR in /*/; do
-          mkdir -p $CHROOT_PATH/$DIR
-          for DIR2 in $NOD_DIRS; do
-            if test "$DIR" = "/$DIR2/"; then continue 2; fi
-          done
-          ${pkgs.util-linux}/bin/mount --rbind $DIR $CHROOT_PATH/$DIR
-        done
-
-        for DIR in $NOD_DIRS; do
-          mkdir -p $CHROOT_PATH/$DIR
-          ${pkgs.util-linux}/bin/mount --rbind $FILES_USR/$DIR $CHROOT_PATH/$DIR
-        done
-
-        echo "Keep root? [y/N]"
-        read x
-        if [[ "$x" == "y" ]]; then
-          exec ${pkgs.util-linux}/bin/chroot $CHROOT_PATH \
-            sh /data/data/com.termux.nix/files/usr/usr/lib/login-inner "$@"
-        else
-          exec ${pkgs.util-linux}/bin/chroot $CHROOT_PATH \
-            sh /data/data/com.termux.nix/files/home/drop_root.sh "$@"
-        fi
+        exec ${pkgs.zsh}/bin/zsh "$@"
       '';
     in
     {
@@ -101,9 +45,10 @@
         "-b /data/adb:/data/adb"
       ];
 
+      user.shell = root-shell;
+
       environment.packages = [
         drop-root
-        root-login
       ];
     };
 }
