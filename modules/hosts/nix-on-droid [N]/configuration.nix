@@ -21,6 +21,9 @@
         devenv ookla-speedtest
       ];
 
+      # font that supports starship theme
+      terminal.font = "${pkgs.nerd-fonts.jetbrains-mono}/share/fonts/truetype/NerdFonts/JetBrainsMono/JetBrainsMonoNerdFont-Regular.ttf";
+
       home-manager.config =
         { ... }:
         {
