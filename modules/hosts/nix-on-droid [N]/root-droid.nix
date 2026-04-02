@@ -35,14 +35,15 @@
         export HOME="/data/data/com.termux.nix/files/home"
         export PROOT_TMP_DIR=/data/data/com.termux.nix/files/usr/tmp
         export PROOT_L2S_DIR=/data/data/com.termux.nix/files/usr/.l2s
-        export PATH=$PATH:/system/bin/
+        export PATH=$PATH:/data/adb/ksu/bin:/data/adb
         export TMPDIR=/data/data/com.termux.nix/files/usr/tmp
 
         if [ "$(${pkgs.coreutils}/bin/whoami)" != "root" ]; then
           echo 'use root? [y/N]'
           read x
           if [[ "$x" == "y" ]]; then
-            /system/bin/su -c "${pkgs.util-linux}/bin/unshare -m $(${pkgs.coreutils}/bin/realpath $0)"
+            # Try ksud directly, or nsenter trick
+            ksud -c "${pkgs.util-linux}/bin/unshare -m $(${pkgs.coreutils}/bin/realpath $0)"
           fi
           exit
         fi
@@ -97,6 +98,7 @@
       build.extraProotOptions = [
         "-b /system:/system"
         "-b /vendor:/vendor"
+        "-b /data/adb:/data/adb"
       ];
 
       environment.packages = [
