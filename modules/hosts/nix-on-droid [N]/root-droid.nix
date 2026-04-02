@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, lib, ... }:
 {
   flake.modules.nixOnDroid.root-droid =  
     { pkgs, ... }:
@@ -45,7 +45,7 @@
         "-b /data/adb:/data/adb"
       ];
 
-      user.shell = root-shell;
+      user.shell = lib.mkForce root-shell;
 
       environment.packages = [
         drop-root
