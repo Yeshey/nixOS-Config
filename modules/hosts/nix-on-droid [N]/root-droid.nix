@@ -94,6 +94,11 @@
       '';
     in
     {
+      environment.extraProotOptions = [
+        "--bind=/system"
+        "--bind=/vendor"   # often needed alongside /system
+      ];
+
       environment.packages = [
         drop-root
         root-login
