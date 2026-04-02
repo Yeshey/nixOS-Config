@@ -6,6 +6,7 @@
       imports = with inputs.self.modules.nixOnDroid; [
         sshd-droid
         autossh-reverse-proxy-droid
+        root-droid
       ];
 
       android-integration.am.enable = true;
@@ -51,6 +52,9 @@
               update = lib.mkForce "echo 'updating from local .setup...' && nix-on-droid switch --flake $HOME/.setup#nix-on-droid --max-jobs 1 --option 'experimental-features' 'nix-command flakes pipe-operators' -v |& ${pkgs.nix-output-monitor}/bin/nom";
               clean  = lib.mkForce "nix-collect-garbage -d && nix-store --gc && echo 'Displaying stray roots:' && nix-store --gc --print-roots | egrep -v '^(/nix/var|/run/current-system|/run/booted-system|/proc|\\{memory|\\{censored)'";
             };
+            initContent = lib.mkBefore ''
+              echo "Welcome to your shell!"
+            '';
           };
           home.activation.storageSymlink = ''
             ln -sfn /storage/emulated/0 $HOME/storage
