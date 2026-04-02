@@ -95,8 +95,8 @@
     in
     {
       build.extraProotOptions = [
-        "--bind=/system"
-        "--bind=/vendor"
+        "-b /system"
+        "-b /vendor"
       ];
 
       environment.packages = [
