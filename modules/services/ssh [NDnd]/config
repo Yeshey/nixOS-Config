@@ -61,7 +61,7 @@ Host kakariko
 Host a70
   HostName localhost
   Port 2234
-  User yeshey
+  User nix-on-droid
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
   ProxyJump oracle
