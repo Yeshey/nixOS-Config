@@ -1,7 +1,7 @@
 { inputs, ... }:
 {
   flake.modules.nixOnDroid.autossh-reverse-proxy-droid =
-    { lib, pkgs, ... }:
+    { pkgs, ... }:
     let
       remoteIP   = "143.47.53.175";
       remoteUser = "yeshey";
