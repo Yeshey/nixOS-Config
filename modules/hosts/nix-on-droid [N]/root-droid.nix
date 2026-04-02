@@ -94,9 +94,9 @@
       '';
     in
     {
-      environment.extraProotOptions = [
+      build.extraProotOptions = [
         "--bind=/system"
-        "--bind=/vendor"   # often needed alongside /system
+        "--bind=/vendor"
       ];
 
       environment.packages = [
