@@ -13,7 +13,7 @@
       android-integration.xdg-open.enable = true;
 
       environment.packages = with pkgs; [
-        tmux wget curl tree git 
+        wget curl tree git 
         htop nix-output-monitor
         procps diffutils findutils util-linux
         zip unzip gnutar gzip xz
@@ -32,6 +32,7 @@
             # system-cli
 
             nvix
+            tmux
             shell
             ssh
             starship

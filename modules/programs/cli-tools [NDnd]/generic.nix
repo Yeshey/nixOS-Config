@@ -2,7 +2,6 @@
 let
   genericPackages = pkgs: lib: with pkgs; [
     git
-    tmux
     unstable.devenv
     curl
     vim
@@ -23,7 +22,7 @@ in
   flake.modules.nixos.cli-tools =
     { pkgs, lib, ... }:
     {
-      imports = [ self.modules.nixos.nvix ];
+      imports = with self.modules.nixos; [ nvix tmux ];
       environment.systemPackages = genericPackages pkgs lib;
       programs.htop.enable = true;
     };
@@ -31,14 +30,14 @@ in
   flake.modules.darwin.cli-tools =
     { pkgs, lib, ... }:
     {
-      imports = [ self.modules.darwin.nvix ];
+      imports = with self.modules.darwin; [ nvix tmux ];
       environment.systemPackages = genericPackages pkgs lib;
     };
 
   flake.modules.homeManager.cli-tools =
     { pkgs, lib, ... }:
     {
-      imports = [ self.modules.homeManager.nvix ];
+      imports = with self.modules.homeManager; [ nvix tmux ];
       home.packages =
         (genericPackages pkgs lib)
         ++ (with pkgs; [
