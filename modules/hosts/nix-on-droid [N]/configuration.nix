@@ -13,7 +13,12 @@
       android-integration.xdg-open.enable = true;
 
       environment.packages = with pkgs; [
-        tmux wget tree git devenv ookla-speedtest htop toybox nix-output-monitor nano
+        tmux wget curl tree git 
+        htop nix-output-monitor
+        procps diffutils findutils utillinux
+        zip unzip gnutar gzip xz
+        gnugrep gnused nano
+        devenv ookla-speedtest
       ];
 
       home-manager.config =
