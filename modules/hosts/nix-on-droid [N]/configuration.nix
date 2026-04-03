@@ -1,4 +1,5 @@
 # For background processes to not be killed you might need to take a look here: https://github.com/agnostic-apollo/Android-Docs/blob/master/en/docs/apps/processes/phantom-cached-and-empty-processes.md#internal-details-for-android-14-and-higher
+# try on the PC before you do on the phone: nix build --impure .#nixOnDroidConfigurations.nix-on-droid.activationPackage
 { inputs, lib, ... }:
 {
   flake.modules.nixOnDroid.nix-on-droid =
