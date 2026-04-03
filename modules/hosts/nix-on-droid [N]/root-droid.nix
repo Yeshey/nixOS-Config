@@ -9,11 +9,10 @@
       drop-root = pkgs.writeScript "drop_root.sh" ''
         #!/system/bin/sh
 
-        uid=$(stat -c %u /data/data/com.termux.nix)
-        pid=$(pidof -s com.termux.nix)
+        uid=$(/system/bin/stat -c %u /data/data/com.termux.nix)
+        pid=$(/system/bin/pidof -s com.termux.nix)
         if test -z $pid; then
-          which -a pidof
-          pgrep com.termux.nix
+          /system/bin/pgrep com.termux.nix
           echo Nix on Droid App process not found
           exit
         fi
@@ -21,7 +20,7 @@
         pol_target=$(echo $label | sed 's/.*:\([untrusted_app_[1-9]*\):.*/\1/')
         supolicy --live "allow $pol_target shell_exec file entrypoint"
         groups="3003,3004,2000,9997,20166,50166"
-        setpriv="${pkgs.util-linux}/bin/setpriv"
+        setpriv="/data/data/com.termux.nix/files/usr${pkgs.util-linux}/bin/setpriv"
         echo setpriving
         $setpriv --reuid $uid --regid $uid --groups $groups --bounding-set -all --selinux-label $label -- /system/bin/sh -c 'exec sh /data/data/com.termux.nix/files/usr/usr/lib/login-inner'
       '';
@@ -54,28 +53,30 @@
         NOD_DIRS="nix bin etc tmp usr dev/shm"
         FILES_USR=/data/data/com.termux.nix/files/usr
 
-        ${pkgs.busybox}/bin/busybox mount --make-rslave /
+        # make-rslave prevents mount propagation leaking back to host
+        # toybox mount may not support it, try and ignore failure
+        /system/bin/mount --make-rslave / 2>/dev/null || true
 
         for DIR in /*/; do
           mkdir -p $CHROOT_PATH/$DIR
           for DIR2 in $NOD_DIRS; do
             if test "$DIR" = "/$DIR2/"; then continue 2; fi
           done
-          ${pkgs.util-linux}/bin/mount --rbind $DIR $CHROOT_PATH/$DIR
+          /system/bin/mount --rbind $DIR $CHROOT_PATH/$DIR 2>/dev/null || true
         done
 
         for DIR in $NOD_DIRS; do
           mkdir -p $CHROOT_PATH/$DIR
-          ${pkgs.util-linux}/bin/mount --rbind $FILES_USR/$DIR $CHROOT_PATH/$DIR
+          /system/bin/mount --rbind $FILES_USR/$DIR $CHROOT_PATH/$DIR
         done
 
         echo "Keep root? [y/N]"
         read x
         if [[ "$x" == "y" ]]; then
-          exec ${pkgs.util-linux}/bin/chroot $CHROOT_PATH sh /data/data/com.termux.nix/files/usr/usr/lib/login-inner "$@"
+          exec /system/bin/chroot $CHROOT_PATH sh /data/data/com.termux.nix/files/usr/usr/lib/login-inner "$@"
         else
-          exec ${pkgs.util-linux}/bin/chroot $CHROOT_PATH \
-            sh ${drop-root} "$@"
+          exec /system/bin/chroot $CHROOT_PATH \
+            sh /data/data/com.termux.nix/files/home/drop_root.sh "$@"
         fi
       '';
 
