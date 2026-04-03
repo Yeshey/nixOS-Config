@@ -1,20 +1,16 @@
 # nix & nixOS Configuration / Linux Config
 The spiciest config on the market [😳🥵💦](https://matias.me/nsfw/)
 
-# TODO
-- Standalone Home Manager
-- check what is Factory
-
 My reproducible nix Configuration & other configuration files.
-More Documentation (for myself) about nixOS in my [TechNotes Repo](https://github.com/Yeshey/TechNotes).
+More Documentation (for myself) about NixOS in my [TechNotes Repo](https://github.com/Yeshey/TechNotes).
 
-It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my MS Surface Pro 7(`kakariko`) and my Oracle `aarch64` server(`skyloft`).
+It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my MS Surface Pro 7(`kakariko`), my phones `nix-on-droid` and my Oracle `aarch64` server(`skyloft`).
 
 **debugging** Use nix-tree to see what packages your current system depends on: `nix run nixpkgs#nix-tree -- /run/current-system`. Then use `/` to search for packages you want.
 
 ## Installing on a new computer
 
-- `sudo nixos-rebuild --flake github:Yeshey/nixOS-Config#skyloft boot --max-jobs 2 --cores 4 --option experimental-features "nix-command flakes pipe-operators" --impure`
+- `sudo nixos-rebuild --flake github:Yeshey/nixOS-Config#hyrulecastle boot --max-jobs 2 --cores 4 --option experimental-features "nix-command flakes pipe-operators" --impure`
 
 - You might need to create the home manager folder manually `mkdir ~/.local/state/nix/profiles`
 
@@ -28,30 +24,36 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
 - You'll need to run `sudo wg show wgOracle` to see the public keys and update the `publicKey` in `wireguardServer.nix` and `wireguardClient.nix`
 
-- nix-on-droid: (don't forget you can connect your phone to the PC and control it with something like `scrcpy --legacy-paste`) install my flake in app by adding [the normal packages](https://nix-on-droid.unboiled.info/upgrade.txt) (restart `nix-on-droid` after that) and running `nix-shell -p git --run "nix-on-droid --flake github:Yeshey/nixOS-Config#nix-on-droid switch"`. (or use the `/nix-on-droid` branch if it isn't working)
-  You'll have to find a way to send the ssh keys, `scp` isn't working, you can do this:
+- If you get rate limited, you can use authenticated requests:
+  - `gh auth login`
+  - `sudo nixos-rebuild --flake ~/.setup#hyrulecastle --option cores 6 --option max-jobs 3 switch --option access-tokens "github.com=$(gh auth token)"`
+
+<details>
+<summary><strong>Nix-on-Droid</strong></summary>
+
+(don't forget you can connect your phone to the PC and control it with something like `scrcpy --render-driver=opengl`). Install nix-on-droid with flakes support, (you can add channels to have access to nix-shell by installing [the normal packages](https://nix-on-droid.unboiled.info/upgrade.txt)). My flake has inputs that need the pipe operator, because 24.05 didn't have support for that we need to update nix first:
+- `vi ~/.config/nix-on-droid/flake.nix` and update only nixpkgs to the latest version
+- Rebuild: `nix-on-droid switch --flake ~/.config/nix-on-droid#default`
+- Then build with my flake: `nix shell nixpkgs#git nixpkgs#nix-output-monitor -c bash -c "nix-on-droid switch --flake github:Yeshey/nixOS-Config#nix-on-droid --max-jobs 2 --option 'experimental-features' 'nix-command flakes pipe-operators' -v |& nom"`
+- You'll have to find a way to send the ssh keys, `scp` isn't working, you can do this:
   - Transfer the files to `Downloads` folder in the phone and then use [this](https://github.com/nix-community/nix-on-droid/issues/238#issuecomment-1826796452) method to get it in nix-on-droid
-  - To use `nix-on-droid` with root, you can try taking a look [here](https://github.com/nix-community/nix-on-droid/issues/3)
-  - If you want to add a [termux:widget](https://github.com/termux/termux-widget) to connect to your computers with their reverse proxy to the server (can be enabled with [autosshReverseProxy](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/autosshReverseProxy.nix)) you can add to `~/.shortcuts/` these files:
-    - `connectHyruleCastle`:
-      ```sh
-      ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@143.47.53.175 "ssh -t -p 2232 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@localhost"
-      ```
-    - `connectKakariko`:
-      ```sh
-      ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@143.47.53.175 "ssh -t -p 2333 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@localhost"
-      ```
-    - `connectSkyloft`:
-      ```sh
-      ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@143.47.53.175
-      ```
-    - From your phone, you can redirect port 2998 of your PC to http://localhost:2998 on your phone with `ssh -L 2998:localhost:2998 -J yeshey@143.47.53.175 yeshey@localhost -p 2232`
+- If you want to add a [termux:widget](https://github.com/termux/termux-widget) to connect to your computers with their reverse proxy to the server (can be enabled with [autosshReverseProxy](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/autosshReverseProxy.nix)) you can add to `~/.shortcuts/` these files:
+  - `connectHyruleCastle`:
+    ```sh
+    ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@143.47.53.175 "ssh -t -p 2232 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@localhost"
+    ```
+  - `connectKakariko`:
+    ```sh
+    ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@143.47.53.175 "ssh -t -p 2333 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@localhost"
+    ```
+  - `connectSkyloft`:
+    ```sh
+    ssh -t -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null yeshey@143.47.53.175
+    ```
+</details>
 
-  - If you get rate limitted, you can use authenticated requests:
-    - `gh auth login`
-    - `sudo nixos-rebuild --flake ~/.setup#hyrulecastle --option cores 6 --option max-jobs 3 switch --option access-tokens "github.com=$(gh auth token)"`
-
-### Non-NixOS Home-manager standalone with flakes (not working rn)
+<details>
+<summary><strong>Non-NixOS Home-manager standalone with flakes (not tested rn)</strong></summary>
 
 1. Install nix, follow [hm standalone](https://nix-community.github.io/home-manager/index.xhtml#sec-install-standalone). (These instructions assume system wide installation)
 2. `mkdir ~/.setup ; git clone git@github.com:Yeshey/nixOS-Config.git ~/.setup/ --depth 1`
@@ -61,24 +63,29 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
    `echo "/home/$USER/.nix-profile/bin/zsh" | sudo tee -a /etc/shells`
    `chsh -s "/home/$USER/.nix-profile/bin/zsh" "$USER"`
 
+</details>
+
 ## Credits
 
 - Initially introduced to nix and nixOS by [Kylix](https://github.com/kylixafonso) 👀
-- First iteration inspiered by [Matthias Benaets'](https://github.com/MatthiasBenaets) [configuration](https://github.com/MatthiasBenaets/nixos-config) and his [video](https://www.youtube.com/watch?v=AGVXJ-TIv3Y);
+- First iteration inspired by [Matthias Benaets'](https://github.com/MatthiasBenaets) [configuration](https://github.com/MatthiasBenaets/nixos-config) and his [video](https://www.youtube.com/watch?v=AGVXJ-TIv3Y);
 - Derived from [LongerHV's](https://github.com/LongerHV) [nixos-configuration](https://github.com/LongerHV/nixos-configuration/tree/master);
 - Based on [Misterio77's](https://github.com/Misterio77) [nix-starter-configs](https://github.com/Misterio77/nix-starter-configs);
 - Inspiered by [pinage404](https://gitlab.com/pinage404) [dotfiles](https://gitlab.com/pinage404/dotfiles)
 - Refactored using the [Dendritic Pattern](https://github.com/mightyiam/dendritic), basing off of [these docs and examples](https://github.com/Doc-Steve/dendritic-design-with-flake-parts)!
-- (Future/To-Do?) Maybe It would have been easier to use the [`den` framework](https://github.com/vic/den)... keep an eye on it.
+- (Future/To-Do?) Maybe It would have been easier to use the [`den` framework](https://github.com/vic/den)… keep an eye on it.
 
 ## Highlights:
 
 - **Structure**
-    - Separation of home manager, nixOS system configuration and Host services through a myHome and mySystem and toHost modules, this way it could also be deployed on a home-manager only system the same way [LongerHV's](https://github.com/LongerHV) [nixos-configuration](https://github.com/LongerHV/nixos-configuration/tree/master) is set up;
+    - Using the dendritic pattern as per [these docs](https://github.com/Doc-Steve/dendritic-design-with-flake-parts). 
+    - Additionally, I've added a `mkNixOnDroid` function.
+    - NixOS Modules generally call HomeManager themselves, so I don't have to call it in the user as well. This way if I define `gnome-full` module on a host, the users with Home-Manager will automatically receive the HomeManager `gnome-full` module as well.
+    - Tiered modules. For example [system types](https://github.com/Yeshey/nixOS-Config/tree/main/modules/system/system%20types), [gnome](https://github.com/Yeshey/nixOS-Config/tree/main/modules/system/settings/desktop-managers/gnome), [kdePlasma](https://github.com/Yeshey/nixOS-Config/tree/main/modules/system/settings/desktop-managers/kdePlasma). The called module is `system-desktop` which is the "leaf" module that calls the `system-desktop-tier` HM and the NixOS modules. We do this separation to allow the NixOS module to call the HomeManager ones without importing the same module several times, as that causes problems especially with `impermanence`.
+    - If a User wants to add more configuration to their `gnome` desktop or example, they can use the Constants aspect to check if the desktop was enabled, as the module sets `systemConstants.isGnome = true;`. [Example](https://github.com/Yeshey/nixOS-Config/blob/main/modules/users/yeshey%20%5BN%5D/gnome-customisation.nix)
+    - Unstable packages available at `pkgs.unstable.<package>`, [NUR](https://github.com/nix-community/NUR) packages available at `pkgs.nur.<package>` using overlays as defined [here](https://github.com/Yeshey/nixOS-Config/blob/main/modules/system/system%20types/1%20-%20system-minimal%20%5BNDnd%5D/nixos/nixos-minimal-tier.nix) for NixOS and [here](https://github.com/Yeshey/nixOS-Config/tree/main/modules/system/settings/standalone-hm%20%5Bn%5D) for Home Manager standalone.
 
-    - Unstable packages available at `pkgs.unstable.<package>`, [NUR](https://github.com/nix-community/NUR) packages available at `pkgs.nur.<package>` using overlays. Check [Misterio77's](https://github.com/Misterio77) `standard` [nix-starter-configs](https://github.com/Misterio77/nix-starter-configs) for getting started with this structure.
-
-- **Auto Updates On Shutdown** - I have a github action that updates my flake.lock every 2 weeks [update-flake.yml](https://github.com/Yeshey/nixOS-Config/blob/main/.github/workflows/update-flake.yml). Then I have a service that updates the PC while shutting down, while keeping services like `sshd`, `oomd`, etc. working: [autoUpdatesOnShutdown.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/autoUpdatesOnShutdown.nix);
+- **Auto Updates On Shutdown** - I have a GitHub action that updates my flake.lock every 2 weeks [update-flake.yml](https://github.com/Yeshey/nixOS-Config/blob/main/.github/workflows/update-flake.yml). Then I have a service that updates the PC while shutting down, while keeping services like `sshd`, `oomd`, etc. working: [autoUpdatesOnShutdown.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/autoUpdatesOnShutdown.nix);
 
 - **Syncthing** - Declaratively set syncthing, including ignore patterns with `userActivationScripts` (TODO: set syncthing as a home manager service): [syncthing.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/syncthing.nix);
 
@@ -88,9 +95,9 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
 - **clean** - `clean` is an alias for a script that cleans user and system dangling nix packages, optimises the store, uninstalls unused Flatpak packages, and removes dangling docker and podman images, volumes and networks: for [`myHome`](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/myScripts.nix) and for [`mySystem`](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/myScripts.nix)
 
-- **pci-passthrough** - for passing my `NVIDIA GeForce RTX 2060 Mobile` to a virt-manager VM and using my intel processor for the host: [pci-passthrough.nix](https://github.com/Yeshey/nixOS-Config/blob/main/nixos/hyrulecastle/pci-passthrough.nix), but better yet:
+- **pci-passthrough (not refactored back yet)** - for passing my `NVIDIA GeForce RTX 2060 Mobile` to a virt-manager VM and using my intel processor for the host: [pci-passthrough.nix](https://github.com/Yeshey/nixOS-Config/blob/main/nixos/hyrulecastle/pci-passthrough.nix), but better yet:
 
-- **VGPU** - Unlocked VGPU functionality on my consumer nvidia card: [vgpu.nix](https://github.com/Yeshey/nixOS-Config/blob/main/nixos/hyrulecastle/vgpu.nix). Using my module, more details there: [nixos-nvidia-vgpu](https://github.com/Yeshey/nixos-nvidia-vgpu);
+- **VGPU (not refactored back yet)** - Unlocked VGPU functionality on my consumer nvidia card: [vgpu.nix](https://github.com/Yeshey/nixOS-Config/blob/main/nixos/hyrulecastle/vgpu.nix). Using my module, more details there: [nixos-nvidia-vgpu](https://github.com/Yeshey/nixos-nvidia-vgpu);
 
 - **Ollama with open-webui and searx** - Ollama and Open-WebUI can be activated with a single module: [ollama](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/toHost/ollama.nix). If searx, to use your own search engine, is also activated, models on openweb-ui are able to search the internet through it: [searx](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/toHost/searx.nix)
 
@@ -99,8 +106,6 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 - **Safe-rm** - I nuked my PC once by running `sudo rm -r /*` instead of `sudo -r rm ./*`, so I decided to change all my `rm` calls to `safe-rm` calls through changing the binary and adding aliases, both in `myHome`: [safe-rm.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/safe-rm.nix); and in `mySystem`: [safe-rm.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/safe-rm.nix);
 
 - **Substituters** - Uses a bunch of substituters for extra caches to hopefully make rebuilds faster: [default.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/default.nix). Also in my module to activate when home manager is used standalone (untested): [non-nixos.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/non-nixos.nix);
-
-- **Agenix** - Using [agenix](https://github.com/ryantm/agenix) both at system (`mySystem` - [default.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/agenix/default.nix)):  and at user (`myHome` - [default.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/agenix/default.nix)) levels, they grab secrets from `/secrets`.
 
 - **VSCodium** - Visual Studio Codium, the open source version of VSC, configuration settings propagated to appropriate locations for VScodium, VSCode and openvscode-server, has a bunch of extensions and configuration for latex nix language server, settings for special characters to work with starship theme in terminal, java, etc: [vscodium/default.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/homeApps/vscodium/default.nix)
 

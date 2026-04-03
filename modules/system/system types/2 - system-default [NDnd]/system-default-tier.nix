@@ -12,6 +12,7 @@
         system-minimal-tier
 
         home-manager
+        upgrade
         safe-rm
         gc
         nix-index-database
