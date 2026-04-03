@@ -687,11 +687,11 @@
         "nmd": "nmd_2"
       },
       "locked": {
-        "lastModified": 1720396533,
-        "narHash": "sha256-UFzk/hZWO1VkciIO5UPaSpJN8s765wsngUSvtJM6d5Q=",
+        "lastModified": 1775256307,
+        "narHash": "sha256-LDfrif6mRDITLKwmS9n2knmixtTc16WiNUqU1jjDOSs=",
         "owner": "Yeshey",
         "repo": "nix-on-droid",
-        "rev": "f3d3b8294039f2f9a8fb7ea82c320f29c6b0fe25",
+        "rev": "33f8932f4ff5729cb2416e8d7312fc0441752865",
         "type": "github"
       },
       "original": {
