@@ -4,6 +4,8 @@
     { config, lib, pkgs, ... }:
     let
       installationDir = config.build.installationDir;
+      fakeProcStat = pkgs.writeText "fakeProcStat" "btime 0\n";
+      fakeProcUptime = pkgs.writeText "fakeProcUptime" "0.00 0.00\n";
 
       drop-root = pkgs.writeScript "drop_root.sh" ''
         #!/system/bin/sh
@@ -90,12 +92,10 @@
         #!/system/bin/sh
         set -eu -o pipefail
 
-        export USER="nix-on-droid"
-        export HOME="/data/data/com.termux.nix/files/home"
-        export PROOT_TMP_DIR=/data/data/com.termux.nix/files/usr/tmp
-        export PROOT_L2S_DIR=/data/data/com.termux.nix/files/usr/.l2s
-        export PATH=$PATH:/system/bin/
-        export TMPDIR=/data/data/com.termux.nix/files/usr/tmp
+        export USER="${config.user.userName}"
+        export HOME="${config.user.home}"
+        export PROOT_TMP_DIR=${installationDir}/tmp
+        export PROOT_L2S_DIR=${installationDir}/.l2s
 
         if test "$(/system/bin/whoami)" != root; then
           echo 'Use chroot (faster, requires root)? [y/N]'
@@ -106,7 +106,6 @@
           fi
         fi
 
-        # Normal proot login
         if ! /system/bin/pgrep proot-static > /dev/null; then
           if test -e ${installationDir}/bin/.proot-static.new; then
             echo "Installing new proot-static..."
@@ -118,19 +117,27 @@
           fi
         fi
 
-        if [ ! -r /proc/stat ] && [ -e ${installationDir}/nix/store ]; then
-          BIND_PROC_STAT="-b /dev/null:/proc/stat"
+        if [ ! -r /proc/stat ] && [ -e ${installationDir}${fakeProcStat} ]; then
+          BIND_PROC_STAT="-b ${installationDir}${fakeProcStat}:/proc/stat"
         else
           BIND_PROC_STAT=""
         fi
 
+        if [ ! -r /proc/uptime ] && [ -e ${installationDir}${fakeProcUptime} ]; then
+          BIND_PROC_UPTIME="-b ${installationDir}${fakeProcUptime}:/proc/uptime"
+        else
+          BIND_PROC_UPTIME=""
+        fi
+
         exec ${installationDir}/bin/proot-static \
           -b ${installationDir}/nix:/nix \
-          -b ${installationDir}/bin:/bin \
-          -b ${installationDir}/etc:/etc \
+          -b ${installationDir}/bin:/bin! \
+          -b ${installationDir}/etc:/etc! \
           -b ${installationDir}/tmp:/tmp \
           -b ${installationDir}/usr:/usr \
           -b ${installationDir}/dev/shm:/dev/shm \
+          $BIND_PROC_STAT \
+          $BIND_PROC_UPTIME \
           -b /:/android \
           --link2symlink \
           --sysvipc \
@@ -139,12 +146,7 @@
       '';
     in
     {
-      build.activationAfter.replace-login = ''
-        echo "Installing custom chroot-aware login..."
-        $DRY_RUN_CMD cp ${login} ${installationDir}/bin/login.custom
-        $DRY_RUN_CMD chmod 755 ${installationDir}/bin/login.custom
-        $DRY_RUN_CMD ln --symbolic --force ${installationDir}/bin/login.custom ${installationDir}/bin/login
-      '';
+      environment.files.login = lib.mkForce login;
 
       build.activationAfter.install-root-scripts = ''
         cp ${root-login} ${config.user.home}/root_login.sh

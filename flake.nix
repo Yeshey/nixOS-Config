@@ -60,7 +60,7 @@
       url = "github:Yeshey/nix-minecraft";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
-    nix-on-droid.url = "github:nix-community/nix-on-droid/release-24.05";
+    nix-on-droid.url = "github:Yeshey/nix-on-droid/release-24.05";
     nixos-hardware.url = "github:mexisme/nixos-hardware/microsoft-surface/update-kernel-6.18.13";
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-25.11-darwin";
