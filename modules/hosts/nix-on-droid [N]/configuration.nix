@@ -69,20 +69,6 @@
           home.activation.storageSymlink = ''
             ln -sfn /storage/emulated/0 $HOME/storage
           '';
-          # New task: Sync keys from Syncthing to internal storage
-          home.activation.syncSshKeys = lib.hm.dag.entryAfter ["writeBoundary"] ''
-            SYNCTHING_SSH="/storage/emulated/0/Documents/Syncthing/ssh"
-            INTERNAL_SSH="$HOME/.ssh"
-
-            if [ -d "$SYNCTHING_SSH" ]; then
-              mkdir -p "$INTERNAL_SSH/keys"
-              # Copy keys, not symlink, so we can change permissions
-              cp -r "$SYNCTHING_SSH/." "$INTERNAL_SSH/keys/"
-              # Fix permissions so SSH doesn't complain
-              chmod 700 "$INTERNAL_SSH"
-              chmod 600 "$INTERNAL_SSH/keys/"*
-            fi
-          '';
           home.enableNixpkgsReleaseCheck = false;
           home.stateVersion = "24.05";
         };
