@@ -3,6 +3,15 @@
   flake.modules.nixOnDroid.root-droid =
     { config, lib, pkgs, ... }:
     let
+      fake-sudo = pkgs.writeShellScript "sudo" ''
+        exec /system/bin/su -c "$*"
+      '';
+      fake-sudo-pkg = pkgs.runCommand "fake-sudo" {} ''
+        mkdir -p $out/bin
+        cp ${fake-sudo} $out/bin/sudo
+        chmod 755 $out/bin/sudo
+      '';
+
       installationDir = config.build.installationDir;
       fakeProcStat = pkgs.writeText "fakeProcStat" ''
         btime 0
@@ -33,6 +42,10 @@
         export PROOT_L2S_DIR=/data/data/com.termux.nix/files/usr/.l2s
         export PATH=$PATH:/system/bin/
         export TMPDIR=/data/data/com.termux.nix/files/usr/tmp
+
+        FILES_USR=/data/data/com.termux.nix/files/usr
+
+        mkdir -p $FILES_USR/root
 
         if ! /system/bin/pgrep proot-static > /dev/null; then
           if test -e /data/data/com.termux.nix/files/usr/bin/.proot-static.new; then
@@ -66,6 +79,10 @@
           mkdir -p $CHROOT_PATH/$DIR
           /system/bin/mount --rbind $FILES_USR/$DIR $CHROOT_PATH/$DIR || true
         done
+
+        # Bind root home
+        mkdir -p $CHROOT_PATH/root
+        /system/bin/mount --rbind $FILES_USR/root $CHROOT_PATH/root
 
         echo "Keep root? [y/N]"
         read x
@@ -139,6 +156,10 @@
     {
       environment.files.login = lib.mkForce login;
 
+      environment.etc."group".text = lib.mkAfter ''
+        nixbld:x:30000:
+      '';
+
       build.activationAfter.install-root-scripts = ''
         cp ${root-login} ${config.user.home}/root_login.sh
         chmod 755 ${config.user.home}/root_login.sh
@@ -146,6 +167,6 @@
         chmod 755 ${config.user.home}/drop_root.sh
       '';
 
-      environment.packages = [ pkgs.util-linux ];
+      environment.packages = [ pkgs.util-linux fake-sudo-pkg ];
     };
 }
