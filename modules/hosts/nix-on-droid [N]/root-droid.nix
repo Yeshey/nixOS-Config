@@ -36,8 +36,8 @@
 
         set -eu -o pipefail
 
-        export USER="nix-on-droid"
-        export HOME="/data/data/com.termux.nix/files/home"
+        export USER="root"
+        export HOME="/root"
         export PROOT_TMP_DIR=/data/data/com.termux.nix/files/usr/tmp
         export PROOT_L2S_DIR=/data/data/com.termux.nix/files/usr/.l2s
         export PATH=$PATH:/system/bin/
@@ -84,7 +84,7 @@
         mkdir -p $CHROOT_PATH/root
         /system/bin/mount --rbind $FILES_USR/root $CHROOT_PATH/root
 
-        echo "Keep root? [y/N]"
+        echo "Keep root? [y/N] (chroot user can use a sudo wrapper)"
         read x
         if [ "$x" = "y" ]; then
           exec /system/bin/chroot $CHROOT_PATH \
