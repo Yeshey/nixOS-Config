@@ -105,9 +105,9 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
 - **Safe-rm** - I nuked my PC once by running `sudo rm -r /*` instead of `sudo -r rm ./*`, so I decided to change all my `rm` calls to `safe-rm` calls through changing the binary and adding aliases, both in Home Manager and NixOS: [safe-rm.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/system/settings/safe-rm%20%5BN%5D/safe-rm.nix)
 
-- **Substituters** - Uses a bunch of substituters for extra caches to hopefully make rebuilds faster: [default.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/nixos/mySystem/default.nix). Also in my module to activate when home manager is used standalone (untested): [non-nixos.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/non-nixos.nix);
+- **VSCodium and Zed Editor** - Both configured extensible for the best developer experience. Notabily, they both use `ltex` with n-gram support for good grammar correction (in Portuguese): [vscodium [nd]](https://github.com/Yeshey/nixOS-Config/tree/main/modules/programs/vscodium%20%5Bnd%5D), [zed-editor [n]](https://github.com/Yeshey/nixOS-Config/tree/main/modules/programs/zed-editor%20%5Bn%5D)
 
-- **VSCodium** - Visual Studio Codium, the open source version of VSC, configuration settings propagated to appropriate locations for VScodium, VSCode and openvscode-server, has a bunch of extensions and configuration for latex nix language server, settings for special characters to work with starship theme in terminal, java, etc: [vscodium/default.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/home-manager/myHome/homeApps/vscodium/default.nix)
+- **Nix-on-Droid with Root!** - Using my own nix-on-droid fork with a couple changes so I can activate root on my nix-on-droid installation: [root-droid.nix](https://github.com/Yeshey/nixOS-Config/blob/main/modules/hosts/nix-on-droid%20%5BN%5D/root-droid.nix)
 
 ## Gallery
 
