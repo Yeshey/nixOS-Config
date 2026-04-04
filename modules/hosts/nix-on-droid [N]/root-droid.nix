@@ -114,7 +114,7 @@ export PROOT_L2S_DIR=${installationDir}/.l2s
 export PATH=$PATH:/system/bin/
 
 if test "$(/system/bin/whoami)" != root; then
-  echo 'Use chroot (faster, requires root)? [y/N]'
+  echo 'Use chroot (faster, unsandboxed, requires root)? [y/N]'
   read x
   if [ "$x" = "y" ]; then
     /system/bin/su -c "/data/data/com.termux.nix/files/home/root_login.sh"
