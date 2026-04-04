@@ -180,6 +180,6 @@ exec ${installationDir}/bin/proot-static \
         chmod 755 ${config.user.home}/drop_root.sh
       '';
 
-      environment.packages = [ pkgs.bash pkgs.util-linux fake-sudo-pkg ];
+      environment.packages = [ pkgs.bash pkgs.util-linux fake-sudo-pkg sweep-store-pkg ];
     };
 }
