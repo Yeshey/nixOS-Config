@@ -171,7 +171,11 @@ exec ${installationDir}/bin/proot-static \
     {
       environment.files.login = lib.mkForce login;
 
-      environment.motd = lib.mkAfter "Warning: doing any root operations to the nix-store might break store permissions! If you get permission issues in the store, login as root and run swwep - store to fix it.";
+environment.motd = lib.mkForce ''
+  Welcome to Nix-on-Droid!
+  Warning: root operations on the nix-store may break permissions.
+  If you get permission errors, login as root and run: sweep-store
+'';
 
       environment.etc."group".text = lib.mkAfter ''
         nixbld:x:30000:
