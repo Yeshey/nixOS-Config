@@ -171,9 +171,9 @@
     {
       environment.files.login = lib.mkForce login;
 
-      environment.motd = lib.mkAfter ''
+      environment.motd = lib.mkForce ''
         Warning: doing any root operations to the nix-store might break store permissions!
-        If you get permission issues in the store, login as root and run `sweep-store` to fix it.
+        If you get permission issues in the store, login as root and run sweep-store to fix it.
       '';
 
       environment.etc."group".text = lib.mkAfter ''
