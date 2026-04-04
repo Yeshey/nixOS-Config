@@ -25,6 +25,7 @@
         "sftp://hyrulecastle Hyrule Castle"
         "sftp://kakariko Kakariko"
         "sftp://oracle Oracle"
+        "sftp://a70 A70"
       ];
     };
   };

@@ -56,6 +56,7 @@
         StrictModes no
 
         LogLevel VERBOSE
+        Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
       '';
 
       environment.packages = [
