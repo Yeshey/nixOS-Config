@@ -99,7 +99,7 @@ if [ "$x" = "y" ]; then
 else
   exec /system/bin/chroot $CHROOT_PATH \
     /usr/bin/env HOME=/data/data/com.termux.nix/files/home USER=nix-on-droid \
-    sh /usr/lib/login-inner "$@"
+    sh /data/data/com.termux.nix/files/home/drop_root.sh "$@"
 fi
       '';
 
