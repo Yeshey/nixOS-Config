@@ -60,6 +60,7 @@
       settings.PasswordAuthentication = false;
       settings.KbdInteractiveAuthentication = false;
       settings.PermitRootLogin = "no";
+      settings.PerSourcePenalties = "no"; # sometimes killed reverse proxy tunnels
     };
 
     networking.hostName = "skyloft"; 
