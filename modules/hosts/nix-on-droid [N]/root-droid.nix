@@ -3,27 +3,19 @@
   flake.modules.nixOnDroid.root-droid =
     { config, lib, pkgs, ... }:
     let
-      fake-sudo = pkgs.writeShellScript "sudo" ''
+      fake-sudo-pkg = pkgs.writeScriptBin "sudo" ''
+        #!/system/bin/sh
         exec /system/bin/su -c "$*"
       '';
-      fake-sudo-pkg = pkgs.runCommand "fake-sudo" {} ''
-        mkdir -p $out/bin
-        cp ${fake-sudo} $out/bin/sudo
-        chmod 755 $out/bin/sudo
-      '';
-      sweep-store-pkg = pkgs.runCommand "sweep-store" {} ''
-mkdir -p $out/bin
-cp ${pkgs.writeShellScript "sweep-store" ''
-  #!/system/bin/sh
-  NOD_UID=$(/system/bin/stat -c %u /data/data/com.termux.nix)
-  NOD_GID=$(/system/bin/stat -c %g /data/data/com.termux.nix)
-  echo "Sweeping nix store ownership, this will take a while..."
-  /system/bin/find /data/data/com.termux.nix/files/usr/nix/store \
-    -maxdepth 1 -user root \
-    -exec /system/bin/chown -R "$NOD_UID:$NOD_GID" {} \;
-  echo "Done."
-''} $out/bin/sweep-store
-chmod 755 $out/bin/sweep-store
+      sweep-store-pkg = pkgs.writeScriptBin "sweep-store" ''
+        #!/system/bin/sh
+        NOD_UID=$(/system/bin/stat -c %u /data/data/com.termux.nix)
+        NOD_GID=$(/system/bin/stat -c %g /data/data/com.termux.nix)
+        echo "Sweeping nix store ownership, this will take a while..."
+        /system/bin/find /data/data/com.termux.nix/files/usr/nix/store \
+          -maxdepth 1 -user root \
+          -exec /system/bin/chown -R "$NOD_UID:$NOD_GID" {} \;
+        echo "Done."
       '';
 
       installationDir = config.build.installationDir;
@@ -171,11 +163,7 @@ exec ${installationDir}/bin/proot-static \
     {
       environment.files.login = lib.mkForce login;
 
-environment.motd = lib.mkForce ''
-  Welcome to Nix-on-Droid!
-  Warning: root operations on the nix-store may break permissions.
-  If you get permission errors, login as root and run: sweep-store
-'';
+# environment.motd = lib.mkForce "Warning: doing any root operations to the nix-store might break store permissions! If you get permission issues in the store, login as root and run 'sweep-store' to fix it.";
 
       environment.etc."group".text = lib.mkAfter ''
         nixbld:x:30000:
