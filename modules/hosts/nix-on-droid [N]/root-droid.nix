@@ -7,16 +7,16 @@
         #!/system/bin/sh
         exec /system/bin/su -c "$*"
       '';
-      sweep-store-pkg = pkgs.writeScriptBin "sweep-store" ''
-        #!/system/bin/sh
-        NOD_UID=$(/system/bin/stat -c %u /data/data/com.termux.nix)
-        NOD_GID=$(/system/bin/stat -c %g /data/data/com.termux.nix)
-        echo "Sweeping nix store ownership, this will take a while..."
-        /system/bin/find /data/data/com.termux.nix/files/usr/nix/store \
-          -maxdepth 1 -user root \
-          -exec /system/bin/chown -R "$NOD_UID:$NOD_GID" {} \;
-        echo "Done."
-      '';
+      # sweep-store-pkg = pkgs.writeScriptBin "sweep-store" ''
+      #   #!/system/bin/sh
+      #   NOD_UID=$(/system/bin/stat -c %u /data/data/com.termux.nix)
+      #   NOD_GID=$(/system/bin/stat -c %g /data/data/com.termux.nix)
+      #   echo "Sweeping nix store ownership, this will take a while..."
+      #   /system/bin/find /data/data/com.termux.nix/files/usr/nix/store \
+      #     -maxdepth 1 -user root \
+      #     -exec /system/bin/chown -R "$NOD_UID:$NOD_GID" {} \;
+      #   echo "Done."
+      # '';
 
       installationDir = config.build.installationDir;
       fakeProcStat = pkgs.writeText "fakeProcStat" ''
@@ -162,8 +162,11 @@ exec ${installationDir}/bin/proot-static \
     in
     {
       environment.files.login = lib.mkForce login;
-
-# environment.motd = lib.mkForce "Warning: doing any root operations to the nix-store might break store permissions! If you get permission issues in the store, login as root and run 'sweep-store' to fix it.";
+      
+      # environment.motd = lib.mkAfter ''
+      #   Warning: root operations on the nix-store may break permissions.
+      #   If you get permission errors, login as root and run 'sweep-store' to fix it.
+      # '';
 
       environment.etc."group".text = lib.mkAfter ''
         nixbld:x:30000:
@@ -176,6 +179,6 @@ exec ${installationDir}/bin/proot-static \
         chmod 755 ${config.user.home}/drop_root.sh
       '';
 
-      environment.packages = [ pkgs.bash pkgs.util-linux fake-sudo-pkg sweep-store-pkg ];
+      environment.packages = [ pkgs.bash pkgs.util-linux fake-sudo-pkg ];
     };
 }
