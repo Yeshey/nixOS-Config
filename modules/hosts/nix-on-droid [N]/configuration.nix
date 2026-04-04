@@ -9,8 +9,7 @@
       imports = with inputs.self.modules.nixOnDroid; [
         sshd-droid
         autossh-reverse-proxy-droid
-
-        root-droid # breaks the install
+        root-droid
       ];
 
       android-integration.am.enable = true;
