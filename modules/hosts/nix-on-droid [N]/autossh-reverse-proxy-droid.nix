@@ -49,10 +49,8 @@
   flake.modules.homeManager.autossh-reverse-proxy-droid =
     { pkgs, lib, ... }:
     {
-      programs.zsh = {
-        programs.zsh.initContent = lib.mkBefore ''
-          ${pkgs.procps}/bin/pgrep -x autossh > /dev/null 2>&1 || autossh-reverse-proxy
-        '';
-      };
+      programs.zsh.initContent = lib.mkBefore ''
+        ${pkgs.procps}/bin/pgrep -x autossh > /dev/null 2>&1 || autossh-reverse-proxy
+      '';
     };
 }
