@@ -122,15 +122,13 @@ if test "$(/system/bin/whoami)" != root; then
   fi
 fi
 
-if ! /system/bin/pgrep proot-static > /dev/null; then
-  if test -e ${installationDir}/bin/.proot-static.new; then
-    echo "Installing new proot-static..."
-    /system/bin/mv ${installationDir}/bin/.proot-static.new ${installationDir}/bin/proot-static
-  fi
-  if test -e ${installationDir}/usr/lib/.login-inner.new; then
-    echo "Installing new login-inner..."
-    /system/bin/mv ${installationDir}/usr/lib/.login-inner.new ${installationDir}/usr/lib/login-inner
-  fi
+if test -e ${installationDir}/bin/.proot-static.new; then
+  echo "Installing new proot-static..."
+  /system/bin/mv ${installationDir}/bin/.proot-static.new ${installationDir}/bin/proot-static
+fi
+if test -e ${installationDir}/usr/lib/.login-inner.new; then
+  echo "Installing new login-inner..."
+  /system/bin/mv ${installationDir}/usr/lib/.login-inner.new ${installationDir}/usr/lib/login-inner
 fi
 
 if [ ! -r /proc/stat ] && [ -e ${installationDir}${fakeProcStat} ]; then
