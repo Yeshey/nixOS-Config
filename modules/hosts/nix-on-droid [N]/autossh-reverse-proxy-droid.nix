@@ -11,7 +11,7 @@
 
       autossh-reverse-proxy = pkgs.writeScriptBin autossh-reverse-proxy-bin ''
         #!${pkgs.runtimeShell}
-        if ${pkgs.procps}/bin/ps -a | ${pkgs.toybox}/bin/grep -q '[a]utossh'; then
+        if ${pkgs.procps}/bin/ps -a | ${pkgs.toybox}/bin/grep '[a]utossh' | ${pkgs.toybox}/bin/grep -qv 'autossh-reverse-proxy'; then
           echo "autossh already running, skipping"
           return 0 2>/dev/null || exit 0
         fi
