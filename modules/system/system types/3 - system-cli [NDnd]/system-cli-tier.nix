@@ -16,6 +16,8 @@
       firmware
       cli-tools
       my-scripts
+      docker
+      podman
     ];
   };
 

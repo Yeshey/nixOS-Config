@@ -15,6 +15,8 @@
       android-integration.am.enable = true;
       android-integration.termux-open-url.enable = true;
       android-integration.xdg-open.enable = true;
+      android-integration.termux-wake-lock.enable = true;
+      android-integration.termux-wake-unlock.enable = true;
 
       environment.packages = with pkgs; [
         wget curl tree git 

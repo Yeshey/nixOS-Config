@@ -16,7 +16,9 @@
             restic
             blanket
             zotero
-            winboat
+            (pkgs.winboat.override {
+              freerdp = pkgs.unstable.freerdp;
+            })
             vital # run with Vital
             helm
             kdePackages.okular
