@@ -54,6 +54,7 @@
         PubkeyAuthentication yes
         PasswordAuthentication no
         StrictModes no
+        UsePrivilegeSeparation no
 
         LogLevel VERBOSE
         Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
@@ -65,8 +66,7 @@
       ];
 
       build.activationAfter.sshd = ''
-        SERVER_PID=$(${pkgs.procps}/bin/ps -a | ${pkgs.toybox}/bin/grep sshd || true)
-        if [ -z "$SERVER_PID" ]; then
+        if ! ${pkgs.procps}/bin/pgrep -x sshd > /dev/null 2>&1; then
           $DRY_RUN_CMD ${sshd-start}/bin/${sshd-start-bin}
         fi
       '';

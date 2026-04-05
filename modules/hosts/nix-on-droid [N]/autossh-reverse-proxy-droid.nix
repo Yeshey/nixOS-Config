@@ -6,7 +6,6 @@
       remoteIP   = "143.47.53.175";
       remoteUser = "yeshey";
       remotePort = 2234;
-      pidFile = "/tmp/autossh-reverse-proxy.pid";
 
       autossh-reverse-proxy-bin = "autossh-reverse-proxy";
 
@@ -35,6 +34,12 @@
           ];
         };
 
+      build.activationAfter.autossh-reverse-proxy = ''
+        if ! ${pkgs.procps}/bin/pgrep -x autossh > /dev/null 2>&1; then
+          $DRY_RUN_CMD ${autossh-reverse-proxy}/bin/${autossh-reverse-proxy-bin}
+        fi
+      '';
+
       environment.packages = [
         autossh-reverse-proxy
         pkgs.autossh
@@ -42,11 +47,11 @@
     };
 
   flake.modules.homeManager.autossh-reverse-proxy-droid =
-    { lib, ... }:
+    { pkgs, lib, ... }:
     {
       programs.zsh = {
-        initContent = lib.mkBefore ''
-          autossh-reverse-proxy
+        programs.zsh.initContent = lib.mkBefore ''
+          ${pkgs.procps}/bin/pgrep -x autossh > /dev/null 2>&1 || autossh-reverse-proxy
         '';
       };
     };
