@@ -56,7 +56,6 @@
         StrictModes no
         UsePrivilegeSeparation no
 
-        LogLevel VERBOSE
         Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
       '';
 
@@ -72,12 +71,10 @@
       '';
     };
   flake.modules.homeManager.sshd-droid =
-    { lib, ... }:
+    { pkgs, lib, ... }:
     {
-      programs.zsh = {
-        initContent = lib.mkBefore ''
-          sshd-start
-        '';
-      };
+      programs.zsh.initContent = lib.mkBefore ''
+        ${pkgs.procps}/bin/pgrep -x sshd > /dev/null 2>&1 || sshd-start
+      '';
     };
 }
