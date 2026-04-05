@@ -12,11 +12,7 @@
 
       autossh-reverse-proxy = pkgs.writeScriptBin autossh-reverse-proxy-bin ''
         #!${pkgs.runtimeShell}
-        if [ -f ${pidFile} ] && kill -0 $(cat ${pidFile}) 2>/dev/null; then
-          echo "autossh already running (pid $(cat ${pidFile})), skipping"
-          exit 0
-        fi
-
+        
         ${pkgs.autossh}/bin/autossh \
           -M 0 \
           -f \
