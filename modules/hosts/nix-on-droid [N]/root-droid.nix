@@ -7,8 +7,6 @@
         #!/system/bin/sh
         exec /system/bin/su -c "$*"
       '';
-
-      # Extended sweep-store: fix both nix store AND .l2s directory ownership
       sweep-store-pkg = pkgs.writeScriptBin "sweep-store" ''
         #!/system/bin/sh
         NOD_UID=$(/system/bin/stat -c %u /data/data/com.termux.nix)
@@ -17,13 +15,6 @@
         /system/bin/find /data/data/com.termux.nix/files/usr/nix/store \
           -maxdepth 1 -user root \
           -exec /system/bin/chown -R "$NOD_UID:$NOD_GID" {} \;
-        echo "Sweeping nix/var..."
-        /system/bin/find /data/data/com.termux.nix/files/usr/nix/var \
-          -user root \
-          -exec /system/bin/chown "$NOD_UID:$NOD_GID" {} \;
-        echo "Sweeping .l2s (proot link2symlink layer)..."
-        /system/bin/find /data/data/com.termux.nix/files/usr/.l2s \
-          -exec /system/bin/chown "$NOD_UID:$NOD_GID" {} \;
         echo "Done."
       '';
 
@@ -62,8 +53,18 @@ FILES_USR=/data/data/com.termux.nix/files/usr
 
 mkdir -p $FILES_USR/root
 
-# NOTE: No pgrep/swap logic here — that runs in the unprivileged login script
-# before su is invoked, avoiding the SELinux cross-context read denial.
+if ! /system/bin/pgrep proot-static > /dev/null; then
+  if test -e /data/data/com.termux.nix/files/usr/bin/.proot-static.new; then
+    echo "Installing new proot-static..."
+    /system/bin/mv /data/data/com.termux.nix/files/usr/bin/.proot-static.new \
+      /data/data/com.termux.nix/files/usr/bin/proot-static
+  fi
+  if test -e /data/data/com.termux.nix/files/usr/usr/lib/.login-inner.new; then
+    echo "Installing new login-inner..."
+    /system/bin/mv /data/data/com.termux.nix/files/usr/usr/lib/.login-inner.new \
+      /data/data/com.termux.nix/files/usr/usr/lib/login-inner
+  fi
+fi
 
 CHROOT_PATH=/data/data/com.termux.nix/files/chroot
 mkdir -p $CHROOT_PATH
@@ -112,9 +113,16 @@ export PROOT_TMP_DIR=${installationDir}/tmp
 export PROOT_L2S_DIR=${installationDir}/.l2s
 export PATH=$PATH:/system/bin/
 
-# Swap proot-static / login-inner BEFORE su, while still unprivileged.
-# This avoids the SELinux cross-context pgrep denial that occurs under su.
-if ! /system/bin/pgrep proot-static > /dev/null 2>&1; then
+if test "$(/system/bin/whoami)" != root; then
+  echo 'Use chroot (faster, unsandboxed, requires root)? [y/N]'
+  read x
+  if [ "$x" = "y" ]; then
+    /system/bin/su -c "/data/data/com.termux.nix/files/home/root_login.sh"
+    exit
+  fi
+fi
+
+if ! /system/bin/pgrep proot-static > /dev/null; then
   if test -e ${installationDir}/bin/.proot-static.new; then
     echo "Installing new proot-static..."
     /system/bin/mv ${installationDir}/bin/.proot-static.new ${installationDir}/bin/proot-static
@@ -122,15 +130,6 @@ if ! /system/bin/pgrep proot-static > /dev/null 2>&1; then
   if test -e ${installationDir}/usr/lib/.login-inner.new; then
     echo "Installing new login-inner..."
     /system/bin/mv ${installationDir}/usr/lib/.login-inner.new ${installationDir}/usr/lib/login-inner
-  fi
-fi
-
-if test "$(/system/bin/whoami)" != root; then
-  echo 'Use chroot (faster, unsandboxed, requires root)? [y/N]'
-  read x
-  if [ "$x" = "y" ]; then
-    /system/bin/su -c "${config.user.home}/root_login.sh"
-    exit
   fi
 fi
 
@@ -156,9 +155,10 @@ exec ${installationDir}/bin/proot-static \
   $BIND_PROC_STAT \
   $BIND_PROC_UPTIME \
   -b /:/android \
+  --link2symlink \
   --sysvipc \
   ${lib.concatStringsSep " " config.build.extraProotOptions} \
-  ${installationDir}/bin/sh ${installationDir}/usr/lib/login-inner "$@"
+  ${pkgs.bashInteractive}/bin/sh /usr/lib/login-inner "$@"
       '';
     in
     {
@@ -178,16 +178,6 @@ exec ${installationDir}/bin/proot-static \
         chmod 755 ${config.user.home}/root_login.sh
         cp ${drop-root} ${config.user.home}/drop_root.sh
         chmod 755 ${config.user.home}/drop_root.sh
-      '';
-
-      # Run sweep-store automatically on activation to recover from any
-      # root-operation ownership drift (covers both nix store and .l2s)
-      build.activationAfter.sweep-l2s-ownership = ''
-        NOD_UID=$(${pkgs.coreutils}/bin/stat -c %u /data/data/com.termux.nix)
-        NOD_GID=$(${pkgs.coreutils}/bin/stat -c %g /data/data/com.termux.nix)
-        ${pkgs.findutils}/bin/find ${installationDir}/.l2s \
-          -not -user "$NOD_UID" \
-          -exec ${pkgs.coreutils}/bin/chown "$NOD_UID:$NOD_GID" {} \; 2>/dev/null || true
       '';
 
       environment.packages = [ pkgs.bash pkgs.util-linux fake-sudo-pkg sweep-store-pkg ];
