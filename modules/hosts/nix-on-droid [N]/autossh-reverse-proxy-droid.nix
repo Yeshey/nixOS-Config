@@ -6,14 +6,15 @@
       remoteIP   = "143.47.53.175";
       remoteUser = "yeshey";
       remotePort = 2234;
+      pidFile = "/tmp/autossh-reverse-proxy.pid";
 
       autossh-reverse-proxy-bin = "autossh-reverse-proxy";
 
       autossh-reverse-proxy = pkgs.writeScriptBin autossh-reverse-proxy-bin ''
         #!${pkgs.runtimeShell}
-        if ${pkgs.procps}/bin/ps -a | ${pkgs.toybox}/bin/grep '[a]utossh' | ${pkgs.toybox}/bin/grep -qv 'autossh-reverse-proxy'; then
-          echo "autossh already running, skipping"
-          return 0 2>/dev/null || exit 0
+        if [ -f ${pidFile} ] && kill -0 $(cat ${pidFile}) 2>/dev/null; then
+          echo "autossh already running (pid $(cat ${pidFile})), skipping"
+          exit 0
         fi
 
         ${pkgs.autossh}/bin/autossh \
