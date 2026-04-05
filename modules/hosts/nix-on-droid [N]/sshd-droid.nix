@@ -54,8 +54,9 @@
         PubkeyAuthentication yes
         PasswordAuthentication no
         StrictModes no
+        UsePrivilegeSeparation no
 
-        Subsystem sftp internal-sftp
+        Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
       '';
 
       environment.packages = [
