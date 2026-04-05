@@ -158,7 +158,7 @@ exec ${installationDir}/bin/proot-static \
   --link2symlink \
   --sysvipc \
   ${lib.concatStringsSep " " config.build.extraProotOptions} \
-  ${pkgs.bashInteractive}/bin/sh /usr/lib/login-inner "$@"
+  ${installationDir}/bin/sh ${installationDir}/usr/lib/login-inner "$@"
       '';
     in
     {
