@@ -53,7 +53,7 @@
           update-off = "sudo bash -c 'nh os boot --bypass-root-check ${flakePath} -- --max-jobs 2 --cores 5 && poweroff'";
         };
 
-        initContent = lib.mkBefore ''
+        initContent = ''
           ${lib.optionalString (builtins.pathExists ./git.zsh) (builtins.readFile ./git.zsh)}
           ${lib.optionalString (builtins.pathExists ./myAlias.zsh) (builtins.readFile ./myAlias.zsh)}
 
