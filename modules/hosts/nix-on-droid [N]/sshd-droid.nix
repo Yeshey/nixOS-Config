@@ -3,6 +3,7 @@
   flake.modules.nixOnDroid.sshd-droid =
     { config, lib, pkgs, ... }:
     let
+      # proot issue: https://github.com/nix-community/nix-on-droid/issues/307
       openssh-patched = pkgs.openssh.overrideAttrs (old: {
         postPatch = (old.postPatch or "") + ''
           sed -i 's/platform_disable_tracing(1)/platform_disable_tracing(0)/' sftp-server.c
