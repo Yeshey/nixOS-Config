@@ -37,6 +37,22 @@
         echo "connect with ssh nix-on-droid@<ip> -p 8022"
         ${pkgs.openssh}/bin/sshd -f "/etc/${configPath}"
       '';
+
+      openssh-android = pkgs.openssh.overrideAttrs (old: {
+        patches = (old.patches or []) ++ [
+          (pkgs.writeText "sftp-android-prctl.patch" ''
+            --- a/sftp-server.c
+            +++ b/sftp-server.c
+            @@ -657,7 +657,7 @@ main(int argc, char **argv)
+            #ifdef HAVE_PRCTL
+              if (prctl(PR_SET_DUMPABLE, 0) != 0)
+            -		fatal("unable to make the process undumpable: %s",
+            +		debug("unable to make the process undumpable: %s",
+                    strerror(errno));
+            #endif
+          '')
+        ];
+      });
     in
     {
       home-manager.config =
@@ -54,14 +70,13 @@
         PubkeyAuthentication yes
         PasswordAuthentication no
         StrictModes no
-        UsePrivilegeSeparation no
 
-        Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
+        Subsystem sftp ${pkgs.openssh-android}/libexec/sftp-server
       '';
 
       environment.packages = [
         sshd-start
-        pkgs.openssh
+        openssh-android
       ];
 
       build.activationAfter.sshd = ''
