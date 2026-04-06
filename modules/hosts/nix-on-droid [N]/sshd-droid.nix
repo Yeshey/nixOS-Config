@@ -3,6 +3,12 @@
   flake.modules.nixOnDroid.sshd-droid =
     { config, lib, pkgs, ... }:
     let
+      openssh-patched = pkgs.openssh.overrideAttrs (old: {
+        postPatch = (old.postPatch or "") + ''
+          sed -i 's/platform_disable_tracing(1)/platform_disable_tracing(0)/' sftp-server.c
+        '';
+      });
+
       concatLines = list: builtins.concatStringsSep "\n" list;
       prefixLines = mapper: list: concatLines (map mapper list);
 
@@ -19,7 +25,7 @@
       generateKeyWhenNeededOf = type: ''
         if [ ! -f ${pathOfKeyOf type} ]; then
           mkdir --parents ${keysFolder}
-          ${pkgs.openssh}/bin/ssh-keygen -t "${type}" -f "${pathOfKeyOf type}" -N ""
+          ${openssh-patched}/bin/ssh-keygen -t "${type}" -f "${pathOfKeyOf type}" -N ""
         fi
       '';
 
@@ -35,7 +41,7 @@
 
         echo "Starting sshd on port ${lib.concatMapStrings toString ports} in the background"
         echo "connect with ssh nix-on-droid@<ip> -p 8022"
-        ${pkgs.openssh}/bin/sshd -f "/etc/${configPath}"
+        ${openssh-patched}/bin/sshd -f "/etc/${configPath}"
       '';
     in
     {
@@ -55,12 +61,12 @@
         PasswordAuthentication no
         StrictModes no
 
-        Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
+        Subsystem sftp ${openssh-patched}/libexec/sftp-server -e
       '';
 
       environment.packages = [
         sshd-start
-        pkgs.openssh
+        openssh-patched
       ];
 
       build.activationAfter.sshd = ''
