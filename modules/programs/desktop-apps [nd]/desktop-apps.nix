@@ -6,6 +6,7 @@
           home.packages = with pkgs; [
             inkscape
             blender
+            easyeffects
             qbittorrent
             vesktop
             vlc
