@@ -26,7 +26,7 @@
         "sftp://hyrulecastle Hyrule Castle"
         "sftp://kakariko Kakariko"
         "sftp://oracle Oracle"
-        "sftp://a70 A70"
+        "sftp://a70/data/data/com.termux.nix/files/home A70"
       ];
     };
   };
