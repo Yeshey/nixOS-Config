@@ -54,6 +54,8 @@
         PubkeyAuthentication yes
         PasswordAuthentication no
         StrictModes no
+
+        Subsystem sftp internal-sftp
       '';
 
       environment.packages = [
@@ -71,7 +73,10 @@
     { pkgs, lib, ... }:
     {
       programs.zsh.initContent = lib.mkBefore ''
-        ${pkgs.procps}/bin/pgrep -x sshd > /dev/null 2>&1 || sshd-start
+        # Only run this check in interactive shells so we don't corrupt SFTP/SCP
+        if [[ -o interactive ]]; then
+          ${pkgs.procps}/bin/pgrep -x sshd > /dev/null 2>&1 || sshd-start
+        fi
       '';
     };
 }
