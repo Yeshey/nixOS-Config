@@ -71,7 +71,7 @@
         PasswordAuthentication no
         StrictModes no
 
-        Subsystem sftp ${pkgs.openssh-android}/libexec/sftp-server
+        Subsystem sftp ${openssh-android}/libexec/sftp-server
       '';
 
       environment.packages = [
