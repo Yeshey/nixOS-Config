@@ -35,7 +35,7 @@
 
         echo "Starting sshd on port ${lib.concatMapStrings toString ports} in the background"
         echo "connect with ssh nix-on-droid@<ip> -p 8022"
-        ${pkgs.openssh}/bin/sshd -f "/etc/${configPath}"
+        ${pkgs.openssh}/bin/sshd -f "/etc/${configPath}" -E /tmp/sshd-debug.log
       '';
     in
     {
@@ -55,7 +55,7 @@
         PasswordAuthentication no
         StrictModes no
 
-        Subsystem sftp internal-sftp
+        Subsystem sftp ${pkgs.openssh}/libexec/sftp-server
       '';
 
       environment.packages = [
