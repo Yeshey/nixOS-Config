@@ -35,7 +35,7 @@
 
         echo "Starting sshd on port ${lib.concatMapStrings toString ports} in the background"
         echo "connect with ssh nix-on-droid@<ip> -p 8022"
-        ${pkgs.openssh}/bin/sshd -f "/etc/${configPath}" -E /tmp/sshd-debug.log
+        ${pkgs.openssh}/bin/sshd -f "/etc/${configPath}"
       '';
     in
     {
@@ -73,10 +73,7 @@
     { pkgs, lib, ... }:
     {
       programs.zsh.initContent = lib.mkBefore ''
-        # Only run this check in interactive shells so we don't corrupt SFTP/SCP
-        if [[ -o interactive ]]; then
-          ${pkgs.procps}/bin/pgrep -x sshd > /dev/null 2>&1 || sshd-start
-        fi
+        ${pkgs.procps}/bin/pgrep -x sshd > /dev/null 2>&1 || sshd-start
       '';
     };
 }
