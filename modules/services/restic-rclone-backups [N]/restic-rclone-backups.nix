@@ -51,7 +51,7 @@ let
       "**/.var/app/*/cache/" "**/.local/share/waydroid"
     ] ++ job.exclude;
 
-    extraBackupArgs = [ "--verbose=1" ] ++ job.extraBackupArgs;
+    extraBackupArgs = [ "--verbose=2" ] ++ job.extraBackupArgs;
 
     pruneOpts = lib.optionals job.prune.enable (
       lib.filter (s: s != "") [
