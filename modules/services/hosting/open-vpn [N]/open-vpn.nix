@@ -39,11 +39,19 @@
     in
       {
         options.open-vpn = with lib; {
-          enable = mkEnableOption "OpenVPN server (UDP + TCP, NetworkManager compatible, IPv6 enabled)";
-          enableSharedGuest = mkEnableOption "Shared guest VPN (internet-only access)";
+          enable = lib.mkOption { # not using rn
+            type = lib.types.bool;
+            default = true;
+            description = "OpenVPN server (UDP + TCP, NetworkManager compatible, IPv6 enabled)";
+          };
+          enableSharedGuest = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+            description = "Shared guest VPN (internet-only access)";
+          };
         };
 
-        config = lib.mkMerge [({
+        config = lib.mkMerge [( lib.mkIf config.open-vpn.enableSharedGuest {
           # 1. OpenVPN UDP Server Configuration (IPv4 + IPv6)
           services.openvpn.servers.skyloftVPN-UDP = {
             autoStart = true;
