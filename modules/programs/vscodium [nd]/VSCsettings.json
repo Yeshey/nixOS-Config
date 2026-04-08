@@ -84,5 +84,6 @@
                 "command": "nixfmt-rfc-style"
             }
         }
-    }
+    },
+    "git.enableSmartCommit": true
 }
