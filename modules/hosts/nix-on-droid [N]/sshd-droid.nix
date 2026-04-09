@@ -42,8 +42,7 @@
 
         echo "Starting sshd on port ${lib.concatMapStrings toString ports} in the background"
         echo "connect with ssh nix-on-droid@<ip> -p 8022"
-        setsid ${openssh-patched}/bin/sshd -f "/etc/${configPath}" > /tmp/sshd.log 2>&1 &
-        disown
+        ${openssh-patched}/bin/sshd -f "/etc/${configPath}"
       '';
     in
     {

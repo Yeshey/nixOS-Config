@@ -11,19 +11,18 @@
 
       autossh-reverse-proxy = pkgs.writeScriptBin autossh-reverse-proxy-bin ''
         #!${pkgs.runtimeShell}
-
-        echo "Starting reverse proxy..."
-        setsid ${pkgs.autossh}/bin/autossh \
+        
+        ${pkgs.autossh}/bin/autossh \
           -M 0 \
+          -f \
           -N \
           -o ExitOnForwardFailure=yes \
           -o ServerAliveInterval=60 \
           -o ServerAliveCountMax=3 \
           -R 0.0.0.0:${toString remotePort}:localhost:8022 \
           ${remoteUser}@${remoteIP} \
-          > /tmp/autossh.log 2>&1 &
-        disown
-        echo "Reverse proxy started, logs: tail -f /tmp/autossh.log"
+          && echo "Reverse proxy started" \
+          || echo "WARNING: reverse proxy failed to start"
       '';
     in
     {
