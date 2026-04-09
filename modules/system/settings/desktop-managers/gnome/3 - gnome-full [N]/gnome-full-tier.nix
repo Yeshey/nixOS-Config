@@ -20,6 +20,7 @@
         gnomeExtensions.appindicator # system tray
         gnomeExtensions.system-monitor # official gnome extension
         gnomeExtensions.user-themes # # official gnome extension
+        gnomeExtensions.caffeine
         # waiting for this issue to get fixed: https://github.com/boerdereinar/copyous/issues/67
         (unstable.gnomeExtensions.copyous.overrideAttrs (old: {
           buildInputs = [
@@ -42,6 +43,7 @@
             "system-monitor@gnome-shell-extensions.gcampax.github.com"
             "user-theme@gnome-shell-extensions.gcampax.github.com"
             "copyous@boerdereinar.dev"
+            "caffeine@patapon.info"
           ];
         };
 

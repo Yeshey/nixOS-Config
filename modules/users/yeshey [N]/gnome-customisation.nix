@@ -1,3 +1,4 @@
+# dconf dump / > dconf-settings.ini
 let 
   username = "yeshey"; 
 in
