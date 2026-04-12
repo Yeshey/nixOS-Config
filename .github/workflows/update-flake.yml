@@ -25,13 +25,13 @@ jobs:
         with:
           hatchet-protocol: "cleave"
 
-      # 2) Checkout repository
+      # 3) Checkout repository
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # 3) Install Nix with experimental features + ARM support
+      # 4) Install Nix with experimental features + ARM support
       - name: Install Nix
         uses: cachix/install-nix-action@v31
         with:
@@ -39,13 +39,26 @@ jobs:
             experimental-features = nix-command flakes pipe-operators
             extra-platforms = aarch64-linux
             extra-system-features = nixos-test benchmark big-parallel kvm
-      # 4) Show free space & git status
+
+      # 5) Restore Nix store from cache (keyed on flake.nix, not flake.lock,
+      #    since flake.lock is what this job changes)
+      - name: Cache Nix store
+        uses: nix-community/cache-nix-action@v6
+        with:
+          primary-key: nix-${{ runner.os }}-${{ hashFiles('flake.nix') }}
+          restore-prefixes-first-match: nix-${{ runner.os }}-
+          gc-max-store-size-linux: 4G
+          purge: true
+          purge-prefixes: nix-${{ runner.os }}-
+          purge-last-accessed: 1209600 # 2 weeks in seconds
+
+      # 6) Show free space & git status
       - name: Show free space & git status
         run: |
           df -h
           git --version
           git status --porcelain --untracked-files=no || true
-      # 5) Try full update first
+      # 7) Try full update first
       - name: Update all flake inputs
         id: full-update
         continue-on-error: true
@@ -53,14 +66,14 @@ jobs:
           git checkout main || git checkout -b main
           nix flake update
           git --no-pager diff flake.lock || true
-      # 6) Check flake after full update
+      # 8) Check flake after full update
       - name: Check flake (full update)
         id: full-check
         if: steps.full-update.outcome == 'success'
         continue-on-error: true
         run: |
           nix flake check --all-systems
-      # 7) If full update failed, rollback and try nixpkgs + nixpkgs-unstable
+      # 9) If full update failed, rollback and try nixpkgs + nixpkgs-unstable
       - name: Rollback and update nixpkgs + nixpkgs-unstable
         id: dual-update
         if: steps.full-check.outcome == 'failure'
@@ -70,14 +83,14 @@ jobs:
           git restore flake.lock
           nix flake update nixpkgs nixpkgs-unstable
           git --no-pager diff flake.lock || true
-      # 8) Check flake after nixpkgs + nixpkgs-unstable update
+      # 10) Check flake after nixpkgs + nixpkgs-unstable update
       - name: Check flake (nixpkgs + nixpkgs-unstable)
         id: dual-check
         if: steps.full-check.outcome == 'failure' && steps.dual-update.outcome == 'success'
         continue-on-error: true
         run: |
           nix flake check --all-systems
-      # 9) If nixpkgs + nixpkgs-unstable failed, rollback and try nixpkgs only
+      # 11) If nixpkgs + nixpkgs-unstable failed, rollback and try nixpkgs only
       - name: Rollback and update nixpkgs only
         if: steps.dual-check.outcome == 'failure'
         run: |
@@ -85,13 +98,13 @@ jobs:
           git restore flake.lock
           nix flake update nixpkgs
           git --no-pager diff flake.lock || true
-      # 10) Check flake after nixpkgs-only update
+      # 12) Check flake after nixpkgs-only update
       - name: Check flake (nixpkgs only)
         id: single-check
         if: steps.dual-check.outcome == 'failure'
         run: |
           nix flake check --all-systems
-      # 11) Determine commit message based on what succeeded
+      # 13) Determine commit message based on what succeeded
       - name: Set commit message
         id: commit-msg
         run: |
@@ -102,27 +115,17 @@ jobs:
           else
             echo "message=chore(deps): update flake.lock (nixpkgs only)" >> $GITHUB_OUTPUT
           fi
-      # 12) Commit & push with explicit pull/rebase
+      # 14) Commit & push with explicit pull/rebase
       - name: Commit and push flake.lock
         if: steps.full-check.outcome == 'success' || steps.dual-check.outcome == 'success' || steps.single-check.outcome == 'success'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Fetch latest changes
           git fetch origin main
-          
-          # Stash our changes
           git add flake.lock
           git stash
-          
-          # Reset to remote
           git reset --hard origin/main
-          
-          # Apply our changes back
           git stash pop
-          
-          # Commit if there are changes
           if ! git diff --quiet flake.lock; then
             git add flake.lock
             git commit --no-verify --signoff -m "${{ steps.commit-msg.outputs.message }}"
