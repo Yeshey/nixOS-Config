@@ -1,11 +1,10 @@
 { inputs, ... }:
 {
   flake.modules.nixos.zswap =
-    { ... }:
     {
       imports = [
-        # zswap module merged Apr 10 2026, remove when nixpkgs stable includes it
-        "${inputs.nixpkgs-unstable}/nixos/modules/system/boot/zswap.nix"
+        # TODO zswap module merged Apr 10 2026, remove when nixpkgs stable includes it, along with the flake-parts file
+        "${inputs.nixpkgs-zswap}/nixos/modules/system/boot/zswap.nix"
       ];
 
       zramSwap.enable = false;

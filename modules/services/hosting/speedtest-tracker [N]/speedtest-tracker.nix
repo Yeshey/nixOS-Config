@@ -1,7 +1,7 @@
 { inputs, ... }:
 {
   flake.modules.nixos.speedtest-tracker =
-    { pkgs, config, ... }:
+    { pkgs, ... }:
     {
       imports = [
         # module definition comes from unstable

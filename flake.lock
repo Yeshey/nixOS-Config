@@ -889,6 +889,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-zswap": {
+      "locked": {
+        "lastModified": 1776050108,
+        "narHash": "sha256-8rsJUyI5kpNZIDBJdfsA/oKsJ11LAX50sm7TwgRi9Ig=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "6ed6d3b6b65085fd8a937e7f7a6fc02cff9feb79",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "master",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs_2": {
       "locked": {
         "lastModified": 1768564909,
@@ -1204,6 +1220,7 @@
         "nixpkgs-darwin": "nixpkgs-darwin",
         "nixpkgs-kernel": "nixpkgs-kernel",
         "nixpkgs-unstable": "nixpkgs-unstable",
+        "nixpkgs-zswap": "nixpkgs-zswap",
         "nurpkgs": "nurpkgs",
         "nvix": "nvix",
         "packages": "packages",
