@@ -29,10 +29,17 @@ let
   '';
 in
 {
-  flake.modules.nixos.nix-index-database = {
-    imports = [ inputs.nix-index-database.nixosModules.nix-index ];
-    programs.nix-index-database.comma.enable = true;
-  };
+  flake.modules.nixos.nix-index-database = 
+    { pkgs, lib, ... }:
+    {
+      imports = [ inputs.nix-index-database.nixosModules.nix-index ];
+      programs.nix-index-database.comma.enable = true;
+
+      environment.systemPackages = [ pkgs.jq ];
+
+      programs.bash.interactiveShellInit = lib.mkBefore commaUnfreeFunction;
+      programs.zsh.interactiveShellInit = lib.mkBefore commaUnfreeFunction;
+    };
 
   flake.modules.homeManager.nix-index-database =
     { pkgs, lib, ... }:
