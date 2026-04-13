@@ -1,10 +1,8 @@
 {
   flake.modules.nixos.zram =
-    { lib, ... }:
     {
       zramSwap = {
         enable = true;
-        memoryPercent = lib.mkDefault 60;
       };
 
       programs.htop = { # TODO doesnt show

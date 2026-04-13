@@ -37,9 +37,6 @@
       port       = 2233;
     };
 
-    zramSwap.enable = true;
-    zramSwap.memoryPercent = 100;
-
     networking.hostName = "kakariko"; 
   };
   flake.modules.homeManager.kakariko = { };

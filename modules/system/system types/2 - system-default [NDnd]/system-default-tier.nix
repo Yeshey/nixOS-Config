@@ -19,7 +19,7 @@
         nix-ld
         location
         restic-rclone-backups
-        zram
+        zswap
         secrets
       ]
       ++ (with inputs.self.modules.generic; [
