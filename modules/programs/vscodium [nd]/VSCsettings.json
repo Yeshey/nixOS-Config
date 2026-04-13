@@ -63,9 +63,6 @@
         "markdown",
         "plaintext"
     ],
-    "ltex.sentenceCacheSize": 50000,
-    "ltex.java.maximumHeapSize": 8192,
-    "ltex.java.initialHeapSize": 2048,
     "ltex.language": "en-US",
     "ltex.additionalRules.enablePickyRules": true,
     "ltex.additionalRules.languageModel": "/home/yeshey/.local/share/vscodium-nix-deps/ngram-en",
