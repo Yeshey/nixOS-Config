@@ -43,6 +43,8 @@
       port       = 2232;
     };
 
+    boot.zswap.maxPoolPercent = 50;
+
     networking.hostName = "hyrulecastle"; 
   };
   flake.modules.homeManager.hyrulecastle = { };

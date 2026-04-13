@@ -37,7 +37,7 @@
       port       = 2233;
     };
 
-    boot.zswap.maxPoolPercent = 60;
+    boot.zswap.maxPoolPercent = 55;
 
     networking.hostName = "kakariko"; 
   };
