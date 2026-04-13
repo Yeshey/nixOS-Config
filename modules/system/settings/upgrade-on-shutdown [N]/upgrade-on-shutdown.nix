@@ -143,6 +143,7 @@
 
         path = with pkgs; [
           coreutils
+          findutils
           gnutar
           xz.bin
           gzip
@@ -168,12 +169,48 @@
             echo "Not powering off (reboot or other). Creating flag to update after next boot."
             touch "$FLAG_FILE"
           else
-            echo "Power-off detected. Running upgrade..."
+            echo "Power-off detected. Checking battery/power before upgrading..."
 
-            if ${updateScript}/bin/nixos-update-flake; then
-              echo "Update finished successfully."
+            BATTERY=$(find /sys/class/power_supply -maxdepth 1 -name "BAT*" | sort | head -1)
+            AC=$(find /sys/class/power_supply -maxdepth 1 \
+                  \( -name "AC*" -o -name "ADP*" -o -name "ACAD*" \) | sort | head -1)
+
+            if [ -n "$BATTERY" ]; then
+              LEVEL=$(cat "$BATTERY/capacity")
+              echo "Battery level: ''${LEVEL}%"
             else
-              echo "Update FAILED. System will boot into the old generation."
+              echo "No battery detected (desktop). Treating as always-OK."
+              LEVEL=100
+            fi
+
+            PROCEED=0
+
+            if [ "$LEVEL" -ge 85 ]; then
+              echo "Battery >= 85% — proceeding with update."
+              PROCEED=1
+            else
+              echo "Battery at ''${LEVEL}%. Waiting 20s in case power is being connected..."
+              sleep 20
+
+              ONLINE=0
+              if [ -n "$AC" ]; then
+                ONLINE=$(cat "$AC/online")
+              fi
+
+              if [ "$ONLINE" -eq 1 ]; then
+                echo "AC adapter is connected — proceeding with update."
+                PROCEED=1
+              else
+                echo "Battery low (''${LEVEL}%) and AC not connected. Skipping update."
+              fi
+            fi
+
+            if [ "$PROCEED" -eq 1 ]; then
+              if ${updateScript}/bin/nixos-update-flake; then
+                echo "Update finished successfully."
+              else
+                echo "Update FAILED. System will boot into the old generation."
+              fi
             fi
           fi
         '';
