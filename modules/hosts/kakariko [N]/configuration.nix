@@ -37,6 +37,8 @@
       port       = 2233;
     };
 
+    boot.zswap.maxPoolPercent = 50;
+
     networking.hostName = "kakariko"; 
   };
   flake.modules.homeManager.kakariko = { };
