@@ -9,7 +9,7 @@
     imports = with inputs.self.modules.nixos; [
       system-cli-tier
 
-      upgrade-on-shutdown
+      # upgrade-on-shutdown
       flatpak
       printing
       virt
