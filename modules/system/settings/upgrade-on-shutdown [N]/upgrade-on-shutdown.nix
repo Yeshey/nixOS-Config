@@ -190,8 +190,8 @@
               echo "Battery >= 85% — proceeding with update."
               PROCEED=1
             else
-              echo "Battery at ''${LEVEL}%. Waiting 20s in case power is being connected..."
-              sleep 20
+              echo "Battery at ''${LEVEL}%. Waiting 60s in case power is being connected..."
+              sleep 60
 
               ONLINE=0
               if [ -n "$AC" ]; then
