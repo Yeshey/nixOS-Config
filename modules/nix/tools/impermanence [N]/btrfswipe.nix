@@ -40,6 +40,7 @@
           "/var/lib/nixos"
           "/var/lib/systemd/coredump"
           "/var/lib/systemd/matches"
+          "/var/lib/systemd/timers" # For timers
           "/etc/NetworkManager/system-connections"
           { directory = "/var/lib/colord"; user = "colord"; group = "colord"; mode = "u=rwx,g=rx,o="; }
         ];

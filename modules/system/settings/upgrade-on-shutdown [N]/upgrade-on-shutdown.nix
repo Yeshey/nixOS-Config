@@ -202,12 +202,15 @@
                 PROCEED=1
               else
                 echo "Battery low (''${LEVEL}%) and AC not connected. Skipping update."
+                echo "Creating flag to retry update on next shutdown."
+                touch "$FLAG_FILE"
               fi
             fi
 
             if [ "$PROCEED" -eq 1 ]; then
               if ${updateScript}/bin/nixos-update-flake; then
                 echo "Update finished successfully."
+                rm -f "$FLAG_FILE"
               else
                 echo "Update FAILED. System will boot into the old generation."
               fi
