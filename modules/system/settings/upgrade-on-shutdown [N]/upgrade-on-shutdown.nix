@@ -132,6 +132,7 @@
           "autossh-reverseProxy.service"
           "sshd.service"
           "local-fs.target"
+          "fix-surface-clock.service"
         ];
 
         wants = [ "network-online.target" ];
@@ -154,8 +155,8 @@
         # ExecStart: runs when the timer fires.
         # Waits 3 min then notifies all desktop users that an update is staged.
         script = ''
-          echo "Will notify in 3 min"
-          sleep 180
+          echo "Will notify in 3 seconds"
+          sleep 3
           ${notify-send-all}/bin/notify-send-all -u critical "Will update on shutdown..."
         '';
 
@@ -222,6 +223,7 @@
           Type            = "oneshot";
           RemainAfterExit = "yes";
           TimeoutStopSec  = "10h";
+          KillMode = "process";
         };
       };
 
@@ -235,15 +237,16 @@
       systemd.services.nixos-reboot-update-check = {
         description = "Check for deferred upgrade flag from last reboot";
         wantedBy    = [ "multi-user.target" ];
-        after       = [ "network.target" ];
+        after = [ "network.target" "my-nixos-update.timer" ];
 
         script = ''
           FLAG_FILE="/etc/nixos-reboot-update.flag"
 
           if [ -f "$FLAG_FILE" ]; then
-            echo "$FLAG_FILE present — re-arming my-nixos-update.service for next shutdown."
-            systemctl start my-nixos-update.service
-            echo "Removing flag $FLAG_FILE"
+            if ! systemctl is-active --quiet my-nixos-update.service; then
+              echo "Re-arming my-nixos-update.service"
+              systemctl start my-nixos-update.service
+            fi
             rm "$FLAG_FILE"
           fi
         '';
