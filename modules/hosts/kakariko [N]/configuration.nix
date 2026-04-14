@@ -12,7 +12,6 @@
       systemd-boot
       bluetooth
       tpm2
-      btrfs
 
       autossh-reverse-proxy
       # i2p
