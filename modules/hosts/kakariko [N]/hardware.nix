@@ -73,20 +73,41 @@
       nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
       hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
-      systemd.services.fix-surface-clock = { # for when the time is so wrong it can't connect to the internet, this uses a http server so it can connect and update the time.
+      systemd.services.fix-surface-clock = {
         description = "Fix broken Surface RTC using ntpdate";
-        wantedBy = [ "multi-user.target" ];
+        # Remove wantedBy = [ "multi-user.target" ]; — we'll use a different target
+        
+        before = [ "time-set.target" "time-sync.target" ];
         after = [ "network-online.target" ];
         wants = [ "network-online.target" ];
+        
+        unitConfig = {
+          DefaultDependencies = false;  # Critical: allows running very early
+        };
+        
         script = ''
           ${pkgs.ntp}/bin/ntpdate -u pool.ntp.org || \
           ${pkgs.ntp}/bin/ntpdate -u time.cloudflare.com || \
           ${pkgs.ntp}/bin/ntpdate -u time.google.com
         '';
+        
         serviceConfig = {
           Type = "oneshot";
+          RemainAfterExit = true;  # Stay "active" so dependents know time is set
           Restart = "on-failure";
           RestartSec = "10s";
+        };
+      };
+
+      # Make your timer depend on time being set
+      systemd.timers.my-nixos-update = {
+        wantedBy = [ "timers.target" ];
+        after = [ "time-set.target" "fix-surface-clock.service" ];  # Wait for clock fix
+        requires = [ "fix-surface-clock.service" ];  # Ensure it actually ran
+        timerConfig = {
+          Persistent = true;
+          OnCalendar = "*-*-01,16 06:10:00";
+          Unit = "my-nixos-update.service";
         };
       };
     };
