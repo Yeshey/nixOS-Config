@@ -16,7 +16,6 @@ let
     unzip
     ookla-speedtest
     home-manager
-    cowsay
   ];
 in
 {
