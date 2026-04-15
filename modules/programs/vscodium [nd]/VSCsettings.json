@@ -82,5 +82,6 @@
             }
         }
     },
-    "git.enableSmartCommit": true
+    "git.enableSmartCommit": true,
+    "redhat.telemetry.enabled": true
 }
