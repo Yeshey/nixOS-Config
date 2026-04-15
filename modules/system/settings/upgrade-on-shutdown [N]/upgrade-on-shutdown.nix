@@ -153,7 +153,7 @@
         ];
 
         # ExecStart: runs when the timer fires.
-        # Waits 3 min then notifies all desktop users that an update is staged.
+        # Waits 3 sec then notifies all desktop users that an update is staged.
         script = ''
           echo "Will notify in 3 seconds"
           sleep 3
