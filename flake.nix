@@ -65,6 +65,10 @@
       inputs.home-manager.follows = "home-manager";
     };
     nixos-hardware.url = "github:mexisme/nixos-hardware/microsoft-surface/update-kernel-6.18.13";
+    nixos-upgrade-on-shutdown = {
+      url = "github:yeshey/nixos-upgrade-on-shutdown";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-25.11-darwin";
     nixpkgs-kernel.url = "github:NixOS/nixpkgs/98d6950e15f36939b41fb9091dd597b5054ac101";
