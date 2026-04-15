@@ -223,7 +223,10 @@
           Type            = "oneshot";
           RemainAfterExit = "yes";
           TimeoutStopSec  = "10h";
-          KillMode = "process";
+          KillMode        = "process";
+          StandardOutput  = "tty";
+          StandardError   = "tty";
+          TTYPath         = "/dev/console";
         };
       };
 
