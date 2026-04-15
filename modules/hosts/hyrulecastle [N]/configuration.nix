@@ -6,8 +6,8 @@
   flake.modules.nixos.hyrulecastle = {
     imports = with inputs.self.modules.nixos; [
       system-desktop
-      gnome-full
-      # plasma-full
+      # gnome-full
+      plasma-full
       # cosmic
       systemd-boot
       bluetooth
