@@ -190,8 +190,11 @@
               echo "Battery >= 85% — proceeding with update."
               PROCEED=1
             else
-              echo "Battery at ''${LEVEL}%. Waiting 60s in case power is being connected..."
-              sleep 60
+              echo "Battery level too low (''${LEVEL}%)."
+              for i in $(seq 40 -1 1); do
+                echo -ne "\rWaiting ''${i} seconds to check if power is left connected/disconnected... " > /dev/console
+                sleep 1
+              done
 
               ONLINE=0
               if [ -n "$AC" ]; then
@@ -224,9 +227,8 @@
           RemainAfterExit = "yes";
           TimeoutStopSec  = "10h";
           KillMode        = "process";
-          StandardOutput  = "tty";
-          StandardError   = "tty";
-          TTYPath         = "/dev/console";
+          StandardOutput  = "journal+console";
+          StandardError   = "journal+console";
         };
       };
 
