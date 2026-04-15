@@ -8,7 +8,7 @@
     }; 
 
   flake.modules.homeManager.vscodium =
-    { pkgs, config, lib, ... }:
+    { pkgs, config, ... }:
     let
       ngram-en-pkg = inputs.nix-languagetool-ngram.packages.${pkgs.stdenv.hostPlatform.system}.ngrams-en;
       ngram-en = "${ngram-en-pkg}/share/languagetool/ngrams";
