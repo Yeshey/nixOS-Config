@@ -83,6 +83,6 @@
         }
     },
     "git.enableSmartCommit": true,
-    "redhat.telemetry.enabled": true,
+    "redhat.telemetry.enabled": false,
     "diffEditor.ignoreTrimWhitespace": false
 }
