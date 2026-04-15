@@ -1,11 +1,16 @@
-{ ... }:
+{ inputs, ... }:
 {
   flake.modules.nixos.ollama =
     { pkgs, lib, ... }:
     let
       port = 11111;
+      searxPort = 5564;
     in
     {
+      imports = with inputs.self.modules.nixos; [
+        searx
+      ];
+
       services.ollama = {
         package = pkgs.unstable.ollama;
         enable = true;
@@ -27,13 +32,13 @@
           ENABLE_RAG_WEB_SEARCH = "True";
           RAG_WEB_SEARCH_RESULT_COUNT = "1";
           RAG_WEB_SEARCH_ENGINE = "searxng";
-          SEARXNG_QUERY_URL = "http://localhost:8888/search?q=<query>";
+          SEARXNG_QUERY_URL = "http://localhost:${toString searxPort}/search?q=<query>";
           OLLAMA_API_BASE_URL = "http://localhost:11434";
           WEBUI_AUTH = "False";
         };
       };
 
-      networking.firewall.interfaces.ap0.allowedTCPPorts = [ port ];
+      networking.firewall.interfaces.ap0.allowedTCPPorts = [ port searxPort ];
 
       environment.systemPackages =
         let
