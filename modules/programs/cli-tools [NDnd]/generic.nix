@@ -15,6 +15,7 @@ let
     pciutils
     unzip
     ookla-speedtest
+    cowsay
     home-manager
   ];
 in
