@@ -27,7 +27,6 @@ in
           prune.keep         = { within = "1d"; daily = 2; weekly = 2; monthly = 6; yearly = 3; };
           exclude            = [ "**/.var" "**/RecordedClasses" "**/Games" ];
         };
-        
       };
     };
 }

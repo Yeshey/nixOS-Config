@@ -5,16 +5,14 @@ let
     type = "staggered";
     params = {
       cleanInterval = "3600";
-      maxAge = "864000";
+      maxAge = "86400"; # 1 day
     };
   };
 
   allDevices = [
     "nixOS-Laptop"
-    "manjaro-Laptop"
     "windows-Laptop"
     "nixOS-Surface"
-    "windows-Surface"
     "android-A70Phone"
     "nixOS-arm-oracle"
   ];
@@ -33,10 +31,8 @@ in
       services.syncthing.settings = {
         devices = {
           "nixOS-Laptop".id    = "MQJK4CT-TFXHX2Y-3E2BSCD-Q7775YX-SX7VHKF-4TY6OA6-OGZO2QX-3NPTWQN";
-          "manjaro-Laptop".id  = "HWPEE67-I7DPOPG-H3A3SDX-5HFJK5W-33OIOUO-S6TD5E7-52OAO3B-OFAUAAF";
           "windows-Laptop".id  = "SST7QBM-2SKF4WK-F4RUAA2-ICQ7NBB-LDI3I33-O3DEZZJ-TVXZ3DB-M7IYTAQ";
           "nixOS-Surface".id   = "SEYY5VY-KFP6VTK-RDUXRJL-DJDZAXT-2FVZHCQ-EEOEJFW-HLAVQKR-6UHBDQN";
-          "windows-Surface".id = "4L2C6IN-PG25JP6-46WCN2B-EKFAHPR-3FE3B2F-JCXRQ5T-MO5PDAA-JWU2IA7";
           "android-A70Phone".id = "RT3DBUX-VNP5WPX-TZEYYL5-SVKR27H-432WTFY-JD3JOAA-HTL4APW-GRQIBQC";
           "nixOS-arm-oracle".id = "GRRWAOD-DNXYFHP-TBZIFO7-L2FV6MK-RGLDASJ-ECOU3TA-27DDF4N-QI2WAA7";
         };

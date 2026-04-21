@@ -31,6 +31,10 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    box64-binfmt = {
+      type = "path";
+      path = "/home/yeshey/Downloads/nixos-box64-binfmt";
+    };
     flake-file.url = "github:vic/flake-file";
     flake-parts.url = "github:hercules-ci/flake-parts";
     home-manager = {

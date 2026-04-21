@@ -3,13 +3,17 @@
   ...
 }:
 {
-  flake.modules.nixos.skyloft = {
+  flake.modules.nixos.skyloft = 
+  { pkgs, ... }:
+  {
     imports = with inputs.self.modules.nixos; [
       system-cli
       plasma-minimal
       systemd-boot
       btrfs
       impermanence
+
+      box64-binfmt
 
       # hosting
       # speedtest-tracker
@@ -31,6 +35,10 @@
     ];
     nixpkgs.config.allowUnsupportedSystem = true;
     nixpkgs.config.allowBroken = true;
+
+    environment.systemPackages = with pkgs; [
+      github-desktop
+    ];
 
     restic-rclone-backups.jobs.servers = {
       enable           = true;
