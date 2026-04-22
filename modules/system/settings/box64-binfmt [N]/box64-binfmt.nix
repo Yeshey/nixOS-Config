@@ -1,7 +1,7 @@
 {inputs, ... }:
 {
   flake.modules.nixos.box64-binfmt =
-    { ... }:
+    { pkgs, ... }:
     {
       nixpkgs.overlays = [
         inputs.box64-binfmt.overlays.default 
@@ -19,5 +19,16 @@
       ];
 
       box64-binfmt.enable = true;
+
+      nixpkgs.config.permittedInsecurePackages = [
+        "python3.12-ecdsa-0.19.1"
+      ];
+
+      security.unprivilegedUsernsClone = true;
+
+      environment.systemPackages = [
+        pkgs.x86.cowsay
+        pkgs.x86.vectoroids
+      ];
     };
 }
