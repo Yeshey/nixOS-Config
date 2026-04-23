@@ -7,8 +7,8 @@
       #   inputs.box64-binfmt.overlays.default 
       # ];
 
-      # # Required so the build system can cross-compile the box32 package before
-      # # binfmt registration is active.  Rebuild once with enable = false first.
+      # Required so the build system can cross-compile the box32 package before
+      # binfmt registration is active.  Rebuild once with enable = false first.
       # boot.binfmt.emulatedSystems = [
       #   "i386-linux" "i486-linux" "i586-linux" "i686-linux"
       #   "x86_64-linux"
@@ -19,10 +19,12 @@
       # ];
 
       box64-binfmt.enable = true;
+      box64-binfmt.steam.enable = true;
+      # box64-binfmt.steam.enable = true; # ← Installs steamcmd, steam, and steam-run
 
       environment.systemPackages = [
         pkgs.x86.cowsay
-        pkgs.x86.vectoroids
+        pkgs.x86.vectoroids 
       ];
     };
 }
