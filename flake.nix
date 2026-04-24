@@ -12,7 +12,7 @@
       };
     };
     box64-binfmt = {
-      url = "/home/yeshey/Downloads/nixos-box64-binfmt";
+      url = "github:Yeshey/nixos-box64-binfmt";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     brew-api = {
