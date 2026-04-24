@@ -33,14 +33,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1776998378,
-        "narHash": "sha256-RCljslUBe/ubkCAN4l3grUACu50kLkPmZsmV+BrrRFw=",
-        "path": "/home/yeshey/Downloads/nixos-box64-binfmt",
-        "type": "path"
+        "lastModified": 1776998553,
+        "narHash": "sha256-QLUBznAeb7itL0X8dr+v1Ir/ip2afALwCx05t7LuNFY=",
+        "owner": "Yeshey",
+        "repo": "nixos-box64-binfmt",
+        "rev": "e6c6bdfa9c93aab849f8e9cc02d7e17a37ef2792",
+        "type": "github"
       },
       "original": {
-        "path": "/home/yeshey/Downloads/nixos-box64-binfmt",
-        "type": "path"
+        "owner": "Yeshey",
+        "repo": "nixos-box64-binfmt",
+        "type": "github"
       }
     },
     "brew-api": {
