@@ -24,6 +24,9 @@
             ".floorp"
             ".config/rclone"
             ".config/org.restic.browser"
+            ".local/share/osu"
+            ".local/share/PrismLauncher/instances/MainInstance"
+            "Zotero/storage"
             { directory = ".local/share/keyrings"; mode = "0700"; }
 
             # syncthing

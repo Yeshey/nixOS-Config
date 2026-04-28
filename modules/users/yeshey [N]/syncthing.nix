@@ -83,8 +83,8 @@ in
             devices    = allDevices;
             versioning = myVersioning;
           };
-          "bash&zshHistory" = {
-            path       = "~/";
+          "zshHistory" = {
+            path       = "~/.config/zsh";
             devices    = allDevices;
             versioning = myVersioning;
           };
@@ -165,12 +165,8 @@ in
           (?i)AllMusic
           (?i)AllMusic-mp3
         '';
-        ".stignore".text = ''
-          !.config/zsh/.zsh_history
-          !/.bash_history
-          !/.python_history
-          // Ignore everything else:
-          *
+        ".config/zsh/.stignore".text = ''
+          !.zsh_history
         '';
         ".local/share/PrismLauncher/instances/MainInstance/.stignore".text = ''
           !/.minecraft/saves
