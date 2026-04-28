@@ -45,7 +45,7 @@ let
       # Skip root's XDG_RUNTIME_DIR (uid 0)
       [ "$uid" = "0" ] && continue
       # Resolve numeric UID to a username; skip if user no longer exists
-      username=$(id -nu "$uid" 2>/dev/null) || continue
+      username=$(${pkgs.coreutils}/bin/id -nu "$uid" 2>/dev/null) || continue
       /run/wrappers/bin/sudo \
         -u "$username" \
         DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus" \
@@ -77,32 +77,12 @@ let
     };
   };
 
-  # NixOS-only extra options
   jobOptionsNixos = lib: {
     user             = lib.mkOption { type = lib.types.str; };
     rcloneConfigFile = lib.mkOption { type = lib.types.path; };
   };
 
-  # ---------------------------------------------------------------------------
   # mkBackup: produces the attrset passed to services.restic.backups.<name>
-  #
-  # flagFile        – absolute path to the recovery flag file
-  # notifyStartCmd  – shell fragment: send "backup starting" notification
-  # notifySuccessCmd – shell fragment: send "backup succeeded" notification
-  # notifyFailCmd   – shell fragment: send "backup failed" notification
-  #
-  # Design:
-  #   backupPrepareCommand (→ ExecStartPre / preStart)
-  #     • waits for internet connectivity
-  #     • creates the recovery flag  ← survives a reboot
-  #     • sends start notification
-  #
-  #   backupCleanupCommand (→ ExecStopPost / postStop)
-  #     • systemd sets $SERVICE_RESULT here ("success" | "failed" | …)
-  #     • on success: removes the flag and sends success notification
-  #     • on failure: leaves the flag (so reboot-resume can retry) and
-  #                   sends a failure notification
-  # ---------------------------------------------------------------------------
   mkBackup = pkgs: lib: flagFile: notifyStartCmd: notifySuccessCmd: notifyFailCmd: job: {
     paths        = job.paths;
     repository   = "rclone:${job.rcloneRemoteName}:${job.rcloneRemotePath}";
@@ -134,8 +114,6 @@ let
       Persistent         = true;
     };
 
-    # Runs before the backup (ExecStartPre / preStart):
-    # poll until internet is available, then plant the recovery flag.
     backupPrepareCommand = ''
       while ! ${pkgs.curl}/bin/curl --silent --max-time 5 https://1.0.0.1 > /dev/null 2>&1; do
         echo "Waiting for internet connection..."
@@ -146,8 +124,6 @@ let
       ${notifyStartCmd}
     '';
 
-    # Runs after the backup finishes, whether or not it succeeded (ExecStopPost / postStop).
-    # systemd populates $SERVICE_RESULT with "success" on a clean exit.
     backupCleanupCommand = ''
       if [ "''${SERVICE_RESULT:-}" = "success" ]; then
         echo "Backup finished successfully – removing recovery flag."
@@ -164,8 +140,6 @@ in
 {
   # ==========================================================================
   # NIXOS SYSTEM MODULE
-  # Backups run as the configured user (often root).
-  # Notifications are sent to all logged-in GUI users via notify-send-all.
   # ==========================================================================
   flake.modules.nixos.restic-rclone-backups =
     { config, lib, pkgs, ... }:
@@ -198,8 +172,6 @@ in
         ) config.restic-rclone-backups.jobs;
 
         systemd.services = lib.mkMerge [
-
-          # Per-job: retry automatically on failure (flag remains until success)
           (lib.mapAttrs' (jobName: job:
             lib.nameValuePair "restic-backups-${jobName}" (lib.mkIf job.enable {
               serviceConfig = {
@@ -209,18 +181,18 @@ in
             })
           ) config.restic-rclone-backups.jobs)
 
-          # Boot-time check: restart any job whose flag was left behind
           {
             restic-resume-check = {
               description = "Resume interrupted system restic backups after reboot";
               wantedBy    = [ "multi-user.target" ];
-              # local-fs.target ensures /var/lib is mounted before we look for flags
               after       = [ "local-fs.target" ];
               script      = ''
                 if [ -d /var/lib/restic-flags ]; then
                   for flag in /var/lib/restic-flags/*.flag; do
-                    [ -e "$flag" ] || continue   # glob matched nothing
-                    jobName=$(basename "$flag" .flag)
+                    [ -e "$flag" ] || continue
+                    # Pure bash alternative to basename
+                    filename="''${flag##*/}"
+                    jobName="''${filename%.flag}"
                     echo "Found interrupted backup for '$jobName', restarting..."
                     systemctl start "restic-backups-$jobName.service" --no-block || true
                   done
@@ -237,10 +209,6 @@ in
 
   # ==========================================================================
   # HOME MANAGER MODULE
-  # Backups run as the home-manager user.
-  # Notifications go directly to the user's D-Bus session.
-  # We explicitly set DBUS_SESSION_BUS_ADDRESS because systemd user services
-  # do not always inherit it (depends on PAM / loginctl session).
   # ==========================================================================
   flake.modules.homeManager.restic-rclone-backups =
     { config, lib, pkgs, ... }:
@@ -256,20 +224,16 @@ in
         let
           enabledJobs = lib.filterAttrs (_: job: job.enable) config.restic-rclone-backups.jobs;
 
-          # Ensure the D-Bus session bus address is set.
-          # Systemd user services may or may not inherit it depending on how
-          # the user session was started (graphical vs. SSH), so we fall back
-          # to the well-known socket path for the current UID.
           ensureDbus = ''export DBUS_SESSION_BUS_ADDRESS="''${DBUS_SESSION_BUS_ADDRESS:-unix:path=/run/user/$(id -u)/bus}"'';
 
-          # Script that checks for leftover flag files and restarts the
-          # corresponding user backup services.
           resumeScript = pkgs.writeShellScript "restic-user-resume" ''
             flagDir="${config.xdg.stateHome}/restic-flags"
             if [ -d "$flagDir" ]; then
               for flag in "$flagDir"/*.flag; do
-                [ -e "$flag" ] || continue   # glob matched nothing
-                jobName=$(basename "$flag" .flag)
+                [ -e "$flag" ] || continue
+                # Pure bash alternative to basename
+                filename="''${flag##*/}"
+                jobName="''${filename%.flag}"
                 echo "Found interrupted backup for '$jobName', restarting..."
                 systemctl --user start "restic-backups-$jobName.service" --no-block || true
               done
@@ -283,7 +247,7 @@ in
               flagFile         = "${config.xdg.stateHome}/restic-flags/${jobName}.flag";
               notifyStartCmd   = ''
                 ${ensureDbus}
-                ${pkgs.libnotify}/bin/notify-send "User Backup" "Starting: ${jobName}…" --icon=drive-harddisk --urgency=low || true
+                ${pkgs.libnotify}/bin/notify-send "User Backup" "Starting: ${jobName}…" --icon=drive-harddisk || true
               '';
               notifySuccessCmd = ''
                 ${ensureDbus}
@@ -291,17 +255,15 @@ in
               '';
               notifyFailCmd    = ''
                 ${ensureDbus}
-                ${pkgs.libnotify}/bin/notify-send "User Backup" "FAILED: ${jobName}" --icon=dialog-error --urgency=critical || true
+                ${pkgs.libnotify}/bin/notify-send "User Backup" "FAILED/STOPPED: ${jobName}" --icon=dialog-error --urgency=critical || true
               '';
             in
             mkBackup pkgs lib flagFile notifyStartCmd notifySuccessCmd notifyFailCmd job
           ) enabledJobs;
 
-          # Boot-time (login-time) check for the user: same idea as NixOS above.
           systemd.user.services.restic-resume-check = {
             Unit = {
               Description = "Resume interrupted user restic backups after login";
-              # Run after the session default target so other user services are up
               After       = [ "default.target" ];
             };
             Install.WantedBy = [ "default.target" ];
