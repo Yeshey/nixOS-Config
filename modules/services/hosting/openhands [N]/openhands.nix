@@ -39,9 +39,9 @@
       };
 
       systemd.services.podman-openhands = {
-        after = [ "network-online.target" "my-network-online.service" ];
-        wants = [ "network-online.target" "my-network-online.service" ];
-        requires = [ "network-online.target" "my-network-online.service" ];
+        after = [ "network-online.target" ];
+        wants = [ "network-online.target" ];
+        requires = [ "network-online.target" ];
       };
 
       systemd.services.openhands-mgr = {

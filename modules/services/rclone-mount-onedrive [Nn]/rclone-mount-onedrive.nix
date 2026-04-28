@@ -38,8 +38,8 @@
         systemd.user.services.${optName}= {
           Unit = {
             Description = "rclone mount (user): ${config.${optName}.remote} → ${config.${optName}.mountPoint}";
-            After = [ "network-online.target" "my-network-online.service" ];
-            Wants = [ "network-online.target" "my-network-online.service" ];
+            After = [ "network-online.target" ];
+            Wants = [ "network-online.target" ];
             Before = [ "sleep.target" ];
           };
 
