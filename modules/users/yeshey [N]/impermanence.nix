@@ -25,6 +25,7 @@
             ".config/rclone"
             ".config/org.restic.browser"
             ".local/share/osu"
+            ".config/gh"
             ".local/share/PrismLauncher/instances/MainInstance"
             "Zotero/storage"
             "~/.minetest"

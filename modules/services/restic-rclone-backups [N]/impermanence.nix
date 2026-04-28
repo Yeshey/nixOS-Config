@@ -11,7 +11,6 @@
           hideMounts = true;
           directories = [
             ".local/state/restic-flags"
-            ".config/rclone"
           ];
         };
       };
@@ -24,9 +23,6 @@
         persistence."/persistent" = {
           directories = [
             "/var/lib/restic-flags"
-          ];
-        files = [
-          "/root/.config/rclone/rclone.conf"
           ];
         };
       };
