@@ -19,7 +19,7 @@ in
           enable             = true;
           paths              = [ "/home/${username}" ];
           rcloneRemoteName   = "OneDriveISCTE";
-          rcloneRemotePath   = "ResticBackups/mainBackupOneDrive";
+          rcloneRemotePath   = "Backups/ResticBackups/mainBackupOneDrive";
           passwordFile       = builtins.toFile "restic-password" "123456789";
           initialize         = true;
           startAt            = "*-*-* 14:00:00";

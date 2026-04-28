@@ -49,7 +49,7 @@
         "/opt/docker/overleaf/overleaf-data"
       ];
       rcloneRemoteName = "OneDriveISCTE";
-      rcloneRemotePath = "ResticBackups/servers";
+      rcloneRemotePath = "Backups/ResticBackups/servers";
       rcloneConfigFile = "/root/.config/rclone/rclone.conf";
       passwordFile     = builtins.toFile "restic-password" "123456789";
       initialize       = true;

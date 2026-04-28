@@ -9,7 +9,7 @@
         description = "Backup TunaCraft to OneDrive";
         script = ''
           BACKUP_NAME="tunaCraft-$(date +%s)"
-          REMOTE="OneDriveISCTE:tunaCraftOpenBackups"
+          REMOTE="OneDriveISCTE:Backups/tunaCraftOpenBackups"
           CURRENT_TIME=$(date +%s)
           CUTOFF_TIME=$((CURRENT_TIME - 864000))  # 10 days in seconds
 

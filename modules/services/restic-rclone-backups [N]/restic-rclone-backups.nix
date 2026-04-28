@@ -1,6 +1,6 @@
 # restore with:
 # sudo -E \
-#   RESTIC_REPOSITORY="rclone:OneDriveISCTE:ResticBackups/servers" \
+#   RESTIC_REPOSITORY="rclone:OneDriveISCTE:Backups/ResticBackups/servers" \
 #   RESTIC_PASSWORD="123456789" \
 #   RCLONE_CONFIG="/home/yeshey/.config/rclone/rclone.conf" \
 #   restic restore latest \
