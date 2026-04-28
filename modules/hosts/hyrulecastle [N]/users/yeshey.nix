@@ -21,7 +21,7 @@ in
           rcloneRemoteName   = "OneDriveISCTE";
           rcloneRemotePath   = "Backups/ResticBackups/mainBackupOneDrive";
           passwordFile       = builtins.toFile "restic-password" "123456789";
-          initialize         = true;
+          initialize         = false;
           startAt            = "*-*-* 14:00:00";
           randomizedDelaySec = "6h";
           prune.keep         = { within = "1d"; daily = 2; weekly = 2; monthly = 6; yearly = 3; };
