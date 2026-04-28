@@ -60,6 +60,10 @@
       url = "gitlab:leonard/nix-luanti?host=git.menzel.lol";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nixpkgs2flatpak = {
+      type = "path";
+      path = "/home/yeshey/Downloads/nixpkgs2flatpak";
+    };
     nix-minecraft = {
       url = "github:Yeshey/nix-minecraft";
       inputs.nixpkgs.follows = "nixpkgs-unstable";
