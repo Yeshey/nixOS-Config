@@ -5,7 +5,7 @@
 { inputs, lib, ... }:
 {
   flake.modules.nixOnDroid.nix-on-droid =
-    { pkgs, ... }:
+    { config, pkgs, ... }:
     {
       imports = with inputs.self.modules.nixOnDroid; [
         sshd-droid
@@ -59,6 +59,7 @@
           };
           programs.zsh = {
             enable = true;
+            history.path = lib.mkForce "${config.home.homeDirectory}/storage/Documents/Syncthing/zshHistory/.zsh_history"; # And then sync with syncthing
             shellAliases = {
               update-remote = lib.mkForce "nix-on-droid switch --flake github:Yeshey/nixOS-Config#nix-on-droid --max-jobs 2 --option 'experimental-features' 'nix-command flakes pipe-operators' -v |& ${pkgs.nix-output-monitor}/bin/nom";
               update = lib.mkForce "echo 'updating from local .setup...' && nix-on-droid switch --flake $HOME/.setup#nix-on-droid --max-jobs 2 --option 'experimental-features' 'nix-command flakes pipe-operators' -v |& ${pkgs.nix-output-monitor}/bin/nom";
