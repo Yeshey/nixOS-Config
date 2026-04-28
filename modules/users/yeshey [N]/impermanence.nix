@@ -28,8 +28,8 @@
             ".config/gh"
             ".local/share/PrismLauncher/instances/MainInstance"
             "Zotero/storage"
-            "~/.minetest"
-            "~/.local/share/The Powder Toy"
+            ".minetest"
+            ".local/share/The Powder Toy"
             { directory = ".local/share/keyrings"; mode = "0700"; }
 
             # syncthing
