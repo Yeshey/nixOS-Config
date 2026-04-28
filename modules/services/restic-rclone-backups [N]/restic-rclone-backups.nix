@@ -8,20 +8,66 @@
 #     --include "/home/yeshey" \
 #     --verbose
 { ... }: # TODO impermanence
+# Remember to persist:
+#   NixOS:       /var/lib/restic-flags
+#   Home-Manager: $XDG_STATE_HOME/restic-flags  (typically ~/.local/state/restic-flags)
 let
-  # Shared option definitions for both nixos and homeManager modules
+  # ===========================================================================
+  # HELPER FUNCTIONS
+  # ===========================================================================
+
+  # notify-send-all: sends a desktop notification to every logged-in GUI user.
+  # Intended to be called from root-owned systemd services.
+  # We iterate /run/user/* (each entry is a numeric UID), skip root (0),
+  # resolve the username with `id -nu`, then sudo to that user with their
+  # D-Bus session bus address so notify-send reaches their compositor.
+  mkNotifySendAll = pkgs: pkgs.writeShellScriptBin "notify-send-all" ''
+    display_help() {
+      echo "Send a notification to all logged-in GUI users."
+      echo ""
+      echo "Usage: notify-send-all [options] <summary> [body]"
+      echo ""
+      echo "All notify-send options are supported, see below..."
+      echo ""
+      ${pkgs.libnotify}/bin/notify-send --help
+      exit 0
+    }
+
+    while [ $# -gt 0 ]; do
+      case $1 in
+        -h | --help) display_help ;;
+        *) break ;;
+      esac
+    done
+
+    for dir in /run/user/*; do
+      uid=$(basename "$dir")
+      # Skip root's XDG_RUNTIME_DIR (uid 0)
+      [ "$uid" = "0" ] && continue
+      # Resolve numeric UID to a username; skip if user no longer exists
+      username=$(id -nu "$uid" 2>/dev/null) || continue
+      /run/wrappers/bin/sudo \
+        -u "$username" \
+        DBUS_SESSION_BUS_ADDRESS="unix:path=/run/user/$uid/bus" \
+        ${pkgs.libnotify}/bin/notify-send "$@" || true
+    done
+  '';
+
+  # ---------------------------------------------------------------------------
+  # Shared option definitions (both NixOS and home-manager modules)
+  # ---------------------------------------------------------------------------
   jobOptions = lib: {
-    enable           = lib.mkEnableOption "this backup job";
-    paths            = lib.mkOption { type = lib.types.listOf lib.types.str; };
-    rcloneRemoteName = lib.mkOption { type = lib.types.str; };
-    rcloneRemotePath = lib.mkOption { type = lib.types.str; };
-    passwordFile     = lib.mkOption { type = lib.types.path; };
-    initialize       = lib.mkOption { type = lib.types.bool;  default = false; };
-    startAt          = lib.mkOption { type = lib.types.str;   default = "*-*-* 14:00:00"; };
-    randomizedDelaySec = lib.mkOption { type = lib.types.str; default = "5h"; };
-    extraBackupArgs  = lib.mkOption { type = lib.types.listOf lib.types.str; default = []; };
-    exclude          = lib.mkOption { type = lib.types.listOf lib.types.str; default = []; };
-    prune.enable     = lib.mkOption { type = lib.types.bool;  default = true; };
+    enable             = lib.mkEnableOption "this backup job";
+    paths              = lib.mkOption { type = lib.types.listOf lib.types.str; };
+    rcloneRemoteName   = lib.mkOption { type = lib.types.str; };
+    rcloneRemotePath   = lib.mkOption { type = lib.types.str; };
+    passwordFile       = lib.mkOption { type = lib.types.path; };
+    initialize         = lib.mkOption { type = lib.types.bool;  default = false; };
+    startAt            = lib.mkOption { type = lib.types.str;   default = "*-*-* 14:00:00"; };
+    randomizedDelaySec = lib.mkOption { type = lib.types.str;   default = "5h"; };
+    extraBackupArgs    = lib.mkOption { type = lib.types.listOf lib.types.str; default = []; };
+    exclude            = lib.mkOption { type = lib.types.listOf lib.types.str; default = []; };
+    prune.enable       = lib.mkOption { type = lib.types.bool;  default = true; };
     prune.keep = {
       within  = lib.mkOption { type = lib.types.nullOr lib.types.str; default = null; };
       daily   = lib.mkOption { type = lib.types.nullOr lib.types.int; default = 7; };
@@ -31,24 +77,43 @@ let
     };
   };
 
-  # nixos-only extra options
+  # NixOS-only extra options
   jobOptionsNixos = lib: {
     user             = lib.mkOption { type = lib.types.str; };
     rcloneConfigFile = lib.mkOption { type = lib.types.path; };
   };
 
-  # Shared job -> restic backup attrset converter (no rcloneConfigFile)
-  mkBackup = pkgs: lib: job: {
-    paths            = job.paths;
-    repository       = "rclone:${job.rcloneRemoteName}:${job.rcloneRemotePath}";
-    passwordFile     = job.passwordFile;
-    initialize       = job.initialize;
+  # ---------------------------------------------------------------------------
+  # mkBackup: produces the attrset passed to services.restic.backups.<name>
+  #
+  # flagFile        – absolute path to the recovery flag file
+  # notifyStartCmd  – shell fragment: send "backup starting" notification
+  # notifySuccessCmd – shell fragment: send "backup succeeded" notification
+  # notifyFailCmd   – shell fragment: send "backup failed" notification
+  #
+  # Design:
+  #   backupPrepareCommand (→ ExecStartPre / preStart)
+  #     • waits for internet connectivity
+  #     • creates the recovery flag  ← survives a reboot
+  #     • sends start notification
+  #
+  #   backupCleanupCommand (→ ExecStopPost / postStop)
+  #     • systemd sets $SERVICE_RESULT here ("success" | "failed" | …)
+  #     • on success: removes the flag and sends success notification
+  #     • on failure: leaves the flag (so reboot-resume can retry) and
+  #                   sends a failure notification
+  # ---------------------------------------------------------------------------
+  mkBackup = pkgs: lib: flagFile: notifyStartCmd: notifySuccessCmd: notifyFailCmd: job: {
+    paths        = job.paths;
+    repository   = "rclone:${job.rcloneRemoteName}:${job.rcloneRemotePath}";
+    passwordFile = job.passwordFile;
+    initialize   = job.initialize;
 
     exclude = [
-      "**/.cache"      "**/.git"         "**/node_modules"
-      "**/Cache"       "**/_build"        "**/venv"
-      "**/.venv"       "**/Steam"         "**/Trash"
-      "**/.var/app/*/cache/" "**/.local/share/waydroid"
+      "**/.cache"             "**/.git"        "**/node_modules"
+      "**/Cache"              "**/_build"      "**/venv"
+      "**/.venv"              "**/Steam"       "**/Trash"
+      "**/.var/app/*/cache/"  "**/.local/share/waydroid"
     ] ++ job.exclude;
 
     extraBackupArgs = [ "--verbose=2" ] ++ job.extraBackupArgs;
@@ -69,53 +134,120 @@ let
       Persistent         = true;
     };
 
+    # Runs before the backup (ExecStartPre / preStart):
+    # poll until internet is available, then plant the recovery flag.
     backupPrepareCommand = ''
       while ! ${pkgs.curl}/bin/curl --silent --max-time 5 https://1.0.0.1 > /dev/null 2>&1; do
         echo "Waiting for internet connection..."
         sleep 60
       done
-      echo "Internet is up, let's upload ~raccoon memes~ some backups!"
+      mkdir -p "$(dirname "${flagFile}")"
+      touch "${flagFile}"
+      ${notifyStartCmd}
+    '';
+
+    # Runs after the backup finishes, whether or not it succeeded (ExecStopPost / postStop).
+    # systemd populates $SERVICE_RESULT with "success" on a clean exit.
+    backupCleanupCommand = ''
+      if [ "''${SERVICE_RESULT:-}" = "success" ]; then
+        echo "Backup finished successfully – removing recovery flag."
+        rm -f "${flagFile}"
+        ${notifySuccessCmd}
+      else
+        echo "Backup failed or was interrupted (SERVICE_RESULT=''${SERVICE_RESULT:-unknown}) – keeping recovery flag for reboot-resume."
+        ${notifyFailCmd}
+      fi
     '';
   };
+
 in
 {
+  # ==========================================================================
+  # NIXOS SYSTEM MODULE
+  # Backups run as the configured user (often root).
+  # Notifications are sent to all logged-in GUI users via notify-send-all.
+  # ==========================================================================
   flake.modules.nixos.restic-rclone-backups =
     { config, lib, pkgs, ... }:
+    let
+      notify-send-all = mkNotifySendAll pkgs;
+    in
     {
       options.restic-rclone-backups.jobs = lib.mkOption {
-        default = { };
-        type = lib.types.attrsOf (lib.types.submodule {
+        default = {};
+        type    = lib.types.attrsOf (lib.types.submodule {
           options = (jobOptions lib) // (jobOptionsNixos lib);
         });
       };
 
-      config = lib.mkIf (config.restic-rclone-backups.jobs != { }) {
+      config = lib.mkIf (config.restic-rclone-backups.jobs != {}) {
+
         services.restic.backups = lib.mapAttrs (jobName: job:
-          lib.mkIf job.enable ((mkBackup pkgs lib job) // {
-            user             = job.user;
-            rcloneConfigFile = job.rcloneConfigFile;
-          })
+          let
+            flagFile         = "/var/lib/restic-flags/${jobName}.flag";
+            notifyStartCmd   = ''${notify-send-all}/bin/notify-send-all "System Backup" "Starting: ${jobName}…" --icon=drive-harddisk --urgency=low || true'';
+            notifySuccessCmd = ''${notify-send-all}/bin/notify-send-all "System Backup" "Finished: ${jobName}" --icon=drive-harddisk || true'';
+            notifyFailCmd    = ''${notify-send-all}/bin/notify-send-all "System Backup" "FAILED: ${jobName}" --icon=dialog-error --urgency=critical || true'';
+          in
+          lib.mkIf job.enable (
+            (mkBackup pkgs lib flagFile notifyStartCmd notifySuccessCmd notifyFailCmd job) // {
+              user             = job.user;
+              rcloneConfigFile = job.rcloneConfigFile;
+            }
+          )
         ) config.restic-rclone-backups.jobs;
 
-        systemd.services = lib.mapAttrs' (jobName: job:
-          lib.nameValuePair "restic-backups-${jobName}" (lib.mkIf job.enable {
-            serviceConfig = {
-              Restart    = "on-failure";
-              RestartSec = "15m";
+        systemd.services = lib.mkMerge [
+
+          # Per-job: retry automatically on failure (flag remains until success)
+          (lib.mapAttrs' (jobName: job:
+            lib.nameValuePair "restic-backups-${jobName}" (lib.mkIf job.enable {
+              serviceConfig = {
+                Restart    = "on-failure";
+                RestartSec = "15m";
+              };
+            })
+          ) config.restic-rclone-backups.jobs)
+
+          # Boot-time check: restart any job whose flag was left behind
+          {
+            restic-resume-check = {
+              description = "Resume interrupted system restic backups after reboot";
+              wantedBy    = [ "multi-user.target" ];
+              # local-fs.target ensures /var/lib is mounted before we look for flags
+              after       = [ "local-fs.target" ];
+              script      = ''
+                if [ -d /var/lib/restic-flags ]; then
+                  for flag in /var/lib/restic-flags/*.flag; do
+                    [ -e "$flag" ] || continue   # glob matched nothing
+                    jobName=$(basename "$flag" .flag)
+                    echo "Found interrupted backup for '$jobName', restarting..."
+                    systemctl start "restic-backups-$jobName.service" --no-block || true
+                  done
+                fi
+              '';
+              serviceConfig.Type = "oneshot";
             };
-          })
-        ) config.restic-rclone-backups.jobs;
+          }
+        ];
 
-        environment.systemPackages = with pkgs; [ rclone restic ];
+        environment.systemPackages = with pkgs; [ rclone restic libnotify notify-send-all ];
       };
     };
 
+  # ==========================================================================
+  # HOME MANAGER MODULE
+  # Backups run as the home-manager user.
+  # Notifications go directly to the user's D-Bus session.
+  # We explicitly set DBUS_SESSION_BUS_ADDRESS because systemd user services
+  # do not always inherit it (depends on PAM / loginctl session).
+  # ==========================================================================
   flake.modules.homeManager.restic-rclone-backups =
     { config, lib, pkgs, ... }:
     {
       options.restic-rclone-backups.jobs = lib.mkOption {
-        default = { };
-        type = lib.types.attrsOf (lib.types.submodule {
+        default = {};
+        type    = lib.types.attrsOf (lib.types.submodule {
           options = jobOptions lib;
         });
       };
@@ -123,12 +255,63 @@ in
       config =
         let
           enabledJobs = lib.filterAttrs (_: job: job.enable) config.restic-rclone-backups.jobs;
-        in
-        lib.mkIf (enabledJobs != { }) {
-          services.restic.enable = true;
-          services.restic.backups = lib.mapAttrs (_: job: mkBackup pkgs lib job) enabledJobs;
 
-          home.packages = with pkgs; [ rclone restic ];
+          # Ensure the D-Bus session bus address is set.
+          # Systemd user services may or may not inherit it depending on how
+          # the user session was started (graphical vs. SSH), so we fall back
+          # to the well-known socket path for the current UID.
+          ensureDbus = ''export DBUS_SESSION_BUS_ADDRESS="''${DBUS_SESSION_BUS_ADDRESS:-unix:path=/run/user/$(id -u)/bus}"'';
+
+          # Script that checks for leftover flag files and restarts the
+          # corresponding user backup services.
+          resumeScript = pkgs.writeShellScript "restic-user-resume" ''
+            flagDir="${config.xdg.stateHome}/restic-flags"
+            if [ -d "$flagDir" ]; then
+              for flag in "$flagDir"/*.flag; do
+                [ -e "$flag" ] || continue   # glob matched nothing
+                jobName=$(basename "$flag" .flag)
+                echo "Found interrupted backup for '$jobName', restarting..."
+                systemctl --user start "restic-backups-$jobName.service" --no-block || true
+              done
+            fi
+          '';
+        in
+        lib.mkIf (enabledJobs != {}) {
+          services.restic.enable  = true;
+          services.restic.backups = lib.mapAttrs (jobName: job:
+            let
+              flagFile         = "${config.xdg.stateHome}/restic-flags/${jobName}.flag";
+              notifyStartCmd   = ''
+                ${ensureDbus}
+                ${pkgs.libnotify}/bin/notify-send "User Backup" "Starting: ${jobName}…" --icon=drive-harddisk --urgency=low || true
+              '';
+              notifySuccessCmd = ''
+                ${ensureDbus}
+                ${pkgs.libnotify}/bin/notify-send "User Backup" "Finished: ${jobName}" --icon=drive-harddisk || true
+              '';
+              notifyFailCmd    = ''
+                ${ensureDbus}
+                ${pkgs.libnotify}/bin/notify-send "User Backup" "FAILED: ${jobName}" --icon=dialog-error --urgency=critical || true
+              '';
+            in
+            mkBackup pkgs lib flagFile notifyStartCmd notifySuccessCmd notifyFailCmd job
+          ) enabledJobs;
+
+          # Boot-time (login-time) check for the user: same idea as NixOS above.
+          systemd.user.services.restic-resume-check = {
+            Unit = {
+              Description = "Resume interrupted user restic backups after login";
+              # Run after the session default target so other user services are up
+              After       = [ "default.target" ];
+            };
+            Install.WantedBy = [ "default.target" ];
+            Service = {
+              Type      = "oneshot";
+              ExecStart = "${resumeScript}";
+            };
+          };
+
+          home.packages = with pkgs; [ rclone restic libnotify ];
         };
     };
 }
