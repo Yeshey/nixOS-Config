@@ -10,7 +10,7 @@
         enable = true;
         createDirectories = true;
         
-        documents = lib.mkDefault "/home/yeshey/PersonalFiles";
+        documents = lib.mkDefault "${dataPath}/PersonalFiles";
         download  = lib.mkDefault "${dataPath}/Downloads";
         music     = lib.mkDefault "${dataPath}/PersonalFiles/Timeless/Music";
       };

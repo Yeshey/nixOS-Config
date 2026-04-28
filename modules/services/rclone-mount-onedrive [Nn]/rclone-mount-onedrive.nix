@@ -2,48 +2,70 @@
 {
   flake.modules.homeManager.rclone-mount-onedrive =
     { lib, config, pkgs, ... }:
-    let 
+    let
       optName = "rclone-mount-onedrive";
-    in 
+      cfg = config.${optName};
+    in
     {
       options.${optName} = {
         enable = lib.mkEnableOption "${optName}";
 
         mountPoint = lib.mkOption {
-          type    = lib.types.str;
+          type        = lib.types.str;
           description = "Path where the rclone remote will be mounted.";
         };
 
         remote = lib.mkOption {
-          type    = lib.types.str;
+          type        = lib.types.str;
           description = "rclone remote/remote-path (eg. 'onedrive:' or 'onedrive:SomeFolder').";
         };
 
         allowOther = lib.mkOption {
-          type    = lib.types.bool;
-          default = false;
+          type        = lib.types.bool;
+          default     = false;
           description = "If true, add --allow-other to rclone mount (requires user_allow_other in /etc/fuse.conf).";
+        };
+
+        allowNonEmpty = lib.mkOption {
+          type        = lib.types.bool;
+          default     = true;
+          description = ''
+            If true, add --allow-non-empty so rclone can mount even if the mount point
+            directory is not empty (e.g. contains stale local files from a previous
+            failed unmount). The local contents are hidden by the overlay while mounted.
+          '';
+        };
+
+        extraWantedBy = lib.mkOption {
+          type        = lib.types.listOf lib.types.str;
+          default     = [];
+          description = ''
+            Additional systemd targets that should pull in this mount, on top of
+            the always-present "remote-fs.target". For example, add
+            "graphical-session.target" if your desktop session needs an explicit
+            dependency on the mount.
+          '';
         };
       };
 
-      config = lib.mkIf config.${optName}.enable {
+      config = lib.mkIf cfg.enable {
         home.packages = with pkgs; [ rclone fuse3 ];
 
         # Create parent directory during activation (before services start)
         home.activation.createRcloneDirs = lib.hm.dag.entryAfter ["writeBoundary"] ''
-          $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p ${lib.escapeShellArg (builtins.dirOf config.${optName}.mountPoint)}
+          $DRY_RUN_CMD ${pkgs.coreutils}/bin/mkdir -p ${lib.escapeShellArg (builtins.dirOf cfg.mountPoint)}
         '';
 
         # Use systemctl --user status rclone-mount-onedrive
-        systemd.user.services.${optName}= {
+        systemd.user.services.${optName} = {
           Unit = {
-            Description = "rclone mount (user): ${config.${optName}.remote} → ${config.${optName}.mountPoint}";
-            After = [ "network-online.target" ];
-            Wants = [ "network-online.target" ];
+            Description = "rclone mount (user): ${cfg.remote} → ${cfg.mountPoint}";
+            After  = [ "network-online.target" ];
+            Wants  = [ "network-online.target" ];
             Before = [ "sleep.target" ];
           };
 
-          Install.WantedBy = [ "default.target" ];
+          Install.WantedBy = [ "remote-fs.target" ] ++ cfg.extraWantedBy;
 
           Service = {
             Type = "notify";
@@ -54,13 +76,13 @@
                   # Kill any existing rclone processes
                   ${pkgs.procps}/bin/pkill -x rclone || true
 
-                  # try clean unmount
-                  fusermount3 -uz ${lib.escapeShellArg config.${optName}.mountPoint} 2>/dev/null || \
-                    umount -l ${lib.escapeShellArg config.${optName}.mountPoint} 2>/dev/null || true
+                  # Try clean unmount
+                  fusermount3 -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || \
+                    umount -l ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
 
                   # Ensure mount point exists and is a directory
-                  ${pkgs.coreutils}/bin/mkdir -p ${lib.escapeShellArg config.${optName}.mountPoint}
-                  chmod 755 ${lib.escapeShellArg config.${optName}.mountPoint}
+                  ${pkgs.coreutils}/bin/mkdir -p ${lib.escapeShellArg cfg.mountPoint}
+                  chmod 755 ${lib.escapeShellArg cfg.mountPoint}
                 '';
               in "${preStartScript}";
 
@@ -68,8 +90,8 @@
               let
                 mountScript = pkgs.writeShellScript "${optName}" ''
                   exec ${pkgs.rclone}/bin/rclone mount \
-                    ${lib.escapeShellArg config.${optName}.remote} \
-                    ${lib.escapeShellArg config.${optName}.mountPoint} \
+                    ${lib.escapeShellArg cfg.remote} \
+                    ${lib.escapeShellArg cfg.mountPoint} \
                     --links \
                     --vfs-cache-mode full \
                     --vfs-cache-max-age 168h \
@@ -78,20 +100,16 @@
                     --bwlimit 4M:off \
                     --disable-http2 \
                     --config ${config.home.homeDirectory}/.config/rclone/rclone.conf \
-                    ${lib.optionalString config.${optName}.allowOther "--allow-other"}
+                    ${lib.optionalString cfg.allowOther "--allow-other"} \
+                    ${lib.optionalString cfg.allowNonEmpty "--allow-non-empty"}
                 '';
-                # Let's see if --bwlimit 4M:off limiting upload makes downloads more responsive
-                # --allow-non-empty \ so it can mount anyways if it becomes unresponsive when you restart it
-                # --debug-fuse \
-                # -vv --log-file=/tmp/${optName}.log \
               in "${mountScript}";
 
             ExecStopPost =
               let
                 postStopScript = pkgs.writeShellScript "${optName}-post" ''
-                  # try regular fusermount first, fallback to lazy umount
-                  fusermount3 -uz ${lib.escapeShellArg config.${optName}.mountPoint} 2>/dev/null || \
-                    umount -l ${lib.escapeShellArg config.${optName}.mountPoint} 2>/dev/null || true
+                  fusermount3 -uz ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || \
+                    umount -l ${lib.escapeShellArg cfg.mountPoint} 2>/dev/null || true
                 '';
               in "${postStopScript}";
 
@@ -103,23 +121,15 @@
             KillMode           = "mixed";
           };
         };
-
-        # This runs a server on localhost instead that you can access on nautilus with dav://localhost:8080. But it's not as fast or good
-        # systemd.user.services.rclone-webdav = {
-        #   Service = {
-        #     ExecStart = "${pkgs.rclone}/bin/rclone serve webdav OneDriveISCTE:";
-        #     Restart = "on-failure";
-        #   };
-        # };
       };
     };
 
   flake.modules.nixos.rclone-mount-onedrive =
     { lib, config, pkgs, ... }:
-    let 
+    let
       optName = "rclone-mount-onedrive";
       cfg = config.${optName};
-    in 
+    in
     {
       options.${optName} = {
         enable = lib.mkEnableOption "${optName}";
@@ -139,6 +149,26 @@
           default     = true; # Highly recommended for root mounts so your normal user can read it
           description = "If true, add --allow-other to rclone mount and enable it system-wide.";
         };
+
+        allowNonEmpty = lib.mkOption {
+          type        = lib.types.bool;
+          default     = true;
+          description = ''
+            If true, add --allow-non-empty so rclone can mount even if the mount point
+            directory is not empty (e.g. contains stale local files from a previous
+            failed unmount). The local contents are hidden by the overlay while mounted.
+          '';
+        };
+
+        extraWantedBy = lib.mkOption {
+          type        = lib.types.listOf lib.types.str;
+          default     = [];
+          description = ''
+            Additional systemd targets that should pull in this mount, on top of
+            the always-present "remote-fs.target". The system will still boot if
+            the mount fails (Restart=on-failure, not required).
+          '';
+        };
       };
 
       config = lib.mkIf cfg.enable {
@@ -149,10 +179,10 @@
 
         systemd.services.${optName} = {
           description = "rclone mount (system): ${cfg.remote} → ${cfg.mountPoint}";
-          after    =[ "network-online.target" ];
+          after    = [ "network-online.target" ];
           wants    = [ "network-online.target" ];
-          before   =[ "sleep.target" ];
-          wantedBy = [ "multi-user.target" ];
+          before   = [ "sleep.target" "remote-fs.target" ] ++ cfg.extraWantedBy;
+          wantedBy = [ "remote-fs.target" ] ++ cfg.extraWantedBy;
 
           serviceConfig = {
             Type = "notify";
@@ -187,7 +217,8 @@
                     --bwlimit 4M:off \
                     --disable-http2 \
                     --config /root/.config/rclone/rclone.conf \
-                    ${lib.optionalString cfg.allowOther "--allow-other"}
+                    ${lib.optionalString cfg.allowOther "--allow-other"} \
+                    ${lib.optionalString cfg.allowNonEmpty "--allow-non-empty"}
                 '';
               in "${mountScript}";
 
