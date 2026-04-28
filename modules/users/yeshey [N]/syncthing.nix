@@ -126,8 +126,17 @@ in
         };
       };
 
+
+
       # stignore files — home.file is cleaner than userActivationScripts
       home.file = {
+        ".local/share/The Powder Toy/.keep".text = "";
+        "Zotero/storage/.keep".text = "";
+        
+        "${dataPath}/PersonalFiles/Servers/.keep".text = "";
+        "${dataPath}/PersonalFiles/Timeless/Syncthing/WhatsAppPictures/.keep".text = "";
+        "${dataPath}/PersonalFiles/Timeless/Syncthing/WhatsAppMovies/.keep".text = "";
+
         "PersonalFiles/2029/.stignore".text = ''
           //*
           //(?i)PhotosAndVideos
