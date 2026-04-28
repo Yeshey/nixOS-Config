@@ -22,6 +22,7 @@
             ".setup"
             ".gnupg"
             ".floorp"
+            ".mozilla/firefox/"
             ".config/rclone"
             ".config/org.restic.browser"
             ".local/share/osu"
