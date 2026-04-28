@@ -1,24 +1,18 @@
 {
-  flake.modules.nixos.rclone-mount-onedrive =
-    { config, lib, pkgs, ... }:
-    {
-      environment.persistence."/persist" = {
-        hideMounts = true;
-        directories =[
-          "/root/.config/rclone"
-          "/var/lib/restic-flags"
-        ];
-      };
-    };
+  inputs,
+  ...
+}:
+{
   flake.modules.homeManager.rclone-mount-onedrive =
-    { config, lib, pkgs, ... }:
+    { config, ... }:
     {
-      home.persistence."/persist/home/${config.home.username}" = {
-        directories =[
-          ".config/rclone"
-          ".local/state/restic-flags"
-        ];
-        allowOther = true;
+      home = inputs.self.lib.mkIfPersistence config {
+        persistence."/persistent" = {
+          hideMounts = true;
+          directories = [
+            ".config/rclone"
+          ];
+        };
       };
     };
 }
