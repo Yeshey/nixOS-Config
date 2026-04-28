@@ -167,6 +167,7 @@ in
         '';
         ".config/zsh/.stignore".text = ''
           !.zsh_history
+          *
         '';
         ".local/share/PrismLauncher/instances/MainInstance/.stignore".text = ''
           !/.minecraft/saves
