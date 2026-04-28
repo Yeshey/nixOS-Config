@@ -1,13 +1,18 @@
-# rclone-mount-onedrive impermanence
 {
   inputs,
   ...
 }:
 {
   flake.modules.homeManager.rclone-mount-onedrive =
+    { config, ... }:
     {
-      imports = [
-        inputs.self.modules.homeManager.rclone-config-impermanence
-      ];
+      home = inputs.self.lib.mkIfPersistence config {
+        persistence."/persistent" = {
+          hideMounts = true;
+          directories = [
+            ".config/rclone"
+          ];
+        };
+      };
     };
 }

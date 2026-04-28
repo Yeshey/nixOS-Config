@@ -1,34 +1,32 @@
-# restic impermanence
 {
   inputs,
   ...
 }:
 {
-  flake.modules.homeManager.restic-rclone-backups-impermanence =
+  flake.modules.homeManager.restic-rclone-backups =
     { config, ... }:
     {
-      imports = [
-        inputs.self.modules.homeManager.rclone-config-impermanence
-      ];
-
       home = inputs.self.lib.mkIfPersistence config {
         persistence."/persistent" = {
           hideMounts = true;
           directories = [
             ".local/state/restic-flags"
+            ".config/rclone"
           ];
         };
       };
     };
 
-  flake.modules.nixos.restic-rclone-backups-impermanence =
+  flake.modules.nixos.restic-rclone-backups =
     { config, ... }:
     {
       environment = inputs.self.lib.mkIfPersistence config {
         persistence."/persistent" = {
           directories = [
             "/var/lib/restic-flags"
-            { directory = "/root/.config/rclone"; mode = "0700"; }
+          ];
+        files = [
+          "/root/.config/rclone/rclone.conf"
           ];
         };
       };
