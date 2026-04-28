@@ -22,15 +22,6 @@ in
     { config, lib, ... }:
     let
       dataPath = config.yeshey.dataStoragePath;
-      folderPaths = lib.mapAttrsToList (name: folder: folder.path) config.services.syncthing.settings.folders;
-      createFoldersScript = lib.concatMapStringsSep "\n" (p: ''
-        # Replace leading ~/ with $HOME/ safely
-        folderPath="${p}"
-        folderPath="''${folderPath/#\~/$HOME}"
-        
-        # Create the directory so Syncthing doesn't fail on missing paths
-        $DRY_RUN_CMD mkdir -p "$folderPath"
-      '') folderPaths;
     in
     {
       imports = with inputs.self.modules.homeManager; [
@@ -38,6 +29,12 @@ in
       ];
 
       services.syncthing = {
+        # Without these, home-manager will only ADD folders/devices but never
+        # update an existing entry (e.g. a changed path). The REST API won't
+        # touch folders whose ID already exists in config.xml.
+        overrideFolders = true;
+        overrideDevices = true;
+
         settings = {
           devices = {
             "nixOS-Laptop".id    = "MQJK4CT-TFXHX2Y-3E2BSCD-Q7775YX-SX7VHKF-4TY6OA6-OGZO2QX-3NPTWQN";
@@ -215,10 +212,6 @@ in
           *
         '';
       };
-
-      home.activation.createSyncthingFolders = lib.hm.dag.entryAfter ["writeBoundary"] ''
-        ${createFoldersScript}
-      '';
 
       # This bug: https://github.com/nix-community/home-manager/issues/6933
       home.activation.fixSyncthingStateDir = lib.hm.dag.entryAfter ["writeBoundary"] ''
