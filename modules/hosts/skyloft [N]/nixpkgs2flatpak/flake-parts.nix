@@ -1,9 +1,9 @@
 { inputs, ... }:
 {
   flake-file.inputs = {
-    # nixpkgs2flatpak = {
-    #   url    = "github:nix-community/disko";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    nixpkgs2flatpak = {
+      url    = "github:Yeshey/nixpkgs2flatpak";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 }
