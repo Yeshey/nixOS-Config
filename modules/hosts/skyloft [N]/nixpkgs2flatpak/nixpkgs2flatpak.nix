@@ -1,7 +1,6 @@
 { inputs, ... }:
 {
   flake.modules.nixos.skyloft =
-    { config, ... }:
     {
       imports = [
         inputs.nixpkgs2flatpak.nixosModules.flatpakServer

@@ -7,8 +7,16 @@ let
   '';
 
   mkCleanGit = pkgs: pkgs.writeShellScriptBin "cleangit" ''
-    find . -type d -name '.git' -execdir sh -c \
-      'echo "Cleaning repository in $(pwd)"; git clean -fdx' \;
+    dry_run=""
+    if [ "$1" = "--dry-run" ]; then
+      dry_run="n"
+    fi
+
+    find . -type d -name '.git' | sort | while IFS= read -r gitdir; do
+      repo="$(dirname "$gitdir")"
+      echo "Cleaning $repo"
+      (cd "$repo" && git clean -fdX$dry_run)
+    done
   '';
 
   combfiles = pkgs: pkgs.writeShellScriptBin "combfiles" (builtins.readFile ./combfiles.sh);

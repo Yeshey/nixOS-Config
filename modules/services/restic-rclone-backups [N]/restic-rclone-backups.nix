@@ -244,77 +244,32 @@ in
           services.restic.enable  = true;
           services.restic.backups = lib.mapAttrs (jobName: job:
             let
-              flagFile         = "${config.xdg.stateHome}/restic-flags/${jobName}.flag";
-              notifyStartCmd =
-                let
-                  journalCmd = "journalctl --user -fu restic-backups-${jobName}.service";
-                  openTerminalScript = pkgs.writeShellScript "restic-open-term-${jobName}" ''
-                    ${ensureDbus}
-                    cmd='${journalCmd}; echo; printf "Press Enter to close..."; read _'
-                    for term in \
-                      "''${TERMINAL:-}" \
-                      ${pkgs.xdg-terminal-exec}/bin/xdg-terminal-exec \
-                      kitty alacritty foot wezterm konsole xfce4-terminal gnome-terminal xterm
-                    do
-                      [ -z "$term" ] && continue
-                      command -v "$term" > /dev/null 2>&1 || continue
-                      case "$term" in
-                        gnome-terminal) exec gnome-terminal -- sh -c "$cmd" ;;
-                        *)              exec "$term" sh -c "$cmd" ;;
-                      esac
-                    done
-                  '';
-                in
-                ''
-                  ${ensureDbus}
-                  (
-                    action=$(${pkgs.libnotify}/bin/notify-send \
-                      "User Backup" "Starting: ${jobName}…" \
-                      --icon=drive-harddisk \
-                      --urgency=critical \
-                      --action=logs:"View logs" \
-                      --wait 2>/dev/null || true)
-                    [ "$action" = "logs" ] && ${openTerminalScript}
-                  ) &
-                '';
-              notifySuccessCmd = ''
-                ${ensureDbus}
-                ${pkgs.libnotify}/bin/notify-send "User Backup" "Finished: ${jobName}" --icon=drive-harddisk --urgency=critical || true
+              flagFile = "${config.xdg.stateHome}/restic-flags/${jobName}.flag";
+              
+              # Simple logic: wait for action, if it's "logs", open the terminal.
+              notifyCmd = summary: body: icon: ''
+                (
+                  ret_val=$(${pkgs.libnotify}/bin/notify-send \
+                    --action="logs=View Logs" \
+                    --icon=${icon} \
+                    --urgency=critical \
+                    --wait \
+                    "${summary}" "${body}")
+
+                  case "$ret_val" in
+                    "logs")
+                      ${pkgs.xdg-terminal-exec}/bin/xdg-terminal-exec -- journalctl --user -fu restic-backups-${jobName}.service
+                      ;;
+                  esac
+                ) &
               '';
-              notifyFailCmd =
-                let
-                  journalCmd = "journalctl --user -fu restic-backups-${jobName}.service";
-                  openTerminalScript = pkgs.writeShellScript "restic-open-term-fail-${jobName}" ''
-                    ${ensureDbus}
-                    cmd='${journalCmd}; echo; printf "Press Enter to close..."; read _'
-                    for term in \
-                      "''${TERMINAL:-}" \
-                      ${pkgs.xdg-terminal-exec}/bin/xdg-terminal-exec \
-                      kitty alacritty foot wezterm konsole xfce4-terminal gnome-terminal xterm
-                    do
-                      [ -z "$term" ] && continue
-                      command -v "$term" > /dev/null 2>&1 || continue
-                      case "$term" in
-                        gnome-terminal) exec gnome-terminal -- sh -c "$cmd" ;;
-                        *)              exec "$term" sh -c "$cmd" ;;
-                      esac
-                    done
-                  '';
-                in
-                ''
-                  ${ensureDbus}
-                  (
-                    action=$(${pkgs.libnotify}/bin/notify-send \
-                      "User Backup" "FAILED/STOPPED: ${jobName}" \
-                      --icon=dialog-error \
-                      --urgency=critical \
-                      --action=logs:"View logs" \
-                      --wait 2>/dev/null || true)
-                    [ "$action" = "logs" ] && ${openTerminalScript}
-                  ) &
-                '';
+
             in
-            mkBackup pkgs lib flagFile notifyStartCmd notifySuccessCmd notifyFailCmd job
+            mkBackup pkgs lib flagFile 
+              (notifyCmd "User Backup" "Starting: ${jobName}…" "drive-harddisk") # notifyStartCmd
+              ''${pkgs.libnotify}/bin/notify-send "User Backup" "Finished: ${jobName}" --icon=drive-harddisk'' # notifySuccessCmd
+              (notifyCmd "User Backup" "FAILED/STOPPED: ${jobName}" "dialog-error") # notifyFailCmd
+              job
           ) enabledJobs;
 
           systemd.user.services = lib.mkMerge [
