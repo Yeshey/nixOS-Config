@@ -15,6 +15,5 @@ in
       home-manager.users."${username}" = {
         "${username}".dataStoragePath = "/mnt/OneDrive/ISCTE";
       };
-      programs.fuse.userAllowOther = true; # so syncthing and stuff can access the mount
     };
 }

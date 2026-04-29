@@ -181,11 +181,12 @@
           description = "rclone mount (system): ${cfg.remote} → ${cfg.mountPoint}";
           after    = [ "network-online.target" ];
           wants    = [ "network-online.target" ];
-          before   = [ "sleep.target" "remote-fs.target" ] ++ cfg.extraWantedBy;
-          wantedBy = [ "remote-fs.target" ] ++ cfg.extraWantedBy;
+          before   = [ "sleep.target" "remote-fs.target" "multi-user.target" ] ++ cfg.extraWantedBy;
+          wantedBy = [ "remote-fs.target" "multi-user.target" ] ++ cfg.extraWantedBy;
 
           serviceConfig = {
             Type = "notify";
+            NotifyAccess = "all";  # Allow rclone to send notify signals
 
             ExecStartPre =
               let

@@ -5,7 +5,7 @@ let
     type = "staggered";
     params = {
       cleanInterval = "3600";
-      maxAge = "86400"; # 1 day
+      maxAge = "259200"; # 3 days
     };
   };
 
@@ -22,6 +22,37 @@ in
     { config, lib, ... }:
     let
       dataPath = config.yeshey.dataStoragePath;
+
+      # Plain list — no reference to config.services.syncthing, so no circular dep
+      externalFolderPaths = [
+        "${dataPath}/PersonalFiles/2026"
+        "${dataPath}/PersonalFiles/2027"
+        "${dataPath}/PersonalFiles/2028"
+        "${dataPath}/PersonalFiles/2029"
+        "${dataPath}/PersonalFiles/Timeless/Syncthing/PhoneCamera"
+        "${dataPath}/PersonalFiles/Timeless/Syncthing/Allsync"
+        "${dataPath}/PersonalFiles/Timeless/Music"
+        "${dataPath}/PersonalFiles/Servers"
+        "${dataPath}/PersonalFiles/Timeless/Syncthing/WhatsAppPictures"
+        "${dataPath}/PersonalFiles/Timeless/Syncthing/WhatsAppMovies"
+      ];
+
+      # mkdir -p for every external path
+      mkdirScript = lib.concatMapStringsSep "\n"
+        (p: ''$DRY_RUN_CMD mkdir -p "${p}"'')
+        externalFolderPaths;
+
+      # Write a .stignore only if it doesn't already exist, so manual edits survive
+      # re-switches. Uses a plain cat redirect — no DRY_RUN_CMD wrapping the heredoc,
+      # which would break under --dry-run.
+      writeStignore = path: content: ''
+        dest="${path}/.stignore"
+        if [ ! -f "$dest" ]; then
+          cat > "$dest" << 'STIGNEOF'
+        ${content}
+        STIGNEOF
+        fi
+      '';
     in
     {
       imports = with inputs.self.modules.homeManager; [
@@ -29,29 +60,21 @@ in
       ];
 
       services.syncthing = {
-        # Without these, home-manager will only ADD folders/devices but never
-        # update an existing entry (e.g. a changed path). The REST API won't
-        # touch folders whose ID already exists in config.xml.
         overrideFolders = true;
         overrideDevices = true;
 
         settings = {
           devices = {
-            "nixOS-Laptop".id    = "MQJK4CT-TFXHX2Y-3E2BSCD-Q7775YX-SX7VHKF-4TY6OA6-OGZO2QX-3NPTWQN";
-            "windows-Laptop".id  = "SST7QBM-2SKF4WK-F4RUAA2-ICQ7NBB-LDI3I33-O3DEZZJ-TVXZ3DB-M7IYTAQ";
-            "nixOS-Surface".id   = "SEYY5VY-KFP6VTK-RDUXRJL-DJDZAXT-2FVZHCQ-EEOEJFW-HLAVQKR-6UHBDQN";
+            "nixOS-Laptop".id     = "MQJK4CT-TFXHX2Y-3E2BSCD-Q7775YX-SX7VHKF-4TY6OA6-OGZO2QX-3NPTWQN";
+            "windows-Laptop".id   = "SST7QBM-2SKF4WK-F4RUAA2-ICQ7NBB-LDI3I33-O3DEZZJ-TVXZ3DB-M7IYTAQ";
+            "nixOS-Surface".id    = "SEYY5VY-KFP6VTK-RDUXRJL-DJDZAXT-2FVZHCQ-EEOEJFW-HLAVQKR-6UHBDQN";
             "android-A70Phone".id = "RT3DBUX-VNP5WPX-TZEYYL5-SVKR27H-432WTFY-JD3JOAA-HTL4APW-GRQIBQC";
             "nixOS-arm-oracle".id = "O3DCQYT-OR2L7LJ-TV2OF6Y-G4WB52H-KJJ7AU2-4GJWQHK-S5POYUE-I6XLBQJ";
           };
 
           folders = {
-            "2029" = {
-              path       = "${dataPath}/PersonalFiles/2029";
-              devices    = allDevices;
-              versioning = myVersioning;
-            };
-            "2028" = {
-              path       = "${dataPath}/PersonalFiles/2028";
+            "2026" = {
+              path       = "${dataPath}/PersonalFiles/2026";
               devices    = allDevices;
               versioning = myVersioning;
             };
@@ -60,8 +83,13 @@ in
               devices    = allDevices;
               versioning = myVersioning;
             };
-            "2026" = {
-              path       = "${dataPath}/PersonalFiles/2026";
+            "2028" = {
+              path       = "${dataPath}/PersonalFiles/2028";
+              devices    = allDevices;
+              versioning = myVersioning;
+            };
+            "2029" = {
+              path       = "${dataPath}/PersonalFiles/2029";
               devices    = allDevices;
               versioning = myVersioning;
             };
@@ -134,52 +162,8 @@ in
         };
       };
 
-      # stignore files — home.file is cleaner than userActivationScripts
+      # Files inside $HOME — home.file handles these cleanly
       home.file = {
-        ".local/share/The Powder Toy/.keep".text = "";
-        "Zotero/storage/.keep".text = "";
-
-        "${dataPath}/PersonalFiles/Servers/.keep".text = "";
-        "${dataPath}/PersonalFiles/Timeless/Syncthing/WhatsAppPictures/.keep".text = "";
-        "${dataPath}/PersonalFiles/Timeless/Syncthing/WhatsAppMovies/.keep".text = "";
-
-        "${dataPath}/PersonalFiles/2029/.stignore".text = ''
-          //*
-          //(?i)PhotosAndVideos
-          .git
-          *.ipynb
-        '';
-        "${dataPath}/PersonalFiles/2028/.stignore".text = ''
-          //*
-          //(?i)PhotosAndVideos
-          .git
-          *.ipynb
-        '';
-        "${dataPath}/PersonalFiles/2027/.stignore".text = ''
-          //*
-          //(?i)PhotosAndVideos
-          .git
-          *.ipynb
-        '';
-        "${dataPath}/PersonalFiles/2026/.stignore".text = ''
-          //*
-          //(?i)PhotosAndVideos
-          .git
-          *.ipynb
-        '';
-        "${dataPath}/PersonalFiles/Timeless/Syncthing/PhoneCamera/.stignore".text = ''
-          //*
-          //(?i)Photos&Videos
-        '';
-        "${dataPath}/PersonalFiles/Timeless/Syncthing/Allsync/.stignore".text = ''
-          //*
-          //(?i)watch
-        '';
-        "${dataPath}/PersonalFiles/Timeless/Music/.stignore".text = ''
-          //*
-          (?i)AllMusic
-          (?i)AllMusic-mp3
-        '';
         ".config/zsh/.stignore".text = ''
           !.zsh_history
           *
@@ -213,11 +197,61 @@ in
         '';
       };
 
-      # This bug: https://github.com/nix-community/home-manager/issues/6933
-      home.activation.fixSyncthingStateDir = lib.hm.dag.entryAfter ["writeBoundary"] ''
-        if [ ! -e "$HOME/.local/state/syncthing" ]; then
-          $DRY_RUN_CMD ln -s "$HOME/.config/syncthing" "$HOME/.local/state/syncthing"
-        fi
-      '';
+      home.activation = {
+
+        # 1. Create all external Syncthing directories before anything else
+        createSyncthingFolders = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+          ${mkdirScript}
+        '';
+
+        # 2. Write external .stignore files after directories exist
+        createExternalStignores = lib.hm.dag.entryAfter [ "createSyncthingFolders" ] ''
+          ${writeStignore "${dataPath}/PersonalFiles/2026" ''
+            //*
+            //(?i)PhotosAndVideos
+            .git
+            *.ipynb
+          ''}
+          ${writeStignore "${dataPath}/PersonalFiles/2027" ''
+            //*
+            //(?i)PhotosAndVideos
+            .git
+            *.ipynb
+          ''}
+          ${writeStignore "${dataPath}/PersonalFiles/2028" ''
+            //*
+            //(?i)PhotosAndVideos
+            .git
+            *.ipynb
+          ''}
+          ${writeStignore "${dataPath}/PersonalFiles/2029" ''
+            //*
+            //(?i)PhotosAndVideos
+            .git
+            *.ipynb
+          ''}
+          ${writeStignore "${dataPath}/PersonalFiles/Timeless/Syncthing/PhoneCamera" ''
+            //*
+            //(?i)Photos&Videos
+          ''}
+          ${writeStignore "${dataPath}/PersonalFiles/Timeless/Syncthing/Allsync" ''
+            //*
+            //(?i)watch
+          ''}
+          ${writeStignore "${dataPath}/PersonalFiles/Timeless/Music" ''
+            //*
+            (?i)AllMusic
+            (?i)AllMusic-mp3
+          ''}
+        '';
+
+        # Workaround for https://github.com/nix-community/home-manager/issues/6933
+        fixSyncthingStateDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+          if [ ! -e "$HOME/.local/state/syncthing" ]; then
+            $DRY_RUN_CMD ln -s "$HOME/.config/syncthing" "$HOME/.local/state/syncthing"
+          fi
+        '';
+
+      };
     };
 }
