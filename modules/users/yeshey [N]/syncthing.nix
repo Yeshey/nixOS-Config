@@ -5,11 +5,11 @@ let
     type = "staggered";
     params = {
       cleanInterval = "3600";
-      maxAge = "86400"; # 1 day
+      maxAge = "259200"; # 3 days
     };
   };
 
-  allDevices = [
+  allDevices =[
     "nixOS-Laptop"
     "windows-Laptop"
     "nixOS-Surface"
@@ -19,19 +19,28 @@ let
 in
 {
   flake.modules.homeManager.yeshey =
-    { config, lib, ... }:
+    { config, lib, pkgs, ... }:
     let
       dataPath = config.yeshey.dataStoragePath;
+
+      # Extract all the paths from your Syncthing folder configuration
+      folderPaths = lib.mapAttrsToList (name: folder: folder.path) config.services.syncthing.settings.folders;
+
+      # Generate a bash script that iterates over all paths and guarantees the directory exists
+      createFoldersScript = lib.concatMapStringsSep "\n" (p: ''
+        # Replace leading ~/ with $HOME/ safely
+        folderPath="${p}"
+        folderPath="''${folderPath/#\~/$HOME}"
+        
+        $DRY_RUN_CMD mkdir -p "$folderPath"
+      '') folderPaths;
     in
     {
-      imports = with inputs.self.modules.homeManager; [
+      imports = with inputs.self.modules.homeManager;[
         syncthing
       ];
 
       services.syncthing = {
-        # Without these, home-manager will only ADD folders/devices but never
-        # update an existing entry (e.g. a changed path). The REST API won't
-        # touch folders whose ID already exists in config.xml.
         overrideFolders = true;
         overrideDevices = true;
 
@@ -134,52 +143,8 @@ in
         };
       };
 
-      # stignore files — home.file is cleaner than userActivationScripts
+      # Files that live inside $HOME — home.file handles these fine.
       home.file = {
-        ".local/share/The Powder Toy/.keep".text = "";
-        "Zotero/storage/.keep".text = "";
-
-        "${dataPath}/PersonalFiles/Servers/.keep".text = "";
-        "${dataPath}/PersonalFiles/Timeless/Syncthing/WhatsAppPictures/.keep".text = "";
-        "${dataPath}/PersonalFiles/Timeless/Syncthing/WhatsAppMovies/.keep".text = "";
-
-        "${dataPath}/PersonalFiles/2029/.stignore".text = ''
-          //*
-          //(?i)PhotosAndVideos
-          .git
-          *.ipynb
-        '';
-        "${dataPath}/PersonalFiles/2028/.stignore".text = ''
-          //*
-          //(?i)PhotosAndVideos
-          .git
-          *.ipynb
-        '';
-        "${dataPath}/PersonalFiles/2027/.stignore".text = ''
-          //*
-          //(?i)PhotosAndVideos
-          .git
-          *.ipynb
-        '';
-        "${dataPath}/PersonalFiles/2026/.stignore".text = ''
-          //*
-          //(?i)PhotosAndVideos
-          .git
-          *.ipynb
-        '';
-        "${dataPath}/PersonalFiles/Timeless/Syncthing/PhoneCamera/.stignore".text = ''
-          //*
-          //(?i)Photos&Videos
-        '';
-        "${dataPath}/PersonalFiles/Timeless/Syncthing/Allsync/.stignore".text = ''
-          //*
-          //(?i)watch
-        '';
-        "${dataPath}/PersonalFiles/Timeless/Music/.stignore".text = ''
-          //*
-          (?i)AllMusic
-          (?i)AllMusic-mp3
-        '';
         ".config/zsh/.stignore".text = ''
           !.zsh_history
           *
@@ -213,11 +178,111 @@ in
         '';
       };
 
-      # This bug: https://github.com/nix-community/home-manager/issues/6933
-      home.activation.fixSyncthingStateDir = lib.hm.dag.entryAfter ["writeBoundary"] ''
-        if [ ! -e "$HOME/.local/state/syncthing" ]; then
-          $DRY_RUN_CMD ln -s "$HOME/.config/syncthing" "$HOME/.local/state/syncthing"
-        fi
-      '';
+      # 1. Automatically create all Syncthing paths before doing anything else
+      home.activation.createFolders = 
+        lib.hm.dag.entryAfter[ "writeBoundary" ] ''
+          ${createFoldersScript}
+        '';
+
+      # 2. Write external .stignore files (runs AFTER createFolders so dirs exist)
+      # only needed for folders not necessarily in home directory
+      home.activation.createExternalSyncthingFiles =
+        lib.hm.dag.entryAfter [ "createFolders" ] ''
+          
+          # -------------------------------------------------------------------
+          # 2026
+          # -------------------------------------------------------------------
+          dest="${dataPath}/PersonalFiles/2026/.stignore"
+          if [ ! -f "$dest" ]; then
+            $DRY_RUN_CMD tee "$dest" > /dev/null << 'EOF'
+          //*
+          //(?i)PhotosAndVideos
+          .git
+          *.ipynb
+          EOF
+          fi
+
+          # -------------------------------------------------------------------
+          # 2027
+          # -------------------------------------------------------------------
+          dest="${dataPath}/PersonalFiles/2027/.stignore"
+          if [ ! -f "$dest" ]; then
+            $DRY_RUN_CMD tee "$dest" > /dev/null << 'EOF'
+          //*
+          //(?i)PhotosAndVideos
+          .git
+          *.ipynb
+          EOF
+          fi
+
+          # -------------------------------------------------------------------
+          # 2028
+          # -------------------------------------------------------------------
+          dest="${dataPath}/PersonalFiles/2028/.stignore"
+          if [ ! -f "$dest" ]; then
+            $DRY_RUN_CMD tee "$dest" > /dev/null << 'EOF'
+          //*
+          //(?i)PhotosAndVideos
+          .git
+          *.ipynb
+          EOF
+          fi
+
+          # -------------------------------------------------------------------
+          # 2029
+          # -------------------------------------------------------------------
+          dest="${dataPath}/PersonalFiles/2029/.stignore"
+          if [ ! -f "$dest" ]; then
+            $DRY_RUN_CMD tee "$dest" > /dev/null << 'EOF'
+          //*
+          //(?i)PhotosAndVideos
+          .git
+          *.ipynb
+          EOF
+          fi
+
+          # -------------------------------------------------------------------
+          # PhoneCamera
+          # -------------------------------------------------------------------
+          dest="${dataPath}/PersonalFiles/Timeless/Syncthing/PhoneCamera/.stignore"
+          if [ ! -f "$dest" ]; then
+            $DRY_RUN_CMD tee "$dest" > /dev/null << 'EOF'
+          //*
+          //(?i)Photos&Videos
+          EOF
+          fi
+
+          # -------------------------------------------------------------------
+          # Allsync
+          # -------------------------------------------------------------------
+          dest="${dataPath}/PersonalFiles/Timeless/Syncthing/Allsync/.stignore"
+          if [ ! -f "$dest" ]; then
+            $DRY_RUN_CMD tee "$dest" > /dev/null << 'EOF'
+          //*
+          //(?i)watch
+          EOF
+          fi
+
+          # -------------------------------------------------------------------
+          # Music
+          # -------------------------------------------------------------------
+          dest="${dataPath}/PersonalFiles/Timeless/Music/.stignore"
+          if [ ! -f "$dest" ]; then
+            $DRY_RUN_CMD tee "$dest" > /dev/null << 'EOF'
+          //*
+          (?i)AllMusic
+          (?i)AllMusic-mp3
+          EOF
+          fi
+
+        '';
+
+      # Workaround for https://github.com/nix-community/home-manager/issues/6933
+      home.activation.fixSyncthingStateDir =
+        lib.hm.dag.entryAfter[ "writeBoundary" ] ''
+          if [ ! -e "$HOME/.local/state/syncthing" ]; then
+            $DRY_RUN_CMD ln -s "$HOME/.config/syncthing" "$HOME/.local/state/syncthing"
+          fi
+        '';
     };
 }
