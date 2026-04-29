@@ -271,6 +271,7 @@ in
                     action=$(${pkgs.libnotify}/bin/notify-send \
                       "User Backup" "Starting: ${jobName}…" \
                       --icon=drive-harddisk \
+                      --urgency=critical \
                       --action=logs:"View logs" \
                       --wait 2>/dev/null || true)
                     [ "$action" = "logs" ] && ${openTerminalScript}
@@ -278,7 +279,7 @@ in
                 '';
               notifySuccessCmd = ''
                 ${ensureDbus}
-                ${pkgs.libnotify}/bin/notify-send "User Backup" "Finished: ${jobName}" --icon=drive-harddisk || true
+                ${pkgs.libnotify}/bin/notify-send "User Backup" "Finished: ${jobName}" --icon=drive-harddisk --urgency=critical || true
               '';
               notifyFailCmd =
                 let
