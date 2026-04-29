@@ -243,11 +243,11 @@ in
         '';
 
         # Workaround for https://github.com/nix-community/home-manager/issues/6933
-        fixSyncthingStateDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-          if [ ! -e "$HOME/.local/state/syncthing" ]; then
-            $DRY_RUN_CMD ln -s "$HOME/.config/syncthing" "$HOME/.local/state/syncthing"
-          fi
-        '';
+        # fixSyncthingStateDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        #   if [ ! -e "$HOME/.local/state/syncthing" ]; then
+        #     $DRY_RUN_CMD ln -s "$HOME/.config/syncthing" "$HOME/.local/state/syncthing"
+        #   fi
+        # '';
 
       };
     };
