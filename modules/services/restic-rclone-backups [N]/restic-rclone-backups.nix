@@ -207,7 +207,7 @@ in
       };
     };
 
-  # ==========================================================================
+# ==========================================================================
   # HOME MANAGER MODULE
   # ==========================================================================
   flake.modules.homeManager.restic-rclone-backups =
@@ -316,17 +316,32 @@ in
             mkBackup pkgs lib flagFile notifyStartCmd notifySuccessCmd notifyFailCmd job
           ) enabledJobs;
 
-          systemd.user.services.restic-resume-check = {
-            Unit = {
-              Description = "Resume interrupted user restic backups after login";
-              After       = [ "default.target" ];
-            };
-            Install.WantedBy = [ "default.target" ];
-            Service = {
-              Type      = "oneshot";
-              ExecStart = "${resumeScript}";
-            };
-          };
+          systemd.user.services = lib.mkMerge [
+            # Restart-on-failure for each backup job
+            (lib.mapAttrs' (jobName: _:
+              lib.nameValuePair "restic-backups-${jobName}" {
+                Service = {
+                  Restart    = "on-failure";
+                  RestartSec = "15m";
+                };
+              }
+            ) enabledJobs)
+
+            # Resume-after-login service
+            {
+              restic-resume-check = {
+                Unit = {
+                  Description = "Resume interrupted user restic backups after login";
+                  After       = [ "default.target" ];
+                };
+                Install.WantedBy = [ "default.target" ];
+                Service = {
+                  Type      = "oneshot";
+                  ExecStart = "${resumeScript}";
+                };
+              };
+            }
+          ];
 
           home.packages = with pkgs; [ rclone restic libnotify ];
         };
