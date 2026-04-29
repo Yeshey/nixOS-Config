@@ -60,10 +60,11 @@ in
       ];
 
       services.syncthing = {
-        overrideFolders = true;
-        overrideDevices = true;
-
         settings = {
+          gui = {
+            address = "0.0.0.0:8384";  # or "10.8.0.1:8384" to bind only to the VPN interface
+          };
+
           devices = {
             "nixOS-Laptop".id     = "MQJK4CT-TFXHX2Y-3E2BSCD-Q7775YX-SX7VHKF-4TY6OA6-OGZO2QX-3NPTWQN";
             "windows-Laptop".id   = "SST7QBM-2SKF4WK-F4RUAA2-ICQ7NBB-LDI3I33-O3DEZZJ-TVXZ3DB-M7IYTAQ";
