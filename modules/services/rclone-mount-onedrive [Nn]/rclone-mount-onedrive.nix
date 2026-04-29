@@ -65,7 +65,7 @@
             Before = [ "sleep.target" ];
           };
 
-          Install.WantedBy = [ "remote-fs.target" ] ++ cfg.extraWantedBy;
+          Install.WantedBy = [ "default.target" ] ++ cfg.extraWantedBy;
 
           Service = {
             Type = "notify";
