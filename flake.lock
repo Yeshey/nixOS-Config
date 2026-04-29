@@ -852,11 +852,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1776287872,
-        "narHash": "sha256-pi0MftxS9DtjniCtA40yx3UcnxrEvsyA8dDZMmiem84=",
+        "lastModified": 1777481045,
+        "narHash": "sha256-VEsJBRgzVfBJcv1T/AZle6fEPpkIVoiMsIbLG2efDaY=",
         "owner": "yeshey",
         "repo": "nixos-upgrade-on-shutdown",
-        "rev": "98566e1d339a5a7a6aaafecc512407f9429f638b",
+        "rev": "d3e4c7e163fad2f63485ccbb6ec942b6a5f8078a",
         "type": "github"
       },
       "original": {

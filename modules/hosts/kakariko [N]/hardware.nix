@@ -75,40 +75,22 @@
 
       systemd.services.fix-surface-clock = {
         description = "Fix broken Surface RTC using ntpdate";
-        # Remove wantedBy = [ "multi-user.target" ]; — we'll use a different target
-        
-        before = [ "time-set.target" "time-sync.target" ];
+        before = [ "time-sync.target" ];
+        wants = [ "time-sync.target" "network-online.target" ];
         after = [ "network-online.target" ];
-        wants = [ "network-online.target" ];
-        
         unitConfig = {
-          DefaultDependencies = false;  # Critical: allows running very early
+          DefaultDependencies = false;
         };
-        
         script = ''
-          ${pkgs.ntp}/bin/ntpdate -u pool.ntp.org || \
-          ${pkgs.ntp}/bin/ntpdate -u time.cloudflare.com || \
-          ${pkgs.ntp}/bin/ntpdate -u time.google.com
+          ${pkgs.ntp}/bin/ntpdate -u pool.ntp.org || ${pkgs.ntp}/bin/ntpdate -u time.google.com
         '';
-        
         serviceConfig = {
           Type = "oneshot";
-          RemainAfterExit = true;  # Stay "active" so dependents know time is set
+          RemainAfterExit = true; # Stay "active" so dependents know time is set
           Restart = "on-failure";
           RestartSec = "10s";
         };
-      };
-
-      # Make your timer depend on time being set
-      systemd.timers.my-nixos-update = {
-        wantedBy = [ "timers.target" ];
-        after = [ "time-set.target" "fix-surface-clock.service" ];  # Wait for clock fix
-        requires = [ "fix-surface-clock.service" ];  # Ensure it actually ran
-        timerConfig = {
-          Persistent = true;
-          OnCalendar = "*-*-01,16 06:10:00";
-          Unit = "my-nixos-update.service";
-        };
+        wantedBy = [ "multi-user.target" "time-sync.target" ];
       };
     };
 }
