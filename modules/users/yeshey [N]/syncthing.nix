@@ -61,10 +61,6 @@ in
 
       services.syncthing = {
         settings = {
-          gui = {
-            address = "0.0.0.0:8384";  # or "10.8.0.1:8384" to bind only to the VPN interface
-          };
-
           devices = {
             "nixOS-Laptop".id     = "MQJK4CT-TFXHX2Y-3E2BSCD-Q7775YX-SX7VHKF-4TY6OA6-OGZO2QX-3NPTWQN";
             "windows-Laptop".id   = "SST7QBM-2SKF4WK-F4RUAA2-ICQ7NBB-LDI3I33-O3DEZZJ-TVXZ3DB-M7IYTAQ";
@@ -200,50 +196,50 @@ in
 
       home.activation = {
 
-        # 1. Create all external Syncthing directories before anything else
         createSyncthingFolders = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-          ${mkdirScript}
+          timeout 10 bash -c '${mkdirScript}' || echo "createSyncthingFolders timed out or failed, skipping."
         '';
 
-        # 2. Write external .stignore files after directories exist
         createExternalStignores = lib.hm.dag.entryAfter [ "createSyncthingFolders" ] ''
-          ${writeStignore "${dataPath}/PersonalFiles/2026" ''
-            //*
-            //(?i)PhotosAndVideos
-            .git
-            *.ipynb
-          ''}
-          ${writeStignore "${dataPath}/PersonalFiles/2027" ''
-            //*
-            //(?i)PhotosAndVideos
-            .git
-            *.ipynb
-          ''}
-          ${writeStignore "${dataPath}/PersonalFiles/2028" ''
-            //*
-            //(?i)PhotosAndVideos
-            .git
-            *.ipynb
-          ''}
-          ${writeStignore "${dataPath}/PersonalFiles/2029" ''
-            //*
-            //(?i)PhotosAndVideos
-            .git
-            *.ipynb
-          ''}
-          ${writeStignore "${dataPath}/PersonalFiles/Timeless/Syncthing/PhoneCamera" ''
-            //*
-            //(?i)Photos&Videos
-          ''}
-          ${writeStignore "${dataPath}/PersonalFiles/Timeless/Syncthing/Allsync" ''
-            //*
-            //(?i)watch
-          ''}
-          ${writeStignore "${dataPath}/PersonalFiles/Timeless/Music" ''
-            //*
-            (?i)AllMusic
-            (?i)AllMusic-mp3
-          ''}
+          timeout 10 bash -c ${lib.escapeShellArg ''
+            ${writeStignore "${dataPath}/PersonalFiles/2026" ''
+              //*
+              //(?i)PhotosAndVideos
+              .git
+              *.ipynb
+            ''}
+            ${writeStignore "${dataPath}/PersonalFiles/2027" ''
+              //*
+              //(?i)PhotosAndVideos
+              .git
+              *.ipynb
+            ''}
+            ${writeStignore "${dataPath}/PersonalFiles/2028" ''
+              //*
+              //(?i)PhotosAndVideos
+              .git
+              *.ipynb
+            ''}
+            ${writeStignore "${dataPath}/PersonalFiles/2029" ''
+              //*
+              //(?i)PhotosAndVideos
+              .git
+              *.ipynb
+            ''}
+            ${writeStignore "${dataPath}/PersonalFiles/Timeless/Syncthing/PhoneCamera" ''
+              //*
+              //(?i)Photos&Videos
+            ''}
+            ${writeStignore "${dataPath}/PersonalFiles/Timeless/Syncthing/Allsync" ''
+              //*
+              //(?i)watch
+            ''}
+            ${writeStignore "${dataPath}/PersonalFiles/Timeless/Music" ''
+              //*
+              (?i)AllMusic
+              (?i)AllMusic-mp3
+            ''}
+          ''} || echo "createExternalStignores timed out or failed, skipping."
         '';
 
         # Workaround for https://github.com/nix-community/home-manager/issues/6933
