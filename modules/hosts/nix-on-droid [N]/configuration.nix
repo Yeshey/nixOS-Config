@@ -25,7 +25,7 @@
         procps diffutils findutils util-linux
         zip unzip gnutar gzip xz
         gnugrep gnused nano
-        devenv ookla-speedtest
+        devenv ookla-speedtest ping
       ];
 
       # font that supports starship theme
