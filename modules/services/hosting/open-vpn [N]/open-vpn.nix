@@ -165,6 +165,8 @@
               push "dhcp-option DNS 2606:4700:4700::1111"
               push "dhcp-option DNS 2606:4700:4700::1001"
               
+              client-to-client
+
               keepalive 10 120
               persist-key
               persist-tun
