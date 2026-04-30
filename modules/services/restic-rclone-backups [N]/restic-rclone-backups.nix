@@ -94,6 +94,7 @@ let
       "**/Cache"              "**/_build"      "**/venv"
       "**/.venv"              "**/Steam"       "**/Trash"
       "**/.var/app/*/cache/"  "**/.local/share/waydroid"
+      "**/.cargo"             "**/target"
     ] ++ job.exclude;
 
     extraBackupArgs = [ "--verbose=2" ] ++ job.extraBackupArgs;
