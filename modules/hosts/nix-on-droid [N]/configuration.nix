@@ -61,8 +61,8 @@
             enable = true;
             history.path = lib.mkForce "/data/data/com.termux.nix/files/home/storage/Documents/Syncthing/zshHistory/.zsh_history";
             shellAliases = {
-              update-remote = lib.mkForce "nix-on-droid switch --flake github:Yeshey/nixOS-Config#nix-on-droid --max-jobs 2 --cores 2 --option 'experimental-features' 'nix-command flakes pipe-operators' -v |& ${pkgs.nix-output-monitor}/bin/nom";
-              update = lib.mkForce "echo 'updating from local .setup...' && nix-on-droid switch --flake $HOME/.setup#nix-on-droid --max-jobs 2 --cores 2 --option 'experimental-features' 'nix-command flakes pipe-operators' -v |& ${pkgs.nix-output-monitor}/bin/nom";
+              update-remote = lib.mkForce "nix-on-droid switch --flake github:Yeshey/nixOS-Config#nix-on-droid --max-jobs 1 --cores 1 --option 'experimental-features' 'nix-command flakes pipe-operators' -v |& ${pkgs.nix-output-monitor}/bin/nom";
+              update = lib.mkForce "echo 'updating from local .setup...' && nix-on-droid switch --flake $HOME/.setup#nix-on-droid --max-jobs 1 --cores 1 --option 'experimental-features' 'nix-command flakes pipe-operators' -v |& ${pkgs.nix-output-monitor}/bin/nom";
               clean  = lib.mkForce "nix-collect-garbage -d && nix-store --gc && echo 'Displaying stray roots:' && nix-store --gc --print-roots | egrep -v '^(/nix/var|/run/current-system|/run/booted-system|/proc|\\{memory|\\{censored)'";
             };
             initContent = lib.mkBefore ''
