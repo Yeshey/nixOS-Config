@@ -67,6 +67,7 @@
             };
             initContent = lib.mkBefore ''
               echo "Welcome to your shell!"
+              termux-wake-lock
             '';
           };
           home.activation.storageSymlink = ''
