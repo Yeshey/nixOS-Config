@@ -2,6 +2,7 @@
 # Run `termux-wake-lock` as well, you might have to give it extra premissions.
 # try on the PC before you do on the phone: nix build --impure .#nixOnDroidConfigurations.nix-on-droid.activationPackage
 # connect the screen to computer: `scrcpy --render-driver=opengl`
+# If something is taking too long to build, check if it was built by Hydra: `nix run nixpkgs#hydra-check -- --arch aarch64-linux blender`
 { inputs, lib, ... }:
 {
   flake.modules.nixOnDroid.nix-on-droid =
@@ -13,6 +14,15 @@
         # root-droid
       ];
 
+      nix.substituters = [
+        "https://install.determinate.systems"
+        "https://nix-community.cachix.org"
+      ];
+      nix.trustedPublicKeys = [
+        "cache.flakehub.com-3:hJuILl5sVK4iKm86JzgdXW12Y2Hwd5G07qKtHTOcDCM"
+        "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      ];
+
       android-integration.am.enable = true;
       android-integration.termux-open-url.enable = true;
       android-integration.xdg-open.enable = true;
@@ -20,7 +30,7 @@
       android-integration.termux-wake-unlock.enable = true;
 
       environment.packages = with pkgs; [
-        wget curl tree git 
+        wget curl tree git
         htop nix-output-monitor
         procps diffutils findutils util-linux
         zip unzip gnutar gzip xz
@@ -61,8 +71,8 @@
             enable = true;
             history.path = lib.mkForce "/data/data/com.termux.nix/files/home/storage/Documents/Syncthing/zshHistory/.zsh_history";
             shellAliases = {
-              update-remote = lib.mkForce "nix-on-droid switch --flake github:Yeshey/nixOS-Config#nix-on-droid --max-jobs 1 --cores 1 --option 'experimental-features' 'nix-command flakes pipe-operators' -v |& ${pkgs.nix-output-monitor}/bin/nom";
-              update = lib.mkForce "echo 'updating from local .setup...' && nix-on-droid switch --flake $HOME/.setup#nix-on-droid --max-jobs 1 --cores 1 --option 'experimental-features' 'nix-command flakes pipe-operators' -v |& ${pkgs.nix-output-monitor}/bin/nom";
+              update-remote = lib.mkForce "nix-on-droid switch --flake github:Yeshey/nixOS-Config#nix-on-droid --max-jobs 2 --cores 2 --option 'experimental-features' 'nix-command flakes pipe-operators' -v |& ${pkgs.nix-output-monitor}/bin/nom";
+              update = lib.mkForce "echo 'updating from local .setup...' && nix-on-droid switch --flake $HOME/.setup#nix-on-droid --max-jobs 2 --cores 2 --option 'experimental-features' 'nix-command flakes pipe-operators' -v |& ${pkgs.nix-output-monitor}/bin/nom";
               clean  = lib.mkForce "nix-collect-garbage -d && nix-store --gc && echo 'Displaying stray roots:' && nix-store --gc --print-roots | egrep -v '^(/nix/var|/run/current-system|/run/booted-system|/proc|\\{memory|\\{censored)'";
             };
             initContent = lib.mkBefore ''
