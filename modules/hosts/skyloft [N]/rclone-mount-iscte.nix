@@ -12,8 +12,9 @@
       };
       programs.fuse.userAllowOther = true; # so syncthing and stuff can access the mount
       systemd.services.home-manager-yeshey = {
-        after = [ "rclone-mount-onedrive.service" ];
-        wants = [ "rclone-mount-onedrive.service" ];
+        after = [ "remote-fs.target" ];
+        wants = [ "remote-fs.target" ];
       };
+
     };
 }

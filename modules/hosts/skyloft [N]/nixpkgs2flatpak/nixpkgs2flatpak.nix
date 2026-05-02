@@ -14,5 +14,9 @@
         openFirewall = true;
         repoPath = "/mnt/OneDrive/ISCTE/nixpkgs2flatpak";
       };
+      systemd.services.nginx = {
+        after = [ "remote-fs.target" ];
+        wants = [ "remote-fs.target" ];
+      };
     };
 }
