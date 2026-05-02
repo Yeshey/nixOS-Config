@@ -312,7 +312,9 @@ in
 
                   case "$ret_val" in
                     "logs")
-                      ${pkgs.gnome-console}/bin/kgx -- ${pkgs.systemd}/bin/journalctl --user -fu restic-backups-${jobName}.service
+                      ${pkgs.systemd}/bin/systemd-run --user --no-block \
+                        ${pkgs.xdg-terminal-exec}/bin/xdg-terminal-exec \
+                        ${pkgs.systemd}/bin/journalctl --user -fu restic-backups-${jobName}.service
                       ;;
                   esac
                 ) &
