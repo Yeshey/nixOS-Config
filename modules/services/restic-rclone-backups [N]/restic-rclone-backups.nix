@@ -90,14 +90,64 @@ let
     initialize   = job.initialize;
 
     exclude = [
-      ".cache"        ".git"         "node_modules"
-      "Cache"         "_build"       "venv"
-      ".venv"         "Steam"        "Trash"
-      ".var/app/*/cache"  ".local/share/waydroid"
-      ".cargo"        "target"
-      ".floorp"
-      ".gradle"
-      ".config/heroic"
+      # Build artifacts & package managers
+      ".cache"        "Cache"          ".cargo"        "target"
+      ".git"          "node_modules"   "_build"
+      "venv"          ".venv"          ".npm"          ".gradle"
+      ".rustup"       ".expo"          ".vagrant.d"
+
+      # Browsers
+      ".floorp"       ".mozilla"       ".tor project"
+      ".config/BraveSoftware"   ".config/vivaldi"
+      ".config/microsoft-edge"
+
+      # Editors & IDEs
+      ".config/VSCodium"   ".config/Code"
+      ".vscode-oss"        ".vscode"        ".zed_server"
+
+      # Games & launchers
+      "Steam"         "Games"
+      ".local/share/bottles"
+      ".local/share/umu"
+      ".local/share/vital"
+      ".local/share/godot"
+
+      # App configs not worth backing up
+      ".config/heroic"           ".config/vesktop"
+      ".config/syncthing"        ".config/Exodus"
+      ".config/libreoffice"      ".config/GitHub Desktop"
+      ".config/.android"
+
+      # .local/share large/reconstructible data
+      ".var"
+      ".local/share/flatpak"
+      ".local/share/baloo"
+      ".local/share/waydroid"
+      ".local/share/zed"
+      ".local/share/Smart Code ltd"
+      ".local/share/io.appflowy.appflowy"
+      ".local/share/yoshimi"
+      ".local/share/teamviewer15"
+      ".local/share/gnome-shell"
+      ".local/share/epiphany"
+      ".local/share/okular"
+      ".local/share/kactivitymanagerd"
+      ".local/share/geary"
+      ".local/share/qBittorrent"
+      ".local/share/nvim"
+      ".local/share/copyous@boerdereinar.dev"
+
+      # Home large dirs
+      "Trash"         "OneDrive"         # OneDrive: would be a recursive backup!
+      "AppFiles"      "Downloads"
+      "winboat"       ".winboat"         "VirtualBox VMs"
+      ".stremio-server"                  ".wine"
+      ".texlive*"     ".nv"              ".compose-cache"
+      ".anydesk"      ".helm"
+
+      # Flagged: uncomment to keep these instead
+      ".thunderbird"                     # email – keep if you use local folders
+      "Zotero"        ".zotero"          # research refs – keep if important
     ] ++ job.exclude;
 
     extraBackupArgs = [ "--verbose=2" "--exclude-caches" ] ++ job.extraBackupArgs;
