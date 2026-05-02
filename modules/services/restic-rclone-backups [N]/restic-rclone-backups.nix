@@ -90,14 +90,17 @@ let
     initialize   = job.initialize;
 
     exclude = [
-      "**/.cache"             "**/.git"        "**/node_modules"
-      "**/Cache"              "**/_build"      "**/venv"
-      "**/.venv"              "**/Steam"       "**/Trash"
-      "**/.var/app/*/cache/"  "**/.local/share/waydroid"
-      "**/.cargo"             "**/target"      "**/.floorp"
+      ".cache"        ".git"         "node_modules"
+      "Cache"         "_build"       "venv"
+      ".venv"         "Steam"        "Trash"
+      ".var/app/*/cache"  ".local/share/waydroid"
+      ".cargo"        "target"
+      ".floorp"
+      ".gradle"
+      ".config/heroic"
     ] ++ job.exclude;
 
-    extraBackupArgs = [ "--verbose=2" ] ++ job.extraBackupArgs;
+    extraBackupArgs = [ "--verbose=2" "--exclude-caches" ] ++ job.extraBackupArgs;
 
     pruneOpts = lib.optionals job.prune.enable (
       lib.filter (s: s != "") [
