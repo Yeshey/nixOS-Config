@@ -230,7 +230,7 @@ in
             lib.nameValuePair "restic-backups-${jobName}" (lib.mkIf job.enable {
               serviceConfig = {
                 Restart    = "on-failure";
-                RestartSec = "15m";
+                RestartSec = "5m";
               };
             })
           ) config.restic-rclone-backups.jobs)
@@ -334,7 +334,7 @@ in
               lib.nameValuePair "restic-backups-${jobName}" {
                 Service = {
                   Restart    = "on-failure";
-                  RestartSec = "15m";
+                  RestartSec = "5m";
                 };
               }
             ) enabledJobs)
