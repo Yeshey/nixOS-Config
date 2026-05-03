@@ -8,7 +8,29 @@
     fonts.packages = with pkgs; [
       nerd-fonts.fira-code
     ];
-    programs.zsh.enable = true;
+    programs.zsh = {
+      enable = true;
+      autosuggestions.enable = true;
+      syntaxHighlighting.enable = true;
+      enableCompletion = true;
+      histSize = 100000;
+      interactiveShellInit = ''
+        source ${pkgs.zsh-nix-shell}/share/zsh-nix-shell/nix-shell.plugin.zsh
+        source ${pkgs.zsh-you-should-use}/share/zsh/plugins/you-should-use/you-should-use.plugin.zsh
+      '';
+      ohMyZsh = {
+        enable = true;
+        plugins = [
+          "git"
+          "colored-man-pages"
+          "alias-finder"
+          "urltools"
+          "bgnotify"
+          "history-substring-search"
+        ];
+        theme = "agnoster";
+      };
+    };
     environment = {
       shells = [ pkgs.zsh ];
       pathsToLink = [ "/share/zsh" ];
