@@ -13,7 +13,7 @@
       btrfs
       impermanence
 
-      box64-binfmt
+      # box64-binfmt
 
       # hosting
       # speedtest-tracker
