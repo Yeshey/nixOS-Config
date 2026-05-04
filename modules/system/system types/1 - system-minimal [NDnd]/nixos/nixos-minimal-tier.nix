@@ -9,6 +9,10 @@
   flake.modules.nixos.system-minimal-tier =
     { pkgs, ... }:
     {
+      imports =[
+        inputs.self.modules.nixos.pit-of-permittedInsecurePackages
+      ];
+
       nixpkgs.overlays = [
         (final: _prev: {
           unstable = import inputs.nixpkgs-unstable {

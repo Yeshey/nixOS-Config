@@ -11,6 +11,10 @@
       ...
     }:
     {
+      imports =[
+        inputs.self.modules.nixos.pit-of-permittedInsecurePackages
+      ];
+
       nixpkgs.config.allowUnfree = true;
 
       system.stateVersion = 6;

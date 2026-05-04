@@ -3,6 +3,10 @@
   flake.modules.homeManager.standalone-hm =
     { lib, pkgs, config, ... }:
     {
+      imports =[
+        inputs.self.modules.homeManager.pit-of-permittedInsecurePackages
+      ];
+
       nixpkgs.overlays = [
         (final: _prev: {
           unstable = import inputs.nixpkgs-unstable {
