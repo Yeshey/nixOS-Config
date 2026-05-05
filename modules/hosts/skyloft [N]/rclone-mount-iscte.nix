@@ -8,6 +8,7 @@
         enable     = true;
         remote     = "OneDriveISCTE:";
         mountPoint = "/mnt/OneDrive/ISCTE";
+        allowOther = true;
       };
       programs.fuse.userAllowOther = true; # so syncthing and stuff can access the mount
       systemd.services.home-manager-yeshey = {
