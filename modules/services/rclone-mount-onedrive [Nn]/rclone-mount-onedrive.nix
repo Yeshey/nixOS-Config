@@ -97,7 +97,6 @@
                     --vfs-cache-max-age 168h \
                     --vfs-cache-min-free-space 10G \
                     --vfs-cache-max-size 20G \
-                    --bwlimit 4M:off \
                     --disable-http2 \
                     --config ${config.home.homeDirectory}/.config/rclone/rclone.conf \
                     ${lib.optionalString cfg.allowOther "--allow-other"} \
@@ -215,9 +214,14 @@
                     --vfs-cache-max-age 168h \
                     --vfs-cache-min-free-space 10G \
                     --vfs-cache-max-size 20G \
-                    --bwlimit 4M:off \
                     --disable-http2 \
                     --config /root/.config/rclone/rclone.conf \
+
+                    --vfs-read-chunk-size 8M \
+                    --vfs-read-chunk-size-limit 64M \
+                    --transfers 2 \
+                    --tpslimit 6 \
+                    --tpslimit-burst 10 \
                     ${lib.optionalString cfg.allowOther "--allow-other"} \
                     ${lib.optionalString cfg.allowNonEmpty "--allow-non-empty"}
                 '';
