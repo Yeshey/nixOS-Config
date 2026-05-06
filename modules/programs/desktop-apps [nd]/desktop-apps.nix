@@ -8,17 +8,14 @@
             blender
             easyeffects
             qbittorrent
-            vesktop
             vlc
             pdfarranger
             thunderbird
             wineWow64Packages.full
             restic-browser
             restic
-            blanket
             zotero
             pkgs.unstable.winboat
-            bazaar
             vital # run with Vital
             helm
             kdePackages.okular
@@ -26,7 +23,6 @@
             rnote
             github-desktop
             obs-studio
-            bitwarden-desktop
             gparted
             baobab
             audacity

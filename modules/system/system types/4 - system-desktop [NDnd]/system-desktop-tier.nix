@@ -44,6 +44,7 @@
       system-cli-tier
 
       desktop-apps
+      desktop-apps-flatpak
       firefox
       vscodium
       zed-editor
