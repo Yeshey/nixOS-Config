@@ -3,7 +3,7 @@
     { pkgs, ... }:
     {
       # 1. Disable the hardware clock entirely 
-      # Since the RTC is borked, we prevent NixOS from trying to read/write to it.
+      # Assuming hardware clock is broken, we prevent NixOS from trying to read/write to it.
       systemd.services.systemd-hwclock-save.enable = false;
       systemd.services.systemd-hwclock-load.enable = false;
 
@@ -23,7 +23,7 @@
         '';
       };
 
-      # 3. Your preferred method: NTP Sync (Online Fix)
+      # 3. Fix time with online server if there is internet
       systemd.services.fix-surface-clock = {
         description = "Fix broken Surface RTC using ntpdate";
         before = [ "time-sync.target" ];
