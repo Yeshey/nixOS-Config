@@ -32,7 +32,7 @@
       imports = [
         (modulesPath + "/installer/scan/not-detected.nix")
         inputs.nixos-hardware.nixosModules.microsoft-surface-pro-intel
-        inputs.nixos-hardware.nixosModules.fake-hardware-clock
+        inputs.self.modules.nixos.fake-hardware-clock
       ];
 
       services.thermald = {
