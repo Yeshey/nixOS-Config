@@ -23,6 +23,7 @@
         "file://${config.xdg.userDirs.download} Downloads"
         "file://${config.xdg.userDirs.music} Music"
         "file://${config.xdg.userDirs.documents}/Timeless/Syncthing Syncthing"
+        "file://${config.xdg.dataHome}/applications DesktopFiles"
         "sftp://hyrulecastle Hyrule Castle"
         "sftp://kakariko Kakariko"
         "sftp://oracle Oracle"
