@@ -18,6 +18,7 @@
             blanket
             zotero
             pkgs.unstable.winboat
+            bazaar
             vital # run with Vital
             helm
             kdePackages.okular
