@@ -8,6 +8,7 @@
         { appId = "dev.vencord.Vesktop"; origin = "flathub"; }
         { appId = "com.rafaelmardojai.Blanket"; origin = "flathub"; }
         { appId = "com.bitwarden.desktop"; origin = "flathub"; }
+        { appId = "org.qbittorrent.qBittorrent"; origin = "flathub"; }
       ];
     };
 }

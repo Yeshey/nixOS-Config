@@ -7,7 +7,6 @@
             inkscape
             blender
             easyeffects
-            qbittorrent
             vlc
             pdfarranger
             thunderbird
@@ -42,7 +41,6 @@
             gnome-connections
 
             # Global Protect VPN to connect to ISCTE
-            gpclient
             (pkgs.makeDesktopItem {
               name = "gpclient-iscte";
               desktopName = "GlobalProtect ISCTE-IUL";

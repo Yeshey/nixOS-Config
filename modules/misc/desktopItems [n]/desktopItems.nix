@@ -49,7 +49,10 @@
         desktopName = "Oracle vscode-server";
         genericName = "Oracle vscode-server";
         exec = "${govscodeserver}/bin/govscodeserver";
-        icon = "vscode";
+        icon = pkgs.fetchurl {
+          url = "https://raw.githubusercontent.com/VSCodium/vscodium/master/icons/stable/codium_cnl.svg";
+          sha256 = "sha256-mBcDa9L1rdZy5wfaMRowEDOtEi1sLFBcd2y0jTW5RHI="; # fill in after nix-prefetch-url
+        };
         categories = [ "GTK" "X-WebApps" ];
         mimeTypes = [ "text/html" "text/xml" "application/xhtml_xml" ];
       };
