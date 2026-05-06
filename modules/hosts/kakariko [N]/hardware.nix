@@ -32,6 +32,7 @@
       imports = [
         (modulesPath + "/installer/scan/not-detected.nix")
         inputs.nixos-hardware.nixosModules.microsoft-surface-pro-intel
+        inputs.nixos-hardware.nixosModules.fake-hardware-clock
       ];
 
       services.thermald = {
@@ -72,25 +73,5 @@
 
       nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
       hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
-
-      systemd.services.fix-surface-clock = {
-        description = "Fix broken Surface RTC using ntpdate";
-        before = [ "time-sync.target" ];
-        wants = [ "time-sync.target" "network-online.target" ];
-        after = [ "network-online.target" ];
-        unitConfig = {
-          DefaultDependencies = false;
-        };
-        script = ''
-          ${pkgs.ntp}/bin/ntpdate -u pool.ntp.org || ${pkgs.ntp}/bin/ntpdate -u time.google.com
-        '';
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true; # Stay "active" so dependents know time is set
-          Restart = "on-failure";
-          RestartSec = "10s";
-        };
-        wantedBy = [ "multi-user.target" "time-sync.target" ];
-      };
     };
 }
