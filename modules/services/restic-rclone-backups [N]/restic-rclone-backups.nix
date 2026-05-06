@@ -146,8 +146,8 @@ let
       ".anydesk"      ".helm"
 
       # Flagged: uncomment to keep these instead
-      ".thunderbird"                     # email – keep if you use local folders
-      "Zotero"        ".zotero"          # research refs – keep if important
+      ".thunderbird"                     # email - keep if you use local folders
+      "Zotero"        ".zotero"          # research refs - keep if important
     ] ++ job.exclude;
 
     extraBackupArgs = [ "--verbose=2" "--exclude-caches" ] ++ job.extraBackupArgs;
@@ -180,11 +180,11 @@ let
 
     backupCleanupCommand = ''
       if [ "''${SERVICE_RESULT:-}" = "success" ]; then
-        echo "Backup finished successfully – removing recovery flag."
+        echo "Backup finished successfully - removing recovery flag."
         rm -f "${flagFile}"
         ${notifySuccessCmd}
       else
-        echo "Backup failed or was interrupted (SERVICE_RESULT=''${SERVICE_RESULT:-unknown}) – keeping recovery flag for reboot-resume."
+        echo "Backup failed or was interrupted (SERVICE_RESULT=''${SERVICE_RESULT:-unknown}) - keeping recovery flag for reboot-resume."
         ${notifyFailCmd}
       fi
     '';
