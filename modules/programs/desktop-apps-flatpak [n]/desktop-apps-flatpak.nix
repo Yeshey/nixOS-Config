@@ -9,6 +9,7 @@
         { appId = "com.rafaelmardojai.Blanket"; origin = "flathub"; }
         { appId = "com.bitwarden.desktop"; origin = "flathub"; }
         { appId = "org.qbittorrent.qBittorrent"; origin = "flathub"; }
+        { appId = "com.stremio.Stremio"; origin = "flathub"; }
       ];
     };
 }
