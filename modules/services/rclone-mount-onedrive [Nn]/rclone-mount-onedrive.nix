@@ -82,7 +82,7 @@
 
                   # Ensure mount point exists and is a directory
                   ${pkgs.coreutils}/bin/mkdir -p ${lib.escapeShellArg cfg.mountPoint}
-                  chmod 755 ${lib.escapeShellArg cfg.mountPoint}
+                  ${pkgs.coreutils}/bin/chmod 755 ${lib.escapeShellArg cfg.mountPoint}
                 '';
               in "${preStartScript}";
 
