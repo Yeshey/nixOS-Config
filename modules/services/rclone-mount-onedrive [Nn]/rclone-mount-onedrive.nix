@@ -214,6 +214,7 @@
                     --vfs-cache-max-age 168h \
                     --vfs-cache-min-free-space 10G \
                     --vfs-cache-max-size 20G \
+                    --dir-cache-time 2h \
                     --disable-http2 \
                     --config /root/.config/rclone/rclone.conf \
                     --vfs-read-chunk-size 8M \
