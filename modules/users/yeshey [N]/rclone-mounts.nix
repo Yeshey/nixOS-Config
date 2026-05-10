@@ -6,10 +6,12 @@
       imports = with inputs.self.modules.homeManager; [ rclone-mount-onedrive ];
 
       rclone-mount-onedrive = {
-        enable     = true;
-        mountPoint = "${config.home.homeDirectory}/OneDrive/ISCTE";
-        remote     = "OneDriveISCTE:";
-        allowOther = false;
+         OneDriveISCTE = {
+           enable     = true;
+           mountPoint = "${config.home.homeDirectory}/OneDrive/ISCTE";
+           remote     = "OneDriveISCTE:";
+           allowOther = false;
+         };
       };
     };
 }

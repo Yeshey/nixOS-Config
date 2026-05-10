@@ -5,16 +5,18 @@
       imports = with inputs.self.modules.nixos; [ rclone-mount-onedrive ];
 
       rclone-mount-onedrive = {
-        enable     = true;
-        remote     = "OneDriveISCTE:";
-        mountPoint = "/mnt/OneDrive/ISCTE";
-        allowOther = true;
+        OneDriveISCTE = {
+          enable     = true;
+          remote     = "OneDriveISCTE:";
+          mountPoint = "/mnt/OneDrive/ISCTE";
+          allowOther = true;
+        };
       };
-      programs.fuse.userAllowOther = true; # so syncthing and stuff can access the mount
+      # programs.fuse.userAllowOther is now set automatically by the module
+      # when any mount has allowOther = true, so you can drop that line.
       systemd.services.home-manager-yeshey = {
         after = [ "remote-fs.target" ];
         wants = [ "remote-fs.target" ];
       };
-
     };
 }
