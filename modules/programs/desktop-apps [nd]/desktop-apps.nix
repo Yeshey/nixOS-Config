@@ -29,7 +29,7 @@
             brave
             tor-browser
             qutebrowser
-            qpwgraph # ch.ange sound inputs and outputs
+            qpwgraph # change sound inputs and outputs
 
             # gaming
             unstable.osu-lazer-bin
