@@ -1,7 +1,9 @@
+{ inputs, ... }:
 {
   flake.modules.homeManager.desktop-apps =
-    { pkgs, lib, ... }:
-      lib.mkMerge [
+    { pkgs, lib, ... }: {
+      imports = with inputs.self.modules.homeManager; [ winapps ];
+      config = lib.mkMerge [
         {
           home.packages = with pkgs; [
             inkscape
@@ -77,4 +79,5 @@
           # Nix-Darwin settings
         })
       ];
+    };
 }

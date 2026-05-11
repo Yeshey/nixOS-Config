@@ -97,5 +97,9 @@
       url = "path:./secrets";
       flake = false;
     };
+    winapps = {
+      url = "github:winapps-org/winapps";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 }
