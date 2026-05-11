@@ -278,8 +278,6 @@ in
         let
           enabledJobs = lib.filterAttrs (_: job: job.enable) config.restic-rclone-backups.jobs;
 
-          ensureDbus = ''export DBUS_SESSION_BUS_ADDRESS="''${DBUS_SESSION_BUS_ADDRESS:-unix:path=/run/user/$(id -u)/bus}"'';
-
           resumeScript = pkgs.writeShellScript "restic-user-resume" ''
             flagDir="${config.xdg.stateHome}/restic-flags"
             if [ -d "$flagDir" ]; then
@@ -303,13 +301,24 @@ in
               # Simple logic: wait for action, if it's "logs", open the terminal.
               notifyCmd = summary: body: icon: ''
                 (
-                  ret_val=$(${pkgs.libnotify}/bin/notify-send \
-                    --action="logs=View Logs" \
-                    --icon=${icon} \
-                    --urgency=critical \
-                    --wait \
-                    "${summary}" "${body}")
+                  # D-Bus / notification daemon may not be ready yet (e.g. backup starts
+                  # immediately on login before the compositor is fully up). Retry a few
+                  # times before giving up.
+                  notify_with_retry() {
+                    local attempts=0
+                    until ${pkgs.libnotify}/bin/notify-send \
+                            --action="logs=View Logs" \
+                            --icon=${icon} \
+                            --urgency=critical \
+                            --wait \
+                            "${summary}" "${body}" 2>/dev/null; do
+                      attempts=$((attempts + 1))
+                      [ $attempts -ge 10 ] && return 1
+                      sleep 10
+                    done
+                  }
 
+                  ret_val=$(notify_with_retry)
                   case "$ret_val" in
                     "logs")
                       ${pkgs.systemd}/bin/systemd-run --user --no-block \
