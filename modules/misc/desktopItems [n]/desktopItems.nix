@@ -6,6 +6,7 @@
       imports = [
         inputs.self.modules.homeManager.desktop-items-xrdp
         inputs.self.modules.homeManager.desktop-items-openvscode-server
+        inputs.self.modules.homeManager.desktop-items-ollama-webui
       ];
     };
 
@@ -59,5 +60,30 @@
     in
     {
       home.packages = [ pkgs.xdg-utils pkgs.openssh govscodeserver vscodeserverDesktopItem ];
+    };
+
+  flake.modules.homeManager.desktop-items-ollama-webui =
+    { pkgs, ... }:
+    let
+      remote = "hyrulecastle";
+      port = 11111;
+      goollamawebui = pkgs.writeShellScriptBin "goollamawebui" ''
+        (ssh -L ${toString port}:localhost:${toString port} -t ${remote} "sleep 90" &) && sleep 1.5 && xdg-open "http://localhost:${toString port}/?web-search=true"
+      '';
+      ollamawebuiDesktopItem = pkgs.makeDesktopItem {
+        name = "Hyrulecastle Ollama WebUI";
+        desktopName = "Hyrulecastle Ollama WebUI";
+        genericName = "Hyrulecastle Ollama WebUI";
+        exec = "${goollamawebui}/bin/goollamawebui";
+        icon = pkgs.fetchurl {
+          url = "https://raw.githubusercontent.com/open-webui/open-webui/main/static/favicon.png";
+          sha256 = "sha256-Vpij45UT57YwTslsMJNzqzrw9w/nlCk0Yd45WpTeqmU=";
+        };
+        categories = [ "GTK" "X-WebApps" ];
+        mimeTypes = [ "text/html" "text/xml" "application/xhtml_xml" ];
+      };
+    in
+    {
+      home.packages = [ pkgs.xdg-utils pkgs.openssh goollamawebui ollamawebuiDesktopItem ];
     };
 }
