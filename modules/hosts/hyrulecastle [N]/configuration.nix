@@ -17,6 +17,7 @@
 
       autossh-reverse-proxy
       i2p
+      ollama-cuda
 
       # hosting
       # speedtest-tracker
@@ -45,7 +46,7 @@
 
     boot.zswap.maxPoolPercent = 50;
 
-    networking.hostName = "hyrulecastle"; 
+    networking.hostName = "hyrulecastle";
   };
   flake.modules.homeManager.hyrulecastle = { };
 }
