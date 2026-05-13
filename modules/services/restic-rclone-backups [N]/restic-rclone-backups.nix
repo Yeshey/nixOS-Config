@@ -136,6 +136,7 @@ let
       ".local/share/qBittorrent"
       ".local/share/nvim"
       ".local/share/copyous@boerdereinar.dev"
+      ".local/share/overboard"  
 
       # Home large dirs
       "Trash"         "OneDrive"         # OneDrive: would be a recursive backup!
@@ -143,7 +144,7 @@ let
       "winboat"       ".winboat"         "VirtualBox VMs"
       ".stremio-server"                  ".wine"
       ".texlive*"     ".nv"              ".compose-cache"
-      ".anydesk"      ".helm"
+      ".anydesk"      ".helm"            ".wine-overboard"
 
       # Flagged: uncomment to keep these instead
       ".thunderbird"                     # email - keep if you use local folders
