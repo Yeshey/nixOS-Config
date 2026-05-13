@@ -24,6 +24,7 @@
     environment.persistence."/persistent" = {
       hideMounts = true;
       directories = [
+        "/tmp"
         "/etc/nixos"
         "/var/log"
         "/var/lib/bluetooth"
