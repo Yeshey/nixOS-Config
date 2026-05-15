@@ -33,7 +33,6 @@
 
             # gaming
             unstable.osu-lazer-bin
-            bottles
             prismlauncher # polymc # prismlauncher # for Minecraft
             heroic
             luanti

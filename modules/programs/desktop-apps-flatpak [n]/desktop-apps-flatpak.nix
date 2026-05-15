@@ -10,6 +10,7 @@
         { appId = "com.bitwarden.desktop"; origin = "flathub"; }
         { appId = "org.qbittorrent.qBittorrent"; origin = "flathub"; }
         { appId = "com.stremio.Stremio"; origin = "flathub"; }
+        { appId = "com.usebottles.bottles"; origin = "flathub"; }
       ];
     };
 }
