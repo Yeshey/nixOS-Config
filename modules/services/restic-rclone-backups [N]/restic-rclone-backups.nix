@@ -343,6 +343,7 @@ in
             (lib.mapAttrs' (jobName: _:
               lib.nameValuePair "restic-backups-${jobName}" {
                 Service = {
+                  Environment = "RESTIC_PROGRESS_FPS=0.016666"; # every min progress report
                   Restart    = "on-failure";
                   RestartSec = "5m";
                 };
