@@ -229,6 +229,7 @@ in
         systemd.services = lib.mkMerge [
           (lib.mapAttrs' (jobName: job:
             lib.nameValuePair "restic-backups-${jobName}" (lib.mkIf job.enable {
+              environment.RESTIC_PROGRESS_FPS = "0.016666"; # every min progress report
               serviceConfig = {
                 Restart    = "on-failure";
                 RestartSec = "5m";
