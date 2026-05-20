@@ -131,7 +131,7 @@ in
               versioning = myVersioning;
             };
             "Minetest" = {
-              path       = "~/.minetest";
+              path       = "~/.var/app/org.luanti.luanti/.minetest";
               devices    = allDevices;
               versioning = myVersioning;
             };
