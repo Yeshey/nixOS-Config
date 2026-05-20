@@ -17,7 +17,7 @@
         servers = with pkgs.luantiPackages; {
           anarchyMineclone2 = {
             game = games.mineclone2;
-            port = 30000;
+            port = 30001;
             openFirewall = true;
             config = {
               serverName        = "Yeshey mineclone server";
@@ -31,7 +31,7 @@
 
           anarchyMineclonia = {
             game = games.mineclonia;
-            port = 30001;
+            port = 30000;
             openFirewall = true;
             config = {
               serverName        = "Yeshey mineclonia server";
