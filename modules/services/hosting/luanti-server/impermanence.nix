@@ -1,5 +1,5 @@
 {
-  flake.modules.nixos.luanti =
+  flake.modules.nixos.luanti-server =
     { ... }:
     {
       environment.persistence."/persistent" = {

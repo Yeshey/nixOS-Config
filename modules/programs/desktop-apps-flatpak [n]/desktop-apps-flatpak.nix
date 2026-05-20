@@ -11,6 +11,7 @@
         { appId = "org.qbittorrent.qBittorrent"; origin = "flathub"; }
         { appId = "com.stremio.Stremio"; origin = "flathub"; }
         { appId = "com.usebottles.bottles"; origin = "flathub"; }
+        { appId = "org.luanti.luanti"; origin = "flathub"; }
       ];
     };
 }

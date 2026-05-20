@@ -35,7 +35,6 @@
             unstable.osu-lazer-bin
             prismlauncher # polymc # prismlauncher # for Minecraft
             heroic
-            luanti
             the-powder-toy
             gnome-connections
 

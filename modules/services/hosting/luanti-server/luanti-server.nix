@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  flake.modules.nixos.luanti =
+  flake.modules.nixos.luanti-server =
     { pkgs, lib, ... }:
     {
       imports = [ inputs.nix-luanti.nixosModules.default ];

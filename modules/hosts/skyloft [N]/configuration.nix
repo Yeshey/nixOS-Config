@@ -24,7 +24,7 @@
       vscodium
       firefox
       open-vpn
-      luanti
+      luanti-server
       jupyter
       ollama
       kubo
