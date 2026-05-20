@@ -178,7 +178,7 @@ in
           !/*.cfg
           *
         '';
-        ".minetest/.stignore".text = ''
+        ".var/app/org.luanti.luanti/.minetest/.stignore".text = ''
           !/games
           !/worlds
           *
