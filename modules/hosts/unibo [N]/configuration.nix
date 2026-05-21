@@ -39,25 +39,30 @@ in
       # the nix-user-chroot — these files must survive outside it.
       home.activation.writeBootstrapFiles =
         let
-          nixEnter = pkgs.writeShellScript "nix-enter" ''
-            set -euo pipefail
-            NUC="${scr}/bootstrap/nix-user-chroot"
-            ROOT_DIR="${scr}/nix-root"
-            [[ -x "$NUC" ]] || { printf 'ERROR: %s not found\n' "$NUC" >&2; exit 1; }
-            exec "$NUC" "$ROOT_DIR" env \
-              _NIX_CHROOT=1 \
-              HOME="${scr}" \
-              USER="${username}" \
-              XDG_STATE_HOME="${scr}/.local/state" \
-              XDG_CONFIG_HOME="${scr}/.config" \
-              XDG_DATA_HOME="${scr}/.local/share" \
-              bash -c '
-                export PATH="${scr}/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
-                source "${scr}/.nix-profile/etc/profile.d/nix.sh" 2>/dev/null || true
-                source "${scr}/.nix-profile/etc/profile.d/hm-session-vars.sh" 2>/dev/null || true
-                exec "${scr}/.nix-profile/bin/zsh" -l
-              '
-          '';
+          nixEnter = pkgs.writeTextFile {
+            name = "nix-enter";
+            executable = true;
+            text = ''
+              #!/usr/bin/env bash
+              set -euo pipefail
+              NUC="${scr}/bootstrap/nix-user-chroot"
+              ROOT_DIR="${scr}/nix-root"
+              [[ -x "$NUC" ]] || { printf 'ERROR: %s not found\n' "$NUC" >&2; exit 1; }
+              exec "$NUC" "$ROOT_DIR" env \
+                _NIX_CHROOT=1 \
+                HOME="${scr}" \
+                USER="${username}" \
+                XDG_STATE_HOME="${scr}/.local/state" \
+                XDG_CONFIG_HOME="${scr}/.config" \
+                XDG_DATA_HOME="${scr}/.local/share" \
+                bash -c '
+                  export PATH="${scr}/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
+                  source "${scr}/.nix-profile/etc/profile.d/nix.sh" 2>/dev/null || true
+                  source "${scr}/.nix-profile/etc/profile.d/hm-session-vars.sh" 2>/dev/null || true
+                  exec "${scr}/.nix-profile/bin/zsh" -l
+                '
+            '';
+          };
 
           bashrc = pkgs.writeText "scr-bashrc" ''
             # enter nix-user-chroot automatically if not already inside
@@ -66,7 +71,11 @@ in
             fi
           '';
 
-          bootstrapNuc = pkgs.writeShellScript "bootstrap-nuc" ''
+          bootstrapNuc = pkgs.writeTextFile {
+            name = "bootstrap-nuc";
+            executable = true;
+            text = ''
+            #!/usr/bin/env bash
             set -euo pipefail
             DEST="${scr}/bootstrap/nix-user-chroot"
             mkdir -p "${scr}/bootstrap" "${scr}/nix-root"
@@ -78,14 +87,20 @@ in
             printf 'Done → %s\n' "$DEST"
             printf 'Now run:\n  %s %s/nix-root bash -c "curl -L https://nixos.org/nix/install | bash -s -- --no-daemon"\n' "$DEST" "${scr}"
           '';
+          };
 
-          bootstrapHome = pkgs.writeShellScript "bootstrap-home" ''
+            bootstrapHome = pkgs.writeTextFile {
+              name = "bootstrap-home";
+              executable = true;
+              text = ''
+            #!/usr/bin/env bash
             set -euo pipefail
             REAL_HOME=$(getent passwd "$USER" | cut -d: -f6)
             printf '[ -f "${scr}/.bashrc" ] && . "${scr}/.bashrc"\n' \
               > "$REAL_HOME/.bashrc"
             printf 'Real ~/.bashrc now sources %s/.bashrc\n' "${scr}"
           '';
+          };
         in
         lib.hm.dag.entryAfter ["writeBoundary"] ''
           mkdir -p "${scr}/bin"
