@@ -27,7 +27,7 @@ in
       ];
 
       programs.zsh.shellAliases.update = lib.mkForce
-        "echo 'If you run out of ram building, request a machine with srun --pty --mem=8G -c 2 /bin/bash' && ${scr}/bin/nix-enter -- home-manager switch -b backup --flake path:${scr}/.setup#unibo --impure";
+        "echo 'If you run out of ram building, request a machine with srun --pty --mem=8G -c 2 bash -c \"exec /scratch.hpc/joaofilipe.silvade/bin/nix-enter\"' && ${scr}/bin/nix-enter -- home-manager switch -b backup --flake path:${scr}/.setup#unibo --impure";
 
       programs.zsh.initContent = lib.mkBefore ''
         echo "All your files should be in ${scr}/"
