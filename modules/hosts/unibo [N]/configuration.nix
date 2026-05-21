@@ -45,22 +45,21 @@ in
             #!/usr/bin/env bash
             set -euo pipefail
             NUC="${scr}/bootstrap/nix-user-chroot"
-            # Using nix-root as the fake root where /nix lives
             ROOT_DIR="${scr}/nix-root"
-            
+
             if [[ ! -x "$NUC" ]]; then
               printf 'ERROR: nix-user-chroot not found at %s\n' "$NUC" >&2
               exit 1
             fi
 
-            # Enter chroot and override HOME/XDG to stay on scratch
             exec "$NUC" "$ROOT_DIR" env \
               HOME="${scr}" \
               USER="${username}" \
               XDG_STATE_HOME="${scr}/.local/state" \
               XDG_CONFIG_HOME="${scr}/.config" \
               XDG_DATA_HOME="${scr}/.local/share" \
-              bash -l "$@"
+              PATH="${scr}/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH" \
+              bash -c 'source ''${HOME}/.nix-profile/etc/profile.d/nix.sh 2>/dev/null; exec zsh -l'
           '';
         };
 
