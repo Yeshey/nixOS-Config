@@ -33,6 +33,12 @@ in
         experimental-features = nix-command flakes pipe-operators
       '';
 
+      home.file.".bashrc".text = ''
+        if [[ -z "$_NIX_CHROOT" ]] && [[ -x "${scr}/bin/nix-enter" ]]; then
+          exec "${scr}/bin/nix-enter"
+        fi
+      '';
+
       home.sessionPath = [ "${scr}/bin" ];
 
       home.file = {
@@ -53,6 +59,7 @@ in
             fi
 
             exec "$NUC" "$ROOT_DIR" env \
+              _NIX_CHROOT=1 \
               HOME="${scr}" \
               USER="${username}" \
               XDG_STATE_HOME="${scr}/.local/state" \
