@@ -7,8 +7,6 @@
         inputs.self.modules.homeManager.pit-of-permittedInsecurePackages
       ];
 
-      home.backupFileExtension = "backup";
-
       nixpkgs.overlays = [
         inputs.self.overlays.default 
         (final: _prev: {
