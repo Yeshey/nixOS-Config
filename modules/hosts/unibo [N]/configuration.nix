@@ -29,11 +29,11 @@ in
         "srun --pty --mem=8G -c 2 /bin/bash -lc 'exec ${scr}/bin/nix-enter home-manager switch -b backup --flake path:${scr}/.setup#unibo --impure'";
 
       programs.zsh.initContent = lib.mkBefore ''
-        echo "All you files should be in ${scr}/"
+        echo "All your files should be in ${scr}/"
       '';
 
       programs.bash.initExtra = lib.mkBefore ''
-        echo "All you files should be in ${scr}/"
+        echo "All your files should be in ${scr}/"
       '';
 
       nix.extraOptions = lib.mkForce ''
