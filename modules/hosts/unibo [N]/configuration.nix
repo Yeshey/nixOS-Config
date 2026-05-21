@@ -26,7 +26,15 @@ in
       ];
 
       programs.zsh.shellAliases.update = lib.mkForce
-        "home-manager switch --flake path:${scr}/.setup#unibo --impure";
+        "srun --pty --mem=8G -c 2 /bin/bash -lc 'exec ${scr}/bin/nix-enter home-manager switch --flake path:${scr}/.setup#unibo --impure'";
+
+      programs.zsh.initExtra = lib.mkBefore ''
+        echo "All you files should be in ${scr}/"
+      '';
+
+      programs.bash.initExtra = lib.mkBefore ''
+        echo "All you files should be in ${scr}/"
+      '';
 
       nix.extraOptions = lib.mkForce ''
         !include ./extra.conf
