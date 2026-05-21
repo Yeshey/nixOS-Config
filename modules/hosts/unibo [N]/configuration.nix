@@ -8,6 +8,7 @@ in
     { pkgs, config, ... }:
     {
       imports = with inputs.self.modules.homeManager; [
+        system-cli
         standalone-hm
         tmux
         shell
