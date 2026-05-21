@@ -151,8 +151,7 @@ This creates `~/.bashrc` (sources `$SCR/.bashrc`) and `~/.bash_profile` (execute
 
 ### 7. Re-login
 
-Log out and back in. You should automatically land inside the chroot with your
-full home-manager environment. Confirm:
+Log out and back in. You should automatically land inside the chroot with your full home-manager environment. Confirm:
 
 ```bash
 echo $HOME     # /scratch.hpc/joaofilipe.silvade
