@@ -8,6 +8,7 @@
       ];
 
       nixpkgs.overlays = [
+        inputs.self.overlays.default 
         (final: _prev: {
           unstable = import inputs.nixpkgs-unstable {
             inherit (final) config;
