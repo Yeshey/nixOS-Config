@@ -1,223 +1,259 @@
-# unibo — HPC Cluster Setup via `nix-user-chroot`
+# UniBo HPC — Standalone Home Manager
 
-**Host:** `giano` (UniBo HPC)  
-**User:** `joaofilipe.silvade`  
-**Persistent storage:** `/scratch.hpc/joaofilipe.silvade` (`$SCR`)  
-**Real home (`$HOME`):** ephemeral — wiped periodically by cluster admins
-
-## How this works
-
-[`nix-user-chroot`](https://github.com/nix-community/nix-user-chroot) uses Linux
-user-namespaces to bind-mount a directory of your choice as `/nix` inside a chroot
-shell. This gives you a fully standard Nix environment (real `/nix/store`, daemon-less
-single-user install) without root. NVIDIA/CUDA access is **unaffected** — the
-namespace only remounts `/nix`; hardware devices, kernel modules, and
-`/dev/nvidia*` are all visible as normal.
-
-Everything persistent lives under `$SCR`:
-
-```
-$SCR/
-├── .nix/                 ← the Nix store (bind-mounted as /nix inside chroot)
-├── .setup/               ← your NixOS config repo
-├── .config/              ← home-manager writes configs here (nix.conf, etc.)
-├── .nix-profile -> ...   ← single-user nix profile
-├── bin/                  ← bootstrap + entry scripts (managed by home-manager)
-│   ├── nix-enter         ← enter the chroot (primary entry-point post-setup)
-│   ├── bootstrap-nuc     ← download nix-user-chroot binary (step 0)
-│   └── bootstrap-home    ← re-create real-home dotfiles after a wipe
-└── bootstrap/
-    └── nix-user-chroot   ← the nix-user-chroot binary itself
-```
+Manages `joaofilipe.silvade` on `giano.cs.unibo.it` (L40 cluster) via
+home-manager + **nix-user-chroot** (user-namespace bind-mount, no root required).
 
 ---
 
-## Prerequisites
+## Architecture
 
-Check that unprivileged user namespaces are enabled on the cluster:
+Real `$HOME` (`/home/students/joaofilipe.silvade`) is ephemeral — the cluster
+resets it periodically and also restores certain dotfiles (e.g. `.bash_profile`)
+on every login. Everything persistent lives in:
+
+```
+/scratch.hpc/joaofilipe.silvade/   ($SCR)
+├── .setup/          ← this repo
+├── .nix-profile/    ← HM-managed profile (symlink farm)
+├── .config/
+├── .local/
+├── .cache/
+├── bootstrap/
+│   └── nix-user-chroot   ← static musl binary, survives home wipes
+├── nix-root/
+│   └── nix/         ← actual nix store, mounted as /nix inside chroot
+└── bin/
+    ├── nix-enter        ← chroot entry-point (real file, not nix symlink)
+    ├── bootstrap-nuc    ← downloads nix-user-chroot
+    └── bootstrap-home   ← fixes real ~/.bashrc after home wipe
+```
+
+Home Manager writes dotfiles to `$SCR` since `home.homeDirectory = $SCR`.
+
+### Why nix-user-chroot (not proot / nix-portable)
+
+User namespaces are enabled on this cluster (`CONFIG_USER_NS=y`,
+`unprivileged_userns_clone=1`) and `unshare --user --map-root-user` works.
+`nix-user-chroot` only maps the current UID as root inside the namespace —
+it does **not** need `/etc/subuid`/`/etc/subgid` entries (those are needed by
+bubblewrap/bwrap for full UID-range mapping, which is why the default nix
+sandbox fails). Result: real unmodified nix, no ptrace overhead.
+
+### Why scripts in `home.activation`, not `home.file`
+
+`home.file` entries are **symlinks into `/nix/store`**. Outside nix-user-chroot,
+`/nix/store` does not exist — those symlinks are dead. The bootstrap scripts
+(`nix-enter`, `bootstrap-home`, etc.) must be executable before entering the
+chroot, so they are written as real files via `home.activation` using
+`pkgs.writeTextFile` (which uses `#!/usr/bin/env bash`, not a nix store
+shebang) and `install`.
+
+### Why `path:` URL for `home-manager switch`
+
+`git+file://` URLs make nix read `flake.lock` from the pinned git revision.
+`path:` reads from the working tree, so a patched `flake.lock` is visible
+without committing.
+
+---
+
+## One-time bootstrap (new account or full wipe of `$SCR`)
+
+### 0 — Get a compute node
+
+The login node enforces cgroup memory limits that OOM-kill nix evaluation
+even when `htop` shows free RAM:
 
 ```bash
-unshare --user --pid echo YES
-# Must print: YES
-# If you get "unshare: unshare failed: Operation not permitted", stop here —
-# contact HPC support and ask them to enable user namespaces (kernel param
-# kernel.unprivileged_userns_clone=1).
+srun --pty --mem=8G -c 2 /bin/bash
 ```
 
-You need `curl` and `bash` available in the real login shell (they always are on
-any sane cluster).
-
----
-
-## First-Time Setup
-
-### 0. Seed `$SCR/bin` (chicken-and-egg)
-
-After the first `home-manager switch` these scripts are managed declaratively,
-but for the very first time you have to create them by hand **or** just copy the
-bootstrap scripts out of the repo once you've cloned it. The easiest path is:
+### 1 — Download nix-user-chroot
 
 ```bash
 SCR=/scratch.hpc/joaofilipe.silvade
-mkdir -p "$SCR/bin" "$SCR/bootstrap"
-```
-
-Then paste / copy `modules/hosts/unibo/bin/bootstrap-nuc` there (or just run the
-one-liner below directly):
-
-```bash
-# Download nix-user-chroot (x86_64-linux)
+mkdir -p "$SCR/bootstrap" "$SCR/nix-root"
 curl -fsSL \
-  https://github.com/nix-community/nix-user-chroot/releases/latest/download/nix-user-chroot-bin-2.1.1-x86_64-unknown-linux-musl \
+  "https://github.com/nix-community/nix-user-chroot/releases/latest/download/nix-user-chroot-x86_64-unknown-linux-musl" \
   -o "$SCR/bootstrap/nix-user-chroot"
 chmod +x "$SCR/bootstrap/nix-user-chroot"
 ```
 
-Verify it works:
+### 2 — Install nix (no-daemon, inside the chroot)
 
 ```bash
-$SCR/bootstrap/nix-user-chroot $SCR/.nix bash -c 'echo "chroot OK"'
+$SCR/bootstrap/nix-user-chroot "$SCR/nix-root" \
+  bash -c 'curl -L https://nixos.org/nix/install | bash -s -- --no-daemon'
 ```
 
-### 1. Install Nix (single-user, no daemon) inside the chroot
+### 3 — Enter the nix environment manually (first time only)
 
 ```bash
-$SCR/bootstrap/nix-user-chroot "$SCR/.nix" \
+$SCR/bootstrap/nix-user-chroot "$SCR/nix-root" \
   env HOME="$SCR" \
-  bash -c 'curl -fsSL https://nixos.org/nix/install | sh -s -- --no-daemon'
+      USER="joaofilipe.silvade" \
+      XDG_STATE_HOME="$SCR/.local/state" \
+      XDG_CONFIG_HOME="$SCR/.config" \
+      XDG_DATA_HOME="$SCR/.local/share" \
+  bash -l
+
+# inside the chroot — source nix
+export PATH="$SCR/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
+source "$SCR/.nix-profile/etc/profile.d/nix.sh" 2>/dev/null || true
 ```
 
-The installer writes everything under `/nix` (= `$SCR/.nix`) and drops a profile
-at `$SCR/.nix-profile`. It will print `. $SCR/.nix-profile/etc/profile.d/nix.sh`
-at the end — **don't** run that yet; it only works inside the chroot.
-
-### 2. Enter the chroot and source Nix
+### 4 — Clone `.setup` if missing
 
 ```bash
-$SCR/bootstrap/nix-user-chroot "$SCR/.nix" env HOME="$SCR" bash -l
+[ ! -d "$SCR/.setup" ] && git clone <your-setup-repo-url> "$SCR/.setup"
+cd "$SCR/.setup"
 ```
 
-You are now inside the chroot. Source Nix:
+### 5 — Fix the flake lock
+
+The dev machine runs nix ≥ 2.24 which omits `narHash` from `path:` inputs in
+`flake.lock`. The nix installed by nixos.org's installer is nix 2.20.x, which
+requires `narHash`. Strip the stale entries so nix regenerates them:
 
 ```bash
-. "$SCR/.nix-profile/etc/profile.d/nix.sh"
-nix --version   # should print e.g. nix (Nix) 2.x.y
+python3 -c "
+import json
+with open('flake.lock') as f: l = json.load(f)
+for k in ['packages', 'secrets']:
+    l['nodes'].pop(k, None)
+    l['nodes']['root']['inputs'].pop(k, None)
+with open('flake.lock', 'w') as f: json.dump(l, f, indent=2)
+print('stripped mutable locks for: packages, secrets')
+"
 ```
 
-### 3. Enable flakes for the bootstrap session
+This must be repeated after every `nix flake update` on the dev machine until
+both machines agree on the lock format.
+
+### 6 — First home-manager switch
 
 ```bash
-mkdir -p "$SCR/.config/nix"
-cat > "$SCR/.config/nix/nix.conf" << 'EOF'
-experimental-features = nix-command flakes pipe-operators
-EOF
+home-manager switch --flake "path:$SCR/.setup#unibo" --impure
 ```
 
-After `home-manager switch` this file is managed by the `standalone-hm` module;
-this is just a temporary seed so you can run flake commands now.
+This writes the nix profile, dotfiles, and — via `home.activation` — the real
+bootstrap scripts (`nix-enter`, `bootstrap-home`, etc.) to `$SCR/bin/`.
 
-### 4. Clone your config repo
+### 7 — Fix the real `~/.bashrc` (once after each home reset)
 
 ```bash
-# Inside the chroot
-git clone https://github.com/<you>/.setup "$SCR/.setup"
-# — or if you already have it elsewhere:
-cp -r /path/to/.setup "$SCR/.setup"
+bash "$SCR/bin/bootstrap-home"
 ```
 
-### 5. Run home-manager for the first time
+This writes `[ -f "$SCR/.bashrc" ] && . "$SCR/.bashrc"` to the real
+`~/.bashrc`. On every subsequent SSH login, bash sources `$SCR/.bashrc` which
+contains the `nix-enter` exec guard.
+
+### 8 — Exit and re-login
 
 ```bash
-# Inside the chroot, with nix sourced
-nix run 'github:nix-community/home-manager' -- \
-  switch --flake "$SCR/.setup#unibo" \
-  --extra-experimental-features 'nix-command flakes'
+exit   # leave the manually entered chroot
 ```
 
-This will take a while on first run (builds / fetches everything). Subsequent
-runs use the `update` alias: `update` → `home-manager switch --flake $SCR/.setup#unibo`.
+SSH in again — the login should now automatically enter the nix-user-chroot
+and drop into zsh with the full HM environment.
 
-### 6. Set up the real-home dotfiles
+---
 
-The cluster will wipe your real `$HOME`; tell it to forward to `$SCR` on every
-login. Run this **outside** the chroot (exit it first, or open a second terminal):
+## After home wipe (real `$HOME` reset, `$SCR` intact)
+
+`$SCR` survives all wipes. Only the real home is reset. Steps needed:
 
 ```bash
-$SCR/bin/bootstrap-home
+# 1. Get a compute node if doing a full update; for just restoring login, skip
+srun --pty --mem=8G -c 2 /bin/bash
+
+# 2. Enter chroot manually (nix-enter doesn't exist yet in real home context)
+/scratch.hpc/joaofilipe.silvade/bootstrap/nix-user-chroot \
+  /scratch.hpc/joaofilipe.silvade/nix-root \
+  env HOME=/scratch.hpc/joaofilipe.silvade \
+      USER=joaofilipe.silvade \
+      XDG_STATE_HOME=/scratch.hpc/joaofilipe.silvade/.local/state \
+      XDG_CONFIG_HOME=/scratch.hpc/joaofilipe.silvade/.config \
+      XDG_DATA_HOME=/scratch.hpc/joaofilipe.silvade/.local/share \
+  bash -l
+
+# 3. Restore ~/.bashrc redirect
+bash /scratch.hpc/joaofilipe.silvade/bin/bootstrap-home
+
+# 4. Exit and re-login — auto-enter works again
+exit
 ```
 
-This creates `~/.bashrc` (sources `$SCR/.bashrc`) and `~/.bash_profile` (executes
-`nix-enter` automatically on interactive login).
+No `home-manager switch` needed unless the config actually changed.
 
-### 7. Re-login
+---
 
-Log out and back in. You should automatically land inside the chroot with your full home-manager environment. Confirm:
+## Subsequent updates
 
 ```bash
-echo $HOME     # /scratch.hpc/joaofilipe.silvade
-nix --version  # works
-tmux           # works
+update
+# expands to: home-manager switch --flake path:/scratch.hpc/joaofilipe.silvade/.setup#unibo --impure
+```
+
+If the dev machine pushed a new `flake.lock` without `narHash` for
+`packages`/`secrets`, re-run the python strip from step 5 first.
+
+---
+
+## GPU / experiment shells
+
+```bash
+cd $SCR/alignment-faking
+
+# Request GPU node first
+srun -p l40 --gres=gpu:1 --time=04:00:00 --pty bash
+
+nix develop                  # vllm-cuda-l40 (default)
+nix develop .#vllm-cuda      # any CUDA GPU
+nix develop .#vllm           # CPU only
+nix develop .#bnb            # QLoRA fine-tuning
 ```
 
 ---
 
-## After a Home-Directory Wipe
+## Gotchas & notes
 
-The cluster admins wiped `~`. You log in to a bare shell. Do:
+**Compute node required for switches** — the login node OOM-kills nix
+evaluation via cgroup limits even when `htop` shows free RAM. Always run
+`home-manager switch` on a compute node (`srun --pty --mem=8G -c 2 /bin/bash`).
 
-```bash
-# 1. Re-create real-home dotfiles (nix-user-chroot binary is still in $SCR)
-/scratch.hpc/joaofilipe.silvade/bin/bootstrap-home
+**`~/.bash_profile` is cluster-managed** — the cluster restores its default
+`.bash_profile` on every login. Do not rely on it. The chain that works:
+real `~/.bashrc` → sources `$SCR/.bashrc` → `$SCR/.bashrc` execs `nix-enter`.
+`bootstrap-home` sets up the real `~/.bashrc` link; it survives resets.
 
-# 2. Re-login (or just exec manually)
-exec /scratch.hpc/joaofilipe.silvade/bin/nix-enter
-```
+**`home.file` = dead symlinks outside chroot** — all `home.file` entries are
+symlinks into `/nix/store` which does not exist outside nix-user-chroot. Any
+file that needs to be executable before entering the chroot (like `nix-enter`)
+must be written via `home.activation` using `pkgs.writeTextFile` (for the
+`#!/usr/bin/env bash` shebang) + `install`.
 
-That's it. Everything else (Nix store, home-manager profile, your configs) is
-still intact in `$SCR`.
+**`pkgs.writeShellScript` / `pkgs.writeScriptBin` are unusable here** — they
+embed a `#!/nix/store/.../bash` shebang, which is invalid outside the chroot.
+Always use `pkgs.writeTextFile { executable = true; text = "#!/usr/bin/env bash\n..."; }`.
 
-If for some reason the `bin/` scripts themselves were lost (e.g. `$SCR` was also
-wiped — unlikely but possible), go back to **Step 0** above.
+**`path:` URL required for switch** — use `home-manager switch --flake "path:$SCR/.setup#unibo"`,
+not the bare directory. `path:` reads `flake.lock` from the filesystem (sees
+your edits); `git+file://` reads from the pinned git rev (misses them).
 
----
+**`system-cli` / `zed-editor-host` excluded** — `system-cli` adds
+`pkgs.home-manager` (nixpkgs version) which conflicts with
+`programs.home-manager.enable` (home-manager-input version) in `standalone-hm`.
+`zed-editor-host` is a GUI app; headless cluster won't build its deps cleanly.
 
-## Daily Workflow
+**`pkgs.local` overlay** — defined in `modules/hosts/unibo/configuration.nix`
+since there is no NixOS layer to inject it. Required by `safe-rm` and any
+other module referencing `pkgs.local.coreutils-with-safe-rm`.
 
-```
-ssh giano                     # auto-executes nix-enter via .bash_profile
-  └─ chroot shell, HOME=$SCR
-       ├─ update              # alias: home-manager switch --flake $SCR/.setup#unibo
-       ├─ tmux / zsh / etc.   # fully managed by home-manager
-       └─ nix develop / run   # normal Nix, full /nix/store available
-```
+**flake.lock path-input narHash mismatch** — nix 2.20 (cluster) requires
+`narHash` in the lock for `path:` inputs; nix ≥ 2.24 (dev machine) omits it.
+Strip the `packages`/`secrets` nodes from the lock before switching on the
+cluster. After switching, commit the regenerated lock (with narHashes) so
+subsequent pulls don't need the strip step.
 
----
-
-## CUDA / NVIDIA
-
-CUDA works as on any other machine. `nix-user-chroot` only sets up a
-user-namespace mount for `/nix`; it does not sandbox hardware. The host kernel
-driver (`nvidia.ko`) and `/dev/nvidia*` devices are visible inside the chroot.
-
-To use CUDA packages from Nixpkgs inside a dev shell:
-
-```nix
-# in a flake.nix devShell
-packages = with pkgs; [ cudaPackages.cudatoolkit ];
-```
-
-If the cluster has `module load cuda/...`, those paths are also visible inside
-the chroot (the host `/proc`, `/sys`, `/dev`, and environment are inherited).
-
----
-
-## Troubleshooting
-
-| Symptom | Fix |
-|---|---|
-| `unshare: Operation not permitted` | User namespaces disabled — ask HPC support |
-| `nix-enter` hangs at bind-mount | `$SCR/.nix` may be on a FUSE/NFS mount that doesn't support bind-mounts; try `--no-pivot` flag (see nix-user-chroot docs) |
-| Nix store corruption after node crash | Run `nix-store --verify --repair` inside the chroot |
-| `home-manager switch` fails on first run | Make sure `$SCR/.config/nix/nix.conf` has `experimental-features = nix-command flakes` (Step 3) |
-| `update` alias not found | You're outside the chroot; run `nix-enter` first |
-| `git` not available for clone in Step 4 | `nix shell nixpkgs#git --extra-experimental-features 'nix-command flakes'` |
+**Model weights cache** — set `HF_HOME=$SCR/.cache/huggingface`.
