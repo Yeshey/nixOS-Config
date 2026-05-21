@@ -65,8 +65,7 @@ in
           };
 
           bashrc = pkgs.writeText "scr-bashrc" ''
-            # enter nix-user-chroot automatically if not already inside
-            if [[ -z "''${_NIX_CHROOT:-}" ]] && [[ -x "${scr}/bin/nix-enter" ]]; then
+            if [[ -z "''${_NIX_CHROOT:-}" ]] && [[ -n "$SSH_TTY" ]] && [[ -x "${scr}/bin/nix-enter" ]]; then
               exec "${scr}/bin/nix-enter"
             fi
           '';
