@@ -68,7 +68,7 @@ one-liner below directly):
 ```bash
 # Download nix-user-chroot (x86_64-linux)
 curl -fsSL \
-  https://github.com/nix-community/nix-user-chroot/releases/latest/download/nix-user-chroot-bin-x86_64-linux \
+  https://github.com/nix-community/nix-user-chroot/releases/latest/download/nix-user-chroot-bin-2.1.1-x86_64-unknown-linux-musl \
   -o "$SCR/bootstrap/nix-user-chroot"
 chmod +x "$SCR/bootstrap/nix-user-chroot"
 ```

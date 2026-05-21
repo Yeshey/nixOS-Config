@@ -47,7 +47,10 @@
             desktopName = "Ollama open WebUI";
             genericName = "Ollama open WebUI";
             exec = ''brave "http://localhost:${toString port}/?web-search=true"'';
-            icon = "firefox";
+            icon = pkgs.fetchurl {
+              url = "https://raw.githubusercontent.com/open-webui/open-webui/main/static/favicon.png";
+              sha256 = "sha256-Vpij45UT57YwTslsMJNzqzrw9w/nlCk0Yd45WpTeqmU=";
+            };
             categories = [ "GTK" "X-WebApps" ];
             mimeTypes = [ "text/html" "text/xml" "application/xhtml_xml" ];
           };
