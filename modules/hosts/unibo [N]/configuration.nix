@@ -58,8 +58,12 @@ in
               XDG_STATE_HOME="${scr}/.local/state" \
               XDG_CONFIG_HOME="${scr}/.config" \
               XDG_DATA_HOME="${scr}/.local/share" \
-              PATH="${scr}/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH" \
-              bash -c 'source ''${HOME}/.nix-profile/etc/profile.d/nix.sh 2>/dev/null; exec zsh -l'
+              bash -c '
+                export PATH="${scr}/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
+                source "${scr}/.nix-profile/etc/profile.d/nix.sh" 2>/dev/null || true
+                source "${scr}/.nix-profile/etc/profile.d/hm-session-vars.sh" 2>/dev/null || true
+                exec "${scr}/.nix-profile/bin/zsh" -l
+              '
           '';
         };
 
