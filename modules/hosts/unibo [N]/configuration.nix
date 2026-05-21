@@ -8,7 +8,9 @@ in
     { pkgs, config, ... }:
     {
       imports = with inputs.self.modules.homeManager; [
+        system-cli
         standalone-hm
+        zed-editor-host
         tmux
         shell
         ssh

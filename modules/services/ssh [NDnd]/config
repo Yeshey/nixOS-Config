@@ -5,9 +5,11 @@
 
 Host unibo
     HostName giano.cs.unibo.it
-    User joaofilipe.silvade@studio.unibo.it
-    RemoteCommand cd /scratch.hpc/joaofilipe.silvade && exec $SHELL
+    User joaofilipe.silvade
     RequestTTY yes
+    ControlMaster auto
+    ControlPath ~/.ssh/master-%r@%h:%p
+    ControlPersist 1h
 
 # These are for connecting to my PCs with double hops through the server.
 # First hop: Connect to the remote server
