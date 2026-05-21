@@ -27,7 +27,7 @@ in
       ];
 
       programs.zsh.shellAliases.update = lib.mkForce
-        "echo 'If you run out of ram building, request a machine with srun --pty --mem=8G -c 2 /bin/bash' && ${scr}/bin/nix-enter home-manager switch -b backup --flake path:${scr}/.setup#unibo --impure";
+        "echo 'If you run out of ram building, request a machine with srun --pty --mem=8G -c 2 /bin/bash' && ${scr}/bin/nix-enter -- home-manager switch -b backup --flake path:${scr}/.setup#unibo --impure";
 
       programs.zsh.initContent = lib.mkBefore ''
         echo "All your files should be in ${scr}/"
@@ -58,6 +58,7 @@ in
               NUC="${scr}/bootstrap/nix-user-chroot"
               ROOT_DIR="${scr}/nix-root"
               [[ -x "$NUC" ]] || { printf 'ERROR: %s not found\n' "$NUC" >&2; exit 1; }
+
               exec "$NUC" "$ROOT_DIR" env \
                 _NIX_CHROOT=1 \
                 HOME="${scr}" \
@@ -65,12 +66,17 @@ in
                 XDG_STATE_HOME="${scr}/.local/state" \
                 XDG_CONFIG_HOME="${scr}/.config" \
                 XDG_DATA_HOME="${scr}/.local/share" \
-                bash -c '
+                bash -lc '
                   export PATH="${scr}/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
                   source "${scr}/.nix-profile/etc/profile.d/nix.sh" 2>/dev/null || true
                   source "${scr}/.nix-profile/etc/profile.d/hm-session-vars.sh" 2>/dev/null || true
-                  exec "${scr}/.nix-profile/bin/zsh" -l
-                '
+
+                  if [ "$#" -eq 0 ]; then
+                    exec "${scr}/.nix-profile/bin/zsh" -l
+                  else
+                    exec "$@"
+                  fi
+                ' nix-enter "$@"
             '';
           };
 
