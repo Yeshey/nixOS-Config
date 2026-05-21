@@ -15,7 +15,6 @@ let
     pciutils
     unzip
     ookla-speedtest
-    home-manager
   ];
 in
 {
