@@ -116,5 +116,7 @@ in
           '';
         };
       };
+
+      home.stateVersion = "25.11";
     };
 }
