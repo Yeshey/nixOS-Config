@@ -3,6 +3,10 @@
 # try on the PC before you do on the phone: nix build --impure .#nixOnDroidConfigurations.nix-on-droid.activationPackage
 # connect the screen to computer: `scrcpy --render-driver=opengl`
 # If something is taking too long to build, check if it was built by Hydra: `nix run nixpkgs#hydra-check -- --arch aarch64-linux blender`
+# If Android says "insufficient storage" despite GBs of free space,
+# the F2FS GC is overwhelmed. Fix as root: 
+#   echo 1 > /sys/fs/f2fs/dm-33/gc_urgent && echo 50 > /sys/fs/f2fs/dm-33/gc_urgent_sleep_time
+# Then run: fstrim -v /data && nix-collect-garbage -d && watch -n 5 'cat /sys/fs/f2fs/dm-33/free_segments; cat /sys/fs/f2fs/dm-33/dirty_segments'
 { inputs, lib, ... }:
 {
   flake.modules.nixOnDroid.nix-on-droid =
