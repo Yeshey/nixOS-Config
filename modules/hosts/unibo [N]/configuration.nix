@@ -12,6 +12,7 @@ in
         tmux shell ssh starship direnv
         nix-index-database nix-your-shell
         zed-editor-host
+        system-minimal
       ];
 
       home.username      = username;
