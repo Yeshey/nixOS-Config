@@ -16,7 +16,6 @@ in
         direnv
         nix-index-database
         nix-your-shell
-        gc
       ];
 
       home.username      = username;
