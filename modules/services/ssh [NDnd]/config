@@ -7,7 +7,6 @@ Host unibo
     HostName giano.cs.unibo.it
     User joaofilipe.silvade
     RequestTTY yes
-    RemoteCommand /scratch.hpc/joaofilipe.silvade/bin/nix-enter
     ControlMaster auto
     ControlPath ~/.ssh/master-%r@%h:%p
     ControlPersist 1h

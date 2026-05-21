@@ -1,4 +1,4 @@
-{ inputs, lib, ... }:
+{ inputs, lib, pkgs, ... }:
 let
   username = "joaofilipe.silvade";
   scr      = "/scratch.hpc/${username}";
@@ -8,56 +8,42 @@ in
     { pkgs, config, ... }:
     {
       imports = with inputs.self.modules.homeManager; [
-        system-cli
         standalone-hm
-        zed-editor-host
-        tmux
-        shell
-        ssh
-        starship
-        direnv
-        nix-index-database
-        nix-your-shell
+        tmux shell ssh starship direnv
+        nix-index-database nix-your-shell
       ];
 
       home.username      = username;
       home.homeDirectory = lib.mkForce scr;
+      home.stateVersion  = "25.11";
 
-      # standalone-hm hardcodes "#yeshey" — point at this config instead.
+      nixpkgs.overlays = [
+        (final: prev: {
+          local.coreutils-with-safe-rm =
+            prev.callPackage "${inputs.packages}/coreutils-with-safe-rm" {};
+        })
+      ];
+
       programs.zsh.shellAliases.update = lib.mkForce
-        "home-manager switch --flake ${scr}/.setup#unibo --impure";
+        "home-manager switch --flake path:${scr}/.setup#unibo --impure";
 
-      # nix-user-chroot bind-mounts $SCR/nix-root as / so the store path is standard /nix/store
       nix.extraOptions = lib.mkForce ''
         !include ./extra.conf
         experimental-features = nix-command flakes pipe-operators
       '';
 
-      home.file.".bashrc".text = ''
-        if [[ -z "$_NIX_CHROOT" ]] && [[ -x "${scr}/bin/nix-enter" ]]; then
-          exec "${scr}/bin/nix-enter"
-        fi
-      '';
-
       home.sessionPath = [ "${scr}/bin" ];
 
-      home.file = {
-        # ------------------------------------------------------------------ #
-        # nix-enter — primary entry-point for every session                  #
-        # ------------------------------------------------------------------ #
-        "bin/nix-enter" = {
-          executable = true;
-          text = ''
-            #!/usr/bin/env bash
+      # Write bootstrap files as REAL copies (not nix store symlinks).
+      # home.file creates symlinks into /nix/store which are dead outside
+      # the nix-user-chroot — these files must survive outside it.
+      home.activation.writeBootstrapFiles =
+        let
+          nixEnter = pkgs.writeShellScript "nix-enter" ''
             set -euo pipefail
             NUC="${scr}/bootstrap/nix-user-chroot"
             ROOT_DIR="${scr}/nix-root"
-
-            if [[ ! -x "$NUC" ]]; then
-              printf 'ERROR: nix-user-chroot not found at %s\n' "$NUC" >&2
-              exit 1
-            fi
-
+            [[ -x "$NUC" ]] || { printf 'ERROR: %s not found\n' "$NUC" >&2; exit 1; }
             exec "$NUC" "$ROOT_DIR" env \
               _NIX_CHROOT=1 \
               HOME="${scr}" \
@@ -72,62 +58,41 @@ in
                 exec "${scr}/.nix-profile/bin/zsh" -l
               '
           '';
-        };
 
-        # ------------------------------------------------------------------ #
-        # bootstrap-nuc — Step 0 of first-time setup                         #
-        # ------------------------------------------------------------------ #
-        "bin/bootstrap-nuc" = {
-          executable = true;
-          text = ''
-            #!/usr/bin/env bash
+          bashrc = pkgs.writeText "scr-bashrc" ''
+            # enter nix-user-chroot automatically if not already inside
+            if [[ -z "''${_NIX_CHROOT:-}" ]] && [[ -x "${scr}/bin/nix-enter" ]]; then
+              exec "${scr}/bin/nix-enter"
+            fi
+          '';
+
+          bootstrapNuc = pkgs.writeShellScript "bootstrap-nuc" ''
             set -euo pipefail
             DEST="${scr}/bootstrap/nix-user-chroot"
-            mkdir -p "${scr}/bootstrap"
-            mkdir -p "${scr}/nix-root"
-
-            printf 'Downloading nix-user-chroot (musl) …\n'
+            mkdir -p "${scr}/bootstrap" "${scr}/nix-root"
+            printf 'Downloading nix-user-chroot…\n'
             curl -fsSL \
               "https://github.com/nix-community/nix-user-chroot/releases/latest/download/nix-user-chroot-x86_64-unknown-linux-musl" \
               -o "$DEST"
             chmod +x "$DEST"
-            
-            printf 'OK  →  %s\n' "$DEST"
-            printf 'To install nix, run:\n'
-            # We use double quotes for the inner command to avoid Nix string escaping issues
-            printf '%s %s/nix-root bash -c "curl -L https://nixos.org/nix/install | bash -s -- --no-daemon"\n' "$DEST" "${scr}"
+            printf 'Done → %s\n' "$DEST"
+            printf 'Now run:\n  %s %s/nix-root bash -c "curl -L https://nixos.org/nix/install | bash -s -- --no-daemon"\n' "$DEST" "${scr}"
           '';
-        };
 
-        # ------------------------------------------------------------------ #
-        # bootstrap-home — Link real home to scratch                         #
-        # ------------------------------------------------------------------ #
-        "bin/bootstrap-home" = {
-          executable = true;
-          text = ''
-            #!/usr/bin/env bash
+          bootstrapHome = pkgs.writeShellScript "bootstrap-home" ''
             set -euo pipefail
-            # Get real home path from host system
             REAL_HOME=$(getent passwd "$USER" | cut -d: -f6)
-            
-            # 1. Update real .bash_profile to auto-enter nix-env
-            cat > "$REAL_HOME/.bash_profile" << EOF
-            # Auto-enter Nix chroot on interactive login
-            if [[ \$- == *i* ]] && [[ -x "${scr}/bin/nix-enter" ]]; then
-              exec "${scr}/bin/nix-enter"
-            fi
-            # Fallback if nix-enter is missing
-            [ -f "\$HOME/.bashrc" ] && . "\$HOME/.bashrc"
-            EOF
-
-            # 2. Update real .bashrc to point to scratch bashrc
-            echo "[ -f \"${scr}/.bashrc\" ] && . \"${scr}/.bashrc\"" > "$REAL_HOME/.bashrc"
-
-            printf 'Host home configured to auto-exec nix-enter.\n'
+            printf '[ -f "${scr}/.bashrc" ] && . "${scr}/.bashrc"\n' \
+              > "$REAL_HOME/.bashrc"
+            printf 'Real ~/.bashrc now sources %s/.bashrc\n' "${scr}"
           '';
-        };
-      };
-
-      home.stateVersion = "25.11";
+        in
+        lib.hm.dag.entryAfter ["writeBoundary"] ''
+          mkdir -p "${scr}/bin"
+          install -m755 ${nixEnter}      "${scr}/bin/nix-enter"
+          install -m755 ${bootstrapNuc}  "${scr}/bin/bootstrap-nuc"
+          install -m755 ${bootstrapHome} "${scr}/bin/bootstrap-home"
+          install -m644 ${bashrc}        "${scr}/.bashrc"
+        '';
     };
 }
