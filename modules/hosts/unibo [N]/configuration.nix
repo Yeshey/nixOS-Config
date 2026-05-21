@@ -5,7 +5,7 @@ let
 in
 {
   flake.modules.homeManager.unibo =
-    { pkgs, config, ... }:
+    { pkgs, config, lib, ... }:
     {
       imports = with inputs.self.modules.homeManager; [
         standalone-hm
