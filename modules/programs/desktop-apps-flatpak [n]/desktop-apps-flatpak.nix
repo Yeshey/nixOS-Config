@@ -12,6 +12,8 @@
         { appId = "com.stremio.Stremio"; origin = "flathub"; }
         { appId = "com.usebottles.bottles"; origin = "flathub"; }
         { appId = "org.luanti.luanti"; origin = "flathub"; }
+        { appId = "io.gitlab.adhami3310.Impression"; origin = "flathub"; }
+        { appId = "com.github.wwmm.easyeffects"; origin = "flathub"; }
       ];
     };
 }
