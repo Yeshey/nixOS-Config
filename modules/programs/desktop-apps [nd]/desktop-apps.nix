@@ -74,4 +74,11 @@
           # Nix-Darwin settings
         })
       ];
+
+  flake.modules.nixos.desktop-apps = 
+    { pkgs, ... }: {
+      environment.systemPackages = with pkgs; [
+        vscode
+      ];
+    };
 }

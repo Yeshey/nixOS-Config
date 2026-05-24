@@ -19,6 +19,7 @@
       appimage
       waydroid
       syncthing
+      desktop-apps
     ];
 
     programs.gphoto2.enable = true; # to be able to access digital cameras
