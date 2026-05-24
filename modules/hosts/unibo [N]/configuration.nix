@@ -11,7 +11,7 @@ in
         standalone-hm
         tmux shell ssh starship direnv
         nix-index-database nix-your-shell
-        zed-editor-host
+        # zed-editor-host
         system-minimal
       ];
 
