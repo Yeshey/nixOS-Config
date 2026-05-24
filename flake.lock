@@ -770,11 +770,11 @@
         "systems": "systems_4"
       },
       "locked": {
-        "lastModified": 1777606121,
-        "narHash": "sha256-GFn5FU9M6GRNvjrZy1xM/joVMppHqPZgLk7/K+MO/tg=",
+        "lastModified": 1779576108,
+        "narHash": "sha256-pFsCbHMtrWMPsD4ZpOP/mWNYb6iyLgK/Dc46PzVxX7Y=",
         "owner": "Yeshey",
         "repo": "nix-minecraft",
-        "rev": "18688878446d7848a9c57feaa5c96de5494c7bcd",
+        "rev": "e16efb9eab432cc032cb2870847b9ea5a73fa357",
         "type": "github"
       },
       "original": {
