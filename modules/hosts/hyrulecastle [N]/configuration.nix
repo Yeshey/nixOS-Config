@@ -46,6 +46,8 @@
 
     boot.zswap.maxPoolPercent = 50;
 
+    # networking.firewall.enable = false;
+
     networking.hostName = "hyrulecastle";
   };
   flake.modules.homeManager.hyrulecastle = { };
