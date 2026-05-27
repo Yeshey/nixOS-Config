@@ -16,17 +16,10 @@ let
     "android-A70Phone"
     "nixOS-arm-oracle"
   ];
-
-  allDevicesExceptOracle = [
-    "nixOS-Laptop"
-    "windows-Laptop"
-    "nixOS-Surface"
-    "android-A70Phone"
-  ];
-in    # asd  dasdas
+in
 {
   flake.modules.homeManager.yeshey =
-    { config, osConfig, lib, ... }:
+    { config, lib, ... }:
     let
       dataPath = config.yeshey.dataStoragePath;
 
@@ -73,57 +66,50 @@ in    # asd  dasdas
             "windows-Laptop".id   = "SST7QBM-2SKF4WK-F4RUAA2-ICQ7NBB-LDI3I33-O3DEZZJ-TVXZ3DB-M7IYTAQ";
             "nixOS-Surface".id    = "SEYY5VY-KFP6VTK-RDUXRJL-DJDZAXT-2FVZHCQ-EEOEJFW-HLAVQKR-6UHBDQN";
             "android-A70Phone".id = "RT3DBUX-VNP5WPX-TZEYYL5-SVKR27H-432WTFY-JD3JOAA-HTL4APW-GRQIBQC";
-            "nixOS-arm-oracle".id = "ZBHC3YL-LFFBP3E-ZJTUVJ5-3T76GOU-XUFP2UK-SQAKS7N-N7UVM2W-NZIBJQY";
+            "nixOS-arm-oracle".id = "O3DCQYT-OR2L7LJ-TV2OF6Y-G4WB52H-KJJ7AU2-4GJWQHK-S5POYUE-I6XLBQJ";
           };
 
           folders = {
-            "PersonalFiles" = {
-              path    = "${dataPath}/PersonalFiles";
-              devices = [ "nixOS-arm-oracle" "nixOS-Laptop" ];
-              versioning = myVersioning;
-            };
-          } // lib.optionalAttrs (osConfig.networking.hostName != "skyloft") {
             "2026" = {
               path       = "${dataPath}/PersonalFiles/2026";
-              devices    = allDevicesExceptOracle;
+              devices    = allDevices;
               versioning = myVersioning;
             };
             "2027" = {
               path       = "${dataPath}/PersonalFiles/2027";
-              devices    = allDevicesExceptOracle; 
+              devices    = allDevices;
+              versioning = myVersioning;
+            };
+            "2028" = {
+              path       = "${dataPath}/PersonalFiles/2028";
+              devices    = allDevices;
+              versioning = myVersioning;
+            };
+            "2029" = {
+              path       = "${dataPath}/PersonalFiles/2029";
+              devices    = allDevices;
               versioning = myVersioning;
             };
             "A70Camera" = {
               path       = "${dataPath}/PersonalFiles/Timeless/Syncthing/PhoneCamera";
-              devices    = allDevicesExceptOracle;
+              devices    = allDevices;
               versioning = myVersioning;
             };
             "Allsync" = {
               path       = "${dataPath}/PersonalFiles/Timeless/Syncthing/Allsync";
-              devices    = allDevicesExceptOracle; 
-              versioning = myVersioning; 
+              devices    = allDevices;
+              versioning = myVersioning;
             };
             "Music" = {
               path       = "${dataPath}/PersonalFiles/Timeless/Music";
-              devices    = allDevicesExceptOracle; 
+              devices    = allDevices;
               versioning = myVersioning;
             };
             "Servers" = {
               path       = "${dataPath}/PersonalFiles/Servers";
-              devices    = allDevicesExceptOracle; 
+              devices    = allDevices;
               versioning = myVersioning;
             };
-            "WhatsAppPictures" = {
-              path       = "${dataPath}/PersonalFiles/Timeless/Syncthing/WhatsAppPictures";
-              devices    = allDevicesExceptOracle; 
-              versioning = myVersioning;
-            };
-            "WhatsAppMovies" = {
-              path       = "${dataPath}/PersonalFiles/Timeless/Syncthing/WhatsAppMovies";
-              devices    = allDevicesExceptOracle; 
-              versioning = myVersioning;
-            };
-          } // {
             "ssh" = {
               path       = "~/.ssh";
               devices    = allDevices;
@@ -151,6 +137,16 @@ in    # asd  dasdas
             };
             "PowderToy" = {
               path       = "~/.local/share/The Powder Toy";
+              devices    = allDevices;
+              versioning = myVersioning;
+            };
+            "WhatsAppPictures" = {
+              path       = "${dataPath}/PersonalFiles/Timeless/Syncthing/WhatsAppPictures";
+              devices    = allDevices;
+              versioning = myVersioning;
+            };
+            "WhatsAppMovies" = {
+              path       = "${dataPath}/PersonalFiles/Timeless/Syncthing/WhatsAppMovies";
               devices    = allDevices;
               versioning = myVersioning;
             };
@@ -247,11 +243,11 @@ in    # asd  dasdas
         '';
 
         # Workaround for https://github.com/nix-community/home-manager/issues/6933
-        fixSyncthingStateDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-          if [ ! -e "$HOME/.local/state/syncthing" ]; then
-            $DRY_RUN_CMD ln -s "$HOME/.config/syncthing" "$HOME/.local/state/syncthing"
-          fi   
-        '';  
+        # fixSyncthingStateDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+        #   if [ ! -e "$HOME/.local/state/syncthing" ]; then
+        #     $DRY_RUN_CMD ln -s "$HOME/.config/syncthing" "$HOME/.local/state/syncthing"
+        #   fi
+        # '';
 
       };
     };
