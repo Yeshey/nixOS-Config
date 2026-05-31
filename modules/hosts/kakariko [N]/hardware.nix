@@ -64,7 +64,14 @@
       # environment.variables.INTEL_DEBUG = "reemit"; # for wot?
       services.bcachefs.autoScrub.enable = true; # enable after you have kernel 6.14 or later
       hardware.microsoft-surface.kernelVersion = "stable"; # newer kernel
-      boot.initrd.preLVMCommands = lib.mkOrder 400 "sleep 7"; # I have to wait a bit to let my hardware pick up on my microSD
+      # I have to wait a bit to let my hardware pick up on my microSD
+      boot.initrd.systemd.services.microsd-delay = {
+        wantedBy = [ "initrd.target" ];
+        before = [ "initrd-fs.target" "sysroot.mount" ];
+        unitConfig.DefaultDependencies = false;
+        serviceConfig.Type = "oneshot";
+        script = "sleep 7";
+      };
 
       swapDevices = [{ 
         device = "/dev/disk/by-label/nvmeswap";
