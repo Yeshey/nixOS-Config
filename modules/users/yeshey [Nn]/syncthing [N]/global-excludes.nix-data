@@ -3,15 +3,9 @@
   # =========================================================
   # 1. EXCEPTIONS (Must come BEFORE their respective ignores)
   # =========================================================
-  "!src/**/build/"
   "!gradle-wrapper.jar"
   "!gradle-wrapper.properties"
   "!/gradle/wrapper/gradle-wrapper.jar"
-  "!.vscode/settings.json"
-  "!.vscode/tasks.json"
-  "!.vscode/launch.json"
-  "!.vscode/extensions.json"
-  "!.vscode/*.code-snippets"
 
   ".git"
 
