@@ -10,7 +10,6 @@
     networking.firewall.allowedUDPPorts = [ 22000 21027 ];
 
     services.syncthing = {
-      enable = true;
       settings.options = {
         relaysEnabled = true;
         urAccepted = 3;
@@ -20,7 +19,6 @@
 
   flake.modules.homeManager.syncthing = {
     services.syncthing = {
-      enable = true;
       settings.options = {
         relaysEnabled = true;
         urAccepted = 3;
