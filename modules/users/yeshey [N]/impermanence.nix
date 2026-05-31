@@ -27,6 +27,8 @@
             ".config/org.restic.browser"
             ".local/share/osu"
             ".config/gh"
+            ".config/syncthing"
+            ".local/share/syncthing"
             ".local/share/PrismLauncher/instances/MainInstance"
             "Zotero/storage"
             ".minetest"
