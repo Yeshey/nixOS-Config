@@ -19,6 +19,6 @@
           (lib.mkForce "/Users/${config.home.username}")
         else
           lib.mkDefault "/home/${config.home.username}";
-      home.stateVersion = lib.mkDefault "25.11";
+      home.stateVersion = lib.mkDefault "26.05";
     };
 }

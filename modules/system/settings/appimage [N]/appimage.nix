@@ -9,7 +9,7 @@
 
       environment.systemPackages = [
         (pkgs.appimage-run.override {
-          extraPkgs = p: [ p.xorg.libxshmfence ];
+          extraPkgs = p: [ p.libxshmfence ];
         })
       ];
     };

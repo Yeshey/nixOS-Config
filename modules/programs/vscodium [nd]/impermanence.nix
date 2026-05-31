@@ -13,7 +13,8 @@
         persistence."/persistent" = {
           directories = [
             ".local/share/code-server/User"
-            ".vscode-oss/extensions" 
+            ".vscode-oss/extensions"
+            ".config/VSCodium/User"
           ];
         };
       };

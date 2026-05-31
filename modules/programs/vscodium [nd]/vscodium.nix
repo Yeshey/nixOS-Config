@@ -20,9 +20,8 @@
         home.file."${nixDepsDir}/ltex-ls-plus".source = pkgs.ltex-ls-plus;
         home.file."${nixDepsDir}/ngram-en".source = ngram-en;
 
-        programs.vscode = {
+        programs.vscodium = {
           enable = true;
-          package = pkgs.vscodium;
           profiles.default = {
             # Has to be a full path and a string to prevent it to be picked up by nix and coppied to the readonly nix store.
             userSettings = config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/.setup/modules/programs/vscodium [nd]/VSCsettings.json";
@@ -53,7 +52,7 @@
 
         home.packages = with pkgs; [
           nixd
-          nixfmt-rfc-style
+          nixfmt
           ltex-ls-plus
         ];
       };

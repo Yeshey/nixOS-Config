@@ -15,54 +15,47 @@
     "window.autoDetectColorScheme": true,
     "editor.fontLigatures": true,
     "code-runner.executorMap": {
-      "python": "python3 -u"
+        "python": "python3 -u"
     },
     "code-runner.runInTerminal": true,
     "files.autoSave": "afterDelay",
     "editor.wordWrap": "on",
     "git.autofetch": true,
 
-
     "latex-workshop.latex.tools": [
-      {
-          "name": "latexmk",
-          "command": "latexmk",
-          "args": [
-              "-pdflatex=lualatex",
-              "--shell-escape",
-              "-f",
-              "-synctex=1",
-              "-interaction=nonstopmode",
-              "-file-line-error",
-              "-pdf",
-              "%DOC%"
-          ]
-      },
-      {
-          "name": "pdflatex",
-          "command": "pdflatex",
-          "args": [
-              "--shell-escape",
-              "-synctex=1",
-              "-interaction=nonstopmode",
-              "-file-line-error",
-              "%DOC%"
-          ]
-      },
-      {
-          "name": "bibtex",
-          "command": "bibtex",
-          "args": [
-              "%DOCFILE%"
-          ]
-      }
+        {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": [
+                "-pdflatex=lualatex",
+                "--shell-escape",
+                "-f",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "-pdf",
+                "%DOC%"
+            ]
+        },
+        {
+            "name": "pdflatex",
+            "command": "pdflatex",
+            "args": [
+                "--shell-escape",
+                "-synctex=1",
+                "-interaction=nonstopmode",
+                "-file-line-error",
+                "%DOC%"
+            ]
+        },
+        {
+            "name": "bibtex",
+            "command": "bibtex",
+            "args": ["%DOCFILE%"]
+        }
     ],
 
-    "ltex.enabled": [
-        "latex",
-        "markdown",
-        "plaintext"
-    ],
+    "ltex.enabled": ["latex", "markdown", "plaintext"],
     "ltex.language": "en-US",
     "ltex.additionalRules.enablePickyRules": true,
     "ltex.additionalRules.languageModel": "/home/yeshey/.local/share/vscodium-nix-deps/ngram-en",
@@ -74,11 +67,11 @@
         "nixd": {
             "options": {
                 "flake": {
-                "autoArchive": true
+                    "autoArchive": true
                 }
             },
             "formatting": {
-                "command": "nixfmt-rfc-style"
+                "command": "nixfmt"
             }
         }
     },

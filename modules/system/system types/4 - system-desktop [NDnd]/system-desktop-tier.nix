@@ -14,7 +14,6 @@
       printing
       virt
       steam
-      adb
       iphone
       appimage
       waydroid

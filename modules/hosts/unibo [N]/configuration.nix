@@ -17,7 +17,7 @@ in
 
       home.username      = username;
       home.homeDirectory = lib.mkForce scr;
-      home.stateVersion  = "25.11";
+      home.stateVersion  = "26.05";
 
       nixpkgs.overlays = [
         (final: prev: {

@@ -9,7 +9,7 @@
     {
       home.packages = with pkgs; [
         nil
-        nixfmt-rfc-style
+        nixfmt
         kdePackages.okular
         ltex-ls-plus
       ];
@@ -88,9 +88,15 @@
           };
 
           languages = {
-            "LaTeX" = { soft_wrap = "editor_width"; };
-            "Markdown" = { soft_wrap = "editor_width"; };
-            "Plain Text" = { soft_wrap = "editor_width"; };
+            "LaTeX" = {
+              soft_wrap = "editor_width";
+            };
+            "Markdown" = {
+              soft_wrap = "editor_width";
+            };
+            "Plain Text" = {
+              soft_wrap = "editor_width";
+            };
           };
         };
       };
