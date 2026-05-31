@@ -54,7 +54,7 @@ in
                 "(?i)AllMusic"
                 "(?i)AllMusic-mp3"
                 ".git"
-
+              ] ++ (import ./global-excludes.nix-data) ++ [
                 # 1. Un-ignore the specific root folders we want to sync
                 "!/2026"
                 "!/2027"
