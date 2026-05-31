@@ -4,16 +4,21 @@
 }:
 let
   username = "yeshey";
+  myStoragePath = "/home/${username}";
 in
 {
   flake.modules.nixos.kakariko =
+    { lib, ... }:
     {
-      imports = with inputs.self.modules.nixos; [
+      imports = [
         inputs.self.modules.nixos.${username}
       ];
-
-      home-manager.users."${username}" = {
-        "${username}".dataStoragePath = "/home/${username}";
+      options.yeshey.dataStoragePath = lib.mkOption { type = lib.types.str; };
+      config = {
+        yeshey.dataStoragePath = myStoragePath;
+        home-manager.users."${username}" = {
+          "${username}".dataStoragePath = myStoragePath;
+        };
       };
     };
 }

@@ -4,16 +4,23 @@
 }:
 let
   username = "yeshey";
+  myStoragePath = "/mnt/OneDrive/ISCTE";
 in
 {
   flake.modules.nixos.skyloft =
+    { lib, ... }:
     {
-      imports = with inputs.self.modules.nixos; [
+      imports = [
         inputs.self.modules.nixos.${username}
       ];
-
-      home-manager.users."${username}" = {
-        "${username}".dataStoragePath = "/mnt/OneDrive/ISCTE";
+      options.yeshey.dataStoragePath = lib.mkOption { type = lib.types.str; };
+      config = {
+        yeshey.dataStoragePath = myStoragePath;
+        home-manager.users."${username}" = {
+          "${username}".dataStoragePath = myStoragePath;
+        };
       };
     };
 }
+
+

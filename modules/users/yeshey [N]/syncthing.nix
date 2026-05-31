@@ -1,11 +1,11 @@
-{ inputs, ... }:
-
 let
+  username = "yeshey";
+
   myVersioning = {
     type = "staggered";
     params = {
       cleanInterval = "3600";
-      maxAge = "259200"; # 3 days
+      maxAge = "604800"; # 7 days
     };
   };
 
@@ -18,48 +18,18 @@ let
   ];
 in
 {
-  flake.modules.homeManager.yeshey =
-    { config, lib, ... }:
+  flake.modules.nixos."${username}" =
+    { config, ... }:
     let
       dataPath = config.yeshey.dataStoragePath;
-
-      # Plain list — no reference to config.services.syncthing, so no circular dep
-      externalFolderPaths = [
-        "${dataPath}/PersonalFiles/2026"
-        "${dataPath}/PersonalFiles/2027"
-        "${dataPath}/PersonalFiles/2028"
-        "${dataPath}/PersonalFiles/2029"
-        "${dataPath}/PersonalFiles/Timeless/Syncthing/PhoneCamera"
-        "${dataPath}/PersonalFiles/Timeless/Syncthing/Allsync"
-        "${dataPath}/PersonalFiles/Timeless/Music"
-        "${dataPath}/PersonalFiles/Servers"
-        "${dataPath}/PersonalFiles/Timeless/Syncthing/WhatsAppPictures"
-        "${dataPath}/PersonalFiles/Timeless/Syncthing/WhatsAppMovies"
-      ];
-
-      # mkdir -p for every external path
-      mkdirScript = lib.concatMapStringsSep "\n"
-        (p: ''$DRY_RUN_CMD mkdir -p "${p}"'')
-        externalFolderPaths;
-
-      # Write a .stignore only if it doesn't already exist, so manual edits survive
-      # re-switches. Uses a plain cat redirect — no DRY_RUN_CMD wrapping the heredoc,
-      # which would break under --dry-run.
-      writeStignore = path: content: ''
-        dest="${path}/.stignore"
-        if [ ! -f "$dest" ]; then
-          cat > "$dest" << 'STIGNEOF'
-        ${content}
-        STIGNEOF
-        fi
-      '';
     in
     {
-      imports = with inputs.self.modules.homeManager; [
-        syncthing
-      ];
-
       services.syncthing = {
+        enable = true;
+        user = username;
+        dataDir = "/home/${username}/.local/share/syncthing";
+        configDir = "/home/${username}/.config/syncthing";
+
         settings = {
           devices = {
             "nixOS-Laptop".id     = "MQJK4CT-TFXHX2Y-3E2BSCD-Q7775YX-SX7VHKF-4TY6OA6-OGZO2QX-3NPTWQN";
@@ -70,185 +40,111 @@ in
           };
 
           folders = {
-            "2026" = {
-              path       = "${dataPath}/PersonalFiles/2026";
-              devices    = allDevices;
+            "PersonalFiles" = {
+              path = "${dataPath}/PersonalFiles";
+              devices = allDevices;
               versioning = myVersioning;
+              ignorePatterns = [
+                # 0. Global Excludes (carried over from your old individual stignores)
+                "(?i)AllMusic"
+                "(?i)AllMusic-mp3"
+
+                # 1. Un-ignore the specific root folders we want to sync
+                "!/2026"
+                "!/2027"
+                "!/2028"
+                "!/2029"
+
+                # 2. Un-ignore the specific nested folders inside Timeless
+                # Note: Un-ignoring Syncthing naturally pulls in PhoneCamera, Allsync, etc.
+                "!/Timeless/Music"
+                "!/Timeless/Syncthing"
+
+                # 3. Ignore everything else inside Timeless (Optimizes the scanner!)
+                "/Timeless/*"
+
+                # 4. Un-ignore the Timeless directory itself so Syncthing evaluates it
+                "!/Timeless"
+
+                # 5. Ignore everything else at the root level (Optimizes the scanner!)
+                "/*"
+              ];
             };
-            "2027" = {
-              path       = "${dataPath}/PersonalFiles/2027";
-              devices    = allDevices;
-              versioning = myVersioning;
-            };
-            "2028" = {
-              path       = "${dataPath}/PersonalFiles/2028";
-              devices    = allDevices;
-              versioning = myVersioning;
-            };
-            "2029" = {
-              path       = "${dataPath}/PersonalFiles/2029";
-              devices    = allDevices;
-              versioning = myVersioning;
-            };
-            "A70Camera" = {
-              path       = "${dataPath}/PersonalFiles/Timeless/Syncthing/PhoneCamera";
-              devices    = allDevices;
-              versioning = myVersioning;
-            };
-            "Allsync" = {
-              path       = "${dataPath}/PersonalFiles/Timeless/Syncthing/Allsync";
-              devices    = allDevices;
-              versioning = myVersioning;
-            };
-            "Music" = {
-              path       = "${dataPath}/PersonalFiles/Timeless/Music";
-              devices    = allDevices;
-              versioning = myVersioning;
-            };
-            "Servers" = {
-              path       = "${dataPath}/PersonalFiles/Servers";
-              devices    = allDevices;
-              versioning = myVersioning;
-            };
+
             "ssh" = {
-              path       = "~/.ssh";
+              path       = "/home/${username}/.ssh";
               devices    = allDevices;
               versioning = myVersioning;
             };
+
             "zshHistory" = {
-              path       = "~/.config/zsh";
+              path       = "/home/${username}/.config/zsh";
               devices    = allDevices;
               versioning = myVersioning;
+              ignorePatterns = [
+                "!.zsh_history"
+                "*"
+              ];
             };
+
             "MinecraftPrismLauncherMainInstance" = {
-              path       = "~/.local/share/PrismLauncher/instances/MainInstance";
+              path       = "/home/${username}/.local/share/PrismLauncher/instances/MainInstance";
               devices    = allDevices;
               versioning = myVersioning;
+              ignorePatterns = [
+                "!/.minecraft/saves"
+                "!/.minecraft/mods"
+                "!/.minecraft/shaderpacks"
+                "!/.minecraft/resourcepacks"
+                "!/minecraft/saves"
+                "!/minecraft/mods"
+                "!/minecraft/shaderpacks"
+                "!/minecraft/resourcepacks"
+                "!/*.json"
+                "!/*.cfg"
+                "*"
+              ];
             };
+
             "Osu-Lazer" = {
-              path       = "~/.local/share/osu";
+              path       = "/home/${username}/.local/share/osu";
               devices    = allDevices;
               versioning = myVersioning;
+              ignorePatterns = [
+                "!/files"
+                "!/files/**"
+                "!/screenshots"
+                "!/screenshots/**"
+                "!/collection.db"
+                "!/client.realm"
+                "*"
+              ];
             };
+
             "Minetest" = {
-              path       = "~/.var/app/org.luanti.luanti/.minetest";
+              path       = "/home/${username}/.var/app/org.luanti.luanti/.minetest";
               devices    = allDevices;
               versioning = myVersioning;
+              ignorePatterns = [
+                "!/games"
+                "!/worlds"
+                "*"
+              ];
             };
+
             "PowderToy" = {
-              path       = "~/.local/share/The Powder Toy";
+              path       = "/home/${username}/.local/share/The Powder Toy";
               devices    = allDevices;
               versioning = myVersioning;
             };
-            "WhatsAppPictures" = {
-              path       = "${dataPath}/PersonalFiles/Timeless/Syncthing/WhatsAppPictures";
-              devices    = allDevices;
-              versioning = myVersioning;
-            };
-            "WhatsAppMovies" = {
-              path       = "${dataPath}/PersonalFiles/Timeless/Syncthing/WhatsAppMovies";
-              devices    = allDevices;
-              versioning = myVersioning;
-            };
+
             "ZoteroStorage" = {
-              path       = "~/Zotero/storage";
+              path       = "/home/${username}/Zotero/storage";
               devices    = allDevices;
               versioning = myVersioning;
             };
           };
         };
-      };
-
-      # Files inside $HOME — home.file handles these cleanly
-      home.file = {
-        ".config/zsh/.stignore".text = ''
-          !.zsh_history
-          *
-        '';
-        ".local/share/PrismLauncher/instances/MainInstance/.stignore".text = ''
-          !/.minecraft/saves
-          !/.minecraft/mods
-          !/.minecraft/shaderpacks
-          !/.minecraft/resourcepacks
-          !/minecraft/saves
-          !/minecraft/mods
-          !/minecraft/shaderpacks
-          !/minecraft/resourcepacks
-          !/*.json
-          !/*.cfg
-          *
-        '';
-        ".var/app/org.luanti.luanti/.minetest/.stignore".text = ''
-          !/games
-          !/worlds
-          *
-        '';
-        ".local/share/osu/.stignore".text = ''
-          !/files
-          !/files/**
-          !/screenshots
-          !/screenshots/**
-          !/collection.db
-          !/client.realm
-          *
-        '';
-      };
-
-      home.activation = {
-
-        createSyncthingFolders = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-          timeout 10 bash -c '${mkdirScript}' || echo "createSyncthingFolders timed out or failed, skipping."
-        '';
-
-        createExternalStignores = lib.hm.dag.entryAfter [ "createSyncthingFolders" ] ''
-          timeout 10 bash -c ${lib.escapeShellArg ''
-            ${writeStignore "${dataPath}/PersonalFiles/2026" ''
-              //*
-              //(?i)PhotosAndVideos
-              .git
-              *.ipynb
-            ''}
-            ${writeStignore "${dataPath}/PersonalFiles/2027" ''
-              //*
-              //(?i)PhotosAndVideos
-              .git
-              *.ipynb
-            ''}
-            ${writeStignore "${dataPath}/PersonalFiles/2028" ''
-              //*
-              //(?i)PhotosAndVideos
-              .git
-              *.ipynb
-            ''}
-            ${writeStignore "${dataPath}/PersonalFiles/2029" ''
-              //*
-              //(?i)PhotosAndVideos
-              .git
-              *.ipynb
-            ''}
-            ${writeStignore "${dataPath}/PersonalFiles/Timeless/Syncthing/PhoneCamera" ''
-              //*
-              //(?i)Photos&Videos
-            ''}
-            ${writeStignore "${dataPath}/PersonalFiles/Timeless/Syncthing/Allsync" ''
-              //*
-              //(?i)watch
-            ''}
-            ${writeStignore "${dataPath}/PersonalFiles/Timeless/Music" ''
-              //*
-              (?i)AllMusic
-              (?i)AllMusic-mp3
-            ''}
-          ''} || echo "createExternalStignores timed out or failed, skipping."
-        '';
-
-        # Workaround for https://github.com/nix-community/home-manager/issues/6933
-        # fixSyncthingStateDir = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-        #   if [ ! -e "$HOME/.local/state/syncthing" ]; then
-        #     $DRY_RUN_CMD ln -s "$HOME/.config/syncthing" "$HOME/.local/state/syncthing"
-        #   fi
-        # '';
-
       };
     };
 }
