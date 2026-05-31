@@ -45,35 +45,26 @@ in
               devices = allDevices;
               versioning = myVersioning;
               ignorePatterns = [
-                # Other nested syncthing folders
+                # Nested syncthing folders
                 "/Timeless/Syncthing/WhatsAppMovies"
                 "/Timeless/Syncthing/WhatsAppPictures"
                 "/Timeless/Syncthing/A70Camera"
-
-                # 0. Global Excludes (carried over from your old individual stignores)
                 "(?i)AllMusic"
                 "(?i)AllMusic-mp3"
-              ] ++ (import ./global-excludes.nix-data) ++ [
-                # 1. Un-ignore the specific root folders we want to sync
+
+                # Structure: what to sync
                 "!/2026"
                 "!/2027"
                 "!/2028"
                 "!/2029"
-
-                # 2. Un-ignore the specific nested folders inside Timeless
-                # Note: Un-ignoring Syncthing naturally pulls in PhoneCamera, Allsync, etc.
                 "!/Timeless/Music"
                 "!/Timeless/Syncthing"
-
-                # 3. Ignore everything else inside Timeless (Optimizes the scanner!)
                 "/Timeless/*"
-
-                # 4. Un-ignore the Timeless directory itself so Syncthing evaluates it
                 "!/Timeless"
-
-                # 5. Ignore everything else at the root level (Optimizes the scanner!)
                 "/*"
-              ];
+
+                # Junk patterns (global excludes — match inside synced dirs)
+              ] ++ (import ./global-excludes.nix-data);
             };
 
             "WhatsAppMovies" = {
