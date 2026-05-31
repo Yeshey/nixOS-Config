@@ -13,11 +13,6 @@
   "!.vscode/extensions.json"
   "!.vscode/*.code-snippets"
 
-  # =========================================================
-  # 2. GLOBAL EXCLUDES
-  # =========================================================
-  "(?i)AllMusic"
-  "(?i)AllMusic-mp3"
   ".git"
 
   # --- OS Generated Files ---
