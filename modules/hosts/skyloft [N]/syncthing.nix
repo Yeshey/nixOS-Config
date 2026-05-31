@@ -14,7 +14,6 @@
             ignorePatterns = lib.mkForce [
               "/Timeless/Syncthing/WhatsAppMovies"
               "/Timeless/Syncthing/WhatsAppPictures"
-              "/Timeless/Syncthing/PhoneCamera"
               "/Timeless/Syncthing/A70Camera"
             ];
           };
