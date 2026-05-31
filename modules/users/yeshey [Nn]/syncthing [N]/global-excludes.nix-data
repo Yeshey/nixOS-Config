@@ -3,11 +3,12 @@
   # =========================================================
   # 1. EXCEPTIONS (Must come BEFORE their respective ignores)
   # =========================================================
+  "!src/**/build/"
   "!gradle-wrapper.jar"
   "!gradle-wrapper.properties"
-  "!/gradle/wrapper/gradle-wrapper.jar"
+  "!gradle/wrapper/gradle-wrapper.jar"
 
-  ".git"
+  ".git/"
 
   # --- OS Generated Files ---
   ".DS_Store"
