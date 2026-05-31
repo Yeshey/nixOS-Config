@@ -45,6 +45,11 @@ in
               devices = allDevices;
               versioning = myVersioning;
               ignorePatterns = [
+                # Other nested syncthing folders
+                "/Timeless/Syncthing/WhatsAppMovies"
+                "/Timeless/Syncthing/WhatsAppPictures"
+                "/Timeless/Syncthing/A70Camera"
+
                 # 0. Global Excludes (carried over from your old individual stignores)
                 "(?i)AllMusic"
                 "(?i)AllMusic-mp3"
@@ -69,6 +74,24 @@ in
                 # 5. Ignore everything else at the root level (Optimizes the scanner!)
                 "/*"
               ];
+            };
+
+            "WhatsAppMovies" = {
+              path       = "${dataPath}/PersonalFiles/Timeless/Syncthing/WhatsAppMovies";
+              devices    = allDevices;
+              versioning = myVersioning;
+            };
+
+            "WhatsAppPictures" = {
+              path       = "${dataPath}/PersonalFiles/Timeless/Syncthing/WhatsAppPictures";
+              devices    = allDevices;
+              versioning = myVersioning;
+            };
+            
+            "A70Camera" = {
+              path       = "${dataPath}/PersonalFiles/Timeless/Syncthing/A70Camera";
+              devices    = allDevices;
+              versioning = myVersioning;
             };
 
             "ssh" = {
