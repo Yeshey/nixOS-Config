@@ -11,11 +11,13 @@
       settings = {
         folders = {
           "PersonalFiles" = {
-            ignorePatterns = lib.mkForce [
+          ignorePatterns = lib.mkForce (
+            [
               "/Timeless/Syncthing/WhatsAppMovies"
               "/Timeless/Syncthing/WhatsAppPictures"
               "/Timeless/Syncthing/A70Camera"
-            ];
+            ] ++ (import (builtins.toPath "${./../..}/users/yeshey [N]/syncthing/global-excludes.nix-data"))
+          );
           };
         };
       };
