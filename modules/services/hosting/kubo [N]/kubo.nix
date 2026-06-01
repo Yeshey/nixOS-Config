@@ -12,6 +12,7 @@
         enable = true;
         enableGC = true;
         settings = {
+          Datastore.StorageMax = "5GB";
           API.HTTPHeaders = {
             "Access-Control-Allow-Origin" = [
               "*"
