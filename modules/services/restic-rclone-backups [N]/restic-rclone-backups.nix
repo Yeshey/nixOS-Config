@@ -97,7 +97,7 @@ let
       ".rustup"       ".expo"          ".vagrant.d"
 
       # Browsers
-      ".floorp"       ".mozilla"       ".tor project"
+      ".tor project"  ".floorp"        ".mozilla"      ".config/mozilla"
       ".config/BraveSoftware"   ".config/vivaldi"
       ".config/microsoft-edge"
 
