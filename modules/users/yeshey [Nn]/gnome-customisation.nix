@@ -10,9 +10,7 @@ in
         home.packages = with pkgs; [
           networkmanagerapplet # Has for example "Automatically connect to VPN when using this connection"
           
-          gnomeExtensions.power-off-options
           gnomeExtensions.burn-my-windows
-          unstable.gnomeExtensions.gnomelets
           gnomeExtensions.night-theme-switcher
         ];
 
@@ -23,14 +21,8 @@ in
             ];
             enabled-extensions = [
               "burn-my-windows@schneegans.github.com"
-              "gnomelets@mcast.gnomext.com"
-              "power-off-options@axelitama.github.io"
               "nightthemeswitcher@romainvigier.fr"
             ];
-          };
-
-          "org/gnome/shell/extensions/power-off-options" = {
-            show-reboot-to-bios=true;
           };
 
           "org/gnome/shell/extensions/burn-my-windows" = {
