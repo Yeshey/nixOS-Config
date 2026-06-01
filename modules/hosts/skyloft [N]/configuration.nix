@@ -25,7 +25,7 @@
       firefox
       open-vpn
       luanti-server
-      jupyter
+      # jupyter
       ollama
       kubo
       minecraft
