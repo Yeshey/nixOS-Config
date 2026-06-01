@@ -1107,11 +1107,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1779644232,
-        "narHash": "sha256-x1rsJbA8AmoW3RDqUsJZqnCywt4Ib5/WFYRhRbGFKwc=",
+        "lastModified": 1780274125,
+        "narHash": "sha256-Mw0EQ+vKgMn6+9VHU28L8iIiBntQMukcm/RkAyLlsUo=",
         "owner": "Yeshey",
         "repo": "nixpkgs2flatpak",
-        "rev": "ecd81eb1e40f69b19740fee4346f8157bdda8095",
+        "rev": "e491b0ba718de0bc5a4555f5b1bed3ee1309a4b1",
         "type": "github"
       },
       "original": {
