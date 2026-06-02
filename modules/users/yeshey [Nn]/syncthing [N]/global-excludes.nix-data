@@ -1,36 +1,9 @@
 # global-excludes.nix-data
 [
-  # =========================================================
-  # 1. EXCEPTIONS (Must come BEFORE their respective ignores)
-  # =========================================================
-  "!src/**/build/"
-  "!gradle-wrapper.jar"
-  "!gradle-wrapper.properties"
-  "!gradle/wrapper/gradle-wrapper.jar"
-  "!.vscode/settings.json"
-  "!.vscode/tasks.json"
-  "!.vscode/launch.json"
-  "!.vscode/extensions.json"
-  "!.vscode/*.code-snippets"
-  
-  # --- Exceptions from Flutter / Rails / VS / IntelliJ ---
-  "!**/ios/**/default.mode1v3"
-  "!**/ios/**/default.mode2v3"
-  "!**/ios/**/default.pbxuser"
-  "!**/ios/**/default.perspectivev3"
-  "!packages/flutter_tools/test/data/dart_dependencies_test/**/.packages"
-  "!.idea/codeStyles"
-  "!.idea/runConfigurations"
-  "!log/.keep"
-  "!tmp/.keep"
-  "!storage/.keep"
-  "!.axoCover/settings.json"
-  "!**/[Pp]ackages/build/"
-  "!?*.[Cc]ache/"
+  "// ========================================================="
+  "// Global exludes and trash, Doesnt (FUCK) have any non-excludes to keep it fast"
+  "// ========================================================="
 
-  # =========================================================
-  # 2. GLOBAL EXCLUDES
-  # =========================================================
   ".git/"
 
   # --- OS Generated Files ---

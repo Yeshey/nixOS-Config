@@ -44,27 +44,37 @@ in
               path = "${dataPath}/PersonalFiles";
               devices = allDevices;
               versioning = myVersioning;
-              ignorePatterns = [
-                # Nested syncthing folders
-                "/Timeless/Syncthing/WhatsAppMovies"
-                "/Timeless/Syncthing/WhatsAppPictures"
-                "/Timeless/Syncthing/A70Camera"
+              ignorePatterns = (import ./global-excludes.nix-data) ++ [
+                "// ========================================================="
+                "// IGNORE ALWAYS"
+                "// ========================================================="
                 "(?i)AllMusic"
                 "(?i)AllMusic-mp3"
 
-                # Structure: what to sync
+                "// ========================================================="
+                "// Directories synced by a different syncthing folder"
+                "// ========================================================="
+                "/Timeless/Syncthing/WhatsAppMovies"
+                "/Timeless/Syncthing/WhatsAppPictures"
+                "/Timeless/Syncthing/A70Camera"
+
+                "// ========================================================="
+                "// WHITELIST"
+                "// ========================================================="
                 "!/2026"
                 "!/2027"
                 "!/2028"
                 "!/2029"
                 "!/Timeless/Music"
                 "!/Timeless/Syncthing"
-                "/Timeless/*"
                 "!/Timeless"
-                "/*"
 
-                # Junk patterns (global excludes — match inside synced dirs)
-              ] ++ (import ./global-excludes.nix-data);
+                "// ========================================================="
+                "// THE CATCH-ALLS (Need to be at the VERY BOTTOM)"
+                "// ========================================================="
+                "/Timeless/*"
+                "/*"
+              ];
             };
 
             "WhatsAppMovies" = {
