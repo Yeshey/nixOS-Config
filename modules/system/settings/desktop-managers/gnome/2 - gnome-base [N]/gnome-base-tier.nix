@@ -10,11 +10,6 @@
         gnome-minimal-tier
       ];
 
-      i18n.inputMethod = {
-        enable = true;
-        type = "ibus";
-      };
-
       environment.systemPackages = with pkgs; [
         gnome-tweaks
         ffmpeg-headless
