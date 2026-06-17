@@ -50,12 +50,13 @@
             config = {
               public.address = "0.0.0.0:1408";
               public.version = extractVersion package.name;
-              motd.sleeping = "☠ LopesCraft is sleeping §2☻ Join to start it up\n§uversion:§c ${extractVersion package.name}";
+              motd.sleeping = "☠ LopesCraft is sleeping §2☻ Join to start it up\n§7If connect fails, retry • §uversion:§c ${extractVersion(package.name)}";
             };
           };
         };
 
         servers.tunaCraft = rec {
+          # minecraft.taiscte.xubi.org:1207 or minecraft.taiscte.xubi.org should work on non restrictive networks
           enable = true;
           jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";
           serverProperties = {
@@ -74,13 +75,16 @@
             "online-mode" = false;
             "max-tick-time" = -1;
           };
+          symlinks = {
+            "server-icon.png" = ./tunacraft-icon.png;
+          };
           package = pkgs.paperServers.paper;
           lazymc = {
             enable = true;
             config = {
               public.address = "0.0.0.0:1207";
               public.version = extractVersion package.name;
-              motd.sleeping = "☠ TunaCraft is sleeping §2☻ Join to start it up\n§uversion:§c ${extractVersion package.name}";
+              motd.sleeping = "☠ TunaCraft is sleeping §2☻ Join to start it up\n§7If connect fails, retry • §uversion:§c ${extractVersion(package.name)}";
             };
           };
         };
@@ -109,7 +113,7 @@
             config = {
               public.address = "0.0.0.0:44329";
               public.version = extractVersion package.name;
-              motd.sleeping = "☠ Server is sleeping §2☻ Join to start it up\n§uversion:§c ${extractVersion package.name}";
+              motd.sleeping = "☠ Server is sleeping §2☻ Join to start it up\n§7If connect fails, retry • §uversion:§c ${extractVersion(package.name)}";
               time.sleep_after = 200;
             };
           };
@@ -139,7 +143,7 @@
             config = {
               public.address = "0.0.0.0:44339";
               public.version = extractVersion package.name;
-              motd.sleeping = "☠ Server is sleeping §2☻ Join to start it up\n§uversion:§c ${extractVersion package.name}";
+              motd.sleeping = "☠ Server is sleeping §2☻ Join to start it up\n§7If connect fails, retry • §uversion:§c ${extractVersion(package.name)}";
               time.sleep_after = 200;
             };
           };
