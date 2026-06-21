@@ -78,5 +78,6 @@
     "git.enableSmartCommit": true,
     "redhat.telemetry.enabled": false,
     "diffEditor.ignoreTrimWhitespace": false,
-    "security.workspace.trust.untrustedFiles": "open"
+    "security.workspace.trust.untrustedFiles": "open",
+    "notebook.output.wordWrap": true
 }
