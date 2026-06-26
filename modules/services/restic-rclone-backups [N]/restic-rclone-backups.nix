@@ -151,7 +151,7 @@ let
       "Zotero"        ".zotero"          # research refs - keep if important
     ] ++ job.exclude;
 
-    extraBackupArgs = [ "--verbose=2" "--exclude-caches" ] ++ job.extraBackupArgs;
+    extraBackupArgs = [ "--verbose=2" "--exclude-caches" "--one-file-system" ] ++ job.extraBackupArgs;
 
     pruneOpts = lib.optionals job.prune.enable (
       lib.filter (s: s != "") [
