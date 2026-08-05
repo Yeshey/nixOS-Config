@@ -13,6 +13,9 @@
         packages = [ pkgs.waydroid-helper ];
         services.waydroid-mount.wantedBy = [ "multi-user.target" ];
       };
-      virtualisation.waydroid.enable = true;
+      virtualisation.waydroid = {
+        enable = true;
+        package = pkgs.waydroid-nftables;
+      };
     };
 }
