@@ -130,21 +130,6 @@ in
               ];
             };
 
-            "Osu-Lazer" = {
-              path       = "/home/${username}/.local/share/osu";
-              devices    = allDevices;
-              versioning = myVersioning;
-              ignorePatterns = [
-                "!/files"
-                "!/files/**"
-                "!/screenshots"
-                "!/screenshots/**"
-                "!/collection.db"
-                "!/client.realm"
-                "*"
-              ];
-            };
-
             "Minetest" = {
               path       = "/home/${username}/.var/app/org.luanti.luanti/.minetest";
               devices    = allDevices;

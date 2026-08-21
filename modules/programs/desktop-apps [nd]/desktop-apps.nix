@@ -31,7 +31,6 @@
             qpwgraph # change sound inputs and outputs
 
             # gaming
-            unstable.osu-lazer-bin
             prismlauncher # polymc # prismlauncher # for Minecraft
             heroic
             the-powder-toy
