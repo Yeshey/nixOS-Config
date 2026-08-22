@@ -89,6 +89,45 @@
           };
         };
 
+        # servers.tunaCraftMods = rec {
+        #   enable = true;
+          
+        #   # Your JVM arguments are excellent for modded servers
+        #   jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";
+          
+        #   serverProperties = {
+        #     server-port = 1308;
+        #     "query.port" = 1308;
+        #     server-portv6 = 1309;
+        #     "rcon.port" = 1310;
+        #     difficulty = 2;
+        #     "allow-cheats" = "false";
+        #     gamemode = 0;
+        #     max-players = 100;
+        #     motd = "TunaCraft Modded Running! ♪♫♪";
+        #     white-list = false;
+        #     enable-rcon = false;
+        #     "rcon.password" = "hunter2";
+        #     "online-mode" = false;
+        #     "max-tick-time" = -1;
+        #   };
+          
+        #   symlinks = {
+        #     "server-icon.png" = ./tunacraft-icon.png;
+        #   };
+          
+        #   package = pkgs.neoforgeServers.neoforge_1_20_1; 
+          
+        #   lazymc = {
+        #     enable = true;
+        #     config = {
+        #       public.address = "0.0.0.0:1307";
+        #       public.version = extractVersion package.name;
+        #       motd.sleeping = "☠ TunaCraft is sleeping §2☻ Join to start it up\n§7If connect fails, retry • §uversion:§c ${extractVersion(package.name)}";
+        #     };
+        #   };
+        # };
+
         servers.mainServer = rec {
           enable = true;
           jvmOpts = "-Xms6144M -Xmx8192M -XX:+UseG1GC -XX:+UnlockExperimentalVMOptions -XX:MaxGCPauseMillis=50 -XX:+DisableExplicitGC -XX:+ParallelRefProcEnabled -XX:+PerfDisableSharedMem";
