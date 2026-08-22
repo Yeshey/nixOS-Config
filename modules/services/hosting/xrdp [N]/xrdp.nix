@@ -19,6 +19,7 @@
             --replace param=.xorgxrdp.%s.log param=/tmp/xorgxrdp.%s.log
         ''; # prevent log file from filling disk: https://github.com/neutrinolabs/xrdp/issues/1845
       };
+      services.displayManager.sddm.enable = lib.mkForce false;
 
       # X11 because Wayland over xrdp is more trouble than it's worth
       services.xserver = {
