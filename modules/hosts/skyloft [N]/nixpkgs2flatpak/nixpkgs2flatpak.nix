@@ -1,22 +1,22 @@
 { inputs, ... }:
 {
-  flake.modules.nixos.skyloft =
-    {
-      imports = [
-        inputs.nixpkgs2flatpak.nixosModules.flatpakServer
-      ];
+  # flake.modules.nixos.skyloft =
+  #   {
+  #     imports = [
+  #       inputs.nixpkgs2flatpak.nixosModules.flatpakServer
+  #     ];
 
-      services.nixpkgs2flatpak = {
-        enable = true;
-        domain = "143.47.53.175";
-        enableSSL = false;
-        isDefault = true;
-        openFirewall = true;
-        repoPath = "/mnt/OneDrive/ISCTE/nixpkgs2flatpak";
-      };
-      systemd.services.nginx = {
-        after = [ "remote-fs.target" ];
-        wants = [ "remote-fs.target" ];
-      };
-    };
+  #     services.nixpkgs2flatpak = {
+  #       enable = true;
+  #       domain = "143.47.53.175";
+  #       enableSSL = false;
+  #       isDefault = true;
+  #       openFirewall = true;
+  #       repoPath = "/mnt/OneDrive/ISCTE/nixpkgs2flatpak";
+  #     };
+  #     systemd.services.nginx = {
+  #       after = [ "remote-fs.target" ];
+  #       wants = [ "remote-fs.target" ];
+  #     };
+  #   };
 }
