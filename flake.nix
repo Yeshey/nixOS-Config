@@ -57,7 +57,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-luanti = {
-      url = "gitlab:leonard/nix-luanti?host=git.menzel.lol";
+      url = "github:lomenzel/nix-luanti";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nix-minecraft = {
@@ -78,10 +78,6 @@
     nixpkgs-kernel.url = "github:NixOS/nixpkgs/4782f433368710c4fd512c91375b9900ffda22a8";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-zswap.url = "github:nixos/nixpkgs/master";
-    nixpkgs2flatpak = {
-      url = "github:Yeshey/nixpkgs2flatpak";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     nurpkgs.url = "github:nix-community/NUR";
     nvix.url = "github:niksingh710/nvix";
     packages = {
