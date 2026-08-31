@@ -12,6 +12,7 @@
       systemd-boot
       bluetooth
       tpm2
+      tailscale
 
       autossh-reverse-proxy
       # i2p

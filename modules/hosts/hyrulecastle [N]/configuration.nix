@@ -14,6 +14,7 @@
       tpm2
       btrfs
       nvidia
+      tailscale
 
       autossh-reverse-proxy
       i2p

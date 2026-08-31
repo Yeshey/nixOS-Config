@@ -32,9 +32,36 @@
         mimeTypes = [ "text/html" "text/xml" "application/xhtml_xml" ];
         terminal = true;
       };
+
+      onikenxIp = "100.86.102.69";
+      onikenxUser = "onikenx";
+      onikenxExtraCliOptions = "/dynamic-resolution /audio-mode:1 /clipboard /network:auto /compression /kbd:layout:0x0816 /gfx:AVC420 /cache:glyph:on,bitmap:on -wallpaper -menu-anims";
+      gofreerdpOnikenX = pkgs.writeShellScriptBin "gofreerdponikenx" ''
+        ${pkgs.freerdp}/bin/xfreerdp /v:${onikenxIp}:3389 /u:${onikenxUser} ${onikenxExtraCliOptions}
+      '';
+      freerdpOnikenXDesktopItem = pkgs.makeDesktopItem {
+        name = "FreeRDP OnikenX";
+        desktopName = "FreeRDP OnikenX";
+        genericName = "FreeRDP OnikenX";
+        exec = "${gofreerdpOnikenX}/bin/gofreerdponikenx";
+        icon = (pkgs.fetchurl {
+          url = "https://github.com/FreeRDP/FreeRDP/raw/master/client/iOS/Resources/Icon.png";
+          sha256 = "0arbqzzzcmd5m0ysdpydr2mm734vmldjjjbydf1p8njld4kz2klm";
+        });
+        categories = [ "GTK" "X-WebApps" ];
+        mimeTypes = [ "text/html" "text/xml" "application/xhtml_xml" ];
+        terminal = true;
+      };
     in
     {
-      home.packages = [ pkgs.freerdp pkgs.xdg-utils gofreerdp freerdpDesktopItem ];
+      home.packages = [
+        pkgs.freerdp
+        pkgs.xdg-utils
+        gofreerdp
+        freerdpDesktopItem
+        gofreerdpOnikenX
+        freerdpOnikenXDesktopItem
+      ];
     };
 
   flake.modules.homeManager.desktop-items-openvscode-server =
