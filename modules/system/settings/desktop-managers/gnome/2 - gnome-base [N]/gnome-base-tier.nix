@@ -10,6 +10,9 @@
         gnome-minimal-tier
       ];
 
+      # For hotspot (https://github.com/NixOS/nixpkgs/issues/263359#issuecomment-2015998431)
+      networking.firewall.allowedUDPPorts = [ 53 67 68 ];
+
       environment.systemPackages = with pkgs; [
         gnome-tweaks
         ffmpeg-headless
