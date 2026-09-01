@@ -1,10 +1,10 @@
 let
-  # Define the logic once here
   sharedLogic = { lib, ... }: {
-    # Only allow these insecure packages on NixOS versions older than 26.05.
-    nixpkgs.config.permittedInsecurePackages = lib.optionals (lib.versionOlder lib.version "26.05") [
-      "luanti-5.14.0"
-    ];
+    # nixpkgs.config.permittedInsecurePackages =
+    #   (lib.optionals (lib.versionOlder lib.version "26.05") [ "luanti-5.14.0" ]) # Only allow these insecure packages on NixOS versions older than 26.05.
+    #   ++ (lib.optionals (lib.versionOlder lib.version "26.11") [ "electron-40.10.5" ]);
+    
+    nixpkgs.config.allowInsecurePredicate = _: true; # allow all insecure packages
   };
 in
 {
