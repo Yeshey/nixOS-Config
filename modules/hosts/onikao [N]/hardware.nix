@@ -26,6 +26,9 @@
       systemd.services.NetworkManager.restartIfChanged = false;   # if still present
       systemd.services.tailscaled.restartIfChanged = false;
       systemd.services.sshd.restartIfChanged = false;
+      systemd.services.tailscaled.stopIfChanged = false;
+
+      # lksdajdlsa
       security.wrappers.ping = { # makes ping work
         owner = "root";
         group = "root";

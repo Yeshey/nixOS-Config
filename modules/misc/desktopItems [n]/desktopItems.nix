@@ -33,17 +33,17 @@
         terminal = true;
       };
 
-      onikenxIp = "100.86.102.69";
-      onikenxUser = "onikenx";
-      onikenxExtraCliOptions = "/dynamic-resolution /audio-mode:1 /clipboard /network:auto /compression /kbd:layout:0x0816 /gfx:AVC420 /cache:glyph:on,bitmap:on -wallpaper -menu-anims";
-      gofreerdpOnikenX = pkgs.writeShellScriptBin "gofreerdponikenx" ''
-        ${pkgs.freerdp}/bin/xfreerdp /v:${onikenxIp}:3389 /u:${onikenxUser} ${onikenxExtraCliOptions}
+      onikaoIp = "100.74.87.65";
+      onikaoUser = "yeshey";
+      onikaoExtraCliOptions = "/dynamic-resolution /audio-mode:1 /clipboard /network:auto /compression /kbd:layout:0x0816 /gfx:AVC420 /cache:glyph:on,bitmap:on -wallpaper -menu-anims";
+      gofreerdpOnikao = pkgs.writeShellScriptBin "gofreerdponikao" ''
+        ${pkgs.freerdp}/bin/xfreerdp /v:${onikaoIp}:3389 /u:${onikaoUser} ${onikaoExtraCliOptions}
       '';
-      freerdpOnikenXDesktopItem = pkgs.makeDesktopItem {
-        name = "FreeRDP OnikenX";
-        desktopName = "FreeRDP OnikenX";
-        genericName = "FreeRDP OnikenX";
-        exec = "${gofreerdpOnikenX}/bin/gofreerdponikenx";
+      freerdpOnikaoDesktopItem = pkgs.makeDesktopItem {
+        name = "FreeRDP Onikao";
+        desktopName = "FreeRDP Onikao";
+        genericName = "FreeRDP Onikao";
+        exec = "${gofreerdpOnikao}/bin/gofreerdponikao";
         icon = (pkgs.fetchurl {
           url = "https://github.com/FreeRDP/FreeRDP/raw/master/client/iOS/Resources/Icon.png";
           sha256 = "0arbqzzzcmd5m0ysdpydr2mm734vmldjjjbydf1p8njld4kz2klm";
@@ -59,8 +59,8 @@
         pkgs.xdg-utils
         gofreerdp
         freerdpDesktopItem
-        gofreerdpOnikenX
-        freerdpOnikenXDesktopItem
+        gofreerdpOnikao
+        freerdpOnikaoDesktopItem
       ];
     };
 

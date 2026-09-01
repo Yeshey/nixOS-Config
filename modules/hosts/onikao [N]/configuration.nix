@@ -14,6 +14,7 @@
       # speedtest-tracker
       # code-server
       xrdp
+      firefox
       vscodium
       # jupyter
       # ollama
