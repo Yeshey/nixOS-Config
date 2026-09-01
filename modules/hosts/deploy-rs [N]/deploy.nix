@@ -1,29 +1,24 @@
 # modules/hosts/deploy.nix
-# deply with `nix run .#deploy-rs -- .#onikao --auto-rollback true --magic-rollback true`
-{ inputs, ... }:
+{ inputs, lib, ... }:
+let
+  mkNode = name: hostname: {
+    inherit hostname;
+    sshUser = "root";
+    profiles.system =
+      let
+        cfg = inputs.self.nixosConfigurations.${name};
+        targetSystem = cfg.config.nixpkgs.hostPlatform.system;
+      in
+      {
+        user = "root";
+        path = inputs.deploy-rs.lib.${targetSystem}.activate.nixos cfg;
+      };
+  };
+in
 {
   flake.deploy.nodes = {
-    onikao = {
-      hostname = "100.74.87.65"; # tailscale IP
-      sshUser = "root";
-      profiles.system = {
-        user = "root";
-        path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos
-          inputs.self.nixosConfigurations.onikao;
-        remoteBuild = true;
-      };
-    };
-
-    skyloft = {
-      hostname = "143.47.53.175";
-      sshUser = "root";
-      profiles.system = {
-        user = "root";
-        path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos
-          inputs.self.nixosConfigurations.skyloft;
-        remoteBuild = true;
-      };
-    };
+    onikao  = mkNode "onikao"  "100.74.87.65";
+    skyloft = mkNode "skyloft" "143.47.53.175";
   };
 
   perSystem = { system, ... }: {
