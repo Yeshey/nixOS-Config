@@ -8,12 +8,8 @@
   {
     imports = with inputs.self.modules.nixos; [
       system-desktop
-      plasma-full
-      systemd-boot
+      # plasma-full
       tailscale
-
-      # box64-binfmt
-
       # hosting
       # speedtest-tracker
       # code-server
@@ -38,6 +34,7 @@
     };
 
     services.openssh = {
+      enable = true;
       settings.PasswordAuthentication = false;
       settings.KbdInteractiveAuthentication = false;
       settings.PermitRootLogin = "no";
