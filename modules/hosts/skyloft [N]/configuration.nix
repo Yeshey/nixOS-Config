@@ -13,6 +13,8 @@
       btrfs
       impermanence
 
+      yeshey-syncthing
+
       # box64-binfmt
 
       # hosting

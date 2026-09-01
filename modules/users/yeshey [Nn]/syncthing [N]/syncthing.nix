@@ -1,3 +1,8 @@
+# modules/users/yeshey/syncthing/yeshey-syncthing.nix
+{
+  inputs,
+  ...
+}:
 let
   username = "yeshey";
 
@@ -18,12 +23,15 @@ let
   ];
 in
 {
-  flake.modules.nixos."${username}" =
+  flake.modules.nixos."${username}-syncthing" =
     { config, ... }:
     let
       dataPath = config.yeshey.dataStoragePath;
     in
     {
+      imports = with inputs.self.modules.nixos; [
+        syncthing-base
+      ];
       services.syncthing = {
         enable = true;
         user = username;

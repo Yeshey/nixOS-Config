@@ -16,6 +16,8 @@
       nvidia
       tailscale
 
+      yeshey-syncthing
+
       autossh-reverse-proxy
       i2p
       ollama-cuda

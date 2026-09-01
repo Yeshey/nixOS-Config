@@ -17,7 +17,6 @@
       iphone
       appimage
       waydroid
-      syncthing
       desktop-apps
     ];
 
@@ -48,7 +47,6 @@
       firefox
       vscodium
       zed-editor
-      syncthing
     ];
   };
 }

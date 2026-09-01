@@ -1,5 +1,5 @@
 # modules/hosts/deploy.nix
-# deply with `nix run .#deploy-rs -- .#onikao --auto-rollback true --magic-rollback true`
+# deply with `nix run .#deploy-rs -- .#onikao --auto-rollback true --magic-rollback true --skip-checks`
 { inputs, ... }:
 {
   flake.deploy.nodes = {

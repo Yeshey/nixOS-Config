@@ -1,8 +1,8 @@
 { inputs, ... }:
 {
-  flake.modules.nixos.syncthing = {
+  flake.modules.nixos.syncthing-base = {
     home-manager.sharedModules = [
-      inputs.self.modules.homeManager.syncthing
+      inputs.self.modules.homeManager.syncthing-base
     ];
 
     # ports: https://docs.syncthing.net/users/firewall.html
@@ -17,7 +17,7 @@
     };
   };
 
-  flake.modules.homeManager.syncthing = {
+  flake.modules.homeManager.syncthing-base = {
     services.syncthing = {
       settings.options = {
         relaysEnabled = true;

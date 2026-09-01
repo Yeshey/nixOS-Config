@@ -14,6 +14,8 @@
       tpm2
       tailscale
 
+      yeshey-syncthing
+
       autossh-reverse-proxy
       # i2p
 
