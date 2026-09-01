@@ -34,7 +34,6 @@
             prismlauncher # polymc # prismlauncher # for Minecraft
             heroic
             the-powder-toy
-            gnome-connections
 
             # Global Protect VPN to connect to ISCTE
             (pkgs.makeDesktopItem {

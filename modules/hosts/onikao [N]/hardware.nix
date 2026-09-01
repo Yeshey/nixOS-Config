@@ -23,7 +23,7 @@
       };
       networking.networkmanager.enable = lib.mkForce false; # the container needs network set up exactly like above, don't let NetworkManager ruin it.
       systemd.services.systemd-networkd.restartIfChanged = false;
-      systemd.services.NetworkManager.restartIfChanged = false;   # if still present
+      systemd.services.NetworkManager.restartIfChanged = false;
       systemd.services.tailscaled.restartIfChanged = false;
       systemd.services.sshd.restartIfChanged = false;
       systemd.services.tailscaled.stopIfChanged = false;
@@ -41,9 +41,6 @@
       };
       hardware.amdgpu.opencl.enable = true;
       environment.systemPackages = [ pkgs.clinfo ];
-      swapDevices = [ {
-        device = "/var/lib/swapfile";
-        size = 4 * 1024;
-      } ];
+      boot.zswap.enable = lib.mkForce false;
     };
 }
