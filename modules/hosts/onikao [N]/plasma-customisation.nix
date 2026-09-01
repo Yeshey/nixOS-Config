@@ -4,7 +4,7 @@
 }:
 {
   flake.modules.homeManager.onikao =
-    { inputs, pkgs, lib, osConfig, ... }:
+    { pkgs, lib, osConfig, ... }:
 
     let
       # A wrapper script to run xautolock with the desired options
