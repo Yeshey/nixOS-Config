@@ -4,15 +4,15 @@
 }:
 {
   flake.modules.homeManager.onikao =
-    { pkgs, lib, osConfig, ... }:
+    { pkgs, ... }:
 
     let
       # A wrapper script to run xautolock with the desired options
       # This avoids quoting issues in the .desktop file
       xautolockWrapper = pkgs.writeShellScript "xautolock-wrapper" ''
         # 1 minute idle timeout (change to 10 later)
-        ${pkgs.xautolock}/bin/xautolock -time 1 \
-          -locker "${pkgs.libnotify}/bin/notify-send 'Idle' 'Triggered'" \
+        ${pkgs.xautolock}/bin/xautolock -time 10 \
+          -locker "${pkgs.kdePackages.qttools}/bin/qdbus org.kde.LogoutPrompt /LogoutPrompt org.kde.LogoutPrompt.promptLogout" \
           -detectsleep
       '';
     in {
@@ -23,7 +23,7 @@
       #config = lib.mkIf (osConfig.systemConstants.isKdePlasma or false) {
       config = {
         # 1. Ensure xautolock is installed
-        home.packages = [ pkgs.xautolock pkgs.cowsay ];
+        home.packages = [ pkgs.xautolock ];
 
         # 2. Create an autostart .desktop file
         xdg.configFile."autostart/xautolock.desktop".text = ''
