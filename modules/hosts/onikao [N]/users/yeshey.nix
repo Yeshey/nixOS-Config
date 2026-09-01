@@ -16,13 +16,8 @@ in
       options.yeshey.dataStoragePath = lib.mkOption { type = lib.types.str; };
       config = {
         yeshey.dataStoragePath = myStoragePath;
-        users.groups."${username}" = {};
-        users.users."${username}" = {
-          isSystemUser = lib.mkForce true;  # or isSystemUser, pick one, not both, not neither
-          group = username;
-        };
-        home-manager.extraSpecialArgs = {
-          dataStoragePath = myStoragePath;
+        home-manager.users."${username}" = {
+          "${username}".dataStoragePath = myStoragePath;
         };
       };
     };

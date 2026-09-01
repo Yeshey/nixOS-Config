@@ -7,8 +7,8 @@
   { pkgs, ... }:
   {
     imports = with inputs.self.modules.nixos; [
-      system-desktop
-      # plasma-full
+      system-cli
+      plasma-minimal
       tailscale
       # hosting
       # speedtest-tracker
