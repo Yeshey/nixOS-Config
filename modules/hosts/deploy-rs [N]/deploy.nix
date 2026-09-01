@@ -1,5 +1,8 @@
 # modules/hosts/deploy.nix
 # deply with `nix run .#deploy-rs -- .#onikao --auto-rollback true --magic-rollback true --skip-checks`
+# if stuck with the ssh connection but no internet, you can still rollback like this:
+# `nix-env --list-generations --profile /nix/var/nix/profiles/system`
+# /nix/var/nix/profiles/system-<N>-link/bin/switch-to-configuration switch
 { inputs, ... }:
 {
   flake.deploy.nodes = {
