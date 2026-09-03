@@ -1,7 +1,7 @@
 keys:
   - &yeshey_hyrulecastle age1u0dygnqzk2jy722patc7hj744yn8s24v5ckwj227ym8jn5xpjcjqltjakl
   - &yeshey_skyloft age1usrppfwvlp3xfpej34tglttg086ytmlqc9xguh9zrjja3nwjlvxsqz8e63
-  - &machine_hyrulecastle age1u0dygnqzk2jy722patc7hj744yn8s24v5ckwj227ym8jn5xpjcjqltjakl
+  - &machine_hyrulecastle age1kgxtyk6wvpalh2ejee3sauj4mna562f8zctz2nrnpue6uv60fuyqjd7x92
   - &machine_skyloft age13qfxjsltu3u76raqhm8rq3vnyenvg69cf9u6edjzeulzcru3mptqztvg4z
 
 creation_rules:
