@@ -1,56 +1,72 @@
 {
   flake.modules.nixos.searx =
-    { pkgs, ... }:
+    { pkgs, config, ... }:
     {
-    # 1. Auto-create the empty file before the service starts
-    # 'f' creates the file if it's missing, but leaves it alone if it already exists.
-    systemd.tmpfiles.rules = [
-      "f /etc/searx.env 0640 searx searx - -"
-    ];
+      sops.secrets."searx_brave_api_key" = {
+        restartUnits = [ "searx.service" ];
+      };
+      sops.secrets."searx_secret_key" = {
+        restartUnits = [ "searx.service" ];
+      };
 
-    services.searx = {
-      enable = true;
-      environmentFile = "/etc/searx.env";
+      sops.templates."searx-settings.yml" = {
+        owner = "searx";
+        mode = "0400";
+        restartUnits = [ "searx.service" ];
+        content = ''
+          use_default_settings: true
 
-      settings = {
-        server = {
-          port         = 5564;
-          bind_address = "0.0.0.0";
-          secret_key   = "secret key";
-          limiter      = false;
-        };
-        search.formats = [ "html" "json" ];
+          server:
+            port: 5564
+            bind_address: "0.0.0.0"
+            limiter: false
+            secret_key: "${config.sops.placeholder."searx_secret_key"}"
 
-        engines = [
-          # --- Own-crawler / bot-tolerant scrapers (free, no key) ---
-          { name = "mojeek"; }      
-          { name = "mwmbl"; }       
-          { name = "yep"; }         
-          { name = "crowdview"; }
-          { name = "qwant"; }
-          { name = "ecosia"; }
-          { name = "startpage"; enable = false; }  
-          { name = "swisscows"; }
-          { name = "duckduckgo"; }
-          { name = "google"; }
-          { name = "bing"; }
+          search:
+            formats:
+              - html
+              - json
 
-          # --- Specialty, never rate-limited ---
-          { name = "wikipedia"; }
-          { name = "wikidata"; }
-          { name = "arxiv"; }
-          { name = "github"; }
-          { name = "reddit"; }
-          { name = "stackoverflow"; }
-          { name = "openstreetmap"; }
-          { name = "curlie"; }
+          engines:
+            # --- free, bot-tolerant, no key ---
+            - name: mojeek
+            - name: mwmbl
+            - name: yep
+            - name: crowdview
+            - name: qwant
+            - name: ecosia
+            - name: swisscows
+            - name: google
+            - name: bing
 
-          # --- API-key engines: uncomment when you want them ---
-          # { name = "brave";     api_key = "@BRAVE_API_KEY@"; }
-          # { name = "marginalia"; api_key = "@MARGINALIA_API_KEY@"; }
-        ];
+            # --- specialty, never rate-limited ---
+            - name: wikipedia
+            - name: wikidata
+            - name: arxiv
+            - name: github
+            - name: reddit
+            - name: stackoverflow
+            - name: openstreetmap
+            - name: curlie
+
+            # --- permanently CAPTCHA on this IP ---
+            - name: startpage
+              disabled: true
+            - name: duckduckgo
+              disabled: true
+
+            # --- paid, reliable fallback ---
+            - name: brave
+              engine: brave
+              api_key: "${config.sops.placeholder."searx_brave_api_key"}"
+              weight: 2
+        '';
+      };
+
+      services.searx = {
+        enable = true;
+        package = pkgs.searxng;
+        settingsFile = config.sops.templates."searx-settings.yml".path;
       };
     };
-    
-  };  
 }

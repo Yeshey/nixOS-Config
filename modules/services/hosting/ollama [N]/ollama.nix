@@ -5,22 +5,23 @@
     let
       port = 11111;
       searxPort = 5564;
-      litellmPort  = 4000;
+      litellmPort = 4000;
     in
     {
-      imports = with inputs.self.modules.nixos; [
-        searx
-      ];
-
       services.ollama = {
         package = pkgs.unstable.ollama;
         enable = true;
         openFirewall = true;
         host = "0.0.0.0";
         environmentVariables = {
-          OLLAMA_ORIGINES = "*";
+          OLLAMA_ORIGINS = "*";
         };
       };
+
+      sops.secrets."searx_env" = {
+        restartUnits = [ "open-webui.service" ];
+      };
+      systemd.services.open-webui.serviceConfig.EnvironmentFile = config.sops.secrets."searx_env".path;
 
       services.open-webui = {
         package = pkgs.open-webui;
@@ -32,8 +33,7 @@
           GLOBAL_LOG_LEVEL = "DEBUG";
           ENABLE_RAG_WEB_SEARCH = "True";
           RAG_WEB_SEARCH_RESULT_COUNT = "5";
-          RAG_WEB_SEARCH_ENGINE = "searxng";
-          SEARXNG_QUERY_URL = "http://localhost:${toString searxPort}/search?q=<query>&format=json";
+          RAG_WEB_SEARCH_ENGINE = "exa";
           OLLAMA_API_BASE_URL = "http://localhost:11434";
           WEBUI_AUTH = "False";
         };
@@ -46,7 +46,7 @@
         host = "0.0.0.0";
         port = litellmPort;
         openFirewall = true;
-        
+
         settings = {
           model_list = [
             {
