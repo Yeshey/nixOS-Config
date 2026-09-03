@@ -46,6 +46,7 @@
                 vscjava.vscode-java-debug
                 vscjava.vscode-java-test
                 llvm-vs-code-extensions.vscode-clangd
+                signageos.signageos-vscode-sops
             ];
           };
         };
