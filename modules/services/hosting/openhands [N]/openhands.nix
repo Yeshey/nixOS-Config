@@ -7,7 +7,6 @@
       home = "/home/yeshey";
       openhandsDir = "${home}/.openhands";
       projectsDir = "${home}/openhands-projects";
-      nixStoreDir = "${home}/openhands-nix-store";
       bolsaDataDir = "/mnt/OneDrive/ISCTE/Projects/Bolsa";
       litellmPort = 4000; # must match modules/services/hosting/litellm [N]/litellm.nix
     in
@@ -30,6 +29,12 @@
       virtualisation.oci-containers.containers.openhands = {
         image = "ghcr.io/openhands/agent-canvas:1.16.0";
         autoStart = true;
+        environment = {
+          LD_LIBRARY_PATH = "";
+          LD_PRELOAD = "";
+          NIX_REMOTE = "daemon";   # so you can drop the export from your shell snippet
+          PATH = "/opt/host-bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin";
+        };
         extraOptions = [
           "--rm"
           "--pull=always"
@@ -41,7 +46,8 @@
           "${openhandsDir}:/home/openhands/.openhands"
           "${projectsDir}:/projects"
           "${bolsaDataDir}:${bolsaDataDir}:rw" # agents can now access /mnt/OneDrive/ISCTE/Projects/Bolsa
-          "${nixStoreDir}:/nix:rw"
+          "/nix:/nix"
+          "${openhandsDir}/bin:/opt/host-bin:ro"
         ];
         environmentFiles = [ config.sops.templates."openhands.env".path ];
       };
@@ -55,13 +61,19 @@
       systemd.services.openhands-mgr = {
         wantedBy = [ "multi-user.target" "docker-openhands.service" ];
         script = ''
-          for d in "${openhandsDir}" "${projectsDir}" "${nixStoreDir}"; do
-            echo "Ensuring $d exists..."
+          for d in "${openhandsDir}" "${projectsDir}"; do
             mkdir -p "$d"
             chmod -R 0777 "$d"
           done
           mkdir -p "${bolsaDataDir}"
           chmod 0777 "${bolsaDataDir}"
+
+          # nix wrapper: strip the PyInstaller LD_LIBRARY_PATH leak
+          mkdir -p "${openhandsDir}/bin"
+          printf '%s\n' '#!/bin/sh' \
+            'exec /usr/bin/env -u LD_LIBRARY_PATH -u LD_PRELOAD /nix/var/nix/profiles/system/sw/bin/nix "$@"' \
+            > "${openhandsDir}/bin/nix"
+          chmod 755 "${openhandsDir}/bin/nix"
         '';
         serviceConfig = {
           Type = "oneshot";
