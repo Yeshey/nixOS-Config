@@ -44,7 +44,7 @@
         environment = {
           GLOBAL_LOG_LEVEL = "DEBUG";
           ENABLE_WEB_SEARCH = "true";
-          WEB_SEARCH_ENGINE = "tavily";
+          WEB_SEARCH_ENGINE = "exa";
           WEB_SEARCH_RESULT_COUNT = "5";
           WEB_SEARCH_CONCURRENT_REQUESTS = "3";
           ENABLE_PERSISTENT_CONFIG = "false";
