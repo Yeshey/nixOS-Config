@@ -1,27 +1,33 @@
 {
   flake.modules.nixos.code-server =
     { pkgs, ... }:
-    let 
-      externalPort = 2998;
-      hostname = "143.47.53.175";
+    let
+      internalPort = 2998;
+      caddyPort = 9444;
+      vpnAddr = "10.8.0.1";
       user = "yeshey";
-    in 
-        {
+    in
+    {
       services.code-server = {
         enable = true;
-        # package = pkgs.code-server;
-        host = "0.0.0.0";
-        port = externalPort;
+        host = "127.0.0.1";
+        port = internalPort;
         user = user;
-        extraPackages = [pkgs.openssl]; 
+        extraPackages = [ pkgs.openssl ];
         extraArguments = [
           "--auth=none"
-          "--extensions-dir=/home/${user}/.vscode-oss/extensions"
-          "--cert"
+          "--extensions-dir=/home/${user}/.local/share/code-server/extensions"  # separate from home-manager's vscodium dir
         ];
       };
-      networking.firewall.allowedTCPPorts = [
-        externalPort
-      ];
+
+      services.caddy.enable = true;
+      services.caddy.virtualHosts."${vpnAddr}:${toString caddyPort}" = {
+        extraConfig = ''
+          tls internal
+          reverse_proxy localhost:${toString internalPort}
+        '';
+      };
+
+      networking.firewall.allowedTCPPorts = [ caddyPort ];
     };
 }
