@@ -1,14 +1,21 @@
 { inputs, ... }:
 {
   flake.modules.nixos.openhands =
-    { pkgs, config, ... }:
+    { pkgs, config, lib, ... }:
     let
       port = 8000;
       home = "/home/yeshey";
       openhandsDir = "${home}/.openhands";
       projectsDir = "${home}/openhands-projects";
       bolsaDataDir = "/mnt/OneDrive/ISCTE/Projects/Bolsa";
-      litellmPort = 4000; # must match modules/services/hosting/litellm [N]/litellm.nix
+      litellmPort = 4000;
+
+      nixCmds = [
+        "nix" "nix-shell" "nix-build" "nix-env" "nix-store" "nix-instantiate"
+        "nix-channel" "nix-collect-garbage" "nix-copy-closure" "nix-hash" "nix-prefetch-url"
+      ];
+      wrapperDir = "${openhandsDir}/bin";
+      nixpkgsPath = inputs.nixpkgs.outPath;  # pinned store path, matches host flake exactly
     in
     {
       virtualisation.docker.enable = true;
@@ -18,9 +25,8 @@
       sops.secrets."litellm_master_key" = { };
 
       sops.templates."openhands.env" = {
-        # Giving it access to my Bolsa repository
         content = ''
-          GITHUB_TOKEN=${config.sops.placeholder."github_bolsa_repo_token"} 
+          GITHUB_TOKEN=${config.sops.placeholder."github_bolsa_repo_token"}
         '';
         owner = "root";
         mode = "0400";
@@ -32,8 +38,7 @@
         environment = {
           LD_LIBRARY_PATH = "";
           LD_PRELOAD = "";
-          NIX_REMOTE = "daemon";   # so you can drop the export from your shell snippet
-          PATH = "/opt/host-bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin";
+          NIX_REMOTE = "daemon";
         };
         extraOptions = [
           "--rm"
@@ -42,14 +47,17 @@
           "-v" "/var/run/docker.sock:/var/run/docker.sock"
         ];
         ports = [ "0.0.0.0:${toString port}:${toString port}" ];
-        volumes = [
-          "${openhandsDir}:/home/openhands/.openhands"
-          "${projectsDir}:/projects"
-          "${bolsaDataDir}:${bolsaDataDir}:rw" # agents can now access /mnt/OneDrive/ISCTE/Projects/Bolsa
-          "/nix:/nix"
-          "${openhandsDir}/bin:/opt/host-bin:ro"
+        volumes =
+          [
+            "${openhandsDir}:/home/openhands/.openhands"
+            "${projectsDir}:/projects"
+            "${bolsaDataDir}:${bolsaDataDir}:rw"
+            "/nix:/nix:ro"
+          ]
+          ++ (map (cmd: "${wrapperDir}/${cmd}:/usr/local/bin/${cmd}:ro") nixCmds);
+        environmentFiles = [
+          config.sops.templates."openhands.env".path
         ];
-        environmentFiles = [ config.sops.templates."openhands.env".path ];
       };
 
       systemd.services.docker-openhands = {
@@ -68,12 +76,15 @@
           mkdir -p "${bolsaDataDir}"
           chmod 0777 "${bolsaDataDir}"
 
-          # nix wrapper: strip the PyInstaller LD_LIBRARY_PATH leak
-          mkdir -p "${openhandsDir}/bin"
-          printf '%s\n' '#!/bin/sh' \
-            'exec /usr/bin/env -u LD_LIBRARY_PATH -u LD_PRELOAD /nix/var/nix/profiles/system/sw/bin/nix "$@"' \
-            > "${openhandsDir}/bin/nix"
-          chmod 755 "${openhandsDir}/bin/nix"
+          mkdir -p "${wrapperDir}"
+          for cmd in ${lib.concatStringsSep " " nixCmds}; do
+            printf '%s\n' '#!/bin/sh' \
+              "export NIX_REMOTE=daemon" \
+              "export NIX_PATH=nixpkgs=${nixpkgsPath}" \
+              "exec /usr/bin/env -u LD_LIBRARY_PATH -u LD_PRELOAD /nix/var/nix/profiles/system/sw/bin/$cmd \"\$@\"" \
+              > "${wrapperDir}/$cmd"
+            chmod 755 "${wrapperDir}/$cmd"
+          done
         '';
         serviceConfig = {
           Type = "oneshot";
