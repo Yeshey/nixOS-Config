@@ -29,6 +29,7 @@
       luanti-server
       # jupyter
       ollama
+      openhands
       kubo
       minecraft
     ];

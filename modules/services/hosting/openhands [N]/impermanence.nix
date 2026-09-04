@@ -6,7 +6,8 @@
       environment = inputs.self.lib.mkIfPersistence config {
         persistence."/persistent" = {
           directories = [
-            "/home/yeshey/.openhands-state"
+            "/home/yeshey/.openhands"
+            "/home/yeshey/openhands-projects"
           ];
         };
       };

@@ -1,60 +1,47 @@
-{ ... }:
+{ inputs, ... }:
 {
   flake.modules.nixos.openhands =
     { pkgs, ... }:
     let
-      port = 3000;
+      port = 8000;
       home = "/home/yeshey";
+      openhandsDir = "${home}/.openhands";
+      projectsDir = "${home}/openhands-projects";
+      litellmPort = 4000; # must match modules/services/hosting/litellm [N]/litellm.nix
     in
     {
-      # A good local LLM to use with this: https://ollama.com/skratos115/qwen2-7b-opendevin-f16
-
-      # Use these commands to check if the container can access ollama:
-      # sudo podman ps
-      # sudo podman exec <CONTAINER ID> curl http://host.docker.internal:11434/api/generate -d '{"model":"huihui_ai/deepseek-r1-abliterated:8b","prompt":"hi"}'
-
-      # https://docs.all-hands.dev/modules/usage/llms/local-llms
-
-      virtualisation.podman.enable = true;
+      virtualisation.docker.enable = true;
+      virtualisation.oci-containers.backend = "docker";
 
       virtualisation.oci-containers.containers.openhands = {
-        image = "docker.all-hands.dev/all-hands-ai/openhands:0.29";
+        image = "ghcr.io/openhands/agent-canvas:1.16.0";
         autoStart = true;
         extraOptions = [
           "--rm"
           "--pull=always"
           "--add-host=host.docker.internal:host-gateway"
         ];
-        ports = [ "${toString port}:${toString port}" ];
-        environment = {
-          SANDBOX_RUNTIME_CONTAINER_IMAGE = "docker.all-hands.dev/all-hands-ai/runtime:0.29-nikolaik";
-          LOG_ALL_EVENTS = "true";
-          LLM_OLLAMA_BASE_URL = "http://host.docker.internal:11434";
-          LLM_BASE_URL = "http://host.docker.internal:11434";
-        };
+        ports = [ "0.0.0.0:${toString port}:${toString port}" ];
         volumes = [
-          "/var/run/docker.sock:/var/run/docker.sock"
-          "${home}/.openhands-state:/.openhands-state"
+          "${openhandsDir}:/home/openhands/.openhands"
+          "${projectsDir}:/projects"
         ];
       };
 
-      systemd.services.podman-openhands = {
+      systemd.services.docker-openhands = {
         after = [ "network-online.target" ];
         wants = [ "network-online.target" ];
         requires = [ "network-online.target" ];
       };
 
       systemd.services.openhands-mgr = {
-        wantedBy = [ "multi-user.target" "podman-openhands.service" ];
+        wantedBy = [ "multi-user.target" "docker-openhands.service" ];
         script = ''
-          STATE_DIR="${home}/.openhands-state"
-          echo "Ensuring OpenHands state directory exists..."
-          if [ ! -d "$STATE_DIR" ]; then
-            echo "Directory does not exist, creating..."
-            mkdir -p "$STATE_DIR"
-          else
-            echo "Directory already exists."
-          fi
+          for d in "${openhandsDir}" "${projectsDir}"; do
+            echo "Ensuring $d exists..."
+            mkdir -p "$d"
+            chmod -R 0777 "$d"
+          done
         '';
         serviceConfig = {
           Type = "oneshot";
@@ -62,13 +49,15 @@
         };
       };
 
+      networking.firewall.allowedTCPPorts = [ port ];
+
       environment.systemPackages =
         let
           openhandsWeb = pkgs.makeDesktopItem {
             name = "OpenHands";
             desktopName = "OpenHands";
             genericName = "OpenHands";
-            exec = ''xdg-open "http://localhost:${toString port}"'';
+            exec = ''xdg-open "http://localhost:${toString port}/canvas"'';
             icon = "firefox";
             categories = [ "GTK" "X-WebApps" ];
             mimeTypes = [ "text/html" "text/xml" "application/xhtml_xml" ];
