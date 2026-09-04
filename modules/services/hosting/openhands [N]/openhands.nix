@@ -69,7 +69,17 @@
         };
       };
 
-      networking.firewall.allowedTCPPorts = [ port ];
+      services.caddy = {
+        enable = true;
+        virtualHosts."10.8.0.1:9443" = {
+          extraConfig = ''
+            tls internal
+            reverse_proxy localhost:8000
+          '';
+        };
+      };
+
+      networking.firewall.allowedTCPPorts = [ port 9443 ];
 
       environment.systemPackages =
         let
