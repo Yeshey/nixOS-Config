@@ -49,6 +49,7 @@
           WEB_SEARCH_CONCURRENT_REQUESTS = "3";
           ENABLE_PERSISTENT_CONFIG = "false";
           ENABLE_FOLLOW_UP_GENERATION = "false";
+          ENABLE_TAGS_GENERATION = "false";
           ENABLE_TITLE_GENERATION = "false";
           OLLAMA_API_BASE_URL = "http://localhost:11434";
           OPENAI_API_BASE_URLS = "http://localhost:${toString litellmPort}/v1;https://integrate.api.nvidia.com/v1;https://openrouter.ai/api/v1";
