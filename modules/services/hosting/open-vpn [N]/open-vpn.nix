@@ -52,6 +52,8 @@
         };
 
         config = lib.mkMerge [( lib.mkIf config.open-vpn.enableSharedGuest {
+          networking.firewall.checkReversePath = "loose"; # https://claude.ai/share/4f1d42fb-e2ae-42fa-be71-045c72e17fec
+
           # 1. OpenVPN UDP Server Configuration (IPv4 + IPv6)
           services.openvpn.servers.skyloftVPN-UDP = {
             autoStart = true;
