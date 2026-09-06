@@ -38,7 +38,7 @@
       enable = true;
       settings.PasswordAuthentication = false;
       settings.KbdInteractiveAuthentication = false;
-      settings.PermitRootLogin = "no";
+      settings.PermitRootLogin = "forced-commands-only";
       settings.PerSourcePenalties = "no"; # sometimes killed reverse proxy tunnels
     };
 
