@@ -54,7 +54,11 @@
           ENABLE_TAGS_GENERATION = "false";
           ENABLE_TITLE_GENERATION = "false";
           OLLAMA_API_BASE_URL = "http://localhost:11434";
+          
           OPENAI_API_BASE_URLS = "http://localhost:${toString litellmPort}/v1;https://integrate.api.nvidia.com/v1;https://openrouter.ai/api/v1;https://opencode.ai/zen/v1;https://api.groq.com/openai/v1";
+          # Map each endpoint index to its specific prefix
+          OPENAI_API_CONFIGS = ''{"0": {"prefix_id": "googleAPI/"}, "1": {"prefix_id": "nvidiaAPI/"}, "2": {"prefix_id": "openrouterAPI/"}, "3": {"prefix_id": "opencodeAPI/"}, "4": {"prefix_id": "groqAPI/"}}'';
+          
           WEBUI_AUTH = "False";
         };
       };
