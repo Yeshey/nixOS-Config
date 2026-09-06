@@ -22,9 +22,11 @@
 
       sops.secrets."nvidia_nim_api_key" = { };
       sops.secrets."openrouter" = { };
+      sops.secrets."opencode_key" = { };
+      sops.secrets."groq_key" = { };
 
       sops.templates."open-webui.env".content = ''
-        OPENAI_API_KEYS=${config.sops.placeholder."litellm_master_key"};${config.sops.placeholder."nvidia_nim_api_key"};${config.sops.placeholder."openrouter"}
+        OPENAI_API_KEYS=${config.sops.placeholder."litellm_master_key"};${config.sops.placeholder."nvidia_nim_api_key"};${config.sops.placeholder."openrouter"};${config.sops.placeholder."opencode_key"};${config.sops.placeholder."groq_key"}
       '';
 
       systemd.services.open-webui.serviceConfig.EnvironmentFile = [
@@ -52,7 +54,7 @@
           ENABLE_TAGS_GENERATION = "false";
           ENABLE_TITLE_GENERATION = "false";
           OLLAMA_API_BASE_URL = "http://localhost:11434";
-          OPENAI_API_BASE_URLS = "http://localhost:${toString litellmPort}/v1;https://integrate.api.nvidia.com/v1;https://openrouter.ai/api/v1";
+          OPENAI_API_BASE_URLS = "http://localhost:${toString litellmPort}/v1;https://integrate.api.nvidia.com/v1;https://openrouter.ai/api/v1;https://opencode.ai/zen/v1;https://api.groq.com/openai/v1";
           WEBUI_AUTH = "False";
         };
       };
