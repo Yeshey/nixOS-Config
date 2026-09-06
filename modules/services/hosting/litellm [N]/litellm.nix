@@ -15,6 +15,9 @@
       '';
 
       systemd.services.litellm.serviceConfig.EnvironmentFile = config.sops.templates."litellm.env".path;
+      systemd.tmpfiles.rules = [
+        "Z /var/lib/litellm - - - -"
+      ];
 
       services.litellm = {
         enable = true;
