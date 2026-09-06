@@ -24,7 +24,7 @@
       services.caddy.virtualHosts."${vpnAddr}:${toString caddyPort}" = {
         extraConfig = ''
           tls internal
-          reverse_proxy localhost:${toString internalPort}
+          reverse_proxy 127.0.0.1:${toString internalPort}
         '';
       };
 

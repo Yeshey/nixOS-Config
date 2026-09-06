@@ -97,7 +97,7 @@
         virtualHosts."10.8.0.1:9443" = {
           extraConfig = ''
             tls internal
-            reverse_proxy localhost:8000
+            reverse_proxy 127.0.0.1:8000
           '';
         };
       };
