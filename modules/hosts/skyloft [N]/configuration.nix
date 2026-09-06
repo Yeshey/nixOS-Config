@@ -70,7 +70,7 @@
     services.openssh = {
       settings.PasswordAuthentication = false;
       settings.KbdInteractiveAuthentication = false;
-      settings.PermitRootLogin = "forced-commands-only";
+      settings.PermitRootLogin = "prohibit-password";
       settings.PerSourcePenalties = "no"; # sometimes killed reverse proxy tunnels
     };
 
