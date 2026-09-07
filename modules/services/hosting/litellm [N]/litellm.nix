@@ -24,9 +24,9 @@
       ];
 
       services.litellm.environment = {
-        MAX_RETRY_DELAY = "86400";     # 1 day
-        INITIAL_RETRY_DELAY = "60";
-        JITTER = "0.75";
+        # MAX_RETRY_DELAY = "86400";     # 1 day
+        # INITIAL_RETRY_DELAY = "60";
+        # JITTER = "0.75";
       };
 
       services.litellm = {
@@ -156,15 +156,14 @@
             # ---------------------------------------------------------------
             # Fallback-chain-only deployments (vercel AI Gateway + NVIDIA NIM).
             # model = "openai/<id>" against each provider's OpenAI-compatible
-            # endpoint. <id> slugs below are GUESSED from display names you
-            # gave — verify against each provider's /v1/models before relying
-            # on this chain. See verification curl commands in chat.
+            # endpoint. All slugs verified against each provider's /v1/models
+            # on 2026-09-07.
             # ---------------------------------------------------------------
 
             {
               model_name = "vercel-muse-spark-1-3";
               litellm_params = {
-                model = "openai/muse-spark-1.3";           # UNVERIFIED slug
+                model = "openai/meta/muse-spark-1.3";
                 api_base = "https://ai-gateway.vercel.sh/v1";
                 api_key = "os.environ/VERCEL_API_KEY";
               };
@@ -173,7 +172,7 @@
             {
               model_name = "vercel-muse-spark-1-3-contributor";
               litellm_params = {
-                model = "openai/muse-spark-1.3-contributor"; # UNVERIFIED slug
+                model = "openai/meta/muse-spark-1.3-contributor";
                 api_base = "https://ai-gateway.vercel.sh/v1";
                 api_key = "os.environ/VERCEL_API_KEY";
               };
@@ -191,7 +190,7 @@
             {
               model_name = "vercel-glm-5-3-flash";
               litellm_params = {
-                model = "openai/glm-5.3-flash";             # UNVERIFIED slug
+                model = "openai/zai/glm-5.3-flash";
                 api_base = "https://ai-gateway.vercel.sh/v1";
                 api_key = "os.environ/VERCEL_API_KEY";
               };
@@ -200,16 +199,25 @@
             {
               model_name = "vercel-glm-5-2";
               litellm_params = {
-                model = "openai/glm-5.2";                   # UNVERIFIED slug
+                model = "openai/zai/glm-5.2";
                 api_base = "https://ai-gateway.vercel.sh/v1";
                 api_key = "os.environ/VERCEL_API_KEY";
               };
             }
 
             {
+              model_name = "nvidia-minimax-m3";
+              litellm_params = {
+                model = "openai/minimaxai/minimax-m3";
+                api_base = "https://integrate.api.nvidia.com/v1";
+                api_key = "os.environ/NVIDIA_NIM_API_KEY";
+              };
+            }
+
+            {
               model_name = "vercel-mimo-v2-5-pro";
               litellm_params = {
-                model = "openai/mimo-v2.5-pro";              # UNVERIFIED slug
+                model = "openai/xiaomi/mimo-v2.5-pro";
                 api_base = "https://ai-gateway.vercel.sh/v1";
                 api_key = "os.environ/VERCEL_API_KEY";
               };
@@ -218,16 +226,16 @@
             {
               model_name = "vercel-kimi-k2-7-code";
               litellm_params = {
-                model = "openai/kimi-k2.7-code";             # UNVERIFIED slug
+                model = "openai/moonshotai/kimi-k2.7-code";
                 api_base = "https://ai-gateway.vercel.sh/v1";
                 api_key = "os.environ/VERCEL_API_KEY";
               };
             }
 
             {
-              model_name = "vercel-mimo-m2-5";
+              model_name = "vercel-mimo-v2-5";
               litellm_params = {
-                model = "openai/mimo-m2.5";                  # UNVERIFIED slug
+                model = "openai/xiaomi/mimo-v2.5";
                 api_base = "https://ai-gateway.vercel.sh/v1";
                 api_key = "os.environ/VERCEL_API_KEY";
               };
@@ -254,7 +262,7 @@
             {
               model_name = "vercel-mimo-v2-5-pro-ultraspeed";
               litellm_params = {
-                model = "openai/mimo-v2.5-pro-ultraspeed";   # UNVERIFIED slug
+                model = "openai/xiaomi/mimo-v2.5-pro-ultraspeed";
                 api_base = "https://ai-gateway.vercel.sh/v1";
                 api_key = "os.environ/VERCEL_API_KEY";
               };
@@ -263,40 +271,60 @@
             {
               model_name = "vercel-morph-v3-large";
               litellm_params = {
-                model = "openai/morph-v3-large";             # UNVERIFIED slug
+                model = "openai/morph/morph-v3-large";
                 api_base = "https://ai-gateway.vercel.sh/v1";
                 api_key = "os.environ/VERCEL_API_KEY";
               };
             }
 
             # ---------------------------------------------------------------
-            # Single entry-point alias for the descending fallback chain.
-            # Same deployment as vercel-muse-spark-1-3 (first in chain);
-            # router_settings.fallbacks below carries it through the rest.
+            # Chain entry-point aliases. Each alias points at its chain's
+            # first deployment; router_settings.fallbacks carries it through
+            # the rest. Overlapping deployments are shared across chains
+            # (no extra API load, litellm dedupes by litellm_params).
             # ---------------------------------------------------------------
+
             {
-              model_name = "auto-fallback-chain";
+              model_name = "auto-fallback-chain";       # full 24-deep chain
               litellm_params = {
-                model = "openai/muse-spark-1.3";             # UNVERIFIED slug
+                model = "openai/meta/muse-spark-1.3";
                 api_base = "https://ai-gateway.vercel.sh/v1";
                 api_key = "os.environ/VERCEL_API_KEY";
+              };
+            }
+
+            {
+              model_name = "strong-fallback-chain";     # top-7 strong models only
+              litellm_params = {
+                model = "openai/meta/muse-spark-1.3";
+                api_base = "https://ai-gateway.vercel.sh/v1";
+                api_key = "os.environ/VERCEL_API_KEY";
+              };
+            }
+
+            {
+              model_name = "weak-fallback-chain";       # solid-but-cheap tier, 14 deep
+              litellm_params = {
+                model = "openai/minimaxai/minimax-m3";
+                api_base = "https://integrate.api.nvidia.com/v1";
+                api_key = "os.environ/NVIDIA_NIM_API_KEY";
               };
             }
           ];
 
           router_settings = {
             optional_pre_call_checks = [ "enforce_model_rate_limits" ];
-            num_retries = 100;
-            allowed_fails = 100;
-            cooldown_time = 86400;
-            retry_policy = {
-              RateLimitErrorRetries = 100;
-              TimeoutErrorRetries = 100;
-              InternalServerErrorRetries = 100;
-              BadRequestErrorRetries = 100;
-              AuthenticationErrorRetries = 100;
-              ContentPolicyViolationErrorRetries = 100;
-            };
+            # num_retries = 100;
+            # allowed_fails = 100;
+            # cooldown_time = 86400;
+            # retry_policy = {
+            #   RateLimitErrorRetries = 100;
+            #   TimeoutErrorRetries = 100;
+            #   InternalServerErrorRetries = 100;
+            #   BadRequestErrorRetries = 100;
+            #   AuthenticationErrorRetries = 100;
+            #   ContentPolicyViolationErrorRetries = 100;
+            # };
             fallbacks = [
               {
                 auto-fallback-chain = [
@@ -306,13 +334,14 @@
                   "gemini-3.7-flash"
                   "vercel-glm-5-3-flash"
                   "vercel-glm-5-2"
+                  "nvidia-minimax-m3"
                   "gemini-3.6-flash"
                   "vercel-mimo-v2-5-pro"
                   "vercel-kimi-k2-7-code"
                   "gemma-4-31b"
                   "gemini-3.5-flash"
                   "gemma-4-26b"
-                  "vercel-mimo-m2-5"
+                  "vercel-mimo-v2-5"
                   "gemini-3-flash"
                   "gemini-3.5-flash-lite"
                   "nvidia-gpt-oss-20b"
@@ -322,6 +351,33 @@
                   "nvidia-nemotron-4-340b"
                   "vercel-mimo-v2-5-pro-ultraspeed"
                   "vercel-morph-v3-large"
+                ];
+              }
+              {
+                strong-fallback-chain = [
+                  "vercel-muse-spark-1-3-contributor"
+                  "gemini-3.8-flash"
+                  "nvidia-kimi-k3"
+                  "gemini-3.7-flash"
+                  "vercel-glm-5-3-flash"
+                  "vercel-glm-5-2"
+                ];
+              }
+              {
+                weak-fallback-chain = [
+                  "gemini-3.6-flash"
+                  "vercel-mimo-v2-5-pro"
+                  "vercel-kimi-k2-7-code"
+                  "gemma-4-31b"
+                  "gemini-3.5-flash"
+                  "gemma-4-26b"
+                  "vercel-mimo-v2-5"
+                  "gemini-3-flash"
+                  "gemini-3.5-flash-lite"
+                  "nvidia-gpt-oss-20b"
+                  "gemini-3.1-flash-lite"
+                  "gemini-2.5-flash"
+                  "gemini-2.5-flash-lite"
                 ];
               }
             ];
