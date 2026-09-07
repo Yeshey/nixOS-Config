@@ -26,6 +26,7 @@
       sops.secrets."nvidia_nim_api_key" = { };
       sops.secrets."openrouter" = { };
       sops.secrets."vercel_key" = { };
+      sops.secrets."gemini_api_key" = { };
       sops.secrets."discord_contact_webhook_url" = { };
       sops.secrets."discord_contact_user_id" = { };
 
@@ -36,6 +37,7 @@
           NVIDIA_NIM_API_KEY=${config.sops.placeholder."nvidia_nim_api_key"}
           OPENROUTER_API_KEY=${config.sops.placeholder."openrouter"}
           VERCEL_API_KEY=${config.sops.placeholder."vercel_key"}
+          GEMINI_API_KEY=${config.sops.placeholder."gemini_api_key"}
           DISCORD_CONTACT_WEBHOOK_URL=${config.sops.placeholder."discord_contact_webhook_url"}
           DISCORD_CONTACT_USER_ID=${config.sops.placeholder."discord_contact_user_id"}
         '';
