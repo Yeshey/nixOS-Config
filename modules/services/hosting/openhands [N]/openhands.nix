@@ -23,17 +23,28 @@
 
       sops.secrets."github_bolsa_repo_token" = { };
       sops.secrets."litellm_master_key" = { };
+      sops.secrets."nvidia_nim_api_key" = { };
+      sops.secrets."openrouter" = { };
+      sops.secrets."vercel_key" = { };
+      sops.secrets."discord_contact_webhook_url" = { };
+      sops.secrets."discord_contact_user_id" = { };
 
       sops.templates."openhands.env" = {
         content = ''
           GITHUB_TOKEN=${config.sops.placeholder."github_bolsa_repo_token"}
+          LITELLM_MASTER_KEY=${config.sops.placeholder."litellm_master_key"}
+          NVIDIA_NIM_API_KEY=${config.sops.placeholder."nvidia_nim_api_key"}
+          OPENROUTER_API_KEY=${config.sops.placeholder."openrouter"}
+          VERCEL_API_KEY=${config.sops.placeholder."vercel_key"}
+          DISCORD_CONTACT_WEBHOOK_URL=${config.sops.placeholder."discord_contact_webhook_url"}
+          DISCORD_CONTACT_USER_ID=${config.sops.placeholder."discord_contact_user_id"}
         '';
         owner = "root";
         mode = "0400";
       };
 
       virtualisation.oci-containers.containers.openhands = {
-        image = "ghcr.io/openhands/agent-canvas:1.16.0";
+        image = "ghcr.io/openhands/agent-canvas:latest";
         autoStart = true;
         environment = {
           LD_LIBRARY_PATH = "";
