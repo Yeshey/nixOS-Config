@@ -52,6 +52,7 @@
           LD_LIBRARY_PATH = "";
           LD_PRELOAD = "";
           NIX_REMOTE = "daemon";
+          AUTOMATION_MAX_RUN_DURATION = "604800";   # was hardcoded 1800 (30min); raise cap on user-configurable automation timeout # Ask the model to change it, the gui still has the old limit hard coded
         };
         extraOptions = [
           "--rm"
