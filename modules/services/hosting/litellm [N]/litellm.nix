@@ -25,43 +25,63 @@
         port = port;
         openFirewall = true;
 
-        settings.model_list = [
-          {
-            model_name = "gemini-3.6-flash";
-            litellm_params = {
-              model = "gemini/gemini-3.6-flash";
-              api_key = "os.environ/GEMINI_API_KEY";
-            };
-          }
-          {
-            model_name = "gemini-3.8-flash";
-            litellm_params = {
-              model = "gemini/gemini-3.8-flash";
-              api_key = "os.environ/GEMINI_API_KEY";
-            };
-          }
-          {
-            model_name = "gemini-3.5-flash-lite";
-            litellm_params = {
-              model = "gemini/gemini-3.5-flash-lite";
-              api_key = "os.environ/GEMINI_API_KEY";
-            };
-          }
-          {
-            model_name = "gemini-3.1-pro-preview";
-            litellm_params = {
-              model = "gemini/gemini-3.1-pro-preview";
-              api_key = "os.environ/GEMINI_API_KEY";
-            };
-          }
-          {
-            model_name = "gemini-2.5-pro";
-            litellm_params = {
-              model = "gemini/gemini-2.5-pro";
-              api_key = "os.environ/GEMINI_API_KEY";
-            };
-          }
-        ];
+        settings = {
+          model_list = [
+            # https://aistudio.google.com/rate-limit
+            # track https://github.com/BerriAI/litellm/issues/14398
+            {
+              model_name = "gemini-3.6-flash";
+              litellm_params = {
+                model = "gemini/gemini-3.6-flash";
+                api_key = "os.environ/GEMINI_API_KEY";
+                rpm = 4;        # real limit 5 — buffer of 1
+                tpm = 225000;   # real limit 250K — ~10% buffer
+              };
+            }
+            {
+              model_name = "gemini-3.7-flash";
+              litellm_params = {
+                model = "gemini/gemini-3.7-flash";
+                api_key = "os.environ/GEMINI_API_KEY";
+                rpm = 4;        # real limit 5 — buffer of 1
+                tpm = 225000;   # real limit 250K — ~10% buffer
+              };
+            }
+            {
+              model_name = "gemini-3.8-flash";
+              litellm_params = {
+                model = "gemini/gemini-3.8-flash";
+                api_key = "os.environ/GEMINI_API_KEY";
+                rpm = 4;        # real limit 5 — buffer of 1
+                tpm = 225000;   # real limit 250K — ~10% buffer
+              };
+            }
+            {
+              model_name = "gemini-3.5-flash-lite";
+              litellm_params = {
+                model = "gemini/gemini-3.5-flash-lite";
+                api_key = "os.environ/GEMINI_API_KEY";
+                rpm = 13;       # real limit 15
+                tpm = 225000;   # real limit 250K
+              };
+            }
+            {
+              model_name = "gemini-3.5-flash";
+              litellm_params = {
+                model = "gemini/gemini-3.5-flash";
+                api_key = "os.environ/GEMINI_API_KEY";
+                rpm = 13;       # real limit 15
+                tpm = 225000;   # real limit 250K
+              };
+            }
+          ];
+
+          router_settings = {
+            optional_pre_call_checks = [ "enforce_model_rate_limits" ];
+            allowed_fails = 1;        # 1 real 429 (e.g. RPD exhausted) trips cooldown
+            cooldown_time = 86400;    # bench it 24h — covers daily-quota exhaustion
+          };
+        };
       };
     };
 }
