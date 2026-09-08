@@ -328,58 +328,92 @@
             fallbacks = [
               {
                 auto-fallback-chain = [
-                  "vercel-muse-spark-1-3-contributor"
-                  "gemini-3.8-flash"
-                  "nvidia-kimi-k3"
-                  "gemini-3.7-flash"
-                  "vercel-glm-5-3-flash"
-                  "vercel-glm-5-2"
-                  "nvidia-minimax-m3"
-                  "gemini-3.6-flash"
-                  "vercel-mimo-v2-5-pro"
-                  "vercel-kimi-k2-7-code"
-                  "gemma-4-31b"
-                  "gemini-3.5-flash"
-                  "gemma-4-26b"
-                  "vercel-mimo-v2-5"
-                  "gemini-3-flash"
-                  "gemini-3.5-flash-lite"
-                  "nvidia-gpt-oss-20b"
-                  "gemini-3.1-flash-lite"
-                  "gemini-2.5-flash"
+                  "vercel-muse-spark-1-3-contributor" "gemini-3.8-flash" "nvidia-kimi-k3"
+                  "gemini-3.7-flash" "vercel-glm-5-3-flash" "vercel-glm-5-2" "nvidia-minimax-m3"
+                  "gemini-3.6-flash" "vercel-mimo-v2-5-pro" "vercel-kimi-k2-7-code" "gemma-4-31b"
+                  "gemini-3.5-flash" "gemma-4-26b" "vercel-mimo-v2-5" "gemini-3-flash"
+                  "gemini-3.5-flash-lite" "nvidia-gpt-oss-20b" "gemini-3.1-flash-lite"
+                  "gemini-2.5-flash" "gemini-2.5-flash-lite" "nvidia-nemotron-4-340b"
+                  "vercel-mimo-v2-5-pro-ultraspeed" "vercel-morph-v3-large"
+                ]; # broken, leave as-is per your call
+              }
+
+              # ---- strong-fallback-chain ----
+              { strong-fallback-chain = [
+                  "vercel-muse-spark-1-3-contributor" "gemini-3.8-flash" "nvidia-kimi-k3"
+                  "gemini-3.7-flash" "vercel-glm-5-3-flash" "vercel-glm-5-2"
+                ]; }
+              { vercel-muse-spark-1-3-contributor = [
+                  "gemini-3.8-flash" "nvidia-kimi-k3" "gemini-3.7-flash"
+                  "vercel-glm-5-3-flash" "vercel-glm-5-2"
+                ]; }
+              { "gemini-3.8-flash" = [
+                  "nvidia-kimi-k3" "gemini-3.7-flash" "vercel-glm-5-3-flash" "vercel-glm-5-2"
+                ]; }
+              { nvidia-kimi-k3 = [
+                  "gemini-3.7-flash" "vercel-glm-5-3-flash" "vercel-glm-5-2"
+                ]; }
+              { "gemini-3.7-flash" = [ "vercel-glm-5-3-flash" "vercel-glm-5-2" ]; }
+              { vercel-glm-5-3-flash = [ "vercel-glm-5-2" ]; }
+              # vercel-glm-5-2 = last
+
+              # ---- weak-fallback-chain ----
+              { weak-fallback-chain = [
+                  "gemini-3.6-flash" "vercel-mimo-v2-5-pro" "vercel-kimi-k2-7-code"
+                  "gemma-4-31b" "gemini-3.5-flash" "gemma-4-26b" "vercel-mimo-v2-5"
+                  "gemini-3-flash" "gemini-3.5-flash-lite" "nvidia-gpt-oss-20b"
+                  "gemini-3.1-flash-lite" "gemini-2.5-flash" "gemini-2.5-flash-lite"
+                ]; }
+              { "gemini-3.6-flash" = [
+                  "vercel-mimo-v2-5-pro" "vercel-kimi-k2-7-code" "gemma-4-31b"
+                  "gemini-3.5-flash" "gemma-4-26b" "vercel-mimo-v2-5" "gemini-3-flash"
+                  "gemini-3.5-flash-lite" "nvidia-gpt-oss-20b" "gemini-3.1-flash-lite"
+                  "gemini-2.5-flash" "gemini-2.5-flash-lite"
+                ]; }
+              { vercel-mimo-v2-5-pro = [
+                  "vercel-kimi-k2-7-code" "gemma-4-31b" "gemini-3.5-flash" "gemma-4-26b"
+                  "vercel-mimo-v2-5" "gemini-3-flash" "gemini-3.5-flash-lite"
+                  "nvidia-gpt-oss-20b" "gemini-3.1-flash-lite" "gemini-2.5-flash"
                   "gemini-2.5-flash-lite"
-                  "nvidia-nemotron-4-340b"
-                  "vercel-mimo-v2-5-pro-ultraspeed"
-                  "vercel-morph-v3-large"
-                ];
-              }
-              {
-                strong-fallback-chain = [
-                  "vercel-muse-spark-1-3-contributor"
-                  "gemini-3.8-flash"
-                  "nvidia-kimi-k3"
-                  "gemini-3.7-flash"
-                  "vercel-glm-5-3-flash"
-                  "vercel-glm-5-2"
-                ];
-              }
-              {
-                weak-fallback-chain = [
-                  "gemini-3.6-flash"
-                  "vercel-mimo-v2-5-pro"
-                  "vercel-kimi-k2-7-code"
-                  "gemma-4-31b"
-                  "gemini-3.5-flash"
-                  "gemma-4-26b"
-                  "vercel-mimo-v2-5"
-                  "gemini-3-flash"
-                  "gemini-3.5-flash-lite"
-                  "nvidia-gpt-oss-20b"
-                  "gemini-3.1-flash-lite"
-                  "gemini-2.5-flash"
+                ]; }
+              { vercel-kimi-k2-7-code = [
+                  "gemma-4-31b" "gemini-3.5-flash" "gemma-4-26b" "vercel-mimo-v2-5"
+                  "gemini-3-flash" "gemini-3.5-flash-lite" "nvidia-gpt-oss-20b"
+                  "gemini-3.1-flash-lite" "gemini-2.5-flash" "gemini-2.5-flash-lite"
+                ]; }
+              { gemma-4-31b = [
+                  "gemini-3.5-flash" "gemma-4-26b" "vercel-mimo-v2-5" "gemini-3-flash"
+                  "gemini-3.5-flash-lite" "nvidia-gpt-oss-20b" "gemini-3.1-flash-lite"
+                  "gemini-2.5-flash" "gemini-2.5-flash-lite"
+                ]; }
+              { "gemini-3.5-flash" = [
+                  "gemma-4-26b" "vercel-mimo-v2-5" "gemini-3-flash" "gemini-3.5-flash-lite"
+                  "nvidia-gpt-oss-20b" "gemini-3.1-flash-lite" "gemini-2.5-flash"
                   "gemini-2.5-flash-lite"
-                ];
-              }
+                ]; }
+              { gemma-4-26b = [
+                  "vercel-mimo-v2-5" "gemini-3-flash" "gemini-3.5-flash-lite"
+                  "nvidia-gpt-oss-20b" "gemini-3.1-flash-lite" "gemini-2.5-flash"
+                  "gemini-2.5-flash-lite"
+                ]; }
+              { vercel-mimo-v2-5 = [
+                  "gemini-3-flash" "gemini-3.5-flash-lite" "nvidia-gpt-oss-20b"
+                  "gemini-3.1-flash-lite" "gemini-2.5-flash" "gemini-2.5-flash-lite"
+                ]; }
+              { gemini-3-flash = [
+                  "gemini-3.5-flash-lite" "nvidia-gpt-oss-20b" "gemini-3.1-flash-lite"
+                  "gemini-2.5-flash" "gemini-2.5-flash-lite"
+                ]; }
+              { "gemini-3.5-flash-lite" = [
+                  "nvidia-gpt-oss-20b" "gemini-3.1-flash-lite" "gemini-2.5-flash"
+                  "gemini-2.5-flash-lite"
+                ]; }
+              { nvidia-gpt-oss-20b = [
+                  "gemini-3.1-flash-lite" "gemini-2.5-flash" "gemini-2.5-flash-lite"
+                ]; }
+              { "gemini-3.1-flash-lite" = [ "gemini-2.5-flash" "gemini-2.5-flash-lite" ]; }
+              { "gemini-2.5-flash" = [ "gemini-2.5-flash-lite" ]; }
+              # gemini-2.5-flash-lite = last
             ];
           };
         };
