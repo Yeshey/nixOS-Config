@@ -66,6 +66,9 @@
               dev ${vpnInterfaceUDP}
               dev-type tun
               
+              mssfix 1300
+              tun-mtu 1400
+              
               # IPv4 configuration
               topology subnet
               server 10.8.0.0 255.255.255.0
@@ -111,9 +114,7 @@
               verb 3
               status /var/log/openvpn/status-udp.log
               log-append /var/log/openvpn/openvpn-udp.log
-              
-              comp-lzo
-              
+                            
               user nobody
               group nogroup
             '';
@@ -176,9 +177,7 @@
               verb 3
               status /var/log/openvpn/status-tcp.log
               log-append /var/log/openvpn/openvpn-tcp.log
-              
-              comp-lzo
-              
+                            
               user nobody
               group nogroup
             '';
@@ -308,9 +307,7 @@
           verb 3
           status /var/log/openvpn/status-guest-udp.log
           log-append /var/log/openvpn/openvpn-guest-udp.log
-          
-          comp-lzo
-          
+                    
           user nobody
           group nogroup
         '';
@@ -359,9 +356,7 @@
           verb 3
           status /var/log/openvpn/status-guest-tcp.log
           log-append /var/log/openvpn/openvpn-guest-tcp.log
-          
-          comp-lzo
-          
+                    
           user nobody
           group nogroup
         '';
@@ -414,3 +409,76 @@
     })];
     };
 }
+      # ---------------------------------------------------------------------
+      # HOW TO ADD A NEW CLIENT / GENERATE A .ovpn FILE
+      # ---------------------------------------------------------------------
+      # 1. On the server, generate a client key+cert pair with easyrsa
+      #    (already in environment.systemPackages). From wherever your PKI
+      #    dir lives (the one that produced ca.crt / server.crt / dh2048.pem):
+      #
+      #      easyrsa gen-req <clientName> nopass
+      #      easyrsa sign-req client <clientName>
+      #
+      #    <clientName> should match a ccd entry if you want a static IP,
+      #    e.g. "hyruleCastleYeshey", "kakarikoYeshey", "A70PhoneYeshey".
+      #    If it's a brand new device and you want a static IP, add entries
+      #    like the existing ones under ccd-udp/ccd-tcp (next free .13, etc).
+      #
+      # 2. Build the .ovpn file. Client configs must be self-contained, so
+      #    embed the ca cert, client cert, client key, and ta.key inline
+      #    (paths below match this module's caPath/taPath etc):
+      #
+      #      client
+      #      dev tun
+      #      remote 143.47.53.175 1194 udp
+      #      remote 143.47.53.175 443 tcp
+      #      resolv-retry infinite
+      #      server-poll-timeout 5
+      #      nobind
+      #      persist-key
+      #      persist-tun
+      #      cipher AES-256-GCM
+      #      auth SHA256
+      #      tls-version-min 1.2
+      #      remote-cert-tls server
+      #      mssfix 1300
+      #      tun-mtu 1400
+      #      verb 3
+      #
+      #      # DNS (IPv4 + IPv6) - must match what the server pushes
+      #      dhcp-option DNS 1.1.1.1
+      #      dhcp-option DNS 1.0.0.1
+      #      dhcp-option DNS 2606:4700:4700::1111
+      #      dhcp-option DNS 2606:4700:4700::1001
+      #      tun-ipv6
+      #
+      #      <ca>
+      #      ...contents of ca.crt...
+      #      </ca>
+      #      <cert>
+      #      ...contents of <clientName>.crt...
+      #      </cert>
+      #      <key>
+      #      ...contents of <clientName>.key...
+      #      </key>
+      #      <tls-auth>
+      #      ...contents of ta.key...
+      #      </tls-auth>
+      #      key-direction 1
+      #
+      # 3. GOTCHAS learned the hard way (keep these in sync between client
+      #    and server or things silently break):
+      #      - Do NOT use `fragment` — it must match on both ends and
+      #        doesn't play well with AEAD ciphers (AES-256-GCM). Use
+      #        `mssfix` + `tun-mtu` instead (server side already set to
+      #        the same values above).
+      #      - `cipher`, `auth`, and `tls-version-min` should match the
+      #        server block exactly.
+      #      - If a client needs a static IP, it needs a ccd entry on
+      #        BOTH ccd-udp and ccd-tcp (different subnets), using the
+      #        SAME <clientName> as the cert's CN.
+      #
+      # 4. Test: connect over the SAME network the server is reachable
+      #    from (e.g. WiFi at home) before testing over cellular, so you
+      #    can tell config bugs apart from carrier MTU/NAT issues.
+      # ---------------------------------------------------------------------
