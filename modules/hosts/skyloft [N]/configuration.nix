@@ -30,6 +30,7 @@
       # jupyter
       ollama
       openhands
+      arcane
       kubo
       minecraft
     ];
