@@ -30,6 +30,7 @@
       # jupyter
       open-webui
       openhands
+      forgejo
       arcane
       kubo
       minecraft
