@@ -28,6 +28,8 @@
         "/etc/nixos"
         "/var/log"
         "/var/lib/bluetooth"
+        "/var/lib/docker"
+        "/var/lib/docker-compose"
         "/var/lib/nixos"
         "/var/lib/systemd/coredump"
         "/var/lib/systemd/matches"
