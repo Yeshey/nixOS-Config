@@ -28,7 +28,7 @@
       open-vpn
       luanti-server
       # jupyter
-      ollama
+      open-webui
       openhands
       arcane
       kubo
