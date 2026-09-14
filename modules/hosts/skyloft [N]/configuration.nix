@@ -31,6 +31,7 @@
       open-webui
       openhands
       cptr # open-webui-computer
+      pithagoras
       forgejo
       arcane
       kubo
