@@ -30,6 +30,7 @@
       # jupyter
       open-webui
       openhands
+      cptr # open-webui-computer
       forgejo
       arcane
       kubo
