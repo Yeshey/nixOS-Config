@@ -25,13 +25,11 @@
       xrdp
       vscodium
       firefox
-      # open-vpn
+      open-vpn
       luanti-server
       # jupyter
       open-webui
       openhands
-      netbird
-      keycloak
       cptr # open-webui-computer
       pithagoras
       forgejo

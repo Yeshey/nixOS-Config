@@ -20,16 +20,9 @@
       #     AUTH_CLIENT_SECRET below).
       # Until that exists, management still starts (oidcConfigEndpoint just
       # needs to resolve to *something* valid), but nobody can log in.
-      # oidcIssuer = "https://netbird.yeshey.dpdns.org/realms/netbird";
-      oidcIssuer = "https://netbirdauth.yeshey.dpdns.org/realms/netbird";
+      oidcIssuer = "https://netbird.yeshey.dpdns.org/realms/netbird";
     in
     {
-      networking.firewall.allowedTCPPorts = [ 80 443 ];
-      security.acme.acceptTerms = true;
-      networking.extraHosts = ''
-        127.0.0.1 netbird.yeshey.dpdns.org
-      '';
-
       # Generate once:
       #   openssl rand -base64 32   -> data-store-encryption-key
       #   pwgen / openssl rand -hex 24 -> coturn-password (shared: coturn's
@@ -39,8 +32,6 @@
         restartUnits = [ "netbird-management.service" ];
       };
       sops.secrets."netbird/coturn-password" = {
-        owner = "turnserver";
-        mode = "0400";
         restartUnits = [
           "coturn.service"
           "netbird-management.service"
@@ -71,10 +62,8 @@
           settings = {
             DataStoreEncryptionKey._secret = config.sops.secrets."netbird/data-store-encryption-key".path;
 
-            TURNConfig.Secret._secret = config.sops.secrets."netbird/coturn-password".path;
-
             IdpManagerConfig = {
-              ManagerType = "keycloak";
+              ManagerType = "none"; # TODO: "keycloak" once the realm exists
               ClientConfig = {
                 Issuer = oidcIssuer;
                 TokenEndpoint = "${oidcIssuer}/protocol/openid-connect/token";
@@ -82,7 +71,6 @@
                 ClientSecret._secret = config.sops.secrets."netbird/idp-client-secret".path;
                 GrantType = "client_credentials";
               };
-              ExtraConfig.AdminEndpoint = "https://netbirdauth.yeshey.dpdns.org/admin/realms/netbird";
             };
 
             PKCEAuthorizationFlow.ProviderConfig = {
@@ -116,7 +104,6 @@
 
       services.caddy.enable = true;
       services.caddy.virtualHosts."${domain}" = {
-        useACMEHost = domain;
         extraConfig = ''
           handle /.well-known/acme-challenge/* {
             root * /var/lib/acme/challenges/${domain}
