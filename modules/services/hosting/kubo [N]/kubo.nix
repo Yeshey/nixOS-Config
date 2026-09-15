@@ -1,9 +1,12 @@
+# WebUI: http://localhost:5001/webui
+# Gateway (Content by CID): http://localhost:8181/ipfs/<CID>
 { ... }:
 {
   flake.modules.nixos.kubo =
     { pkgs, ... }:
     let
       port = 5001;
+      gatewayPort = 8181;   # was 8080 — moved so Headscale can keep its default
     in
     {
       # Check this to understand why added files with ipfs add don't show up in the webui:
@@ -26,15 +29,15 @@
           };
           Addresses = {
             API     = "/ip4/0.0.0.0/tcp/${toString port}";
-            Gateway = "/ip4/0.0.0.0/tcp/8080";
+            Gateway = "/ip4/0.0.0.0/tcp/${toString gatewayPort}";
           };
           Experimental.Libp2pStreamMounting = true;
         };
       };
 
-      # Access webui at http://0.0.0.0:8080/webui
+      # Access webui at http://0.0.0.0:8181/webui
       networking.firewall = {
-        allowedTCPPorts = [ 8080 4001 port ];
+        allowedTCPPorts = [ gatewayPort 4001 port ];
         allowedUDPPorts = [ 4001 ];
       };
 
