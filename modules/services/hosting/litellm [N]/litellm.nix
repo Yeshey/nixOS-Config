@@ -19,9 +19,6 @@
       '';
 
       systemd.services.litellm.serviceConfig.EnvironmentFile = config.sops.templates."litellm.env".path;
-      systemd.tmpfiles.rules = [
-        "Z /var/lib/litellm - - - -"
-      ];
 
       services.litellm.environment = {
         # MAX_RETRY_DELAY = "86400";     # 1 day
