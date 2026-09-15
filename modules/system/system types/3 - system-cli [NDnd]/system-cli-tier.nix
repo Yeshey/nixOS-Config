@@ -15,7 +15,7 @@
       ssh
       firmware
       cli-tools
-      sops-nix
+      sops-base # TODO - HUGE TERRIBLE THING - This dendritic pattern framework is getting confused with the [NDnd]??? Had to move to a [N] folder? 😭
       my-scripts
       docker
       podman
