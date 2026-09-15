@@ -15,6 +15,7 @@
       ssh
       firmware
       cli-tools
+      sops-nix
       my-scripts
       docker
       podman
@@ -25,6 +26,7 @@
     imports = with inputs.self.modules.darwin; [
       system-default-tier
 
+      # sops-nix
       direnv
       ssh
       cli-tools
@@ -35,6 +37,7 @@
     imports = with inputs.self.modules.homeManager; [
       system-default-tier
 
+      # sops-nix
       nh
       direnv
       shell

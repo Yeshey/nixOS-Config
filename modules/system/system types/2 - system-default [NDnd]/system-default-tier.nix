@@ -19,8 +19,7 @@
         nix-ld
         location
         restic-rclone-backups
-        zswap
-        sops-nix 
+        zswap 
       ]
       ++ (with inputs.self.modules.generic; [
         systemConstants
@@ -45,7 +44,6 @@
         determinate
         home-manager
         homebrew
-        # sops-nix 
       ]
       ++ (with inputs.self.modules.generic; [
         systemConstants
@@ -65,7 +63,6 @@
         safe-rm
         gc
         nix-index-database
-        # sops-nix 
         nix-your-shell
         restic-rclone-backups
       ]
