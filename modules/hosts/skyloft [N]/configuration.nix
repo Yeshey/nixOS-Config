@@ -51,7 +51,7 @@
       enable           = true;
       user             = "root";
       paths            = [
-        "/var/lib/luanti-anarchyMineclone2/world"
+        "/var/lib/luanti-anarchyMineclonia/world"
         "/srv/minecraft"
         "/opt/docker/overleaf/overleaf-data"
       ];

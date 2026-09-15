@@ -15,19 +15,19 @@
         enable = lib.mkDefault true;
 
         servers = with pkgs.luantiPackages; {
-          anarchyMineclone2 = {
-            game = games.mineclone2;
-            port = 30001;
-            openFirewall = true;
-            config = {
-              serverName        = "Yeshey mineclone server";
-              serverDescription = "mine here";
-              defaultGame       = "mineclone2";
-              serverAnnounce    = false;
-              enableDamage      = true;
-              creativeMode      = false;
-            };
-          };
+          # anarchyMineclone2 = {
+          #   game = games.mineclone2;
+          #   port = 30001;
+          #   openFirewall = true;
+          #   config = {
+          #     serverName        = "Yeshey mineclone server";
+          #     serverDescription = "mine here";
+          #     defaultGame       = "mineclone2";
+          #     serverAnnounce    = false;
+          #     enableDamage      = true;
+          #     creativeMode      = false;
+          #   };
+          # };
 
           anarchyMineclonia = {
             game = games.mineclonia;
