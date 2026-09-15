@@ -34,6 +34,7 @@
             ".minetest"
             ".local/share/The Powder Toy"
             { directory = ".local/share/keyrings"; mode = "0700"; }
+            ".config/sops/age"
 
             # syncthing
             ".stversions"
