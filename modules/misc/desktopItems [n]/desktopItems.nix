@@ -13,12 +13,32 @@
   flake.modules.homeManager.desktop-items-xrdp =
     { pkgs, ... }:
     let
-      ip = "143.47.53.175";
+      # SSH config alias for skyloft. No public IP hardcoded.
+      remote = "oracle";
       user = "yeshey";
+      rdpPort = 3389;
+
       extraclioptions = "/dynamic-resolution /p: /audio-mode:1 /clipboard /network:auto /compression /kbd:layout:0x0816 /gfx:AVC420 /cache:glyph:on,bitmap:on -wallpaper -menu-anims";
+
+      # SSH tunnel: local 3389 -> remote localhost:3389. Background ssh, wait
+      # briefly for the forward to come up, launch xfreerdp against localhost,
+      # then kill the tunnel when xfreerdp exits.
       gofreerdp = pkgs.writeShellScriptBin "gofreerdpserver" ''
-        ${pkgs.freerdp}/bin/xfreerdp /v:${ip} /u:${user} ${extraclioptions}
+        set -euo pipefail
+        cleanup() { [ -n "''${SSH_PID:-}" ] && kill "$SSH_PID" 2>/dev/null || true; }
+        trap cleanup EXIT
+        ssh -N -L ${toString rdpPort}:localhost:${toString rdpPort} ${remote} &
+        SSH_PID=$!
+        # Poll until the local port accepts connections (max ~5s).
+        for _ in $(seq 1 50); do
+          if ${pkgs.iproute2}/bin/ss -tln "sport = :${toString rdpPort}" | grep -q LISTEN; then
+            break
+          fi
+          sleep 0.1
+        done
+        ${pkgs.freerdp}/bin/xfreerdp /v:localhost:${toString rdpPort} /u:${user} ${extraclioptions}
       '';
+
       freerdpDesktopItem = pkgs.makeDesktopItem {
         name = "FreeRDP Oracle";
         desktopName = "FreeRDP Oracle";
@@ -33,7 +53,10 @@
         terminal = true;
       };
 
-      onikaoIp = "100.74.87.65";
+      # Onikao entry unchanged — already reaches skyloft over Tailscale IP,
+      # which is fine. If you want to kill the Tailscale dependency here too,
+      # swap to an SSH tunnel the same way using your ssh alias.
+      onikaoIp = "onikao";
       onikaoUser = "yeshey";
       onikaoExtraCliOptions = "/dynamic-resolution /audio-mode:1 /clipboard /network:auto /compression /kbd:layout:0x0816 /gfx:AVC420 /cache:glyph:on,bitmap:on -wallpaper -menu-anims";
       gofreerdpOnikao = pkgs.writeShellScriptBin "gofreerdponikao" ''
@@ -56,6 +79,8 @@
     {
       home.packages = [
         pkgs.freerdp
+        pkgs.openssh
+        pkgs.iproute2
         pkgs.xdg-utils
         gofreerdp
         freerdpDesktopItem
@@ -79,7 +104,7 @@
         exec = "${govscodeserver}/bin/govscodeserver";
         icon = pkgs.fetchurl {
           url = "https://raw.githubusercontent.com/VSCodium/vscodium/master/icons/stable/codium_cnl.svg";
-          sha256 = "sha256-mBcDa9L1rdZy5wfaMRowEDOtEi1sLFBcd2y0jTW5RHI="; # fill in after nix-prefetch-url
+          sha256 = "sha256-mBcDa9L1rdZy5wfaMRowEDOtEi1sLFBcd2y0jTW5RHI=";
         };
         categories = [ "GTK" "X-WebApps" ];
         mimeTypes = [ "text/html" "text/xml" "application/xhtml_xml" ];
