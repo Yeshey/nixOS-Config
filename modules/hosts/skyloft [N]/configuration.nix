@@ -24,14 +24,13 @@
       code-server
       xrdp
       vscodium
-      tailscale
       firefox
       # open-vpn
       luanti-server
       # jupyter
       open-webui
       openhands
-      headscale
+      tailscale-skyloft
       cptr # open-webui-computer
       pithagoras
       forgejo

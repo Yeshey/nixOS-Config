@@ -108,7 +108,7 @@
 
       services.caddy = {
         enable = true;
-        virtualHosts."10.8.0.1:9443" = {
+        virtualHosts."skyloft.tailb6874b.ts.net:9443" = {
           extraConfig = ''
             tls internal
             reverse_proxy 127.0.0.1:8000

@@ -11,20 +11,25 @@
       sops.secrets."nvidia_nim_api_key" = { };
       sops.secrets."vercel_key" = { };
 
-      sops.templates."litellm.env".content = ''
-        GEMINI_API_KEY=${config.sops.placeholder."gemini_api_key"}
-        LITELLM_MASTER_KEY=${config.sops.placeholder."litellm_master_key"}
-        NVIDIA_NIM_API_KEY=${config.sops.placeholder."nvidia_nim_api_key"}
-        VERCEL_API_KEY=${config.sops.placeholder."vercel_key"}
-      '';
+      sops.templates."litellm.env" = {
+        content = ''
+          GEMINI_API_KEY=${config.sops.placeholder."gemini_api_key"}
+          LITELLM_MASTER_KEY=${config.sops.placeholder."litellm_master_key"}
+          NVIDIA_NIM_API_KEY=${config.sops.placeholder."nvidia_nim_api_key"}
+          VERCEL_API_KEY=${config.sops.placeholder."vercel_key"}
+        '';
+        restartUnits = [ "litellm.service" ];
+      };
 
-      systemd.services.litellm.serviceConfig.EnvironmentFile = config.sops.templates."litellm.env".path;
-
-      # FIX 1: Disable DynamicUser so systemd does not try to set up ID-mapped
-      # mounts under /var/lib/private/litellm, which conflicts with the
-      # bind mount created by impermanence and causes:
-      # "Failed to set up special execution directory ... status=238/STATE_DIRECTORY".
-      systemd.services.litellm.serviceConfig.DynamicUser = lib.mkForce false;
+      systemd.services.litellm = {
+        serviceConfig.EnvironmentFile = config.sops.templates."litellm.env".path;
+        serviceConfig.DynamicUser = lib.mkForce false;
+        unitConfig.RequiresMountsFor = config.sops.templates."litellm.env".path;
+        serviceConfig.Restart = "on-failure";
+        serviceConfig.RestartSec = "5s";
+        startLimitIntervalSec = 120;
+        startLimitBurst = 10;
+      };
 
       # FIX 2: Run litellm as a static, unprivileged user instead of root.
       users.users.litellm = {

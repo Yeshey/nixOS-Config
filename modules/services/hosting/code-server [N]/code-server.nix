@@ -5,7 +5,7 @@
     let
       internalPort = 2998;
       caddyPort = 9444;
-      hostname = "skyloft.ts";   # MagicDNS, never goes stale
+      hostname = "skyloft.tailb6874b.ts.net";   # MagicDNS, never goes stale
       user = "yeshey";
     in
     {
