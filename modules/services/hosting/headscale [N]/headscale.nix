@@ -100,11 +100,8 @@
 
           dns = {
             magic_dns = true;
-            base_domain = "skyloft.internal";
+            base_domain = "ts";
             nameservers.global = [ "1.1.1.1" "8.8.8.8" ];
-            extra_records = [
-              { name = "code.yeshey.dpdns.org"; type = "A"; value = "100.64.0.4"; }
-            ];
           };
 
           # Both keys now come from sops

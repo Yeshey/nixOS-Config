@@ -4,7 +4,8 @@
     { pkgs, ... }:
     let
       internalPort = 2998;
-      domain = "code.yeshey.dpdns.org";
+      caddyPort = 9444;
+      hostname = "skyloft.ts";   # MagicDNS, never goes stale
       user = "yeshey";
     in
     {
@@ -20,20 +21,14 @@
         ];
       };
 
-      services.caddy.virtualHosts."${domain}" = {
+      services.caddy.enable = true;
+      services.caddy.virtualHosts."${hostname}:${toString caddyPort}" = {
         extraConfig = ''
-          @tailnet remote_ip 100.64.0.0/10
-          handle @tailnet {
-            reverse_proxy 127.0.0.1:${toString internalPort}
-          }
-          handle {
-            respond "Not found" 404
-          }
+          tls internal
+          reverse_proxy 127.0.0.1:${toString internalPort}
         '';
       };
 
-      networking.extraHosts = ''
-        127.0.0.1 ${domain}
-      '';
+      networking.firewall.allowedTCPPorts = [ caddyPort ];
     };
 }
