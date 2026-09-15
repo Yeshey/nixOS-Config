@@ -1,7 +1,7 @@
 { ... }:
 {
   flake.modules.nixos.litellm =
-    { config, ... }:
+    { config, lib, ... }:
     let
       port = 4000; # keep this in sync with `litellmPort` in ollama.nix / openhands.nix
     in
@@ -19,6 +19,21 @@
       '';
 
       systemd.services.litellm.serviceConfig.EnvironmentFile = config.sops.templates."litellm.env".path;
+
+      # FIX 1: Disable DynamicUser so systemd does not try to set up ID-mapped
+      # mounts under /var/lib/private/litellm, which conflicts with the
+      # bind mount created by impermanence and causes:
+      # "Failed to set up special execution directory ... status=238/STATE_DIRECTORY".
+      systemd.services.litellm.serviceConfig.DynamicUser = lib.mkForce false;
+
+      # FIX 2: Run litellm as a static, unprivileged user instead of root.
+      users.users.litellm = {
+        isSystemUser = true;
+        group = "litellm";
+      };
+      users.groups.litellm = { };
+      systemd.services.litellm.serviceConfig.User = "litellm";
+      systemd.services.litellm.serviceConfig.Group = "litellm";
 
       services.litellm.environment = {
         # MAX_RETRY_DELAY = "86400";     # 1 day
