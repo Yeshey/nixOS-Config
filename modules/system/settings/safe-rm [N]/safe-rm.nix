@@ -31,6 +31,7 @@
 /usr
 /usr/lib
 /var
+/var/lib
 /mnt
 /persist
 /persistent
@@ -72,6 +73,7 @@
 /usr
 /usr/lib
 /var
+/var/lib
 /mnt
 /persist
 /persistent
