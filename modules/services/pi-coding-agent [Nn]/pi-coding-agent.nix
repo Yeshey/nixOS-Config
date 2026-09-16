@@ -7,7 +7,24 @@
       litellmHost = "skyloft.tailb6874b.ts.net";
       litellmPort = 4000;
       litellmBaseUrl = "http://${litellmHost}:${toString litellmPort}/v1";
-      litellmModelId = "weak-fallback-chain";
+
+      # LiteLLM models available to Pi. Add new entries here as your
+      # LiteLLM config grows; the `id` must match the LiteLLM model name
+      # exactly.
+      litellmModels = [
+        {
+          id = "weak-fallback-chain";
+          name = "Weak Fallback Chain (LiteLLM)";
+          reasoning = false;
+        }
+        {
+          id = "strong-fallback-chain";
+          name = "Strong Fallback Chain (LiteLLM)";
+          reasoning = true;  # enable if the underlying backend supports thinking
+        }
+      ];
+
+      defaultModel = "weak-fallback-chain";
     in
     {
       imports = [
@@ -17,8 +34,6 @@
 
       sops.secrets."litellm_master_key" = { };
 
-      # auth.json holds the real key. Rendered as a sops template so the
-      # placeholder gets substituted with the decrypted secret.
       sops.templates."pi-auth.json".content = builtins.toJSON {
         litellm = {
           type = "api_key";
@@ -46,7 +61,7 @@
 
         settings = {
           defaultProvider = "litellm";
-          defaultModel = litellmModelId;
+          defaultModel = defaultModel;
           defaultThinkingLevel = "medium";
           theme = "dark";
 
@@ -62,8 +77,6 @@
           };
         };
 
-        # Dummy apiKey satisfies the loader. Real key comes from auth.json
-        # at request time (per the fix in pi issue #5953).
         models = {
           providers.litellm = {
             baseUrl = litellmBaseUrl;
@@ -71,15 +84,9 @@
             apiKey = "from-auth-json";
             compat = {
               supportsDeveloperRole = false;
-              supportsReasoningEffort = false;
+              # supportsReasoningEffort = false;
             };
-            models = [
-              {
-                id = litellmModelId;
-                name = "Weak Fallback Chain (LiteLLM)";
-                reasoning = false;
-              }
-            ];
+            models = litellmModels;
           };
         };
 
