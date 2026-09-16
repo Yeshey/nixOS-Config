@@ -12,6 +12,7 @@
 
       sops = {
         # This points to your encrypted secrets file in your repo
+        useSystemdActivation = true; 
         defaultSopsFile = ../../../../secrets/secrets.yaml;
         defaultSopsFormat = "yaml";
 
