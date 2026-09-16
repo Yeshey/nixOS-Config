@@ -20,7 +20,7 @@
         {
           id = "strong-fallback-chain";
           name = "Strong Fallback Chain (LiteLLM)";
-          reasoning = true;  # enable if the underlying backend supports thinking
+          reasoning = false;
         }
       ];
 
@@ -84,7 +84,7 @@
             apiKey = "from-auth-json";
             compat = {
               supportsDeveloperRole = false;
-              # supportsReasoningEffort = false;
+              supportsReasoningEffort = false;
             };
             models = litellmModels;
           };
