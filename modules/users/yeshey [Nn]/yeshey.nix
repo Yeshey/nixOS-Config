@@ -47,6 +47,7 @@ in
       imports = with inputs.self.modules.homeManager; [
         my-scripts
         desktop-items
+        pi-coding-agent
       ];
 
       config = {
