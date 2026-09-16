@@ -1,12 +1,12 @@
 { inputs, ... }:
 {
-  flake.modules.nixos.open-webui =
+  flake.modules.nixos.cptr =
     { config, ... }:
     {
       environment = inputs.self.lib.mkIfPersistence config {
         persistence."/persistent" = {
           directories = [
-            "/var/lib/private/open-webui"
+            "/var/lib/cptr/workspace"
           ];
         };
       };

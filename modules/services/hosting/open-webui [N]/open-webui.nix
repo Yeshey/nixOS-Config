@@ -13,6 +13,8 @@
         inputs.self.modules.nixos.litellm
       ];
 
+      networking.firewall.trustedInterfaces = [ "tailscale0" ];
+
       sops.secrets."nvidia_nim_api_key" = { };
       sops.secrets."openrouter" = { };
       sops.secrets."opencode_key" = { };
