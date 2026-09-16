@@ -40,3 +40,31 @@
       networking.firewall.interfaces.ap0.allowedTCPPorts = [ port ];
     };
 }
+
+# in advanced pane I had to put:
+# {
+#   "packages": [
+#     "npm:pi-provider-litellm"
+#   ],
+#   "enabledModels": [
+#     "litellm/*"
+#   ],
+#   "defaultProvider": "litellm",
+#   "defaultModel": "litellm/weak-fallback-chain",
+#   "litellm": {
+#     "providers": {
+#       "litellm": {
+#         "allowInsecureHttp": true
+#       }
+#     }
+#   },
+#   "compaction": {
+#     "enabled": true,
+#     "reserveTokens": 16384,
+#     "keepRecentTokens": 20000
+#   },
+#   "retry": {
+#     "enabled": true,
+#     "maxRetries": 3
+#   }
+# }

@@ -31,7 +31,6 @@
       open-webui
       openhands
       tailscale-skyloft
-      cptr # open-webui-computer
       pithagoras
       forgejo
       arcane
