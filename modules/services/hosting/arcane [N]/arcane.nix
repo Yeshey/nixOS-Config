@@ -4,7 +4,7 @@
     let
       port = 3552;
       dataDir = "/var/lib/arcane";
-      vpnAddr = "10.8.0.1";
+      host = "skyloft.tailb6874b.ts.net";
     in
     {
       systemd.services."docker-arcane-mgr" = {
@@ -19,7 +19,6 @@
           if [ ! -f "$ENV" ]; then
             umask 077
             {
-              echo "JWT_SECRET=$(${pkgs.openssl}/bin/openssl rand -hex 32)"
               echo "ENCRYPTION_KEY=$(${pkgs.openssl}/bin/openssl rand -hex 32)"
             } > "$ENV"
           fi
@@ -30,6 +29,7 @@
         image = "ghcr.io/getarcaneapp/arcane:latest";
         autoStart = true;
         extraOptions = [ "--pull=always" ];
+        # Publish on all interfaces; access control is handled by the tailnet ACL.
         ports = [ "${toString port}:${toString port}" ];
         volumes = [
           "/var/run/docker.sock:/var/run/docker.sock"
@@ -37,7 +37,7 @@
         ];
         environmentFiles = [ "${dataDir}/secrets.env" ];
         environment = {
-          APP_URL = "http://${vpnAddr}:${toString port}";
+          APP_URL = "http://${host}:${toString port}";
           PUID = "1000";
           PGID = "1000";
         };

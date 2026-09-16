@@ -9,14 +9,13 @@
         database.type = "postgres";
         settings = {
           server = {
-            DOMAIN = "forgejo.local"; # or your host
-            ROOT_URL = "http://10.8.0.1:3000/";
+            DOMAIN = "skyloft.tailb6874b.ts.net";
+            ROOT_URL = "http://skyloft.tailb6874b.ts.net:${toString port}/";
             HTTP_PORT = port;
           };
-          actions.ENABLED = true; # off by default — needed for Forgejo Actions
+          actions.ENABLED = true;
         };
       };
       networking.firewall.interfaces.ap0.allowedTCPPorts = [ port ];
-
     };
 }
