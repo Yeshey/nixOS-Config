@@ -76,7 +76,6 @@
     };
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-26.05-darwin";
-    nixpkgs-kernel.url = "github:NixOS/nixpkgs/4782f433368710c4fd512c91375b9900ffda22a8";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-zswap.url = "github:nixos/nixpkgs/master";
     nurpkgs.url = "github:nix-community/NUR";

@@ -885,22 +885,6 @@
         "type": "github"
       }
     },
-    "nixpkgs-kernel": {
-      "locked": {
-        "lastModified": 1778261749,
-        "narHash": "sha256-JrkNl3sWvOf1ooK6Xm8pRnjn0fFMlp8xnvvt9nYPcM4=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "4782f433368710c4fd512c91375b9900ffda22a8",
-        "type": "github"
-      },
-      "original": {
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "4782f433368710c4fd512c91375b9900ffda22a8",
-        "type": "github"
-      }
-    },
     "nixpkgs-lib": {
       "locked": {
         "lastModified": 1774748309,
@@ -1354,7 +1338,6 @@
         "nixos-upgrade-on-shutdown": "nixos-upgrade-on-shutdown",
         "nixpkgs": "nixpkgs_7",
         "nixpkgs-darwin": "nixpkgs-darwin",
-        "nixpkgs-kernel": "nixpkgs-kernel",
         "nixpkgs-unstable": "nixpkgs-unstable",
         "nixpkgs-zswap": "nixpkgs-zswap",
         "nurpkgs": "nurpkgs",
