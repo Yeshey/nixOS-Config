@@ -8,24 +8,33 @@
     in
     {
       sops.secrets."openrouter" = { };
+      sops.secrets."litellm_master_key" = { };
 
-      sops.templates."pithagoras.env".content = ''
-        WORKSPACES_DIR=${workspacesDir}
-        EXECUTOR=host
-        PI_PROVIDER=openrouter
-        PI_MODEL=anthropic/claude-sonnet-5
-        OPENROUTER_API_KEY=${config.sops.placeholder."openrouter"}
-      '';
+      sops.templates."pithagoras.env" = {
+        content = ''
+          WORKSPACES_DIR=${workspacesDir}
+          EXECUTOR=host
+          PI_PROVIDER=litellm
+          PI_MODEL=weak-fallback-chain
+          LITELLM_BASE_URL=http://skyloft.tailb6874b.ts.net:4000
+          LITELLM_API_KEY=${config.sops.placeholder."litellm_master_key"}
+        '';
+        restartUnits = [ "docker-pithagoras.service" ];
+      };
 
       systemd.tmpfiles.rules = [
         "d ${workspacesDir} 0750 root root -"
       ];
 
-      virtualisation.oci-containers.backend = "docker"; # match rest of config
+      virtualisation.oci-containers.backend = "docker";
       virtualisation.oci-containers.containers.pithagoras = {
-        image = "ghcr.io/yeshey/pithagoras:latest"; # pin sha, bump manually on update
+        image = "ghcr.io/yeshey/pithagoras:latest";
         volumes = [ "${workspacesDir}:${workspacesDir}" ];
-        extraOptions = [ "--network=host" ]; # required — upstream design, pi expects host-net services
+        extraOptions = [
+          "--pull=always"
+          "--network=host"
+          "--env-file=${config.sops.templates."pithagoras.env".path}"
+        ];
       };
 
       networking.firewall.interfaces.ap0.allowedTCPPorts = [ port ];
