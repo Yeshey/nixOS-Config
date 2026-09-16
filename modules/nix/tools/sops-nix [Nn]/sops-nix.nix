@@ -15,13 +15,33 @@
         defaultSopsFile = ../../../../secrets/secrets.yaml;
         defaultSopsFormat = "yaml";
 
-        # This tells sops-nix to use your server's native SSH host key to decrypt the secrets!
-        # This means you don't have to provision a specific age key manually.
+        # Use the server's native SSH host key to decrypt secrets at the
+        # system level. This means you don't have to provision a specific
+        # age key manually for the system.
         age.sshKeyPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
-        
-        # (Optional) If your server doesn't have an SSH key yet, setting this to true 
-        # will generate one automatically during activation.
+
+        # Generate the host SSH key during activation if it doesn't exist yet.
         age.generateKey = true;
+      };
+    };
+
+  flake.modules.homeManager.sops-nix =
+    { config, ... }:
+    {
+      imports = [
+        inputs.sops-nix.homeManagerModules.sops
+      ];
+
+      sops = {
+        defaultSopsFile = ../../../../secrets/secrets.yaml;
+        defaultSopsFormat = "yaml";
+
+        # Use your user's existing age key. This is the key your VS Code
+        # extension uses to edit secrets, so the same recipient already
+        # exists in .sops.yaml and the file decrypts cleanly.
+        age = {
+          keyFile = "${config.home.homeDirectory}/.config/sops/age/keys.txt";
+        };
       };
     };
 }

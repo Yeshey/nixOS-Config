@@ -11,4 +11,16 @@
         };
       };
     };
+
+  flake.modules.homeManager.sops-nix =
+    { config, ... }:
+    {
+      home = inputs.self.lib.mkIfPersistence config {
+        persistence."/persistent" = {
+          directories = [
+            ".config/sops/age"
+          ];
+        };
+      };
+    };
 }

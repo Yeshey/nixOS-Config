@@ -37,7 +37,7 @@
     imports = with inputs.self.modules.homeManager; [
       system-default-tier
 
-      # sops-nix
+      sops-nix
       nh
       direnv
       shell

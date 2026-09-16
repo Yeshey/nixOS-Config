@@ -1,21 +1,34 @@
 # modules/services/pi-coding-agent [Nn]/pi-coding-agent.nix
-{ inputs, ...}:
+{ inputs, ... }:
 {
   flake.modules.homeManager.pi-coding-agent =
     { lib, config, pkgs, ... }:
     let
-      # LiteLLM endpoint via Tailscale
       litellmHost = "skyloft.tailb6874b.ts.net";
       litellmPort = 4000;
       litellmBaseUrl = "http://${litellmHost}:${toString litellmPort}/v1";
-
-      # The model name as registered in your local LiteLLM config
       litellmModelId = "weak-fallback-chain";
     in
     {
       imports = [
         (inputs.home-manager-unstable + "/modules/programs/pi-coding-agent.nix")
+        inputs.sops-nix.homeManagerModules.sops
       ];
+
+      sops.secrets."litellm_master_key" = { };
+
+      # auth.json holds the real key. Rendered as a sops template so the
+      # placeholder gets substituted with the decrypted secret.
+      sops.templates."pi-auth.json".content = builtins.toJSON {
+        litellm = {
+          type = "api_key";
+          key = config.sops.placeholder."litellm_master_key";
+        };
+      };
+
+      home.file."${config.programs.pi-coding-agent.configDir}/auth.json".source =
+        config.lib.file.mkOutOfStoreSymlink
+          (toString config.sops.templates."pi-auth.json".path);
 
       programs.pi-coding-agent = {
         enable = true;
@@ -49,31 +62,24 @@
           };
         };
 
+        # Dummy apiKey satisfies the loader. Real key comes from auth.json
+        # at request time (per the fix in pi issue #5953).
         models = {
-          providers = {
-            litellm = {
-              baseUrl = litellmBaseUrl;
-              api = "openai-completions";
-
-              # Pi treats models as requiring auth even if the endpoint
-              # doesn't. Use a dummy value if LiteLLM has no auth.
-              apiKey = "sk-litellm";
-
-              # LiteLLM may not understand the `developer` role or
-              # `reasoning_effort` depending on the backend models.
-              compat = {
-                supportsDeveloperRole = false;
-                supportsReasoningEffort = false;
-              };
-
-              models = [
-                {
-                  id = litellmModelId;
-                  name = "Weak Fallback Chain (LiteLLM)";
-                  reasoning = false;
-                }
-              ];
+          providers.litellm = {
+            baseUrl = litellmBaseUrl;
+            api = "openai-completions";
+            apiKey = "from-auth-json";
+            compat = {
+              supportsDeveloperRole = false;
+              supportsReasoningEffort = false;
             };
+            models = [
+              {
+                id = litellmModelId;
+                name = "Weak Fallback Chain (LiteLLM)";
+                reasoning = false;
+              }
+            ];
           };
         };
 
