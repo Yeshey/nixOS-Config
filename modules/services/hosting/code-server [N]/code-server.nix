@@ -1,3 +1,4 @@
+# if symbols don't work in chromium browsers, toggle "terminal.integrated.gpuAcceleration" = "off";
 { ... }:
 {
   flake.modules.nixos.code-server =
