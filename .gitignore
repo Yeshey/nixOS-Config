@@ -6,4 +6,5 @@ Studio
 # secrets
 result
 store.dot
-.vscode
+.vscode/*
+!.vscode/settings.json
