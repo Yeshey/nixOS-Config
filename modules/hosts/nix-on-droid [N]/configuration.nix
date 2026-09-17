@@ -14,7 +14,6 @@
     {
       imports = with inputs.self.modules.nixOnDroid; [
         sshd-droid
-        autossh-reverse-proxy-droid
         # root-droid
       ];
 

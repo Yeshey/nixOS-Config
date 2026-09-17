@@ -18,7 +18,6 @@
 
       yeshey-syncthing
 
-      autossh-reverse-proxy
       i2p
       ollama-cuda
 
@@ -38,13 +37,6 @@
       enable = true;
       flakeLocation = "/home/yeshey/.setup";
       # hostName auto-detected from networking.hostName
-    };
-
-    autossh-reverse-proxy = {
-      enable     = true;
-      remoteIP   = "143.47.53.175";
-      remoteUser = "yeshey";
-      port       = 2232;
     };
 
     boot.zswap.maxPoolPercent = 50;

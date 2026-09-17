@@ -16,7 +16,6 @@
 
       yeshey-syncthing
 
-      autossh-reverse-proxy
       # i2p
 
       # hosting
@@ -30,13 +29,6 @@
       enable = true;
       flakeLocation = "/home/yeshey/.setup";
       # hostName auto-detected from networking.hostName
-    };
-
-    autossh-reverse-proxy = {
-      enable     = true;
-      remoteIP   = "143.47.53.175";
-      remoteUser = "yeshey";
-      port       = 2233;
     };
 
     boot.zswap.maxPoolPercent = 55;
