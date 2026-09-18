@@ -11,7 +11,6 @@ in
           networkmanagerapplet # Has for example "Automatically connect to VPN when using this connection"
           
           gnomeExtensions.burn-my-windows
-          gnomeExtensions.night-theme-switcher
         ];
 
         dconf.settings = {
@@ -21,7 +20,6 @@ in
             ];
             enabled-extensions = [
               "burn-my-windows@schneegans.github.com"
-              "nightthemeswitcher@romainvigier.fr"
             ];
           };
 
