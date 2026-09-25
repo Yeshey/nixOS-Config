@@ -21,7 +21,6 @@ in
           "wheel"
           "networkmanager"
           "audio"
-          "docker"
           "kvm"
           "libvirtd"
           "adbusers"
