@@ -30,6 +30,7 @@
       # jupyter
       open-webui
       openhands
+      jev-ultrafast
       tailscale-skyloft
       pithagoras
       forgejo

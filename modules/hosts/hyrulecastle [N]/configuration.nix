@@ -9,6 +9,7 @@
       gnome-full
       # plasma-full
       # cosmic
+      jev-ultrafast
       systemd-boot
       bluetooth
       tpm2
