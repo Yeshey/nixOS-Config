@@ -11,7 +11,9 @@
   "litellm": {
     "providers": {
       "litellm": {
-        "allowInsecureHttp": true
+      "baseUrl": "http://skyloft.tailb6874b.ts.net:4000",
+      "apiKey": "$OPENAI_API_KEY",
+      "allowInsecureHttp": true
       }
     }
   },
