@@ -6,6 +6,7 @@
       environment = inputs.self.lib.mkIfPersistence config {
         persistence."/persistent".directories = [
           "/var/lib/forgejo"
+          "/var/lib/postgresql"
         ];
       };
     };
