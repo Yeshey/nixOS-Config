@@ -1,0 +1,11 @@
+#!/bin/sh
+set -eu
+
+token_file=/workspace/.secrets/forgejo-token
+
+if [ -r "$token_file" ]; then
+  FORGEJO_WORK_TOKEN=$(cat "$token_file")
+  export FORGEJO_WORK_TOKEN
+fi
+
+exec /usr/local/bin/pi-real "$@"
