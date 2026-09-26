@@ -10,7 +10,10 @@
         containers.mc-router = {
           image = "itzg/mc-router:latest";
           
-          extraOptions = [ "--network=host" ];
+          extraOptions = [ 
+            "--network=host" 
+            "--pull=always"
+          ];
           
           cmd = [
             "--mapping=tunacraft.yeshey.dpdns.org=127.0.0.1:1207,lopescraft.yeshey.dpdns.org=127.0.0.1:1408,minecraft.yeshey.dpdns.org=127.0.0.1:44329"
