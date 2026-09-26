@@ -1,3 +1,27 @@
 {
-  "packages": ["npm:pi-mcp-adapter"]
+  "packages": [
+    "npm:pi-provider-litellm",
+    "npm:pi-mcp-adapter"
+  ],
+  "enabledModels": [
+    "litellm/*"
+  ],
+  "defaultProvider": "litellm",
+  "defaultModel": "weak-fallback-chain",
+  "litellm": {
+    "providers": {
+      "litellm": {
+        "allowInsecureHttp": true
+      }
+    }
+  },
+  "compaction": {
+    "enabled": true,
+    "reserveTokens": 16384,
+    "keepRecentTokens": 20000
+  },
+  "retry": {
+    "enabled": true,
+    "maxRetries": 3
+  }
 }
