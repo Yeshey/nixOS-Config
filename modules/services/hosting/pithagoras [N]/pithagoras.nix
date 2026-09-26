@@ -12,8 +12,10 @@
 
       sops.templates."pithagoras.env" = {
         content = ''
-          WORKSPACES_DIR=${workspacesDir}
+          WORKSPACES_DIR=/workspaces
+          PORTAL_CONTAINER_NAME=pithagoras
           EXECUTOR=host
+          PI_IMAGE=ghcr.io/yeshey/pithagoras:latest
           PI_PROVIDER=litellm
           PI_MODEL=weak-fallback-chain
           LITELLM_BASE_URL=http://skyloft.tailb6874b.ts.net:4000
@@ -29,7 +31,11 @@
       virtualisation.oci-containers.backend = "docker";
       virtualisation.oci-containers.containers.pithagoras = {
         image = "ghcr.io/yeshey/pithagoras:latest";
-        volumes = [ "${workspacesDir}:${workspacesDir}" ];
+        volumes = [ 
+          "/var/lib/pithagoras/data:/data"
+          "${workspacesDir}:/workspaces"
+          "/var/run/docker.sock:/var/run/docker.sock"
+        ];
         extraOptions = [
           "--pull=always"
           "--network=host"
@@ -38,6 +44,13 @@
       };
 
       networking.firewall.interfaces.ap0.allowedTCPPorts = [ port ];
+
+      services.caddy.virtualHosts."skyloft.tailb6874b.ts.net:9445".extraConfig = ''
+        tls internal
+        reverse_proxy 127.0.0.1:4100
+      '';
+
+      networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 9445 ];
     };
 }
 

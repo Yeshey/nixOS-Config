@@ -8,6 +8,7 @@
           directories = [
             "/opt/docker/overleaf"
             "/var/log/journal"
+            "/var/lib/pithagoras/browser-profile"
           ];
         };
       };
