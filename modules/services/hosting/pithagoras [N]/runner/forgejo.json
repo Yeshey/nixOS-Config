@@ -1,9 +1,0 @@
-{
-  "servers": {
-    "skyloft": {
-      "baseUrl": "http://skyloft.tailb6874b.ts.net:3000",
-      "credentialProvider": "env",
-      "tokenEnv": "FORGEJO_WORK_TOKEN"
-    }
-  }
-}

@@ -10,13 +10,11 @@
     {
       sops.secrets."openrouter" = { };
       sops.secrets."litellm_master_key" = { };
-      sops.secrets."forgejo_agent_token" = { };
 
       sops.templates."pithagoras.env" = {
         # PI_IMAGE=ghcr.io/yeshey/pithagoras:latest
         content = ''
           OPENAI_API_KEY=${config.sops.placeholder."litellm_master_key"}
-          FORGEJO_WORK_TOKEN=${config.sops.placeholder."forgejo_agent_token"}
           WORKSPACES_DIR=/workspaces
           PORTAL_CONTAINER_NAME=pithagoras
           EXECUTOR=container

@@ -1,8 +1,7 @@
 {
   "packages": [
     "npm:pi-provider-litellm",
-    "npm:pi-mcp-adapter",
-    "npm:pi-forgejo-toolkit"
+    "npm:pi-mcp-adapter"
   ],
   "enabledModels": [
     "litellm/*"
