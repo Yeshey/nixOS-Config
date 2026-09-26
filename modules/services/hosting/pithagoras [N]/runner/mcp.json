@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "browser": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@0.0.79",
+        "--cdp-endpoint=http://172.17.0.1:9223"
+      ],
+      "directTools": true
+    }
+  }
+}

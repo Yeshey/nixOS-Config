@@ -1,7 +1,7 @@
 { ... }:
 {
   flake.modules.nixos.pithagoras =
-    { config, lib, ... }:
+    { config, pkgs, lib, ... }:
     let
       profileDir = "/var/lib/pithagoras/browser-profile";
     in
@@ -74,6 +74,21 @@
         profileDir
         config.sops.templates."pithagoras-browser-container.env".path
       ];
+
+      systemd.services.pithagoras-cdp-bridge = {
+        description = "Browser CDP bridge for Pithagoras task containers";
+        requires = [ "docker.service" ];
+        after = [ "docker.service" ];
+        wantedBy = [ "multi-user.target" ];
+
+        serviceConfig = {
+          ExecStart = "${pkgs.socat}/bin/socat TCP-LISTEN:9223,bind=172.17.0.1,reuseaddr,fork TCP:127.0.0.1:9222";
+          Restart = "on-failure";
+        };
+      };
+
+      networking.firewall.interfaces.docker0.allowedTCPPorts = [ 9223 ];
+
     };
 }
 

@@ -1,0 +1,10 @@
+{
+  "providers": {
+    "litellm": {
+      "baseUrl": "http://skyloft.tailb6874b.ts.net:4000/v1",
+      "api": "openai-completions",
+      "apiKey": "$OPENAI_API_KEY",
+      "models": [{ "id": "weak-fallback-chain" }]
+    }
+  }
+}
