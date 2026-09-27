@@ -1,19 +1,19 @@
 {
   "packages": [
     "npm:pi-provider-litellm",
-    "npm:pi-mcp-adapter"
+    "npm:pi-mcp-adapter",
+    "npm:pi-forgejo-toolkit",
+    "npm:pi-tavily-tools"
   ],
-  "enabledModels": [
-    "litellm/*"
-  ],
-  "defaultProvider": "litellm",
+  "defaultProvider": "litellm-chat",
+  "enabledModels": ["litellm-chat/*", "litellm/*"],
   "defaultModel": "weak-fallback-chain",
   "litellm": {
     "providers": {
       "litellm": {
-      "baseUrl": "http://skyloft.tailb6874b.ts.net:4000",
-      "apiKey": "$OPENAI_API_KEY",
-      "allowInsecureHttp": true
+        "baseUrl": "http://skyloft.tailb6874b.ts.net:4000",
+        "apiKey": "$LITELLM_API_KEY",
+        "allowInsecureHttp": true
       }
     }
   },

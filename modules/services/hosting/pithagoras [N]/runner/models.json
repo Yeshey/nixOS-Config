@@ -1,0 +1,16 @@
+{
+  "providers": {
+    "litellm-chat": {
+      "baseUrl": "http://127.0.0.1:4000/v1",
+      "api": "openai-completions",
+      "apiKey": "$LITELLM_API_KEY",
+      "models": [
+        {
+          "id": "weak-fallback-chain",
+          "contextWindow": 128000,
+          "maxTokens": 16384
+        }
+      ]
+    }
+  }
+}
