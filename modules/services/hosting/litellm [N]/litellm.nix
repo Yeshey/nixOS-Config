@@ -462,3 +462,5 @@
 # nvidiaAPI/.nvidia/nemotron-4-340b-instruct
 # vercelAPI/.MiMo V2.5 Pro UltraSpeed
 # vercelAPI/.Morph V3 Large
+
+# add Qwen 3.8 Max 0902? and Mimo V2.6 pro?
