@@ -6,12 +6,7 @@
       port = 4100;
       workspacesDir = "/var/lib/pithagoras/workspaces";
       agentDir = "/var/lib/pithagoras/data/home/.pi/agent";
-
       bolsaDir = "/mnt/OneDrive/ISCTE/Projects/Bolsa";
-      nixCmds = [
-        "nix" "nix-shell" "nix-build" "nix-env" "nix-store"
-        "nix-instantiate" "nix-collect-garbage" "nix-hash" "nix-prefetch-url"
-      ];
     in
     {
       sops.secrets."litellm_master_key" = { };
@@ -91,11 +86,10 @@
           "/var/lib/pithagoras/data:/data"
           "${workspacesDir}:/workspaces"
           "/var/run/docker.sock:/var/run/docker.sock"
-
           "${bolsaDir}:${bolsaDir}:rw"
           "/nix:/nix:ro"
-        ]
-        ++ (map (cmd: "${config.nix.package}/bin/${cmd}:/usr/local/bin/${cmd}:ro") nixCmds);
+          "${config.system.path}/bin:/usr/local/sbin:ro"
+        ];
 
         extraOptions = [
           "--pull=always"
@@ -107,10 +101,11 @@
 
       systemd.services.docker-pithagoras = {
         requires = [ "pithagoras-config.service" ];
-        after = [ "pithagoras-config.service" "remote-fs.target" ];
+        after = [
+          "pithagoras-config.service"
+          "remote-fs.target"
+        ];
         wants = [ "remote-fs.target" ];
-
-        unitConfig.RequiresMountsFor = [ bolsaDir ];
       };
 
       networking.firewall.interfaces.ap0.allowedTCPPorts = [ port ];
