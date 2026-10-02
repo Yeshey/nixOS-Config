@@ -1,4 +1,4 @@
-{ ... }:
+{ inputs, ... }:
 {
   flake.modules.nixos.pithagoras =
     { pkgs, config, ... }:
@@ -8,6 +8,10 @@
       agentDir = "/var/lib/pithagoras/data/home/.pi/agent";
 
       bolsaDir = "/mnt/OneDrive/ISCTE/Projects/Bolsa";
+      nixCmds = [
+        "nix" "nix-shell" "nix-build" "nix-env" "nix-store"
+        "nix-instantiate" "nix-collect-garbage" "nix-hash" "nix-prefetch-url"
+      ];
     in
     {
       sops.secrets."litellm_master_key" = { };
@@ -76,13 +80,22 @@
       virtualisation.oci-containers.containers.pithagoras = {
         image = "ghcr.io/yeshey/pithagoras:latest";
 
+        environment = {
+          NIX_REMOTE = "daemon";
+          NIX_PATH = "nixpkgs=${inputs.nixpkgs.outPath}";
+          NIX_CONFIG = "experimental-features = nix-command flakes";
+          NIX_SSL_CERT_FILE = "${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt";
+        };
+
         volumes = [
           "/var/lib/pithagoras/data:/data"
           "${workspacesDir}:/workspaces"
           "/var/run/docker.sock:/var/run/docker.sock"
 
           "${bolsaDir}:${bolsaDir}:rw"
-        ];
+          "/nix:/nix:ro"
+        ]
+        ++ (map (cmd: "${config.nix.package}/bin/${cmd}:/usr/local/bin/${cmd}:ro") nixCmds);
 
         extraOptions = [
           "--pull=always"
