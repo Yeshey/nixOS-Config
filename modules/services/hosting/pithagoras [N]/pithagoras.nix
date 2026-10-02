@@ -26,6 +26,14 @@
           EXECUTOR=host
           PI_PROVIDER=litellm-chat
           PI_MODEL=weak-fallback-chain
+
+          GIT_CONFIG_COUNT=1
+          GIT_CONFIG_KEY_0=credential.http://skyloft.tailb6874b.ts.net:3000.helper
+          GIT_CONFIG_VALUE_0=!f() { echo username=AGENT_USER; echo password=$FORGEJO_WORK_TOKEN; }; f
+          GIT_AUTHOR_NAME=pithagoras
+          GIT_AUTHOR_EMAIL=pithagoras@skyloft.tailb6874b.ts.net
+          GIT_COMMITTER_NAME=pithagoras
+          GIT_COMMITTER_EMAIL=pithagoras@skyloft.tailb6874b.ts.net
         '';
         restartUnits = [ "docker-pithagoras.service" ];
       };
@@ -95,31 +103,3 @@
       networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 9445 ];
     };
 }
-
-# in advanced pane I had to put:
-# {
-#   "packages": [
-#     "npm:pi-provider-litellm"
-#   ],
-#   "enabledModels": [
-#     "litellm/*"
-#   ],
-#   "defaultProvider": "litellm",
-#   "defaultModel": "litellm/weak-fallback-chain",
-#   "litellm": {
-#     "providers": {
-#       "litellm": {
-#         "allowInsecureHttp": true
-#       }
-#     }
-#   },
-#   "compaction": {
-#     "enabled": true,
-#     "reserveTokens": 16384,
-#     "keepRecentTokens": 20000
-#   },
-#   "retry": {
-#     "enabled": true,
-#     "maxRetries": 3
-#   }
-# }
