@@ -80,26 +80,6 @@
             }
 
             {
-              model_name = "gemini-2.5-flash";
-              litellm_params = {
-                model = "gemini/gemini-2.5-flash";
-                api_key = "os.environ/GEMINI_API_KEY";
-                rpm = 4;        # real limit 5
-                tpm = 225000;   # real limit 250K
-              };
-            }
-
-            {
-              model_name = "gemini-2.5-flash-lite";
-              litellm_params = {
-                model = "gemini/gemini-2.5-flash-lite";
-                api_key = "os.environ/GEMINI_API_KEY";
-                rpm = 9;        # real limit 10
-                tpm = 225000;   # real limit 250K
-              };
-            }
-
-            {
               model_name = "gemini-3-flash";
               litellm_params = {
                 model = "gemini/gemini-3-flash-preview";
@@ -177,15 +157,6 @@
             # ---------------------------------------------------------------
 
             {
-              model_name = "vercel-muse-spark-1-3";
-              litellm_params = {
-                model = "openai/meta/muse-spark-1.3";
-                api_base = "https://ai-gateway.vercel.sh/v1";
-                api_key = "os.environ/VERCEL_API_KEY";
-              };
-            }
-
-            {
               model_name = "vercel-muse-spark-1-3-contributor";
               litellm_params = {
                 model = "openai/meta/muse-spark-1.3-contributor";
@@ -204,27 +175,18 @@
             }
 
             {
-              model_name = "vercel-glm-5-3-flash";
+              model_name = "nvidia-deepseek-v4-pro";
               litellm_params = {
-                model = "openai/zai/glm-5.3-flash";
-                api_base = "https://ai-gateway.vercel.sh/v1";
-                api_key = "os.environ/VERCEL_API_KEY";
+                model = "openai/deepseek-ai/deepseek-v4-pro";
+                api_base = "https://integrate.api.nvidia.com/v1";
+                api_key = "os.environ/NVIDIA_NIM_API_KEY";
               };
             }
 
             {
-              model_name = "vercel-glm-5-2";
+              model_name = "nvidia-glm-5-2";
               litellm_params = {
-                model = "openai/zai/glm-5.2";
-                api_base = "https://ai-gateway.vercel.sh/v1";
-                api_key = "os.environ/VERCEL_API_KEY";
-              };
-            }
-
-            {
-              model_name = "nvidia-minimax-m3";
-              litellm_params = {
-                model = "openai/minimaxai/minimax-m3";
+                model = "openai/z-ai/glm-5.2";
                 api_base = "https://integrate.api.nvidia.com/v1";
                 api_key = "os.environ/NVIDIA_NIM_API_KEY";
               };
@@ -267,24 +229,6 @@
             }
 
             {
-              model_name = "nvidia-nemotron-4-340b";
-              litellm_params = {
-                model = "openai/nvidia/nemotron-4-340b-instruct";
-                api_base = "https://integrate.api.nvidia.com/v1";
-                api_key = "os.environ/NVIDIA_NIM_API_KEY";
-              };
-            }
-
-            {
-              model_name = "vercel-mimo-v2-5-pro-ultraspeed";
-              litellm_params = {
-                model = "openai/xiaomi/mimo-v2.5-pro-ultraspeed";
-                api_base = "https://ai-gateway.vercel.sh/v1";
-                api_key = "os.environ/VERCEL_API_KEY";
-              };
-            }
-
-            {
               model_name = "vercel-morph-v3-large";
               litellm_params = {
                 model = "openai/morph/morph-v3-large";
@@ -295,26 +239,27 @@
 
             # ---------------------------------------------------------------
             # Chain entry-point aliases. Each alias points at its chain's
-            # first deployment; router_settings.fallbacks carries it through
-            # the rest. Overlapping deployments are shared across chains
-            # (no extra API load, litellm dedupes by litellm_params).
+            # first *working* deployment; router_settings.fallbacks carries
+            # it through the rest. Overlapping deployments are shared across
+            # chains (no extra API load, litellm dedupes by litellm_params).
             # ---------------------------------------------------------------
 
             {
-              model_name = "strong-fallback-chain";     # top-7 strong models only
+              model_name = "strong-fallback-chain";     # top strong models only
               litellm_params = {
-                model = "openai/meta/muse-spark-1.3";
+                model = "openai/meta/muse-spark-1.3-contributor";
                 api_base = "https://ai-gateway.vercel.sh/v1";
                 api_key = "os.environ/VERCEL_API_KEY";
               };
             }
 
             {
-              model_name = "weak-fallback-chain";       # solid-but-cheap tier, 14 deep
+              model_name = "weak-fallback-chain";       # solid-but-cheap tier
               litellm_params = {
-                model = "openai/minimaxai/minimax-m3";
-                api_base = "https://integrate.api.nvidia.com/v1";
-                api_key = "os.environ/NVIDIA_NIM_API_KEY";
+                model = "gemini/gemini-3.6-flash";
+                api_key = "os.environ/GEMINI_API_KEY";
+                rpm = 4;        # real limit 5
+                tpm = 225000;   # real limit 250K
               };
             }
           ];
@@ -335,80 +280,68 @@
             fallbacks = [
               # ---- strong-fallback-chain ----
               { strong-fallback-chain = [
-                  "vercel-muse-spark-1-3-contributor" "gemini-3.8-flash" "nvidia-kimi-k3"
-                  "gemini-3.7-flash" "vercel-glm-5-3-flash" "vercel-glm-5-2"
+                  "gemini-3.8-flash" "nvidia-deepseek-v4-pro" "nvidia-kimi-k3"
+                  "nvidia-glm-5-2" "gemini-3.7-flash"
                 ]; }
               { vercel-muse-spark-1-3-contributor = [
-                  "gemini-3.8-flash" "nvidia-kimi-k3" "gemini-3.7-flash"
-                  "vercel-glm-5-3-flash" "vercel-glm-5-2"
+                  "gemini-3.8-flash" "nvidia-deepseek-v4-pro" "nvidia-kimi-k3"
+                  "nvidia-glm-5-2" "gemini-3.7-flash"
                 ]; }
               { "gemini-3.8-flash" = [
-                  "nvidia-kimi-k3" "gemini-3.7-flash" "vercel-glm-5-3-flash" "vercel-glm-5-2"
+                  "nvidia-deepseek-v4-pro" "nvidia-kimi-k3" "nvidia-glm-5-2"
+                  "gemini-3.7-flash"
                 ]; }
-              { nvidia-kimi-k3 = [
-                  "gemini-3.7-flash" "vercel-glm-5-3-flash" "vercel-glm-5-2"
+              { nvidia-deepseek-v4-pro = [
+                  "nvidia-kimi-k3" "nvidia-glm-5-2" "gemini-3.7-flash"
                 ]; }
-              { "gemini-3.7-flash" = [ "vercel-glm-5-3-flash" "vercel-glm-5-2" ]; }
-              { vercel-glm-5-3-flash = [ "vercel-glm-5-2" ]; }
-              # vercel-glm-5-2 = last
+              { nvidia-kimi-k3 = [ "nvidia-glm-5-2" "gemini-3.7-flash" ]; }
+              { nvidia-glm-5-2 = [ "gemini-3.7-flash" ]; }
+              # gemini-3.7-flash = last
 
               # ---- weak-fallback-chain ----
               { weak-fallback-chain = [
-                  "gemini-3.6-flash" "vercel-mimo-v2-5-pro" "vercel-kimi-k2-7-code"
+                  "vercel-mimo-v2-5-pro" "vercel-kimi-k2-7-code"
                   "gemma-4-31b" "gemini-3.5-flash" "gemma-4-26b" "vercel-mimo-v2-5"
                   "gemini-3-flash" "gemini-3.5-flash-lite" "nvidia-gpt-oss-20b"
-                  "gemini-3.1-flash-lite" "gemini-2.5-flash" "gemini-2.5-flash-lite"
+                  "gemini-3.1-flash-lite"
                 ]; }
               { "gemini-3.6-flash" = [
                   "vercel-mimo-v2-5-pro" "vercel-kimi-k2-7-code" "gemma-4-31b"
                   "gemini-3.5-flash" "gemma-4-26b" "vercel-mimo-v2-5" "gemini-3-flash"
                   "gemini-3.5-flash-lite" "nvidia-gpt-oss-20b" "gemini-3.1-flash-lite"
-                  "gemini-2.5-flash" "gemini-2.5-flash-lite"
                 ]; }
               { vercel-mimo-v2-5-pro = [
                   "vercel-kimi-k2-7-code" "gemma-4-31b" "gemini-3.5-flash" "gemma-4-26b"
                   "vercel-mimo-v2-5" "gemini-3-flash" "gemini-3.5-flash-lite"
-                  "nvidia-gpt-oss-20b" "gemini-3.1-flash-lite" "gemini-2.5-flash"
-                  "gemini-2.5-flash-lite"
+                  "nvidia-gpt-oss-20b" "gemini-3.1-flash-lite"
                 ]; }
               { vercel-kimi-k2-7-code = [
                   "gemma-4-31b" "gemini-3.5-flash" "gemma-4-26b" "vercel-mimo-v2-5"
                   "gemini-3-flash" "gemini-3.5-flash-lite" "nvidia-gpt-oss-20b"
-                  "gemini-3.1-flash-lite" "gemini-2.5-flash" "gemini-2.5-flash-lite"
+                  "gemini-3.1-flash-lite"
                 ]; }
               { gemma-4-31b = [
                   "gemini-3.5-flash" "gemma-4-26b" "vercel-mimo-v2-5" "gemini-3-flash"
                   "gemini-3.5-flash-lite" "nvidia-gpt-oss-20b" "gemini-3.1-flash-lite"
-                  "gemini-2.5-flash" "gemini-2.5-flash-lite"
                 ]; }
               { "gemini-3.5-flash" = [
                   "gemma-4-26b" "vercel-mimo-v2-5" "gemini-3-flash" "gemini-3.5-flash-lite"
-                  "nvidia-gpt-oss-20b" "gemini-3.1-flash-lite" "gemini-2.5-flash"
-                  "gemini-2.5-flash-lite"
+                  "nvidia-gpt-oss-20b" "gemini-3.1-flash-lite"
                 ]; }
               { gemma-4-26b = [
                   "vercel-mimo-v2-5" "gemini-3-flash" "gemini-3.5-flash-lite"
-                  "nvidia-gpt-oss-20b" "gemini-3.1-flash-lite" "gemini-2.5-flash"
-                  "gemini-2.5-flash-lite"
+                  "nvidia-gpt-oss-20b" "gemini-3.1-flash-lite"
                 ]; }
               { vercel-mimo-v2-5 = [
                   "gemini-3-flash" "gemini-3.5-flash-lite" "nvidia-gpt-oss-20b"
-                  "gemini-3.1-flash-lite" "gemini-2.5-flash" "gemini-2.5-flash-lite"
+                  "gemini-3.1-flash-lite"
                 ]; }
               { gemini-3-flash = [
                   "gemini-3.5-flash-lite" "nvidia-gpt-oss-20b" "gemini-3.1-flash-lite"
-                  "gemini-2.5-flash" "gemini-2.5-flash-lite"
                 ]; }
-              { "gemini-3.5-flash-lite" = [
-                  "nvidia-gpt-oss-20b" "gemini-3.1-flash-lite" "gemini-2.5-flash"
-                  "gemini-2.5-flash-lite"
-                ]; }
-              { nvidia-gpt-oss-20b = [
-                  "gemini-3.1-flash-lite" "gemini-2.5-flash" "gemini-2.5-flash-lite"
-                ]; }
-              { "gemini-3.1-flash-lite" = [ "gemini-2.5-flash" "gemini-2.5-flash-lite" ]; }
-              { "gemini-2.5-flash" = [ "gemini-2.5-flash-lite" ]; }
-              # gemini-2.5-flash-lite = last
+              { "gemini-3.5-flash-lite" = [ "nvidia-gpt-oss-20b" "gemini-3.1-flash-lite" ]; }
+              { nvidia-gpt-oss-20b = [ "gemini-3.1-flash-lite" ]; }
+              # gemini-3.1-flash-lite = last
             ];
           };
         };
@@ -416,14 +349,12 @@
     };
 }
 
-# vercelAPI/.Muse Spark 1.3
 # vercelAPI/.Muse Spark 1.3 Contributor
 # googleAPI/.gemini-3.8-flash
+# nvidiaAPI/.deepseek-ai/deepseek-v4-pro
 # nvidiaAPI/.moonshotai/kimi-k3
+# nvidiaAPI/.z-ai/glm-5.2
 # googleAPI/.gemini-3.7-flash
-# vercelAPI/.GLM 5.3 Flash
-# vercelAPI/.GLM 5.2
-# nvidiaAPI/.minimaxai/minimax-m3
 # googleAPI/.gemini-3.6-flash
 # vercelAPI/.MiMo V2.5 Pro
 # vercelAPI/.Kimi K2.7 Code
@@ -435,10 +366,6 @@
 # googleAPI/.gemini-3.5-flash-lite
 # nvidiaAPI/.openai/gpt-oss-20b
 # googleAPI/.gemini-3.1-flash-lite
-# googleAPI/.gemini-2.5-flash
-# googleAPI/.gemini-2.5-flash-lite
-# nvidiaAPI/.nvidia/nemotron-4-340b-instruct
-# vercelAPI/.MiMo V2.5 Pro UltraSpeed
 # vercelAPI/.Morph V3 Large
 
 # add Qwen 3.8 Max 0902? and Mimo V2.6 pro?

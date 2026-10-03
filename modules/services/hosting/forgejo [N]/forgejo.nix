@@ -1,5 +1,6 @@
 {
   flake.modules.nixos.forgejo =
+    { pkgs, ... }:
     let
       port = 3000;
     in
@@ -16,6 +17,7 @@
           actions.ENABLED = true;
         };
       };
+      environment.systemPackages = [ pkgs.forgejo-lts ];
       networking.firewall.interfaces.ap0.allowedTCPPorts = [ port ];
     };
 }
