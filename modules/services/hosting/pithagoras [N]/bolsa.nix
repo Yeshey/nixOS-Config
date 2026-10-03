@@ -17,7 +17,7 @@
       syncMain = false;
 
       # Forgejo runner: stays completely inert while this is empty (see registration steps).
-      runnerUuid = "";
+      runnerUuid = "38623864-3963-3133-6264-383839666565";
       runnerEnabled = runnerUuid != "";
       forgejoHost = "skyloft.tailb6874b.ts.net";
       runnerNet = "forgejo-runner";
@@ -105,7 +105,7 @@
           runner = {
             capacity = 1;
             timeout = "30m";
-            labels = [ "docker:docker://node:22-bookworm" ];
+            labels = [ "docker:docker://python:3.12-bookworm" ];
           };
           server.connections.default = {
             url = "http://${forgejoHost}:3000/";
