@@ -713,11 +713,11 @@
         "nixpkgs": "nixpkgs_5"
       },
       "locked": {
-        "lastModified": 1791230995,
-        "narHash": "sha256-8cF1iTgvD8FrGBHoYm9tmcF+pmgAopvlfp7Fvhv/Rus=",
+        "lastModified": 1791235578,
+        "narHash": "sha256-AYDdJmiiNG0XjvF/hCRtN/yXHmtnCZRrF3aRq17PY8A=",
         "ref": "refs/heads/main",
-        "rev": "55f75a313d73722e8e9ac75cc7e5fe51a376d5dc",
-        "revCount": 8,
+        "rev": "7628f243bfc50a910fb86dc2c02e3eea2deb952b",
+        "revCount": 9,
         "type": "git",
         "url": "ssh://forgejo@skyloft.tailb6874b.ts.net/Yeshey/looped.git"
       },

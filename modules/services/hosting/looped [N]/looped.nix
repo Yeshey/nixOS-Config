@@ -22,6 +22,7 @@
         name = "looped";
         defaultBranch = "main";
       };
+      listenAddress = "skyloft.tailb6874b.ts.net";
       secrets = {
         authorFile = config.sops.secrets.looper_author_token.path;
         reviewerFile = config.sops.secrets.looper_reviewer_token.path;
@@ -51,5 +52,7 @@
       memoryMax = "infinity"; # Set from actual Skyloft capacity.
       autoMerge.enable = false;
     };
+
+    networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 17310 ];
   };
 }
