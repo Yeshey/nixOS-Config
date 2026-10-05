@@ -44,6 +44,7 @@
     };
     impermanence.url = "github:nix-community/impermanence";
     import-tree.url = "github:vic/import-tree";
+    looped.url = "git+ssh://forgejo@skyloft.tailb6874b.ts.net/Yeshey/looped.git";
     nix-darwin = {
       url = "github:LnL7/nix-darwin/nix-darwin-26.05";
       inputs.nixpkgs.follows = "nixpkgs-darwin";
