@@ -51,7 +51,7 @@
       ];
       cpuQuota = "100%";
       memoryMax = "infinity"; # Set from actual Skyloft capacity.
-      autoMerge.enable = false;
+      autoMerge.enable = true;
     };
 
     networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 17310 ];
