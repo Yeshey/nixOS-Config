@@ -23,6 +23,7 @@
         defaultBranch = "main";
       };
       listenAddress = "skyloft.tailb6874b.ts.net";
+      authMode = "none";
       secrets = {
         authorFile = config.sops.secrets.looper_author_token.path;
         reviewerFile = config.sops.secrets.looper_reviewer_token.path;
