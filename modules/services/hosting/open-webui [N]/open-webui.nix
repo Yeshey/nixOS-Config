@@ -21,6 +21,8 @@
       sops.secrets."groq_key" = { };
       sops.secrets."vercel_key" = { };
       sops.secrets."cerebras_key" = { };
+      sops.secrets."tavily_api_key" = { };
+      sops.secrets."exa_api_key" = { };
 
       sops.templates."open-webui.env" = {
         content = ''
@@ -29,17 +31,21 @@
         restartUnits = [ "open-webui.service" ];
       };
 
-      sops.secrets."searx_env" = {
+      sops.templates."searx_env" = {
+        content = ''
+          TAVILY_API_KEY=${config.sops.placeholder."tavily_api_key"}
+          EXA_API_KEY=${config.sops.placeholder."exa_api_key"}
+        '';
         restartUnits = [ "open-webui.service" ];
       };
 
       systemd.services.open-webui = {
         serviceConfig.EnvironmentFile = [
-          config.sops.secrets."searx_env".path
+          config.sops.templates."searx_env".path
           config.sops.templates."open-webui.env".path
         ];
         unitConfig.RequiresMountsFor = [
-          config.sops.secrets."searx_env".path
+          config.sops.templates."searx_env".path
           config.sops.templates."open-webui.env".path
         ];
         serviceConfig.Restart = "on-failure";

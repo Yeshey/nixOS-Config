@@ -12,9 +12,16 @@
       sops.secrets."litellm_master_key" = { };
       sops.secrets."forgejo_agent_token" = { };
       sops.secrets."moltbook_api_key" = { };
-      sops.secrets."searx_env".restartUnits = [
-        "docker-pithagoras.service"
-      ];
+      sops.secrets."tavily_api_key" = { };
+      sops.secrets."exa_api_key" = { };
+
+      sops.templates."searx_env" = {
+        content = ''
+          TAVILY_API_KEY=${config.sops.placeholder."tavily_api_key"}
+          EXA_API_KEY=${config.sops.placeholder."exa_api_key"}
+        '';
+        restartUnits = [ "docker-pithagoras.service" ];
+      };
 
       sops.templates."pithagoras.env" = {
         content = ''
@@ -43,7 +50,6 @@
         "d ${workspacesDir} 0750 root root -"
       ];
 
-      # /data is a host bind mount. Install config there before starting portal.
       systemd.services.pithagoras-config = {
         description = "Install declarative Pi configuration";
 
@@ -95,7 +101,7 @@
           "--pull=always"
           "--network=host"
           "--env-file=${config.sops.templates."pithagoras.env".path}"
-          "--env-file=${config.sops.secrets."searx_env".path}"
+          "--env-file=${config.sops.templates."searx_env".path}"
         ];
       };
 
