@@ -266,8 +266,6 @@
 
           router_settings = {
             optional_pre_call_checks = [ "enforce_model_rate_limits" ];
-            timeout = 60;
-            num_retries = 2;
             # num_retries = 100;
             # allowed_fails = 100;
             # cooldown_time = 86400;
