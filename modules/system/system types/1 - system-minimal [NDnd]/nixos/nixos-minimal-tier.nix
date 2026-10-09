@@ -50,7 +50,11 @@
           "pipe-operators"
         ];
 
-        download-buffer-size = 1024 * 1024 * 1024;
+        # Improve resilience to crashes and interrupted power.
+        fsync-store-paths = lib.mkDefault true;
+        fsync-metadata = lib.mkDefault true;
+        
+        download-buffer-size = lib.mkDefault (1024 * 1024 * 1024);
 
         trusted-users = [
           "root"

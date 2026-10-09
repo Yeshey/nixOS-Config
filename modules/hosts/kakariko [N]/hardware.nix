@@ -60,6 +60,10 @@
       boot.kernelModules = [ "kvm-intel" ];
       boot.extraModulePackages = [ ];
       
+      # Force a fresh initrd after repairing corrupted store dependencies.
+      boot.initrd.systemd.contents."/etc/initrd-repair-marker".text =
+        "Rebuilt after store repair, 2026-10-10\n";
+
       hardware.firmware = [ hdaJackRetaskFwPkg ];
       # environment.variables.INTEL_DEBUG = "reemit"; # for wot?
       services.bcachefs.autoScrub.enable = true; # enable after you have kernel 6.14 or later
