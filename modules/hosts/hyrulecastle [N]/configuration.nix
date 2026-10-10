@@ -19,6 +19,7 @@
       yeshey-syncthing
 
       i2p
+      waydroid
       ollama-cuda
 
       # hosting

@@ -16,7 +16,6 @@
       steam
       iphone
       appimage
-      waydroid
       desktop-apps
     ];
 
