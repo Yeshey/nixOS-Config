@@ -20,6 +20,7 @@
       desktop-apps
     ];
 
+    virtualisation.docker.enableOnBoot = lib.mkDefault false;
     programs.gphoto2.enable = true; # to be able to access digital cameras
     networking.resolvconf.dnsExtensionMechanism = lib.mkDefault false; # https://github.com/NixOS/nixpkgs/issues/24433
     services.automatic-timezoned.enable = true;
