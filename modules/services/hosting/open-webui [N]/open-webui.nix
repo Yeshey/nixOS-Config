@@ -74,7 +74,7 @@
           OLLAMA_API_BASE_URL = "http://localhost:11434";
 
           OPENAI_API_BASE_URLS = "http://localhost:${toString litellmPort}/v1;https://integrate.api.nvidia.com/v1;https://openrouter.ai/api/v1;https://opencode.ai/zen/v1;https://api.groq.com/openai/v1;https://ai-gateway.vercel.sh/v1;https://api.cerebras.ai/v1;https://api.iaedu.pt/agent-chat//api/v1/agent/cmor5objoex9gfp01vm7p95jh/stream";
-          OPENAI_API_CONFIGS = ''{"0": {"prefix_id": "googleAPI/"}, "1": {"prefix_id": "nvidiaAPI/"}, "2": {"prefix_id": "openrouterAPI/"}, "3": {"prefix_id": "opencodeAPI/"}, "4": {"prefix_id": "groqAPI/"}, "5": {"prefix_id": "vercelAPI/"}, "6": {"prefix_id": "cerebrasAPI/"}, "7": {"prefix_id": "iaeduAPI/"}}'';
+          OPENAI_API_CONFIGS = ''{"0": {"prefix_id": "mylitellmAPI/"}, "1": {"prefix_id": "nvidiaAPI/"}, "2": {"prefix_id": "openrouterAPI/"}, "3": {"prefix_id": "opencodeAPI/"}, "4": {"prefix_id": "groqAPI/"}, "5": {"prefix_id": "vercelAPI/"}, "6": {"prefix_id": "cerebrasAPI/"}, "7": {"prefix_id": "iaeduAPI/"}}'';
 
           WEBUI_AUTH = "False";
         };
