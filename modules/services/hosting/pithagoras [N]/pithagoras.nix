@@ -15,6 +15,11 @@
       sops.secrets."tavily_api_key" = { };
       sops.secrets."exa_api_key" = { };
 
+      # Portal login credentials. The container refuses to start without
+      # PORTAL_PASSWORD; PORTAL_SECRET keeps sessions valid across restarts.
+      sops.secrets."pithagoras_portal_password" = { };
+      sops.secrets."pithagoras_portal_secret" = { };
+
       sops.templates."searx_env" = {
         content = ''
           TAVILY_API_KEY=${config.sops.placeholder."tavily_api_key"}
@@ -34,6 +39,9 @@
           EXECUTOR=host
           PI_PROVIDER=litellm-chat
           PI_MODEL=weak-fallback-chain
+
+          PORTAL_PASSWORD=${config.sops.placeholder."pithagoras_portal_password"}
+          PORTAL_SECRET=${config.sops.placeholder."pithagoras_portal_secret"}
 
           GIT_CONFIG_COUNT=1
           GIT_CONFIG_KEY_0=credential.http://skyloft.tailb6874b.ts.net:3000.helper
@@ -115,12 +123,5 @@
       };
 
       networking.firewall.interfaces.ap0.allowedTCPPorts = [ port ];
-
-      services.caddy.virtualHosts."skyloft.tailb6874b.ts.net:9445".extraConfig = ''
-        tls internal
-        reverse_proxy 127.0.0.1:4100
-      '';
-
-      networking.firewall.interfaces.tailscale0.allowedTCPPorts = [ 9445 ];
     };
 }

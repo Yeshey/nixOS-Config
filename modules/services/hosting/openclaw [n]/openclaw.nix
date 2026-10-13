@@ -1,6 +1,5 @@
 { inputs, ... }:
 {
-
   flake.modules.nixos.openclaw =
     { config, ... }:
     {
@@ -10,13 +9,11 @@
         owner = "yeshey";
         mode = "0400";
       };
-
       sops.templates."openclaw-litellm-key" = {
         owner = "yeshey";
         mode = "0400";
         content = config.sops.placeholder.litellm_master_key;
       };
-
       home-manager.users.yeshey.imports = [
         inputs.self.modules.homeManager.openclaw
       ];
@@ -26,66 +23,29 @@
     { config, lib, pkgs, osConfig, ... }:
     let
       stateDir = "${config.home.homeDirectory}/.openclaw";
-
-      # Use upstream's dependency set, avoiding the host's unsafe SQLite.
+      workspace = name: "${stateDir}/workspaces/${name}";
       openclawPkgs = import inputs.nix-openclaw.inputs.nixpkgs {
         system = pkgs.stdenv.hostPlatform.system;
         overlays = [ inputs.nix-openclaw.overlays.default ];
       };
-
-      agents = {
-        orchestrator = {
-          model = "weak-fallback-chain";
-          instructions = ''
-            Coordinate tasks and delegate to the declared specialists.
-            Report progress and blockers accurately.
-          '';
-          skills = [ ];
-          allowAgents = [ "planner" "worker" "reviewer" "fixer" ];
-        };
-
-        planner = {
-          model = "weak-fallback-chain";
-          instructions = ''
-            Inspect the project and produce plans with concrete acceptance criteria.
-            Implement changes only when asked.
-          '';
-          skills = [ ];
-          allowAgents = [ ];
-        };
-
-        worker = {
-          model = "weak-fallback-chain";
-          instructions = ''
-            Implement assigned tasks. Keep changes focused and run relevant tests.
-          '';
-          skills = [ ];
-          allowAgents = [ ];
-        };
-
-        reviewer = {
-          model = "weak-fallback-chain";
-          instructions = ''
-            Review changes for concrete defects supported by evidence.
-            Distinguish cosmetic nits from blocking problems.
-          '';
-          skills = [ ];
-          allowAgents = [ ];
-        };
-
-        fixer = {
-          model = "weak-fallback-chain";
-          instructions = ''
-            Address supplied review findings and test failures.
-            Preserve unrelated changes and validate your fixes.
-          '';
-          skills = [ ];
-          allowAgents = [ ];
-        };
+      common = import ./_agents/common.nix { inherit pkgs; };
+      roles = {
+        orchestrator = import ./_agents/orchestrator.nix;
+        planner = import ./_agents/planner.nix;
+        worker = import ./_agents/worker.nix;
+        reviewer = import ./_agents/reviewer.nix;
+        fixer = import ./_agents/fixer.nix;
       };
-
-      workspace = name: "${stateDir}/workspaces/${name}";
-
+      # Nested attributes merge; role lists replace common lists.
+      agents = lib.mapAttrs (_: role:
+        lib.recursiveUpdate common.defaults role
+      ) roles;
+      filesFor = name:
+        agents.${name}.files // {
+          "AGENTS.md" = common.sharedInstructions + "\n"
+            + agents.${name}.instructions;
+        };
+      primaryFiles = filesFor "orchestrator";
       secretRef = provider: {
         source = "file";
         inherit provider;
@@ -93,12 +53,8 @@
       };
     in
     {
-      imports = [
-        inputs.nix-openclaw.homeManagerModules.openclaw
-      ];
-
+      imports = [ inputs.nix-openclaw.homeManagerModules.openclaw ];
       systemd.user.startServices = "sd-switch";
-
       systemd.user.services.openclaw-gateway.Service = {
         StandardOutput = lib.mkForce "journal";
         StandardError = lib.mkForce "journal";
@@ -110,47 +66,18 @@
         toolNames = [ ];
         inherit stateDir;
         workspaceDir = workspace "orchestrator";
+        runtimePackages = [ openclawPkgs.nodejs_24 ] ++ common.runtimePackages;
+        skills = common.skillDefinitions;
 
-        # Upstream manages the primary workspace bootstrap files.
+        # Use upstream bootstrap management for the primary workspace.
+        # toFile avoids evaluation-time ARM builds on the deploying x86 host.
         workspace.bootstrapFiles = {
-          agents = builtins.toFile "AGENTS.md"
-            agents.orchestrator.instructions;
-
-          soul = builtins.toFile "SOUL.md" ''
-            Be direct, accurate, and explicit about uncertainty.
-          '';
-
-          tools = builtins.toFile "TOOLS.md" ''
-            Use available tools to complete assigned work.
-            Report validation results accurately.
-          '';
-
-          identity = builtins.toFile "IDENTITY.md" ''
-            You are the project orchestrator.
-          '';
-
-          user = builtins.toFile "USER.md" ''
-            The user is Yeshey. Follow the user's instructions.
-          '';
+          agents = builtins.toFile "AGENTS.md" primaryFiles."AGENTS.md";
+          soul = builtins.toFile "SOUL.md" primaryFiles."SOUL.md";
+          tools = builtins.toFile "TOOLS.md" primaryFiles."TOOLS.md";
+          identity = builtins.toFile "IDENTITY.md" primaryFiles."IDENTITY.md";
+          user = builtins.toFile "USER.md" primaryFiles."USER.md";
         };
-
-        # Upstream materializes these skills and wires their load paths.
-        # Example:
-        # skills = [
-        #   {
-        #     name = "research";
-        #     mode = "copy";
-        #     source = "${./skills/research}";
-        #   }
-        # ];
-        skills = [ ];
-
-        runtimePackages = with pkgs; [
-          git curl wget jq ripgrep findutils
-          bashInteractive coreutils gnugrep gnused
-          nix procps
-          (python3.withPackages (ps: [ ps.pytest ]))
-        ];
 
         config = {
           secrets.providers = {
@@ -165,7 +92,6 @@
               path = osConfig.sops.templates."openclaw-litellm-key".path;
             };
           };
-
           gateway = {
             mode = "local";
             bind = "loopback";
@@ -179,7 +105,6 @@
               "https://skyloft.tailb6874b.ts.net:8444"
             ];
           };
-
           talk.agentId = "orchestrator";
           agents = {
             ownership = "explicit";
@@ -197,9 +122,9 @@
               model = "litellm/${agent.model}";
               skills = agent.skills;
               subagents.allowAgents = agent.allowAgents;
+              tools.allow = agent.tools;
             }) agents;
           };
-
           models.providers.litellm = {
             baseUrl = "http://127.0.0.1:4000/v1";
             apiKey = secretRef "litellm-key";
@@ -210,8 +135,7 @@
               agentRuntime.id = "openclaw";
               reasoning = false;
               input = [ "text" ];
-              contextWindow = 128000;
-              maxTokens = 16384;
+              inherit (common) contextWindow maxTokens;
               cost = {
                 input = 0;
                 output = 0;
@@ -222,7 +146,6 @@
               map (agent: agent.model) (builtins.attrValues agents)
             ));
           };
-
           tools = {
             profile = "full";
             exec = {
@@ -234,11 +157,14 @@
         };
       };
 
-      # Separate instructions for specialist workspaces.
-      home.file = lib.mapAttrs' (name: agent:
-        lib.nameValuePair ".openclaw/workspaces/${name}/AGENTS.md" {
-          text = agent.instructions;
-        }
-      ) (builtins.removeAttrs agents [ "orchestrator" ]);
+      # Home Manager manages the specialists' full bootstrap file sets.
+      # Session history, MEMORY.md and memory/ remain runtime-owned.
+      home.file = lib.listToAttrs (lib.concatLists (
+        lib.mapAttrsToList (name: _: lib.mapAttrsToList (filename: text:
+          lib.nameValuePair ".openclaw/workspaces/${name}/${filename}" {
+            inherit text;
+          }
+        ) (filesFor name)) (builtins.removeAttrs agents [ "orchestrator" ])
+      ));
     };
 }

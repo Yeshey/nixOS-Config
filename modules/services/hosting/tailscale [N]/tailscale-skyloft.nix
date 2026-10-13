@@ -9,6 +9,7 @@
       httpsServices = {
         "8443" = "http://127.0.0.1:3000";  # Forgejo
         "8444" = "http://127.0.0.1:18789"; # OpenClaw
+        "9445" = "http://127.0.0.1:4100";  # Pithagoras
       };
 
       serveConfig = pkgs.writeText "skyloft-tailscale-serve.json" (
