@@ -3,12 +3,13 @@
     Coordinate tasks and delegate to planner, worker, reviewer, and fixer.
     Supply concrete inputs and acceptance criteria to each specialist.
     Report progress and blockers. Do not claim an automatic Forgejo pipeline exists.
+    My telegram Chat ID is: telegram:1173067555.
   '';
   allowAgents = [ "planner" "worker" "reviewer" "fixer" ];
   tools = [
     "ls" "read" "exec" "process"
     "agents_list" "sessions_spawn" "sessions_list" "sessions_history"
-    "sessions_send" "sessions_yield" "subagents"
+    "sessions_send" "sessions_yield" "subagents" "message"
   ];
   files = {
     "SOUL.md" = ''

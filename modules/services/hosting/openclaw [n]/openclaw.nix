@@ -9,6 +9,15 @@
         owner = "yeshey";
         mode = "0400";
       };
+      sops.secrets.openclaw_moltbook_key = {
+        key = "moltbook_api_key";
+        owner = "yeshey";
+        mode = "0400";
+      };
+      sops.secrets.telegram_openclawinator_bot = {
+        owner = "yeshey";
+        mode = "0400";
+      };
       sops.templates."openclaw-litellm-key" = {
         owner = "yeshey";
         mode = "0400";
@@ -68,6 +77,9 @@
         workspaceDir = workspace "orchestrator";
         runtimePackages = [ openclawPkgs.nodejs_24 ] ++ common.runtimePackages;
         skills = common.skillDefinitions;
+        runtimePlugins = [ ];
+        environment.MOLTBOOK_API_KEY =
+          osConfig.sops.secrets.openclaw_moltbook_key.path;
 
         # Use upstream bootstrap management for the primary workspace.
         # toFile avoids evaluation-time ARM builds on the deploying x86 host.
@@ -80,6 +92,17 @@
         };
 
         config = {
+          channels.telegram = {
+            enabled = true;
+            tokenFile = osConfig.sops.secrets.telegram_openclawinator_bot.path;
+            dmPolicy = "pairing";
+          };
+          bindings = [
+            {
+              agentId = "orchestrator";
+              match = { channel = "telegram"; accountId = "*"; };
+            }
+          ];
           secrets.providers = {
             gateway-password = {
               source = "file";
@@ -106,9 +129,14 @@
             ];
           };
           talk.agentId = "orchestrator";
+
+          skills.workshop.autonomous.mode = "off";
+          plugins.entries."memory-core".config.dreaming.enabled = false;
+
           agents = {
             ownership = "explicit";
             defaults = {
+              heartbeat.every = "0m";
               systemAgent.agentId = "orchestrator";
               model.primary = "litellm/${agents.orchestrator.model}";
               skipBootstrap = true;
@@ -148,10 +176,13 @@
           };
           tools = {
             profile = "full";
+            alsoAllow = [ "message" ];
+
             exec = {
               host = "gateway";
               mode = "full";
             };
+
             fs.workspaceOnly = false;
           };
         };
