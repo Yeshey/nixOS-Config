@@ -33,7 +33,8 @@
       tailscale-skyloft
       pithagoras
       forgejo
-      looped
+      # looped
+      openclaw
       arcane
       kubo
       minecraft

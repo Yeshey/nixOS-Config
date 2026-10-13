@@ -1,7 +1,32 @@
 { inputs, ... }:
 {
   flake.modules.nixos.tailscale-skyloft =
-   { config, pkgs, ... }:
+    { config, lib, pkgs, ... }:
+    let
+      hostname = "skyloft.tailb6874b.ts.net";
+
+      # Add HTTPS services here: external port -> local backend.
+      httpsServices = {
+        "8443" = "http://127.0.0.1:3000";  # Forgejo
+        "8444" = "http://127.0.0.1:18789"; # OpenClaw
+      };
+
+      serveConfig = pkgs.writeText "skyloft-tailscale-serve.json" (
+        builtins.toJSON {
+          TCP = lib.mapAttrs (_: _: { HTTPS = true; }) httpsServices;
+          Web = lib.mapAttrs' (
+            port: backend:
+            lib.nameValuePair "${hostname}:${port}" {
+              Handlers."/".Proxy = backend;
+            }
+          ) httpsServices;
+        }
+      );
+
+      applyServeConfig = pkgs.writeShellScript "apply-skyloft-serve" ''
+        exec ${lib.getExe config.services.tailscale.package} serve set-raw < ${serveConfig}
+      '';
+    in
     {
       imports = with inputs.self.modules.nixos; [
         tailscale
@@ -23,7 +48,15 @@
           "--hostname=skyloft"
           "--advertise-exit-node"
         ];
+
+        serve = {
+          enable = true;
+          configFile = serveConfig;
+        };
       };
+
+      systemd.services.tailscale-serve.serviceConfig.ExecStart =
+        lib.mkForce "${applyServeConfig}";
 
       systemd.services.tailscaled-autoconnect = {
         unitConfig.RequiresMountsFor = config.sops.secrets."tailscale/authkey".path;

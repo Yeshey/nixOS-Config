@@ -70,6 +70,7 @@
       url = "github:Yeshey/nix-on-droid/release-24.05";
       inputs.home-manager.follows = "home-manager";
     };
+    nix-openclaw.url = "github:openclaw/nix-openclaw";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
     nixos-upgrade-on-shutdown = {
       url = "github:yeshey/nixos-upgrade-on-shutdown";
