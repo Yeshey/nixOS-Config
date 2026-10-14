@@ -1,43 +1,45 @@
 ---
 name: container-rebuild
-description: Install durable container packages or change the OpenClaw guest configuration, request a rebuild, and verify completion.
+description: Change your container's NixOS configuration and wait for the rebuild to finish.
 ---
 
-# Container configuration
+Edit `~/config/guest.nix`. Preserve existing settings and packages.
+Add durable packages to `environment.systemPackages`.
 
-Edit `~/config/guest.nix`, preserving existing settings. This is the writable
-NixOS guest extension. For packages, add `pkgs.<name>` to
-`environment.systemPackages`. The host fetches GitHub main and builds the
-container with this module; do not edit `/host-config` or rebuild the host.
+Before rebuilding, save your progress: activation may restart OpenClaw.
 
-Before applying, save your progress in workspace files: activation can restart
-OpenClaw and interrupt this tool call. Persistent files and rebuild status remain.
-
-Request a rebuild using the existing exec tool:
+Run this entire block in ONE exec call:
 
 ```bash
-openclaw-rebuild request
+request_id="$(openclaw-rebuild request)" &&
+  printf '%s\n' "$request_id" > ~/last-rebuild-request &&
+  openclaw-rebuild wait "$request_id"
 ```
 
-Save the printed request ID in a workspace file before waiting. Do not submit a
-second request while one is pending or running.
+Wait for completion. If exec backgrounds the command, follow it with the
+process tool. Do not submit another request.
+
+After success, verify the change, for example:
 
 ```bash
-openclaw-rebuild wait REQUEST_ID
+command -v cowsay
 ```
 
-Waiting polls every two seconds, times out after 65 minutes, and returns the
-rebuild's exit status. If exec runs this in the background, use the process tool
-to follow that same command. Do not start another rebuild to check progress.
+If interrupted, resume waiting for the SAME request:
 
-If interrupted, recover using:
+```bash
+openclaw-rebuild wait "$(cat ~/last-rebuild-request)"
+```
+
+For diagnostics:
 
 ```bash
 openclaw-rebuild status
-cat ~/rebuild/latest.log
+tail -n 80 ~/rebuild/latest.log
 ```
 
-Only `state=finished`, matching `requestId`, and `exitStatus=0` confirm success.
-Verify the requested change separately, for example `command -v cmatrix`.
-Report failures accurately. A timeout means completion is unknown, not failure
-of the build. Do not delete pending requests or status files to bypass a blocker.
+Success requires matching request ID, `state=finished`, and `exitStatus=0`.
+Timeout means completion is unknown. Report errors; never claim unverified success.
+
+The host builds GitHub main with your guest module. Do not edit `/host-config`,
+rebuild the host, or delete request/status files to bypass a blocker.
