@@ -1,5 +1,7 @@
 # To approve:
 # sudo nixos-container run openclaw -- su - openclaw -c 'openclaw devices approve <session-ID>'
+# restart container:
+# sudo systemctl restart container@openclaw
 
 { inputs, ... }:
 {
