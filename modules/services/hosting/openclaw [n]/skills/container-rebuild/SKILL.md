@@ -4,10 +4,10 @@ description: Change your container configuration, rebuild it, and publish the te
 ---
 
 Edit `~/config/guest.nix`, preserving unrelated settings. This aliases
-`~/config/playground/guest.nix-data`. Add packages to `environment.systemPackages`.
+`~/config/playground/guest.nix`. Add packages to `environment.systemPackages`.
 
-Put helper files in `~/config/playground/`. Use `.nix-data` for Nix helper modules
-and import them explicitly from `guest.nix-data`. Only imported modules affect
+Put helper files in `~/config/playground/`. Use `.nix` for Nix helper modules
+and import them explicitly from `guest.nix`. Only imported modules affect
 NixOS. Keep paths relative. Do not put secrets, symlinks, or Git repositories here.
 The entire playground, including added and deleted files, is committed to the
 public GitHub repository after successful build and activation.

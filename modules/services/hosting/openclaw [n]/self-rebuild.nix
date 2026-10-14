@@ -78,18 +78,18 @@
         if [ ! -d ${proposals}/playground ]; then
           mkdir -p ${proposals}/playground
           cp -r --no-preserve=mode,ownership ${./_playground}/. ${proposals}/playground/
-          if [ -f ${proposals}/guest.nix ]; then
+          if [ -f ${proposals}/guest.nix ] && [ ! -L ${proposals}/guest.nix ]; then
             ${pkgs.util-linux}/bin/runuser -u openclaw -- ${pkgs.coreutils}/bin/cat ${proposals}/guest.nix \
-              > ${proposals}/playground/guest.nix-data
+              > ${proposals}/playground/guest.nix
           fi
           chown -R 61000:61000 ${proposals}/playground
           chmod -R u+rwX ${proposals}/playground
         fi
-        ln -sfn playground/guest.nix-data ${proposals}/guest.nix
+        ln -sfn playground/guest.nix ${proposals}/guest.nix
       '';
 
       # This is a normal relative module import, included in pure flake builds.
-      containers.openclaw.config.imports = [ ./_playground/guest.nix-data ];
+      containers.openclaw.config.imports = [ ./_playground/guest.nix ];
       containers.openclaw.bindMounts."/home/openclaw/rebuild" = {
         hostPath = logs;
         isReadOnly = true;
@@ -158,7 +158,7 @@
             echo "The playground may contain only regular files and directories, without .git." >&2
             exit 1
           fi
-          test -f snapshot/guest.nix-data
+          test -f snapshot/guest.nix
           git clone --depth 1 --single-branch --branch ${lib.escapeShellArg branch} \
             ${lib.escapeShellArg repository} source
           echo "Repository revision: $(git -C source rev-parse HEAD)"
