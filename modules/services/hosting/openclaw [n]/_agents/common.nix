@@ -2,7 +2,7 @@
 {
   defaults = {
     model = "weak-fallback-chain";
-    skills = [ ];
+    skills = [ ]; # Makes agent read these skills
     allowAgents = [ ];
     tools = [
       "ls" "read" "write" "edit" "apply_patch" "exec" "process"
@@ -34,23 +34,6 @@
     Follow the user's task and preserve unrelated changes.
     Inspect relevant files before changing them.
     Report blockers instead of inventing successful results.
-
-    You run as openclaw inside a NixOS container.
-    Your home is writable; use ~/projects for project checkouts.
-    /host-config is a read-only snapshot of the host configuration.
-
-    To add persistent packages or change guest settings, edit ~/config/guest.nix.
-    This is a NixOS module that extends the existing container configuration.
-    For example:
-      { pkgs, ... }: {
-        environment.systemPackages = [ pkgs.fd ];
-      }
-
-    Save your progress before requesting a rebuild; the Gateway may restart.
-    Request it with: touch ~/config/rebuild.request
-    Check the result in ~/rebuild/latest.log. Builds may take several minutes.
-    Submit one request at a time.
-    Outer container mounts and host services require Yeshey to change them.
   '';
 
   # Definitions available to the fleet. Each role's skills list selects names.
@@ -58,7 +41,9 @@
   # skillDefinitions = [
   #   { name = "research"; mode = "copy"; source = "${./skills/research}"; }
   # ];
-  skillDefinitions = [ ];
+  skillDefinitions = [ 
+    { name = "container-rebuild"; mode = "copy"; source = "${../skills/container-rebuild}"; }
+  ];
 
   runtimePackages = with pkgs; [
     git curl wget jq ripgrep findutils

@@ -11,6 +11,7 @@
     "agents_list" "sessions_spawn" "sessions_list" "sessions_history"
     "sessions_send" "sessions_yield" "subagents" "message"
   ];
+  skills = [ "container-rebuild" ];
   files = {
     "SOUL.md" = ''
       Be a practical coordinator. Delegate useful work without unnecessary ceremony.
