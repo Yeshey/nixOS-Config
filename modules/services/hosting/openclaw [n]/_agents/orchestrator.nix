@@ -7,7 +7,7 @@
   '';
   allowAgents = [ "planner" "worker" "reviewer" "fixer" ];
   tools = [
-    "ls" "read" "exec" "process"
+    "browser"
     "agents_list" "sessions_spawn" "sessions_list" "sessions_history"
     "sessions_send" "sessions_yield" "subagents" "message"
   ];

@@ -65,7 +65,13 @@
       };
       # Nested attributes merge; role lists replace common lists.
       agents = lib.mapAttrs (_: role:
-        lib.recursiveUpdate common.defaults role
+        let
+          merged = lib.recursiveUpdate common.defaults role;
+        in
+        merged // {
+          # Append the role's extra tools to the common list; dedupe.
+          tools = lib.unique (common.defaults.tools ++ (role.tools or [ ]));
+        }
       ) roles;
       filesFor = name:
         agents.${name}.files // {
@@ -153,6 +159,19 @@
           skills.workshop.autonomous.mode = "off";
           plugins.entries."memory-core".config.dreaming.enabled = false;
 
+          browser = {
+            enabled = true;
+            defaultProfile = "openclaw";
+            headless = true;
+            executablePath = "${pkgs.chromium}/bin/chromium";
+
+            ssrfPolicy.allowedHostnames = [
+              "skyloft.tailb6874b.ts.net"
+            ];
+          };
+
+          plugins.entries.browser.enabled = true;
+
           agents = {
             ownership = "explicit";
             defaults = {
@@ -170,13 +189,7 @@
               model = "litellm/${agent.model}";
               skills = agent.skills;
               subagents.allowAgents = agent.allowAgents;
-              tools.allow = lib.unique (
-                agent.tools ++ [
-                  "web_search"
-                  "tavily_search"
-                  "tavily_extract"
-                ]
-              );
+              tools.allow = agent.tools;
             }) agents;
           };
           models.providers.litellm = {
