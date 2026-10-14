@@ -52,7 +52,7 @@ in
               path = "${dataPath}/PersonalFiles";
               devices = allDevices;
               versioning = myVersioning;
-              ignorePatterns = (import ./global-excludes.nix-data) ++ [
+              ignorePatterns = (import ./_data/global-excludes.nix) ++ [
                 "// ========================================================="
                 "// IGNORE ALWAYS"
                 "// ========================================================="
