@@ -1,8 +1,21 @@
 { inputs, ... }:
 {
   flake.modules.nixos.openclaw =
-    { config, ... }:
+    { config, pkgs, ... }:
+    let
+      openclawPkgs = import inputs.nix-openclaw.inputs.nixpkgs {
+        system = pkgs.stdenv.hostPlatform.system;
+        overlays = [ inputs.nix-openclaw.overlays.default ];
+      };
+    in
     {
+      nixpkgs.overlays = [
+        (_: _: {
+          openclawRuntimePlugins.tavily =
+            openclawPkgs.openclawRuntimePlugins.tavily;
+        })
+      ];
+
       users.users.yeshey.linger = true;
 
       sops.secrets.openclaw_gateway_password = {
@@ -11,6 +24,11 @@
       };
       sops.secrets.openclaw_moltbook_key = {
         key = "moltbook_api_key";
+        owner = "yeshey";
+        mode = "0400";
+      };
+      sops.secrets.openclaw_tavily_key = {
+        key = "tavily_api_key";
         owner = "yeshey";
         mode = "0400";
       };
@@ -77,9 +95,11 @@
         workspaceDir = workspace "orchestrator";
         runtimePackages = [ openclawPkgs.nodejs_24 ] ++ common.runtimePackages;
         skills = common.skillDefinitions;
-        runtimePlugins = [ ];
+        runtimePlugins = [ "tavily" ];
         environment.MOLTBOOK_API_KEY =
           osConfig.sops.secrets.openclaw_moltbook_key.path;
+        environment.TAVILY_API_KEY =
+          osConfig.sops.secrets.openclaw_tavily_key.path;
 
         # Use upstream bootstrap management for the primary workspace.
         # toFile avoids evaluation-time ARM builds on the deploying x86 host.
@@ -150,7 +170,13 @@
               model = "litellm/${agent.model}";
               skills = agent.skills;
               subagents.allowAgents = agent.allowAgents;
-              tools.allow = agent.tools;
+              tools.allow = lib.unique (
+                agent.tools ++ [
+                  "web_search"
+                  "tavily_search"
+                  "tavily_extract"
+                ]
+              );
             }) agents;
           };
           models.providers.litellm = {
@@ -177,6 +203,11 @@
           tools = {
             profile = "full";
             alsoAllow = [ "message" ];
+
+            web.search = {
+              enabled = true;
+              provider = "tavily";
+            };
 
             exec = {
               host = "gateway";
