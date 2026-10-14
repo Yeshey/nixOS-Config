@@ -104,11 +104,23 @@
               home.username = "openclaw";
               home.homeDirectory = "/home/openclaw";
               home.stateVersion = "26.05";
+              # Ensure agent subprocesses inherit the same host Nixpkgs source
+              # used by login shells inside the container.
+              systemd.user.services.openclaw-gateway.Service.Environment =
+                lib.mkAfter [
+                  "NIX_PATH=nixpkgs=${pkgs.path}"
+                ];
             };
           };
           nix.settings.experimental-features = [ "nix-command" "flakes" ];
+          # Point nix-shell and friends at the host's pinned Nixpkgs source
+          # rather than a channel path that may not exist inside the guest.
+          nix.nixPath = lib.mkForce [
+            "nixpkgs=${pkgs.path}"
+          ];
         };
       };
+
       systemd.services."container@openclaw" = {
         after = [ "sops-nix.service" ];
         unitConfig.RequiresMountsFor = [ home proposals ];

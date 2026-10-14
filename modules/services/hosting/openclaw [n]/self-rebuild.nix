@@ -28,6 +28,12 @@
           request="$HOME/config/rebuild.request"
           status="$HOME/rebuild/status.json"
           case "''${1:-request}" in
+            apply)
+              id="$("$0" request)"
+              printf '%s\n' "$id" > "$HOME/last-rebuild-request"
+              echo "Rebuild request: $id"
+              exec "$0" wait "$id"
+              ;;
             request)
               exec 9> "$HOME/config/rebuild.lock"
               flock -n 9 || { echo "Another request is being submitted." >&2; exit 1; }
@@ -48,18 +54,23 @@
               id="''${2:?Usage: openclaw-rebuild wait REQUEST_ID}"
               deadline=$((SECONDS + 3900))
               while (( SECONDS < deadline )); do
-                if [ -r "$status" ] && jq -e --arg id "$id" \
-                  '.requestId == $id and .state == "finished"' "$status" >/dev/null; then
-                  cat "$status"
-                  tail -n 80 "$HOME/rebuild/latest.log"
-                  exit "$(jq -r '.exitStatus' "$status")"
+                if [ -r "$status" ]; then
+                  result="$(cat "$status")"
+                  if jq -e --arg id "$id" \
+                    '.requestId == $id and .state == "finished"' <<< "$result" >/dev/null; then
+                    code="$(jq -r '.exitStatus' <<< "$result")"
+                    printf '%s\n' "$result"
+                    tail -n 80 "$HOME/rebuild/latest.log" || true
+                    echo "Full log: $HOME/rebuild/latest.log"
+                    exit "$code"
+                  fi
                 fi
                 sleep 2
               done
               echo "Timed out waiting. Check openclaw-rebuild status and ~/rebuild/latest.log." >&2
               exit 124
               ;;
-            *) echo "Usage: openclaw-rebuild {request|status|wait REQUEST_ID}" >&2; exit 2 ;;
+            *) echo "Usage: openclaw-rebuild {apply|request|status|wait REQUEST_ID}" >&2; exit 2 ;;
           esac
         '';
       };
@@ -72,21 +83,38 @@
 
       containers.openclaw.config.environment.systemPackages = [ rebuildTool ];
 
-      # Seed once, preserving the agent's current module. Later deployments
-      # must not replace its persistent playground with an older store copy.
-      systemd.services."container@openclaw".preStart = lib.mkBefore ''
-        if [ ! -d ${proposals}/playground ]; then
-          mkdir -p ${proposals}/playground
-          cp -r --no-preserve=mode,ownership ${./_playground}/. ${proposals}/playground/
-          if [ -f ${proposals}/guest.nix ] && [ ! -L ${proposals}/guest.nix ]; then
-            ${pkgs.util-linux}/bin/runuser -u openclaw -- ${pkgs.coreutils}/bin/cat ${proposals}/guest.nix \
-              > ${proposals}/playground/guest.nix
+      systemd.services."container@openclaw" = {
+        # Prefer the latest managed guest generation on every start.
+        # Keep the declarative generation as fallback for the first boot.
+        script = lib.mkBefore ''
+          profile=/nix/var/nix/profiles/per-container/openclaw/system
+          if [ -e "$profile/init" ]; then
+            SYSTEM_PATH="$(${pkgs.coreutils}/bin/readlink -f "$profile")"
+            export SYSTEM_PATH
           fi
-          chown -R 61000:61000 ${proposals}/playground
-          chmod -R u+rwX ${proposals}/playground
-        fi
-        ln -sfn playground/guest.nix ${proposals}/guest.nix
-      '';
+        '';
+
+        # This profile is mounted at /nix/var/nix/profiles/system inside the guest.
+        serviceConfig.ExecReload = lib.mkForce (pkgs.writeShellScript "reload-openclaw-container" ''
+          exec ${pkgs.nixos-container}/bin/nixos-container run openclaw -- \
+            /nix/var/nix/profiles/system/bin/switch-to-configuration test
+        '');
+
+        # Seed once; preserve the agent's playground on later deployments.
+        preStart = lib.mkBefore ''
+          if [ ! -d ${proposals}/playground ]; then
+            mkdir -p ${proposals}/playground
+            cp -r --no-preserve=mode,ownership ${./_playground}/. ${proposals}/playground/
+            if [ -f ${proposals}/guest.nix ] && [ ! -L ${proposals}/guest.nix ]; then
+              ${pkgs.util-linux}/bin/runuser -u openclaw -- ${pkgs.coreutils}/bin/cat ${proposals}/guest.nix \
+                > ${proposals}/playground/guest.nix
+            fi
+            chown -R 61000:61000 ${proposals}/playground
+            chmod -R u+rwX ${proposals}/playground
+          fi
+          ln -sfn playground/guest.nix ${proposals}/guest.nix
+        '';
+      };
 
       # This is a normal relative module import, included in pure flake builds.
       containers.openclaw.config.imports = [ ./_playground/guest.nix ];

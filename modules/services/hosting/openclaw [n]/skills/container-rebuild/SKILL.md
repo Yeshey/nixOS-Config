@@ -1,48 +1,37 @@
 ---
 name: container-rebuild
-description: Change your container configuration, rebuild it, and publish the tested playground to GitHub.
+description: Change the OpenClaw container configuration and publish it.
 ---
 
-Edit `~/config/guest.nix`, preserving unrelated settings. This aliases
-`~/config/playground/guest.nix`. Add packages to `environment.systemPackages`.
+Edit `~/config/guest.nix`, preserving unrelated settings and packages.
+Add packages to `environment.systemPackages`. Helpers go in
+`~/config/playground/`: plain `.nix`, imported explicitly.
+No secrets, symlinks, or Git repositories. The playground is published
+to public GitHub after a successful build and activation.
 
-Put helper files in `~/config/playground/`. Use `.nix` for Nix helper modules
-and import them explicitly from `guest.nix`. Only imported modules affect
-NixOS. Keep paths relative. Do not put secrets, symlinks, or Git repositories here.
-The entire playground, including added and deleted files, is committed to the
-public GitHub repository after successful build and activation.
-
-Save your progress before applying: activation may restart OpenClaw.
-Run this whole block in ONE exec call:
+Apply in ONE exec call:
 
 ```bash
-request_id="$(openclaw-rebuild request)" &&
-  printf '%s\n' "$request_id" > ~/last-rebuild-request &&
-  openclaw-rebuild wait "$request_id"
+openclaw-rebuild apply
 ```
 
-Wait for completion. If exec backgrounds the command, follow it with process.
-Do not submit another request while one is pending or running.
+This requests, saves the request ID, waits, prints recent logs, and exits
+with the rebuild's status. If exec backgrounds it, follow that process.
+Verify the requested change after success.
 
-Success requires the matching request ID, `state=finished`, `exitStatus=0`,
-`applied=true`, and `published=true`. Verify the requested change separately,
-for example `command -v cowsay`.
+If interrupted, reconnect and inspect:
 
-If interrupted, resume the SAME request:
+```bash
+openclaw-rebuild status
+```
+
+Resume waiting if needed:
 
 ```bash
 openclaw-rebuild wait "$(cat ~/last-rebuild-request)"
 ```
 
-For diagnostics:
-
-```bash
-openclaw-rebuild status
-tail -n 80 ~/rebuild/latest.log
-```
-
-A publication failure can leave the guest applied but GitHub unchanged. Report
-that distinction. Timeout means completion is unknown. Do not claim success,
-force-push, delete status files, or rebuild the host.
-
-The host owns GitHub authentication and commits. You do not need its token.
+Read `~/rebuild/latest.log` for full errors. `applied=true` with
+`published=false` means the guest changed but GitHub publication did not
+complete. Report that distinction. Timeout means completion is unknown.
+Do not submit duplicate requests, force-push, or rebuild the host.
