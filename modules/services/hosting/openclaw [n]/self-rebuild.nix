@@ -7,14 +7,20 @@
   };
 
   flake.modules.nixos.openclaw =
-    { lib, pkgs, ... }:
+    { config, lib, pkgs, ... }:
     let
       repository = "https://github.com/Yeshey/nixOS-Config.git";
       branch = "main";
-      modulePath = "modules/services/hosting/openclaw [n]/_playground/guest.nix-data";
+      playgroundPath = "modules/services/hosting/openclaw [n]/_playground";
       proposals = "/var/lib/openclaw/config";
       logs = "/var/lib/openclaw/rebuild";
-      checkout = "/home/yeshey/.setup/modules/services/hosting/openclaw [n]/_playground/guest.nix-data";
+      githubAskpass = pkgs.writeShellScript "openclaw-github-askpass" ''
+        case "$1" in
+          Username*github.com*) printf '%s\n' x-access-token ;;
+          Password*github.com*) cat "$CREDENTIALS_DIRECTORY/github" ;;
+          *) exit 1 ;;
+        esac
+      '';
       rebuildTool = pkgs.writeShellApplication {
         name = "openclaw-rebuild";
         runtimeInputs = [ pkgs.coreutils pkgs.jq pkgs.util-linux ];
@@ -59,7 +65,28 @@
       };
     in
     {
+      sops.secrets.openclaw_github_token = {
+        owner = "root";
+        mode = "0400";
+      };
+
       containers.openclaw.config.environment.systemPackages = [ rebuildTool ];
+
+      # Seed once, preserving the agent's current module. Later deployments
+      # must not replace its persistent playground with an older store copy.
+      systemd.services."container@openclaw".preStart = lib.mkBefore ''
+        if [ ! -d ${proposals}/playground ]; then
+          mkdir -p ${proposals}/playground
+          cp -r --no-preserve=mode,ownership ${./_playground}/. ${proposals}/playground/
+          if [ -f ${proposals}/guest.nix ]; then
+            ${pkgs.util-linux}/bin/runuser -u openclaw -- ${pkgs.coreutils}/bin/cat ${proposals}/guest.nix \
+              > ${proposals}/playground/guest.nix-data
+          fi
+          chown -R 61000:61000 ${proposals}/playground
+          chmod -R u+rwX ${proposals}/playground
+        fi
+        ln -sfn playground/guest.nix-data ${proposals}/guest.nix
+      '';
 
       # This is a normal relative module import, included in pure flake builds.
       containers.openclaw.config.imports = [ ./_playground/guest.nix-data ];
@@ -70,8 +97,6 @@
 
       systemd.tmpfiles.rules = [
         "d ${logs} 0755 root root -"
-        # C copies only when the destination does not already exist.
-        "C ${proposals}/guest.nix 0640 openclaw openclaw - ${./_playground/guest.nix-data}"
         "f ${proposals}/rebuild.request 0600 openclaw openclaw -"
         "f ${logs}/latest.log 0644 root root -"
       ];
@@ -80,7 +105,7 @@
         description = "Update only the OpenClaw container from the latest repository and guest module";
         after = [ "network-online.target" "container@openclaw.service" ];
         wants = [ "network-online.target" ];
-        path = [ pkgs.git pkgs.nix pkgs.nixos-container pkgs.coreutils pkgs.util-linux pkgs.systemd pkgs.diffutils pkgs.jq ];
+        path = [ pkgs.git pkgs.nix pkgs.nixos-container pkgs.coreutils pkgs.util-linux pkgs.systemd pkgs.diffutils pkgs.jq pkgs.rsync pkgs.findutils ];
         environment.GIT_TERMINAL_PROMPT = "0";
         serviceConfig = {
           Type = "oneshot";
@@ -88,16 +113,22 @@
           RuntimeDirectoryMode = "0700";
           WorkingDirectory = "/run/openclaw-guest-rebuild";
           TimeoutStartSec = "1h";
+          LoadCredential = [ "github:${config.sops.secrets.openclaw_github_token.path}" ];
           StandardOutput = "append:${logs}/latest.log";
           StandardError = "append:${logs}/latest.log";
         };
         script = ''
           set -euo pipefail
+          applied=false
+          published=false
+          commit=""
           request_id="$(runuser -u openclaw -- cat ${proposals}/rebuild.request)"
           request_id="''${request_id:-manual}"
           write_status() {
             jq -n --arg id "$request_id" --arg state "$1" --argjson code "$2" \
-              '{requestId: $id, state: $state, exitStatus: $code}' > ${logs}/status.json.tmp
+              --argjson applied "$applied" --argjson published "$published" --arg commit "$commit" \
+              '{requestId: $id, state: $state, exitStatus: $code,
+                applied: $applied, published: $published, commit: $commit}' > ${logs}/status.json.tmp
             chmod 0644 ${logs}/status.json.tmp
             mv ${logs}/status.json.tmp ${logs}/status.json
           }
@@ -113,13 +144,30 @@
           echo "Request ID: $request_id"
           echo "=== OpenClaw guest rebuild: $(date --iso-8601=seconds) ==="
 
-          # Read as the agent identity, then freeze this request's module bytes.
-          runuser -u openclaw -- cat ${proposals}/guest.nix > guest.nix
+          # Snapshot as the agent user, without following symlinks or copying
+          # devices. Freeze the copy before building or publishing it.
+          chmod 0711 .
+          mkdir snapshot
+          chown 61000:61000 snapshot
+          runuser -u openclaw -- ${pkgs.rsync}/bin/rsync -rlpt \
+            ${proposals}/playground/ snapshot/
+          chown -R root:root snapshot
+          chmod -R go-w snapshot
+          if [ -n "$(find snapshot -mindepth 1 ! -type f ! -type d -print -quit)" ] || \
+             [ -n "$(find snapshot -name .git -print -quit)" ]; then
+            echo "The playground may contain only regular files and directories, without .git." >&2
+            exit 1
+          fi
+          test -f snapshot/guest.nix-data
           git clone --depth 1 --single-branch --branch ${lib.escapeShellArg branch} \
             ${lib.escapeShellArg repository} source
           echo "Repository revision: $(git -C source rev-parse HEAD)"
-          test -f source/${lib.escapeShellArg modulePath}
-          install -m 0644 guest.nix source/${lib.escapeShellArg modulePath}
+          playground=source/${lib.escapeShellArg playgroundPath}
+          test -d "$playground"
+          rsync -rlpt --delete snapshot/ "$playground/"
+          # Force-add the folder so new helper files are included in the build
+          # and commit even when the repository has ignore patterns.
+          git -C source add -f -A -- ${lib.escapeShellArg playgroundPath}
 
           # path: includes the modified module, with the fetched flake.lock.
           previous=$(readlink -f /nix/var/nix/profiles/per-container/openclaw/system)
@@ -143,27 +191,35 @@
               exit 1
             fi
 
+            applied=true
+            write_status running 0
+
             nixos-container run openclaw -- runuser -u openclaw -- \
               env XDG_RUNTIME_DIR=/run/user/61000 \
                   DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/61000/bus \
               systemctl --user start openclaw-gateway.service
 
-            # Snapshot the exact module bytes used for this successful build
-            # into Yeshey's checkout, if that checkout exists on this host.
-            destination=${lib.escapeShellArg checkout}
-            if [ -f "$destination" ]; then
-              if cmp -s guest.nix "$destination"; then
-                echo "Yeshey's checkout already matches the applied module."
-              elif runuser -u yeshey -- tee "$destination" < guest.nix > /dev/null; then
-                echo "Updated guest.nix-data in Yeshey's checkout."
-              else
-                echo "Guest updated, but copying into Yeshey's checkout failed."
+            # Publish only the snapshot that passed build and activation.
+            if ! git -C source diff --cached --quiet; then
+              git -C source -c core.hooksPath=/dev/null \
+                -c user.name="OpenClaw" \
+                -c user.email="openclaw@skyloft.tailb6874b.ts.net" \
+                commit -m "Update OpenClaw playground ($request_id)"
+              commit="$(git -C source rev-parse HEAD)"
+              if ! GIT_ASKPASS=${githubAskpass} \
+                git -C source -c credential.helper= -c core.hooksPath=/dev/null \
+                push origin HEAD:refs/heads/${lib.escapeShellArg branch}; then
+                echo "Guest applied, but GitHub publication failed. No force-push was attempted." >&2
+                exit 1
               fi
             else
-              echo "Guest updated; no local checkout file found to synchronize."
+              commit="$(git -C source rev-parse HEAD)"
+              echo "The playground already matches GitHub; no commit is needed."
             fi
+            published=true
+            echo "GitHub revision: $commit"
 
-            echo "Guest configuration applied successfully."
+            echo "Guest configuration applied and published successfully."
           else
             echo "Update failed; restoring previous container profile."
             nix-env -p /nix/var/nix/profiles/per-container/openclaw/system --set "$previous"
