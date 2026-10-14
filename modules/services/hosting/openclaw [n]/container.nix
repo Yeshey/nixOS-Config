@@ -1,4 +1,8 @@
 # Use `sudo machinectl shell openclaw@openclaw` to connect to the openclaw container
+# check the openclaw service:
+# sudo nixos-container run openclaw -- journalctl _SYSTEMD_USER_UNIT=openclaw-gateway.service -f
+# check the container:
+# 
 
 { inputs, ... }:
 {

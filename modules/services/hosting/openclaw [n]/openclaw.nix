@@ -49,6 +49,10 @@
         StandardOutput = lib.mkForce "journal";
         StandardError = lib.mkForce "journal";
       };
+      # Ensure the gateway starts with the user manager at container boot,
+      # not only when a session is opened.
+      systemd.user.services.openclaw-gateway.Install.WantedBy =
+        lib.mkForce [ "default.target" ];
 
       programs.openclaw = {
         enable = true;
