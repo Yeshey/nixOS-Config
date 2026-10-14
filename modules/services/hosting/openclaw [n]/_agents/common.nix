@@ -16,7 +16,10 @@
       '';
       "IDENTITY.md" = "You are a specialist in Yeshey's project team.";
       "TOOLS.md" = ''
-        Shell commands run on Skyloft as yeshey without an agent sandbox.
+        Shell commands run as openclaw inside the Skyloft NixOS container.
+        The host Nix configuration is read-only at /host-config.
+        Use ~/projects for checkouts and ~/config for configuration proposals.
+        Host deployment configuration is applied by Yeshey, not by the agent.
         Use git worktrees when working concurrently on the same repository.
         Report the commands run and their results. Do not claim unperformed tests passed.
       '';

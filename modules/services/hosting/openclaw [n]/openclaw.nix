@@ -1,53 +1,10 @@
+# To approve:
+# sudo nixos-container run openclaw -- su - openclaw -c 'openclaw devices approve <session-ID>'
+
 { inputs, ... }:
 {
-  flake.modules.nixos.openclaw =
-    { config, pkgs, ... }:
-    let
-      openclawPkgs = import inputs.nix-openclaw.inputs.nixpkgs {
-        system = pkgs.stdenv.hostPlatform.system;
-        overlays = [ inputs.nix-openclaw.overlays.default ];
-      };
-    in
-    {
-      nixpkgs.overlays = [
-        (_: _: {
-          openclawRuntimePlugins.tavily =
-            openclawPkgs.openclawRuntimePlugins.tavily;
-        })
-      ];
-
-      users.users.yeshey.linger = true;
-
-      sops.secrets.openclaw_gateway_password = {
-        owner = "yeshey";
-        mode = "0400";
-      };
-      sops.secrets.openclaw_moltbook_key = {
-        key = "moltbook_api_key";
-        owner = "yeshey";
-        mode = "0400";
-      };
-      sops.secrets.openclaw_tavily_key = {
-        key = "tavily_api_key";
-        owner = "yeshey";
-        mode = "0400";
-      };
-      sops.secrets.telegram_openclawinator_bot = {
-        owner = "yeshey";
-        mode = "0400";
-      };
-      sops.templates."openclaw-litellm-key" = {
-        owner = "yeshey";
-        mode = "0400";
-        content = config.sops.placeholder.litellm_master_key;
-      };
-      home-manager.users.yeshey.imports = [
-        inputs.self.modules.homeManager.openclaw
-      ];
-    };
-
   flake.modules.homeManager.openclaw =
-    { config, lib, pkgs, osConfig, ... }:
+    { config, lib, pkgs, ... }:
     let
       stateDir = "${config.home.homeDirectory}/.openclaw";
       workspace = name: "${stateDir}/workspaces/${name}";
@@ -70,7 +27,7 @@
         in
         merged // {
           # Append the role's extra tools to the common list; dedupe.
-          tools = lib.unique (common.defaults.tools ++ (role.tools or [ ]));
+          tools = lib.unique ((common.defaults.tools or [ ]) ++ (role.tools or [ ]));
         }
       ) roles;
       filesFor = name:
@@ -103,9 +60,9 @@
         skills = common.skillDefinitions;
         runtimePlugins = [ "tavily" ];
         environment.MOLTBOOK_API_KEY =
-          osConfig.sops.secrets.openclaw_moltbook_key.path;
+          "/run/openclaw-secrets/moltbook";
         environment.TAVILY_API_KEY =
-          osConfig.sops.secrets.openclaw_tavily_key.path;
+          "/run/openclaw-secrets/tavily";
 
         # Use upstream bootstrap management for the primary workspace.
         # toFile avoids evaluation-time ARM builds on the deploying x86 host.
@@ -120,7 +77,7 @@
         config = {
           channels.telegram = {
             enabled = true;
-            tokenFile = osConfig.sops.secrets.telegram_openclawinator_bot.path;
+            tokenFile = "/run/openclaw-secrets/telegram";
             dmPolicy = "pairing";
           };
           bindings = [
@@ -133,12 +90,12 @@
             gateway-password = {
               source = "file";
               mode = "singleValue";
-              path = osConfig.sops.secrets.openclaw_gateway_password.path;
+              path = "/run/openclaw-secrets/password";
             };
             litellm-key = {
               source = "file";
               mode = "singleValue";
-              path = osConfig.sops.templates."openclaw-litellm-key".path;
+              path = "/run/openclaw-secrets/litellm";
             };
           };
           gateway = {

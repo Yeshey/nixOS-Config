@@ -4,11 +4,8 @@
     { config, ... }:
     {
       environment = inputs.self.lib.mkIfPersistence config {
-        persistence."/persistent" = {
-          users.yeshey.directories = [
-            ".openclaw"
-          ];
-        };
+        persistence."/persistent".directories = [ "/var/lib/openclaw" ];
       };
+      # _playground persists with your existing yeshey .setup persistence.
     };
 }
