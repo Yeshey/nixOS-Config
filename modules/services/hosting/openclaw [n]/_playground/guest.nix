@@ -1,3 +1,3 @@
 { pkgs, ... }: {
-  environment.systemPackages = [ pkgs.cowsay pkgs.cmatrix ];
+  environment.systemPackages = [ pkgs.cowsay pkgs.cmatrix pkgs.bat ];
 }
