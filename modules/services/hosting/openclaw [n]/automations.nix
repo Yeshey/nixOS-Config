@@ -15,7 +15,6 @@
         let
           prompt = job.prompt + ''
 
-            Execute this task yourself without spawning subagents.
             Your final summary is delivered automatically to Telegram chat ${job.telegramChatId}.
             For an urgent update while working, use message with channel telegram
             and target ${job.telegramChatId}. Do not send a duplicate final summary manually.
