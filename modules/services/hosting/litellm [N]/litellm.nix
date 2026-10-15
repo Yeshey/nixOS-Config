@@ -348,24 +348,3 @@
       };
     };
 }
-
-# vercelAPI/.Muse Spark 1.3 Contributor
-# mylitellmAPI/.gemini-3.8-flash
-# nvidiaAPI/.deepseek-ai/deepseek-v4-pro
-# nvidiaAPI/.moonshotai/kimi-k3
-# nvidiaAPI/.z-ai/glm-5.2
-# mylitellmAPI/.gemini-3.7-flash
-# mylitellmAPI/.gemini-3.6-flash
-# vercelAPI/.MiMo V2.5 Pro
-# vercelAPI/.Kimi K2.7 Code
-# mylitellmAPI/.gemma-4-31b
-# mylitellmAPI/.gemini-3.5-flash
-# mylitellmAPI/.gemma-4-26b
-# vercelAPI/.MiMo M2.5
-# mylitellmAPI/.gemini-3-flash
-# mylitellmAPI/.gemini-3.5-flash-lite
-# nvidiaAPI/.openai/gpt-oss-20b
-# mylitellmAPI/.gemini-3.1-flash-lite
-# vercelAPI/.Morph V3 Large
-
-# add Qwen 3.8 Max 0902? and Mimo V2.6 pro?

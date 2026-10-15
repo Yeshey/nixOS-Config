@@ -57,6 +57,7 @@
         openclaw_tavily_key = secret "tavily_api_key";
         telegram_openclawinator_bot = secret "telegram_openclawinator_bot";
         openclaw_github_app_key = secret "openclaw_github_app_key";
+        sops.secrets.openclaw_artificial_analysis = secret "artificial_analysis_api_key";
       };
       sops.templates."openclaw-litellm-key" = {
         owner = "openclaw";
@@ -128,6 +129,7 @@
           # Reuse Skyloft's existing SOPS identity. Never copy this into Git.
           "/run/openclaw-secrets/sops-ssh-key" = ro "/etc/ssh/ssh_host_ed25519_key";
           "/run/openclaw-secrets/github-app-key" = ro config.sops.secrets.openclaw_github_app_key.path;
+          "/run/openclaw-secrets/artificial-analysis" = ro config.sops.secrets.openclaw_artificial_analysis.path;
 
           # Add project/data mounts here, for example:
           # "/projects/bolsa" = {
@@ -182,6 +184,7 @@
 
               home.packages = [
                 (lib.hiPrio githubCli)
+                pkgs.curl
                 pkgs.git
                 pkgs.jq
               ];
