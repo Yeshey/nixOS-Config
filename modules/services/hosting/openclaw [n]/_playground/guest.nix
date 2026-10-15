@@ -1,4 +1,4 @@
 { pkgs, ... }: {
   imports = [ ./litellm-test.nix ];
-  environment.systemPackages = [ pkgs.cowsay pkgs.cmatrix pkgs.bat ];
+  environment.systemPackages = [ pkgs.cowsay pkgs.cmatrix ];
 }
