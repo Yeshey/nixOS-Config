@@ -13,7 +13,7 @@
   # The guest shares the host's network namespace. Keep production on 4000.
   services.litellm = {
     host = lib.mkForce "127.0.0.1";
-    port = lib.mkForce 4001;
+    port = lib.mkForce 14001;
     openFirewall = lib.mkForce false;
   };
 }
