@@ -57,7 +57,7 @@
         openclaw_tavily_key = secret "tavily_api_key";
         telegram_openclawinator_bot = secret "telegram_openclawinator_bot";
         openclaw_github_app_key = secret "openclaw_github_app_key";
-        sops.secrets.openclaw_artificial_analysis = secret "artificial_analysis_api_key";
+        openclaw_artificial_analysis = secret "openclaw_artificial_analysis";
       };
       sops.templates."openclaw-litellm-key" = {
         owner = "openclaw";
