@@ -1,3 +1,4 @@
+# waiting on https://github.com/openclaw/openclaw/issues/20950 to stop using this hack
 { ... }:
 {
   flake.modules.homeManager.openclaw =

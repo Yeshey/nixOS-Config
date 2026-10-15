@@ -98,21 +98,6 @@
         isReadOnly = true;
       };
 
-      systemd.services."container@openclaw" = {
-        # Ordinary restarts retain the latest managed guest generation.
-        script = lib.mkBefore ''
-          profile=${profile}
-          if [ -e "$profile/init" ]; then
-            SYSTEM_PATH="$(${pkgs.coreutils}/bin/readlink -f "$profile")"
-            export SYSTEM_PATH
-          fi
-        '';
-        serviceConfig.ExecReload = lib.mkForce (pkgs.writeShellScript "reload-openclaw-container" ''
-          exec ${pkgs.nixos-container}/bin/nixos-container run openclaw -- \
-            /nix/var/nix/profiles/system/bin/switch-to-configuration test
-        '');
-      };
-
       systemd.tmpfiles.rules = [
         "d ${logs} 0755 root root -"
         "d ${logs}/publish 0700 root root -"
