@@ -71,5 +71,7 @@
     final Telegram summary, distinguish local LiteLLM edits, applied test
     configuration, and the helper's published playground commit. Explain any
     testing or publication failure accurately. Do not claim production changed.
+
+    Report to telegram.
   '';
 }
