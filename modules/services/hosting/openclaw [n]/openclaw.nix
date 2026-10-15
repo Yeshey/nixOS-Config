@@ -46,7 +46,7 @@
     in
     {
       imports = [ inputs.nix-openclaw.homeManagerModules.openclaw ];
-      home.packages = [ pkgs.gh ];
+      home.packages = with pkgs; [ gh git jq gh-token  ];
       systemd.user.startServices = "sd-switch";
       systemd.user.services.openclaw-gateway.Service = {
         StandardOutput = lib.mkForce "journal";

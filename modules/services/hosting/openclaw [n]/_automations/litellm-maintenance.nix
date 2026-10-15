@@ -55,23 +55,22 @@
     real model requests. HTTP 400, auth errors and a loaded model catalog do
     not prove inference works. Report status codes and sanitized errors.
     Production LiteLLM on port 4000 and OpenClaw's provider URL must stay unchanged.
+    If no justified changes are needed, do not rebuild merely to produce activity.
 
     The rebuild helper automatically publishes only the applied _playground.
-    After testing, commit only the LiteLLM module changes on a dedicated branch,
-    push that branch, and open a pull request for Yeshey to review. Include test
-    results and any remaining blockers. Preserve unrelated edits and exclude
-    _playground changes already published by the helper.
-
-    Never push non-playground changes directly to main, merge the pull request,
-    or run deploy-rs/nixos-rebuild against the host. If GitHub authentication or
-    PR creation is unavailable, leave the changes local and report the blocker.
+    After testing, use the github-pr skill to commit only this task's LiteLLM
+    module changes, push a dedicated proposal branch, and open a pull request
+    for Yeshey to review. Exclude unrelated changes and playground changes
+    already published by the helper. Include test results and remaining blockers.
+    If no justified module changes were made, do not create a pull request.
+    If authentication or PR creation fails, preserve local changes and report
+    the blocker. Do not deploy the host.
 
     Save a dated report under ~/reports/litellm-maintenance/ with official
-    sources, tested models, outcomes, changes and remaining blockers. In the
-    final Telegram summary, distinguish local LiteLLM edits, applied test
-    configuration, and the helper's published playground commit. Explain any
-    testing or publication failure accurately. Do not claim production changed.
-
-    Report to telegram.
+    sources, tested models, outcomes, changes and remaining blockers.
+    In your final summary, include the PR URL or creation blocker, test results,
+    and the helper's playground publication status and commit when available.
+    Explain failures accurately. Do not claim production changed.
+    Telegram delivery is handled automatically; do not send a duplicate summary.
   '';
 }
