@@ -52,6 +52,9 @@
     documentation. If a provider requires new credentials or host
     wiring, or a new provider with a free tier that could be used is found,
     report what is needed and leave that integration pending.
+    ALWAYS check with official sources. third party sources may be outdated or
+    wrong, treat those as suggestions, and if you can't find official information,
+    then test the endpoints.
 
     Subagents research only; keep edits, inference tests, rebuilds, and PR creation under your control.
 
