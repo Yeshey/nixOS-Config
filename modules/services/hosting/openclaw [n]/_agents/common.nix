@@ -2,7 +2,7 @@
 {
   defaults = {
     model = "weak-fallback-chain";
-    skills = [ ]; # Per-agent skill allowlist; the model decides when to read one.
+    skills = [ "github" ]; # Per-agent skill allowlist; the model decides when to read one.
     allowAgents = [ ];
     tools = [
       "ls" "read" "write" "edit" "apply_patch" "exec" "process"

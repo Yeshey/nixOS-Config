@@ -24,6 +24,22 @@
         restartUnits = [ "container@openclaw.service" ];
       };
       ro = hostPath: { inherit hostPath; isReadOnly = true; };
+
+      githubCli = pkgs.writeShellApplication {
+        name = "gh";
+        runtimeInputs = [ pkgs.gh-token pkgs.jq ];
+        text = ''
+          GH_TOKEN="$(
+            gh-token generate \
+              --app-id 5325279 \
+              --installation-id 171592385 \
+              --key /run/openclaw-secrets/github-app-key |
+              jq -er '.token'
+          )"
+          export GH_TOKEN
+          exec ${pkgs.gh}/bin/gh "$@"
+        '';
+      };
     in
     {
       # Use the same explicit identity on both sides of the bind mounts.
@@ -163,6 +179,23 @@
                 lib.mkAfter [
                   "NIX_PATH=nixpkgs=${pkgs.path}"
                 ];
+
+              home.packages = [
+                githubCli
+                pkgs.git
+                pkgs.jq
+              ];
+
+              programs.git = {
+                enable = true;
+                settings.credential."https://github.com" = {
+                  helper = [
+                    ""
+                    "${githubCli}/bin/gh auth git-credential"
+                  ];
+                  useHttpPath = true;
+                };
+              };
             };
           };
           nix.settings.experimental-features = [ "nix-command" "flakes" ];

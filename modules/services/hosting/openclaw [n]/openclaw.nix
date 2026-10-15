@@ -30,6 +30,7 @@
         merged // {
           # Append the role's extra tools to the common list; dedupe.
           tools = lib.unique ((common.defaults.tools or [ ]) ++ (role.tools or [ ]));
+          skills = lib.unique ((common.defaults.skills or [ ]) ++ (role.skills or [ ]));
         }
       ) roles;
       filesFor = name:
