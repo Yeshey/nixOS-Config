@@ -184,9 +184,9 @@
             }
 
             {
-              model_name = "nvidia-glm-5-2";
+              model_name = "nvidia-glm-5-3";
               litellm_params = {
-                model = "openai/z-ai/glm-5.2";
+                model = "openai/z-ai/glm-5.3";
                 api_base = "https://integrate.api.nvidia.com/v1";
                 api_key = "os.environ/NVIDIA_NIM_API_KEY";
               };
@@ -282,21 +282,21 @@
               # ---- strong-fallback-chain ----
               { strong-fallback-chain = [
                   "gemini-3.8-flash" "nvidia-deepseek-v4-pro" "nvidia-kimi-k3"
-                  "nvidia-glm-5-2" "gemini-3.7-flash"
+                  "nvidia-glm-5-3" "gemini-3.7-flash"
                 ]; }
               { vercel-muse-spark-1-3-contributor = [
                   "gemini-3.8-flash" "nvidia-deepseek-v4-pro" "nvidia-kimi-k3"
-                  "nvidia-glm-5-2" "gemini-3.7-flash"
+                  "nvidia-glm-5-3" "gemini-3.7-flash"
                 ]; }
               { "gemini-3.8-flash" = [
-                  "nvidia-deepseek-v4-pro" "nvidia-kimi-k3" "nvidia-glm-5-2"
+                  "nvidia-deepseek-v4-pro" "nvidia-kimi-k3" "nvidia-glm-5-3"
                   "gemini-3.7-flash"
                 ]; }
               { nvidia-deepseek-v4-pro = [
-                  "nvidia-kimi-k3" "nvidia-glm-5-2" "gemini-3.7-flash"
+                  "nvidia-kimi-k3" "nvidia-glm-5-3" "gemini-3.7-flash"
                 ]; }
-              { nvidia-kimi-k3 = [ "nvidia-glm-5-2" "gemini-3.7-flash" ]; }
-              { nvidia-glm-5-2 = [ "gemini-3.7-flash" ]; }
+              { nvidia-kimi-k3 = [ "nvidia-glm-5-3" "gemini-3.7-flash" ]; }
+              { nvidia-glm-5-3 = [ "gemini-3.7-flash" ]; }
               # gemini-3.7-flash = last
 
               # ---- weak-fallback-chain ----
