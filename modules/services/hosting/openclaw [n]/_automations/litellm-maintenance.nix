@@ -17,8 +17,10 @@
     ~/projects/nixOS-Config/modules/services/hosting/litellm [N]/litellm.nix.
     Inspect that exact path and the current Git diff first. Preserve unrelated edits.
     This task authorizes local changes to that LiteLLM module and the OpenClaw
-    _playground folder. It does not authorize a host deployment or a push of
-    the LiteLLM module to GitHub main.
+    _playground folder. It authorizes committing the LiteLLM module changes on
+    a dedicated branch and opening a pull request for review. It does not
+    authorize pushing non-playground changes directly to GitHub main, merging
+    the pull request, or a host deployment.
 
     Search the web for current free API models supported by the providers already
     configured there. Verify model IDs, API URLs, pricing and quotas against
@@ -55,9 +57,14 @@
     Production LiteLLM on port 4000 and OpenClaw's provider URL must stay unchanged.
 
     The rebuild helper automatically publishes only the applied _playground.
-    Leave the LiteLLM module changes local for Yeshey to review. Do not commit,
-    push, create a PR, or run deploy-rs/nixos-rebuild against the host yourself.
-    If no justified changes are needed, do not rebuild merely to produce activity.
+    After testing, commit only the LiteLLM module changes on a dedicated branch,
+    push that branch, and open a pull request for Yeshey to review. Include test
+    results and any remaining blockers. Preserve unrelated edits and exclude
+    _playground changes already published by the helper.
+
+    Never push non-playground changes directly to main, merge the pull request,
+    or run deploy-rs/nixos-rebuild against the host. If GitHub authentication or
+    PR creation is unavailable, leave the changes local and report the blocker.
 
     Save a dated report under ~/reports/litellm-maintenance/ with official
     sources, tested models, outcomes, changes and remaining blockers. In the
