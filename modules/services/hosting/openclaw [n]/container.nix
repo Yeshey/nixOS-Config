@@ -181,7 +181,7 @@
                 ];
 
               home.packages = [
-                githubCli
+                (lib.hiPrio githubCli)
                 pkgs.git
                 pkgs.jq
               ];
