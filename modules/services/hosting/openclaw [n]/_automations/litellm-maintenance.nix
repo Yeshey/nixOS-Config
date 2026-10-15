@@ -58,7 +58,7 @@
     If no justified changes are needed, do not rebuild merely to produce activity.
 
     The rebuild helper automatically publishes only the applied _playground.
-    After testing, use the github-pr skill to commit only this task's LiteLLM
+    After testing, use the github skill to commit only this task's LiteLLM
     module changes, push a dedicated proposal branch, and open a pull request
     for Yeshey to review. Exclude unrelated changes and playground changes
     already published by the helper. Include test results and remaining blockers.
