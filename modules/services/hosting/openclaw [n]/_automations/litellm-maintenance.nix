@@ -29,6 +29,8 @@
     ~/projects/nixOS-Config/modules/services/hosting/litellm [N]/litellm.nix.
     Inspect that file and the current Git diff first. Preserve unrelated edits.
 
+    Check repository state, pull latests changes.
+
     Read memory/litellm-maintenance.md in your workspace at the start of each run.
     You may create and update this file to track pending integrations, required
     credentials or host changes, tested models, dated failures, and open PR URLs.
