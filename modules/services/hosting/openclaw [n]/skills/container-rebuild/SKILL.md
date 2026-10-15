@@ -1,37 +1,38 @@
 ---
 name: container-rebuild
-description: Change the OpenClaw container configuration and publish it.
+description: Change and test the OpenClaw container using its own NixOS-Config checkout.
 ---
 
-Edit `~/config/guest.nix`, preserving unrelated settings and packages.
-Add packages to `environment.systemPackages`. Helpers go in
-`~/config/playground/`: plain `.nix`, imported explicitly.
-No secrets, symlinks, or Git repositories. The playground is published
-to public GitHub after a successful build and activation.
+Work in `~/projects/nixOS-Config`.
+Edit `modules/services/hosting/openclaw [n]/_playground/guest.nix`.
+Helpers can be plain `.nix` files in that folder, imported explicitly.
+Existing dendritic modules are available as `inputs.self.modules.nixos.<name>`
+in modules that accept `{ inputs, ... }`.
 
-Apply in ONE exec call:
+Change only `_playground` unless Yeshey explicitly asks for another repository
+change. Never put decrypted secrets or private keys in the repository.
+The guest's SOPS module decrypts declared secrets during activation.
+The network is shared with the host: test services must use unused ports.
+
+Save your work, then run ONE command:
 
 ```bash
 openclaw-rebuild apply
 ```
 
-This requests, saves the request ID, waits, prints recent logs, and exits
-with the rebuild's status. If exec backgrounds it, follow that process.
-Verify the requested change after success.
+This builds the local checkout, including uncommitted changes, activates only
+the container, prints recent logs, and exits with the result. No pull, commit,
+push, or host deployment occurs. Do not edit files during the build.
+If exec backgrounds it, follow that process. Verify the change after success.
 
-If interrupted, reconnect and inspect:
+If activation interrupts the session:
 
 ```bash
 openclaw-rebuild status
-```
-
-Resume waiting if needed:
-
-```bash
 openclaw-rebuild wait "$(cat ~/last-rebuild-request)"
 ```
 
-Read `~/rebuild/latest.log` for full errors. `applied=true` with
-`published=false` means the guest changed but GitHub publication did not
-complete. Report that distinction. Timeout means completion is unknown.
-Do not submit duplicate requests, force-push, or rebuild the host.
+Read `~/rebuild/latest.log` for full errors. Matching `requestId`,
+`state=finished`, and `exitStatus=0` confirm completion. `applied=true` with
+a nonzero exit status means activation completed but a later step failed.
+Timeout means completion is unknown. Do not submit duplicate requests.

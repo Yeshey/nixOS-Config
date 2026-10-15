@@ -2,7 +2,7 @@
 {
   defaults = {
     model = "weak-fallback-chain";
-    skills = [ ]; # Makes agent read these skills
+    skills = [ ]; # Per-agent skill allowlist; the model decides when to read one.
     allowAgents = [ ];
     tools = [
       "ls" "read" "write" "edit" "apply_patch" "exec" "process"
@@ -17,9 +17,12 @@
       "IDENTITY.md" = "You are a specialist in Yeshey's project team.";
       "TOOLS.md" = ''
         Shell commands run as openclaw inside the Skyloft NixOS container.
-        The host Nix configuration is read-only at /host-config.
-        Use ~/projects for checkouts and ~/config for configuration proposals.
-        Host deployment configuration is applied by Yeshey, not by the agent.
+        /host-config is the read-only source of the host's last deployment.
+        Your writable checkout is ~/projects/nixOS-Config; rebuilds use this checkout.
+        Change only modules/services/hosting/openclaw [n]/_playground unless
+        Yeshey explicitly asks for another repository change.
+        Use openclaw-rebuild apply to build and activate only your container.
+        Never rebuild or deploy the host. Do not push to main automatically.
         Use git worktrees when working concurrently on the same repository.
         Report the commands run and their results. Do not claim unperformed tests passed.
       '';

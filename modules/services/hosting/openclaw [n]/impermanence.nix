@@ -6,6 +6,6 @@
       environment = inputs.self.lib.mkIfPersistence config {
         persistence."/persistent".directories = [ "/var/lib/openclaw" ];
       };
-      # _playground persists with your existing yeshey .setup persistence.
+      # Includes the agent's home, repository checkout, requests, and logs.
     };
 }
