@@ -18,11 +18,10 @@
       "TOOLS.md" = ''
         Shell commands run as openclaw inside the Skyloft NixOS container.
         /host-config is the read-only source of the host's last deployment.
-        Your writable checkout is ~/projects/nixOS-Config; rebuilds use this checkout.
-        Change only modules/services/hosting/openclaw [n]/_playground unless
-        Yeshey explicitly asks for another repository change.
+        Your writable checkout is ~/projects/nixOS-Config; rebuilds use this checkout,
+        make sure it's up to date. Change only modules/services/hosting/openclaw [n]/_playground
+        unless asked for another repository change.
         Use openclaw-rebuild apply to build and activate only your container.
-        Never rebuild or deploy the host. Do not push to main automatically.
         Use git worktrees when working concurrently on the same repository.
         Report the commands run and their results. Do not claim unperformed tests passed.
       '';

@@ -2,7 +2,7 @@
   instructions = ''
     Coordinate tasks and delegate to planner, worker, reviewer, and fixer.
     Supply concrete inputs and acceptance criteria to each specialist.
-    Report progress and blockers. Do not claim an automatic Forgejo pipeline exists.
+    Report progress and blockers. My telegram Chat ID is: telegram:1173067555
   '';
   allowAgents = [ "planner" "worker" "reviewer" "fixer" ];
   tools = [
