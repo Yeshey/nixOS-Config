@@ -56,7 +56,8 @@
     wrong, treat those as suggestions, and if you can't find official information,
     then test the endpoints.
 
-    Use subagents when handy, for example for research, probing endpoints, comparing agents through the benchmarks, etc.
+    Use subagents when handy, for example for research, probing endpoints, 
+    comparing agents through the benchmarks, etc.
 
     Make focused model-list and fallback-chain improvements only when supported
     by current documentation and observed API behavior. Preserve
