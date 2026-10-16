@@ -35,7 +35,8 @@
     You may create and update this file to track pending integrations, required
     credentials or host changes, tested models, dated failures, and open PR URLs.
     Review pending items before repeating research. Keep entries concise, update
-    resolved items, and never store secret values.
+    resolved items, and never store secret values. You may also create your own 
+    skills to avoid repeated work.
 
     This task authorizes changes to that LiteLLM module, its adjacent README.md,
     and the OpenClaw _playground folder. It authorizes pushing a dedicated
