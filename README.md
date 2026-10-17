@@ -119,6 +119,50 @@ It has my personal configuration for my Lenovo Legion laptop(`hyrulecastle`), my
 
 ![kakariko](https://github.com/Yeshey/nixOS-Config/assets/41551785/87c28630-9c44-4931-a4d2-573376999ff6)
 
+
+## TMP
+
+```
+okay, here is what I'm thinking:
+The only thing that should touch code in the repository, should be a planner grabbing an issue and making a plan, a worker implementing it, a reviewer reviewing it, and a fixer fixing it until the PR is good. And then a human should review it.
+I shouldn't have this litellm automation able to make a PR by itself, it should only have access to its playground, assess the repository, make its tests in the playground, and make an issue with the things that are wrong with a specific label. 
+The repository would trigger another worker because of that issue with that label created that would also have access to the same playground environment and its own  checked out repository. It would fix the issue, again use the playground for tests and make a PR with a specific label.
+Then a reviewer would be woken up, it would have the same playground skill, but also have its own environment and checked out repository, it could review it, test, search, whatever. And then there would be the fixer that would act on that review.
+
+Tell me. How would the reviewer pass it to the fixer, I can't trigger a github action when a reviewer leaves a review with a specific label, is leaving a review with a specific label even possible? How does looper solve that?
+Also, I'll have to make a key for the github action to be able to call my agents right? And because I want this pattern to be reusable, I want my github action to be able to pass context to the agents about the project etc. The agents in openclaw would be designated with only the general capabilities they need for their role, and the github action could define more skills / capabilities, / context to give to them so I could use this pattern in other repositorys, and the same agents running in the openclaw container that can use the playground to change their container. So, a lot of the litellm automation information would be now in those github actions for the specific repository, and the agents could even potentially change it in their PRs if they really feel like it.
+Would doing this mean that I'd need an API key to add to github to call my specific openclaw agents? It is not even exposed to the internet, right now it's just in my server and accessible through tailscale (This is not the more important part, I could even run these actions in a forgejo instance running on the server that could easily access the openclaw api) And somehow make it so it could pass context, etc? Or can we already do that through openclaw cli?
+And tell me how can we make make the agents run with their own version of the repository tree checked out like looper does. Can we do that through openclaw CLI call or something like that? Can we run a little bash script every time we run an agent to spin up a temporary worktree for it to do its job? Are there openclaw implementations to integrate it into github or git servers like this?
+
+Is this a good idea How I'm thinking? If we do this, we could also in the checkout of my nix configuration that the agents have access to, in order to edit their playground, make only their playground folder accessible, maybe make it not even be a checkout, just a static image of the current running host configuration that the agent can change a portion of just to update its environment
+
+I choose github, I'll find a way to do external auth, even if I have to expose it, just so I don't have to move everything to forgejo yet (I'll do it later, nad have some projects in forgejo and some in github)
+I Don't want everything inside one loop, I want the fixer and the reviewer to be specifically different agents represented by different apps in github if needed. How do we do that again? Do we pool for review comments?
+litellm would file an issue, but we need to first think on the infrastructure plan
+We'll use github that will call agents somehow, I'll find an auth method, you can suggest me one, maybe I'll have to expose openclaw to the internet, or maybe I can give github a tailscale that exposes just openclaw and connect to it in github action.
+Worktrees: yes, use them. OpenClaw ships openclaw worktrees create <repo> --name <name> --base-ref <ref> which makes an isolated branch and checkout, snapshots it before removal, and runs an optional .openclaw/worktree-setup.sh. For CI, create the worktree first, then run the agent with that directory as its working directory. Make some research on this first tho.
+
+
+Create a workspace and run an agent on that workspace from github actions.
+# 1. Create an isolated worktree for the agent
+openclaw worktrees create /path/to/repo \
+  --name fix-issue-42 \
+  --base-ref origin/main
+
+# 2. Run the agent in that worktree as its working directory
+openclaw agent --agent worker \
+  --cwd /path/to/worktrees/fix-issue-42 \
+  --message "Fix the issue described in the context file"
+can also use --message-file <path>
+
+And for the fixer -> reviewer, we'll use a github action detection mechanism, GitHub provides two native triggers for this:
+    pull_request_review with types: [submitted] fires when a review is submitted (approved, changes requested, or commented).
+    pull_request_review_comment with types: [created] fires when a comment is added directly to a PR's diff.
+So we will trigger on the review event itself, then filter by label inside the workflow
+
+I'll skip the planner at least for this scoped effort of using agents to do litellm PR changes and maintain litellm.
+```
+
 &nbsp;
 
 &nbsp;
