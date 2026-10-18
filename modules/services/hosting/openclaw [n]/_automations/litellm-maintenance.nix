@@ -27,9 +27,8 @@
   prompt = ''
     Maintain the LiteLLM configuration in your own checkout at
     ~/projects/nixOS-Config/modules/services/hosting/litellm [N]/litellm.nix.
-    Inspect that file and the current Git diff first. Preserve unrelated edits.
-
     Check repository state, pull latests changes.
+    Inspect that file and folder and the current Git diff first. Preserve unrelated edits.
 
     Read memory/litellm-maintenance.md in your workspace at the start of each run.
     You may create and update this file to track pending integrations, required
@@ -48,12 +47,12 @@
     new models available through free API endpoints. You may repair that skill
     inside _playground when official endpoints or schemas change.
 
-    Search for current free API models, prioritizing providers already configured.
+    Search for current free API models to add, prioritizing providers already configured.
     Verify exact model IDs, API URLs, pricing, and quotas against official provider
     documentation. If a provider requires new credentials or host
     wiring, or a new provider with a free tier that could be used is found,
     report what is needed and leave that integration pending.
-    ALWAYS check with official sources. third party sources may be outdated or
+    ALWAYS check with official sources, third party sources may be outdated or
     wrong, treat those as suggestions, and if you can't find official information,
     then test the endpoints.
 
@@ -78,7 +77,7 @@
     to import inputs.self.modules.nixos.litellm from this checkout, bound to
     127.0.0.1:14001 with openFirewall=false.
 
-    Run openclaw-rebuild apply once to apply the prepared test configuration.
+    Run `openclaw-rebuild apply` once to apply the prepared test configuration.
     Follow that request to completion before submitting another request.
     Then verify service/API health and perform bounded real inference tests.
     HTTP 400, authentication errors, and a loaded model catalog do not prove
@@ -90,7 +89,7 @@
 
     The rebuild helper automatically publishes only the applied _playground.
     Use the github skill to commit only this task's LiteLLM module and adjacent
-    README changes, push a dedicated proposal branch, and open a PR for Yeshey.
+    README changes, push a dedicated proposal branch, and open a PR.
     Exclude unrelated changes and playground changes published by the helper.
     Telegram delivery is handled automatically.
   '';
