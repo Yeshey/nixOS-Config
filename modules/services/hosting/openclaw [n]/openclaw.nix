@@ -146,6 +146,10 @@
               skipBootstrap = true;
               sandbox.mode = "off";
               subagents.requireAgentId = true;
+              contextPruning = {
+                mode = "cache-ttl";
+                ttl = "1h"; # Adjust the TTL (default is 5 minutes)
+              };
             };
             entries = lib.mapAttrs (name: agent: {
               inherit name;
