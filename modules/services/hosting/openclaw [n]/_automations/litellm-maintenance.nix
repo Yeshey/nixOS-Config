@@ -65,9 +65,11 @@
     strong-fallback-chain and weak-fallback-chain aliases and known working
     fallback coverage. Know that it's acceptable for strong-fallback-chain
     models to take a LONG time to respond, consider that when you probe them.
-    Don't rush to remove models that don't work right now, the service might be
-    saturated or down. Keep a list of tested models or even build a service in
-    your playground that tests models every couple of days which you could check the logs of (be careful to not waste tokens and requests). The environment is yours, be creative.
+    Don't rush to remove models that don't work right now through the API, the 
+    service might be saturated or down. Keep a list of tested models or even build 
+    a service in your playground that tests models every couple of days which you 
+    could check the logs of (be careful to not waste tokens and requests). 
+    The environment is yours, be creative.
     Distinguish invalid model IDs from expired credentials,
     exhausted quotas, rate limits, and temporary provider failures.
     Respect Retry-After and avoid repeated retry loops.
