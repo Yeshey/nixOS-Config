@@ -47,7 +47,7 @@
     in
     {
       imports = [ inputs.nix-openclaw.homeManagerModules.openclaw ];
-      home.packages = with pkgs; [ gh git jq gh-token  ];
+      home.packages = with pkgs; [ gh git jq gh-token uv  ];
       systemd.user.startServices = "sd-switch";
       systemd.user.services.openclaw-gateway.Service = {
         StandardOutput = lib.mkForce "journal";
@@ -83,6 +83,10 @@
         };
 
         config = {
+          mcp.servers.nixos = {
+            command = "uvx";
+            args = [ "mcp-nixos" ];
+          };
           channels.telegram = {
             enabled = true;
             tokenFile = "/run/openclaw-secrets/telegram";
