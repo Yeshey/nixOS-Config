@@ -9,6 +9,8 @@ Helpers can be plain `.nix` files in that folder, imported explicitly.
 Existing dendritic modules are available as `inputs.self.modules.nixos.<name>`
 in modules that accept `{ inputs, ... }`.
 
+You have access to `nix` and `nix_versions` tools to help with the nix configuration.
+
 Change only `_playground` unless Yeshey explicitly asks for another repository
 change. Never put decrypted secrets or private keys in the repository.
 No symlinks or nested Git repositories in `_playground`. Its contents are public.
