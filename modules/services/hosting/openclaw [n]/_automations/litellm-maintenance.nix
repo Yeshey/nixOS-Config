@@ -27,8 +27,9 @@
   prompt = ''
     Maintain the LiteLLM configuration in your own checkout at
     ~/projects/nixOS-Config/modules/services/hosting/litellm [N]/litellm.nix.
+    Inspect that file and the current Git diff first. Preserve unrelated edits.
+
     Check repository state, pull latests changes.
-    Inspect that file and folder and the current Git diff first. Preserve unrelated edits.
 
     Read memory/litellm-maintenance.md in your workspace at the start of each run.
     You may create and update this file to track pending integrations, required
@@ -47,12 +48,12 @@
     new models available through free API endpoints. You may repair that skill
     inside _playground when official endpoints or schemas change.
 
-    Search for current free API models to add, prioritizing providers already configured.
+    Search for current free API models, prioritizing providers already configured.
     Verify exact model IDs, API URLs, pricing, and quotas against official provider
     documentation. If a provider requires new credentials or host
     wiring, or a new provider with a free tier that could be used is found,
     report what is needed and leave that integration pending.
-    ALWAYS check with official sources, third party sources may be outdated or
+    ALWAYS check with official sources. third party sources may be outdated or
     wrong, treat those as suggestions, and if you can't find official information,
     then test the endpoints.
 
@@ -62,7 +63,12 @@
     Make focused model-list and fallback-chain improvements only when supported
     by current documentation and observed API behavior. Preserve
     strong-fallback-chain and weak-fallback-chain aliases and known working
-    fallback coverage. Distinguish invalid model IDs from expired credentials,
+    fallback coverage. Know that it's acceptable for strong-fallback-chain
+    models to take a LONG time to respond, consider that when you probe them.
+    Don't rush to remove models that don't work right now, the service might be
+    saturated or down. Keep a list of tested models or even build a service in
+    your playground that tests models every couple of days which you could check the logs of (be careful to not waste tokens and requests). The environment is yours, be creative.
+    Distinguish invalid model IDs from expired credentials,
     exhausted quotas, rate limits, and temporary provider failures.
     Respect Retry-After and avoid repeated retry loops.
 
@@ -77,19 +83,19 @@
     to import inputs.self.modules.nixos.litellm from this checkout, bound to
     127.0.0.1:14001 with openFirewall=false.
 
-    Run `openclaw-rebuild apply` once to apply the prepared test configuration.
+    Run openclaw-rebuild apply once to apply the prepared test configuration.
     Follow that request to completion before submitting another request.
     Then verify service/API health and perform bounded real inference tests.
     HTTP 400, authentication errors, and a loaded model catalog do not prove
     inference works. Record status codes and sanitized errors.
     Production LiteLLM on port 4000 and OpenClaw's provider URL must stay unchanged.
-    After testing, disable the temporary LiteLLM test service in the playground
-    configuration without deleting the test module or unrelated configuration.
-    Apply that cleanup through one additional rebuild. If no justified changes are needed, skip rebuilds and unnecessary PRs.
+    After testing, disable any temporary LiteLLM test services you don't want to stay on.
+    Apply that cleanup through one additional rebuild. 
+    If no justified changes are needed, skip rebuilds and unnecessary PRs.
 
     The rebuild helper automatically publishes only the applied _playground.
     Use the github skill to commit only this task's LiteLLM module and adjacent
-    README changes, push a dedicated proposal branch, and open a PR.
+    README changes, push a dedicated proposal branch, and open a PR for Yeshey.
     Exclude unrelated changes and playground changes published by the helper.
     Telegram delivery is handled automatically.
   '';

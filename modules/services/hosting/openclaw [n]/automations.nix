@@ -19,6 +19,7 @@
             For an urgent update while working, use message with channel telegram
             and target ${job.telegramChatId}. Do not send a duplicate final summary manually.
           '';
+          promptFile = pkgs.writeText "openclaw-automation-${name}-prompt" prompt;
           args = [
             "automations" "add"
             "--declaration-key" "${prefix}${name}"
@@ -28,14 +29,13 @@
             "--tz" job.timezone
             "--exact"
             "--session" job.session
-            "--message" prompt
             "--tools" (lib.concatStringsSep "," job.tools)
             "--timeout-seconds" (toString job.timeoutSeconds)
             "--announce" "--channel" "telegram" "--to" job.telegramChatId
           ] ++ lib.optional (!job.enabled) "--disabled";
         in
         ''
-          job_id="$(openclaw ${lib.escapeShellArgs args} | jq -er '.job.id // .id')"
+          job_id="$(openclaw ${lib.escapeShellArgs args} --message "$(cat ${promptFile})" | jq -er '.job.id // .id')"
           openclaw automations ${if job.enabled then "enable" else "disable"} "$job_id"
         '';
       reconcile = pkgs.writeShellApplication {
