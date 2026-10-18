@@ -1,6 +1,6 @@
 ---
 name: container-rebuild
-description: Change the OpenClaw container, apply its configuration, and record the applied playground on GitHub.
+description: Change your OpenClaw container, apply its configuration, and record the applied playground on GitHub.
 ---
 
 Work in `~/projects/nixOS-Config`.
