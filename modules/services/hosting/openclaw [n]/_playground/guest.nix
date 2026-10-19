@@ -1,5 +1,5 @@
 { pkgs, ... }: {
-  imports = [ ./litellm-test.nix ];  # enabled for testing
+  # imports = [ ./litellm-test.nix ];  # disabled after test
   environment.systemPackages = [ pkgs.cowsay pkgs.cmatrix ];
 
   home-manager.users.openclaw.programs.openclaw.config.skills.load.extraDirs = [
