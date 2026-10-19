@@ -166,27 +166,27 @@
             }
 
             {
-              model_name = "nvidia-kimi-k3";
+              model_name = "nvidia-glm-5-3-flash";
               litellm_params = {
-                model = "openai/moonshotai/kimi-k3";
+                model = "openai/z-ai/glm-5.3-flash";
                 api_base = "https://integrate.api.nvidia.com/v1";
                 api_key = "os.environ/NVIDIA_NIM_API_KEY";
               };
             }
 
             {
-              model_name = "nvidia-deepseek-v4-pro";
+              model_name = "nvidia-muse-glimmer-30b";
               litellm_params = {
-                model = "openai/deepseek-ai/deepseek-v4-pro";
+                model = "openai/meta/muse-glimmer-30b";
                 api_base = "https://integrate.api.nvidia.com/v1";
                 api_key = "os.environ/NVIDIA_NIM_API_KEY";
               };
             }
 
             {
-              model_name = "nvidia-glm-5-3";
+              model_name = "nvidia-nemotron-3-5-lightning";
               litellm_params = {
-                model = "openai/z-ai/glm-5.3";
+                model = "openai/nvidia/nemotron-3.5-lightning-30b-a3b";
                 api_base = "https://integrate.api.nvidia.com/v1";
                 api_key = "os.environ/NVIDIA_NIM_API_KEY";
               };
@@ -247,9 +247,10 @@
             {
               model_name = "strong-fallback-chain";     # top strong models only
               litellm_params = {
-                model = "openai/meta/muse-spark-1.3-contributor";
-                api_base = "https://ai-gateway.vercel.sh/v1";
-                api_key = "os.environ/VERCEL_API_KEY";
+                model = "gemini/gemini-3.8-flash";       # entry: free, verified working
+                api_key = "os.environ/GEMINI_API_KEY";
+                rpm = 4;        # real limit 5
+                tpm = 225000;   # real limit 250K
               };
             }
 
@@ -280,23 +281,30 @@
             # };
             fallbacks = [
               # ---- strong-fallback-chain ----
+              # Rebuilt 2026-10-19: removed dead NIM models (deepseek-v4-pro,
+              # kimi-k3, glm-5-3). Added glm-5-3-flash, muse-glimmer-30b,
+              # nemotron-3.5-lightning from official build.nvidia.com.
+              # Entry point changed from muse-spark-1-3-contributor (403 on
+              # free Vercel tier) to gemini-3.8-flash.
               { strong-fallback-chain = [
-                  "gemini-3.8-flash" "nvidia-deepseek-v4-pro" "nvidia-kimi-k3"
-                  "nvidia-glm-5-3" "gemini-3.7-flash"
-                ]; }
-              { vercel-muse-spark-1-3-contributor = [
-                  "gemini-3.8-flash" "nvidia-deepseek-v4-pro" "nvidia-kimi-k3"
-                  "nvidia-glm-5-3" "gemini-3.7-flash"
-                ]; }
-              { "gemini-3.8-flash" = [
-                  "nvidia-deepseek-v4-pro" "nvidia-kimi-k3" "nvidia-glm-5-3"
+                  "gemini-3.8-flash" "nvidia-glm-5-3-flash"
+                  "nvidia-muse-glimmer-30b" "nvidia-nemotron-3-5-lightning"
                   "gemini-3.7-flash"
                 ]; }
-              { nvidia-deepseek-v4-pro = [
-                  "nvidia-kimi-k3" "nvidia-glm-5-3" "gemini-3.7-flash"
+              # muse-spark-1-3-contributor not in strong chain — 403 on
+              # free Vercel tier. Keep model_list entry for future paid use.
+              { "gemini-3.8-flash" = [
+                  "nvidia-glm-5-3-flash" "nvidia-muse-glimmer-30b"
+                  "nvidia-nemotron-3-5-lightning" "gemini-3.7-flash"
                 ]; }
-              { nvidia-kimi-k3 = [ "nvidia-glm-5-3" "gemini-3.7-flash" ]; }
-              { nvidia-glm-5-3 = [ "gemini-3.7-flash" ]; }
+              { nvidia-glm-5-3-flash = [
+                  "nvidia-muse-glimmer-30b" "nvidia-nemotron-3-5-lightning"
+                  "gemini-3.7-flash"
+                ]; }
+              { nvidia-muse-glimmer-30b = [
+                  "nvidia-nemotron-3-5-lightning" "gemini-3.7-flash"
+                ]; }
+              { nvidia-nemotron-3-5-lightning = [ "gemini-3.7-flash" ]; }
               # gemini-3.7-flash = last
 
               # ---- weak-fallback-chain ----
