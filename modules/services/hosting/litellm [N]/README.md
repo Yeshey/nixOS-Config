@@ -60,3 +60,6 @@ currently works or remains free.
 
 These are investigation notes, not verified provider IDs. Confirm exact names,
 configured-provider support, free quotas, and successful inference before adding.
+
+**OpenCode** (opencode.ai/zen) offers free models (GLM 5.3, DeepSeek V4 Flash, etc.)
+but requires the OpenCode client — cannot be used as a LiteLLM upstream.
