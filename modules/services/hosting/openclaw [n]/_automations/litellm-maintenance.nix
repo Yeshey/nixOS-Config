@@ -97,8 +97,8 @@
     If no justified changes are needed, skip rebuilds and unnecessary PRs.
 
     The rebuild helper automatically publishes only the applied _playground.
-    Use the github skill to commit only this task's LiteLLM module and adjacent
-    README changes, push a dedicated proposal branch, and open a PR for Yeshey.
+    Commit only this task's LiteLLM module and adjacent
+    README changes, push a dedicated proposal branch, and open a PR.
     Exclude unrelated changes and playground changes published by the helper.
     Telegram delivery is handled automatically.
   '';

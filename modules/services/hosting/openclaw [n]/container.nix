@@ -58,6 +58,7 @@
         telegram_openclawinator_bot = secret "telegram_openclawinator_bot";
         openclaw_github_app_key = secret "openclaw_github_app_key";
         openclaw_artificial_analysis = secret "openclaw_artificial_analysis";
+        nvidia_nim_api_key = secret "nvidia_nim_api_key";
       };
       sops.templates."openclaw-litellm-key" = {
         owner = "openclaw";
@@ -130,7 +131,8 @@
           "/run/openclaw-secrets/sops-ssh-key" = ro "/etc/ssh/ssh_host_ed25519_key";
           "/run/openclaw-secrets/github-app-key" = ro config.sops.secrets.openclaw_github_app_key.path;
           "/run/openclaw-secrets/artificial-analysis" = ro config.sops.secrets.openclaw_artificial_analysis.path;
-
+          "/run/openclaw-secrets/nvidia_nim_api_key" = ro config.sops.secrets.nvidia_nim_api_key.path;
+          
           # Add project/data mounts here, for example:
           # "/projects/bolsa" = {
           #   hostPath = "/mnt/OneDrive/ISCTE/Projects/Bolsa";
@@ -180,6 +182,7 @@
               systemd.user.services.openclaw-gateway.Service.Environment =
                 lib.mkAfter [
                   "NIX_PATH=nixpkgs=${pkgs.path}"
+                  "GIT_CONFIG_GLOBAL=/home/openclaw/.config/git/config"
                 ];
 
               home.packages = [

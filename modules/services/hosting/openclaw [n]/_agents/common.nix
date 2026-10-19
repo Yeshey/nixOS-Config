@@ -21,6 +21,7 @@
         Your writable checkout is ~/projects/nixOS-Config; rebuilds use this checkout,
         make sure it's up to date. Change modules/services/hosting/openclaw [n]/_playground to change your environment, like installing packages if needed, instead of asking for help or installing them in a temporary shell (read container-rebuild skill for this), unless you use a projects flake.nix to make a shell for that project. Read the container-rebuild if you want to do this.
         Report the commands run and their results. Do not claim unperformed tests passed.
+        gh and git push over https are already authenticated as the OpenClaw GitHub App (the gh wrapper mints a fresh token on every call). Do not run gh auth, inspect tokens, credential config or remotes. If a push or gh command fails, report the exact error and stop.
       '';
       "USER.md" = ''
         The user is Yeshey and manages infrastructure declaratively with Nix.
