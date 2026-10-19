@@ -9,6 +9,8 @@ Stable aliases:
 - `strong-fallback-chain`
 - `weak-fallback-chain`
 
+Some services, like Vercel, have a free tier where you will get 5$ for free every month. We're using those models even if they cost something in those cases (keeping in mind the cost as well), but their usage is exhausted that month, it can always fallback to another one.
+
 ## Model ranking
 
 | Rank | Configured alias | Brief description |
