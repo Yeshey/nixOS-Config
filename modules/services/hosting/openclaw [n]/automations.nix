@@ -32,7 +32,9 @@
             "--tools" (lib.concatStringsSep "," job.tools)
             "--timeout-seconds" (toString job.timeoutSeconds)
             "--announce" "--channel" "telegram" "--to" job.telegramChatId
-          ] ++ lib.optional (!job.enabled) "--disabled";
+          ]
+          ++ lib.optionals (job ? model) [ "--model" job.model ]
+          ++ lib.optional (!job.enabled) "--disabled";
         in
         ''
           job_id="$(openclaw ${lib.escapeShellArgs args} --message "$(cat ${promptFile})" | jq -er '.job.id // .id')"

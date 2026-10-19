@@ -2,6 +2,7 @@
   name = "LiteLLM maintenance";
   enabled = true;
   agent = "orchestrator";
+  model = "litellm/strong-fallback-chain";
   cron = "0 9 * * 1";
   timezone = "Europe/Lisbon";
   session = "session:litellm-maintenance";

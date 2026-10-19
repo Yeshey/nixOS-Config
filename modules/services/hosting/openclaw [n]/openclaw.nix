@@ -44,6 +44,22 @@
         inherit provider;
         id = "value";
       };
+
+      mkLitellmModel = id: {
+        inherit id;
+        name = id;
+        reasoning = false;
+        input = [ "text" ];
+        # Conservative: chains fall through GLM/DeepSeek/Gemini/etc. with
+        # different limits, so cap at what the weakest hop can handle.
+        contextWindow = 128000;
+        maxTokens = 8192;
+      };
+
+      litellmModelIds = lib.unique (
+        [ "strong-fallback-chain" "weak-fallback-chain" ]
+        ++ lib.mapAttrsToList (_: a: a.model) agents
+      );
     in
     {
       imports = [ inputs.nix-openclaw.homeManagerModules.openclaw ];
@@ -126,7 +142,6 @@
           talk.agentId = "orchestrator";
 
           skills.workshop.autonomous.mode = "off";
-          plugins.entries."memory-core".config.dreaming.enabled = false;
 
           browser = {
             enabled = true;
@@ -139,7 +154,13 @@
             ];
           };
 
-          plugins.entries.browser.enabled = true;
+          plugins = {
+            entries = {
+              browser.enabled = true;
+              litellm.enabled = true;
+              "memory-core".config.dreaming.enabled = false;
+            };
+          };
 
           agents = {
             ownership = "explicit";
@@ -166,25 +187,10 @@
             }) agents;
           };
           models.providers.litellm = {
-            baseUrl = "http://127.0.0.1:4000/v1";
+            baseUrl = "http://127.0.0.1:4000";
             apiKey = secretRef "litellm-key";
             api = "openai-completions";
-            models = map (id: {
-              inherit id;
-              name = id;
-              agentRuntime.id = "openclaw";
-              reasoning = false;
-              input = [ "text" ];
-              inherit (common) contextWindow maxTokens;
-              cost = {
-                input = 0;
-                output = 0;
-                cacheRead = 0;
-                cacheWrite = 0;
-              };
-            }) (lib.unique (
-              map (agent: agent.model) (builtins.attrValues agents)
-            ));
+            models = map mkLitellmModel litellmModelIds;
           };
           tools = {
             profile = "full";

@@ -44,7 +44,7 @@ curl -fsS --connect-timeout 10 --max-time 60 \
       | map(select(.terminal_bench | type == "number"))
       | sort_by(.terminal_bench)
       | reverse
-      | .[:20]
+      | .[:200]
     )
   }'
 ```
