@@ -250,6 +250,8 @@
                 model = "openai/meta/muse-spark-1.3-contributor";
                 api_base = "https://ai-gateway.vercel.sh/v1";
                 api_key = "os.environ/VERCEL_API_KEY";
+                # Vercel free tier: $5/month credit. 403 = credit exhausted,
+                # litellm falls through to fallbacks.
               };
             }
 
@@ -280,23 +282,31 @@
             # };
             fallbacks = [
               # ---- strong-fallback-chain ----
+              # Rebuilt 2026-10-19: removed dead NIM models (deepseek-v4-pro,
+              # kimi-k3, glm-5-3). Added glm-5-3-flash, muse-glimmer-30b,
+              # nemotron-3.5-lightning from official build.nvidia.com.
               { strong-fallback-chain = [
-                  "gemini-3.8-flash" "nvidia-deepseek-v4-pro" "nvidia-kimi-k3"
-                  "nvidia-glm-5-3" "gemini-3.7-flash"
-                ]; }
-              { vercel-muse-spark-1-3-contributor = [
-                  "gemini-3.8-flash" "nvidia-deepseek-v4-pro" "nvidia-kimi-k3"
-                  "nvidia-glm-5-3" "gemini-3.7-flash"
-                ]; }
-              { "gemini-3.8-flash" = [
-                  "nvidia-deepseek-v4-pro" "nvidia-kimi-k3" "nvidia-glm-5-3"
+                  "gemini-3.8-flash" "nvidia-glm-5-3-flash"
+                  "nvidia-muse-glimmer-30b" "nvidia-nemotron-3-5-lightning"
                   "gemini-3.7-flash"
                 ]; }
-              { nvidia-deepseek-v4-pro = [
-                  "nvidia-kimi-k3" "nvidia-glm-5-3" "gemini-3.7-flash"
+              { vercel-muse-spark-1-3-contributor = [
+                  "gemini-3.8-flash" "nvidia-glm-5-3-flash"
+                  "nvidia-muse-glimmer-30b" "nvidia-nemotron-3-5-lightning"
+                  "gemini-3.7-flash"
                 ]; }
-              { nvidia-kimi-k3 = [ "nvidia-glm-5-3" "gemini-3.7-flash" ]; }
-              { nvidia-glm-5-3 = [ "gemini-3.7-flash" ]; }
+              { "gemini-3.8-flash" = [
+                  "nvidia-glm-5-3-flash" "nvidia-muse-glimmer-30b"
+                  "nvidia-nemotron-3-5-lightning" "gemini-3.7-flash"
+                ]; }
+              { nvidia-glm-5-3-flash = [
+                  "nvidia-muse-glimmer-30b" "nvidia-nemotron-3-5-lightning"
+                  "gemini-3.7-flash"
+                ]; }
+              { nvidia-muse-glimmer-30b = [
+                  "nvidia-nemotron-3-5-lightning" "gemini-3.7-flash"
+                ]; }
+              { nvidia-nemotron-3-5-lightning = [ "gemini-3.7-flash" ]; }
               # gemini-3.7-flash = last
 
               # ---- weak-fallback-chain ----
