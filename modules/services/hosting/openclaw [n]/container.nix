@@ -58,7 +58,15 @@
         telegram_openclawinator_bot = secret "telegram_openclawinator_bot";
         openclaw_github_app_key = secret "openclaw_github_app_key";
         openclaw_artificial_analysis = secret "openclaw_artificial_analysis";
-        nvidia_nim_api_key = secret "nvidia_nim_api_key";
+        gemini_api_key = secret "gemini_api_key";
+        litellm_master_key = secret "litellm_master_key";
+        openrouter = secret "openrouter";
+        iaedu_api_key = secret "iaedu_api_key";
+        opencode_key = secret "opencode_key";
+        groq_key = secret "groq_key";
+        cerebras_key = secret "cerebras_key";
+        openjev_key = secret "openjev_key";
+        vercel_key = secret "vercel_key";
       };
       sops.templates."openclaw-litellm-key" = {
         owner = "openclaw";
@@ -132,7 +140,15 @@
           "/run/openclaw-secrets/github-app-key" = ro config.sops.secrets.openclaw_github_app_key.path;
           "/run/openclaw-secrets/artificial-analysis" = ro config.sops.secrets.openclaw_artificial_analysis.path;
           "/run/openclaw-secrets/nvidia_nim_api_key" = ro config.sops.secrets.nvidia_nim_api_key.path;
-          
+          "/run/openclaw-secrets/gemini_api_key" = ro config.sops.secrets.gemini_api_key.path;
+          "/run/openclaw-secrets/litellm_master_key" = ro config.sops.secrets.litellm_master_key.path;
+          "/run/openclaw-secrets/openrouter" = ro config.sops.secrets.openrouter.path;
+          "/run/openclaw-secrets/iaedu_api_key" = ro config.sops.secrets.iaedu_api_key.path;
+          "/run/openclaw-secrets/opencode_key" = ro config.sops.secrets.opencode_key.path;
+          "/run/openclaw-secrets/groq_key" = ro config.sops.secrets.groq_key.path;
+          "/run/openclaw-secrets/cerebras_key" = ro config.sops.secrets.cerebras_key.path;
+          "/run/openclaw-secrets/openjev_key" = ro config.sops.secrets.openjev_key.path;
+          "/run/openclaw-secrets/vercel_key" = ro config.sops.secrets.vercel_key.path;
           # Add project/data mounts here, for example:
           # "/projects/bolsa" = {
           #   hostPath = "/mnt/OneDrive/ISCTE/Projects/Bolsa";
