@@ -149,7 +149,7 @@
               model.primary = "litellm/${agents.orchestrator.model}";
               skipBootstrap = true;
               sandbox.mode = "off";
-              subagents.requireAgentId = true;
+              subagents.requireAgentId = false;
               contextPruning = {
                 mode = "cache-ttl";
                 ttl = "1h"; # Adjust the TTL (default is 5 minutes)
