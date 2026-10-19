@@ -25,6 +25,7 @@
   ];
 
   prompt = ''
+    This is a weekly automation.
     Maintain the LiteLLM configuration in your own checkout at
     ~/projects/nixOS-Config/modules/services/hosting/litellm [N]/litellm.nix.
     Inspect that file and the current Git diff first. Preserve unrelated edits.
