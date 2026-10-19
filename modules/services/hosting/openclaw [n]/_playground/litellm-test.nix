@@ -3,12 +3,23 @@
 {
   imports = [ inputs.self.modules.nixos.litellm ];
 
-  # This module already declares LiteLLM's SOPS secrets and environment template.
-  # Additional sops.secrets / sops.templates declarations can go here normally.
-  # sops.secrets.gemini_api_key = {
-  #   owner = "openclaw";
-  #   mode = "0400";
-  # };
+  # Make sops secrets readable by the openclaw user so we can probe from the guest.
+  sops.secrets.gemini_api_key = {
+    owner = "openclaw";
+    mode = "0400";
+  };
+  sops.secrets.nvidia_nim_api_key = {
+    owner = "openclaw";
+    mode = "0400";
+  };
+  sops.secrets.vercel_key = {
+    owner = "openclaw";
+    mode = "0400";
+  };
+  sops.secrets.litellm_master_key = {
+    owner = "openclaw";
+    mode = "0400";
+  };
 
   # The guest shares the host's network namespace. Keep production on 4000.
   services.litellm = {
