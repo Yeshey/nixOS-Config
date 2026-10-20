@@ -165,7 +165,6 @@
           agents = {
             ownership = "explicit";
             defaults = {
-              toolCallTimeoutSeconds = 600; # 10min
               heartbeat.every = "0m";
               systemAgent.agentId = "orchestrator";
               model.primary = "litellm/${agents.orchestrator.model}";
