@@ -6,6 +6,8 @@
       port = 11111;
       searxPort = 5564;
       litellmPort = 4000; # must match modules/services/hosting/litellm [N]/litellm.nix
+      localOllama = "http://localhost:11434";
+      hyrulecastleOllama = "http://hyrulecastle.tailb6874b.ts.net:11434";
     in
     {
       imports = [
@@ -71,7 +73,11 @@
           ENABLE_FOLLOW_UP_GENERATION = "false";
           ENABLE_TAGS_GENERATION = "false";
           ENABLE_TITLE_GENERATION = "false";
-          OLLAMA_API_BASE_URL = "http://localhost:11434";
+
+          # Two Ollama backends: local (skyloft) and remote (hyrulecastle, via Tailscale).
+          DEFAULT_MODEL_PARAMS = ''{"num_ctx": 32768}'';
+          OLLAMA_BASE_URLS = "${localOllama};${hyrulecastleOllama}";
+          OLLAMA_API_CONFIGS = ''{"0": {"prefix_id": "local-ollama/"}, "1": {"prefix_id": "hyrulecastle-ollama/"}}'';
 
           OPENAI_API_BASE_URLS = "http://localhost:${toString litellmPort}/v1;https://integrate.api.nvidia.com/v1;https://openrouter.ai/api/v1;https://opencode.ai/zen/v1;https://api.groq.com/openai/v1;https://ai-gateway.vercel.sh/v1;https://api.cerebras.ai/v1;https://api.iaedu.pt/agent-chat//api/v1/agent/cmor5objoex9gfp01vm7p95jh/stream";
           OPENAI_API_CONFIGS = ''{"0": {"prefix_id": "mylitellmAPI/"}, "1": {"prefix_id": "nvidiaAPI/"}, "2": {"prefix_id": "openrouterAPI/"}, "3": {"prefix_id": "opencodeAPI/"}, "4": {"prefix_id": "groqAPI/"}, "5": {"prefix_id": "vercelAPI/"}, "6": {"prefix_id": "cerebrasAPI/"}, "7": {"prefix_id": "iaeduAPI/"}}'';

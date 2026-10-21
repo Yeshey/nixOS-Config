@@ -1,7 +1,7 @@
 { inputs, ... }:
 {
   flake.modules.nixos.ollama =
-    { pkgs, ... }:
+    { pkgs, config, ... }:
     {
       services.ollama = {
         package = pkgs.unstable.ollama;

@@ -50,9 +50,9 @@
         settings = {
           model_list = [
             {
-              model_name = "minicpm5-2b-hyrulecastle-ollama";
+              model_name = "mimo-v2.6-9b-hyrulecastle-ollama";
               litellm_params = {
-                model = "ollama_chat/openbmb/minicpm5-2b:latest";
+                model = "ollama_chat/maternion/mimo-v2.6:9b";
                 api_base = "http://hyrulecastle.tailb6874b.ts.net:11434";
                 extra_body = {
                   options = {
