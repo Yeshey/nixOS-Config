@@ -10,6 +10,7 @@
       sops.secrets."nvidia_nim_api_key" = { };
       sops.secrets."vercel_key" = { };
       sops.secrets."cerebras_key" = { };
+      sops.secrets."inceptio_mercury_api" = { };
 
       sops.templates."litellm.env" = {
         content = ''
@@ -18,6 +19,7 @@
           NVIDIA_NIM_API_KEY=${config.sops.placeholder."nvidia_nim_api_key"}
           VERCEL_API_KEY=${config.sops.placeholder."vercel_key"}
           CEREBRAS_API_KEY=${config.sops.placeholder."cerebras_key"}
+          INCEPTIO_MERCURY_API_KEY=${config.sops.placeholder."inceptio_mercury_api"}
         '';
         restartUnits = [ "litellm.service" ];
       };
@@ -241,6 +243,17 @@
                 api_base = "https://api.cerebras.ai/v1";
                 api_key = "os.environ/CEREBRAS_API_KEY";
                 # TB4.0: 0.056 (Xhigh). Above muse-glimmer (0.005).
+              };
+            }
+
+            # ---- Inception Labs Mercury ----
+            # Defined only; intentionally NOT wired into any fallback chain.
+            {
+              model_name = "inceptio-mercury-3";
+              litellm_params = {
+                model = "openai/mercury-3";
+                api_base = "https://api.inceptionlabs.ai/v1";
+                api_key = "os.environ/INCEPTIO_MERCURY_API_KEY";
               };
             }
 

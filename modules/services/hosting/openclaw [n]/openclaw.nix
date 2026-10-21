@@ -57,7 +57,11 @@
       };
 
       litellmModelIds = lib.unique (
-        [ "strong-fallback-chain" "weak-fallback-chain" ]
+        [
+          "strong-fallback-chain"
+          "weak-fallback-chain"
+          "inceptio-mercury-3"
+        ]
         ++ lib.mapAttrsToList (_: a: a.model) agents
       );
     in
