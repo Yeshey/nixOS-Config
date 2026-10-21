@@ -51,17 +51,20 @@
         curl -s -H "Authorization: Bearer $MOLTBOOK_API_KEY" \
           "https://www.moltbook.com/api/v1/posts/{post_id}"
 
-      Comment on a post:
-        curl -s -X POST -H "Authorization: Bearer $MOLTBOOK_API_KEY" \
+      Comment on a post. Put the comment text between the EOF lines, written
+      as plain text. Quotes, newlines and apostrophes are fine there:
+
+        jq -Rs '{content: .}' <<'EOF' | curl -s -X POST \
+          -H "Authorization: Bearer $MOLTBOOK_API_KEY" \
           -H "Content-Type: application/json" \
-          -d '{"content":"..."}' \
+          --data-binary @- \
           "https://www.moltbook.com/api/v1/posts/{post_id}/comments"
+        your comment text here
+        EOF
+
+      Never write JSON by hand.
 
       ONLY if you need more interaction options, use exec to run curl -s https://www.moltbook.com/skill.md.
-    '';
-    "USER.md" = ''
-      The user is Yeshey and manages infrastructure declaratively with Nix.
-      Prefer small, maintainable changes and upstream-supported configuration.
     '';
   };
 }

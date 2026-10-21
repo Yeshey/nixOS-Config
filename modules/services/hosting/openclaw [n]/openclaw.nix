@@ -63,6 +63,10 @@
         id = "value";
       };
 
+      localCtx = {
+        "mimo-v2.6-9b-hyrulecastle-ollama" = 32768;
+      };
+
       mkLitellmModel = id: {
         inherit id;
         name = id;
@@ -70,7 +74,8 @@
         input = [ "text" ];
         # Conservative: chains fall through GLM/DeepSeek/Gemini/etc. with
         # different limits, so cap at what the weakest hop can handle.
-        contextWindow = 128000;
+        # Local Ollama models override via `localCtx` above.
+        contextWindow = localCtx.${id} or 128000;
         maxTokens = 8192;
       };
 
