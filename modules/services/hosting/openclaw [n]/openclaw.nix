@@ -61,13 +61,14 @@
           "strong-fallback-chain"
           "weak-fallback-chain"
           "inceptio-mercury-3"
+          "minicpm5-2b-hyrulecastle-ollama"
         ]
         ++ lib.mapAttrsToList (_: a: a.model) agents
       );
     in
     {
       imports = [ inputs.nix-openclaw.homeManagerModules.openclaw ];
-      home.packages = with pkgs; [ gh git jq gh-token uv  ];
+      home.packages = with pkgs; [ gh git jq gh-token uv python3 ];
       systemd.user.startServices = "sd-switch";
       systemd.user.services.openclaw-gateway.Service = {
         StandardOutput = lib.mkForce "journal";

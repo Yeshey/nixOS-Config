@@ -49,6 +49,18 @@
 
         settings = {
           model_list = [
+            {
+              model_name = "minicpm5-2b-hyrulecastle-ollama";
+              litellm_params = {
+                model = "ollama_chat/openbmb/minicpm5-2b:latest";
+                api_base = "http://hyrulecastle.tailb6874b.ts.net:11434";
+                extra_body = {
+                  options = {
+                    num_ctx = 32768;
+                  };
+                };
+              };
+            }
             # ---- Google AI Studio free tier ----
             {
               model_name = "gemini-3.8-flash";
