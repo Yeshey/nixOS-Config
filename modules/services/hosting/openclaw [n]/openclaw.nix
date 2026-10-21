@@ -214,13 +214,12 @@
           lib.mapAttrsToList (name: agent:
             lib.mapAttrsToList (filename: text:
               let
-                mode = if builtins.elem filename (agent.executableFiles or [ ]) then "555" else "444";
                 src = builtins.toFile "${name}-${filename}" text;
                 dest = "${workspace name}/${filename}";
               in ''
                 run mkdir -p "${workspace name}"
                 run rm -f "${dest}"
-                run ${pkgs.coreutils}/bin/install -m ${mode} ${src} "${dest}"
+                run ${pkgs.coreutils}/bin/install -m 444 ${src} "${dest}"
               ''
             ) agent.files
           ) agents
