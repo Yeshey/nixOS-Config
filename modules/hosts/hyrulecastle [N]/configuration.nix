@@ -21,6 +21,7 @@
       i2p
       waydroid
       ollama-cuda
+      open-webui
 
       # hosting
       # speedtest-tracker
