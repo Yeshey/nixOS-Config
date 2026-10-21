@@ -120,7 +120,7 @@
       remote = "hyrulecastle";
       port = 11111;
       goollamawebui = pkgs.writeShellScriptBin "goollamawebui" ''
-        (ssh -L ${toString port}:localhost:${toString port} -t ${remote} "sleep 90" &) && sleep 1.5 && xdg-open "http://localhost:${toString port}/?web-search=true"
+        (ssh -L ${toString port}:localhost:${toString port} -t ${remote} "sleep 90" &) && sleep 1.5 && xdg-open "http://hyrulecastle.tailb6874b.ts.net:${toString port}/?web-search=true"
       '';
       ollamawebuiDesktopItem = pkgs.makeDesktopItem {
         name = "Hyrulecastle Ollama WebUI";
