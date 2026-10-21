@@ -51,12 +51,18 @@
             files = role.files or { };
           }
       ) roles;
+
       filesFor = name:
         agents.${name}.files // {
           "AGENTS.md" = common.sharedInstructions + "\n"
             + agents.${name}.instructions;
         };
-      primaryFiles = filesFor "orchestrator";
+
+      # Files a role marks as executable (e.g. helper shell scripts). Read
+      # from the raw role (not the merged `agents` output) so `inheritDefaults`
+      # doesn't interfere.
+      executableFilesFor = name: roles.${name}.executableFiles or [ ];
+
       secretRef = provider: {
         source = "file";
         inherit provider;
@@ -115,16 +121,6 @@
           "/run/openclaw-secrets/moltbook";
         environment.TAVILY_API_KEY =
           "/run/openclaw-secrets/tavily";
-
-        # Use upstream bootstrap management for the primary workspace.
-        # toFile avoids evaluation-time ARM builds on the deploying x86 host.
-        workspace.bootstrapFiles = {
-          agents = builtins.toFile "AGENTS.md" primaryFiles."AGENTS.md";
-          soul = builtins.toFile "SOUL.md" primaryFiles."SOUL.md";
-          tools = builtins.toFile "TOOLS.md" primaryFiles."TOOLS.md";
-          identity = builtins.toFile "IDENTITY.md" primaryFiles."IDENTITY.md";
-          user = builtins.toFile "USER.md" primaryFiles."USER.md";
-        };
 
         config = {
           mcp.servers.nixos = {
@@ -239,14 +235,20 @@
         };
       };
 
-      # Home Manager manages the specialists' full bootstrap file sets.
-      # Session history, MEMORY.md and memory/ remain runtime-owned.
+      # Home Manager manages every agent's bootstrap file set, including the
+      # orchestrator. Session history, MEMORY.md and memory/ remain runtime-
+      # owned. Files listed in a role's `executableFiles` are installed with
+      # mode 0755.
       home.file = lib.listToAttrs (lib.concatLists (
         lib.mapAttrsToList (name: _: lib.mapAttrsToList (filename: text:
-          lib.nameValuePair ".openclaw/workspaces/${name}/${filename}" {
-            inherit text;
-          }
-        ) (filesFor name)) (builtins.removeAttrs agents [ "orchestrator" ])
+          let
+            isExe = builtins.elem filename (executableFilesFor name);
+          in
+          lib.nameValuePair ".openclaw/workspaces/${name}/${filename}" (
+            if isExe then { inherit text; executable = true; }
+            else { inherit text; }
+          )
+        ) (filesFor name)) agents
       ));
     };
 }

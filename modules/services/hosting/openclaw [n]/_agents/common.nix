@@ -6,7 +6,7 @@
     allowAgents = [ ];
     tools = [
       "ls" "read" "write" "edit" "apply_patch" "exec" "process"
-      "web_search" "tavily_search" "tavily_extract"
+      "web_search" "x_search" "tavily_search" "tavily_extract"
     ];
     instructions = "";
     files = {
