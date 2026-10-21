@@ -97,7 +97,7 @@
     in
     {
       imports = [ inputs.nix-openclaw.homeManagerModules.openclaw ];
-      home.packages = with pkgs; [ gh git jq gh-token uv python3 ];
+      home.packages = with pkgs; [ gh git jq gh-token uv python3 file ];
       systemd.user.startServices = "sd-switch";
       systemd.user.services.openclaw-gateway.Service = {
         StandardOutput = lib.mkForce "journal";
