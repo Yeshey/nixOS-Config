@@ -1,78 +1,73 @@
-# Clean-slate agent. `inheritDefaults = false` tells openclaw.nix to skip the
-# common tools/skills/files entirely, so this agent gets only what it declares
-# here plus the always-required attributes (model, instructions, allowAgents,
-# files, AGENTS.md).
 {
-  inheritDefaults = false;
-
   model = "mimo-v2.6-9b-hyrulecastle-ollama";
 
-  instructions = ''
-    You are the Moltbook agent. Your only job is to interact with the Moltbook
-    API at https://www.moltbook.com via the exec tool.
-
-    Read recent posts first, then contribute useful, specific comments or
-    replies, or create an original post if you have something worth sharing.
-    Avoid duplicate or generic engagement. Respect rate limits.
-
-    Prefer the helper scripts in your workspace (`./moltbook-comment`,
-    `./moltbook-verify`) over hand-writing curl for comments — they handle
-    JSON quoting and verification for you.
-
-    Never claim an action succeeded unless the API returned a success response.
-    If a request fails, report the exact error and the HTTP status code.
-  '';
-
-  # No skills are loaded.
   skills = [ ];
 
-  # Only the exec tool is needed: it is how curl and the helper scripts run.
   tools = [ "exec" ];
 
-  # This agent cannot spawn subagents.
   allowAgents = [ ];
 
-  # These files in the workspace will be chmod +x by openclaw.nix.
-  executableFiles = [ "moltbook-comment" "moltbook-verify" ];
+  executableFiles = [
+    "moltbook-list"
+    "moltbook-read"
+    "moltbook-comment"
+    "moltbook-verify"
+  ];
 
   files = {
-    "SOUL.md" = ''
-      Be precise. Distinguish API success from API failure.
-      Respect rate limits. Do not retry aggressively.
+    "AGENTS.md" = ''
+      You are the Moltbook agent. Interact with https://www.moltbook.com only.
+      Never use curl or jq directly. Use as little tool calls as possible.
     '';
 
-    "IDENTITY.md" = "You are the Moltbook interaction agent.";
-
     "TOOLS.md" = ''
-      Use the exec tool. The API key is in $MOLTBOOK_API_KEY.
+      # Moltbook commands
 
-      All URLs use https://www.moltbook.com (always `www` — without it,
-      redirects strip the Authorization header).
+      List posts:        ./moltbook-list [N]
+      Read a post:       ./moltbook-read <post_id>
+      Comment:           ./moltbook-comment <post_id> "text"
+      Verify (if asked): ./moltbook-verify '<code>' '<answer>'
 
-      Read recent posts:
-        curl -s -H "Authorization: Bearer $MOLTBOOK_API_KEY" \
-          "https://www.moltbook.com/api/v1/posts?sort=hot&limit=10"
+      Order: list → read 1-2 → comment → verify only if asked.
+      Verify answer: exactly 2 decimals (15.00, -3.50).
+    '';
 
-      Read a specific post with its comments:
-        curl -s -H "Authorization: Bearer $MOLTBOOK_API_KEY" \
-          "https://www.moltbook.com/api/v1/posts/{post_id}"
+    "moltbook-list" = ''
+      #!/usr/bin/env bash
+      set -euo pipefail
 
-      Comment on a post (recommended — use the helper script):
-        ./moltbook-comment "{post_id}" "your comment text here"
+      limit="''${1:-10}"
+      : "''${MOLTBOOK_API_KEY:?ERROR: MOLTBOOK_API_KEY is not set}"
 
-        The script posts the comment and prints the raw response. If
-        `verification_required: true` appears in the response, it also
-        prints the verification code and challenge text — follow the
-        printed instructions.
+      curl -sS -H "Authorization: Bearer $MOLTBOOK_API_KEY" \
+        "https://www.moltbook.com/api/v1/posts?sort=hot&limit=$limit" \
+      | jq -r '
+          def a: (.author.name // .author.username // .author.handle // "?");
+          (.posts // .data // .) as $p
+          | (if ($p | type) == "array" then $p else [$p] end)[]
+          | "\(.id)  \(a)  \(((.title // .content // .body // "") | tostring | gsub("\n"; " ") | .[0:160]))"
+        '
+    '';
 
-      Submit a verification answer:
-        ./moltbook-verify "{verification_code}" "<answer>"
+    "moltbook-read" = ''
+      #!/usr/bin/env bash
+      set -euo pipefail
 
-        The answer must be a number with exactly 2 decimal places
-        (e.g. 15.00, -3.50, 84.00).
+      post_id="''${1:?usage: moltbook-read <post_id>}"
+      : "''${MOLTBOOK_API_KEY:?ERROR: MOLTBOOK_API_KEY is not set}"
 
-      NEVER paste the API key into a command — always reference
-      $MOLTBOOK_API_KEY.
+      curl -sS -H "Authorization: Bearer $MOLTBOOK_API_KEY" \
+        "https://www.moltbook.com/api/v1/posts/$post_id" \
+      | jq -r '
+          def a: (.author.name // .author.username // .author.handle // "?");
+          .post as $p
+          | "POST \($p.id) by \($p | a)",
+            (($p.title // "") | tostring),
+            "",
+            (($p.content // "") | tostring),
+            "",
+            "comments: \($p.comment_count // 0)"
+        '
     '';
 
     "moltbook-comment" = ''
@@ -82,32 +77,38 @@
       post_id="''${1:?usage: moltbook-comment <post_id> <text>}"
       shift
       text="$*"
+      : "''${MOLTBOOK_API_KEY:?ERROR: MOLTBOOK_API_KEY is not set}"
 
-      if [ -z "''${MOLTBOOK_API_KEY:-}" ]; then
-        echo "ERROR: MOLTBOOK_API_KEY is not set" >&2
-        exit 1
-      fi
+      body_file="$(mktemp)"
+      trap 'rm -f "$body_file"' EXIT
 
-      response=$(jq -Rs '{content: .}' <<<"$text" | curl -sS -X POST \
+      status="$(jq -Rs '{content: .}' <<<"$text" | curl -sS \
+        -o "$body_file" -w '%{http_code}' \
+        -X POST \
         -H "Authorization: Bearer $MOLTBOOK_API_KEY" \
         -H "Content-Type: application/json" \
         --data-binary @- \
-        "https://www.moltbook.com/api/v1/posts/$post_id/comments")
+        "https://www.moltbook.com/api/v1/posts/$post_id/comments")"
 
-      printf '%s\n' "$response"
+      body="$(cat "$body_file")"
 
-      if command -v jq >/dev/null 2>&1; then
-        code=$(printf '%s' "$response" | jq -r '.comment.verification.verification_code // empty' 2>/dev/null || true)
-        challenge=$(printf '%s' "$response" | jq -r '.comment.verification.challenge_text // empty' 2>/dev/null || true)
-        if [ -n "$code" ]; then
-          echo
-          echo "=== VERIFICATION REQUIRED ==="
-          echo "code: $code"
-          echo "challenge: $challenge"
-          echo "Solve the math problem, then run:"
-          echo "  ./moltbook-verify '$code' '<answer.00>'"
-        fi
+      if [ "$status" -lt 200 ] || [ "$status" -ge 300 ]; then
+        echo "FAILED: HTTP $status"
+        printf '%s\n' "$body" | jq -r '.error // .message // .' 2>/dev/null || printf '%s\n' "$body"
+        exit 1
       fi
+
+      code="$(printf '%s' "$body" | jq -r '.comment.verification.verification_code // empty' 2>/dev/null || true)"
+      if [ -n "$code" ]; then
+        challenge="$(printf '%s' "$body" | jq -r '.comment.verification.challenge_text // empty' 2>/dev/null || true)"
+        echo "COMMENT POSTED but VERIFICATION REQUIRED."
+        echo "code: $code"
+        echo "challenge: $challenge"
+        echo "Run: ./moltbook-verify '$code' '<answer with 2 decimals>'"
+        exit 0
+      fi
+
+      echo "OK: comment posted to $post_id"
     '';
 
     "moltbook-verify" = ''
@@ -116,20 +117,29 @@
 
       code="''${1:?usage: moltbook-verify <verification_code> <answer>}"
       answer="''${2:?usage: moltbook-verify <verification_code> <answer>}"
+      : "''${MOLTBOOK_API_KEY:?ERROR: MOLTBOOK_API_KEY is not set}"
 
-      if [ -z "''${MOLTBOOK_API_KEY:-}" ]; then
-        echo "ERROR: MOLTBOOK_API_KEY is not set" >&2
-        exit 1
-      fi
+      body_file="$(mktemp)"
+      trap 'rm -f "$body_file"' EXIT
 
-      jq -n --arg code "$code" --arg answer "$answer" \
+      status="$(jq -n --arg code "$code" --arg answer "$answer" \
         '{verification_code: $code, answer: $answer}' \
-        | curl -sS -X POST \
+        | curl -sS -o "$body_file" -w '%{http_code}' \
+            -X POST \
             -H "Authorization: Bearer $MOLTBOOK_API_KEY" \
             -H "Content-Type: application/json" \
             --data-binary @- \
-            "https://www.moltbook.com/api/v1/verify"
-      echo
+            "https://www.moltbook.com/api/v1/verify")"
+
+      body="$(cat "$body_file")"
+
+      if [ "$status" -lt 200 ] || [ "$status" -ge 300 ]; then
+        echo "FAILED: HTTP $status"
+        printf '%s\n' "$body" | jq -r '.error // .message // .' 2>/dev/null || printf '%s\n' "$body"
+        exit 1
+      fi
+
+      echo "OK: verification accepted"
     '';
   };
 }

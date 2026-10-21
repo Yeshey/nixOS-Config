@@ -14,8 +14,7 @@
         system = pkgs.stdenv.hostPlatform.system;
         overlays = [ inputs.nix-openclaw.overlays.default ];
       };
-      common = import ./_agents/common.nix { inherit pkgs; };
-      roles = {
+      agents = {
         orchestrator = import ./_agents/orchestrator.nix;
         planner = import ./_agents/planner.nix;
         worker = import ./_agents/worker.nix;
@@ -23,45 +22,19 @@
         fixer = import ./_agents/fixer.nix;
         moltbooker = import ./_agents/moltbooker.nix;
       };
-      # Nested attributes merge; role lists replace common lists.
-      # Roles may set `inheritDefaults = false` to opt out of inheriting the
-      # common tools/skills/files entirely (clean-slate agents).
-      agents = lib.mapAttrs (_: role:
-        let
-          inheritDefaults = role.inheritDefaults or true;
-        in
-        if inheritDefaults then
-          let
-            merged = lib.recursiveUpdate common.defaults role;
-          in
-          merged // {
-            # Append the role's extra tools to the common list; dedupe.
-            tools = lib.unique ((common.defaults.tools or [ ]) ++ (role.tools or [ ]));
-            skills = lib.unique ((common.defaults.skills or [ ]) ++ (role.skills or [ ]));
-          }
-        else
-          # Clean slate: only what the role declares, plus the attributes
-          # OpenClaw expects to always be present.
-          {
-            model = role.model or common.defaults.model;
-            instructions = role.instructions or "";
-            allowAgents = role.allowAgents or [ ];
-            tools = role.tools or [ ];
-            skills = role.skills or [ ];
-            files = role.files or { };
-          }
-      ) roles;
 
-      filesFor = name:
-        agents.${name}.files // {
-          "AGENTS.md" = common.sharedInstructions + "\n"
-            + agents.${name}.instructions;
-        };
-
-      # Files a role marks as executable (e.g. helper shell scripts). Read
-      # from the raw role (not the merged `agents` output) so `inheritDefaults`
-      # doesn't interfere.
-      executableFilesFor = name: roles.${name}.executableFiles or [ ];
+      # Every subdirectory containing a SKILL.md is a skill. Discovered, not listed.
+      mkSkillDefinitions = dir:
+        lib.mapAttrsToList
+          (name: _: { inherit name; mode = "copy"; source = "${dir}/${name}"; })
+          (lib.filterAttrs
+            (name: type:
+              type == "directory"
+              && builtins.pathExists "${dir}/${name}/SKILL.md")
+            (builtins.readDir dir));
+      skillDefinitions =
+        mkSkillDefinitions ./skills
+        ++ mkSkillDefinitions ./_playground/skills;
 
       secretRef = provider: {
         source = "file";
@@ -114,8 +87,7 @@
         toolNames = [ ];
         inherit stateDir;
         workspaceDir = workspace "orchestrator";
-        runtimePackages = [ openclawPkgs.nodejs_24 ] ++ common.runtimePackages;
-        skills = common.skillDefinitions;
+        skills = skillDefinitions;
         runtimePlugins = [ "tavily" ];
         environment.MOLTBOOK_API_KEY =
           "/run/openclaw-secrets/moltbook";
@@ -235,20 +207,24 @@
         };
       };
 
-      # Home Manager manages every agent's bootstrap file set, including the
-      # orchestrator. Session history, MEMORY.md and memory/ remain runtime-
-      # owned. Files listed in a role's `executableFiles` are installed with
-      # mode 0755.
-      home.file = lib.listToAttrs (lib.concatLists (
-        lib.mapAttrsToList (name: _: lib.mapAttrsToList (filename: text:
-          let
-            isExe = builtins.elem filename (executableFilesFor name);
-          in
-          lib.nameValuePair ".openclaw/workspaces/${name}/${filename}" (
-            if isExe then { inherit text; executable = true; }
-            else { inherit text; }
-          )
-        ) (filesFor name)) agents
-      ));
+      # Regular files, not symlinks: OpenClaw rejects symlinked bootstrap files.
+      # Runs after linkGeneration so HM's old-symlink cleanup can't delete the copies.
+      home.activation.openclawWorkspaces = lib.hm.dag.entryAfter [ "linkGeneration" ] (
+        lib.concatStrings (lib.concatLists (
+          lib.mapAttrsToList (name: agent:
+            lib.mapAttrsToList (filename: text:
+              let
+                mode = if builtins.elem filename (agent.executableFiles or [ ]) then "555" else "444";
+                src = builtins.toFile "${name}-${filename}" text;
+                dest = "${workspace name}/${filename}";
+              in ''
+                run mkdir -p "${workspace name}"
+                run rm -f "${dest}"
+                run ${pkgs.coreutils}/bin/install -m ${mode} ${src} "${dest}"
+              ''
+            ) agent.files
+          ) agents
+        ))
+      );
     };
 }
