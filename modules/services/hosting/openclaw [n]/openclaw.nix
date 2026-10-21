@@ -21,35 +21,17 @@
         worker = import ./_agents/worker.nix;
         reviewer = import ./_agents/reviewer.nix;
         fixer = import ./_agents/fixer.nix;
-        moltbooker = import ./_agents/moltbooker.nix;
       };
       # Nested attributes merge; role lists replace common lists.
-      # Roles may set `inheritDefaults = false` to opt out of inheriting the
-      # common tools/skills/files entirely (clean-slate agents).
       agents = lib.mapAttrs (_: role:
         let
-          inheritDefaults = role.inheritDefaults or true;
+          merged = lib.recursiveUpdate common.defaults role;
         in
-        if inheritDefaults then
-          let
-            merged = lib.recursiveUpdate common.defaults role;
-          in
-          merged // {
-            # Append the role's extra tools to the common list; dedupe.
-            tools = lib.unique ((common.defaults.tools or [ ]) ++ (role.tools or [ ]));
-            skills = lib.unique ((common.defaults.skills or [ ]) ++ (role.skills or [ ]));
-          }
-        else
-          # Clean slate: only what the role declares, plus the attributes
-          # OpenClaw expects to always be present.
-          {
-            model = role.model or common.defaults.model;
-            instructions = role.instructions or "";
-            allowAgents = role.allowAgents or [ ];
-            tools = role.tools or [ ];
-            skills = role.skills or [ ];
-            files = role.files or { };
-          }
+        merged // {
+          # Append the role's extra tools to the common list; dedupe.
+          tools = lib.unique ((common.defaults.tools or [ ]) ++ (role.tools or [ ]));
+          skills = lib.unique ((common.defaults.skills or [ ]) ++ (role.skills or [ ]));
+        }
       ) roles;
       filesFor = name:
         agents.${name}.files // {

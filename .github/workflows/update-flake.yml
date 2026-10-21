@@ -7,12 +7,11 @@ concurrency:
   group: bump-flake-lock
   cancel-in-progress: true
 permissions:
-  contents: read   # pushing is done by the GitHub App token, not GITHUB_TOKEN
+  contents: write
 jobs:
   bump:
     name: Bump flake.lock
     runs-on: ubuntu-latest
-    # environment: bump   # uncomment if you move the secrets into an Environment
     steps:
       # 1) Set up QEMU FIRST (while Docker still exists) ⭐ MOVED UP
       - name: Set up QEMU for multi-arch
@@ -26,22 +25,13 @@ jobs:
         with:
           hatchet-protocol: "cleave"
 
-      # 3) Generate a token for the GitHub App that is allowed to bypass the ruleset
-      - name: Generate app token
-        id: app-token
-        uses: actions/create-github-app-token@v1
-        with:
-          app-id: ${{ secrets.BUMP_APP_ID }}
-          private-key: ${{ secrets.BUMP_APP_PRIVATE_KEY }}
-
-      # 4) Checkout repository (credentials stored here are used by the final git push)
+      # 3) Checkout repository
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ steps.app-token.outputs.token }}
 
-      # 5) Install Nix with experimental features + ARM support
+      # 4) Install Nix with experimental features + ARM support
       - name: Install Nix
         uses: cachix/install-nix-action@v31
         with:
@@ -50,7 +40,7 @@ jobs:
             extra-platforms = aarch64-linux
             extra-system-features = nixos-test benchmark big-parallel kvm
 
-      # 6) Restore Nix store from cache (keyed on flake.nix, not flake.lock,
+      # 5) Restore Nix store from cache (keyed on flake.nix, not flake.lock,
       #    since flake.lock is what this job changes)
       - name: Cache Nix store
         uses: nix-community/cache-nix-action@v6
@@ -62,14 +52,13 @@ jobs:
           purge-prefixes: nix-${{ runner.os }}-
           purge-last-accessed: 1209600 # 2 weeks in seconds
 
-      # 7) Show free space & git status
+      # 6) Show free space & git status
       - name: Show free space & git status
         run: |
           df -h
           git --version
           git status --porcelain --untracked-files=no || true
-
-      # 8) Try full update first
+      # 7) Try full update first
       - name: Update all flake inputs
         id: full-update
         continue-on-error: true
@@ -77,16 +66,14 @@ jobs:
           git checkout main || git checkout -b main
           nix flake update
           git --no-pager diff flake.lock || true
-
-      # 9) Check flake after full update
+      # 8) Check flake after full update
       - name: Check flake (full update)
         id: full-check
         if: steps.full-update.outcome == 'success'
         continue-on-error: true
         run: |
           nix flake check --all-systems
-
-      # 10) If full update failed, rollback and try nixpkgs + nixpkgs-unstable
+      # 9) If full update failed, rollback and try nixpkgs + nixpkgs-unstable
       - name: Rollback and update nixpkgs + nixpkgs-unstable
         id: dual-update
         if: steps.full-check.outcome == 'failure'
@@ -96,16 +83,14 @@ jobs:
           git restore flake.lock
           nix flake update nixpkgs nixpkgs-unstable
           git --no-pager diff flake.lock || true
-
-      # 11) Check flake after nixpkgs + nixpkgs-unstable update
+      # 10) Check flake after nixpkgs + nixpkgs-unstable update
       - name: Check flake (nixpkgs + nixpkgs-unstable)
         id: dual-check
         if: steps.full-check.outcome == 'failure' && steps.dual-update.outcome == 'success'
         continue-on-error: true
         run: |
           nix flake check --all-systems
-
-      # 12) If nixpkgs + nixpkgs-unstable failed, rollback and try nixpkgs only
+      # 11) If nixpkgs + nixpkgs-unstable failed, rollback and try nixpkgs only
       - name: Rollback and update nixpkgs only
         if: steps.dual-check.outcome == 'failure'
         run: |
@@ -113,15 +98,13 @@ jobs:
           git restore flake.lock
           nix flake update nixpkgs
           git --no-pager diff flake.lock || true
-
-      # 13) Check flake after nixpkgs-only update
+      # 12) Check flake after nixpkgs-only update
       - name: Check flake (nixpkgs only)
         id: single-check
         if: steps.dual-check.outcome == 'failure'
         run: |
           nix flake check --all-systems
-
-      # 14) Determine commit message based on what succeeded
+      # 13) Determine commit message based on what succeeded
       - name: Set commit message
         id: commit-msg
         run: |
@@ -132,8 +115,7 @@ jobs:
           else
             echo "message=chore(deps): update flake.lock (nixpkgs only)" >> $GITHUB_OUTPUT
           fi
-
-      # 15) Commit & push with explicit pull/rebase (authenticates as the GitHub App)
+      # 14) Commit & push with explicit pull/rebase
       - name: Commit and push flake.lock
         if: steps.full-check.outcome == 'success' || steps.dual-check.outcome == 'success' || steps.single-check.outcome == 'success'
         run: |
