@@ -4,6 +4,6 @@
     { pkgs, lib, ... }:
     {
       imports = [ inputs.self.modules.nixos.ollama ];
-      services.ollama.package = lib.mkForce pkgs.ollama-cuda;
+      services.ollama.package = lib.mkForce pkgs.unstable.ollama-cuda;
     };
 }
