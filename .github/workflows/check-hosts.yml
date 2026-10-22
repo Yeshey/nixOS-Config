@@ -10,6 +10,10 @@ on:
         description: JSON list of {host, system}
         required: true
         type: string
+      mode:
+        description: "eval = only evaluate each host, build = build each host"
+        required: true
+        type: string
 
 permissions:
   contents: read
@@ -45,12 +49,17 @@ jobs:
       - name: Apply candidate lock
         run: cp "locks/${{ inputs.cand }}.lock" flake.lock
 
-      - name: Build host (retry on transient download errors)
+      - name: Check host (retry on transient download errors)
+        env:
+          MODE: ${{ inputs.mode }}
+          HOST: ${{ matrix.entry.host }}
         run: |
+          attr=".#nixosConfigurations.${HOST}.config.system.build.toplevel"
           for i in 1 2 3; do
-            if nix build --no-link --print-build-logs \
-              ".#nixosConfigurations.${{ matrix.entry.host }}.config.system.build.toplevel"; then
-              exit 0
+            if [ "$MODE" = build ]; then
+              nix build --no-link --print-build-logs "$attr" && exit 0
+            else
+              nix eval --raw "${attr}.drvPath" > /dev/null && exit 0
             fi
             echo "Attempt $i failed, retrying..."
           done

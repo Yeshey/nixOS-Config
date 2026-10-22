@@ -9,6 +9,11 @@ concurrency:
 permissions:
   contents: read   # pushing is done by the GitHub App token, not GITHUB_TOKEN
 
+env:
+  # THE LEVER: "eval" = only evaluate every host (fast)
+  #            "build" = fully build every host (slow, catches build failures)
+  CHECK_MODE: eval
+
 jobs:
   # Build three candidate lock files and list hosts with their architecture.
   prepare:
@@ -17,6 +22,7 @@ jobs:
     timeout-minutes: 30
     outputs:
       hosts: ${{ steps.hosts.outputs.hosts }}
+      mode: ${{ env.CHECK_MODE }}
     steps:
       - uses: actions/checkout@v4
 
@@ -56,6 +62,7 @@ jobs:
     with:
       cand: full
       hosts: ${{ needs.prepare.outputs.hosts }}
+      mode: ${{ needs.prepare.outputs.mode }}
 
   # Stage 2: only if stage 1 failed
   check-dual:
@@ -66,6 +73,7 @@ jobs:
     with:
       cand: dual
       hosts: ${{ needs.prepare.outputs.hosts }}
+      mode: ${{ needs.prepare.outputs.mode }}
 
   # Stage 3: only if stage 2 failed
   check-single:
@@ -76,6 +84,7 @@ jobs:
     with:
       cand: single
       hosts: ${{ needs.prepare.outputs.hosts }}
+      mode: ${{ needs.prepare.outputs.mode }}
 
   push:
     name: Commit and push flake.lock
