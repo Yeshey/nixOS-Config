@@ -20,7 +20,7 @@ jobs:
     runs-on: ${{ matrix.entry.system == 'aarch64-linux' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
     timeout-minutes: 90
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         entry: ${{ fromJson(inputs.hosts) }}
     steps:
@@ -45,7 +45,13 @@ jobs:
       - name: Apply candidate lock
         run: cp "locks/${{ inputs.cand }}.lock" flake.lock
 
-      - name: Build host
+      - name: Build host (retry on transient download errors)
         run: |
-          nix build --no-link --print-build-logs \
-            ".#nixosConfigurations.${{ matrix.entry.host }}.config.system.build.toplevel"
+          for i in 1 2 3; do
+            if nix build --no-link --print-build-logs \
+              ".#nixosConfigurations.${{ matrix.entry.host }}.config.system.build.toplevel"; then
+              exit 0
+            fi
+            echo "Attempt $i failed, retrying..."
+          done
+          exit 1
