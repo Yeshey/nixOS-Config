@@ -37,26 +37,14 @@ jobs:
           extra_nix_config: |
             experimental-features = nix-command flakes pipe-operators
 
-      # 4) Cache Nix store (keyed on flake.nix, not flake.lock,
-      #    since flake.lock is what this job changes).
-      - name: Cache Nix store
-        uses: nix-community/cache-nix-action@v6
-        with:
-          primary-key: nix-${{ runner.os }}-${{ hashFiles('flake.nix') }}
-          restore-prefixes-first-match: nix-${{ runner.os }}-
-          gc-max-store-size-linux: 4G
-          purge: true
-          purge-prefixes: nix-${{ runner.os }}-
-          purge-last-accessed: 1209600 # 2 weeks in seconds
-
-      # 5) Show free space & git status
+      # 4) Show free space & git status
       - name: Show free space & git status
         run: |
           df -h
           git --version
           git status --porcelain --untracked-files=no || true
 
-      # 6) Try full update first
+      # 5) Try full update first
       - name: Update all flake inputs
         id: full-update
         continue-on-error: true
@@ -65,13 +53,14 @@ jobs:
           nix flake update
           git --no-pager diff flake.lock || true
 
-      # 7) Check flake after full update
+      # 6) Check flake after full update
       - name: Check flake (full update)
         id: full-check
         if: steps.full-update.outcome == 'success'
         continue-on-error: true
         run: nix flake check --all-systems --no-build
 
+      # 7) If full update failed, rollback and try nixpkgs + nixpkgs-unstable
       - name: Rollback and update nixpkgs + nixpkgs-unstable
         id: dual-update
         if: steps.full-update.outcome == 'failure' || steps.full-check.outcome == 'failure'
@@ -82,14 +71,14 @@ jobs:
           nix flake update nixpkgs nixpkgs-unstable
           git --no-pager diff flake.lock || true
 
-      # 9) Check flake after nixpkgs + nixpkgs-unstable update
+      # 8) Check flake after nixpkgs + nixpkgs-unstable update
       - name: Check flake (nixpkgs + nixpkgs-unstable)
         id: dual-check
         if: steps.dual-update.outcome == 'success'
         continue-on-error: true
         run: nix flake check --all-systems --no-build
 
-      # 10) If nixpkgs + nixpkgs-unstable failed, rollback and try nixpkgs only
+      # 9) If nixpkgs + nixpkgs-unstable failed, rollback and try nixpkgs only
       - name: Rollback and update nixpkgs only
         id: single-update
         if: steps.dual-update.outcome == 'failure' || steps.dual-check.outcome == 'failure'
@@ -99,13 +88,13 @@ jobs:
           nix flake update nixpkgs
           git --no-pager diff flake.lock || true
 
-      # 11) Check flake after nixpkgs-only update
+      # 10) Check flake after nixpkgs-only update
       - name: Check flake (nixpkgs only)
         id: single-check
         if: steps.single-update.outcome == 'success'
         run: nix flake check --all-systems --no-build
 
-      # 12) Determine commit message based on what succeeded
+      # 11) Determine commit message based on what succeeded
       - name: Set commit message
         id: commit-msg
         run: |
@@ -117,7 +106,7 @@ jobs:
             echo "message=chore(deps): update flake.lock (nixpkgs only)" >> "$GITHUB_OUTPUT"
           fi
 
-      # 13) Commit & push with explicit rebase retry (authenticates as the GitHub App)
+      # 12) Commit & push with explicit rebase retry (authenticates as the GitHub App)
       - name: Commit and push flake.lock
         if: steps.full-check.outcome == 'success' || steps.dual-check.outcome == 'success' || steps.single-check.outcome == 'success'
         run: |
