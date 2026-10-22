@@ -11,54 +11,8 @@ Host unibo
     ControlPath ~/.ssh/master-%r@%h:%p
     ControlPersist 1h
 
-# These are for connecting to my PCs with double hops through the server.
-# First hop: Connect to the remote server
 Host oracle
   HostName 143.47.53.175
   User yeshey
   StrictHostKeyChecking no
   UserKnownHostsFile /dev/null
-
-# Second hop: Connect from remote server to the Lenovo PC
-Host hyrulecastle
-  HostName localhost
-  Port 2232
-  User yeshey
-  StrictHostKeyChecking no
-  UserKnownHostsFile /dev/null
-  ProxyJump oracle
-
-# Second hop: Connect from remote server to the Lenovo PC with root
-Host hyrulecastleroot
-  HostName localhost
-  Port 2232
-  User root
-  StrictHostKeyChecking no
-  UserKnownHostsFile /dev/null
-  ProxyJump oracle
-
-# Second hop: Connect from remote server to the surface Pro
-Host kakariko
-  HostName localhost
-  Port 2233
-  User yeshey
-  StrictHostKeyChecking no
-  UserKnownHostsFile /dev/null
-  ProxyJump oracle
-
-Host a70
-  HostName localhost
-  Port 2234
-  User nix-on-droid
-  StrictHostKeyChecking no
-  UserKnownHostsFile /dev/null
-  ProxyJump oracle
-
-# Second hop: Connect from remote server to the surface Pro
-Host kakarikoroot
-  HostName localhost
-  Port 2233
-  User root
-  StrictHostKeyChecking no
-  UserKnownHostsFile /dev/null
-  ProxyJump oracle
