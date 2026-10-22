@@ -12,7 +12,7 @@ permissions:
 env:
   # THE LEVER: "eval" = only evaluate every host (fast)
   #            "build" = fully build every host (slow, catches build failures)
-  CHECK_MODE: eval
+  CHECK_MODE: build
 
 jobs:
   # Build three candidate lock files and list hosts with their architecture.
