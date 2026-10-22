@@ -10,15 +10,13 @@ permissions:
   contents: read   # pushing is done by the GitHub App token, not GITHUB_TOKEN
 
 jobs:
-  # Build three candidate lock files (full, nixpkgs+unstable, nixpkgs only)
-  # and list the hosts with their architecture.
+  # Build three candidate lock files and list hosts with their architecture.
   prepare:
     name: Prepare candidates
     runs-on: ubuntu-latest
     timeout-minutes: 30
     outputs:
       hosts: ${{ steps.hosts.outputs.hosts }}
-      count: ${{ steps.hosts.outputs.count }}
     steps:
       - uses: actions/checkout@v4
 
@@ -32,7 +30,6 @@ jobs:
         run: |
           hosts=$(nix eval --json --apply 'cs: builtins.attrValues (builtins.mapAttrs (name: c: { host = name; system = c.config.nixpkgs.hostPlatform.system; }) cs)' .#nixosConfigurations)
           echo "hosts=$hosts" >> "$GITHUB_OUTPUT"
-          echo "count=$(echo "$hosts" | jq length)" >> "$GITHUB_OUTPUT"
 
       - name: Create candidate lock files
         run: |
@@ -45,65 +42,44 @@ jobs:
           git restore flake.lock
           nix flake update nixpkgs || git restore flake.lock
           cp flake.lock locks/single.lock
-          git --no-pager diff --stat
 
       - uses: actions/upload-artifact@v4
         with:
           name: locks
           path: locks/
 
-  # Build every host with every candidate lock, each on a native runner.
-  check:
-    name: ${{ matrix.cand }} / ${{ matrix.entry.host }}
+  # Stage 1: all inputs
+  check-full:
+    name: check
     needs: prepare
-    runs-on: ${{ matrix.entry.system == 'aarch64-linux' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
-    timeout-minutes: 90
-    strategy:
-      fail-fast: false
-      matrix:
-        cand: [full, dual, single]
-        entry: ${{ fromJson(needs.prepare.outputs.hosts) }}
-    steps:
-      - name: Nothing but Nix (reclaim disk space for /nix)
-        if: matrix.entry.system == 'x86_64-linux'
-        uses: wimpysworld/nothing-but-nix@main
-        with:
-          hatchet-protocol: "cleave"
+    uses: ./.github/workflows/check-hosts.yml
+    with:
+      cand: full
+      hosts: ${{ needs.prepare.outputs.hosts }}
 
-      - uses: actions/checkout@v4
+  # Stage 2: only if stage 1 failed
+  check-dual:
+    name: check
+    needs: [prepare, check-full]
+    if: ${{ !cancelled() && needs.check-full.result == 'failure' }}
+    uses: ./.github/workflows/check-hosts.yml
+    with:
+      cand: dual
+      hosts: ${{ needs.prepare.outputs.hosts }}
 
-      - uses: cachix/install-nix-action@v31
-        with:
-          extra_nix_config: |
-            experimental-features = nix-command flakes pipe-operators
+  # Stage 3: only if stage 2 failed
+  check-single:
+    name: check
+    needs: [prepare, check-dual]
+    if: ${{ !cancelled() && needs.check-dual.result == 'failure' }}
+    uses: ./.github/workflows/check-hosts.yml
+    with:
+      cand: single
+      hosts: ${{ needs.prepare.outputs.hosts }}
 
-      - uses: actions/download-artifact@v4
-        with:
-          name: locks
-          path: locks
-
-      - name: Apply candidate lock
-        run: cp locks/${{ matrix.cand }}.lock flake.lock
-
-      - name: Build host
-        run: |
-          nix build --no-link --print-build-logs \
-            ".#nixosConfigurations.${{ matrix.entry.host }}.config.system.build.toplevel"
-
-      - name: Mark success
-        run: |
-          mkdir ok
-          touch "ok/ok-${{ matrix.cand }}-${{ matrix.entry.host }}"
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: ok-${{ matrix.cand }}-${{ matrix.entry.host }}
-          path: ok/
-
-  # Pick the most complete candidate where every host passed, then push it.
   push:
     name: Commit and push flake.lock
-    needs: [prepare, check]
+    needs: [prepare, check-full, check-dual, check-single]
     if: ${{ !cancelled() && needs.prepare.result == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -126,33 +102,22 @@ jobs:
           name: locks
           path: locks
 
-      - uses: actions/download-artifact@v4
-        with:
-          pattern: ok-*
-          path: ok
-          merge-multiple: true
-
       - name: Pick candidate
         id: pick
         env:
-          COUNT: ${{ needs.prepare.outputs.count }}
+          FULL: ${{ needs.check-full.result }}
+          DUAL: ${{ needs.check-dual.result }}
+          SINGLE: ${{ needs.check-single.result }}
         run: |
-          ls ok || true
-          for cand in full dual single; do
-            n=$(ls ok 2>/dev/null | grep -c "^ok-${cand}-" || true)
-            if [ "$n" -eq "$COUNT" ]; then
-              case $cand in
-                full)   msg="chore(deps): update flake.lock (all inputs)" ;;
-                dual)   msg="chore(deps): update flake.lock (nixpkgs + nixpkgs-unstable)" ;;
-                single) msg="chore(deps): update flake.lock (nixpkgs only)" ;;
-              esac
-              cp "locks/$cand.lock" flake.lock
-              echo "message=$msg" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
-          done
-          echo "No candidate passed on all $COUNT hosts"
-          exit 1
+          if   [ "$FULL" = success ];   then cand=full;   msg="chore(deps): update flake.lock (all inputs)"
+          elif [ "$DUAL" = success ];   then cand=dual;   msg="chore(deps): update flake.lock (nixpkgs + nixpkgs-unstable)"
+          elif [ "$SINGLE" = success ]; then cand=single; msg="chore(deps): update flake.lock (nixpkgs only)"
+          else
+            echo "No candidate passed on all hosts (full=$FULL dual=$DUAL single=$SINGLE)"
+            exit 1
+          fi
+          cp "locks/$cand.lock" flake.lock
+          echo "message=$msg" >> "$GITHUB_OUTPUT"
 
       - name: Commit and push flake.lock
         env:

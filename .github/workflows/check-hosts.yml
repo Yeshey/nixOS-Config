@@ -1,0 +1,51 @@
+name: Check hosts (reusable)
+on:
+  workflow_call:
+    inputs:
+      cand:
+        description: Candidate lock to test (full, dual or single)
+        required: true
+        type: string
+      hosts:
+        description: JSON list of {host, system}
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: ${{ inputs.cand }} / ${{ matrix.entry.host }}
+    runs-on: ${{ matrix.entry.system == 'aarch64-linux' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        entry: ${{ fromJson(inputs.hosts) }}
+    steps:
+      - name: Nothing but Nix (reclaim disk space for /nix)
+        if: matrix.entry.system == 'x86_64-linux'
+        uses: wimpysworld/nothing-but-nix@main
+        with:
+          hatchet-protocol: "cleave"
+
+      - uses: actions/checkout@v4
+
+      - uses: cachix/install-nix-action@v31
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes pipe-operators
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: locks
+          path: locks
+
+      - name: Apply candidate lock
+        run: cp "locks/${{ inputs.cand }}.lock" flake.lock
+
+      - name: Build host
+        run: |
+          nix build --no-link --print-build-logs \
+            ".#nixosConfigurations.${{ matrix.entry.host }}.config.system.build.toplevel"
