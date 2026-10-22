@@ -5,28 +5,17 @@ on:
   workflow_dispatch:
 concurrency:
   group: bump-flake-lock
-  cancel-in-progress: true
+  cancel-in-progress: false        # FIX: don't kill a running bump
 permissions:
-  contents: read   # pushing is done by the GitHub App token, not GITHUB_TOKEN
+  contents: read                   # pushing is done by the GitHub App token, not GITHUB_TOKEN
 jobs:
   bump:
     name: Bump flake.lock
     runs-on: ubuntu-latest
-    # environment: bump   # uncomment if you move the secrets into an Environment
+    timeout-minutes: 60            # FIX: fail fast instead of hanging to 6h
+    # environment: bump            # uncomment if you move the secrets into an Environment
     steps:
-      # 1) Set up QEMU FIRST (while Docker still exists) ⭐ MOVED UP
-      - name: Set up QEMU for multi-arch
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: arm64
-
-      # 2) Free up disk space for Nix (this removes Docker)
-      - name: Nothing but Nix (reclaim disk space for /nix)
-        uses: wimpysworld/nothing-but-nix@main
-        with:
-          hatchet-protocol: "cleave"
-
-      # 3) Generate a token for the GitHub App that is allowed to bypass the ruleset
+      # 1) Generate a token for the GitHub App that is allowed to bypass the ruleset
       - name: Generate app token
         id: app-token
         uses: actions/create-github-app-token@v1
@@ -34,24 +23,22 @@ jobs:
           app-id: ${{ secrets.BUMP_APP_ID }}
           private-key: ${{ secrets.BUMP_APP_PRIVATE_KEY }}
 
-      # 4) Checkout repository (credentials stored here are used by the final git push)
+      # 2) Checkout repository (credentials stored here are used by the final git push)
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ steps.app-token.outputs.token }}
 
-      # 5) Install Nix with experimental features + ARM support
+      # 3) Install Nix
       - name: Install Nix
         uses: cachix/install-nix-action@v31
         with:
           extra_nix_config: |
             experimental-features = nix-command flakes pipe-operators
-            extra-platforms = aarch64-linux
-            extra-system-features = nixos-test benchmark big-parallel kvm
 
-      # 6) Restore Nix store from cache (keyed on flake.nix, not flake.lock,
-      #    since flake.lock is what this job changes)
+      # 4) Cache Nix store (keyed on flake.nix, not flake.lock,
+      #    since flake.lock is what this job changes).
       - name: Cache Nix store
         uses: nix-community/cache-nix-action@v6
         with:
@@ -62,14 +49,14 @@ jobs:
           purge-prefixes: nix-${{ runner.os }}-
           purge-last-accessed: 1209600 # 2 weeks in seconds
 
-      # 7) Show free space & git status
+      # 5) Show free space & git status
       - name: Show free space & git status
         run: |
           df -h
           git --version
           git status --porcelain --untracked-files=no || true
 
-      # 8) Try full update first
+      # 6) Try full update first
       - name: Update all flake inputs
         id: full-update
         continue-on-error: true
@@ -78,76 +65,78 @@ jobs:
           nix flake update
           git --no-pager diff flake.lock || true
 
-      # 9) Check flake after full update
+      # 7) Check flake after full update
       - name: Check flake (full update)
         id: full-check
         if: steps.full-update.outcome == 'success'
         continue-on-error: true
-        run: |
-          nix flake check --all-systems
+        run: nix flake check --all-systems --no-build
 
-      # 10) If full update failed, rollback and try nixpkgs + nixpkgs-unstable
       - name: Rollback and update nixpkgs + nixpkgs-unstable
         id: dual-update
-        if: steps.full-check.outcome == 'failure'
+        if: steps.full-update.outcome == 'failure' || steps.full-check.outcome == 'failure'
         continue-on-error: true
         run: |
-          echo "Full update failed flake check, trying nixpkgs + nixpkgs-unstable update..."
+          echo "Full update/check failed, trying nixpkgs + nixpkgs-unstable update..."
           git restore flake.lock
           nix flake update nixpkgs nixpkgs-unstable
           git --no-pager diff flake.lock || true
 
-      # 11) Check flake after nixpkgs + nixpkgs-unstable update
+      # 9) Check flake after nixpkgs + nixpkgs-unstable update
       - name: Check flake (nixpkgs + nixpkgs-unstable)
         id: dual-check
-        if: steps.full-check.outcome == 'failure' && steps.dual-update.outcome == 'success'
+        if: steps.dual-update.outcome == 'success'
         continue-on-error: true
-        run: |
-          nix flake check --all-systems
+        run: nix flake check --all-systems --no-build
 
-      # 12) If nixpkgs + nixpkgs-unstable failed, rollback and try nixpkgs only
+      # 10) If nixpkgs + nixpkgs-unstable failed, rollback and try nixpkgs only
       - name: Rollback and update nixpkgs only
-        if: steps.dual-check.outcome == 'failure'
+        id: single-update
+        if: steps.dual-update.outcome == 'failure' || steps.dual-check.outcome == 'failure'
         run: |
-          echo "nixpkgs + nixpkgs-unstable update failed flake check, trying nixpkgs only..."
+          echo "nixpkgs + nixpkgs-unstable update/check failed, trying nixpkgs only..."
           git restore flake.lock
           nix flake update nixpkgs
           git --no-pager diff flake.lock || true
 
-      # 13) Check flake after nixpkgs-only update
+      # 11) Check flake after nixpkgs-only update
       - name: Check flake (nixpkgs only)
         id: single-check
-        if: steps.dual-check.outcome == 'failure'
-        run: |
-          nix flake check --all-systems
+        if: steps.single-update.outcome == 'success'
+        run: nix flake check --all-systems --no-build
 
-      # 14) Determine commit message based on what succeeded
+      # 12) Determine commit message based on what succeeded
       - name: Set commit message
         id: commit-msg
         run: |
           if [ "${{ steps.full-check.outcome }}" == "success" ]; then
-            echo "message=chore(deps): update flake.lock (all inputs)" >> $GITHUB_OUTPUT
+            echo "message=chore(deps): update flake.lock (all inputs)" >> "$GITHUB_OUTPUT"
           elif [ "${{ steps.dual-check.outcome }}" == "success" ]; then
-            echo "message=chore(deps): update flake.lock (nixpkgs + nixpkgs-unstable)" >> $GITHUB_OUTPUT
+            echo "message=chore(deps): update flake.lock (nixpkgs + nixpkgs-unstable)" >> "$GITHUB_OUTPUT"
           else
-            echo "message=chore(deps): update flake.lock (nixpkgs only)" >> $GITHUB_OUTPUT
+            echo "message=chore(deps): update flake.lock (nixpkgs only)" >> "$GITHUB_OUTPUT"
           fi
 
-      # 15) Commit & push with explicit pull/rebase (authenticates as the GitHub App)
+      # 13) Commit & push with explicit rebase retry (authenticates as the GitHub App)
       - name: Commit and push flake.lock
         if: steps.full-check.outcome == 'success' || steps.dual-check.outcome == 'success' || steps.single-check.outcome == 'success'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git fetch origin main
+
           git add flake.lock
-          git stash
-          git reset --hard origin/main
-          git stash pop
-          if ! git diff --quiet flake.lock; then
-            git add flake.lock
-            git commit --no-verify --signoff -m "${{ steps.commit-msg.outputs.message }}"
-            git push origin main
-          else
+          if git diff --cached --quiet -- flake.lock; then
             echo "No changes to commit"
+            exit 0
           fi
+
+          git commit --no-verify --signoff -m "${{ steps.commit-msg.outputs.message }}"
+
+          for i in 1 2 3; do
+            if git push origin main; then
+              exit 0
+            fi
+            echo "Push failed (attempt $i), rebasing onto origin/main..."
+            git pull --rebase origin main
+          done
+          exit 1
