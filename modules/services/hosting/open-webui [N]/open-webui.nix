@@ -20,7 +20,7 @@
       sops.secrets."nvidia_nim_api_key" = { };
       sops.secrets."openrouter" = { };
       sops.secrets."opencode_key" = { };
-      sops.secrets."groq_key" = { };
+      sops.secrets."groq_api_key" = { };
       sops.secrets."vercel_key" = { };
       sops.secrets."cerebras_key" = { };
       sops.secrets."tavily_api_key" = { };
@@ -29,7 +29,7 @@
 
       sops.templates."open-webui.env" = {
         content = ''
-          OPENAI_API_KEYS=${config.sops.placeholder."litellm_master_key"};${config.sops.placeholder."nvidia_nim_api_key"};${config.sops.placeholder."openrouter"};${config.sops.placeholder."opencode_key"};${config.sops.placeholder."groq_key"};${config.sops.placeholder."vercel_key"};${config.sops.placeholder."cerebras_key"};${config.sops.placeholder."iaedu_api_key"}
+          OPENAI_API_KEYS=${config.sops.placeholder."litellm_master_key"};${config.sops.placeholder."nvidia_nim_api_key"};${config.sops.placeholder."openrouter"};${config.sops.placeholder."opencode_key"};${config.sops.placeholder."groq_api_key"};${config.sops.placeholder."vercel_key"};${config.sops.placeholder."cerebras_key"};${config.sops.placeholder."iaedu_api_key"}
         '';
         restartUnits = [ "open-webui.service" ];
       };

@@ -63,7 +63,7 @@
         openrouter = secret "openrouter";
         iaedu_api_key = secret "iaedu_api_key";
         opencode_key = secret "opencode_key";
-        groq_key = secret "groq_key";
+        groq_api_key = secret "groq_api_key";
         cerebras_key = secret "cerebras_key";
         openjev_key = secret "openjev_key";
         vercel_key = secret "vercel_key";
@@ -145,7 +145,7 @@
           "/run/openclaw-secrets/openrouter" = ro config.sops.secrets.openrouter.path;
           "/run/openclaw-secrets/iaedu_api_key" = ro config.sops.secrets.iaedu_api_key.path;
           "/run/openclaw-secrets/opencode_key" = ro config.sops.secrets.opencode_key.path;
-          "/run/openclaw-secrets/groq_key" = ro config.sops.secrets.groq_key.path;
+          "/run/openclaw-secrets/groq_api_key" = ro config.sops.secrets.groq_api_key.path;
           "/run/openclaw-secrets/cerebras_key" = ro config.sops.secrets.cerebras_key.path;
           "/run/openclaw-secrets/openjev_key" = ro config.sops.secrets.openjev_key.path;
           "/run/openclaw-secrets/vercel_key" = ro config.sops.secrets.vercel_key.path;
