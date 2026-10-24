@@ -63,6 +63,18 @@
             }
 
             # ---- Google AI Studio free tier ----
+            # Rate limits (peak/limit, 2026-10-24):
+            #   gemini-3.8-flash     5 RPM, 250K TPM, 20 RPD
+            #   gemini-3.7-flash     not in rate-limits table — verify
+            #   gemini-3.6-flash     5 RPM, 250K TPM, 20 RPD
+            #   gemini-3.5-flash     not in rate-limits table — verify
+            #   gemini-3.5-flash-lite 15 RPM, 250K TPM, 500 RPD
+            #   gemini-3.1-flash-lite 15 RPM, 250K TPM, 500 RPD
+            #   gemini-3-flash       5 RPM, 250K TPM, 20 RPD (preview)
+            #   gemma-4-26b          30 RPM, 16K TPM, 14.4K RPD
+            #   gemma-4-31b          30 RPM, 16K TPM, 14.4K RPD
+            # litellm_params.rpm/tpm below are set just under the provider
+            # limits to avoid tripping them.
             {
               model_name = "gemini-3.8-flash";
               litellm_params = {
@@ -130,17 +142,7 @@
                 api_key = "os.environ/GEMINI_API_KEY";
                 rpm = 4;
                 tpm = 225000;
-                # TB4.0: no AA match.
-              };
-            }
-            {
-              model_name = "gemma-4-26b";
-              litellm_params = {
-                model = "gemini/gemma-4-26b-a4b-it";
-                api_key = "os.environ/GEMINI_API_KEY";
-                rpm = 29;
-                tpm = 14400;
-                # TB4.0: no AA match. Opt-in only.
+                # TB4.0: no AA match. Preview model — may be unstable.
               };
             }
             {
@@ -150,7 +152,17 @@
                 api_key = "os.environ/GEMINI_API_KEY";
                 rpm = 29;
                 tpm = 14400;
-                # TB4.0: no AA match. Opt-in only.
+                # TB4.0: no AA match. 31B dense — larger than 26b-a4b.
+              };
+            }
+            {
+              model_name = "gemma-4-26b";
+              litellm_params = {
+                model = "gemini/gemma-4-26b-a4b-it";
+                api_key = "os.environ/GEMINI_API_KEY";
+                rpm = 29;
+                tpm = 14400;
+                # TB4.0: no AA match. MoE (26B total, 4B active).
               };
             }
 
@@ -163,7 +175,6 @@
             #   minimaxai/minimax-m3.1-flash ......... 0.2576
             #   meta/muse-glimmer-30b ................ 0.0051
             #   nvidia/nemotron-3.5-lightning-30b-a3b  0.0051
-            #   openai/gpt-oss-20b ................... 0       (unscored)
             # ---------------------------------------------------------------
             {
               model_name = "nvidia-glm-5-3";
@@ -357,17 +368,26 @@
             optional_pre_call_checks = [ "enforce_model_rate_limits" ];
             fallbacks = [
               # =============================================================
-              # strong chain (capability-first, free before paid)
+              # strong chain (capability-first, free before paid, paid
+              # before long tail of unscored free Geminis, $0/$0 tail last)
               # =============================================================
-              # Entry: nvidia-glm-5-3 (via alias above).
-              # Ordering: TB4.0 descending within free tier, then the single
-              # paid Vercel slot, then $0/$0 Vercel tail.
+              # Fast path: top-4 free → paid. If paid succeeds, we get
+              # TB 0.3384 at D 0.043 (cheap upgrade over gemini-3.7's 0.1364).
+              # Slow path (paid fails / credit exhausted): fall through the
+              # full free Gemini family, then $0/$0 tail.
               { strong-fallback-chain = [
-                  "nvidia-glm-5-3-flash"                # free, 0.3283 ⚠
+                  "nvidia-glm-5-3-flash"                # free, 0.3283 ⚠ AVAILABLE=false
                   "nvidia-deepseek-v4-1-flash"          # free, 0.2677
                   "gemini-3.8-flash"                    # free, 0.197
-                  "gemini-3.7-flash"                    # free, 0.1364 (floor)
+                  "gemini-3.7-flash"                    # free, 0.1364
                   "vercel-deepseek-v4-1-flash-1017"     # paid, 0.3384, D 0.043
+                  "gemini-3.6-flash"                    # free, 0.0707
+                  "gemini-3.5-flash"                    # free, 0.0657
+                  "gemini-3.5-flash-lite"               # free, 0.0101
+                  "gemini-3.1-flash-lite"               # free, 0.0051
+                  "gemini-3-flash"                      # free, no AA (preview)
+                  "gemma-4-31b"                         # free, no AA (31B dense)
+                  "gemma-4-26b"                         # free, no AA (MoE 26B/4B)
                   "vercel-nemotron-3-5-lightning-free"  # $0/$0, 0.0051 (tail)
                 ]; }
               { nvidia-glm-5-3 = [
@@ -376,6 +396,13 @@
                   "gemini-3.8-flash"
                   "gemini-3.7-flash"
                   "vercel-deepseek-v4-1-flash-1017"
+                  "gemini-3.6-flash"
+                  "gemini-3.5-flash"
+                  "gemini-3.5-flash-lite"
+                  "gemini-3.1-flash-lite"
+                  "gemini-3-flash"
+                  "gemma-4-31b"
+                  "gemma-4-26b"
                   "vercel-nemotron-3-5-lightning-free"
                 ]; }
               { nvidia-glm-5-3-flash = [
@@ -383,26 +410,101 @@
                   "gemini-3.8-flash"
                   "gemini-3.7-flash"
                   "vercel-deepseek-v4-1-flash-1017"
+                  "gemini-3.6-flash"
+                  "gemini-3.5-flash"
+                  "gemini-3.5-flash-lite"
+                  "gemini-3.1-flash-lite"
+                  "gemini-3-flash"
+                  "gemma-4-31b"
+                  "gemma-4-26b"
                   "vercel-nemotron-3-5-lightning-free"
                 ]; }
               { nvidia-deepseek-v4-1-flash = [
                   "gemini-3.8-flash"
                   "gemini-3.7-flash"
                   "vercel-deepseek-v4-1-flash-1017"
+                  "gemini-3.6-flash"
+                  "gemini-3.5-flash"
+                  "gemini-3.5-flash-lite"
+                  "gemini-3.1-flash-lite"
+                  "gemini-3-flash"
+                  "gemma-4-31b"
+                  "gemma-4-26b"
                   "vercel-nemotron-3-5-lightning-free"
                 ]; }
               { "gemini-3.8-flash" = [
                   "gemini-3.7-flash"
                   "vercel-deepseek-v4-1-flash-1017"
+                  "gemini-3.6-flash"
+                  "gemini-3.5-flash"
+                  "gemini-3.5-flash-lite"
+                  "gemini-3.1-flash-lite"
+                  "gemini-3-flash"
+                  "gemma-4-31b"
+                  "gemma-4-26b"
                   "vercel-nemotron-3-5-lightning-free"
                 ]; }
               { "gemini-3.7-flash" = [
                   "vercel-deepseek-v4-1-flash-1017"
+                  "gemini-3.6-flash"
+                  "gemini-3.5-flash"
+                  "gemini-3.5-flash-lite"
+                  "gemini-3.1-flash-lite"
+                  "gemini-3-flash"
+                  "gemma-4-31b"
+                  "gemma-4-26b"
                   "vercel-nemotron-3-5-lightning-free"
                 ]; }
               { vercel-deepseek-v4-1-flash-1017 = [
+                  "gemini-3.6-flash"
+                  "gemini-3.5-flash"
+                  "gemini-3.5-flash-lite"
+                  "gemini-3.1-flash-lite"
+                  "gemini-3-flash"
+                  "gemma-4-31b"
+                  "gemma-4-26b"
                   "vercel-nemotron-3-5-lightning-free"
                 ]; }
+              { "gemini-3.6-flash" = [
+                  "gemini-3.5-flash"
+                  "gemini-3.5-flash-lite"
+                  "gemini-3.1-flash-lite"
+                  "gemini-3-flash"
+                  "gemma-4-31b"
+                  "gemma-4-26b"
+                  "vercel-nemotron-3-5-lightning-free"
+                ]; }
+              { "gemini-3.5-flash" = [
+                  "gemini-3.5-flash-lite"
+                  "gemini-3.1-flash-lite"
+                  "gemini-3-flash"
+                  "gemma-4-31b"
+                  "gemma-4-26b"
+                  "vercel-nemotron-3-5-lightning-free"
+                ]; }
+              { "gemini-3.5-flash-lite" = [
+                  "gemini-3.1-flash-lite"
+                  "gemini-3-flash"
+                  "gemma-4-31b"
+                  "gemma-4-26b"
+                  "vercel-nemotron-3-5-lightning-free"
+                ]; }
+              { "gemini-3.1-flash-lite" = [
+                  "gemini-3-flash"
+                  "gemma-4-31b"
+                  "gemma-4-26b"
+                  "vercel-nemotron-3-5-lightning-free"
+                ]; }
+              { gemini-3-flash = [
+                  "gemma-4-31b"
+                  "gemma-4-26b"
+                  "vercel-nemotron-3-5-lightning-free"
+                ]; }
+              { gemma-4-31b = [
+                  "gemma-4-26b"
+                  "vercel-nemotron-3-5-lightning-free"
+                ]; }
+              { gemma-4-26b = [ "vercel-nemotron-3-5-lightning-free" ]; }
               # vercel-nemotron-3-5-lightning-free = last
 
               # =============================================================
@@ -410,11 +512,6 @@
               # =============================================================
               # Entry: gemini-3.8-flash (via alias above).
               # Floor: gemini-3.1-flash-lite (TB 0.0051) — nothing weaker.
-              # NIM small models are included for provider diversity, not
-              # capability; NIM strong (GLM, DeepSeek-V4.1) deliberately
-              # excluded from the entry section since they are slow /
-              # timeout-prone, but appear mid-chain in case the strong
-              # chain already burned through them.
               { weak-fallback-chain = [
                   "gemini-3.7-flash"                    # free, 0.1364
                   "gemini-3.6-flash"                    # free, 0.0707
