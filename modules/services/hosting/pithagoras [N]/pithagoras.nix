@@ -6,7 +6,6 @@
       port = 4100;
       workspacesDir = "/var/lib/pithagoras/workspaces";
       agentDir = "/var/lib/pithagoras/data/home/.pi/agent";
-      bolsaDir = "/mnt/OneDrive/ISCTE/Projects/Bolsa";
     in
     {
       sops.secrets."litellm_master_key" = { };
@@ -100,7 +99,6 @@
           "/var/lib/pithagoras/data:/data"
           "${workspacesDir}:/workspaces"
           "/var/run/docker.sock:/var/run/docker.sock"
-          "${bolsaDir}:${bolsaDir}:rw"
           "/nix:/nix:ro"
           "${config.system.path}/bin:/usr/local/sbin:ro"
         ];
