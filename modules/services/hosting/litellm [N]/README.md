@@ -1,3 +1,5 @@
+
+```markdown
 # LiteLLM models
 
 Shared model gateway for OpenClaw and other clients.
@@ -9,57 +11,78 @@ Stable aliases:
 - `strong-fallback-chain`
 - `weak-fallback-chain`
 
-Some services, like Vercel, have a free tier where you will get 5$ for free every month. We're using those models even if they cost something in those cases (keeping in mind the cost, preferring -contributor models bc they're cheaper), but if their usage is exhausted that month, it can always fallback to another one.
+## Policy
+
+Some services, like Vercel, have a free tier where you get $5 every
+month. We use those paid models, but under two constraints:
+
+1. **A truly free provider must sit above every paid one.** "Truly
+   free" includes both external free providers (Google AI Studio,
+   NVIDIA NIM, Cerebras, local Ollama) **and** Vercel `-free` SKUs
+   (models whose `pricing.input` and `pricing.output` are both `$0` on
+   the AI Gateway, e.g. `nvidia/nemotron-3.5-lightning-free`). Rate
+   limits on free models at the top of a chain are expected and
+   acceptable.
+2. **Pricing weighs more than capability.** Rank paid models by
+   `D = C² / TB4.0`, where `C = 0.8·P_in + 0.2·P_out` ($/1M tokens,
+   agentic 4:1 ratio). Lower D is better. `D ≥ 1.0` means opt-in only,
+   never in an auto-chain. `D < 0.3` is the sweet spot.
+
+Free models score `D = 0` (cost is zero) and are ranked within their
+tier by TB4.0 descending.
 
 ## Model ranking
 
-| Rank | Configured alias | Brief description |
-|---:|---|---|
-| 1 | `vercelAPI/.Muse Spark 1.3 Contributor` | Contributor variant; match evaluations to this exact variant. |
-| 2 | `mylitellmAPI/.gemini-3.8-flash` | Gemini Flash candidate for general agent tasks. |
-| 3 | `nvidiaAPI/.z-ai/glm-5.3-flash` | GLM 5.3 Flash through NVIDIA NIM — 320B MoE (18B active), 1M context, multimodal. |
-| 4 | `nvidiaAPI/.meta/muse-glimmer-30b` | Muse Glimmer 30B through NVIDIA NIM — multimodal reasoning, tool calling. |
-| 5 | `nvidiaAPI/.nvidia/nemotron-3.5-lightning-30b-a3b` | Nemotron 3.5 Lightning through NVIDIA NIM — 30B/3B active, 1M context. |
-| 6 | `mylitellmAPI/.gemini-3.7-flash` | Alternative Gemini Flash route. |
-| 7 | `mylitellmAPI/.gemini-3.6-flash` | Additional Gemini Flash fallback. |
-| 8 | `vercelAPI/.MiMo V2.5 Pro` | MiMo Pro through Vercel. |
-| 9 | `vercelAPI/.Kimi K2.7 Code` | Kimi Code variant through Vercel. |
-| 10 | `mylitellmAPI/.gemma-4-31b` | Gemma 4 31B route. |
-| 11 | `mylitellmAPI/.gemini-3.5-flash` | Earlier Gemini Flash fallback. |
-| 12 | `mylitellmAPI/.gemma-4-26b` | Gemma 4 26B route. |
-| 13 | `vercelAPI/.MiMo M2.5` | Additional MiMo route through Vercel. |
-| 14 | `mylitellmAPI/.gemini-3-flash` | Earlier Gemini Flash route. |
-| 15 | `mylitellmAPI/.gemini-3.5-flash-lite` | Flash-Lite candidate for lightweight tasks. |
-| 16 | `nvidiaAPI/.openai/gpt-oss-20b` | GPT-OSS 20B through NVIDIA. |
-| 17 | `mylitellmAPI/.gemini-3.1-flash-lite` | Additional Flash-Lite fallback. |
-| 18 | `vercelAPI/.Morph V3 Large` | Morph V3 Large through Vercel. |
+Reflects the current config as of 2026-10-24. `TB` is Terminal-Bench 4.0
+from Artificial Analysis. `D` is computed from Vercel pricing.
 
-Aliases above identify configuration entries; they do not establish that a route
-currently works or remains free.
+**Free tier** (D = 0; sorted by TB descending):
 
-## Removed models (2026-10-19)
+| # | Alias | Provider | TB4.0 | Notes |
+|---:|---|---|---:|---|
+| 1 | `nvidiaAPI/.z-ai/glm-5.3` | NVIDIA NIM | 0.4192 | ⚠ DEPRECATION **10/27/2026** — remove now |
+| 2 | `nvidiaAPI/.stepfun-ai/step-5-preview` | NVIDIA NIM | 0.3333 | Candidate, not yet configured |
+| 3 | `nvidiaAPI/.z-ai/glm-5.3-flash` | NVIDIA NIM | 0.3283 | ⚠ `AVAILABLE=false` on NGC — remove |
+| 4 | `nvidiaAPI/.deepseek-ai/deepseek-v4.1-flash` | NVIDIA NIM | 0.2677 | 🆕 Candidate — replaces deprecated GLM pair |
+| 5 | `nvidiaAPI/.mistralai/mistral-large` | NVIDIA NIM | 0.2677 | Candidate |
+| 6 | `nvidiaAPI/.minimaxai/minimax-m3.1-flash` | NVIDIA NIM | 0.2576 | Candidate |
+| 7 | `mylitellmAPI/.gemini-3.8-flash` | Google AI Studio | 0.197 | Configured |
+| 8 | `mylitellmAPI/.gemini-3.7-flash` | Google AI Studio | 0.1364 | Configured |
+| 9 | `mylitellmAPI/.gemini-3.6-flash` | Google AI Studio | 0.0707 | Configured (weak-chain entry) |
+| 10 | `mylitellmAPI/.gemini-3.5-flash` | Google AI Studio | 0.0657 | Configured |
+| 11 | `mylitellmAPI/.cerebras-qwen-3.8-27b` | Cerebras | 0.0556 | Configured |
+| 12 | `mylitellmAPI/.gemini-3.5-flash-lite` | Google AI Studio | 0.0101 | Configured |
+| 13 | `mylitellmAPI/.gemini-3.1-flash-lite` | Google AI Studio | 0.0051 | Configured |
+| 14 | `nvidiaAPI/.meta/muse-glimmer-30b` | NVIDIA NIM | 0.0051 | Configured |
+| 15 | `nvidiaAPI/.nvidia/nemotron-3.5-lightning-30b-a3b` | NVIDIA NIM | 0.0051 | Configured |
+| — | `nvidiaAPI/.openai/gpt-oss-20b` | NVIDIA NIM | 0 (unscored) | Configured; TB4.0 = 0, weak tail |
+| — | `mylitellmAPI/.gemma-4-31b` | Google AI Studio | no AA match | Configured |
+| — | `mylitellmAPI/.gemma-4-26b` | Google AI Studio | no AA match | Configured |
+| — | `mylitellmAPI/.gemini-3-flash` | Google AI Studio | no AA match | Configured |
+| — | `ollama/.mimo-v2.6-9b` | local Ollama | no AA match | Configured; not in any chain |
 
-| Alias | Provider | Model ID | Reason |
-|---|---|---|---|
-| `nvidia-deepseek-v4-pro` | NVIDIA NIM | `deepseek-ai/deepseek-v4-pro` | Deprecated Sep 2026; HTTP 000 timeout. |
-| `nvidia-kimi-k3` | NVIDIA NIM | `moonshotai/kimi-k3` | HTTP 410 Gone; end-of-life Oct 15, 2026. Confirmed via NIM API. |
-| `nvidia-glm-5-3` | NVIDIA NIM | `z-ai/glm-5.3` | Deprecating 10/27/2026; already timing out. |
+**Paid tier (Vercel)** — sorted by D ascending:
 
-## Candidates to investigate
+| # | Alias | Blend $/1M | TB4.0 | D | Notes |
+|---:|---|---:|---:|---:|---|
+| 1 | `vercelAPI/.deepseek-v4.1-flash-1017` | 0.12 | 0.3384 | 0.043 | 🆕 Best value; swap in place of `-fast` |
+| 2 | `vercelAPI/.muse-spark-1.3-contributor` | 0.12 | 0.3333* | 0.043 | ⚠ Violates rule 1 as strong-chain entry; * inherited from Max |
+| 3 | `vercelAPI/.mimo-v2.6-flash` | 0.168 | 0.2273 | 0.124 | 🆕 Strong cheap candidate |
+| 4 | `vercelAPI/.minimax-m3.1-flash` | 0.24 | 0.2576 | 0.224 | 🆕 Strong candidate |
+| 5 | `vercelAPI/.gpt-6-luna` | 0.18 | 0.1263 | 0.257 | Below the cutoff but usable |
+| 6 | `vercelAPI/.ling-3.1-flash` | 0.42 | 0.3333 | 0.529 | Only if above are exhausted |
+| 7 | `vercelAPI/.mimo-v2.6-pro` | 0.522 | 0.3485 | 0.782 | Best Vercel TB but 4× the cost of `mimo-v2.6-flash` |
+| — | `vercelAPI/.deepseek-v4.1-flash-1017-fast` | 0.96 | 0.3384 | 2.72 | ⚠ 8× premium over non-fast for identical TB |
+| — | `vercelAPI/.mimo-v2.5-pro` | 0.365 | **0** | ∞ | ⚠ TB=0. Remove; replaced by `mimo-v2.6-flash` |
+| — | `vercelAPI/.mimo-v2.5` | 0.143 | **0** | ∞ | ⚠ TB=0. Remove |
+| — | `vercelAPI/.kimi-k2.7-code` | 1.56 | 0.0101 | 240 | ⚠ Opt-in only; not a chain member |
 
-- `deepseek-ai/deepseek-v4.1-flash` — new on NVIDIA NIM, 552B/8B MoE, 1M context, free. Replaces all deprecated DeepSeek V4 variants.
-- `nvidia/nemotron-3-ultra-550b-a55b` — flagship free model on NVIDIA NIM, 550B/55B, 1M context, reasoning + tool use.
-- `moonshotai/kimi-k3` — confirmed dead. NIM returned 410 Gone: EOL Oct 15, 2026. Also 403 on Vercel free tier.
-- `inclusionai/ling-3.0-flash-sante` — free on Vercel AI Gateway (256K context). Note: ling-3.1-flash free promo ended Oct 13.
-- Qwen 3.8 Max 0902 Next
-- MiMo V2.6 Pro
+`muse-spark-1.3-contributor` is deliberately marked `*`: AA has no
+`contributor` row, so its TB is inherited from `Muse Spark 1.3 (Max)`.
+That is an **upper bound** on the contributor tier's real capability;
+verify by measurement before treating it as a like-for-like top-of-tier.
 
-**Removed from candidates:** `minimaxai/minimax-m2.7` (deprecated on NIM, replaced by MiniMax M3); `convaiinnovations/laya-free` (decision/classification model, not general chat); `inclusionai/ling-3.1-flash` (free promo ended Oct 13 2026).
 
-- `vercel-muse-spark-1-3-contributor` — returns 403 on free Vercel tier (paid model, not free). Removed from strong-fallback-chain entry point.
-
-These are investigation notes, not verified provider IDs. Confirm exact names,
-configured-provider support, free quotas, and successful inference before adding.
-
-**OpenCode** (opencode.ai/zen) offers free models (GLM 5.3, DeepSeek V4 Flash, etc.)
-but requires the OpenCode client — cannot be used as a LiteLLM upstream.
+**OpenCode** (opencode.ai/zen) offers free models (GLM 5.3, DeepSeek V4
+Flash, etc.) but requires the OpenCode client — cannot be used as a
+LiteLLM upstream.
