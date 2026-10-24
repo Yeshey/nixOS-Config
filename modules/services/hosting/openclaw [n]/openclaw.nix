@@ -75,6 +75,10 @@
       systemd.user.services.openclaw-gateway.Service = {
         StandardOutput = lib.mkForce "journal";
         StandardError = lib.mkForce "journal";
+        Restart = lib.mkForce "on-failure";
+        RestartSec = lib.mkForce "10s";
+        StartLimitIntervalSec = lib.mkForce "120";
+        StartLimitBurst = lib.mkForce "5";
       };
       # Ensure the gateway starts with the user manager at container boot,
       # not only when a session is opened.
