@@ -3,41 +3,37 @@
 
   skills = [ ];
 
-  tools = [ "exec" ];
+  # MCP tool names: verify after rebuild (see below). Keep "exec" until then.
+  tools = [
+    "exec"
+    "moltbook__*"
+    "web_search" "tavily_search"
+  ];
 
   allowAgents = [ ];
 
   files = {
     "AGENTS.md" = ''
-      You are the Moltbook agent. Interact with https://www.moltbook.com only.
-      Use the exact commands in TOOLS.md. Do not explore the API.
+      You are the Moltbook agent. Interact with Moltbook only, through the molt_* tools.
+      Call molt_home first on every check-in.
+      Do not use exec, curl, or the raw API. Do not explore.
       On failure report the error and status. Never print the API key.
     '';
 
-  "TOOLS.md" = ''
-    # Moltbook API
+    "TOOLS.md" = ''
+      # Moltbook tools
 
-    Key is in $MOLTBOOK_API_KEY. Never type or print the key. Never write ***.
-    Always use https://www.moltbook.com (with www).
+      - molt_home: dashboard. Karma, notifications, activity on your posts. Call first.
+      - molt_feed(sort, limit, following_only): list posts. sort = hot | new | top.
+      - molt_read_post(post_id, max_comments): read one post and top comments.
+      - molt_search(query, limit): search posts and comments.
+      - molt_post(submolt, title, content): new post. Limit 1 per 30 min.
+      - molt_reply(post_id, content, parent_id): comment or reply. Limit 1 per 20 s, 50 per day.
+      - molt_vote(target_id, target, direction): target = post | comment. direction = up | down.
+      - molt_verify(verification_code, answer): only if a write result says verified is false. Answer has exactly 2 decimals (15.00, -3.50).
 
-    List hot posts:
-      curl -sS -H "Authorization: Bearer $MOLTBOOK_API_KEY" "https://www.moltbook.com/api/v1/posts?sort=hot&limit=10" | jq -r '(.posts // .data)[] | "\(.id)  \(.title)"'
-
-    Read a post:
-      curl -sS -H "Authorization: Bearer $MOLTBOOK_API_KEY" "https://www.moltbook.com/api/v1/posts/<post_id>" | jq '.post | {id, title, content}'
-
-    Read its comments:
-      curl -sS -H "Authorization: Bearer $MOLTBOOK_API_KEY" "https://www.moltbook.com/api/v1/posts/<post_id>/comments" | jq -r '.comments[] | "\(.id)  \(.content)"'
-
-    Comment on a post. Write the text between the EOF lines exactly as plain text. Quotes and backticks are fine there:
-      jq -Rs '{content: .}' <<'EOF' | curl -sS -w '\nHTTP %{http_code}\n' -X POST -H "Authorization: Bearer $MOLTBOOK_API_KEY" -H "Content-Type: application/json" --data-binary @- "https://www.moltbook.com/api/v1/posts/<post_id>/comments"
-      your comment text
-      EOF
-
-    If the response asks for verification, submit the answer:
-      jq -n --arg code "<code>" --arg answer "<answer>" '{verification_code: $code, answer: $answer}' | curl -sS -w '\nHTTP %{http_code}\n' -X POST -H "Authorization: Bearer $MOLTBOOK_API_KEY" -H "Content-Type: application/json" --data-binary @- "https://www.moltbook.com/api/v1/verify"
-
-    Answer format: exactly 2 decimals (15.00, -3.50).
-  '';
+      Writes auto-verify. If the result shows verification.verified = false, solve the math in challenge_text and call molt_verify.
+      Never type or print the API key.
+    '';
   };
 }

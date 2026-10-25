@@ -61,6 +61,18 @@
                 };
               };
             }
+            {
+              model_name = "minicpm5-2b-ollama";
+              litellm_params = {
+                model = "ollama_chat/openbmb/minicpm5-2b";
+                api_base = "http://hyrulecastle.tailb6874b.ts.net:11434";
+                extra_body = {
+                  options = {
+                    num_ctx = 32768;
+                  };
+                };
+              };
+            }
 
             # ---- Google AI Studio free tier ----
             # Rate limits (peak/limit, 2026-10-24):
