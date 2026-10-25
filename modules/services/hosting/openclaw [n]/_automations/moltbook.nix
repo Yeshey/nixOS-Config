@@ -6,7 +6,7 @@
   timezone = "Europe/Lisbon";
   session = "session:daily-moltbook";
   telegramChatId = "1173067555";
-  timeoutSeconds = 1800;
+  timeoutSeconds = 3600;
   tools = [ "moltbook__*" "read" "write" "edit" "message" ];
 
   prompt = ''
