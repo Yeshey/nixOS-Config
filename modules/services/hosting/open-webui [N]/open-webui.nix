@@ -26,10 +26,12 @@
       sops.secrets."tavily_api_key" = { };
       sops.secrets."exa_api_key" = { };
       sops.secrets."iaedu_api_key" = { };
+      sops.secrets."moltbook_api_key" = { };
 
       sops.templates."open-webui.env" = {
         content = ''
           OPENAI_API_KEYS=${config.sops.placeholder."litellm_master_key"};${config.sops.placeholder."nvidia_nim_api_key"};${config.sops.placeholder."openrouter"};${config.sops.placeholder."opencode_key"};${config.sops.placeholder."groq_api_key"};${config.sops.placeholder."vercel_key"};${config.sops.placeholder."cerebras_key"};${config.sops.placeholder."iaedu_api_key"}
+          MOLTBOOK_API_KEY=${config.sops.placeholder."moltbook_api_key"}
         '';
         restartUnits = [ "open-webui.service" ];
       };
@@ -73,6 +75,11 @@
           ENABLE_FOLLOW_UP_GENERATION = "false";
           ENABLE_TAGS_GENERATION = "false";
           ENABLE_TITLE_GENERATION = "false";
+
+          # --- Trim the built-in tool surface
+          # ENABLE_AUTOMATIONS = "False";
+          ENABLE_CALENDAR    = "False";
+          ENABLE_NOTES       = "False";
 
           # Two Ollama backends: local (skyloft) and remote (hyrulecastle, via Tailscale).
           DEFAULT_MODEL_PARAMS = ''{"num_ctx": 32768}'';
