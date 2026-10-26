@@ -1,5 +1,5 @@
 {
-  model = "mimo-v2.6-9b-hyrulecastle-ollama";
+  model = "weak-fallback-chain";
 
   skills = [ ];
 
