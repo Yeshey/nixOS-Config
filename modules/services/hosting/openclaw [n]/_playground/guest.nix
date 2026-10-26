@@ -20,7 +20,7 @@ let
     (builtins.readDir mcpDir);
 in
 {
-  # imports = [ ./litellm-test.nix ];  # disabled after test
+  imports = [ ./litellm-test.nix ];  # litellm test — remove after probe run
   sops.secrets.opencode_key = {
     owner = "openclaw";
     mode = "0400";
