@@ -33,11 +33,20 @@
       ];
 
       sops.secrets."litellm_master_key" = { };
+      # Tavily API key, read by the pi-tavily-search extension from
+      # auth.json under the `tavily` entry. If the value already exists
+      # under another sops key name, set `key = "<existing path>"` here
+      # instead of adding a new entry to the sops file.
+      sops.secrets."tavily_api_key" = { };
 
       sops.templates."pi-auth.json".content = builtins.toJSON {
         litellm = {
           type = "api_key";
           key = config.sops.placeholder."litellm_master_key";
+        };
+        tavily = {
+          type = "api_key";
+          key = config.sops.placeholder."tavily_api_key";
         };
       };
 
@@ -45,7 +54,11 @@
         config.lib.file.mkOutOfStoreSymlink
           (toString config.sops.templates."pi-auth.json".path);
 
-      programs.pi-coding-agent = {
+      programs.pi-coding-agent = 
+        let
+          ollamaBaseUrl = "http://hyrulecastle.tailb6874b.ts.net:11434/v1";
+        in
+      {
         enable = true;
         package = pkgs.unstable.pi-coding-agent;
 
@@ -66,6 +79,7 @@
           defaultModel = defaultModel;
           defaultThinkingLevel = "medium";
           theme = "dark";
+          packages = [ "npm:@jmcombs/pi-tavily-search" ];
 
           compaction = {
             enabled = true;
@@ -89,6 +103,25 @@
               supportsReasoningEffort = false;
             };
             models = litellmModels;
+          };
+
+          providers.hyrule-ollama = {
+            baseUrl = ollamaBaseUrl;
+            api = "openai-completions";
+            apiKey = "ollama"; # ollama ignores key, but field must be non-empty
+            compat = {
+              supportsDeveloperRole = false;
+              supportsReasoningEffort = false;
+            };
+            models = [
+              {
+                id = "woof-fixed-64k";
+                name = "Woof 4B (hyrulecastle)";
+                reasoning = true; # model emits thinking
+                contextWindow = 65536;
+                maxTokens = 8192;
+              }
+            ];
           };
         };
 
