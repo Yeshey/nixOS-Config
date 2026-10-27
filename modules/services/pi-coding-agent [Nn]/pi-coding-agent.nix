@@ -57,6 +57,8 @@
           fd
           nodejs
           bun
+          # --- Wayland clipboard support ---
+          wl-clipboard
         ];
 
         settings = {
