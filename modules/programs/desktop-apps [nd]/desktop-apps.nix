@@ -30,6 +30,11 @@
             qutebrowser
             qpwgraph # change sound inputs and outputs
 
+            unstable.antigravity-hub
+            unstable.antigravity-cli # agy
+            unstable.antigravity-ide
+            unstable.antigravity-acp
+
             # gaming
             prismlauncher # polymc # prismlauncher # for Minecraft
             heroic
