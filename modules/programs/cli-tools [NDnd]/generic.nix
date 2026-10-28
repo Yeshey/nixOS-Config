@@ -55,6 +55,7 @@ in
           android-tools
           rclone
           bc
+          python3
         ]);
       programs.htop.enable = true;
     };
