@@ -54,6 +54,7 @@ in
           gh
           android-tools
           rclone
+          bc
         ]);
       programs.htop.enable = true;
     };
