@@ -10,6 +10,7 @@
         host = "0.0.0.0";
         environmentVariables = {
           OLLAMA_ORIGINS = "*";
+          # OLLAMA_DEBUG = "1";
         };
       };
     };

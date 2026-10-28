@@ -69,8 +69,8 @@
           GLOBAL_LOG_LEVEL = "DEBUG";
           ENABLE_WEB_SEARCH = "true";
           WEB_SEARCH_ENGINE = "exa";
-          WEB_SEARCH_RESULT_COUNT = "5";
-          WEB_SEARCH_CONCURRENT_REQUESTS = "3";
+          WEB_SEARCH_RESULT_COUNT = "1";
+          WEB_SEARCH_CONCURRENT_REQUESTS = "1";
           ENABLE_PERSISTENT_CONFIG = "false";
           ENABLE_FOLLOW_UP_GENERATION = "false";
           ENABLE_TAGS_GENERATION = "false";
@@ -82,7 +82,7 @@
           ENABLE_NOTES       = "False";
 
           # Two Ollama backends: local (skyloft) and remote (hyrulecastle, via Tailscale).
-          DEFAULT_MODEL_PARAMS = ''{"num_ctx": 32768}'';
+          # DEFAULT_MODEL_PARAMS = ''{"num_ctx": 32768}'';
           OLLAMA_BASE_URLS = "${localOllama};${hyrulecastleOllama}";
           OLLAMA_API_CONFIGS = ''{"0": {"prefix_id": "local-ollama/"}, "1": {"prefix_id": "hyrulecastle-ollama/"}}'';
 
