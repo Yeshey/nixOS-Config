@@ -50,6 +50,18 @@
         settings = {
           model_list = [
             {
+              model_name = "woof-fixed-128k-hyrulecastle-ollama";
+              litellm_params = {
+                model = "ollama_chat/woof-fixed-128k:latest";   # <-- no namespace prefix
+                api_base = "http://hyrulecastle.tailb6874b.ts.net:11434";
+                extra_body = {
+                  options = {
+                    num_ctx = 131072;   # see note below
+                  };
+                };
+              };
+            }
+            {
               model_name = "mimo-v2.6-9b-hyrulecastle-ollama";
               litellm_params = {
                 model = "ollama_chat/maternion/mimo-v2.6:9b";

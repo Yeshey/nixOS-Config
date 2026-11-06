@@ -45,6 +45,7 @@
       localCtx = {
         "mimo-v2.6-9b-hyrulecastle-ollama" = 32768;
         "minicpm5-2b-ollama" = 32768;
+        "woof-fixed-128k-hyrulecastle-ollama" = 32768;
       };
 
       mkLitellmModel = id: {
@@ -66,6 +67,7 @@
           "inceptio-mercury-3"
           "mimo-v2.6-9b-hyrulecastle-ollama"
           "minicpm5-2b-ollama"
+          "woof-fixed-128k-hyrulecastle-ollama"
         ]
         ++ lib.mapAttrsToList (_: a: a.model) agents
       );
