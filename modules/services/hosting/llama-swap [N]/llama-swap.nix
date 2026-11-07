@@ -72,7 +72,7 @@
                   -c 32768 -np 1 \
                   -ctk q8_0 -ctv q8_0 \
                   --flash-attn on --jinja \
-                  -t 4
+                  -t 3
               '';
               ttl = 300;
               env = [
