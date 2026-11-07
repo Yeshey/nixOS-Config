@@ -40,6 +40,8 @@
       systemd.services.litellm.serviceConfig.Group = "litellm";
 
       services.litellm.environment = { };
+      systemd.services.litellm.after = [ "llama-swap.service" ];
+      systemd.services.litellm.wants  = [ "llama-swap.service" ];
 
       services.litellm = {
         enable = true;
@@ -49,6 +51,14 @@
 
         settings = {
           model_list = [
+            {
+              model_name = "qwen3-6-35b-a3b";
+              litellm_params = {
+                model = "openai/qwen3-6-35b-a3b";      # must match the llama-swap key
+                api_base = "http://127.0.0.1:9090/v1"; # llama-swap, not llama-server
+                api_key = "not-needed";
+              };
+            }
             {
               model_name = "woof-fixed-128k-hyrulecastle-ollama";
               litellm_params = {

@@ -29,12 +29,13 @@
       luanti-server
       # jupyter
       open-webui
-      openhands
+      # openhands
+      llama-swap
       tailscale-skyloft
-      pithagoras
+      # pithagoras
       forgejo
       openclaw
-      arcane
+      # arcane
       kubo
       minecraft
     ];
