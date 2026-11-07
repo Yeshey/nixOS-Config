@@ -31,6 +31,15 @@
       # CPU-only: leave the flag off entirely so llama-server doesn't warn
       # "no usable GPU found, --gpu-layers option will be ignored".
       gpuFlags = if cudaEnabled then "-ngl 99" else "";
+
+      # Auto-fit target: leave 512 MiB VRAM free. Required for the MoE
+      # expert offload described in the video; on a CPU-only build it is a
+      # no-op.
+      fitFlags = "--fit-target 512";
+
+      # mmap: stream expert weights from disk instead of pinning them in
+      # RAM. Universal llama.cpp flag, safe on CPU and CUDA.
+      loadFlags = "--load-mode mmap";
     in
     {
       users.groups.llama-swap = { };
@@ -67,12 +76,13 @@
                   --host 127.0.0.1 --port ''${PORT} \
                   --no-webui \
                   -hf ${modelRepo}:${modelQuant} \
-                  --no-mmproj \
                   ${gpuFlags} \
+                  ${fitFlags} \
+                  ${loadFlags} \
                   -c 32768 -np 1 \
                   -ctk q8_0 -ctv q8_0 \
                   --flash-attn on --jinja \
-                  -t 3
+                  -t 4
               '';
               ttl = 300;
               env = [
