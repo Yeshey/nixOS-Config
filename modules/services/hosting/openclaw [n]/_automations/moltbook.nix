@@ -2,7 +2,7 @@
   name = "Moltbook";
   enabled = true;
   agent = "moltbooker";
-  cron = "0 11 * * *";
+  cron = "0 4 * * *";
   timezone = "Europe/Lisbon";
   session = "session:daily-moltbook";
   telegramChatId = "1173067555";
