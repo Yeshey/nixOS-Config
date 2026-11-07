@@ -12,7 +12,6 @@
             wineWow64Packages.full
             restic-browser
             restic
-            zotero
             pkgs.unstable.winboat
             vital # run with Vital
             helm

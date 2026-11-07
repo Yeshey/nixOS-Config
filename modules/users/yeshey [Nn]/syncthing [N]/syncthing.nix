@@ -154,12 +154,6 @@ in
               devices    = allDevices;
               versioning = myVersioning;
             };
-
-            "ZoteroStorage" = {
-              path       = "/home/${username}/Zotero/storage";
-              devices    = allDevices;
-              versioning = myVersioning;
-            };
           };
         };
       };

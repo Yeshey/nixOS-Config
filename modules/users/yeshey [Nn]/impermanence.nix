@@ -30,7 +30,6 @@
             ".config/syncthing"
             ".local/share/syncthing"
             ".local/share/PrismLauncher/instances/MainInstance"
-            "Zotero/storage"
             ".minetest"
             ".local/share/The Powder Toy"
             { directory = ".local/share/keyrings"; mode = "0700"; }

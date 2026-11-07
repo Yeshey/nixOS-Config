@@ -148,7 +148,6 @@ let
 
       # Flagged: uncomment to keep these instead
       ".thunderbird"                     # email - keep if you use local folders
-      "Zotero"        ".zotero"          # research refs - keep if important
     ] ++ job.exclude;
 
     extraBackupArgs = [ "--verbose=2" "--exclude-caches" "--one-file-system" ] ++ job.extraBackupArgs;
