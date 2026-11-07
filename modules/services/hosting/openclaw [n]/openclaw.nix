@@ -46,7 +46,7 @@
         "mimo-v2.6-9b-hyrulecastle-ollama" = 32768;
         "minicpm5-2b-ollama" = 32768;
         "woof-fixed-128k-hyrulecastle-ollama" = 32768;
-        "qwen3-6-35b-a3b" = 32768;
+        "skyloft-qwen3-6-35b-a3b" = 32768;
       };
 
       mkLitellmModel = id: {
@@ -69,7 +69,7 @@
           "mimo-v2.6-9b-hyrulecastle-ollama"
           "minicpm5-2b-ollama"
           "woof-fixed-128k-hyrulecastle-ollama"
-          "qwen3-6-35b-a3b"
+          "skyloft-qwen3-6-35b-a3b"
         ]
         ++ lib.mapAttrsToList (_: a: a.model) agents
       );

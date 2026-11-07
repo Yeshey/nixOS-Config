@@ -1,3 +1,4 @@
+# check curl -N http://127.0.0.1:9090/logs/stream/qwen3-6-35b-a3b
 { ... }:
 {
   flake.modules.nixos.llama-swap =
@@ -23,23 +24,10 @@
 
       # Global cudaSupport already makes pkgs.llama-cpp a CUDA build.
       llamaPackage =
-        if cudaEnabled && !cudaGlobal then
-          pkgs.llama-cpp.override { cudaSupport = true; }
+        if cudaEnabled then
+          pkgs.unstable.llama-cpp.override { cudaSupport = true; }
         else
-          pkgs.llama-cpp;
-
-      # CPU-only: leave the flag off entirely so llama-server doesn't warn
-      # "no usable GPU found, --gpu-layers option will be ignored".
-      gpuFlags = if cudaEnabled then "-ngl 99" else "";
-
-      # Auto-fit target: leave 512 MiB VRAM free. Required for the MoE
-      # expert offload described in the video; on a CPU-only build it is a
-      # no-op.
-      fitFlags = "--fit-target 512";
-
-      # mmap: stream expert weights from disk instead of pinning them in
-      # RAM. Universal llama.cpp flag, safe on CPU and CUDA.
-      loadFlags = "--load-mode mmap";
+          pkgs.unstable.llama-cpp;
     in
     {
       users.groups.llama-swap = { };
@@ -54,6 +42,7 @@
 
       services.llama-swap = {
         enable = true;
+        package = pkgs.unstable.llama-swap;
         listenAddress = "0.0.0.0";
         inherit port;
         openFirewall = true;
@@ -63,22 +52,15 @@
           logLevel = "info";
           models = {
             "qwen3-6-35b-a3b" = {
-              # Pin the upstream address to IPv4. llama-swap defaults the
-              # proxy to "localhost", which resolves to ::1 on this host,
-              # while llama-server binds 127.0.0.1 (IPv4 only) -> the
-              # "dial tcp [::1]:PORT: connect: connection refused" loop.
-              # NOTE: "\${PORT}" is a Nix escape; llama-swap expands
-              # ${PORT} at runtime, same as it does inside `cmd`.
               proxy = "http://127.0.0.1:\${PORT}";
 
               cmd = ''
                 ${lib.getExe' llamaPackage "llama-server"} \
+                  -hf ${modelRepo}:${modelQuant} \
                   --host 127.0.0.1 --port ''${PORT} \
                   --no-webui \
-                  -hf ${modelRepo}:${modelQuant} \
-                  ${gpuFlags} \
-                  ${fitFlags} \
-                  ${loadFlags} \
+                  --fit-target 512 \
+                  --load-mode mmap \
                   -c 32768 -np 1 \
                   -ctk q8_0 -ctv q8_0 \
                   --flash-attn on --jinja \
@@ -96,13 +78,6 @@
 
       # Upstream sets DynamicUser, PrivateUsers, CacheDirectory and
       # WorkingDirectory without mkDefault, so overrides need mkForce.
-      #
-      # - DynamicUser=false -> PrivateUsers must also be false; otherwise
-      #   the user namespace remaps the uid and llama-server cannot write
-      #   to the cache directory.
-      # - ProtectSystem=strict makes /var/cache read-only unless systemd
-      #   manages it via CacheDirectory. Without that, llama-server fails
-      #   with "cannot create directories: Read-only file system".
       systemd.services.llama-swap = {
         serviceConfig = {
           DynamicUser = lib.mkForce false;

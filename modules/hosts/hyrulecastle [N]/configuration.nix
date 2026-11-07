@@ -21,6 +21,7 @@
       i2p
       waydroid
       ollama-cuda
+      llama-swap
       open-webui
 
       # hosting

@@ -52,10 +52,18 @@
         settings = {
           model_list = [
             {
-              model_name = "qwen3-6-35b-a3b";
+              model_name = "skyloft-qwen3-6-35b-a3b";
               litellm_params = {
                 model = "openai/qwen3-6-35b-a3b";      # must match the llama-swap key
                 api_base = "http://127.0.0.1:9090/v1"; # llama-swap, not llama-server
+                api_key = "not-needed";
+              };
+            }
+            {
+              model_name = "hyrulecastle-qwen3-6-35b-a3b";
+              litellm_params = {
+                model = "openai/qwen3-6-35b-a3b";      # same llama-swap model key on hyrulecastle
+                api_base = "http://hyrulecastle.tailb6874b.ts.net:9090/v1";
                 api_key = "not-needed";
               };
             }
