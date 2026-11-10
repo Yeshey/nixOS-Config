@@ -22,6 +22,16 @@
           name = "Strong Fallback Chain (LiteLLM)";
           reasoning = false;
         }
+        {
+          id = "hyrulecastle-qwen3-6-35b-a3b";
+          name = "Qwen3 6/35B A3B (hyrulecastle)";
+          reasoning = false;
+        }
+        {
+          id = "onikao-qwen3-8-flash-next";
+          name = "Qwen3 8 Flash Next (onikao)";
+          reasoning = false;
+        }
       ];
 
       defaultModel = "weak-fallback-chain";
@@ -54,11 +64,7 @@
         config.lib.file.mkOutOfStoreSymlink
           (toString config.sops.templates."pi-auth.json".path);
 
-      programs.pi-coding-agent = 
-        let
-          ollamaBaseUrl = "http://hyrulecastle.tailb6874b.ts.net:11434/v1";
-        in
-      {
+      programs.pi-coding-agent = {
         enable = true;
         package = pkgs.unstable.pi-coding-agent;
 
@@ -103,25 +109,6 @@
               supportsReasoningEffort = false;
             };
             models = litellmModels;
-          };
-
-          providers.hyrule-ollama = {
-            baseUrl = ollamaBaseUrl;
-            api = "openai-completions";
-            apiKey = "ollama"; # ollama ignores key, but field must be non-empty
-            compat = {
-              supportsDeveloperRole = false;
-              supportsReasoningEffort = false;
-            };
-            models = [
-              {
-                id = "woof-fixed-64k";
-                name = "Woof 4B (hyrulecastle)";
-                reasoning = true; # model emits thinking
-                contextWindow = 65536;
-                maxTokens = 8192;
-              }
-            ];
           };
         };
 
