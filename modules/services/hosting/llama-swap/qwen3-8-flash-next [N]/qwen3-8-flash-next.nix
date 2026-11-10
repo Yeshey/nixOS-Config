@@ -23,7 +23,7 @@
         family = "swift";
         model = "IQ3_XXS";
         context = 32768;
-        port = 8080;
+        port = 9080;
       };
 
       # Loaded only when llama-swap asks.
