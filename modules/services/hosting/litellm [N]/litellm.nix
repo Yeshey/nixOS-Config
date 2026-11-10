@@ -68,6 +68,14 @@
               };
             }
             {
+              model_name = "onikao-qwen3-8-flash-next";
+              litellm_params = {
+                model = "openai/qwen3-8-flash-next";   # must match the llama-swap key in qwen3-8-flash-next.nix
+                api_base = "http://onikao.tailb6874b.ts.net:9090/v1";
+                api_key = "not-needed";
+              };
+            }
+            {
               model_name = "woof-fixed-128k-hyrulecastle-ollama";
               litellm_params = {
                 model = "ollama_chat/woof-fixed-128k:latest";   # <-- no namespace prefix
