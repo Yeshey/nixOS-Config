@@ -26,8 +26,8 @@ in
       services.strata = {
         enable = true;
         package = inputs.strata-nix.packages.${pkgs.stdenv.hostPlatform.system}.strata-hip;
-        family = "swift";
-        model = "IQ3_XXS";
+        family = "qwen";
+        model = "IQ3_S";
         context = 32768;
         port = 9080;
       };
