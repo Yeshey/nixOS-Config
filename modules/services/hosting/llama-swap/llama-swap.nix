@@ -42,22 +42,5 @@
         StateDirectory = "llama-swap";
         CacheDirectory = lib.mkForce "llama-swap";
       };
-
-      environment = inputs.self.lib.mkIfPersistence config {
-        persistence."/persistent".directories = [
-          {
-            directory = cacheDir;
-            user = "llama-swap";
-            group = "llama-swap";
-            mode = "0750";
-          }
-          {
-            directory = stateDir;
-            user = "llama-swap";
-            group = "llama-swap";
-            mode = "0750";
-          }
-        ];
-      };
     };
 }
