@@ -30,7 +30,7 @@
       # jupyter
       open-webui
       # openhands
-      llama-swap
+      llama-swap-qwen-3-6
       tailscale-skyloft
       # pithagoras
       forgejo

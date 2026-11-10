@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  flake.modules.nixos.llama-swap =
+  flake.modules.nixos.llama-swap-qwen-3-6 =
     { config, ... }:
     {
       environment = inputs.self.lib.mkIfPersistence config {

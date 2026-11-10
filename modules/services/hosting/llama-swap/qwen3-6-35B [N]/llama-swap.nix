@@ -1,7 +1,7 @@
 # check curl -N http://127.0.0.1:9090/logs/stream/qwen3-6-35b-a3b
 { ... }:
 {
-  flake.modules.nixos.llama-swap =
+  flake.modules.nixos.llama-swap-qwen-3-6 =
     {
       config,
       pkgs,

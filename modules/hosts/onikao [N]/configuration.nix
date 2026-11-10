@@ -16,6 +16,7 @@
       xrdp
       firefox
       vscodium
+      llama-swap-qwen3-8-flash-next
       # jupyter
       # ollama
     ];
