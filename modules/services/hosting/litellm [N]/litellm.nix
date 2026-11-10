@@ -68,12 +68,12 @@
               };
             }
             {
-              model_name = "onikao-qwen3-8-flash-next";
-              litellm_params = {
-                model = "openai/qwen3-8-flash-next";   # must match the llama-swap key in qwen3-8-flash-next.nix
-                api_base = "http://onikao.tailb6874b.ts.net:9090/v1";
-                api_key = "not-needed";
-              };
+              model = "openai/qwen3-8-flash-next";
+              api_base = "http://onikao.tailb6874b.ts.net:9090/v1";
+              api_key = "not-needed";
+              timeout = 600;          # whole request, seconds
+              stream_timeout = 600;   # wait for first/next chunk when streaming
+              num_retries = 2;        # retry on 502/timeouts before falling to fallback chain
             }
             {
               model_name = "woof-fixed-128k-hyrulecastle-ollama";
