@@ -28,6 +28,7 @@
 
     environment.systemPackages = with pkgs; [
       github-desktop
+      unstable.amdtop
     ];
 
     my-scripts = {
