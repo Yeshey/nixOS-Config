@@ -1,4 +1,7 @@
-{ inputs, ... }:
+{ inputs, config, ... }:
+let
+  top = config;
+in
 {
   flake.modules.nixos.llama-swap-qwen3-8-flash-next =
     {
@@ -15,7 +18,10 @@
       '';
     in
     {
-      imports = [ inputs.strata-nix.nixosModules.default ];
+      imports = [
+        inputs.strata-nix.nixosModules.default
+        inputs.self.modules.nixos.llama-swap
+      ];
 
       services.strata = {
         enable = true;
