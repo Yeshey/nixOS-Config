@@ -28,7 +28,7 @@ in
         package = inputs.strata-nix.packages.${pkgs.stdenv.hostPlatform.system}.strata-hip;
         family = "swift";
         model = "IQ3_XXS";
-        context = 32768;
+        context = 131072;
         port = 9080;
       };
       systemd.services.strata.environment.STRATA_ALLOWED_HOSTS = "onikao.tailb6874b.ts.net,onikao.tailb6874b.ts.net:9090,onikao,100.74.87.65"; # format is guess
