@@ -8,7 +8,7 @@
         enable = true;
         flake = "github:yeshey/nixos-config";
         host = config.networking.hostName;
-        dates  = "*-*-01,16 06:10:00";
+        dates = "Sat *-*-* 07:00:00 UTC";   # CI + 2h
         extraKeepAliveServices = [ "fix-surface-clock.service" ];
       };
     };
