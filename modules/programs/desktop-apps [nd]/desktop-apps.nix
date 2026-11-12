@@ -1,81 +1,91 @@
+{ inputs, ... }:
 {
   flake.modules.homeManager.desktop-apps =
     { pkgs, lib, ... }:
-      lib.mkMerge [
-        {
-          home.packages = with pkgs; [
-            inkscape
-            blender 
-            vlc
-            pdfarranger
-            thunderbird
-            wineWow64Packages.full
-            restic-browser
-            restic
-            pkgs.unstable.winboat
-            vital # run with Vital
-            helm
-            kdePackages.okular
-            unstable.joplin-desktop
-            rnote
-            github-desktop
-            obs-studio
-            gparted
-            baobab
-            audacity
-            unstable.floorp-bin
-            brave
-            tor-browser
-            qutebrowser
-            qpwgraph # change sound inputs and outputs
+    let
+      ag = inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system};
+    in
+    lib.mkMerge [
+      {
+        home.packages = with pkgs; [
+          inkscape
+          blender 
+          vlc
+          pdfarranger
+          thunderbird
+          wineWow64Packages.full
+          restic-browser
+          restic
+          pkgs.unstable.winboat
+          vital # run with Vital
+          helm
+          kdePackages.okular
+          unstable.joplin-desktop
+          rnote
+          github-desktop
+          obs-studio
+          gparted
+          baobab
+          audacity
+          unstable.floorp-bin
+          brave
+          tor-browser
+          qutebrowser
+          qpwgraph # change sound inputs and outputs
 
-            unstable.antigravity-hub
-            unstable.antigravity-cli # agy
-            unstable.antigravity-ide
-            unstable.antigravity-acp
+          # unstable.antigravity-hub
+          # unstable.antigravity-cli # agy
+          # unstable.antigravity-ide
+          # unstable.antigravity-acp
 
-            # gaming
-            prismlauncher # polymc # prismlauncher # for Minecraft
-            heroic
-            the-powder-toy
+          unstable.antigravity-acp
+          t3code
 
-            # Global Protect VPN to connect to ISCTE
-            (pkgs.makeDesktopItem {
-              name = "gpclient-iscte";
-              desktopName = "GlobalProtect ISCTE-IUL";
-              genericName = "GlobalProtect VPN Client";
-              comment = "Connect to ISCTE-IUL VPN";
-              exec = "sudo ${pkgs.gpclient}/bin/gpclient --fix-openssl connect vpn.iscte-iul.pt --browser firefox";
-              icon = "network-vpn";
-              categories = [ "Network" "Dialup" ];
-              keywords = [
-                "GlobalProtect"
-                "Openconnect"
-                "SAML"
-                "connection"
-                "VPN"
-              ];
-              mimeTypes = ["x-scheme-handler/globalprotectcallback"];
-              terminal = true;
-            })
-          ];
-          # settings for all systems
-        }
-        (lib.mkIf (pkgs.stdenv.isLinux) {
-          home.packages = with pkgs; [
-            libreoffice-qt6
-            gimp3-with-plugins
-          ];
-          # NixOS settings
-        })
-        (lib.mkIf (pkgs.stdenv.isDarwin) {
-          home.packages = with pkgs; [
-            libreoffice-bin
-            brewCasks.gimp
-          ];
-          # Nix-Darwin settings
-        })
-      ];
+          # gaming
+          prismlauncher # polymc # prismlauncher # for Minecraft
+          heroic
+          the-powder-toy
+
+          # Global Protect VPN to connect to ISCTE
+          (pkgs.makeDesktopItem {
+            name = "gpclient-iscte";
+            desktopName = "GlobalProtect ISCTE-IUL";
+            genericName = "GlobalProtect VPN Client";
+            comment = "Connect to ISCTE-IUL VPN";
+            exec = "sudo ${pkgs.gpclient}/bin/gpclient --fix-openssl connect vpn.iscte-iul.pt --browser firefox";
+            icon = "network-vpn";
+            categories = [ "Network" "Dialup" ];
+            keywords = [
+              "GlobalProtect"
+              "Openconnect"
+              "SAML"
+              "connection"
+              "VPN"
+            ];
+            mimeTypes = ["x-scheme-handler/globalprotectcallback"];
+            terminal = true;
+          })
+        ];
+        # settings for all systems
+      }
+      (lib.mkIf (pkgs.stdenv.isLinux) {
+        home.packages = with pkgs; [
+          libreoffice-qt6
+          gimp3-with-plugins
+          ag.default                    # Antigravity 2.0 base app (hub)
+          ag.google-antigravity-ide     # antigravity-ide
+          ag.google-antigravity-cli     # agy
+        ];
+        # NixOS settings
+      })
+      (lib.mkIf (pkgs.stdenv.isDarwin) {
+        home.packages = with pkgs; [
+          libreoffice-bin
+          brewCasks.gimp
+        ];
+        # Nix-Darwin settings
+      })
+    ];
 
   flake.modules.nixos.desktop-apps = 
     { pkgs, ... }: {

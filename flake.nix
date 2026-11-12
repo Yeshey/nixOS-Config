@@ -4,6 +4,10 @@
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
 
   inputs = {
+    antigravity-nix = {
+      url = "github:jacopone/antigravity-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     box64-binfmt = {
       url = "github:Yeshey/nixos-box64-binfmt";
       inputs.nixpkgs.follows = "nixpkgs";
