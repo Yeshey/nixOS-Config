@@ -1,10 +1,6 @@
-{ inputs, ... }:
 {
   flake.modules.homeManager.desktop-apps =
-    { pkgs, lib, ... }:
-    let
-      ag = inputs.antigravity-nix.packages.${pkgs.stdenv.hostPlatform.system};
-    in
+  { pkgs, lib, ... }:
     lib.mkMerge [
       {
         home.packages = with pkgs; [
@@ -33,11 +29,9 @@
           qutebrowser
           qpwgraph # change sound inputs and outputs
 
-          # unstable.antigravity-hub
-          # unstable.antigravity-cli # agy
-          # unstable.antigravity-ide
-          # unstable.antigravity-acp
-
+          unstable.antigravity-hub
+          unstable.antigravity-cli # agy
+          unstable.antigravity-ide
           unstable.antigravity-acp
           t3code
 
@@ -72,9 +66,6 @@
         home.packages = with pkgs; [
           libreoffice-qt6
           gimp3-with-plugins
-          ag.default                    # Antigravity 2.0 base app (hub)
-          ag.google-antigravity-ide     # antigravity-ide
-          ag.google-antigravity-cli     # agy
         ];
         # NixOS settings
       })
