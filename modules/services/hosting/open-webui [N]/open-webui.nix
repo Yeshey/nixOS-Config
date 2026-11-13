@@ -8,6 +8,7 @@
       litellmPort = 4000; # must match modules/services/hosting/litellm [N]/litellm.nix
       localOllama = "http://localhost:11434";
       hyrulecastleOllama = "http://hyrulecastle.tailb6874b.ts.net:11434";
+      strataEndpoint = "http://192.168.1.207:47832/v1";
     in
     {
       imports = [
@@ -27,10 +28,11 @@
       sops.secrets."exa_api_key" = { };
       sops.secrets."iaedu_api_key" = { };
       sops.secrets."moltbook_api_key" = { };
+      sops.secrets."oniken-strata-api-key" = { };
 
       sops.templates."open-webui.env" = {
         content = ''
-          OPENAI_API_KEYS=${config.sops.placeholder."litellm_master_key"};${config.sops.placeholder."nvidia_nim_api_key"};${config.sops.placeholder."openrouter"};${config.sops.placeholder."opencode_key"};${config.sops.placeholder."groq_api_key"};${config.sops.placeholder."vercel_key"};${config.sops.placeholder."cerebras_key"};${config.sops.placeholder."iaedu_api_key"}
+          OPENAI_API_KEYS=${config.sops.placeholder."litellm_master_key"};${config.sops.placeholder."nvidia_nim_api_key"};${config.sops.placeholder."openrouter"};${config.sops.placeholder."opencode_key"};${config.sops.placeholder."groq_api_key"};${config.sops.placeholder."vercel_key"};${config.sops.placeholder."cerebras_key"};${config.sops.placeholder."iaedu_api_key"};${config.sops.placeholder."oniken-strata-api-key"}
           MOLTBOOK_API_KEY=${config.sops.placeholder."moltbook_api_key"}
         '';
         restartUnits = [ "open-webui.service" ];
@@ -86,8 +88,8 @@
           OLLAMA_BASE_URLS = "${localOllama};${hyrulecastleOllama}";
           OLLAMA_API_CONFIGS = ''{"0": {"prefix_id": "local-ollama/"}, "1": {"prefix_id": "hyrulecastle-ollama/"}}'';
 
-          OPENAI_API_BASE_URLS = "http://localhost:${toString litellmPort}/v1;https://integrate.api.nvidia.com/v1;https://openrouter.ai/api/v1;https://opencode.ai/zen/v1;https://api.groq.com/openai/v1;https://ai-gateway.vercel.sh/v1;https://api.cerebras.ai/v1;https://api.iaedu.pt/agent-chat//api/v1/agent/cmor5objoex9gfp01vm7p95jh/stream";
-          OPENAI_API_CONFIGS = ''{"0": {"prefix_id": "mylitellmAPI/"}, "1": {"prefix_id": "nvidiaAPI/"}, "2": {"prefix_id": "openrouterAPI/"}, "3": {"prefix_id": "opencodeAPI/"}, "4": {"prefix_id": "groqAPI/"}, "5": {"prefix_id": "vercelAPI/"}, "6": {"prefix_id": "cerebrasAPI/"}, "7": {"prefix_id": "iaeduAPI/"}}'';
+          OPENAI_API_BASE_URLS = "http://localhost:${toString litellmPort}/v1;https://integrate.api.nvidia.com/v1;https://openrouter.ai/api/v1;https://opencode.ai/zen/v1;https://api.groq.com/openai/v1;https://ai-gateway.vercel.sh/v1;https://api.cerebras.ai/v1;https://api.iaedu.pt/agent-chat//api/v1/agent/cmor5objoex9gfp01vm7p95jh/stream;${strataEndpoint}";
+          OPENAI_API_CONFIGS = ''{"0": {"prefix_id": "mylitellmAPI/"}, "1": {"prefix_id": "nvidiaAPI/"}, "2": {"prefix_id": "openrouterAPI/"}, "3": {"prefix_id": "opencodeAPI/"}, "4": {"prefix_id": "groqAPI/"}, "5": {"prefix_id": "vercelAPI/"}, "6": {"prefix_id": "cerebrasAPI/"}, "7": {"prefix_id": "iaeduAPI/"}, "8": {"prefix_id": "strataOniAPI/"}}'';
 
           WEBUI_AUTH = "False";
         };
