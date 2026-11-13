@@ -33,7 +33,12 @@
           unstable.antigravity-cli # agy
           unstable.antigravity-ide
           unstable.antigravity-acp
-          t3code
+          # unstable.t3code
+          unstable.codex
+          unstable.opencode
+          # unstable.cursor-cli
+          unstable.grok-build
+          # unstable.muse-code
 
           # gaming
           prismlauncher # polymc # prismlauncher # for Minecraft

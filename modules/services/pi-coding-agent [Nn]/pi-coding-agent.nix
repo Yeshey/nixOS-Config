@@ -23,6 +23,11 @@
           reasoning = false;
         }
         {
+          id = "lfm3-hyrulecastle-ollama";
+          name = "LFM3 (hyrulecastle)";
+          reasoning = false;
+        }
+        {
           id = "hyrulecastle-qwen3-6-35b-a3b";
           name = "Qwen3 6/35B A3B (hyrulecastle)";
           reasoning = false;
@@ -30,6 +35,11 @@
         {
           id = "onikao-qwen3-8-flash-next";
           name = "Qwen3 8 Flash Next (onikao)";
+          reasoning = false;
+        }
+        {
+          id = "ling3-tiny-hyrulecastle-ollama";
+          name = "Ling 3 Tiny (hyrulecastle)";
           reasoning = false;
         }
       ];

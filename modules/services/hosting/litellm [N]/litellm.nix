@@ -68,33 +68,41 @@
               };
             }
             {
-              model = "openai/qwen3-8-flash-next";
-              api_base = "http://onikao.tailb6874b.ts.net:9090/v1";
-              api_key = "not-needed";
-              timeout = 600;          # whole request, seconds
-              stream_timeout = 600;   # wait for first/next chunk when streaming
-              num_retries = 2;        # retry on 502/timeouts before falling to fallback chain
+              model_name = "onikao-qwen3-8-flash-next";
+              litellm_params = {
+                model = "openai/qwen3-8-flash-next";
+                api_base = "http://onikao.tailb6874b.ts.net:9090/v1";
+                api_key = "not-needed";
+                timeout = 600;
+                stream_timeout = 600;
+                num_retries = 2;
+              };
             }
             {
-              model_name = "woof-fixed-128k-hyrulecastle-ollama";
+              model_name = "lfm3-hyrulecastle-ollama";
               litellm_params = {
-                model = "ollama_chat/woof-fixed-128k:latest";   # <-- no namespace prefix
+                model = "ollama_chat/lfm3:latest";
                 api_base = "http://hyrulecastle.tailb6874b.ts.net:11434";
+                max_tokens = 14336;
                 extra_body = {
                   options = {
-                    num_ctx = 131072;   # see note below
+                    num_ctx = 150528;
                   };
                 };
               };
             }
             {
-              model_name = "mimo-v2.6-9b-hyrulecastle-ollama";
+              model_name = "ling3-tiny-hyrulecastle-ollama";
               litellm_params = {
-                model = "ollama_chat/maternion/mimo-v2.6:9b";
+                model = "ollama_chat/AntLing/Ling-3.0-tiny:q8_0";
                 api_base = "http://hyrulecastle.tailb6874b.ts.net:11434";
+                max_tokens = 14336;
                 extra_body = {
                   options = {
-                    num_ctx = 32768;
+                    num_ctx = 131072;
+                    temperature = 1.0;
+                    top_p = 0.95;
+                    top_k = 20;
                   };
                 };
               };
