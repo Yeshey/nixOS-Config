@@ -1,10 +1,11 @@
+{ inputs, ... }:
 {
-  flake.modules.nixos.t3code =
-    { ... }:
+  flake.modules.homeManager.t3code =
+    { config, ... }:
     {
-      environment.persistence."/persistent" = {
-        directories = [
-          { directory = "/var/lib/t3code"; user = "t3code"; group = "t3code"; mode = "u=rwx,g=,o="; }
+      home = inputs.self.lib.mkIfPersistence config {
+        persistence."/persistent".directories = [
+          ".t3"
         ];
       };
     };
