@@ -36,14 +36,23 @@ below), because its job is time-to-first-answer, not peak capability.
 **`strong-fallback-chain`** — capability-first, free before paid:
 
 ```
-nvidia-glm-5-3                  # free, TB 0.4192 ⚠ DEPRECATION 10/27/2026
-nvidia-glm-5-3-flash            # free, TB 0.3283 ⚠ AVAILABLE=false
-nvidia-deepseek-v4-1-flash      # free, TB 0.2677  (post-10/27 head)
+nvidia-deepseek-v4-1-flash      # free, TB 0.2677  (head; NIM AVAILABLE=true)
 gemini-3.8-flash                # free, TB 0.197
-gemini-3.7-flash                # free, TB 0.1364  (free floor)
+gemini-3.7-flash                # free, TB 0.1364
 vercel-deepseek-v4-1-flash-1017 # paid, TB 0.3384, D 0.043 (single paid slot)
+gemini-3.6-flash                # free, TB 0.0707
+gemini-3.5-flash                # free, TB 0.0657
+gemini-3.5-flash-lite           # free, TB 0.0101
+gemini-3.1-flash-lite           # free, TB 0.0051
+gemini-3-flash                  # free, no AA (preview)
+gemma-4-31b                     # free, no AA (31B dense)
+gemma-4-26b                     # free, no AA (MoE 26B/4B)
 vercel-nemotron-3-5-lightning-free # $0/$0, TB 0.0051 (graceful tail)
 ```
+
+GLM-5.3 and GLM-5.3-Flash were removed on 2026-10-26: NIM deprecated
+`z-ai/glm-5.3` on 10/27/2026 and `z-ai/glm-5.3-flash` was
+`AVAILABLE=false` on NGC.
 
 **`weak-fallback-chain`** — responsive-first, breadth over peak TB,
 nothing below `gemini-3.1-flash-lite` (TB 0.0051):
@@ -55,11 +64,15 @@ gemini-3.6-flash                # free, TB 0.0707
 gemini-3.5-flash                # free, TB 0.0657
 gemini-3.5-flash-lite           # free, TB 0.0101
 nvidia-deepseek-v4-1-flash      # free, TB 0.2677 (provider diversity)
-nvidia-minimax-m3-1-flash       # free, TB 0.2576 (provider diversity)
+nvidia-mistral-large            # free, TB 0.2677 (provider diversity)
 gemini-3.1-flash-lite           # free, TB 0.0051 (floor)
 vercel-deepseek-v4-1-flash-1017 # paid, TB 0.3384, D 0.043 (single paid slot)
 vercel-nemotron-3-5-lightning-free # $0/$0, TB 0.0051 (graceful tail)
 ```
+
+`nvidia-minimax-m3-1-flash` was removed on 2026-10-26 (`AVAILABLE=false`
+on NGC) and replaced by `nvidia-mistral-large`, which ties
+`nvidia-deepseek-v4-1-flash` at TB 0.2677 and is still callable on NIM.
 
 Both chains use exactly **one paid Vercel model**. The `$0/$0` Vercel SKU
 at the tail is not a second paid slot — it costs nothing and only exists
@@ -68,33 +81,37 @@ call fails.
 
 ## Model ranking
 
-Reflects the current config as of 2026-10-24. `TB` is Terminal-Bench 4.0
+Reflects the current config as of 2026-10-26. `TB` is Terminal-Bench 4.0
 from Artificial Analysis. `D` is computed from Vercel pricing.
 
 **Free tier** (D = 0; sorted by TB descending):
 
 | # | Alias | Provider | TB4.0 | Notes |
 |---:|---|---|---:|---|
-| 1 | `nvidia-glm-5-3` | NVIDIA NIM | 0.4192 | ⚠ DEPRECATION **10/27/2026** — strong-chain head until then |
-| 2 | `nvidia-glm-5-3-flash` | NVIDIA NIM | 0.3283 | ⚠ `AVAILABLE=false` on NGC — remove with head |
-| 3 | `nvidia-deepseek-v4-1-flash` | NVIDIA NIM | 0.2677 | Post-10/27 strong-chain head; weak-chain diversity |
-| 4 | `nvidia-minimax-m3-1-flash` | NVIDIA NIM | 0.2576 | Weak-chain diversity |
-| 5 | `gemini-3.8-flash` | Google AI Studio | 0.197 | Weak-chain entry |
-| 6 | `gemini-3.7-flash` | Google AI Studio | 0.1364 | Configured |
-| 7 | `gemini-3.6-flash` | Google AI Studio | 0.0707 | Configured |
-| 8 | `gemini-3.5-flash` | Google AI Studio | 0.0657 | Configured |
-| 9 | `gemini-3.5-flash-lite` | Google AI Studio | 0.0101 | Configured |
-| 10 | `gemini-3.1-flash-lite` | Google AI Studio | 0.0051 | Weak-chain floor |
-| 11 | `nvidia-muse-glimmer-30b` | NVIDIA NIM | 0.0051 | Opt-in only |
-| 12 | `nvidia-nemotron-3-5-lightning` | NVIDIA NIM | 0.0051 | Opt-in only |
-| 13 | `vercel-nemotron-3-5-lightning-free` | Vercel ($0/$0) | 0.0051 | Both chains' graceful tail |
+| 1 | `nvidia-deepseek-v4-1-flash` | NVIDIA NIM | 0.2677 | Strong-chain head |
+| 2 | `nvidia-mistral-large` | NVIDIA NIM | 0.2677 | Tie; weak-chain diversity |
+| 3 | `gemini-3.8-flash` | Google AI Studio | 0.197 | Weak-chain entry |
+| 4 | `gemini-3.7-flash` | Google AI Studio | 0.1364 | Configured |
+| 5 | `gemini-3.6-flash` | Google AI Studio | 0.0707 | Configured |
+| 6 | `gemini-3.5-flash` | Google AI Studio | 0.0657 | Configured |
+| 7 | `gemini-3.5-flash-lite` | Google AI Studio | 0.0101 | Configured |
+| 8 | `gemini-3.1-flash-lite` | Google AI Studio | 0.0051 | Weak-chain floor |
+| 9 | `nvidia-muse-glimmer-30b` | NVIDIA NIM | 0.0051 | Opt-in only |
+| 10 | `nvidia-nemotron-3-5-lightning` | NVIDIA NIM | 0.0051 | Opt-in only |
+| 11 | `vercel-nemotron-3-5-lightning-free` | Vercel ($0/$0) | 0.0051 | Both chains' graceful tail |
+| — | `stepfun-ai/step-5-preview` (NIM id) | NVIDIA NIM | 0.3333 | Not configured — PREVIEW, `AVAILABLE=false`, fragile |
 | — | `nvidia-gpt-oss-20b` | NVIDIA NIM | 0 (unscored) | Opt-in only |
 | — | `gemma-4-31b` | Google AI Studio | no AA match | Opt-in only |
 | — | `gemma-4-26b` | Google AI Studio | no AA match | Opt-in only |
 | — | `gemini-3-flash` | Google AI Studio | no AA match | Opt-in only |
 | — | `mimo-v2.6-9b-hyrulecastle-ollama` | local Ollama | no AA match | Opt-in only |
+| — | `minicpm5-2b-ollama` | local Ollama | no AA match | Opt-in only |
 | — | `groq-qwen-3-8-27b` | Groq | 0.0556 | Opt-in only — Preview tier, tool-use reliability unverified |
 | — | `inceptio-mercury-3` | Inception Labs | no AA match | Opt-in only |
+
+Removed 2026-10-26: `nvidia-glm-5-3` (NIM DEPRECATION 10/27/2026),
+`nvidia-glm-5-3-flash` (`AVAILABLE=false`), `nvidia-minimax-m3-1-flash`
+(`AVAILABLE=false`).
 
 **Paid tier (Vercel)** — sorted by D ascending:
 
@@ -115,36 +132,35 @@ before promoting it into any chain.
 
 ## Action required
 
-- **`nvidia-glm-5-3` deprecates 2026-10-27** — three days from this
-  README's date. It is the head of `strong-fallback-chain`. The chain's
-  own fallback list already handles the transition: after 10/27, requests
-  fall through to `nvidia-glm-5-3-flash`, then
-  `nvidia-deepseek-v4-1-flash`. When the alias stops returning useful
-  results, update the `strong-fallback-chain` entry's `model` field to
-  `openai/deepseek-ai/deepseek-v4.1-flash` and remove the two GLM
-  entries from `model_list` and both chains.
-- **`nvidia-glm-5-3-flash` is already `AVAILABLE=false`** on NGC. It will
-  die with `nvidia-glm-5-3`, not before. Remove both in the same change.
 - **`vercel-deepseek-v4-1-flash-1017-fast` is 8× the price of its non-fast
   sibling for identical TB.** It is currently opt-in only, which is the
-  correct default. Do not add it to any chain without a specific latency
+correct default. Do not add it to any chain without a specific latency
   justification.
 - **`vercel-mimo-v2-5` and `vercel-mimo-v2-5-pro` have TB = 0.** They are
   opt-in only. `mimo-v2.6-flash` (TB 0.2273, blend $0.168, D 0.124) is
   strictly better on both axes and should be added to `model_list` if
   these are ever referenced by real callers.
+- **Artificial Analysis legacy API (`/api/v2/data/llms/models`) retires
+  2026-11-04.** The current key is Free-tier: the replacement
+  `/api/v2/language/models` returns HTTP 403 (Pro required). The `/free`
+  variant works but exposes no Terminal-Bench scores. Without a Pro key
+  or an alternate TB4.0 source, the weekly `bench-*` scripts lose their
+  ranking column after 2026-11-04.
+- **`nvidia-mistral-large` is not listed in the NGC catalog** (no
+  `AVAILABLE`/`PREVIEW`/`DEPRECATION` flags), so it carries no published
+  lifecycle data. It is callable on NIM today. Watch it via
+  `bench-nim-deprecation`; if it silently disappears, fall back within the
+  weak chain as usual.
 
 ## Candidates to investigate
 
 - **`stepfun-ai/step-5-preview`** (NVIDIA NIM, free, TB 0.3333). Preview
-  tier — verify it survives past 10/27 before promoting to a chain entry.
-- **`mistralai/mistral-large`** (NVIDIA NIM, free, TB 0.2677). Tie with
-  `deepseek-v4.1-flash`; useful as a same-tier provider-diversity option.
+  tier and `AVAILABLE=false` on NGC — fragile; do not promote while it
+  carries those flags.
 - **`vercel-mimo-v2.6-flash`** (Vercel, D 0.124). Beats both current
   `mimo-v2.5` variants on price and capability.
-- **`vercel-minimax-m3.1-flash`** (Vercel, D 0.224). Same underlying
-  model as the NIM entry but paid; only useful if the NIM route is
-  unavailable.
+- **`moonshotai/kimi-k2.6`** (NVIDIA NIM, free, TB 0.0051, reasoning).
+  Low score; only worth a slot if NIM loses both TB-0.2677 heads.
 - **`inclusionai/ling-3.0-flash-sante`** (Vercel, $0/$0 tier, 256K
   context). Worth a look as a second free Vercel tail.
 
