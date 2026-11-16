@@ -226,48 +226,33 @@
 
             # ---------------------------------------------------------------
             # NVIDIA NIM free tier.
-            # TB4.0 (artificialanalysis.ai, 2026-10-24):
-            #   z-ai/glm-5.3 ......................... 0.4192  ⚠ DEPRECATION 10/27
-            #   z-ai/glm-5.3-flash ................... 0.3283  ⚠ AVAILABLE=false
-            #   deepseek-ai/deepseek-v4.1-flash ...... 0.2677  ✓ stable
-            #   minimaxai/minimax-m3.1-flash ......... 0.2576
+            # TB4.0 (artificialanalysis.ai, 2026-10-26):
+            #   deepseek-ai/deepseek-v4.1-flash ...... 0.2677  ✓ stable, strong-chain head
+            #   mistralai/mistral-large ............. 0.2677  tie; weak-chain diversity
+            #   minimaxai/minimax-m3.1-flash ........ REMOVED (AVAILABLE=false on NGC 2026-10-26)
             #   meta/muse-glimmer-30b ................ 0.0051
             #   nvidia/nemotron-3.5-lightning-30b-a3b  0.0051
+            #   (z-ai/glm-5.3 and glm-5.3-flash: removed — NIM DEPRECATION 10/27/2026)
             # ---------------------------------------------------------------
-            {
-              model_name = "nvidia-glm-5-3";
-              litellm_params = {
-                model = "openai/z-ai/glm-5.3";
-                api_base = "https://integrate.api.nvidia.com/v1";
-                api_key = "os.environ/NVIDIA_NIM_API_KEY";
-                # TB4.0: 0.4192. ⚠ DEPRECATION 10/27/2026 — remove after.
-              };
-            }
-            {
-              model_name = "nvidia-glm-5-3-flash";
-              litellm_params = {
-                model = "openai/z-ai/glm-5.3-flash";
-                api_base = "https://integrate.api.nvidia.com/v1";
-                api_key = "os.environ/NVIDIA_NIM_API_KEY";
-                # TB4.0: 0.3283. ⚠ AVAILABLE=false on NGC.
-              };
-            }
             {
               model_name = "nvidia-deepseek-v4-1-flash";
               litellm_params = {
                 model = "openai/deepseek-ai/deepseek-v4.1-flash";
                 api_base = "https://integrate.api.nvidia.com/v1";
                 api_key = "os.environ/NVIDIA_NIM_API_KEY";
-                # TB4.0: 0.2677. Stable NIM. Post-10/27 strong-chain head.
+                # TB4.0: 0.2677. Stable NIM. Strong-chain head since 10/27/2026
+                # (replaces deprecated z-ai/glm-5.3).
               };
             }
             {
-              model_name = "nvidia-minimax-m3-1-flash";
+              model_name = "nvidia-mistral-large";
               litellm_params = {
-                model = "openai/minimaxai/minimax-m3.1-flash";
+                model = "openai/mistralai/mistral-large";
                 api_base = "https://integrate.api.nvidia.com/v1";
                 api_key = "os.environ/NVIDIA_NIM_API_KEY";
-                # TB4.0: 0.2576. Weak-chain provider diversification.
+                # TB4.0: 0.2677. Tie with deepseek-v4.1-flash; weak-chain
+                # provider-diversity slot (replaces minimax-m3.1-flash,
+                # AVAILABLE=false on NGC since 2026-10-26).
               };
             }
             {
@@ -399,14 +384,14 @@
             }
 
             # ---- Chain entry points ----
-            # strong-fallback-chain routes to nvidia-glm-5-3's model today
-            # (highest-TB free model). After 10/27/2026 GLM deprecates,
-            # swap its model field to `openai/deepseek-ai/deepseek-v4.1-flash`
-            # or let the chain's own fallback list take over at position #1.
+            # strong-fallback-chain routes to nvidia-deepseek-v4-1-flash's
+            # model (highest-TB free NIM after the 10/27/2026 GLM-5.3 sunset).
+            # If NIM deprecates it, the chain's own fallback list takes
+            # over at position #1 (gemini-3.8-flash).
             {
               model_name = "strong-fallback-chain";
               litellm_params = {
-                model = "openai/z-ai/glm-5.3";
+                model = "openai/deepseek-ai/deepseek-v4.1-flash";
                 api_base = "https://integrate.api.nvidia.com/v1";
                 api_key = "os.environ/NVIDIA_NIM_API_KEY";
               };
@@ -429,13 +414,11 @@
               # strong chain (capability-first, free before paid, paid
               # before long tail of unscored free Geminis, $0/$0 tail last)
               # =============================================================
-              # Fast path: top-4 free → paid. If paid succeeds, we get
-              # TB 0.3384 at D 0.043 (cheap upgrade over gemini-3.7's 0.1364).
+              # Fast path: top-3 free → paid. If paid succeeds, we get
+              # TB 0.3384 at D 0.043 (cheap upgrade over gemini-3.8's 0.197).
               # Slow path (paid fails / credit exhausted): fall through the
               # full free Gemini family, then $0/$0 tail.
               { strong-fallback-chain = [
-                  "nvidia-glm-5-3-flash"                # free, 0.3283 ⚠ AVAILABLE=false
-                  "nvidia-deepseek-v4-1-flash"          # free, 0.2677
                   "gemini-3.8-flash"                    # free, 0.197
                   "gemini-3.7-flash"                    # free, 0.1364
                   "vercel-deepseek-v4-1-flash-1017"     # paid, 0.3384, D 0.043
@@ -447,35 +430,6 @@
                   "gemma-4-31b"                         # free, no AA (31B dense)
                   "gemma-4-26b"                         # free, no AA (MoE 26B/4B)
                   "vercel-nemotron-3-5-lightning-free"  # $0/$0, 0.0051 (tail)
-                ]; }
-              { nvidia-glm-5-3 = [
-                  "nvidia-glm-5-3-flash"
-                  "nvidia-deepseek-v4-1-flash"
-                  "gemini-3.8-flash"
-                  "gemini-3.7-flash"
-                  "vercel-deepseek-v4-1-flash-1017"
-                  "gemini-3.6-flash"
-                  "gemini-3.5-flash"
-                  "gemini-3.5-flash-lite"
-                  "gemini-3.1-flash-lite"
-                  "gemini-3-flash"
-                  "gemma-4-31b"
-                  "gemma-4-26b"
-                  "vercel-nemotron-3-5-lightning-free"
-                ]; }
-              { nvidia-glm-5-3-flash = [
-                  "nvidia-deepseek-v4-1-flash"
-                  "gemini-3.8-flash"
-                  "gemini-3.7-flash"
-                  "vercel-deepseek-v4-1-flash-1017"
-                  "gemini-3.6-flash"
-                  "gemini-3.5-flash"
-                  "gemini-3.5-flash-lite"
-                  "gemini-3.1-flash-lite"
-                  "gemini-3-flash"
-                  "gemma-4-31b"
-                  "gemma-4-26b"
-                  "vercel-nemotron-3-5-lightning-free"
                 ]; }
               { nvidia-deepseek-v4-1-flash = [
                   "gemini-3.8-flash"
@@ -576,7 +530,7 @@
                   "gemini-3.5-flash"                    # free, 0.0657
                   "gemini-3.5-flash-lite"               # free, 0.0101
                   "nvidia-deepseek-v4-1-flash"          # free, 0.2677 (diversify)
-                  "nvidia-minimax-m3-1-flash"           # free, 0.2576
+                  "nvidia-mistral-large"                # free, 0.2677 (diversify)
                   "gemini-3.1-flash-lite"               # free, 0.0051 (floor)
                   "vercel-deepseek-v4-1-flash-1017"     # paid, 0.3384, D 0.043
                   "vercel-nemotron-3-5-lightning-free"  # $0/$0, 0.0051 (tail)
@@ -586,7 +540,7 @@
                   "gemini-3.5-flash"
                   "gemini-3.5-flash-lite"
                   "nvidia-deepseek-v4-1-flash"
-                  "nvidia-minimax-m3-1-flash"
+                  "nvidia-mistral-large"
                   "gemini-3.1-flash-lite"
                   "vercel-deepseek-v4-1-flash-1017"
                   "vercel-nemotron-3-5-lightning-free"
@@ -595,7 +549,7 @@
                   "gemini-3.5-flash"
                   "gemini-3.5-flash-lite"
                   "nvidia-deepseek-v4-1-flash"
-                  "nvidia-minimax-m3-1-flash"
+                  "nvidia-mistral-large"
                   "gemini-3.1-flash-lite"
                   "vercel-deepseek-v4-1-flash-1017"
                   "vercel-nemotron-3-5-lightning-free"
@@ -603,19 +557,19 @@
               { "gemini-3.5-flash" = [
                   "gemini-3.5-flash-lite"
                   "nvidia-deepseek-v4-1-flash"
-                  "nvidia-minimax-m3-1-flash"
+                  "nvidia-mistral-large"
                   "gemini-3.1-flash-lite"
                   "vercel-deepseek-v4-1-flash-1017"
                   "vercel-nemotron-3-5-lightning-free"
                 ]; }
               { "gemini-3.5-flash-lite" = [
                   "nvidia-deepseek-v4-1-flash"
-                  "nvidia-minimax-m3-1-flash"
+                  "nvidia-mistral-large"
                   "gemini-3.1-flash-lite"
                   "vercel-deepseek-v4-1-flash-1017"
                   "vercel-nemotron-3-5-lightning-free"
                 ]; }
-              { nvidia-minimax-m3-1-flash = [
+              { nvidia-mistral-large = [
                   "gemini-3.1-flash-lite"
                   "vercel-deepseek-v4-1-flash-1017"
                   "vercel-nemotron-3-5-lightning-free"
