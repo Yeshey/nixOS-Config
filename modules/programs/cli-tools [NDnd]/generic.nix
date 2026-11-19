@@ -56,6 +56,17 @@ in
           rclone
           bc
           python3
+
+          unstable.antigravity-hub
+          unstable.antigravity-cli # agy
+          unstable.antigravity-ide
+          unstable.antigravity-acp
+          # unstable.t3code
+          unstable.codex
+          unstable.opencode
+          # unstable.cursor-cli
+          unstable.grok-build
+          # unstable.muse-code
         ]);
       programs.htop.enable = true;
     };
