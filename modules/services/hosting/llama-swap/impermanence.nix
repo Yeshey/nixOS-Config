@@ -18,6 +18,12 @@
               group = "llama-swap";
               mode = "0750";
             }
+            {
+              directory = "/var/cache/llama-swap/huggingface";
+              user = "llama-swap";
+              group = "llama-swap";
+              mode = "0750";
+            }
           ];
         };
       };

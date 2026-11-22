@@ -1,3 +1,4 @@
+# curl -N http://skyloft.tailb6874b.ts.net:9090/logs/stream/qwen3-6-35b-a3b
 { inputs, config, ... }:
 let
   top = config;

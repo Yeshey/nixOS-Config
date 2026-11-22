@@ -29,6 +29,8 @@
           qutebrowser
           qpwgraph # change sound inputs and outputs
 
+          unstable.t3code
+
           # gaming
           prismlauncher # polymc # prismlauncher # for Minecraft
           heroic

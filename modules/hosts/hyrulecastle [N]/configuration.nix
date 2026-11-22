@@ -22,6 +22,7 @@
       waydroid
       ollama-cuda
       llama-swap-qwen-3-6
+      # llama-swap-inkling-mini
       open-webui
 
       # hosting
