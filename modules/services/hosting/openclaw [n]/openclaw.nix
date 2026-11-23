@@ -171,7 +171,6 @@
           agents = {
             ownership = "explicit";
             defaults = {
-              heartbeat.every = "0m";
               systemAgent.agentId = "orchestrator";
               model.primary = "litellm/${agents.orchestrator.model}";
               skipBootstrap = true;
