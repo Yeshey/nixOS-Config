@@ -6,6 +6,10 @@
     #   dates = "weekly";
     # };
 
+    systemd.timers.nh-clean.timerConfig = {
+      RandomizedDelaySec = "1h";
+      FixedRandomDelay = true;  # same offset each run, stable across reboots
+    };
     programs.nh = {
       enable      = true;
       clean.enable     = true;
@@ -30,6 +34,10 @@
         clean.dates     = "monthly";
         clean.extraArgs = "--keep-since 21d --keep 3";
         flake = "${config.home.homeDirectory}/.setup";
+      };
+      systemd.user.timers.nh-clean.Timer = {
+        RandomizedDelaySec = "1h";
+        FixedRandomDelay = true;
       };
     };
 }
