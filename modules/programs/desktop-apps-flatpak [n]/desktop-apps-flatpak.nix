@@ -16,6 +16,7 @@
         { appId = "com.github.wwmm.easyeffects"; origin = "flathub"; }
         { appId = "flathub sh.ppy.osu"; origin = "flathub"; }
         { appId = "dev.deedles.Trayscale"; origin = "flathub"; }
+        { appId = "org.blender.Blender"; origin = "flathub"; }
       ];
     };
 }

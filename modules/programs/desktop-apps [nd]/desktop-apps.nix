@@ -5,7 +5,6 @@
       {
         home.packages = with pkgs; [
           inkscape
-          blender 
           vlc
           pdfarranger
           thunderbird
