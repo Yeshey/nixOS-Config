@@ -14,7 +14,7 @@
         { appId = "org.luanti.luanti"; origin = "flathub"; }
         { appId = "io.gitlab.adhami3310.Impression"; origin = "flathub"; }
         { appId = "com.github.wwmm.easyeffects"; origin = "flathub"; }
-        { appId = "flathub sh.ppy.osu"; origin = "flathub"; }
+        { appId = "sh.ppy.osu"; origin = "flathub"; }
         { appId = "dev.deedles.Trayscale"; origin = "flathub"; }
         { appId = "org.blender.Blender"; origin = "flathub"; }
       ];
