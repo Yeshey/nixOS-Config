@@ -11,7 +11,7 @@ in
       systemd.user.services.t3code = {
         Unit.Description = "T3 Code headless server";
         Service = {
-          ExecStart = "${pkgs.unstable.t3code}/bin/t3 serve --host 127.0.0.1 --port 3773";
+          ExecStart = "${pkgs.unstable.t3code}/bin/t3 serve --host 127.0.0.1 --port 3773 --tailscale-serve --tailscale-serve-port 8445";
           Restart = "on-failure";
           RestartSec = "5s";
           Environment = [
@@ -23,6 +23,7 @@ in
                 pkgs.coreutils
                 pkgs.gnutar
                 pkgs.gzip
+                pkgs.tailscale # <-- ADDED: Allows t3 to find and execute the tailscale CLI
               ]
             }:${config.home.profileDirectory}/bin"
           ];
@@ -37,6 +38,12 @@ in
       # start user manager at boot, no login needed
       users.users.yeshey.linger = true;
       home-manager.users.yeshey.imports = [ hm.t3code ];
+
+      # Enable Tailscale and grant your user permission to manage it
+      services.tailscale = {
+        enable = true;
+        extraSetFlags = [ "--operator=yeshey" ];
+      };
 
       # Optional but recommended so headless browser screenshots have clean fonts
       fonts.packages = with pkgs; [
