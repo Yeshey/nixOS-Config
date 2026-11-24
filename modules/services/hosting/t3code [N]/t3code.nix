@@ -39,12 +39,6 @@ in
       users.users.yeshey.linger = true;
       home-manager.users.yeshey.imports = [ hm.t3code ];
 
-      # Enable Tailscale and grant your user permission to manage it
-      services.tailscale = {
-        enable = true;
-        extraSetFlags = [ "--operator=yeshey" ];
-      };
-
       # Optional but recommended so headless browser screenshots have clean fonts
       fonts.packages = with pkgs; [
         noto-fonts
