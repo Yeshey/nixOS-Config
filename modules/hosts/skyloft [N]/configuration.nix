@@ -30,6 +30,7 @@
       # jupyter
       open-webui
       t3code
+      omniroute
       # openhands
       llama-swap-qwen-3-6
       tailscale-skyloft
