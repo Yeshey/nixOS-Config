@@ -79,6 +79,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-26.05-darwin";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-unstable-small.url = "github:nixos/nixpkgs/nixos-unstable-small";
     nixpkgs-zswap.url = "github:nixos/nixpkgs/master";
     nurpkgs.url = "github:nix-community/NUR";
     nvix.url = "github:niksingh710/nvix";

@@ -20,6 +20,12 @@
             system = pkgs.stdenv.hostPlatform.system;
           };
         })
+        (final: _prev: {
+          unstable-small = import inputs.nixpkgs-unstable-small {
+            inherit (final) config;
+            system = pkgs.stdenv.hostPlatform.system;
+          };
+        })
         (final: prev: {
           nur = import inputs.nurpkgs {
             nurpkgs = prev;
