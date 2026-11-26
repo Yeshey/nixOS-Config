@@ -1,3 +1,4 @@
+
 # modules/services/pi-coding-agent [Nn]/pi-coding-agent.nix
 { inputs, ... }:
 {
@@ -8,9 +9,11 @@
       litellmPort = 4000;
       litellmBaseUrl = "http://${litellmHost}:${toString litellmPort}/v1";
 
-      # LiteLLM models available to Pi. Add new entries here as your
-      # LiteLLM config grows; the `id` must match the LiteLLM model name
-      # exactly.
+      omnirouteHost = litellmHost;
+      omniroutePort = 8445;
+      omnirouteBaseUrl =
+        "https://${omnirouteHost}:${toString omniroutePort}/v1";
+
       litellmModels = [
         {
           id = "weak-fallback-chain";
@@ -45,6 +48,20 @@
       ];
 
       defaultModel = "weak-fallback-chain";
+
+      piBase = pkgs.unstable.pi-coding-agent;
+
+      piWrapped = pkgs.symlinkJoin {
+        name = "pi-coding-agent-wrapped-${piBase.version}";
+        paths = [ piBase ];
+        inherit (piBase) meta;
+        nativeBuildInputs = [ pkgs.makeWrapper ];
+
+        postBuild = ''
+          wrapProgram $out/bin/pi \
+            --run 'export OMNIROUTE_API_KEY="$(cat ${config.sops.secrets."omniroute_api_key".path})"'
+        '';
+      };
     in
     {
       imports = [
@@ -53,17 +70,15 @@
       ];
 
       sops.secrets."litellm_master_key" = { };
-      # Tavily API key, read by the pi-tavily-search extension from
-      # auth.json under the `tavily` entry. If the value already exists
-      # under another sops key name, set `key = "<existing path>"` here
-      # instead of adding a new entry to the sops file.
       sops.secrets."tavily_api_key" = { };
+      sops.secrets."omniroute_api_key" = { };
 
       sops.templates."pi-auth.json".content = builtins.toJSON {
         litellm = {
           type = "api_key";
           key = config.sops.placeholder."litellm_master_key";
         };
+
         tavily = {
           type = "api_key";
           key = config.sops.placeholder."tavily_api_key";
@@ -76,7 +91,7 @@
 
       programs.pi-coding-agent = {
         enable = true;
-        package = pkgs.unstable.pi-coding-agent;
+        package = piWrapped;
 
         extraPackages = with pkgs; [
           git
@@ -86,7 +101,6 @@
           fd
           nodejs
           bun
-          # --- Wayland clipboard support ---
           wl-clipboard
         ];
 
@@ -95,7 +109,11 @@
           defaultModel = defaultModel;
           defaultThinkingLevel = "medium";
           theme = "dark";
-          packages = [ "npm:@jmcombs/pi-tavily-search" ];
+
+          packages = [
+            "npm:@jmcombs/pi-tavily-search"
+            "npm:pi-models-discovery"
+          ];
 
           compaction = {
             enabled = true;
@@ -110,15 +128,27 @@
         };
 
         models = {
-          providers.litellm = {
-            baseUrl = litellmBaseUrl;
-            api = "openai-completions";
-            apiKey = "from-auth-json";
-            compat = {
-              supportsDeveloperRole = false;
-              supportsReasoningEffort = false;
+          providers = {
+            litellm = {
+              baseUrl = litellmBaseUrl;
+              api = "openai-completions";
+              apiKey = "from-auth-json";
+
+              compat = {
+                supportsDeveloperRole = false;
+                supportsReasoningEffort = false;
+              };
+
+              models = litellmModels;
             };
-            models = litellmModels;
+
+            omniroute = {
+              name = "OmniRoute";
+              baseUrl = omnirouteBaseUrl;
+              api = "openai-completions";
+              apiKey = "$OMNIROUTE_API_KEY";
+              discoverModels = true;
+            };
           };
         };
 
