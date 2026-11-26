@@ -10,8 +10,9 @@
         "8443" = "http://127.0.0.1:3000";  # Forgejo
         "8444" = "http://127.0.0.1:18789"; # OpenClaw
         "9445" = "http://127.0.0.1:4100";  # Pithagoras
-        "8445" = "http://127.0.0.1:20128"; # OmniRoute
-        "8446" = "http://127.0.0.1:11111"; # OmniRoute
+        # 8445 is for tailscale
+        "8446" = "http://127.0.0.1:20128"; # OmniRoute
+        "8447" = "http://127.0.0.1:11111"; # open-webui
       };
 
       serveConfig = pkgs.writeText "skyloft-tailscale-serve.json" (
