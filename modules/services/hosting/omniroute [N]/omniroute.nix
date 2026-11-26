@@ -39,7 +39,7 @@
           PORT = toString port;
           HOSTNAME = "127.0.0.1"; # VERIFY: must stay loopback-only
           REQUIRE_API_KEY = "true";
-          NEXT_PUBLIC_BASE_URL = "https://skyloft.tailb6874b.ts.net:8445";
+          NEXT_PUBLIC_BASE_URL = "https://skyloft.tailb6874b.ts.net:8446";
           AUTH_COOKIE_SECURE = "true";
         };
         serviceConfig = {

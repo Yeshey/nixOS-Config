@@ -10,7 +10,7 @@
       litellmBaseUrl = "http://${litellmHost}:${toString litellmPort}/v1";
 
       omnirouteHost = litellmHost;
-      omniroutePort = 8445;
+      omniroutePort = 8446;
       omnirouteBaseUrl =
         "https://${omnirouteHost}:${toString omniroutePort}/v1";
 
