@@ -6,7 +6,7 @@
       port = 11111;
       searxPort = 5564;
       litellmPort = 4000; # must match modules/services/hosting/litellm [N]/litellm.nix
-      omnirouteLocalPort = 20128; # must match modules/services/hosting/omniroute [N]/omniroute.nix
+      omnirouteLocalPort = 8446; # must match modules/services/hosting/omniroute [N]/omniroute.nix
       localOllama = "http://localhost:11434";
       hyrulecastleOllama = "http://hyrulecastle.tailb6874b.ts.net:11434";
     in
@@ -88,7 +88,7 @@
           OLLAMA_BASE_URLS = "${localOllama};${hyrulecastleOllama}";
           OLLAMA_API_CONFIGS = ''{"0": {"prefix_id": "local-ollama/"}, "1": {"prefix_id": "hyrulecastle-ollama/"}}'';
 
-          OPENAI_API_BASE_URLS = "http://localhost:${toString litellmPort}/v1;https://integrate.api.nvidia.com/v1;https://openrouter.ai/api/v1;https://opencode.ai/zen/v1;https://api.groq.com/openai/v1;https://ai-gateway.vercel.sh/v1;https://api.cerebras.ai/v1;https://api.iaedu.pt/agent-chat//api/v1/agent/cmor5objoex9gfp01vm7p95jh/stream;http://localhost:${toString omnirouteLocalPort}/v1";
+          OPENAI_API_BASE_URLS = "http://localhost:${toString litellmPort}/v1;https://integrate.api.nvidia.com/v1;https://openrouter.ai/api/v1;https://opencode.ai/zen/v1;https://api.groq.com/openai/v1;https://ai-gateway.vercel.sh/v1;https://api.cerebras.ai/v1;https://api.iaedu.pt/agent-chat//api/v1/agent/cmor5objoex9gfp01vm7p95jh/stream;https://skyloft.tailb6874b.ts.net:${toString omnirouteLocalPort}/v1";
           OPENAI_API_CONFIGS = ''{"0": {"prefix_id": "mylitellmAPI/"}, "1": {"prefix_id": "nvidiaAPI/"}, "2": {"prefix_id": "openrouterAPI/"}, "3": {"prefix_id": "opencodeAPI/"}, "4": {"prefix_id": "groqAPI/"}, "5": {"prefix_id": "vercelAPI/"}, "6": {"prefix_id": "cerebrasAPI/"}, "7": {"prefix_id": "iaeduAPI/"}, "8": {"prefix_id": "omnirouteAPI/"}}'';
 
           WEBUI_AUTH = "False";
